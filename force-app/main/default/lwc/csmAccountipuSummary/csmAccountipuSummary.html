@@ -1,0 +1,29 @@
+<template>
+    
+    <lightning-card title={label.IPUSummaryTitle} hide-header={hideHeader} icon-name="standard:calculated_insights">
+        <template lwc:if={recordId}>
+          <div class="slds-p-left_medium slds-m-around_x-small slds-box slds-text-heading_small slds-theme_shade">
+            <p>
+              <span class="slds-p-horizontal_x-small">
+                {label.EntitledIPU} : <strong>{intEntitled}</strong>
+              </span>
+              <span class="slds-p-horizontal_x-small">
+                {label.EstimatedIPUs} : <strong>{intEstimated}</strong>
+              </span>
+              <span class="slds-p-horizontal_x-small">
+                {label.Usage} : <strong>{intUsed}</strong>
+              </span>
+              <span class="slds-p-horizontal_x-small">
+                {label.ExpectedIPUs} : <strong>{intExpected}</strong>
+              </span>
+              <span class="slds-p-horizontal_x-small">
+                {label.IPUType}: <strong>{type}</strong>
+              </span>
+            </p>
+          </div>
+        </template>
+        <template lwc:if={error}>
+          {error}
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,69 @@
+<template>        
+        
+    <!-- Show Links-->
+    <template if:true={linkUtilities}>
+      <div class="slds-grid slds-gutters">
+          <div class="slds-col slds-size_10-of-12">
+              <lightning-input type="search" onkeyup={search} onchange={search} variant="label-hidden"></lightning-input>
+          </div>
+          <div class="slds-col slds-size_2-of-12">
+					<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-left_xx-small" disabled={boolDisableRefreshButton} 
+							onclick={loadRecords}></lightning-button-icon>
+          </div>
+      </div>
+      <div class="c-accordion">
+          <template for:each={linkUtilities} for:item="linkUtility">
+              <section class="c-accordion-section" key={linkUtility.groupName}> 
+                  <div class="c-accordion-heading slds-grid">
+                      <div class="slds-col slds-size_10-of-12 slds-nav-vertical__item" data-group-child-container={linkUtility.groupName} onclick={handleAccordionClick}>
+                          <span class="right-arrow" data-group-icon-open={linkUtility.groupName}>
+                              <lightning-icon icon-name="utility:chevronright" alternative-text="Sprite" size="xx-small" title="xx-small size"></lightning-icon>
+                          </span>
+                          <span class="left-arrow hide" data-group-icon-close={linkUtility.groupName}>
+                              <lightning-icon icon-name="utility:chevrondown" alternative-text="Sprite" size="xx-small" title="xx-small size"></lightning-icon>
+                          </span>
+                          <span class="c-accordion-summary">
+                              <img src={linkUtility.icon}></img>
+                              <span class="c-accordion-summary__label" data-group={linkUtility.groupName} lwc:dom="manual"></span>
+                          </span>
+                      </div>
+                      <div class="slds-col slds-size_2-of-12">
+                          <lightning-button-menu if:true={linkUtility.boolCanAdd} menu-alignment="right" data-group={linkUtility.groupName} onselect={executeAction}>
+                              <lightning-menu-item value="add" label="Add"></lightning-menu-item>
+                          </lightning-button-menu>
+                      </div>
+                  </div>
+                  <div class="c-accordion-content hide" data-group-child-container={linkUtility.groupName}>
+                      <nav class="slds-nav-vertical">
+                          <div class="slds-nav-vertical__section">
+                              <template for:each={linkUtility.linkItems} for:item="linkItem" >
+                                  <div key={linkItem.objLink.Id} class="slds-grid">
+                                      <div class="slds-col slds-size_10-of-12 slds-nav-vertical__item">
+                                          <a href="javascript:void(0);" onclick={handleSelect} data-name={linkItem.objLink.Id} class="slds-nav-vertical__action" 
+                                                  aria-current="true" data-link={linkItem.objLink.Id} lwc:dom="manual"></a>
+                                      </div>
+                                      <div class="slds-col slds-size_2-of-12">
+                                          <lightning-button-menu if:true={linkItem.boolDisplayDropDown} menu-alignment="right" data-id={linkItem.objLink.Id} 
+                                                  data-label={linkItem.objLink.Name} onselect={executeAction}>
+                                              <lightning-menu-item if:true={linkItem.boolCanEdit} value="edit" label="Edit"></lightning-menu-item>
+                                              <lightning-menu-item if:true={linkItem.boolCanDelete} value="delete" label="Delete"></lightning-menu-item>
+                                          </lightning-button-menu>
+                                      </div>
+                                  </div>
+                              </template>
+                          </div>
+                      </nav>
+                  </div>
+              </section>
+          </template>
+        </div>
+    </template>
+
+    <!-- Show No records to display message when there are no records/Links-->
+    <template if:false={linkUtilities}>
+      <div class="flex-align-center">
+          No Links to display!
+      </div>
+    </template>
+
+</template>

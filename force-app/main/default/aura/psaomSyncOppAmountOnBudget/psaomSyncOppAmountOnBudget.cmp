@@ -1,0 +1,7 @@
+<aura:component controller="psa_om_SyncOppAmountController" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div>
+        <lightning:spinner alternativeText="Loading" size="medium" />
+    </div>
+    <p class="slds-align_absolute-center">Syncing in Progress...</p>
+</aura:component>

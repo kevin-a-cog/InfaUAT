@@ -1,0 +1,212 @@
+:root{
+    --customValueSmall: 24px;
+}
+@media only screen and ( max-width: 420px ){
+    :root{
+        --customValueSmall: 22px;
+    }
+}
+/*** Bootstrap items - Label, input, select, textarea
+checkbox ***/
+.es-form-label {
+    font-size: 12px;
+    color: #000000;
+    font-weight: 400;
+    margin-bottom: 2px;
+    /* padding: 7px 14px; */
+}
+.es-form-control,
+.es-custom-select {
+    height: var( --customValueSmall );
+    padding: 4px;
+    font-size: 12px;
+    line-height: 14px;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+}
+@media only screen and ( max-width: 420px ){
+    .es-form-control,
+    .es-custom-select { 
+        height: var( --customValueSmall );
+    }
+}
+.es-custom-checkbox .custom-control-label {
+    line-height: 24px;
+    vertical-align: middle;
+}
+.es-custom-checkbox .custom-control-label::before {
+    border-radius: 2px;
+}
+.es-form-textarea {
+    height: 150px!important;
+    border-radius: 2px;
+}
+/*** Form items - Unique ***/
+.es-form-desc {
+    border: 1px solid #BBBBBB;
+    padding: 8px;
+    border-radius: 2px;
+    height: 270px;
+}
+.es-form-desc__criteria-item {
+    margin-bottom: 5px;
+}
+.es-form-desc__criteria-item:last-child {
+    margin-bottom: 0;
+}
+.es-form-desc__criteria-tick {
+    background: #C4FCBC;
+    border-radius: 50%;
+    margin-right: 8px;
+    text-align: center;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    display: inline-block;
+}
+.es-form-desc__criteria-tick--disabled {
+    background: #E5E8E9;
+}
+.es-form__criteria-text {
+   font-weight: 300;
+   font-size: 10px;
+}
+.es-form__search {
+    margin-bottom: 0;
+}
+.es-form__icon-with-upload {
+    float: left;
+    padding: 5px 5px 0 0;
+}
+/*** LDS component override ***/
+.es-lds-form-group .slds-input {
+    height: var( --customValueSmall );
+    min-height: var( --customValueSmall );
+    border-radius: 2px;
+    border: 1px solid #BBBBBB;
+    box-shadow: none;
+}
+.es-lds-form-group .slds-textarea {
+    height: 150px;
+    border-radius: 2px;
+    border: 1px solid #BBBBBB;
+}
+.es-lds-form-group--small .slds-textarea {
+    height: 80px;
+}
+.es-lds-form-group--big .slds-textarea {
+    height: 270px;
+}
+.es-lds-form-group .slds-form-element__label {
+    font-size: 12px;
+    color: #000000;
+    font-weight: 400;
+}
+.es-lds-file-select .slds-file-selector__dropzone {
+    border: 0 none;
+}
+.es-lds-file-select .slds-file-selector__button {
+    border: 1px solid #BBBBBB;
+    border-radius: 2px;
+}
+.es-lds-radio .slds-form-element__label,
+.es-lds-chip .slds-form-element__label {
+    font-size: 12px;
+    font-weight: 400;
+}
+.es-lds-radio .slds-radio_faux {
+    border-color: #BBB;
+}
+.es-lds-radio .slds-form-element__control {
+    display: flex;
+}
+.es-lds-radio--multicolumn .slds-form-element__control {
+    flex-wrap: wrap;
+}
+.es-lds-radio--multicolumn .slds-radio {
+    flex-basis: 50%;
+}
+.es-lds-chip .slds-form-element__control {
+    display: flex;
+    flex-wrap: wrap;
+}
+.es-lds-chip .slds-radio [type="radio"] + .slds-radio__label .slds-radio_faux {
+    display: none;
+}
+.es-lds-chip .slds-radio [type="radio"] + .slds-radio__label {
+    border: 1px solid #BBBBBB;
+    padding: 2px 15px;
+    width: 225px;
+    border-radius: 2px;
+    margin-right: 12px;
+    height: 30px;
+    vertical-align: middle;
+    line-height: 24px;
+}
+.es-lds-chip .slds-radio [type="radio"]:checked + .slds-radio__label {
+    border: 1px solid #FF5800;
+    padding: 2px 15px;
+    width: 225px;
+    border-radius: 2px;
+}
+.es-lds-chip .slds-radio [type="radio"]:checked + .slds-radio__label .slds-form-element__label {
+    color: #FF5800;
+}
+.es-lds-chip .slds-form-element__control .slds-radio {
+    display: initial;
+    flex: 1 1 50%;
+}
+/* .es-form-selector {
+    padding-left: 15px;
+}
+.es-form-selector input[type=radio] {
+    display: none;
+}
+.es-form-selector label {
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    cursor: pointer;
+    text-align: center;
+    padding: 8px;
+}
+.es-form-selector label:hover {
+    border: 1px solid #FF5800;
+    color: #FF5800;
+}
+.es-form-selector input[type=radio]:checked ~ label {
+    border: 1px solid #FF5800;
+    color: #FF5800;
+}
+.es-form-selector__text {
+    font-size: 12px;
+}
+.es-form-selector__sub-text {
+    font-size: 12px;
+} */
+.es-lds-record-form .slds-form-element_stacked {
+    padding: 0;
+    margin: 0;
+}
+.es-lds-record-form .slds-form-element__control {
+    padding-left: 0;
+    clear: both;
+}
+.es-lds-record-form-wrapper .es-lds-record-form .slds-form-element {
+    margin-bottom: 10px;
+}
+.es-lds-record-form .slds-form-element__label {
+    color: #000;
+    font-weight: 400;
+}
+.es-lds-record-form .slds-input {
+    height: var( --customValueSmall );
+    min-height: var( --customValueSmall );
+    border-radius: 2px;
+    border: 1px solid #BBBBBB;
+    box-shadow: none;
+}
+
+/* Fix the height of the pin icon */
+.es-pin-inline .slds-button_icon{
+    height: 24px;
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>footer-social-linkedin</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M16,0 C24.837,0 32,7.1634 32,16 C32,24.8366 24.837,32 16,32 C7.163,32 0,24.8366 0,16 C0,7.1634 7.163,0 16,0 Z" id="path-1"></path>
+        <path d="M23.5,22.5 L20.185,22.5 L20.185,17.7542 C20.185,16.512 19.666,15.664 18.526,15.664 C17.654,15.664 17.169,16.2362 16.943,16.7878 C16.858,16.9857 16.871,17.2615 16.871,17.5372 L16.871,22.5 L13.587,22.5 C13.587,22.5 13.629,14.0933 13.587,13.3291 L16.871,13.3291 L16.871,14.7684 C17.065,14.1391 18.115,13.241 19.79,13.241 C21.868,13.241 23.5,14.5601 23.5,17.4007 L23.5,22.5 Z M10.266,12.182 L10.244,12.182 C9.186,12.182 8.5,11.481 8.5,10.5923 C8.5,9.6864 9.206,9 10.286,9 C11.365,9 12.028,9.6846 12.049,10.5897 C12.049,11.4784 11.365,12.182 10.266,12.182 Z M8.878,13.3291 L11.802,13.3291 L11.802,22.5 L8.878,22.5 L8.878,13.3291 Z" id="path-3"></path>
+    </defs>
+    <g id="footer-social-linkedin" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <g id="Clip-30"></g>
+        <mask id="mask-4" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+        <g id="Clip-33"></g>
+        <polygon id="Fill-32" fill="#999999" mask="url(#mask-4)" points="3 3 29 3 29 29 3 29"></polygon>
+    </g>
+</svg>

@@ -1,0 +1,67 @@
+<!--
+/*
+ * Name			:	certificationRequestCreateV2
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	7/21/2023
+ * Description	:	This is used to create certification request from the screen flow.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					                Tag
+ **********************************************************************************************************
+ Vignesh Divakaran	    7/21/2023		I2RT-8640		Initial version.			                N/A
+ Vignesh Divakaran	    8/14/2023		I2RT-8852		Added business justification field to		T01
+                                                        preferred request type
+ */
+-->
+<template>
+
+    <div class="slds-is-relative">
+
+        <!-- Lightning Spinner -->
+        <lightning-spinner alternative-text="Loading" size="medium" lwc:if={boolDisplaySpinner}></lightning-spinner>
+    
+        <!-- Create Certification Request screen-->
+        <div class="">
+                
+            <!-- Active certification request warning -->
+            <template lwc:if={showWarning}>
+                <c-global-toast-message str-variant="warning" str-message={strWarningMessage}></c-global-toast-message>
+            </template>
+    
+            <lightning-record-edit-form object-api-name={objectApiName} onload={load}>
+                <lightning-input-field field-name="Request_Type__c" onchange={inputChange} value={_objCertificationRequest.Request_Type__c} required></lightning-input-field>
+    
+                <!-- Hypercare -->
+                <template lwc:if={isHypercare}>
+                    <lightning-input-field field-name="Certification_Type__c" onchange={inputChange} value={_objCertificationRequest.Certification_Type__c} required></lightning-input-field>
+                    <lightning-input-field field-name="Product__c" onchange={inputChange} value={_objCertificationRequest.Product__c} required></lightning-input-field>
+                    <lightning-input-field field-name="Business_Justification__c" onchange={inputChange} value={_objCertificationRequest.Business_Justification__c} required></lightning-input-field>
+                    <lightning-input-field field-name="Start_Date__c" onchange={inputChange} value={_objCertificationRequest.Start_Date__c} required></lightning-input-field>
+                    <lightning-input-field field-name="End_Date__c" onchange={inputChange} value={_objCertificationRequest.End_Date__c} required></lightning-input-field>
+                    <lightning-input-field field-name="Owner__c" onchange={inputChange} value={_objCertificationRequest.Owner__c} required></lightning-input-field>
+                </template>
+    
+                <!-- Preferred -->
+                <template lwc:elseif={isPreferred}>
+                    <lightning-dual-listbox 
+                            name="Product__c"
+                            label="Product"
+                            source-label="Available"
+                            selected-label="Chosen"
+                            options={lstProducts}
+                            value={lstDraftProducts}
+                            onchange={inputChange}
+                            class="pe-1"
+                            required>
+                    </lightning-dual-listbox> <!-- <T01> -->
+                    <lightning-input-field field-name="Business_Justification__c" onchange={inputChange} value={_objCertificationRequest.Business_Justification__c} required></lightning-input-field> <!-- <T01> -->
+                    <lightning-input-field field-name="Start_Date__c" onchange={inputChange} value={_objCertificationRequest.Start_Date__c} required></lightning-input-field>
+                    <lightning-input-field field-name="End_Date__c" onchange={inputChange} value={_objCertificationRequest.End_Date__c} required></lightning-input-field>
+                </template>
+            </lightning-record-edit-form>
+        </div>
+    
+    </div>
+    
+</template>

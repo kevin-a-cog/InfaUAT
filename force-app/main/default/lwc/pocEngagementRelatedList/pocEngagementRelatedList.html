@@ -1,0 +1,47 @@
+<template>
+    
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+          <div class="slds-page-header__col-title">
+            <div class="slds-media">
+              <div class="slds-media__figure">
+                <span class="slds-icon_container" >
+                    <lightning-icon alternative-text="icon" size="small" icon-name="standard:workforce_engagement"></lightning-icon>
+                </span>
+              </div>
+              <div class="slds-media__body">
+                <div class="slds-page-header__name">
+                  <div class="slds-page-header__name-title">
+                    <h1>
+                      <span class="slds-page-header__title slds-truncate" title="POC Engagement(s)">POC Engagement(s)</span>
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      
+      <!--  <lightning-datatable 
+                    key-field="Id"
+                    data={tableData}
+                    hide-checkbox-column="true"
+                    columns={columns}>
+        </lightning-datatable> 
+    -->
+    <!-- Search field. -->
+		<div>
+			<lightning-input class="searchField" variant="label-hidden" placeholder={objConfiguration.strSearchPlaceholder} type="search" onchange={searchRecord}></lightning-input>
+		</div>
+    <br/>
+
+        <template if:true={boolDisplaySpinner}>
+        <!-- Table section. -->
+						<c-global-data-table class="pocEngagements" obj-parameters={objConfiguration} ></c-global-data-table>
+        </template>
+
+
+</template>

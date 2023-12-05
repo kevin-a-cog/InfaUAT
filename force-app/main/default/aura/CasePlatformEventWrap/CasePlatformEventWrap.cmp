@@ -1,0 +1,8 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" >
+    <lightning:workspaceAPI aura:id="workspace" />	
+    <aura:handler name="render" value="{!this}" action="{!c.onRender}"/>
+    <aura:attribute name="recordId" type="String"/>  
+    <aura:handler event="lightning:tabFocused" action="{! c.onTabFocused }"/> 
+    <aura:handler event="lightning:tabClosed" action="{! c.onTabClosed }"/>
+    <c:caseCommentTimeLineView recordId="{!v.recordId}" aura:id="caseCommentRefresh" />
+</aura:component>

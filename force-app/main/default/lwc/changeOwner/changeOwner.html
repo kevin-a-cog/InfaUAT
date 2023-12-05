@@ -1,0 +1,57 @@
+<!--
+ * Name			:	changeOwner
+ * Author		:	Isha Bansal
+ * Created Date	: 	27/03/2023
+ * Description	:	This LWC is used to change ownership of a record to another user or queue
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description							Tag
+ **********************************************************************************************************
+Isha Bansal		27/03/2023		I2RT-6727		Initial version.					N/A 
+-->
+<template>
+
+    <!--Quick Action-->
+    <lightning-quick-action-panel title="Change Owner">
+        <div class="slds-is-relative changeowner-popup">
+
+            <!-- Lightning Spinner -->
+            <lightning-spinner alternative-text="Loading" size="medium" lwc:if={isLoading}></lightning-spinner>
+            <div class="slds-modal__container"> 
+            <!-- Modal Header -->
+            <header class="slds-modal__header">
+                <h2  class="slds-modal__title slds-hyphenate">Change Owner</h2>
+            </header>
+
+            <!-- Modal Body -->
+            <div class="slds-p-around_medium slds-p-bottom_xx-large">
+                <!-- Id for Quick Action. -->
+             <div style="display: none;">{recordId}</div>
+
+               <!--Change Owner Lookup-->
+                        <lightning-layout>
+                            <lightning-layout-item size="12">
+                                <div class="slds-p-around_x-small">                                    
+                                    <c-custom-lookup-field label={label} placeholder="Select the Engineer or Queue" sobjectapiname={objectApiName}
+                                        onsearch={handleCombinedLookupSearch} onselectionchange={handleCombinedLookupSelectionChange}
+                                        required>
+                                    </c-custom-lookup-field>
+                                </div>
+                                <c-user-upcoming-events userid={changedOwnerId} lwc:if={booldisplayftotable}></c-user-upcoming-events>
+                            </lightning-layout-item>
+                        </lightning-layout>  
+            </div>
+
+        </div>
+        </div>
+
+        <!-- Footer Buttons -->
+        <div slot="footer">
+            <lightning-button label="Cancel" title="Cancel" variant="brand" onclick={cancel} ></lightning-button>
+            &nbsp; &nbsp;
+            <lightning-button label="Save" title="Save" variant="brand" onclick={save} disabled={booldisableSave}></lightning-button>
+        </div>
+
+    </lightning-quick-action-panel>
+</template>

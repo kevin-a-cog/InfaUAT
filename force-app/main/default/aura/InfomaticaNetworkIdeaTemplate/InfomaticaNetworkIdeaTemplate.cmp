@@ -1,0 +1,37 @@
+<aura:component implements="forceCommunity:themeLayout" description="IN Idea Layout">
+    <aura:attribute name="templateHeader" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="SearchBar" type="Aura.Component[]" required="false"/>
+   	<aura:attribute name="templateFooter" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="showSearch" type="Integer" default="1920"/>
+    <aura:attribute name="relatedIdeas" type="Aura.Component[]" required="false"/>
+    <aura:html tag="style">
+       :root {
+           --maxWidth: {!v.showSearch+'px;'};
+       }
+   </aura:html>
+    <div style="{! 'max-width:'+v.showSearch+'px;'}" class="mx-auto">
+        <div style="position:relative">
+            <div class="newHeader" style="{! 'max-width:'+v.showSearch+'px;'}">
+            {!v.templateHeader}
+        </div>
+            <div class="notificationContainer">
+                 <div class="notifications">
+            <forceCommunity:notifications/>
+                 </div>
+            </div>
+           
+        </div>
+        <div class="searchBar">
+            {!v.SearchBar}
+        </div>
+        <div class="container mainContentArea">
+            {!v.body}
+        </div>
+        <div class="relatedIdeas">
+            {!v.relatedIdeas}
+        </div>
+        <div class="newFooter">
+            {!v.templateFooter}
+        </div>
+    </div>
+</aura:component>

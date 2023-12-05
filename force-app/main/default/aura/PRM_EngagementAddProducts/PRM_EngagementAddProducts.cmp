@@ -1,0 +1,304 @@
+<aura:component controller="AuraProductRequestAddProductsHandler" implements="force:lightningQuickActionWithoutHeader,forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global" >
+    
+    <aura:attribute name="productFamily" type="List"/>
+    <aura:attribute name="productSubFamily" type="List"/>
+    <aura:attribute name="products" type="List"/>
+ 
+    <aura:attribute name="depnedentFieldMap" type="map" description="store controller(key)--> dependent(values) picklist value as a map." />
+    <aura:attribute name="isDependentDisable" type="boolean" default="true" description="use for, make disbale depandent field." />
+    
+    <aura:attribute name="depnedentFieldMap2" type="map" description="store controller(key)--> dependent(values) picklist value as a map." />
+    <aura:attribute name="isDependentDisable2" type="boolean" default="true" description="use for, make disbale depandent field." />
+	
+	
+    <aura:attribute name="lstProducts" type="product2[]" />
+    <aura:attribute name="lstselectedProducts" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+	<aura:attribute name="searchKeyword" type="string" default=""/>
+    <aura:attribute name="fieldarray" type="Object[]" />
+    <aura:attribute name="fieldStrQry" type="String" />
+    <aura:attribute name="saveBtnClicked" type="Boolean" default="false"/>
+    
+    <aura:attribute name="pillsList" type="List" />
+    <aura:attribute name="pillsList2" type="List" /> 
+
+    <aura:attribute name="DeleteEnabled" type="boolean" default="false"/>
+    <aura:attribute name="DealRegProductId" type="String" default=""/>
+    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+	<aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+	<aura:attribute name="Spinner" type="boolean" default="false"/>
+
+    <aura:attribute name="requestType" type="List"/>
+    <aura:attribute name="reqUpdtKeyPicklistVal" type="List"/>
+    <aura:attribute name="orgIdURL" type="String" default=""/>
+    <aura:attribute name="addProductSection1" type="Boolean" default="true" description="" />
+    <aura:attribute name="addProductSection2" type="Boolean" default="false" description="" />
+	<aura:attribute name="pillsList3" type="PRMProductHandlerUtility[]" />
+    <aura:attribute name="indexVal" type="Integer" />
+    <aura:if isTrue="{!v.addProductSection1}">
+	
+    <!-- Header Dialog Box -->      
+	<!-- =============================================================================== -->
+    <div class="slds-col modal-header slds-modal__header">
+        <h3 id="modal-heading-01" class="slds-text-heading_small slds-hyphenate">{!$Label.c.PRM_EngagmentProduct_Title}</h3>
+    </div>
+    
+    <!-- Body CONTAINS Content -->      
+	<!-- =============================================================================== -->
+    <div class="slds-col modal-body scrollable slds-p-around--medium" style="height: 415px; max-height: 550px; overflow-y: auto !important">              
+		
+			<div class="slds-p-top--small scrollable">
+				<!-- -->
+                <div class="slds-col slds-grid slds-grid_vertical scrollable">
+                        
+                        <div class="slds-p-vertical_x-small slds-p-horizontal_large slds-theme_shade">
+                           <p class="slds-m-top_x-small">{!$Label.c.PRM_EngagmentProduct_Desc}</p>
+                            <p class="slds-m-top_x-small">{!$Label.c.PRM_EngagmentProduct_Desc1}</p> 
+                            <!-- @-26-6 added for search product --> 
+                            <div class="slds-form-element scrollable">
+                                <label class="slds-form-element__label slds-assistive-text" for="combobox-unique-id">Search</label>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-combobox_container">
+                                        <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                                            
+                                            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                                                <ui:inputText updateOn="keyup" keyup="{!c.searchProdcut2}" aura:id="searchId" class="slds-input slds-combobox__input" value="{!v.searchKeyword}" placeholder="Search Products"/>
+                                                
+                                                <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right" title="Description of icon when needed">
+                                                    <lightning:icon class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" iconName="utility:search" size="x-small" alternativeText="search"/>
+                                                    <span class="slds-assistive-text">Description of icon</span>
+                                                </span>
+                                            </div>
+                                            
+                                            <div class="slds-grid slds-wrap slds-grid--pull-padded slds-p-top--small" >
+                                                <div class="slds-p-horizontal--small slds-large-size--1-of-3 slds-medium-size--1-of-2  slds-small-size--1-of-1 slds-p-bottom--xx-small" >
+                                                    <lightning:select aura:id="prodFamily" label="Product Family" name="PRM_Product_Family__c" value="" onchange="{!c.onControllerFieldChange}">
+                                                        <aura:iteration items="{!v.productFamily}" var="item">
+                                                            <option text="{!item.label}" value="{!item.value}"/>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                                <div class="slds-p-horizontal--small slds-large-size--2-of-3 slds-medium-size--1-of-2  slds-small-size--1-of-1 slds-p-bottom--xx-small" >
+                                                    <lightning:select aura:id="prodSubFamily" disabled="{!v.isDependentDisable}" label="Product Sub-Family" name="PRM_Product_Sub_Family__c" value="" onchange="{!c.onControllerFieldChange2}">
+                                                        <aura:iteration items="{!v.productSubFamily}" var="item">
+                                                            <option text="{!item.label}" value="{!item.value}"/>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                    							<div class="slds-p-horizontal--small slds-large-size--3-of-3 slds-medium-size--1-of-2  slds-small-size--1-of-1 slds-p-bottom--xx-small" >
+                                                    <lightning:select aura:id="prods" disabled="{!v.isDependentDisable2}" label="Products" name="PRM_Products__c" value="" onchange="{!c.onSelectProductFamily}">
+                                                        <aura:iteration items="{!v.products}" var="item">
+                                                            <option text="{!item.label}" value="{!item.value}"/>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>  
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          <!--21-06 added-->  
+                            <div class="slds-pill_container slds-pill_container_bare">
+                                <div id="listbox-unique-id" role="listbox">
+                                    <ul class="slds-listbox" role="presentation">
+                                        <li role="presentation" class="slds-listbox__item">
+                                            <div class="slds-p-top--x-small">
+                                                <aura:iteration var="pill" items="{!v.pillsList}">
+                                                    <lightning:pill label="{!pill.Name}" href="{!'/'+ pill.Id}" onremove="{!c.handleRemove }" name="{!pill.Id}">
+                                                        <aura:set attribute="media">
+                                                            <lightning:icon iconName="standard:product"  alternativeText="Product"/>
+                                                        </aura:set>
+                                                    </lightning:pill>
+                                                </aura:iteration>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+						<!-- ADD PRODUCT WINDOW: LIST OF PRODUCTS == FIELDS USING FIELDSET -->  
+						<!-- DYNAMIC TABLE GOES HERE     -->
+						<!-- =============================================================================== -->               
+						<div class="slds-grow scrollable">
+							<div class="slds-p-top--small scrollable">
+								<aura:if isTrue="{!v.lstProducts.length > 0}">
+									<div class="table-overflow">
+										<table class="slds-table slds-table_bordered slds-table_cell-buffer" role="grid" >
+										<thead>
+											<tr class="slds-text-title_caps">
+												<th scope="col" role="gridcell" class="slds-cell-shrink">
+													<div class="slds-truncate" title="button"></div>
+												</th>
+												<aura:iteration items="{!v.fieldarray}" var="f">
+													<aura:if isTrue="{!f.label != 'Is Selected'}">
+													<th scope="col">
+														<div class="slds-truncate" title="{!f.label}">{!f.label}</div>
+													</th>
+													</aura:if>
+												</aura:iteration>
+											</tr>
+										</thead>
+										<tbody>
+										<aura:iteration items="{!v.lstProducts}" var="prod">
+											<tr class="slds-border_bottom">
+												<td role="gridcell" class="slds-cell-shrink">
+												<!--21-06 added-->
+												<aura:if isTrue="{!prod.Is_Selected__c}">
+													<lightning:icon iconName="action:approval"  size="x-small" class="slds-button slds-button_brand slds-button--icon-container slds-button--icon-border" alternativeText="Selected"/>
+													<aura:set attribute="else">
+														<button class="check_in_button slds-button slds-button--icon-container slds-button--icon-border" style="font-size:30px" data-contact-id="{!prod.Id}" id="checkoutbtn" onclick="{!c.handleClick}" >
+														+</button>
+													</aura:set>
+												</aura:if> 
+												</td>
+												<aura:iteration items="{!v.fieldarray}" var="f">
+													<aura:if isTrue="{!f.fieldPath != 'Is_Selected__c'}">
+														<td class="slds-text-body--regular slds-truncate">
+															<c:rendertext obj="{!prod}" field="{!f}"/> 
+														</td>
+													</aura:if>
+												</aura:iteration>
+											</tr>
+										</aura:iteration>
+										</tbody>
+										</table>
+									</div>
+								</aura:if>
+							</div>
+						</div>
+						<!-- BOTTOM DIV SECTION STARTS -->           
+						<div class="slds-p-vertical_x-small slds-p-horizontal_large slds-theme_shade">
+						<!-- SPINNER SECTION STARTS -->           
+						<aura:if isTrue="{!v.Spinner}">
+							<div aura:id="spinnerId" class="slds-spinner_container">
+								<div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+									<span class="slds-assistive-text">Loading</span>
+									<div class="slds-spinner__dot-a"></div>
+									<div class="slds-spinner__dot-b"></div>
+								</div>
+							</div>
+						</aura:if>
+						<!-- SPINNER SECTION ENDS -->           
+						<!-- SHOWS ALREADY ADDED PRODUCTS STARTS -->
+						<aura:if isTrue="{!v.pillsList2.length > 0}">
+							<p class="slds-m-top_x-small">{!$Label.c.PRM_EngagmentProduct_Product2}</p>
+							<aura:iteration items="{!v.pillsList2}" var="rec">
+							<tr> 
+								<td>
+									<lightning:input type="checkbox" aura:id="selectBox" name="{!rec.Id}" onchange="{!c.displayDelete}"/>
+								</td>
+								<td>
+									<div class="slds-truncate" title="{!rec.Product__r.Name}"><a href="{!'/'+ rec.Id}">{!rec.Product__r.Name}</a></div>
+								</td>
+							</tr>
+							</aura:iteration>
+							<div class="slds-float--right">
+								<div class="slds-button">
+									<aura:if isTrue="{!v.DeleteEnabled}" >
+										<lightning:button aura:id="removeBtn" label="Remove" name="Remove" variant="brand" onclick="{!c.handleProductDelete}" />              
+									</aura:if>
+								</div>
+							</div>
+						</aura:if>
+						<!-- SHOWS ALREADY ADDED PRODUCTS ENDS -->                   
+						</div>
+						<!-- BOTTOM DIV SECTION ENDS -->           
+                    </div>
+                <!-- -->
+                
+                
+                
+			</div>
+		
+	</div>
+        
+	<!-- FOOTER CONTAINS BUTTONS -->      
+	<!-- =============================================================================== -->
+	<div class="slds-col modal-footer slds-modal__footer">
+        <lightning:button label="Cancel" name="Cancel" onclick="{!c.CloseModalOne}" />
+        <aura:if isTrue="{!(v.showNext == true)? false : true}" >
+            <lightning:button label="Add" name="Add" variant="brand" onclick="{!c.nextSection}" disabled="{!v.pillsList.length > 0 ? false : true}"/>
+        </aura:if>
+        <aura:if isTrue="{!(v.showNext == true)? true : false}" >
+            <lightning:button aura:id="saveBtn" label="Save" name="Save" variant="brand" onclick="{!c.save}" />
+        </aura:if>
+    </div>
+    </aura:if>
+    
+    <!-- SECTION FOR VALIDATING PRODUCTS WITH ADDITIONAL DETAILS-->
+	<aura:if isTrue="{!v.addProductSection2}">
+		<div id="section1" class="slds-show" >
+			<div class="slds-col modal-body scrollable slds-p-around--medium" style="height: 100%; overflow-y: auto !important">
+				<div class="table-overflow slds-scrollable">
+					<table class="slds-table slds-table_bordered" role="grid" >
+					<thead>
+						<tr>
+							<th>{!$Label.c.PRM_EngagmentProduct_Product}</th>
+							<th>{!$Label.c.PRM_EngagmentProduct_Product1}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- TO Check if list is not empty-->
+						<aura:if isTrue="{!!empty(v.pillsList3)}">                 
+							<aura:iteration var="validProduct" items="{!v.pillsList3}" indexVar="index">
+								<aura:if isTrue="{!notequals(validProduct.productrefName,'')}">
+								<tr>
+									<td>
+										<ui:outputText value="{!validProduct.productrefName}"/>
+									</td>                         
+									<table class="slds-table" role="grid" >
+										<tbody>
+											<tr>
+												<td><lightning:input type="text" name="comments" label="Comments" value="{!validProduct.Comments}"/></td>
+												<td><lightning:input type="text" name="License_Key_Org_ID" label="License Key Org ID" value="{!validProduct.LicenseKeyOrgID}"/></td>
+												<td>
+													<lightning:select aura:id="requestforanupdatedkey" label="Request updated key?" name="Is_this_a_request_for_an_updated_key" value="{!validProduct.requestupdatedkey}">
+													<aura:iteration items="{!v.reqUpdtKeyPicklistVal}" var="item">
+														<option text="{!item.label}" value="{!item.value}"/>
+													</aura:iteration>
+													</lightning:select>
+												</td>
+											</tr>
+											<aura:if isTrue="{!validProduct.reqFieldsYes}">
+												<tr>
+													<td role="gridcell" class="slds-text-body--regular slds-truncate">
+														<lightning:input type="text" name="ipAddress" label="IP Address" value="{!validProduct.ipAddress}"/>
+													</td>
+													<td role="gridcell" class="slds-text-body--regular slds-truncate">
+														<lightning:input type="text" name="hostname" label="Host Name" value="{!validProduct.hostName}"/>
+													</td>
+													<td role="gridcell" data-record="{!index}" class="slds-text-body--regular slds-truncate">
+														<lightning:select aura:id="rqstType" disabled="" label="New Request?" value="{!validProduct.reqType}">
+														<aura:iteration items="{!v.requestType}" var="item">
+															<option text="{!item.label}" value="{!item.value}"/>
+														</aura:iteration>
+														</lightning:select> 
+														<aura:if isTrue="{!validProduct.reqType == 'Yes'}">
+															<ui:outputURL value="" aura:id="opUrl" disabled="false" label="Please use this link to request a new key" click="{!c.openURL}"/>
+														</aura:if>
+														<aura:if isTrue="{!validProduct.reqType == 'No'}">
+															<lightning:input type="text" aura:id="orgIdVal" disabled="false" label="Enter OrgId/Email" name="orgIdUrl" value="{!validProduct.orgID}"/>
+														</aura:if>
+													</td>  
+												</tr>
+											</aura:if>
+										</tbody>
+									</table>
+								</tr>
+								</aura:if>
+							</aura:iteration>
+						</aura:if>
+					</tbody>
+					</table>
+				</div>
+				<div class="slds-col modal-footer slds-modal__footer">
+							<lightning:button label="Cancel" name="Cancel" onclick="{!c.CloseModalOne}" />                           
+							<lightning:button label="Add" name="Add" variant="brand" onclick="{!c.saveAdditionalProducts}"/>
+					</div>
+			</div>
+		
+		</div>    
+	</aura:if>
+</aura:component>

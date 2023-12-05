@@ -1,0 +1,37 @@
+<!--
+/*
+ * Name			:	globalToastMessage
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	7/24/2023
+ * Description	:	This is used to show toast message relative to the component.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Vignesh Divakaran	    7/24/2023		I2RT-8640		Initial version.			N/A
+ */
+-->
+<template>
+
+    <template lwc:if={showToast}>
+
+        <!-- Toast container -->
+        <div class="slds-notify_container slds-is-relative override-zindex">
+            <div class={computedThemeClassNames} role="status">
+    
+                <!-- Icon -->
+                <span class={computedIconClassNames} title={title}>
+                    <lightning-icon icon-name={iconName} size="medium" alternative-text={alternateText} title={title}></lightning-icon>
+                </span>
+    
+                <!-- Message -->
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small">{strMessage}</h2>
+                </div>
+    
+            </div>
+        </div>
+    </template>
+
+</template>

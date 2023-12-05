@@ -1,0 +1,92 @@
+<!--
+/*
+ * Name			:	esCaseDownload
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	9/27/2022
+ * Description	:	This provides a UI with filters to download cases in a excel file.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Vignesh Divakaran      9/27/2022		I2RT-6880		Initial version.			N/A
+ Isha Bansal           06/13/2023       I2RT-8503      Download button enhancement  T01
+ */
+-->
+<template>
+
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container" style="width: 25% !important;">
+
+            <!-- Modal Header -->
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{strLabel}</h2>
+            </header>
+
+            <!-- Modal body -->
+            <lightning-card class="export-card-wrapper slds-is-relative">
+
+                <!-- Spinner. -->
+                <lightning-spinner variant="brand" if:true={boolDisplaySpinner}></lightning-spinner>            
+
+                <div class="slds-card__body_inner">
+                    <div class="export-card-wrapper-header">
+                        <p>{strMessage}</p>
+                    </div>
+                    <lightning-layout multiple-rows="true">
+                        
+                        <lightning-layout-item size="6">
+                            <lightning-combobox name="ORG ID" label="ORG ID" placeholder="Select your ORG ID" options={objFilter.lstOrgs} value={strOrgId} onchange={select} required if:false={boolShowSupportAccount}></lightning-combobox>
+                            <lightning-combobox name="Support Account" label="Support Account Name" placeholder="Select your support account" options={objFilter.lstSupportAccounts} value={strSupportAccountId} onchange={select} required if:true={boolShowSupportAccount}></lightning-combobox>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6">
+                            <lightning-combobox name="Product" label="Product" placeholder="Select your product details" options={objFilter.lstProducts} value={strProduct} onchange={select} ></lightning-combobox>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6">
+                            <lightning-input name="Case Number" label="Case Number" placeholder="Case Number" value={strCaseNumber} onchange={select} type="text" variant="standard"></lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6">
+                            <lightning-combobox name="Case Type" label="Case type" placeholder="Select your case Type" options={objFilter.lstCaseTypes} value={strCaseRecordTypeId} onchange={select}></lightning-combobox>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6">
+                            <lightning-combobox name="Priority" label="Priority" placeholder="Select your Priority" options={objFilter.lstPriority} value={strPriority} onchange={select}></lightning-combobox>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6">
+                            <lightning-combobox name="Status" label="Status" value={strStatus} options={objFilter.lstStatus} onchange={handleStatusChange}></lightning-combobox>
+                            <div class="slds-p-around_xx-small">
+                                <template for:each={allValues} for:item="val">
+                                  <lightning-pill key={val} name={val} label={val} onremove={handleStatusRemove}></lightning-pill>
+                                </template>
+                              </div>
+                              <!-- T01 . Independent multi-select picklist for status -->                                    
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6">
+                            <lightning-input name="Date From" label="From" placeholder="From" onchange={select} value={dtFrom} type="date" variant="standard"></lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6">
+                            <lightning-input name="Date To" label="To" placeholder="To" onchange={select} value={dtTo} type="date" variant="standard"></lightning-input>
+                        </lightning-layout-item>
+
+                    </lightning-layout>
+                </div>
+
+            </lightning-card>
+
+            <!-- Footer -->
+            <footer class="slds-modal__footer">
+                <lightning-button class={exportClass} icon-name="utility:download"  label="Export" title="Export" onclick={exportFile} variant="na" style="padding:4px;" disabled={disableActions}></lightning-button> 
+                <lightning-button label="Cancel" title="Cancel" onclick={cancel} variant="neutral" disabled={disableActions}></lightning-button>
+            </footer>
+
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+
+</template>

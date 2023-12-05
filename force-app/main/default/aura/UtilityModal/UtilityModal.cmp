@@ -1,0 +1,46 @@
+<!--Lightining component for Custom Popup Modal Window (Include footer buttons + window customed size) for the hybrid deal management(Opportunity)-->
+<aura:component >
+	<aura:attribute name="title"  type="string" />
+	<aura:attribute name="cancelLabel"  type="string" default=""  />
+	<aura:attribute name="confirmLabel"  type="string" default="Okay"/>
+	<aura:attribute name="isHidden" type="Boolean" default="true" />
+	<aura:attribute name="containerCSSStyle" type="String" />
+
+	<aura:registerEvent name="onSaveClick" type="c:LIPressEvent"/>
+	<aura:registerEvent name="onCancelClick" type="c:LIPressEvent"/>
+	<aura:method name="changeVisibility" action="{!c.changeVisibility}" description="show/hide this component">
+		<aura:attribute name="isShow" type="Boolean" default="false" />
+	</aura:method>
+	<div>
+		<div aria-hidden="{!v.isHidden}" role="dialog" 
+			class="{!v.isHidden ? 'slds-modal slds-modal__close slds-fade-in-close' : 'slds-modal slds-modal__open slds-fade-in-open'}" >
+	        <div class="slds-modal__container" style="{!v.containerCSSStyle}">
+
+	        	
+	            <div class="slds-modal__header">
+	           		<h2 class="slds-text-heading--medium">
+	           			{!v.title}
+	           		</h2>
+	                <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.defaultCloseAction}">
+	                  
+	                    X
+	                </button>
+	            </div>
+
+				<div class="slds-modal__content slds-p-around--medium" style="">
+					 <div>
+					 	{!v.body}
+					 </div>
+				</div>
+
+	           <div class="slds-modal__footer">
+	           	    <aura:if isTrue="{! !empty(v.cancelLabel)}">
+	               		<button class="slds-button slds-button--neutral" onclick="{!c.fireCancelEvent}">{!v.cancelLabel}</button>
+               		</aura:if>	
+	               <button class="slds-button slds-button--brand" onclick="{!c.fireSaveEvent}">{!v.confirmLabel}</button>
+	           </div>
+	       </div>
+	   </div>
+	   <div class="{!v.isHidden ? 'slds-backdrop slds-backdrop--close' : 'slds-backdrop slds-backdrop--open'}" aura:id="backdrop" ></div>
+    </div>
+</aura:component>

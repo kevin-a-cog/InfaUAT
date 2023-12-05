@@ -1,0 +1,1 @@
+<aura:event type="COMPONENT" description="Generic component event for all press actions"/>

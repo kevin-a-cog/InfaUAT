@@ -1,0 +1,32 @@
+<!--
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 08-21-2020
+  @last modified by  : Sathish Rajalingam
+  Modifications Log 
+  Ver   Date         Author               Modification
+  1.0   08-21-2020   Sathish Rajalingam   Initial Version
+-->
+<apex:page showHeader="true" sidebar="false" cache="false">
+    <apex:includeLightning />
+    <div id="lightning" />
+    <script>
+       
+
+        $Lightning.use("c:KB_Deployment_APP", function () {
+            console.log('Component started');
+            $Lightning.createComponent("c:KB_Deployment", {
+                // Pass params to the lightning component here
+            },
+                "lightning",
+                function (cmp) {
+                    console.log('Component Created');
+                });
+            console.log('Component ended');
+        });
+
+    
+        
+    </script>
+</apex:page>

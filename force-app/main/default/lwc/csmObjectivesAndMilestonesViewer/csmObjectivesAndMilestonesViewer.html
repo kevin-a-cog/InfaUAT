@@ -1,0 +1,117 @@
+<!-- sldsValidatorIgnore -->
+<!--
+/*
+ * Name			:	CsmPlanRisks
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	9/6/2021
+ * Description	:	Objectives and Milestones Viewer controller.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description							Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		9/6/2021		N/A				Initial version.					N/A
+ Karthi 				27/07/2022		AR-2150			Added Expand All/Collapse All		T1
+ */
+-->
+<template>
+	<div class="slds-is-relative slds-m-top_large slds-m-bottom_large">
+
+		<!-- Spinner. -->
+		<div class="spinner slds-m-top_large slds-m-bottom_large">
+			<template if:true={boolDisplaySpinner}>
+				<lightning-spinner variant="brand" size="medium" class="slds-m-top_large slds-m-bottom_large"></lightning-spinner>
+			</template>
+		</div>
+
+		<!-- Header controls. -->
+		<!--Depricated as new Objective button not required for Community
+			<template if:true={boolIsCSMCommunity}>
+			<div class="slds-clearfix slds-p-bottom_medium">
+				<div class="slds-float_right">
+					<lightning-button label={label.New_Objective} if:true={boolDisplayNewButton} onclick={displayAddObjective} class="slds-m-left_x-small es-button es-button--primary" 
+							slot="actions"></lightning-button>
+				</div>
+			</div>
+		</template>-->
+		<template if:false={boolIsCSMCommunity}>
+			<div class="slds-card">
+				<lightning-card variant="Narrow">	
+					<lightning-button label={label.New_Objective} if:true={boolDisplayNewButton} onclick={displayAddObjective} class="slds-m-left_x-small" slot="actions"></lightning-button>
+					<lightning-button label="Signoff" if:true={boolDisplayNewButton} onclick={displayObjectiveSignoff} class="slds-m-left_x-small" slot="actions"></lightning-button>
+					<!-- Buttons to handle Expand /Collapse All [T1 START]-->
+					<lightning-button-icon icon-name="utility:expand_all" alternative-text="Expand" onclick={handletoggleCollapse} name="expandAll" class="slds-m-left_small" title="Expand All" if:false={boolExpandAll} slot="actions" > </lightning-button-icon>					
+					<lightning-button-icon icon-name="utility:collapse_all" alternative-text="Collapse" onclick={handletoggleCollapse} name="collapseAll" class="slds-m-left_small"
+						title="Collapse All" if:true={boolExpandAll} slot="actions" ></lightning-button-icon>
+					<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-left_xx-small" onclick={refreshCard} slot="actions"></lightning-button-icon>
+					<!-- T1 END-->
+					<template if:false={isPoppedOut}>
+						<lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+					</template>
+					<template if:true={isPoppedOut}>
+						<lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+					</template>
+				</lightning-card>
+			</div>
+		</template>
+		
+		<!-- Card body. -->
+		<div class="slds-card">
+
+			<!-- Only display once the spinner is done. -->
+			<template if:false={boolDisplaySpinner}>
+
+				<!-- Table section. -->
+				<c-global-data-table class={objParameters.strTableClass} obj-parameters={objParameters} onaction={executeAction}></c-global-data-table>
+			</template>
+		</div>
+
+		<!-- Modals. -->
+		<template if:true={boolDisplayAddObjective}>
+			<c-csm-create-objective-and-milestone-modal plan-record={recordId} onclose={closeModal}></c-csm-create-objective-and-milestone-modal>
+		</template>
+		<template if:true={boolDisplayObjectiveSignoff}>
+			<c-csm-manage-objectives-signoff record-id={recordId} onclose={closeModal}></c-csm-manage-objectives-signoff>
+		</template>
+		<template if:true={boolDisplayEditObjective}>
+			<c-csm-custom-record-edit-page record-id={strSelectedRecord} sobject-api-name="Objective__c" onclose={closeModal}></c-csm-custom-record-edit-page>
+		</template>
+		<template if:true={boolDisplayDeleteObjective}>
+			<c-csm-delete-confirmation-modal record-id={strSelectedRecord} onclose={closeModal}></c-csm-delete-confirmation-modal>
+		</template>
+		<template if:true={boolDisplayApplyTemplate}>
+			<section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+				<div class="slds-modal__container">
+					<header class="slds-modal__header" style="padding-top: 0px; padding-bottom: 0px;">
+						<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeModal}>
+							<lightning-icon icon-name="utility:close" variant="inverse" size="small"></lightning-icon>
+						</button>
+					</header>
+					<div class="slds-modal__content">
+						<c-csm-apply-playbook record-id={recordId} str-pre-selected-objective={strPreSelectedObjective} str-pre-selected-milestone={strPreSelectedMilestone}
+								onclose={closeModal}></c-csm-apply-playbook>
+					</div>
+				</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>
+		</template>
+		<template if:true={boolDisplayAddMilestone}>
+			<c-csm-create-milestone-with-product-modal objective-id={strSelectedRecord} plan-id={recordId} onclose={closeModal}></c-csm-create-milestone-with-product-modal>			
+		</template>
+		<template if:true={boolDisplayManageObjectives}>
+			<c-csm-manage-objective-product-modal plan-id={recordId} objective-id={strSelectedRecord} onclose={closeModal}></c-csm-manage-objective-product-modal>
+		</template>
+		<template if:true={boolDisplayEditMilestone}>
+			<c-csm-custom-record-edit-page record-id={strSelectedRecord} sobject-api-name="Milestone__c" onclose={closeModal}></c-csm-custom-record-edit-page>
+		</template>
+		<template if:true={boolDisplayDeleteMilestone}>
+			<c-csm-delete-confirmation-modal record-id={strSelectedRecord} onclose={closeModal}></c-csm-delete-confirmation-modal>
+		</template>
+		<template if:true={boolDisplayManageMilestone}>
+			<c-csm-manage-milestone-products-modal plan-record-id={recordId} milestone-record-id={strSelectedRecord} onclose={closeModal}></c-csm-manage-milestone-products-modal>
+		</template>
+		<template if:true={boolDisplayCreateEngagement}>
+			<c-csm-create-new-engagement record-id={recordId} milestone-record-id={strSelectedRecord} onclosemodal={closeModal}></c-csm-create-new-engagement>
+		</template>		
+	</div>
+</template>

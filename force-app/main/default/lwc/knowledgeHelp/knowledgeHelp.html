@@ -1,0 +1,14 @@
+<!--
+  @description       : To be used in the Knowledge Console App in the Utility Bar to show a list of help links
+  @author            : balajip
+  @created on        : 09-29-2020
+-->
+<template>
+    <lightning-vertical-navigation onselect={handleSelect}>
+        <lightning-vertical-navigation-section>
+            <template for:each={helpItems} for:item="helpItem" >
+                <lightning-vertical-navigation-item name={helpItem.id} label={helpItem.label} key={helpItem.id}></lightning-vertical-navigation-item>
+            </template>
+        </lightning-vertical-navigation-section>
+    </lightning-vertical-navigation>
+</template>

@@ -1,0 +1,25 @@
+<!--
+    @description       : Child lookup component for datatable 
+    @author            : Pavithra V
+    @group             : 
+    Modifications Log  
+    Ver   Date         Author       Modification
+-->
+<template>
+    
+        <div class="picklist-container">        
+            <lightning-record-edit-form object-api-name="Fulfillment_Line__c" record-id={context}>
+                <div if:true={showEditForm} style="float:left;width: 95%;" >
+                    <lightning-input-field  style="float:left;width: 95%;" id="fieldid" variant="label-hidden" field-name={fieldapi}
+                        value={value} onchange={handleLookupChange} >
+                    </lightning-input-field>
+                </div>
+
+                <div if:false={showEditForm} style="float:left;margin:auto;width: 95%;">
+                    <div style="float:left;width: 90%;" class="slds-truncate"><lightning-output-field  variant="label-hidden" id="opfieldid" field-name={fieldapi} value={value}></lightning-output-field></div>                    
+                    <div style="float:left;width: 5%;"><lightning-icon icon-name="utility:edit" if:false={disable} size="xx-small" alternative-text="Edit" title="Edit" onclick={handleEdit}></lightning-icon></div>
+                </div>            
+            </lightning-record-edit-form>
+        </div>
+       
+</template>

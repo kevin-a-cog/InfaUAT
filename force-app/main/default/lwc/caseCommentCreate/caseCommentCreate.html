@@ -1,0 +1,373 @@
+<!--
+  @description       : 
+  @author            : SF Developer
+  @group             : 
+  @last modified on  : 12-06-2020
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   12-06-2020   SF Developer   Initial Version
+
+ Change History
+ **************************************************************************************************************************
+ Modified By            Date            Jira No.            Description                                               Tag
+ **************************************************************************************************************************
+ balajip                05-Apr-2022     I2RT-5459           Added feature to tag users in a Case Comment              T01
+ Vignesh Divakaran      10-Jan-2023     NA                  Moved one of the conditional directive to a template tag  T03
+															to fix the LWC Compilation error post Spring 23' upgrade
+Isha Bansal            01-Jan-2023     I2RT-7491           Display banner for Jira Login on the Jire related replies  T04
+-->
+<template>
+    <div class="customExternalRadioButtonCSS" lwc:dom="manual"></div>
+    <div>
+        <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+        <div class="slds-clearfix slds-m-top_large">
+            <div class="slds-float_right fab-posiiton" if:true={showFloatingActionButton}>
+                <c-floating-icon action={floatingActions} onfabclick={handleFabClick}></c-floating-icon>
+            </div>
+             <!--I2RT-7491 T04 changes start here -->
+            <div class="slds-card slds-theme_shade" if:true={isZIssueLinked} >
+                <div class="slds-card__header slds-grid">
+                  <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                    <span class="slds-assistive-text">warning</span>
+                    <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                      title="Description of icon when needed">
+                      <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#warning"></use>
+                      </svg>
+                    </span>
+                    <h2 >{label.jirabannermsg}</h2>
+                  </div>
+                </div>
+              </div>
+        <!--I2RT-7491 T04 changes end  here -->
+            <lightning-input-rich-text class={richtextheight} name="comment" label="Comment Body" formats={formats} data-name="commentBody"
+                value={caseCommentObj.fields.Comment__c} onchange={handleChange} variant="bottom-toolbar" valid="false">
+            </lightning-input-rich-text>
+        </div>
+    
+        <lightning-layout class="slds-m-top_small ">
+            <lightning-layout-item size="6">
+                <lightning-radio-group name="accessType" label="Access" options={sharingOptions} type="button"
+                    value={caseCommentObj.fields.Visibility__c} onchange={handleChange} class="visibilityClass">
+                </lightning-radio-group>
+                <!-- T01 -->
+                <template if:true={isInternalAccess}>
+                    <div class="slds-p-right_large">
+                        <c-global-multi-select-lookup 
+                            name="taggedUsers"
+                            obj-request={objMultiSelectLookupRequest} 
+                            onupdate={handleChange} 
+                            if:true={boolDisplayMultiSelectLookup}>
+                        </c-global-multi-select-lookup>
+                    </div>
+                </template>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="6" class="slds-clearfix slds-form-element__label">
+                <!-- div style="width:10px" -->
+                <template if:true={isExternalAccess}>
+                        <label class="slds-form-element__label" for="importance" style="margin-top: -3px;float: left;">High Importance</label>
+                        <lightning-input style="float:left;" if:true={isExternalAccess} variant="label-hidden" type="checkbox" label="High Importance" name="importance" id="importance" 
+                        checked={caseCommentObj.fields.Importance__c} onchange={handleChange}></lightning-input>
+                </template>
+                <!-- /div -->
+
+                <template if:true={isnotPrivate}>
+                    <br />
+                    <!-- @Akhilesh 8 Apr 2021 start [I2RT-2125]-->
+                <lightning-combobox 
+                        style="clear: left;"
+                        if:true={isnotPrivate}
+                        name="commentCategory"
+                        label="Comment Category :"
+                        value={selectedeCommentCategory}
+                        placeholder="Select Comment Category"
+                        options={commentCategories}
+                        onchange={handleChange}
+                        class="validate"
+                        required
+                        ></lightning-combobox>
+                    <!-- @Akhilesh 8 Apr 2021 end [I2RT-2125]-->
+                </template>
+
+            </lightning-layout-item>
+
+        </lightning-layout>
+
+        <!-- @Akhilesh 21 Apr 2021 - start-->
+        <template if:false={isPrivateAccess}>
+
+            <lightning-layout class="slds-m-top_xxx-small ">
+                <lightning-layout-item size="12">
+                    <template if:true={isEOGRVisible}>
+                    <lightning-helptext content="Engineer OGR will be visible when OGR is running, It will extend milestone. Customer Action will complete milestones"></lightning-helptext>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <!--<lightning-layout class="slds-m-top_xxx-small ">
+            <lightning-layout-item size="6">
+                <lightning-radio-group name="notificationstype" label="Notification Type" options={notificationtype} type="button"
+                    value={nottype} onchange={handleChange}>
+                </lightning-radio-group>
+            </lightning-layout-item>            
+            <lightning-layout-item size="6" class="slds-clearfix slds-form-element__label" >
+                <!- - div style="width:10px" - ->
+                    <lightning-input variant="label-inline" type="checkbox" label="Post this update to JIRA?" name="jiraupdate" 
+                        checked={jiraupdatecheckbox} onchange={handleChange}> <span class="slds-form-element__label"> Post this update to JIRA?</span>
+                    </lightning-input> 
+                <!- - /div - ->
+            </lightning-layout-item>
+
+        </lightning-layout>-->
+
+            <lightning-layout class="slds-m-top_xxx-small">
+                <lightning-layout-item size="6">
+                    <lightning-radio-group name="notificationstype" label="Notification Type" options={notificationtype} type="button"
+                        value={nottype}  onchange={handleChange}>
+                    </lightning-radio-group>
+
+                </lightning-layout-item>
+                <template if:true={isnotPrivate}>
+                    <lightning-layout-item size="6">
+                        <div>
+                            <div>
+                                <!--  <T02> -->
+
+                            <lightning-combobox name="nextaction" data-name="nextaction" dropdown-alignment="auto" field-name="Next_Action__c"  label="Next Action" placeholder="Choose Next Action"
+                                 options={nextActionValues} value={selectedNextAction}             
+                                onchange={handleChange} required>
+                                </lightning-combobox>
+                                <!--  </T02> -->
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+
+            <template if:true={eOGRVisible}>
+                <div class="slds-m-top_small ">
+                    <div class="inlineclass">
+                    <lightning-input type="datetime" name="eOGRDateTimeField" label="Extend OGR by :" required value={eOGRDateTime} onchange={handleChange} 
+                            min={todayDate}  message-when-bad-input="Please enter a valid time in future"
+                            message-when-range-underflow="Please enter a valid time in future">
+                        </lightning-input>
+                        <template if:true={showwarningtime}>
+                         <p style="font-size:x-small;color:red"> You have selected a time outside your working hours! </p>  
+                        </template>
+
+                    </div>
+                    <!--div>                
+                    <lightning-button variant={eogrtimebutton} label="Ok2" title="Ok2" onclick={handleChange} class="slds-p-top_xx-large">
+
+                    </lightning-button >
+                    <lightning-radio-group name="confirmeogr" label="Ok" options={eogrok} type="button"
+                        value={caseCommentObj.fields.Visibility__c} onchange={handleChange}>
+                    </lightning-radio-group>
+                </div-->
+                </div>
+
+                <!-- div class="slds-text-heading_small slds-border_bottom">
+                    <lightning-input type="checkbox"  label="eOGR" name="eOGRRequired"  value={iseOgrSelected} checked={iseOgrSelected} onchange={handleChange}></lightning-input>
+                </div>
+                
+                   <<template if:true={showeOGRDropdown}>>
+                        <div class="slds-text-heading_small slds-border_bottom">
+                        <lightning-combobox
+                        name="eOGRActionCombobox"
+                        label="Select :"
+                        value={selectedeOGRAction}
+                        placeholder="Select Action"
+                        options={eOGRActions}
+                        
+                        onchange={handleChange}
+                        required></lightning-combobox></div -->
+
+
+                <!-- template if:true={showDatePickerForeOGR}>
+                                <div class="slds-text-heading_small slds-border_bottom">
+                            <lightning-input type="datetime" name="eOGRDateTimeField" label="Extend OGR by :" required value={eOGRDateTime} onchange={handleChange} 
+                            min={todayDate}  message-when-bad-input="Please enter a valid time in future"
+                            message-when-range-underflow="Please enter a valid time in future"></lightning-input>
+
+                            <lightning-button variant={eogrtimebutton} label="Ok" title="Ok" onclick={handleegorclick} class="slds-m-left_x-small"></lightning-button>
+
+                        </div> </template>
+            <    </template></div>-->
+
+            </template>
+
+            <!--attachment section-->
+            <div class="">
+                <div class="slds-m-top_medium">
+
+                    <div class="slds-text-heading_small slds-border_bottom">
+                        <lightning-icon size="x-small" icon-name="utility:attach"></lightning-icon>&nbsp;File(s)
+                    </div>
+                    <lightning-file-upload class="" label="" name="fileUploader" record-id={parentId}
+                        onuploadfinished={handleUploadFinished} variant="label-hidden" multiple>
+                    </lightning-file-upload>
+
+                    <!-- <template if:true={uploadedAttachments}> -->
+                    <lightning-pill-container items={attachments} onitemremove={deleteFile}>
+                    </lightning-pill-container>
+                    <!-- </template> -->
+
+                </div>
+            </div>
+        </template>
+        <!-- @Akhilesh 21 Apr 2021 - end-->
+
+        <div class="slds-clearfix slds-m-top_large">
+            <div class="es-case-comment-actions">
+                <div class="slds-align_absolute-center">
+
+                    <!-- Scheduler buttons.-->
+                    <lightning-button label={label.Insert_Meeting} name="insertMeeting" onclick={getEventCreated} icon-name="utility:event" 
+                            class="slds-m-horizontal_xx-small"></lightning-button>
+                    <lightning-button label={label.Insert_Availability} name="insertAvailability" onclick={getScheduleShared} icon-name="utility:shift_scheduling_operation" 
+                        class="slds-m-horizontal_xx-small"></lightning-button>
+
+                    <!-- Rest of buttons.-->
+                    <lightning-button if:true={isShowDraftButton} label="Save as Draft" name="saveAsDraft"
+                        onclick={handleClick} icon-name="utility:note" class="slds-m-horizontal_x-small es-save-as-draft"></lightning-button>
+                    <!-- <T03> -->
+                    <template if:true={isShowscheduleButton}>
+                        <lightning-button class="slds-m-horizontal_xx-small" label={btnschedule} name="schedule" onclick={handleClick}
+                            icon-name="utility:reminder" if:false={isSchedule}>
+                        </lightning-button>
+                    </template>
+                    <!-- </T03> -->
+                    <template if:true={isSchedule}>
+                        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open"
+                            aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-2">
+                            <div class="slds-modal__container" style="width:33%;">
+                                <header class="slds-modal__header slds-modal__header_empty">
+                                </header>
+                                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2" style="height:250px">
+                                    <lightning-input type="datetime" data-field="Date_Time_Scheduled__c"
+                                        name="Date_Time_Scheduled__c" label="Scheduled date/time" required min={todayDate}
+                                        message-when-bad-input="Please enter a valid time in future"
+                                        message-when-range-underflow="Please enter a valid time in future"
+                                        value={caseCommentObj.fields.Date_Time_Scheduled__c}>
+                                    </lightning-input>
+                                </div>
+                                <lightning-layout>
+                                    <lightning-layout-item size="6"> <button
+                                            class="slds-float_left slds-button slds-button_neutral" name="cancelSchedule"
+                                            onclick={handleClick} style="width:100%; border-radius: 0;">Cancel</button>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6"><button
+                                            class="slds-float_right slds-button slds-button_brand" name="scheduleConfirm"
+                                            onclick={handleClick} style="width:100%; border-radius: 0;">Schedule</button>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+                    <lightning-button variant="brand" label="Submit" name="submit" onclick={handleClick}
+                        icon-name="utility:save" class="slds-m-horizontal_x-small es-submit-button">
+                    </lightning-button>
+                    <!--   <lightning-button-group></lightning-button-group>-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <template if:true={showFloatingActionModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small"
+            aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{modalHeader}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" style="overflow: initial;"
+                    id="modal-content-id-1">
+                    <template if:true={isQuickUpdate}>
+                        <lightning-record-edit-form object-api-name="Case" record-id={recordId}
+                            onsuccess={handleSuccess} onload={handleLoad}>
+                            <lightning-layout multiple-rows>
+                                <template for:each={quickActionConfiguration.data.quickUpdateFieldList}
+                                    for:item="field">
+                                    <lightning-layout-item size="6" key={field} class="slds-p-horizontal_x-small">
+                                        <lightning-input-field field-name={field}></lightning-input-field>
+                                    </lightning-layout-item>
+                                </template>
+                            </lightning-layout>
+                            <lightning-button type="submit" label="Submit" class="slds-hide"
+                                data-name="quickUpdateSubmit"></lightning-button>
+                        </lightning-record-edit-form>
+                    </template>
+                    <template if:true={isQuickText}>
+                        <div class="slds-border_bottom slds-p-bottom_x-small"
+                            style="border-color:rgb(141, 173, 214); color:rgb(3, 62, 115); font-size: 16px; font-weight:bold;">
+                            Select Template
+                        </div>
+                        <div class="slds-m-top_large">
+                            <lightning-layout multiple-rows vertical-align="stretch">
+                                <template for:item="child" for:each={emailTemplateList} for:index="ind">
+                                    <lightning-layout-item flexibility="grow" key={child.customMetadataName}
+                                        class="padding-left_none" padding="horizontal-large" size="4">
+                                        <div if:false={child.isSelected} class="custom-card"
+                                            onclick={handleEmailTemplateClick} data-name="childCard" data-ind={ind}
+                                            data-recordid={child.customMetadataName}>
+                                            <div class="slds-align_absolute-center">
+                                                {child.emailTemplateLabel}
+                                            </div>
+                                            <div class="custom-card-description">
+                                                {child.description}
+                                            </div>
+                                        </div>
+                                        <div if:true={child.isSelected} class="custom-card_active"
+                                            onclick={handleEmailTemplateClick} data-name="childCard" data-ind={ind}
+                                            data-recordid={child.customMetadataName}>
+                                            <div class="slds-align_absolute-center">
+                                                {child.emailTemplateLabel}
+                                            </div>
+                                            <div class="custom-card-description">
+                                                {child.description}
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                </template>
+                            </lightning-layout>
+                        </div>
+                    </template>
+
+                </div>
+                <footer class="slds-modal__footer slds-modal__footer_directional">
+                    <button class="slds-button slds-button_neutral" name="cancelModal"
+                        onclick={handleClick}>Cancel</button>
+                    <template if:true={isQuickUpdate}>
+                        <button class="slds-button slds-button_brand" name="nextModal" onclick={handleClick}
+                            if:true={isQuickTextAvailable}>Save &amp; Next</button>
+                    </template>
+                    <button class="slds-button slds-button_brand" name="saveModal" onclick={handleClick}>Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Scheduler modal.-->
+    <template if:true={boolOpenScheduler}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+            <div class="slds-modal__container schedulerModal">
+                <header class="slds-modal__header" style="padding-top: 0px; padding-bottom: 0px;">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" variant="inverse" size="small"></lightning-icon>
+                    </button>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium schedulerModal">
+					<c-global-scheduler-container record-id={recordId} bool-send-back-response="true" bool-is-send-schedule={boolIsSendSchedule} bool-is-create-invite={boolIsCreateInvite} 
+                        onschedulermessage={populateCommentField} onpopout={popOut}></c-global-scheduler-container>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+</template>

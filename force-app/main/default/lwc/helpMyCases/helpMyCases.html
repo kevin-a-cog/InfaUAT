@@ -1,0 +1,34 @@
+<template>
+    <div class="container-fluid es-container-fluid--grey" if:true={showCasesTable}>
+        <div class="container">
+            <div class="my-cases-heading">
+                <a href={casesLandingPage} class="d-flex in-heading-div">
+                    <div class="in-component-heading">My Cases</div>
+                    <lightning-icon data-name="cases" class="right-chev pl-3" icon-name="utility:chevronright"
+                        size="x-small">
+                    </lightning-icon>
+                </a>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-30">
+                    <div class="es-caselist-wrapper">
+                        <lightning-datatable data={getcaselist} class="slds-max-medium-table_stacked" 
+                                     columns={COL_CONTACTS}
+                                     sorted-by={sortBy}
+                                     sorted-direction={sortDirection}
+                                     onsort={onHandleSort}
+                                     key-field="id"
+                                     hide-checkbox-column="true"></lightning-datatable>
+                        <div class="es-table-pagination mt-2">
+                            <p class="es-table__pagination-count">
+                                Showing {startingRecord}- {endingRecord} of {totalRecountCount} {showCases}
+                            </p>
+                        </div>
+                        <c-es-do-p-agination onfirst={firstHandler} onprevious={previousHandler} onnext={nextHandler} onlast={lastHandler}> </c-es-do-p-agination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</template>

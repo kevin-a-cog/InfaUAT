@@ -1,0 +1,21 @@
+<apex:page showHeader="false" applyHtmlTag="true" applyBodyTag="false">
+ <apex:includeLightning />
+ <div style="width:100%;height:100%;" id="shipcompleteContiner" />
+ <script>
+ 
+ var recordId = "{!$CurrentPage.parameters.Id}";
+ $Lightning.use("c:ShipCompleteLtngOut", function() {
+ $Lightning.createComponent("c:ShipCompleteInlineEdit",
+ {
+  "recordId":recordId
+
+ },
+ "shipcompleteContiner",
+ function(cmp) { 
+ console.log('Component created, do something cool here..');
+ });
+
+ });
+ </script>  
+
+</apex:page>

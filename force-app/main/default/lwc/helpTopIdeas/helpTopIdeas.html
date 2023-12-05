@@ -1,0 +1,55 @@
+<template>
+    <div class="in-top-ideas-container">
+        <template if:false={showNoresult}>
+
+        <h1 class="in-heading in-orange in-heading-bottom">Top Ideas</h1>
+        <ul>
+            <template for:each={wiredResults} for:item="item">
+                <li key={item} class="list-item">
+                    <div class="d-flex bd-highlight">
+                        <div class="vote-count">
+                            <lightning-button-icon variant="bare" class="green-icon" icon-name="utility:chevronup"
+                                alternative-text="up" size="large" disabled>
+                            </lightning-button-icon>
+                            <div>
+                                {item.Upvote_Count__c}
+                            </div>
+                            <lightning-button-icon variant="bare" class="red-icon" icon-name="utility:chevrondown"
+                                alternative-text="down" size="large" disabled>
+                            </lightning-button-icon>
+                        </div>
+                        <div class="pl-3">
+                            <a href={item.AttachmentName} target={target} class="in-user-list-item">{item.Title}</a>
+                            <div class="in-status">
+                                {item.Status}
+                            </div>
+                            <div class="idea-time">
+                                {item.Body} in {item.Categories}
+                            </div>
+                            <div class="in-top-ideas-author-mobile" style="align-items: center;">
+                                <div class="in-username">
+                                    {item.CreatorName}
+                                </div>
+                                <img src={item.CreatorFullPhotoUrl} class="profile-icon">
+                            </div>
+                        </div>
+                        <div class="in-top-ideas-author-desktop" style="align-items: center;">
+                            <div class="in-username">
+                                {item.CreatorName}
+                            </div>
+                            <img src={item.CreatorFullPhotoUrl} class="profile-icon">
+                        </div>
+                    </div>
+                </li>
+            </template>
+            <li class="list-item">
+                <a href={viewmore} class="in-user-list-item view-more">
+                    View More
+                    <i class="view-more-arrow"><span>&#8594;</span></i>
+                </a>
+            </li>
+        </ul>
+    </template>
+
+    </div>
+</template>

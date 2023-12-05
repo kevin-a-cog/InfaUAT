@@ -1,0 +1,442 @@
+<aura:component controller="AddOpportunityProductsController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <!-- <ltng:require styles="/resource/slds212/assets/styles/salesforce-lightning-design-system.css" />-->
+    
+    <!-- <aura:attribute name="recordId" type="Id"/> -->
+    <aura:attribute name="showNext" type="Boolean" default="false"/>
+    <aura:attribute name="disabledNext" type="Boolean" />
+    <aura:attribute name="productFamily" type="List"/>
+    <aura:attribute name="productForecast" type="List"/>
+    <aura:attribute name="ForcastFamily" type="List"/>
+    <aura:attribute name="productBusiness" type="List"/>
+    <aura:attribute name="productEngine" type="List"/>
+    <aura:attribute name="ErrorMsgLst" type="string[]"/>
+    
+    
+    <aura:attribute name="lstProducts" type="product2[]" />
+    <aura:attribute name="lstselectedProducts" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!-- @-26-6 added --> 
+    <aura:attribute name="searchKeyword" type="string" default=""/>
+    <aura:attribute name="fieldarray" type="Object[]" />
+    <aura:attribute name="fieldStrQry" type="String" />
+    <aura:attribute name="salePriceIsEdited" type="Boolean" default="false"/>
+    <aura:attribute name="saveBtnClicked" type="Boolean" default="false"/>
+    <aura:attribute name="transTypeMap" type="Map"/>
+    <aura:attribute name="transTypeOptions" type="List" />
+    
+    
+    <!--21-06 added-->
+    <aura:attribute name="pillsList" type="List" />  
+    
+    <!--19-09 added-->
+    <!-- <aura:attribute name="opportunityRecType" type="String" default="" /> -->
+    
+    <!--08-12-2017 added -->
+    <aura:attribute name="opportunityType" type="String" default="" />
+    
+    <!-- 06/18/2019 added QCA-1229 -->
+    <aura:attribute name="opptyPricebookName" type="String" default="" />
+    
+    <aura:attribute name="VfPageMethod" type="object"/>
+    
+    <div id="section1" class="slds-show" >
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container" style="height:106%">
+                
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.CloseModalOne}">
+                        <lightning:icon class="slds-button__icon slds-button__icon_large fillColor" iconName="utility:close" size="x-small" alternativeText="search"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">Add Products</h2>
+                    <p class="slds-m-top_x-small">Price Book: {!v.opptyPricebookName}</p>
+                </header>
+                
+                <!-- Error message -->
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error slds-hide" role="alert" aura:id="error-msg-Id">
+                        <span class="slds-assistive-text">error</span>
+                        <h2>Please Select the valid Pricebook on the related Opportunity.
+                        </h2>
+                        
+                    </div>
+                <!-- Error Message -->                
+                <!-- FOUR PICKLISTS BELOW HEADER -->
+                <!-- =============================================================================== -->
+                 <div class="slds-modal__content slds-grow modal-overflow" id="modal-content-id-1" style="overflow:auto">
+                        <div class="slds-col slds-grid slds-grid_vertical">
+                            
+                            <div class="slds-p-vertical_x-small slds-p-horizontal_large slds-theme_shade">
+                                <!-- @-26-6 added for search product --> 
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label slds-assistive-text" for="combobox-unique-id">Search</label>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-combobox_container">
+                                            <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                                                
+                                                <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                                                    <ui:inputText updateOn="keyup" keyup="{!c.searchProdcut2}" aura:id="searchId" class="slds-input slds-combobox__input" value="{!v.searchKeyword}" placeholder="Search Products"/>
+                                                    
+                                                    <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right" title="Description of icon when needed">
+                                                        <lightning:icon class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" iconName="utility:search" size="x-small" alternativeText="search"/>
+                                                        <span class="slds-assistive-text">Description of icon</span>
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="slds-grid slds-wrap slds-grid--pull-padded slds-p-top--small" >
+                                                    <div class="slds-p-horizontal--small slds-large-size--1-of-3 slds-medium-size--1-of-2  slds-small-size--1-of-1 slds-p-bottom--xx-small" >
+                                                        <lightning:select aura:id="pForecast" label="Product Forecast" name="Forecast_Product__c" value="" onchange="{!c.onSelectChange}">                         
+                                                            <aura:iteration items="{!v.productForecast}" var="item">
+                                                                <option text="{!item.label}" value="{!item.value}"/>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                    
+                                                    
+                                                    <div class="slds-p-horizontal--small slds-large-size--1-of-3 slds-medium-size--1-of-2  slds-small-size--1-of-1 slds-p-bottom--xx-small" >
+                                                        <lightning:select aura:id="pFamily" label="Product Family" name="Product_Family__c" value="" onchange="{!c.onSelectProductFamily}">
+                                                            <aura:iteration items="{!v.productFamily}" var="item">
+                                                                <option text="{!item.label}" value="{!item.value}"/>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                    
+                                                    <div class="slds-p-horizontal--small slds-large-size--1-of-3 slds-medium-size--1-of-2  slds-small-size--1-of-1 slds-p-bottom--xx-small" >
+                                                        <lightning:select aura:id="pFamily2" label="Forecast Family" name="Family" value="" onchange="{!c.onSelectForecastFamily}">                         
+                                                            <aura:iteration items="{!v.ForcastFamily}" var="item">
+                                                                <option text="{!item.label}" value="{!item.value}"/>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>   
+                                                </div>  
+                                                
+                                                <div id="listbox-unique-id" role="listbox">
+                                                    <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid" role="presentation">
+                                                        <li role="presentation" class="slds-listbox__item">
+                                                            <span id="listbox-option-unique-id-01" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                                <span class="slds-media__figure">
+                                                                    <span class="slds-icon_container slds-icon-standard-account" title="Description of icon when needed">
+                                                                        <lightning:icon class="slds-icon slds-icon_small" iconName="standard:account" size="x-small" alternativeText="search"/>
+                                                                        <span class="slds-assistive-text">Description of icon</span>
+                                                                    </span>
+                                                                </span>
+                                                                <span class="slds-media__body">
+                                                                    <span class="slds-listbox__option-text slds-listbox__option-text_entity">Acme</span>
+                                                                    <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">Account • San Francisco</span>
+                                                                </span>
+                                                            </span>
+                                                        </li>                          
+                                                    </ul>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--21-06 added-->  
+                                <div class="slds-pill_container slds-pill_container_bare">
+                                    <div id="listbox-unique-id" role="listbox">
+                                        <ul class="slds-listbox" role="presentation">
+                                            <li role="presentation" class="slds-listbox__item">
+                                                <div class="slds-p-top--x-small">
+                                                    <aura:iteration var="pill" items="{!v.pillsList}">
+                                                        <lightning:pill label="{!pill.Name}" href="{!'/'+ pill.Id}" onremove="{!c.handleRemove }" name="{!pill.Id}">
+                                                            <aura:set attribute="media">
+                                                                <lightning:icon iconName="standard:product"  alternativeText="Product"/>
+                                                            </aura:set>
+                                                        </lightning:pill>
+                                                    </aura:iteration>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <!-- <div class="slds-text-title slds-m-top_x-small" aria-live="polite">1 Item(s) Selected</div>-->
+                            </div>
+                            
+                            
+                            <!-- ADD PRODUCT WINDOW: LIST OF PRODUCTS == FIELDS USING FIELDSET -->  
+                            <!-- DYNAMIC TABLE GOES HERE     -->
+                            <!-- =============================================================================== -->               
+                            <div class="slds-grow">
+                                <div class="slds-p-top--small">
+                                    <aura:if isTrue="{!v.lstProducts.length > 0}">
+                                        <div class="table-overflow">
+                                            <table class="slds-table slds-table_bordered slds-table_cell-buffer" role="grid" >
+                                                <thead>
+                                                    <tr class="slds-text-title_caps">
+                                                        <th scope="col" role="gridcell" class="slds-cell-shrink">
+                                                            <div class="slds-truncate" title="button"></div>
+                                                        </th>
+                                                        <!-- <th scope="col">
+                            <div class="slds-truncate" title="Name">Name</div>
+                        </th>
+                         <th scope="col">
+                            <div class="slds-truncate" title="Products">Products</div>
+                        </th>
+                        
+                        <th scope="col">
+                            <div class="slds-truncate" title="Product Family">Product Family</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Forecast Family">Forecast Family</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Delivery Method">Delivery Method</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Pricing Business Model">Pricing Business Model</div>
+                        </th> -->
+                                                        <!--  <th scope="col">
+                            <div class="slds-truncate" title="Processing Engine">Processing Engine</div>
+                        </th>-->
+                                                        
+                                                        <aura:iteration items="{!v.fieldarray}" var="f">
+                                                            <aura:if isTrue="{!f.label != 'Is Selected'}">
+                                                                <th scope="col">
+                                                                    <div class="slds-truncate" title="{!f.label}">{!f.label}</div>
+                                                                </th>
+                                                            </aura:if>
+                                                        </aura:iteration>
+                                                        
+                                                    </tr>
+                                                    
+                                                </thead>
+                                                <tbody>
+                                                    <aura:iteration items="{!v.lstProducts}" var="prod">
+                                                        <tr class="slds-border_bottom">
+                                                            <td role="gridcell" class="slds-cell-shrink">
+                                                                <!--<lightning:input type="checkbox" label=" " name="blue" checked="{!prod.isSelected}"/>-->
+                                                                <!--21-06 added-->
+                                                                <aura:if isTrue="{!prod.Is_Selected__c}">
+                                                                    <lightning:icon iconName="action:approval"  size="x-small" class="slds-button slds-button_brand slds-button--icon-container slds-button--icon-border" alternativeText="Selected"/>
+                                                                    <aura:set attribute="else">
+                                                                        <button class="check_in_button slds-button slds-button--icon-container slds-button--icon-border" style="font-size:30px" data-contact-id="{!prod.Id}" id="checkoutbtn" onclick="{!c.handleClick}" >
+                                                                            +</button>
+                                                                    </aura:set>
+                                                                </aura:if> 
+                                                            </td>
+                                                            <!-- <td class="slds-text-body- -regular">
+                                {!prod.Name}
+                            </td>
+                            <td class="slds-text-body- -regular">
+                                {!prod.Products__c}
+                            </td>
+                           
+                            <td class="slds-text-body- -regular">
+                                {!prod.Product_Family__c}
+                            </td>
+                            <td class="slds-text-body- -regular">
+                                {!prod.Family}
+                            </td>
+                            <td class="slds-text-body- -regular">
+                                {!prod.Delivery_Method__c}
+                            </td>
+                            <td class="slds-text-body- -regular">
+                                {!prod.Pricing_Business_Model__c}
+                            </td> -->
+                                                            <!--  <td class="slds-text-body- -regular">
+                                {!prod.ProcessingEngine}
+                            </td>-->
+                                                            <aura:iteration items="{!v.fieldarray}" var="f">
+                                                                <aura:if isTrue="{!f.fieldPath != 'Is_Selected__c'}">
+                                                                    <td class="slds-text-body--regular slds-truncate">
+                                                                        <c:rendertext obj="{!prod}" field="{!f}"/> 
+                                                                    </td>
+                                                                </aura:if>
+                                                            </aura:iteration>
+                                                            
+                                                        </tr>
+                                                    </aura:iteration>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                <!-- FOOTER CONTAINS BUTTONS -->      
+                <!-- =============================================================================== --> 
+                <footer class="slds-modal__footer">
+                    <div class="slds-float--left">
+                        <aura:if isTrue="{!(v.showNext == true)? true : false}" >
+                            <lightning:button label="Back" name="Back" onclick="{!c.backSection}" />
+                        </aura:if>
+                    </div>
+                    
+                    <div class="slds-float--right">
+                        <div class="slds-button">
+                            <lightning:button label="Cancel" name="Cancel" onclick="{!c.CloseModalOne}" />
+                            <aura:if isTrue="{!(v.showNext == true)? false : true}" >
+                                <lightning:button label="Next" name="Next" variant="brand" onclick="{!c.nextSection}" disabled="{!v.pillsList.length > 0 ? false : true}"/>
+                            </aura:if>
+                            <aura:if isTrue="{!(v.showNext == true)? true : false}" >
+                                <lightning:button aura:id="saveBtn" label="Save" name="Save" variant="brand" onclick="{!c.save}" />
+                            </aura:if>
+                        </div>
+                    </div>
+                </footer>
+                
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+    
+    <!-- 'EDIT SELECTED PRODUCTS' SECTION -->      
+    <!-- =============================================================================== --> 
+    <div id="section2" class="slds-hide">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-2">
+            <div class="slds-modal__container" style="height:106%">
+                
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.CloseModalOne}">
+                        <lightning:icon class="slds-button__icon slds-button__icon_large fillColor" iconName="utility:close" size="x-small" alternativeText="close"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">Edit Selected Products</h2>
+                </header>
+                
+                
+                <div class="slds-modal__content slds-grid slds-nowrap modal-overflow" id="modal-content-id-2">
+                    <div class="slds-col slds-grid slds-grid_vertical slds-nowrap">
+                        
+                        <div class=" slds-grow">
+                            <div class="slds-p-top--small">
+                                <table class="slds-table slds-table_bordered slds-table_cell-buffer" role="grid">
+                                    <thead>
+                                        <tr class="slds-text-title_caps">
+                                            
+                                            <!-- <th>
+                                    <div class="slds-truncate" title="Product">PRODUCT NAME</div>
+                                </th>
+                                <th>
+                                    <div class="slds-truncate" title="Products">FORECAST PRODUCT</div>
+                                </th>
+                                <th>
+                                    <div class="slds-truncate" title="Family">FORECAST FAMILY</div>
+                                </th>                -->                  
+                                            
+                                            
+                                            <aura:iteration items="{!v.fieldarray}" var="f">
+                                                <aura:if isTrue="{!or(or(f.fieldPath == 'Name', f.fieldPath == 'Forecast_Product__c'), f.fieldPath == 'Family')}">
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="{!f.label}">{!f.label}</div>
+                                                    </th>
+                                                </aura:if>
+                                            </aura:iteration>
+                                            
+                                            <th>
+                                                <div class="slds-truncate" title="Transaction Type">Transaction Type</div>
+                                            </th>
+                                            <th>
+                                                <div class="slds-truncate" title="Sales Price">Sales Price</div>
+                                            </th>
+                                        </tr>
+                                        
+                                    </thead>
+                                    <tbody>
+                                        
+                                        <aura:iteration items="{!v.lstselectedProducts}" var="prod" indexVar="n">
+                                            <tr class="slds-border_bottom">
+                                                <td class="slds-text-body--regular slds-truncate">
+                                                    <lightning:icon aura:id="errorIconSmall" class="slds-button__icon slds-button__icon_large setIconAlign" iconName="utility:warning" size="x-small" alternativeText="warning"/>
+                                                    <!-- {!n + 1 + '.  '} <a href="javascript:void(0);">{!prod.prodName}</a> -->
+                                                    {!n + 1 + '.  '} <a href="javascript:void(0);">{!prod.Product2.Name}</a>
+                                                </td>
+                                                <!-- <td class="slds-text-body- -regular slds-truncate">
+                                        <p>{!prod.Product2.Forecast_Product__c}</p>
+                                    </td>
+                                     
+                                    <td class="slds-text-body- -regular slds-truncate">
+                                        <p>{!prod.Product2.Family}</p>
+                                    </td> -->
+                                                
+                                                <aura:iteration items="{!v.fieldarray}" var="f">
+                                                    <aura:if isTrue="{!and(or(f.fieldPath == 'Forecast_Product__c', f.fieldPath == 'Family'), f.fieldPath != 'Name')}">
+                                                        <td class="slds-text-body--regular slds-truncate">
+                                                            <c:rendertext obj="{!prod.Product2}" field="{!f}"/> 
+                                                        </td>
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                <!-- Transaction Type Picklist go here  -->
+                                                <td class="slds-text-body--regular">
+                                                    <div class="slds-combobox-picklist" >
+                                                        <lightning:select aura:id="transTypePL" name="{!prod.Id}" onchange="{!c.onTransTypeChange}" >
+                                                            <aura:iteration items="{!v.transTypeOptions}" var="transValue">
+                                                                <aura:if isTrue="{!transValue.value == v.opportunityType}">
+                                                                    <option value="{!transValue.value}" text="{!transValue.label}" selected="true" />
+                                                                    <aura:set attribute="else">
+                                                                        <option value="{!transValue.value}" text="{!transValue.label}" />
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                    
+                                                </td>
+                                                <td class="slds-text-body--regular" id="{!prod.Id}" aura:id="salesPriceTD">
+                                                    <!-- <input class="slds-input" value="{!prod.UnitPrice}" aura:id="price" id="{!prod.Id}" /> -->
+                                                    <ui:inputNumber class="slds-input" value="{!prod.UnitPrice}" aura:id="price" change="{!c.onSalesPriceChange}"/>
+                                                    <!-- <lightning:input   type="Number" label=" " name="price" value="{!prod.salesPrice}" aura:id="price"/>-->
+                                                </td>
+                                            </tr>
+                                            
+                                        </aura:iteration>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <footer class="slds-modal__footer">
+                    <div class="slds-float--left">
+                        <aura:if isTrue="{!(v.showNext == true)? true : false}" >
+                            <lightning:button label="Back" name="Back" onclick="{!c.backSection}" />
+                        </aura:if>
+                    </div>
+                    <div class="slds-hide" aura:id="errorPopUpBox" style="position:absolute;bottom:90px;right:30px;" id="errorPopUp">
+                        
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left slds-theme--error forceStatusIcon uiPanel--default uiPanel--error" role="tooltip" id="help" >
+                            <div class="slds-popover__body">
+                                <div class="slds-float_left">Can't save records with errors.</div><br/>
+                                <aura:iteration items="{!v.ErrorMsgLst}" var="err">
+                                    <li style="margin-left: 5px;text-align: left;">{!err}</li> 
+                                </aura:iteration> 
+                            </div>
+                        </div>
+                        
+                        <div aura:id="errorIcon" class="slds-form-element" style="left: 11px; position: absolute; bottom: -36px;">
+                            <div class="slds-form-element__icon slds-align-middle">
+                                <button class="slds-button slds-button_icon slds-button slds-button_icon" aria-describedby="help" title="Help">
+                                    <lightning:icon class="slds-button__icon slds-button__icon_large fillColor" iconName="utility:warning" size="small" alternativeText="warning"/>
+                                    <span class="slds-assistive-text">Help</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                    <div class="slds-float--right">
+                        
+                        <div class="slds-button">
+                            <lightning:button label="Cancel" name="Cancel" onclick="{!c.CloseModalOne}" />
+                            <aura:if isTrue="{!(v.showNext == true)? false : true}" >
+                                <lightning:button label="Next" name="Next" variant="brand" onclick="{!c.nextSection}" />
+                            </aura:if>
+                            <aura:if isTrue="{!(v.showNext == true)? true : false}" >
+                                <lightning:button label="Save" name="Save" variant="brand" onclick="{!c.save}" />
+                            </aura:if>
+                        </div>
+                    </div>
+                </footer>
+                
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+    
+</aura:component>

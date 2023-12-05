@@ -1,0 +1,54 @@
+<!--
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 08-07-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author               Modification
+  1.0   05-24-2021   Sathish Rajalingam   Initial Version
+  2.0   01-02-2023   Sathish Rajalingam   I2RT-7585 - Make the KB Search recommendation widget floatable on eSupport portal.
+-->
+<template>
+    <div class="es-sidebar-multiple" style="height:100%;"> <!-- 2 -->
+        <!-- <template if:true={showLastValues}>
+            <div class="es-case-info-horizontal-wrapper">
+                <div class="es-case-info-horizontal__title">Last Applied Values</div>
+                <div class="es-case-info-horizontal__info">
+                    <p class="es-case-info-horizontal__info-item">
+                        <span class="es-case-info-horizontal__label">Product:</span>
+                        <span class="es-case-info-horizontal__value">Cloud Application Integration</span>
+                    </p>
+                    <p class="es-case-info-horizontal__info-item">
+                        <span class="es-case-info-horizontal__label">Project:</span>
+                        <span class="es-case-info-horizontal__value">ProjectABC</span>
+                    </p>
+                    <p class="es-case-info-horizontal__info-item">
+                        <span class="es-case-info-horizontal__label">Org Name: </span>
+                        <span class="es-case-info-horizontal__value">Org34234</span>
+                    </p>
+                </div>
+                <div class="es-btn-grp d-flex justify-content-center">
+                    <button class="es-c-button es-c-button--primary" type="submit">
+                        Apply
+                    </button>
+                </div>
+            </div>
+        </template> -->
+        <!-- <div class="es-lds-form-group mb-3">
+             <div class="slds-form-element">
+                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                    <lightning-icon size="xx-small" class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" icon-name="utility:search"></lightning-icon>
+                    <input type="text" placeholder="Search across Knowledge Base" class="slds-input" />
+                </div>
+            </div> 
+        </div> -->
+        <!-- <div class="es-case-info-horizontal-wrapper">
+            <c-es-similar-cases ></c-es-similar-cases>           
+        </div>   -->
+        <div class="es-kb-recommended-wrapper"> 
+            <h4 class="es-sidebar__heading">Recommendations for you</h4>         
+            <c-es-case-deflection escasedeflectionsearch={triggerforsearch} escasedeflectionplacedin={placedin}></c-es-case-deflection><!-- Property added for Case Deflection Search -->
+        </div>       
+    </div>
+</template>

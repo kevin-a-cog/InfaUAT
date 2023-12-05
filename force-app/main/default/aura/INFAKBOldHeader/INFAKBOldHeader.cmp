@@ -1,0 +1,99 @@
+<!--
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 10-24-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  Tag       |  Date          |  Modified by              |  Jira reference   |   ChangesMade
+   1        |  07-19-2020    |  Sathish R                |                   |   Initial Version
+   2        |  09-08-2020    |  Divesh Soni		         |                   |   Header UI Updated
+   3        |  11-Jan-2021   |  Sathish R                |    I2RT-550       |   Progress Icon Added
+   4        |  11-Jan-2021   |  Sathish R                |    I2RT-745       |   Progress Icon Added
+   5        |  23-04-2022    |  Ankit Saxena             | IN Community Changes | Auto Login Changes and Login Link update
+
+-->
+
+
+<aura:component
+      implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId"
+      access="global" controller="KBLWCHandler">
+
+      <aura:attribute name="username" type="String" />
+      <aura:attribute name="userid" type="String" />
+      <aura:attribute name="currentUsersDetails" type="KBLWCHandler.UserDetailsWrapper" default="" />
+      <aura:attribute name="searchKeyword" type="String" default="" />
+      <aura:attribute name="feedBackURL" type="String" default="{!$Label.c.CustomerSupportFeedbackURL}" />
+      <aura:attribute name="logOutURL" type="String" default="{!$Label.c.CustomerSupportLogoutURL}" />
+      <aura:attribute name="signUpURL" type="String" default="{!$Label.c.CustomerSupportSignupURL}" />
+      <aura:attribute name="logInURL" type="String" default="{!$Label.c.CustomerSupportLoginURL}" />
+      <aura:attribute name="fedId" type="String" />
+      <aura:attribute name="internalLogInURL" type="String" default="{!$Label.c.CustomerSupportInternalLoginURL}" />
+      <aura:attribute name="internalNetworkSwitchLogInURL" type="String"
+            default="{!$Label.c.KB_Internal_Network_Switch_LoginURL}" />
+      <aura:attribute name="hdnKBCommunityNameInURL" type="String" default="{!$Label.c.KB_Community_Name_In_URL}" />
+      <aura:attribute name="oktaMeApiUrl" type="String" default="{!$Label.c.Okta_Me_Api_Url}" />
+      <aura:attribute name="KbSamlUrl" type="String" default="{!$Label.c.KB_Community_Saml_Url}" />
+
+
+      <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+      <!--<3>-->
+
+      <div class="divmaskArticleContent"
+            style="float: right; z-index: 1569; background-color: white; position: absolute; width: 100%;  height: 100%; display: none;top:0px;left:0px;">
+            <div style="width: 100%;margin: 0;position: fixed;padding: 0;text-align: center;top: 45%;">
+                  <lightning:spinner alternativeText="Loading" size="medium" />
+            </div>
+      </div>
+      <!--</3>-->
+      <!-- PAGE HEADER -->
+      <header class="community-header" style="display: none;">
+            <div class="community-nav-desktop">
+                  <div class="top-header">
+                        <nav class="navbar navbar-expand-lg container">
+                              <div class="collapse navbar-collapse" id="topNavbarSupportedContent">
+                                    <ul class="navbar-nav mr-auto community-top-header-links">
+                                          <div class="user-login-info-hide" aura:id="UserLogin">
+                                                <div class="community-authentication" id="community-authentication">
+                                                      <li class="nav-item" onclick="{!c.doLogin}">
+                                                            <span class="nav-link">Log In</span>
+                                                      </li>
+                                                      <li class="header-pipe">|</li>
+                                                      <li class="nav-item" onclick="{!c.doSignUp}">
+                                                            <span class="nav-link">Sign Up</span>
+                                                      </li>
+                                                </div>
+                                          </div>
+                                          <div class="user-login-info-hide" aura:id="UserName">
+                                                <div class="community-authenticated" id="community-authenticated">
+                                                      <li class="nav-item">
+                                                            <span id="authenticated-firstName" class="nav-link"
+                                                                  href="#">{!v.currentUsersDetails.FirstName}</span>
+                                                      </li>
+                                                      <li class="header-pipe">|</li>
+                                                      <li class="nav-item" onclick="{!c.doLogout}">
+                                                            <span class="nav-link">Log Out</span>
+                                                      </li>
+                                                </div>
+                                          </div>
+                                          <div class="user-login-info-hide" aura:id="UserId">
+                                                <span id="authentication-userId" class="nav-link"
+                                                      href="#">{!v.currentUsersDetails.UserId}</span>
+                                          </div>
+                                          <div class="user-login-info-hide" aura:id="UserType">
+                                                <span id="authentication-userType" class="nav-link"
+                                                      href="#">{!v.currentUsersDetails.UserType}</span>
+                                          </div>
+                                    </ul>
+                              </div>
+
+                        </nav>
+                  </div>
+            </div>
+
+      </header>
+
+
+
+
+</aura:component>

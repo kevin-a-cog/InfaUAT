@@ -1,0 +1,14 @@
+<apex:page showHeader="false" sidebar="false">
+<img class="logo" src="{!$Resource.informatica}" width="20%"/>  
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<apex:form >
+<b>
+<p style="color:black;font-family: Arial Unicode MS;font-size:18px;text-align:center;border:2px">The system is currently in ReadOnly mode due to the Salesforce Site switching maintenance activity until 04th Oct 00:20 AM PST (04th Oct 12:50 PM IST).
+<br/>Apologies for the inconvenience caused.
+<br/>
+<br/>
+Please revisit after the maintenance window is over.
+</p>
+</b>
+</apex:form>
+</apex:page>

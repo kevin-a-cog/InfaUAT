@@ -1,0 +1,36 @@
+<!--
+*  LWC: OverrideTaxOnQuote
+*  @Author: Chandana Gowda
+*  @Date: 15  Jul 2021
+*  @Description: TAX-165 : Enable "Override Tax(ES/PS only)" button for Quotes.
+-->
+<template>
+    <template if:true={loading}>
+        <lightning-spinner alternative-text="Overriding Tax" size="medium"></lightning-spinner>
+    </template>
+
+    <!--Modal Header-->
+    <div class="modal-header slds-modal__header slds-size_1-of-1">
+        <h4 class="title slds-text-heading--medium">Override Tax</h4>
+    </div>
+    <!--End Modal Header-->
+
+    <!--Modal Body-->
+    <div class="slds-modal__content slds-align_absolute-center slds-size_1-of-1 slds-is-relative">
+        <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+            <h2><b>{statusMsg}</b></h2>
+        </div>
+    </div>
+    <!--End of Modal Body-->
+
+    <!--Modal Footer-->
+    <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+        <template if:true={isTaxApplicable}>
+            <lightning-button variant="brand" label="Confirm" title="Override Tax" onclick={overrideTax}
+                class="slds-m-left_x-small"></lightning-button>
+        </template>
+        <lightning-button variant="brand-outline" label="Cancel" title="Cancel" onclick={closeWindow}
+            class="slds-m-left_x-small"></lightning-button>
+    </div>
+    <!--End of Modal Footer-->
+</template>

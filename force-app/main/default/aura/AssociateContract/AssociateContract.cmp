@@ -1,0 +1,12 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickActionwithoutHeader,flexipage:availableForAllPageTypes" access="global" >
+	<aura:attribute name="recordId" type="String" />
+    <aura:attribute name="sObjectName" type="String" />
+    <aura:attribute name="buttonName" type="String" default="Associate Contract"/>
+
+   	<div class="slds-col modal-header slds-modal__header">
+         <h2 class="title slds-text-heading--medium">{!v.buttonName}</h2>
+	</div>
+    
+   	<c:genericLookupChild buttonName="{!v.buttonName}" Child2Id="{!v.recordId}" Child2Object="{!v.sObjectName}" customPermissions="['CSMUser','Renewal_Rep']"/>
+
+</aura:component>

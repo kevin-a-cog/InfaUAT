@@ -1,0 +1,220 @@
+<aura:component controller="primaryOrderedContractedRenewal" implements="force:lightningQuickAction,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+	<aura:attribute name="posQuote" type="boolean" default = "false"/>
+    <aura:attribute name="posOrder" type="boolean" default = "false"/>
+    <aura:attribute name="posContract" type="boolean" default = "false"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="buttonLabel" type="boolean" default = "false"/>
+    <aura:attribute name="info" type="boolean" default = "false"/>
+    <aura:attribute name="SOG" type="boolean" default = "false"/>
+    <aura:attribute name="createorder" type="boolean" default = "false"/>
+    <aura:attribute name="activateAmend" type="boolean" default="false" />
+    <aura:attribute name="isProcessing" type="boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.onLoad}"/>
+    
+    <!--Spinner-->
+    <aura:if isTrue="{!v.isProcessing}">
+        <lightning:spinner aura:id="myProcessSpinner" variant="brand" title="Activating the Order......" alternativeText="Activating the Order......"/>
+    </aura:if>
+
+    <aura:attribute name="options1" type="List" default="[
+    {'label': 'Activate the Order', 'value': 'Activation'}, 
+    {'label': 'Activate the Amendment Order for Custom Billing', 'value': 'ActivationAmend'},                                                     
+    {'label': 'Run Batch for Revenue Agreement creation', 'value': 'RunBatchRevAgrr'}, 
+    {'label': 'Run Batch for PO Number', 'value': 'RunBatchPONum'},                                                      
+    {'label': 'Contract the Order', 'value': 'Contracted'}                                                  
+    ]"/>
+    <aura:attribute name="value1" type="String" default=""/>
+    
+    <aura:attribute name="options2" type="List" default="[
+    {'label': 'Amend the Contract', 'value': 'Amend'},
+    {'label': 'Create Renewal Opportunity', 'value': 'RenewalOppty'},                                                         
+    {'label': 'Create Renewal Quote', 'value': 'RenewalQuote'}                                                         
+    ]"/>
+    <aura:attribute name="value2" type="String" default=""/>
+    
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'Submit for Approval', 'value': 'SubmitApproval'},
+    {'label': 'Recall Approval', 'value': 'RecallApproval'},
+    {'label': 'Quote as Primary', 'value': 'QuotePrimary'},
+    {'label': 'Create Order', 'value': 'Ordered'},
+    {'label': 'Set Sub Type to Full Debook', 'value': 'FullDebook'}     
+    ]"/>
+    
+    <aura:attribute name="value" type="String" default=""/>
+    
+ 
+    
+ 
+    <aura:if isTrue="{!v.SOG}">
+    <div>  
+    
+<aura:if isTrue="{!v.posQuote}">
+    <lightning:radioGroup name="radioGroupRequired"
+                          label="Select any one action"
+                          options="{! v.options }"
+                          value="{! v.value }"
+                          type="radio"
+                          required="true"
+                          onchange="{! c.onSelect }"/>
+    
+  </aura:if> 
+    
+    <aura:if isTrue="{!v.posOrder}">
+    <lightning:radioGroup name="radioGroupRequired"
+                          label="Select any one action"
+                          options="{! v.options1 }"
+                          value="{! v.value1 }"
+                          type="radio"
+                          required="true"
+                          onchange="{! c.onSelect }"/>
+    
+  </aura:if> 
+    
+    <aura:if isTrue="{!v.posContract}">
+    <lightning:radioGroup name="radioGroupRequired"
+                          label="Select any one action"
+                          options="{! v.options2 }"
+                          value="{! v.value2 }"
+                          type="radio"
+                          required="true"
+                          onchange="{! c.onSelect }"/>
+    
+  </aura:if> 
+    <br/><br/>
+      <div position="right">  
+     <aura:if isTrue="{!v.buttonLabel}">     
+    <lightning:button label="Complete" iconName="utility:connected_apps" iconPosition="right" variant="brand" onclick="{!c.doInit}"/>
+	</aura:if> 
+          </div>
+     </div>
+    
+    <aura:set attribute="else">
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+<div class="slds-modal__container">
+<header class="slds-modal__header">
+<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+
+<span class="slds-assistive-text">Close</span>
+</button>
+<h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Information</h2>
+<p class="slds-m-top_x-small">You do not have permissions.</p>
+</header>
+<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+<p>
+    This feature can only be used by SOG Team. If you are not SOG, please reach out to your respective SOG Team. <br/> <br/> <br/>
+	<b> Thank You ! </b>
+
+</p>
+</div>
+<footer class="slds-modal__footer">
+<button class="slds-button slds-button_neutral" onclick="{!c.goToRecord}">OK</button>
+</footer>
+</div>
+</section>
+<div class="slds-backdrop slds-backdrop_open"></div>    
+    </aura:set>
+  </aura:if> 
+
+    
+<aura:if isTrue="{!v.buttonLabel}"> 
+	<aura:if isTrue="{!v.posQuote}">
+		<aura:if isTrue="{!v.createorder}">	
+	   
+			<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+			<header class="slds-modal__header">
+			<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+
+			<span class="slds-assistive-text">Close</span>
+			</button>
+			<h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Warning</h2>
+			<p class="slds-m-top_x-small"> <b> Creating Order ? </b></p>
+			</header>
+			<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+			<p>
+				Please make sure bleow things are done before processing Order.<br/> <br/>
+				Opportunity should be Closed Won. <br/><br/>
+				Quote should be set as Primary. <br/> <br/>
+				PO# Number should be applied to all Quote Lines <br/> <br/>
+				</p>
+			
+			</div>
+			<footer class="slds-modal__footer">
+			<button class="slds-button slds-button_neutral" onclick="{!c.goToRecord}">Cancel</button>
+			<button class="slds-button slds-button_neutral" onclick="{!c.proceed}">OK</button>
+			</footer>
+			</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>    
+	   </aura:if>
+	    </aura:if>
+    
+    <aura:if isTrue="{!v.posOrder}">
+		<aura:if isTrue="{!v.activateAmend}">	
+	   
+			<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+			<header class="slds-modal__header">
+			<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+
+			<span class="slds-assistive-text">Close</span>
+			</button>
+			<h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Warning</h2>
+			<p class="slds-m-top_x-small"> <b> Activating Amend Order </b></p>
+			</header>
+			<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+			<p>
+				The amended lines having Quantity Increase or Quantity Decrease will undergo Billing Frequency change before and after Activation.<br/> <br/>
+				After Order is activated, you will be redirected to Order Products page. <br/><br/>
+				With some delay of 2 to 3 minutes, Billing Frequency will be updated for those lines to "Invoice Plan" <br/> <br/>
+				</p>
+			
+			</div>
+			<footer class="slds-modal__footer">
+			<button class="slds-button slds-button_neutral" onclick="{!c.goToRecord}">Cancel</button>
+			<button class="slds-button slds-button_neutral" onclick="{!c.proceed}">OK</button>
+			</footer>
+			</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>    
+	   </aura:if>
+	    </aura:if>
+   
+   </aura:if>
+    
+    
+    
+<aura:if isTrue="{!v.info}">     
+   
+<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+<div class="slds-modal__container">
+<header class="slds-modal__header">
+<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+
+<span class="slds-assistive-text">Close</span>
+</button>
+<h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Information</h2>
+<p class="slds-m-top_x-small">Your request has been submitted.</p>
+</header>
+<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+<p>
+    Please make sure that all pre-requisites are completed before submitting the request.<br/><br/>
+    To Create Order, make sure Quote is set as Primary, Opportunity is Closed Won, PO# is applied to all lines.<br/><br/>
+    To Contract the Order, make sure Order is set as <b>Bill and Contract</b>.<br/><br/>
+    </p>
+    
+    <p>Since it is Large Quote/Order/Contract with more number of lines or bundle structure is complex, the request is processed separately and might take a while to complete.
+</p>
+    <br/>  <p>
+<b>Please refresh the page after some time.</b>
+
+</p>
+</div>
+<footer class="slds-modal__footer">
+<button class="slds-button slds-button_neutral" onclick="{!c.goToRecord}">OK</button>
+</footer>
+</div>
+</section>
+<div class="slds-backdrop slds-backdrop_open"></div>    
+   </aura:if>  
+</aura:component>

@@ -1,0 +1,88 @@
+<template>
+    <div class="container-fluid es-container-fluid--grey">
+        <div class="container">
+            <h2 class="es-page__heading">
+                <lightning-button-icon variant="container" size="medium" icon-name="utility:chevronleft" title="Back"></lightning-button-icon>
+                Create a New Case
+            </h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <c-es-case-creation-filled filled-step="1" filled-label="Case Type" filled-value="Shipping | Product Download & License Request"></c-es-case-creation-filled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <c-es-case-creation-filled filled-step="2" filled-label="Case Information" filled-value="P1 | Subject : Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…"></c-es-case-creation-filled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="es-case-wrapper">
+                        <h3 class="es-case__heading"> <span class="es-case__step es-case__step--active">3</span> Additional Case Information</h3>
+                        <div class="es-case-section">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="es-form">
+                                        <div class="form-row">
+                                            <div class="form-group es-form-group es-lds-form-group col-md-4">
+                                                <lightning-combobox
+                                                    name="problemType"
+                                                    label="Problem Type"
+                                                    value=""
+                                                    placeholder="Select Problem Type"
+                                                    options={optionsTemp}
+                                                    onchange={handleChange}>
+                                                </lightning-combobox>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">                                
+                                            <div class="form-group es-form-group es-lds-form-group es-lds-file-select col-md-6">
+                                                <lightning-file-upload
+                                                    label="Attach Files (Upload limit is 2GB)"
+                                                    name="fileUploader"
+                                                    accept={acceptedFormats}
+                                                    record-id={myRecordId}
+                                                    file-field-name="Guest_Record_fileupload__c"
+                                                    onuploadfinished={handleUploadFinished}
+                                                    multiple>
+                                                </lightning-file-upload>
+                                                <p><span class="es-case-addnl-info__icon">+</span>Add Files</p>
+                                            </div>
+                                        </div>
+                                        <p class="es-form-label">Recommended logs to attach to this case</p>                                 
+                                        <div class="es-kb-recommended-wrapper es-kb-recommended-wrapper--lg">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h4 class="es-kb-recommended__title">
+                                                    <lightning-icon icon-name="utility:page"
+                                                                    size="xx-small" 
+                                                                    class="es-icon-space-right--small">
+                                                    </lightning-icon>
+                                                    How to: Extract Tomcat, Session Logs and attach it to case?
+                                                </h4>
+                                                <img src={maximize} alt="maximize"/>
+                                            </div>
+                                            <div class="es-kb-recommended__info">
+                                                <span class="es-sidebar__tag">Knowledge Base</span>
+                                                <span class="es-kb-recommended__date">6 Dec 2020</span>
+                                            </div>
+                                            <div class="es-kb-recommended__desc-section">
+                                                <p class="es-kb-recommended__desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                                <p class="es-kb-recommended__desc">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur. </p>
+                                                <p class="es-kb-recommended__desc">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.</p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="es-btn-grp d-flex justify-content-end">
+                                        <lightning-button label="Cancel" class="es-button es-button--secondary"></lightning-button>
+                                        <lightning-button label="Go Back" class="es-button es-button--secondary"></lightning-button>
+                                        <lightning-button label="Proceed" class="es-button es-button--primary"></lightning-button>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

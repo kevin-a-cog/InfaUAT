@@ -1,0 +1,130 @@
+.discussion-heading {
+  font-weight: 300;
+  font-size: 33.55px;
+  color: #373737;
+  padding: 24px 0px;
+}
+
+@media screen and (max-width: 768px) {
+    .discussion-heading {
+        font-size: 24px;
+    }
+}
+
+.in-anon-discussions-container {
+    padding-bottom: 55px;
+}
+
+@media screen and (max-width: 768px) {
+    .in-anon-discussions-container {
+        margin: 0 auto;
+        width: 93%;
+    }
+}
+
+.right-chev {
+  --sds-c-icon-color-foreground-default: #373737;
+}
+.action-img{
+    height: auto;
+    width: 25px;
+    margin-right: 5px;
+    margin-top: 4px;
+}
+.action-name {
+  font-weight: normal;
+  font-size: 19.3958px;
+  line-height: 23px;
+  color: #ff4d00;
+}
+@media screen and (max-width: 768px) {
+    .action-name {
+        font-size: 12px;
+    }
+}
+.action-item{
+    border: 1px solid #FF4D00;
+    box-sizing: border-box;
+    height: fit-content;
+    padding: 10px 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+@media screen and (max-width: 768px) {
+    .action-item {
+        padding: 5px;
+    }
+}
+
+.discussion-img{
+    height: auto;
+    width: 70px;
+}
+@media screen and (max-width: 768px) {
+    .discussion-img{
+        display: none;
+    }
+}
+
+.discussion-title{
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 32px;
+    letter-spacing: 0.02em;
+    color: #373737;
+}
+@media screen and (max-width: 768px) {
+    .discussion-title{
+        font-size: 14px;
+    }
+}
+.discussion-title:hover {
+    color: #001aff;
+}
+.discussion-info{
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 21px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.02em;
+    color: #5E5A5A;
+}
+@media screen and (max-width: 768px) {
+    .discussion-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.discussion-count{
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 21px;
+    letter-spacing: 0.02em;
+    color: #333333;
+}
+.item-bg{
+    background-color: white;
+    border-top: 1px solid rgb(242, 242, 242);
+    padding: 5px 0px;
+    align-items: center;
+}
+@media screen and (max-width:768px){
+    .item-bg{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
+
+.item-bg:first-child{
+    border-top: none;
+}
+.in-anon-discussions-replies{
+    display: flex;
+}
+.in-anon-discussions-likes {
+    margin-right: 15px;
+    display: flex;
+}

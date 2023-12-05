@@ -1,0 +1,18 @@
+<aura:component implements="force:appHostable,force:hasRecordId,flexipage:availableForRecordHome,flexipage:availableForAllPageTypes" access="global">
+	<aura:handler name="init" value="{!this}" action="{!c.default}"/>
+		
+       		 <div class="relative">
+                     <h6>List of Dashboards available:</h6>
+                        <br/><br/>
+                 </div>
+        		
+                    <center>
+                    <ui:button label="NNB Proforma Dashboard" press="{!c.dashbaord1}" />
+                        <br/><br/><br/><br/>
+                    <ui:button label="Segment Leaders Dashboard" press="{!c.dashbaord2}" />
+                    
+                    
+                 </center>
+       		
+        	
+</aura:component>

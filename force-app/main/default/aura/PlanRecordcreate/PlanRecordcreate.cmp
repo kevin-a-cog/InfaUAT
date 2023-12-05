@@ -1,0 +1,274 @@
+<!--
+  @description       : 
+  @author            : Venky K
+  @group             : 
+  @last modified on  : 08-20-2020
+  @last modified by  : 
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   08-20-2020   VenkyK 						   Initial Version
+  2.0 	09-02-2021	 Pavithra V						   OBSP Plan for Project Cosmos
+-->
+<aura:component controller="CSMPlanProductsController" implements="lightning:isUrlAddressable,force:lightningQuickActionwithoutHeader,lightning:actionOverride,force:hasRecordId,force:hasSObjectName,lightning:availableForFlowScreens" access="global">
+    
+    <lightning:navigation aura:id="navService"/>  
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>	
+    
+    <aura:attribute name="planRecDetails" type="string" default=""/>
+    <!--aura:attribute name="recordeditfm" type="boolean" default="false" /-->
+    <aura:attribute name="accPlanLayout" type="boolean" default="false"/> 
+    <aura:attribute name="salesplanLayout" type="boolean" default="false"/>
+    
+    <aura:attribute name="addplanpr" type="boolean" default="false" />
+    <aura:attribute name="setaddplanpr" type="boolean" default="false" />
+    <aura:attribute name="showMessage" type="boolean" default="false" />
+    
+    <aura:attribute name="selectedrectypelabel" type="String" default=" " />
+    <aura:attribute name="selectedRecordTypeId" type="String" default=" " />
+    
+    <aura:attribute name="recid" type="String" default=" " />
+    <aura:attribute name="accountid" type="String" default=" " />
+    <aura:attribute name="parentRecordId" type="String" default=" " />
+
+    <aura:attribute name="navigatetoobj" type="String" default=" " />
+    <aura:attribute name="navigatetorec" type="String" default=" " />
+    <aura:attribute name="buttonlabel" type="String" default="Next" /> 
+	<!--Create New Dummy-->
+    <!--Create New Dummy-->
+    <aura:attribute name="accountURL" type="String" default="" />
+    <aura:attribute name="accountName" type="String" default="Account" />
+    
+    <aura:attribute name="overrideEligiblity" type="boolean" default="false"/>
+    
+    <aura:attribute name="recordTypeMap" type="Map"/>
+    
+    <aura:attribute name="isLoading" type="boolean" default="false"/>
+    <aura:attribute name="openPlanProductsScreen" type="boolean" default="false"/>    
+    <aura:attribute name="PlanRecordId" type="String"/>
+    
+    <aura:attribute name="bAccPlanLayout_SaveClose" type="boolean" default="false"/>
+    <aura:attribute name="openInterlockModal" type="boolean" default="false"/>
+
+    
+    
+    <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 100% !important;
+        width:60% !important;
+        } .selectrec {
+        margin-left: 200px;
+        
+        }
+    </aura:html>  
+    
+    <lightning:workspaceAPI aura:id="workspace"/>
+
+         <!--Create New Interlock-->
+         <aura:if isTrue="{!v.openInterlockModal}"> 
+            <c:csmCreateNewInterlock recordId="{!v.PlanRecordId}" onclosemodal="{!c.closeFocusedTab}"></c:csmCreateNewInterlock>
+        </aura:if> 
+        <aura:if isTrue="{!!v.openInterlockModal}">        
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close closeIcon slds-button_icon-bare slds-button_icon-inverse" title="Close" onclick="{!c.closeFocusedTab}">
+                    <lightning:icon iconName="utility:close" alternativeText="Close" title="close" class="my-icon"/>
+                </button>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">New Plan</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium padding" id="modal-content-id-1">
+                
+                <aura:if isTrue="{!v.isLoading}">
+                    <div class="spinnerHolder">
+                        <lightning:spinner alternativeText="Loading" size="small" />
+                    </div>
+                </aura:if>
+
+                <lightning:notificationsLibrary aura:id="notifLib"/>
+                <aura:if isTrue="{!v.showMessage}">
+                    <div class="modal__content">
+                        <div class="slds-align_absolute-center">
+                            Please create Plan from Account.
+                        </div>
+
+                        <br/>
+                        <div class="slds-align_absolute-center">
+                            <lightning:button variant="Neutral" label="Cancel" onclick="{!c.closeFocusedTab}" /> 
+                        </div>
+                    </div>
+                </aura:if>
+                
+                <aura:if isTrue="{!v.addplanpr}" >                   
+					<c:csmPlanProducts fromcreatepage = "true" PlanRecordId="{!v.PlanRecordId}" oncloseclicked="{!c.closeFocusedTab}" accountidpassed="{!v.accountid}" planrectypeid="{!v.selectedRecordTypeId}" density="auto"/>
+                </aura:if>
+
+             
+                            
+                <!-- OUTCOME BASED SUCCESS PLAN -->
+                <!--Deva Re arrangged the layout of plan as per feedback-->
+                <aura:if isTrue="{!v.accPlanLayout}">
+                    <lightning:recordEditForm aura:id="recordFormadp" objectApiName="Plan__c" recordTypeId  = "{!v.selectedRecordTypeId}" onsubmit="{!c.handleNext}" onsuccess="{!c.handleSuccess}" density="cozy">
+                        <lightning:layout multipleRows="true">
+                          <lightning:layoutItem size="12">
+                              
+                             <h3 class="slds-section__title slds-theme_shade slds-m-around_small">Information</h3>
+                              
+                        	<lightning:layout multipleRows="true">
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="planName" fieldName="Name" required="true" value="" variant="label-stacked"/>	   
+                                </lightning:layoutItem>
+    
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="descField" fieldName="Description__c" required="true" value="" variant="label-stacked"/>	   
+                                </lightning:layoutItem>
+    
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="accId" fieldName="Account__c" label="Account" value="{!v.accountid}" required="true" disabled="true" variant="label-stacked"/>
+                                </lightning:layoutItem>   
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="planType" fieldName="Plan_Type__c" label="Plan Type" value="" required="true" variant="label-stacked"/>
+                                </lightning:layoutItem> 
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="coeGrp" fieldName="COE_Group__c" label="COE Group" value="" required="true" variant="label-stacked"/>
+                                </lightning:layoutItem> 
+                                
+                              </lightning:layout>
+                              
+                              <lightning:layout multipleRows="true">
+                                  
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="journey" fieldName="Journey__c" variant="label-stacked"/>	   
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="subjourney" fieldName="Sub_Journey__c" variant="label-stacked"/>	   
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="implementOwner" fieldName="Implementation_Owner__c" label="Implementation Owner" variant="label-stacked" required="true"/>	   
+                                </lightning:layoutItem>                                
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="operationModel" fieldName="Plan_Operational_Model__c" label="Plan Operation Model" variant="label-stacked" required="true"/>	   
+                                </lightning:layoutItem>
+                                  
+                              </lightning:layout>  
+                              
+                              <lightning:layout multipleRows="true">
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="overrideEligiblity" fieldName="Override_Eligibility__c" onchange="{!c.handleOverrideChange}" variant="label-stacked"/>	   
+                                </lightning:layoutItem>  
+                                  <!--Deva added this field for internal/External plan-->
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="isInternal" fieldName="Is_Internal__c" variant="label-stacked"/>	   
+                                </lightning:layoutItem>    
+                                <aura:if isTrue="{!v.overrideEligiblity}" >
+                                    <lightning:layoutItem size="6" padding="horizontal-small">
+                                        <lightning:inputField aura:id="OverrideReason" fieldName="Override_Reason__c" required="true" value="" variant="label-stacked"/>	   
+                                    </lightning:layoutItem>
+                                </aura:if>
+                                <lightning:layoutItem size="6" padding="horizontal-small">
+                                    <lightning:inputField aura:id="OwnerId" fieldName="OwnerId" label="Owner" class="slds-hide" variant="label-stacked"/>	   
+                                </lightning:layoutItem>                                
+                            </lightning:layout>
+                          </lightning:layoutItem>
+                        </lightning:layout>                      
+                        
+                        <footer class="slds-modal__footer slds-modal__footer_directional slds-m-top_small">
+                            <div style="height:2.5rem">
+                                <lightning:button class="slds-button slds-float_left" variant="neutral" name="Cancel" label="Cancel" onclick="{!c.closeFocusedTab}"/>
+                                
+                                <!--
+                                <aura:if isTrue="{!v.setaddplanpr}" >
+                                     <lightning:button class="slds-button slds-button_brand slds-float_right" variant="brand" label="Save &amp; Add Plan Products" onclick="{!c.handlePlanProducts}" />
+                                </aura:if>
+                                <lightning:button class="slds-button slds-button_brand slds-float_right" aura:id="SaveAndClose" variant="brand" label="Save &amp; Close" type="submit"/>
+                                -->
+
+                                <aura:if isTrue="{!v.bAccPlanLayout_SaveClose}">
+                                    <lightning:button class="slds-button slds-button_brand slds-float_right" variant="brand" label="Save &amp; Add Plan Products" onclick="{!c.handlePlanProducts}" />
+                                </aura:if>
+                                
+                                <aura:if isTrue="{!!v.bAccPlanLayout_SaveClose}">
+                                    <lightning:button class="slds-button slds-button_brand slds-float_right" aura:id="SaveAndClose" variant="brand" label="Save &amp; Associate Opportunity" type="submit"/>
+                                </aura:if>   
+                                 
+                            </div>  
+                        </footer>
+                    </lightning:recordEditForm>
+                </aura:if> 	                
+                
+                
+                <!-- SALES ACCOUNT PLAN -->
+                <aura:if isTrue="{!v.salesplanLayout}">
+                    <lightning:recordEditForm aura:id="recordFormsales" objectApiName="Plan__c" recordTypeId  = "{!v.selectedRecordTypeId}" onsubmit="{!c.handleNext}" onsuccess="{!c.handleSuccess}">
+                        <h3 class="slds-section__title slds-theme_shade">Information</h3>
+                        <lightning:layout multipleRows="true">                            
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="name" fieldName="Name" required="true"/>	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="owner" fieldName="OwnerId"/>	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="accId" fieldName="Account__c" value= "{!v.accountid}"/>	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="excecspon" fieldName="Executive_Sponsor__c"/>	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a01" fieldName="A01_Account_Plan_Uploaded__c" />	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a08" fieldName="A08_EBCs_Innovation_Days_Completed__c"/>	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a02" fieldName="A02_Plan_Reviewed_w_Sponsor__c"/>	   
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a09" fieldName="A09_Demand_Gen_Plan_Created__c"/>	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a03" fieldName="A03_Connected_to_GSI_Partner__c"/>	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a10" fieldName="A10_QBRs_CBRs__c"/>	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a04" fieldName="A04_Connected_to_Ecosystem_Partner__c"/>	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a11" fieldName="A11_Solution_RA_built_with_customer__c"/>	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a05" fieldName="A05_First_Customer_Meeting_w_Sponsor__c"/>	   
+                            </lightning:layoutItem>	
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a12" fieldName="A12_Platform_RA_built_with_customer__c"/>	   
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a06" fieldName="A06_Joint_Business_Plan_w_GSI_Ecosystem__c"/>	   
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a13" fieldName="A13_Exec_Sponsor_Meeting_Call_w_Customer__c"/>	   
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6" class="slds-p-left_x-small">
+                                <lightning:inputField aura:id="a07" fieldName="A07_EBCs_Innovation_Days_Scheduled__c"/>	   
+                            </lightning:layoutItem>
+                        </lightning:layout>                       
+                        
+                        <footer class="slds-modal__footer slds-modal__footer_directional">
+                            <div style="height:2.5rem">
+                                <lightning:button class="slds-button slds-m-top_small slds-float_left" name="Cancel" label="Cancel" onclick="{!c.closeFocusedTab}"/>
+                                <lightning:button class="slds-button slds-m-top_small slds-button_brand slds-float_right" variant="brand" label="{!v.buttonlabel}" type="submit"/>
+                            </div> 
+                        </footer>
+                        
+                    </lightning:recordEditForm>
+                </aura:if>               
+                
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>    
+    </aura:if> 
+</aura:component>

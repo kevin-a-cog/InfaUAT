@@ -1,0 +1,77 @@
+<!--
+/*
+ * Name			:	GlobalMultiSelectLookup
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	3/4/2022
+ * Description	:	This LWC exposes the generic Multi Select Lookup component.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description							Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		3/4/2022		N/A				Initial version.					N/A
+ */
+-->
+<template>
+
+	<!-- Label. -->
+	<label class='slds-form-element__label'>{objRequest.strLabel}</label>
+
+	<!-- Component body. -->
+	<div class="slds-form-element__control">
+		<div class="slds-combobox_container">
+			<div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+
+				<!-- Search field. -->
+				<div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-has-focus slds-p-bottom_x-small">
+					<lightning-input value={strKeyword} onchange={searchRecords} variant="label-hidden" autocomplete="off" 
+							placeholder={label.Multi_Select_Lookup_Search} type="search" disabled={boolIsSearchFieldDisabled}>
+					</lightning-input>
+				</div>
+
+				<!-- Selected elements. -->
+				<div class="slds-form-element__control slds-input-has-icon slds-input-has-icon slds-input-has-icon_left-right">
+					<template for:each={lstPills} for:item="objPill">
+						<span key={objPill.value}>
+							<lightning-pill label={objPill.label} name={objPill.value} data-item={objPill.value} onremove={removeRecord}>
+								<lightning-icon icon-name={objRequest.strIconName} variant="circle"></lightning-icon>
+							</lightning-pill>
+						</span>
+					</template>
+				</div>
+
+				<!-- Results section. -->
+				<template if:true={boolDisplayResultsSection}>
+
+					<!-- No records found. -->
+					<template if:true={boolDisplayNoRecordsFound}>
+						<div class="slds-col slds-size_12-of-12">
+							<div class="slds-illustration slds-illustration_small">
+								<img src="/img/chatter/Desert.svg" class="slds-illustration__svg" />
+								<div class="slds-text-color_weak">
+									<h3 class="slds-text-heading_medium">{label.Multi_Select_Lookup_No_Records_Found}</h3>
+								</div>
+							</div>
+						</div>
+					</template>
+	
+					<!-- Search results. -->
+					<template if:false={boolDisplayNoRecordsFound}>
+						<section class="slds-popover slds-popover_full-width">
+							<div class="slds-popover__body slds-popover__body_small">
+								<fieldset class="slds-form-element">
+									<lightning-checkbox-group name="Selections" options={lstCurrentCheckboxes} value={lstCurrentCheckboxesSelectedIds} 
+											onchange={selectUnselectCheckbox}></lightning-checkbox-group>
+								</fieldset>
+							</div>
+							<footer class="slds-popover__footer slds-popover__footer_form">
+								<lightning-button label={label.Multi_Select_Lookup_Cancel} onclick={cancelSelection} class="slds-m-left_x-small"></lightning-button>
+								<lightning-button variant="brand" label={label.Multi_Select_Lookup_Done}  onclick={selectionCompleted} class="slds-m-left_x-small"></lightning-button>
+							</footer>
+						</section>
+					</template>
+				</template>
+			</div>
+		</div>
+	</div>
+</template>

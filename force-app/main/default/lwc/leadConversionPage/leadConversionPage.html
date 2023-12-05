@@ -1,0 +1,241 @@
+<template>
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_full">
+        <div class="slds-modal__container">
+            <lightning-icon class="slds-modal__close close" icon-name="utility:close" variant="inverse" size="small" onclick={handleCloseModal}>
+            </lightning-icon>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <div class="slds-grid slds-grid_vertical">
+                    <div class="slds-col slds-p-vertical_medium slds-m-top_xx-small slds-text-align_center">
+                        <!-- Heading -->
+                        <h2 class="heading">Your lead has been converted</h2>
+                    </div>
+                    <div class="slds-col final-img slds-text-align_center">
+                        <!-- SubHeading -->
+                        <img src="/projRes/ui-lead-runtime-components/images/lead_convert_celebration@2x.gif" alt="Lead Convert Celebration" class="subtitle-image">
+                    </div>
+                    <!-- Lead Info -->
+                    <div class="slds-col">
+                        <div class="slds-grid slds-wrap slds-grid_align-center slds-p-horizontal_medium">
+                            <!-- Account Card -->
+                            <div class="slds-col card slds-p-around_medium slds-size_1-of-3 slds-truncate">
+                                <div class="slds-grid slds-grid_vertical">
+                                    <!-- Account Card Heading -->
+                                    <div class="slds-col card-head slds-p-vertical_medium slds-truncate">
+                                        <h2 class="obj_head">Account</h2>
+                                    </div>
+                                    <!-- Account Card Content -->
+                                    <div class="slds-col card-main slds-p-around_medium slds-truncate">
+                                        <div class="slds-grid slds-grid_vertical-align-start slds-truncate">
+                                            <div class="slds-col">
+                                                <lightning-icon icon-name='standard:account' alternative-text='account' size='Medium' title='account'></lightning-icon>
+                                            </div>
+                                            <div class="slds-col slds-p-left_small slds-truncate">
+                                                <div class="slds-grid slds-grid_vertical">
+                                                    <div class="slds-col slds-truncate">
+                                                        <lightning-formatted-url class="slds-text-heading_medium slds-truncate" value={accountURL} label={accountName} ></lightning-formatted-url>
+                                                    </div>
+                                                    <div class="slds-col slds-p-top_x-small">
+                                                        <div class="slds-grid slds-grid_vertical">
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <p class="slds-text-small slds-truncate">Account Record Type:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-size_1-of-2 slds-p-left_x-small">
+                                                                    <p class="slds-text-small slds-truncate">{accountRecordType}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col">
+                                                                    <p class="slds-text-small slds-truncate">Phone:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-truncate slds-p-left_x-small">
+                                                                    <p class="slds-text-small slds-truncate">{accountPhone}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <p class="slds-text-small slds-truncate">Account Address:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-size_1-of-2 slds-p-left_x-small">
+                                                                    <p class="slds-text-small slds-truncate acc-address">
+                                                                        <lightning-formatted-address city={accCity} 
+                                                                        country={accCountry} 
+                                                                        postal-code={accPostalcode} 
+                                                                        province={accState} 
+                                                                        street={accStreet}
+                                                                        show-static-map={showStaticMap}></lightning-formatted-address>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col">
+                                                                    <p class="slds-text-small slds-truncate">Website:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-truncate slds-p-left_x-small">
+                                                                    <p class="slds-text-small slds-truncate">{accountWebsite}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col">
+                                                                    <p class="slds-text-small slds-truncate">Account Health:</p> 
+                                                                </div>
+                                                                <div class="slds-col slds-truncate slds-p-left_x-small">
+                                                                    <p class="slds-text-small slds-truncate">{accountHealth}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Contact Card-->
+                            <div class="slds-col card slds-p-around_medium slds-size_1-of-3 slds-truncate">
+                                <div class="slds-grid slds-grid_vertical">
+                                    <!-- Contact Card Heading -->
+                                    <div class="slds-col card-head slds-p-vertical_medium slds-truncate">
+                                        <h2 class="obj_head">Contact</h2>
+                                    </div>
+                                    <!-- Contact Card Content -->
+                                    <div class="slds-col card-main slds-p-around_medium slds-truncate">
+                                        <div class="slds-grid slds-grid_vertical-align-start slds-truncate">
+                                            <div class="slds-col icon">
+                                                <lightning-icon icon-name='standard:contact' alternative-text='contact' size='Medium' title='contact'></lightning-icon>
+                                            </div>
+                                            <div class="slds-col slds-p-left_small slds-truncate">
+                                                <div class="slds-grid slds-grid_vertical">
+                                                    <div class="slds-col slds-truncate">
+                                                        <lightning-formatted-url class="slds-text-heading_medium slds-truncate" value={contactURL} label={contactName} ></lightning-formatted-url>
+                                                    </div>
+                                                    <div class="slds-col slds-p-top_x-small">
+                                                        <div class="slds-grid slds-grid_vertical">
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col">
+                                                                    <p class="slds-text-small">Title:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-p-left_x-small slds-truncate">
+                                                                    <p class="slds-text-small slds-truncate">{contactTitle}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col slds-truncate">
+                                                                    <p class="slds-text-small slds-truncate">Account Name:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-p-left_x-small">
+                                                                    <lightning-formatted-url class="slds-text-small slds-truncate" value={contactAccountID} label={contactAccountname} ></lightning-formatted-url>                                                    
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col">
+                                                                    <p class="slds-text-small">Phone:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-truncate slds-p-left_x-small">
+                                                                    <p class="slds-text-small slds-truncate">{contactPhone}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col">
+                                                                    <p class="slds-text-small slds-truncate">Email:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-truncate slds-p-left_x-small">
+                                                                    <p class="slds-text-small slds-truncate">
+                                                                        <a href ={contactEmailTo}>{contactEmail}</a>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col">
+                                                                    <p class="slds-text-small">Mobile:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-truncate slds-p-left_x-small">
+                                                                    <p class="slds-text-small slds-truncate">{contactMobile}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Opportunity Card -->
+                        <div if:true={isOpportunityCreated}>  
+                            <div class="slds-col card slds-p-around_medium slds-size_1-of-3 slds-truncate">
+                                <div class="slds-grid slds-grid_vertical">
+                                    <!-- Opportunity Card Heading -->
+                                    <div class="slds-col card-head slds-p-vertical_medium slds-truncate">
+                                        <h2 class="obj_head">Opportunity</h2>
+                                    </div>
+                                    <!-- Opportunity Card Content -->
+                                    <div class="slds-col card-main slds-p-around_medium slds-truncate">
+                                        <div class="slds-grid slds-grid_vertical-align-start slds-truncate">
+                                            <div class="slds-col icon">
+                                                <lightning-icon icon-name='standard:opportunity' alternative-text='opportunity' size='Medium' title='opportunity'></lightning-icon>
+                                            </div>
+                                            <div class="slds-col slds-p-left_small slds-truncate">
+                                                <div class="slds-grid slds-grid_vertical">
+                                                    <div class="slds-col slds-truncate">
+                                                        <lightning-formatted-url class="slds-text-heading_medium slds-truncate" value={opportunityURL} label={opportunityName} ></lightning-formatted-url>
+                                                    </div>
+                                                    <div class="slds-col slds-p-top_x-small">
+                                                        <div class="slds-grid slds-grid_vertical">
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col">
+                                                                    <p class="slds-text-small">Opportunity Owner:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-p-left_x-small slds-truncate">
+                                                                    <p class="slds-text-small slds-truncate">{opportunityOwner}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col">
+                                                                    <p class="slds-text-small">SubStage:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-p-left_x-small slds-truncate">
+                                                                    <p class="slds-text-small slds-truncate">{opportunityStage}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col slds-truncate">
+                                                                    <p class="slds-text-small slds-truncate">Sales Forecast Revenue:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-truncate slds-p-left_x-small">
+                                                                    <p class="slds-text-small slds-truncate">{opportunityForecast}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid">
+                                                                <div class="slds-col">
+                                                                    <p class="slds-text-small">Close Date:</p>
+                                                                </div>
+                                                                <div class="slds-col slds-p-left_x-small">
+                                                                    <p class="slds-text-small">{opportunityCloseDate}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="slds-modal__footer">
+               
+            <lightning-button
+                variant="brand"
+                label="Go to Leads"
+                class="slds-m-left_x-small"
+                onclick={handleGoToLeads}
+            ></lightning-button>
+            </div>
+        </div>
+    </section>
+</template>

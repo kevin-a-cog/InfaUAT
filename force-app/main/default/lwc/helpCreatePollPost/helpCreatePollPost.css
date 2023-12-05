@@ -1,0 +1,30 @@
+.popup-alert__msg {
+    color: red;
+    margin-bottom: 10px;
+}
+
+/* I2RT-7800- Styles for Modal popup . Added by Chetan Shetty */
+
+.slds-modal {
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    margin-top: 15px;
+}
+.in-modal__faux-body {
+    margin: 20px;
+}
+.in-modal__body{
+    margin: 0;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+.in-modal__footer {
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+    background: #fff;
+}
+.in-button--only-icon{
+    top: 8px;
+}
+/* ends here */

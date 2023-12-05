@@ -1,0 +1,21 @@
+<!--
+/*
+ * Name			:	picklistCell
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	8/4/2021
+ * Description	:	This LWC exposes the Picklist Cell template for the custom Datatable.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		8/4/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	<c-global-custom-cell str-record-label={typeAttributes.label} str-record-object-a-p-i-name={typeAttributes.objectapiname} 
+			str-record-field-a-p-i-name={typeAttributes.fieldapiname} str-record-parent-object-a-p-i-name={typeAttributes.parentobjectapiname} 
+			bool-is-name={typeAttributes.boolisname} map-ids={typeAttributes.mapids} bool-is-editable={typeAttributes.editable} 
+			str-row-id={rowKeyValue} str-value={value} str-field-type={typeAttributes.subtype} 
+			str-table-id={typeAttributes.tableid} str-column-label={typeAttributes.columnlabel}></c-global-custom-cell>
+</template>

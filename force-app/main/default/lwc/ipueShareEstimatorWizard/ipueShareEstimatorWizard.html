@@ -1,0 +1,30 @@
+<template>
+
+    <lightning-quick-action-panel header="Share with Contacts">
+
+        <lightning-progress-indicator current-step={currentStep} type="base" variant="base" class="slds-p-vertical_small">
+          <lightning-progress-step value="1"></lightning-progress-step>
+          <lightning-progress-step value="2"></lightning-progress-step>
+        </lightning-progress-indicator>
+
+        <div class="slds-clearfix slds-p-horizontal_xx-large">       
+          <h3 class="slds-float_left slds-p-left_x-large"> <b>Add Contacts</b></h3>          
+          <h3 class="slds-float_right slds-p-right_medium"><b>Review Contacts</b></h3>
+        </div>
+
+        <template if:true={recordId}>
+
+          <!--display Add contacts screen-->
+          <template if:true={isStepOne}>
+              <c-ipue-add-contacts record-id={recordId} contacts-from-parent={selectedContactIds} oncancel={closeAction} onnext={handleNext}></c-ipue-add-contacts>
+          </template>
+
+          <!--display review contact screen-->
+          <template if:true={isStepTwo}>
+              <c-ipue-review-contacts record-id={recordId} selected-contact-ids={selectedContactIds} oncancel={closeAction} onprevious={handlePrevious}></c-ipue-review-contacts>
+          </template>
+
+        </template>
+        
+    </lightning-quick-action-panel>
+</template>

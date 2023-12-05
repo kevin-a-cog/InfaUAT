@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Custom Chatter</masterLabel>
+    <description>This component displays combined chatter feeds based on the given record ids.</description>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+		<target>lightning__Tab</target>
+		<target>lightning__RecordAction</target>
+		<target>lightningCommunity__Page</target>
+    </targets>
+	<targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage">
+            <property label="Include tagged records" name="boolIncludeTaggedRecords" type="Boolean" default="true"
+					description="If TRUE, Chatter Posts where the Ids provided in the queries were tagged, will be retrieved." />
+            <property label="List of Query Paths" name="strQueryPaths" type="String" 
+					description="Query paths separated by Comma, that give record ids to combine with the main feed. For example, Contact.AccountId." />
+			<property label="List of Child Queries" name="strChildQueries" type="String" 
+					description="List of Child Queries in JSON format, related to recordId. For example, ['SELECT Id FROM Contact WHERE AccountId = {recordId}']" />
+			<property label="No Records Found message" name="strNoRecordsFoundMessage" type="String" description="Custom message for 'No Records Found' scenario." />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

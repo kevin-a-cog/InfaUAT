@@ -1,0 +1,562 @@
+<!--Lightning Component to Display the Contract Line records related to a Renewal Quote Design-->
+<!-- ================================================================== -->
+<!-- PLEASE KEEP THE FORMATTING CLEAN, MAKES DEBUGGING EASY, THANK YOU -->
+<!-- Controller="ViewContractLinesController"  ====================== -->
+<!-- Added PRIOR UPLIFTRENEWAL NOTES -->
+<!-- Added Renewal Year,Offering Id,Description and Old Org Order Number colums (SALESRT-11796) <T01>-->
+<!-- Added Download button to export the column (SALESRT-11773) <T02>
+     NOTE: ADD THE AURD-ID TAG WITH THE VALUES PriorcellData/OriginalcellData TO ALL THE TABLE CELL DATA, TO BE
+           FETECHED FOR THE DOWNLOAD
+
+-->
+
+<aura:component controller="ViewContractLinesController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionwithoutHeader" access="global">
+    <!-- ATTRIBUTES + HANDLERS -->
+    <!-- ====================================================================================================================================================== -->
+    <aura:attribute name="loading" type="Boolean" default="true" />
+    <aura:attribute name="showTopTable" type="Boolean" default="true" />
+    <aura:attribute name="noAssets" type="Boolean" default="false" />
+    <aura:attribute name="assetWrapperList" type="List" />
+    <aura:attribute name="originSObjectName" type="String" />
+    <aura:attribute name="error" type="String" />
+    <aura:attribute name="today" type="Date" default=""/>
+    <aura:attribute name="QuoteRec" type="Object"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:html tag="style">
+        .slds-modal__container{
+        width:100%;
+        max-width:100% ;
+        height: 100%;
+        }
+    </aura:html>  
+    
+    <!--To get the Quote record Data without query-->
+    <force:recordData layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.QuoteRec}"
+                      mode="VIEW"/>   
+    
+    <!-- MAIN SECTION -->
+    <!-- ====================================================================================================================================================== -->
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container">
+            
+            <!-- MODAL HEADER -->
+            <!-- =============================================================================== -->
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModalOne}">
+                    <lightning:icon class="slds-button__icon slds-button__icon_large fillColor" iconName="utility:close" size="x-small" alternativeText="search"/>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">Quote Lines and Contract Lines comparison</h2>
+            </header>
+            
+            <!--TOGGLE BUTTON-->
+            <div class="slds-clearfix" >
+                <div class="slds-float--right">
+                    <div class="slds-form-element">
+                        <label class="slds-checkbox_toggle slds-grid">
+                            <span class="slds-form-element__label slds-m-bottom_none">Prior Values</span>
+                            <input type="checkbox" name="checkbox-toggle-19" value="checkbox-toggle-19" aria-describedby="checkbox-toggle-19" change="{!c.toggle}"/>
+                            <span id="checkbox-toggle-19" class="slds-checkbox_faux_container" aria-live="assertive" onclick="{!c.toggle}">
+                                <span class="slds-checkbox_faux" style="background-color:rgba(27, 82, 151, 1)"></span>
+                            </span>
+                            <span class="slds-form-element__label slds-m-bottom_none" style="padding-left:8px;">Original Values</span>
+                        </label>
+                    </div>
+                    <!--<lightning:button class="slds-button slds-button_brand " label="Toggle" onclick="{!c.toggle}"/>-->
+                </div>
+            </div>
+            
+            <!-- MODAL CONTENT -->
+            <!-- =============================================================================== -->                
+            <!--<aura:if isTrue="{!v.showTopTable}">-->
+            <!--PRIOR VALUE TABLE-->
+            <div aura:id="priorTable" class="slds-modal__content slds-grow modal-overflow" id="modal-content-id-1" style="overflow:auto">
+                <div class="slds-col slds-grid slds-grid_vertical">
+                    <div class="slds-grow slds-p-top--small">
+                        
+                        <!-- Error Message -->
+                        <!-- ====================================== -->
+                        <aura:if isTrue="{!!empty(v.error)}">
+                            <div style="text-align:center;color:red">
+                                <ui:outputText value="{!v.error}"/>
+                            </div><br/>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!and(v.loading, empty(v.assetWrapperList))}">
+                            <lightning:spinner variant="brand" size="large"/>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!v.noAssets}">
+                            <h2 class="slds-text-heading_medium slds-align_absolute-center slds-p-top_xx-large">No associated contract exists.</h2>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!v.assetWrapperList.length > 0}">
+                            <div class="table-overflow">
+                                <table id="Prior_Value" class="slds-table slds-table_bordered slds-table_cell-buffer" role="grid" style="overflow:auto">
+                                    
+                                    <!-- TABLE HEADER -->
+                                    <!-- ====================================== -->
+                                    <thead>
+                                        <tr class="slds-text-title_caps">
+                                            <th scope="col" role="gridcell" class="slds-cell-shrink">
+                                                <div class="slds-truncate" title="listingNo"></div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="QuoteLine">Quote Line</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Product">Product</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="ProductCode">Product Code</div>
+                                            </th>	
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="SubscriptionTerm">Subscription Term</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="SubscriptionStartDate">Start Date</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="SubscriptionEndDate">End Date</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Quantity">Quantity</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="List Price">List Price</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="ExtendedPrice">Extended Price</div>
+                                            </th>
+                                            <th scope="col"> <!--<T01>-->
+                                                <div class="slds-truncate" title="MRYear">MR Year</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="OfferingID">Offering ID</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Description">Description</div>
+                                            </th>                                                                                                
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorContract">Prior Contract</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorContractLine">Prior Contract Line</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorOldOrgOrder">Old Org Order #</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorContractLine">Prior Product Name</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorSubscriptionTerm">Prior Subscription Term</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorStartDate">Prior Start Date</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorEndDate">Prior End Date</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorQuantity">Prior Quantity</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorListPrice">Prior List Price</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorExtendedPrice">Prior Extended Price</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Uplift">Uplift(%)</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorUplift">Prior Uplift(%)</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="RenewalNotes">Renewal Notes </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <!-- TABLE BODY -->
+                                    <!-- ====================================== -->
+                                    <tbody>
+                                        <aura:iteration items="{!v.assetWrapperList}" var="assetWrapper" indexVar="idx">
+                                            <tr>
+                                                <td role="gridcell" class="slds-cell-shrink">
+                                                    <ui:outputText aura:id ='PriorcellData' value="{!idx + 1}" class="slds-text-body--regular"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <a href="{!'/one/one.app?#/sObject/'+ assetWrapper.quoteLineId + '/view'}" target="_blank"><ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.quoteLineName}" class="slds-text-body--regular"/></a>
+                                                </td>
+                                                <aura:if isTrue="{!empty(assetWrapper.requiredBy)}">
+                                                    <td class="slds-text-align_left">
+                                                        <a href="{!'/one/one.app?#/sObject/'+ assetWrapper.productId + '/view'}" target="_blank"><ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.productName}" class="slds-text-body--regular"/></a>
+                                                    </td>
+                                                    <aura:set attribute="else">
+                                                        <td class="slds-text-align_left">
+                                                            <a href="{!'/one/one.app?#/sObject/'+ assetWrapper.productId + '/view'}" target="_blank"><ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.productName}" class="slds-text-body--regular slds-p-left_medium"/></a>
+                                                        </td>  
+                                                    </aura:set>
+                                                </aura:if>
+                                                <td class="slds-text-body--regular" >
+                                                    <ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.productCode}" class="slds-text-body--regular"/>
+                                                </td>
+                                                <aura:if isTrue="{! and(empty(assetWrapper.endDate),empty(assetWrapper.quoteEndDate))}">
+                                                    <aura:if isTrue="{!empty(assetWrapper.subscriptionTerm)}">
+                                                        <td class="slds-text-align_center" >
+                                                            <ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.quoteSubscriptionTerm}" class="slds-text-align_center"/>
+                                                        </td>
+                                                        <aura:set attribute="else">
+                                                            <td class="slds-text-align_center" >
+                                                                <ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.subscriptionTerm}" class="slds-text-align_center"/>
+                                                            </td>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                    <aura:set attribute="else">
+                                                        <td class="slds-text-align_center" >
+                                                            <ui:outputText aura:id ='PriorcellData' value="" class="slds-text-align_center"/>
+                                                        </td>
+                                                    </aura:set>
+                                                </aura:if>
+                                                <aura:if isTrue="{!empty(assetWrapper.startDate)}">
+                                                    <td class="slds-text-align_center" >
+                                                        <ui:outputDate aura:id ='PriorcellData' value="{!assetWrapper.quoteStartDate}" class="slds-text-align_center"/>
+                                                    </td>
+                                                    <aura:set attribute="else">
+                                                        <td class="slds-text-align_center" >
+                                                            <ui:outputDate aura:id ='PriorcellData' value="{!assetWrapper.startDate}" class="slds-text-align_center"/>
+                                                        </td>
+                                                    </aura:set>
+                                                </aura:if>
+                                                <aura:if isTrue="{!empty(assetWrapper.endDate)}">
+                                                    <td class="slds-text-align_center" >
+                                                        <ui:outputDate aura:id ='PriorcellData' value="{!assetWrapper.quoteEndDate}" class="slds-text-align_center"/>
+                                                    </td>
+                                                    <aura:set attribute="else">
+                                                        <td class="slds-text-align_center" >
+                                                            <ui:outputDate aura:id ='PriorcellData' value="{!assetWrapper.endDate}" class="slds-text-align_center"/>
+                                                        </td>
+                                                    </aura:set>
+                                                </aura:if>
+                                                <td class="slds-text-align_center" >
+                                                    <ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.quantity}" class="slds-text-align_center"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <lightning:formattedNumber aura:id ='PriorcellData' value="{!assetWrapper.listPrice}" style="currency" currencyCode="USD" currencyDisplayAs="code"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <lightning:formattedNumber aura:id ='PriorcellData' value="{!assetWrapper.extendedPrice}" style="currency" currencyCode="USD" currencyDisplayAs="code"/>
+                                                </td>
+                                                <td class="slds-text-align_center" > <!--<T01>-->
+                                                    <lightning:formattedNumber aura:id ='PriorcellData' value="{!assetWrapper.quoteLineRenewalYear}"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.quoteLineOfferingID}" class="slds-text-align_center"/>
+                                                </td>
+                                                <td class="slds-text-align_left" >
+                                                    <ui:outputTextArea aura:id ='PriorcellData' value="{!assetWrapper.quoteLineDescription}" class="slds-text-align_center"/>
+                                                </td>                                                                                                             
+                                                <td class="slds-text-align_center" >
+                                                    <a href="{!'/one/one.app?#/sObject/'+ assetWrapper.priorContractId+ '/view'}" target="_blank"><ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.priorContractName}" class="slds-text-body--regular"/></a>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <a href="{!'/one/one.app?#/sObject/'+ assetWrapper.priorContractLineId + '/view'}" target="_blank"><ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.priorContractLineName}" class="slds-text-body--regular"/></a>
+                                                </td>
+                                                <td> <!--<T01>-->
+                                                    <ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.priorOldOrgOrderNumber}"/>
+                                                </td>
+                                                <td>
+                                                    <ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.priorProductName}"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.priorSubscriptionTerm}" class="slds-text-align_center"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <ui:outputDate aura:id ='PriorcellData' value="{!assetWrapper.priorStartDate}" class="slds-text-align_center"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <ui:outputDate aura:id ='PriorcellData' value="{!assetWrapper.priorEndDate}" class="slds-text-body--regular"/>
+                                                </td>
+                                                <td class="slds-text-body--regular" >
+                                                    <ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.priorQuantity}" class="slds-text-align_center"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <lightning:formattedNumber aura:id ='PriorcellData' value="{!assetWrapper.priorListPrice}" style="currency" currencyCode="USD" currencyDisplayAs="code"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <lightning:formattedNumber aura:id ='PriorcellData' value="{!assetWrapper.priorExtendedPrice}" style="currency" currencyCode="USD" currencyDisplayAs="code"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <lightning:formattedNumber aura:id ='PriorcellData' value="{!assetWrapper.uplift}" style="percent" minimumFractionDigits="2"/>
+                                                </td>                                         
+                                                <td class="slds-text-align_center" >
+                                                    <lightning:formattedNumber aura:id ='PriorcellData' value="{!assetWrapper.priorUplift}" style="percent" minimumFractionDigits="2"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <ui:outputText aura:id ='PriorcellData' value="{!assetWrapper.renewalNotes}" class="slds-text-align_center"/>
+                                                </td>                                                            
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+            
+            <!--ORIGINAL VALUE TABLE-->
+            <!--<aura:set attribute="else"> --> 
+            <div aura:id="originalTable" class="slds-modal__content slds-grow modal-overflow" id="modal-content-id-1" style="overflow:auto">
+                <div class="slds-col slds-grid slds-grid_vertical">
+                    <div class="slds-grow slds-p-top--small">
+                        
+                        <!-- Error Message -->
+                        <!-- ====================================== -->
+                        <aura:if isTrue="{!!empty(v.error)}">
+                            <div style="text-align:center;color:red">
+                                <ui:outputText value="{!v.error}"/>
+                            </div><br/>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!and(v.loading, empty(v.assetWrapperList))}">
+                            <lightning:spinner variant="brand" size="large"/>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!v.noAssets}">
+                            <h2 class="slds-text-heading_medium slds-align_absolute-center slds-p-top_xx-large">No original contract exists.</h2>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!v.assetWrapperList.length > 0}">
+                            <div class="table-overflow">
+                                <table id="Original_Value" class="slds-table slds-table_bordered slds-table_cell-buffer" role="grid" style="overflow:auto">
+                                    
+                                    <!-- TABLE HEADER -->
+                                    <!-- ====================================== -->
+                                    <thead>
+                                        <tr class="slds-text-title_caps">
+                                            <th scope="col" role="gridcell" class="slds-cell-shrink">
+                                                <div class="slds-truncate" title="listingNo"></div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="QuoteLine">Quote Line</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Product">Product</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="ProductCode">Product Code</div>
+                                            </th>	
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="SubscriptionTerm">Subscription Term</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="SubscriptionStartDate">Start Date</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="SubscriptionEndDate">End Date</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Quantity">Quantity</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="List Price">List Price</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="ExtendedPrice">Extended Price</div>
+                                            </th>
+                                            <th scope="col"> <!--<T01>-->
+                                                <div class="slds-truncate" title="MRYear">MR Year</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="OfferingId">Offering ID</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Description">Description</div>
+                                            </th>                                                            
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="OriginalContract">Original Contract</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="OriginalContractLine">Original Contract Line</div>
+                                            </th>
+                                            <th scope="col"> <!--<T01>-->
+                                                <div class="slds-truncate" title="OriginalOldOrgOrder">Original OLD ORG Order #</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="PriorContractLine">Original Product Name</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="OriginalSubscriptionTerm">Original Subscription Term</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="OriginalStartDate">Original Start Date</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="OriginalEndDate">Original End Date</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="OriginalQuantity">Original Quantity</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="OriginalListPrice">Original List Price</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="OriginalExtendedPrice">Original Extended Price</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <!-- TABLE BODY -->
+                                    <!-- ====================================== -->
+                                    <tbody>
+                                        <aura:iteration items="{!v.assetWrapperList}" var="assetWrapper" indexVar="idx">
+                                            <tr>
+                                                <td role="gridcell" class="slds-cell-shrink">
+                                                    <ui:outputText value="{!idx + 1}" class="slds-text-body--regular"/> 
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <a href="{!'/one/one.app?#/sObject/'+ assetWrapper.quoteLineId + '/view'}" target="_blank"><ui:outputText value="{!assetWrapper.quoteLineName}" class="slds-text-body--regular"/></a>
+                                                </td>
+                                                <aura:if isTrue="{!empty(assetWrapper.requiredBy)}">
+                                                    <td class="slds-text-align_left">
+                                                        <a href="{!'/one/one.app?#/sObject/'+ assetWrapper.productId + '/view'}" target="_blank"><ui:outputText value="{!assetWrapper.productName}" class="slds-text-body--regular"/></a>
+                                                    </td>
+                                                    <aura:set attribute="else">
+                                                        <td class="slds-text-align_left">
+                                                            <a href="{!'/one/one.app?#/sObject/'+ assetWrapper.productId + '/view'}" target="_blank"><ui:outputText value="{!assetWrapper.productName}" class="slds-text-body--regular slds-p-left_medium"/></a>
+                                                        </td>  
+                                                    </aura:set>
+                                                </aura:if>                                                   
+                                                <td class="slds-text-body--regular" >
+                                                    <ui:outputText value="{!assetWrapper.productCode}" class="slds-text-body--regular"/>
+                                                </td>
+                                                <aura:if isTrue="{! and(empty(assetWrapper.endDate),empty(assetWrapper.quoteEndDate))}">
+                                                    <aura:if isTrue="{!empty(assetWrapper.subscriptionTerm)}">
+                                                        <td class="slds-text-align_center" >
+                                                            <ui:outputText value="{!assetWrapper.quoteSubscriptionTerm}" class="slds-text-align_center"/>
+                                                        </td>
+                                                        <aura:set attribute="else">
+                                                            <td class="slds-text-align_center" >
+                                                                <ui:outputText value="{!assetWrapper.subscriptionTerm}" class="slds-text-align_center"/>
+                                                            </td>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                    <aura:set attribute="else">
+                                                        <td class="slds-text-align_center" >
+                                                            <ui:outputText value="" class="slds-text-align_center"/>
+                                                        </td>
+                                                    </aura:set>
+                                                </aura:if>
+                                                <aura:if isTrue="{!empty(assetWrapper.startDate)}">
+                                                    <td class="slds-text-align_center" >
+                                                        <ui:outputDate value="{!assetWrapper.quoteStartDate}" class="slds-text-align_center"/>
+                                                    </td>
+                                                    <aura:set attribute="else">
+                                                        <td class="slds-text-align_center" >
+                                                            <ui:outputDate value="{!assetWrapper.startDate}" class="slds-text-align_center"/>
+                                                        </td>
+                                                    </aura:set>
+                                                </aura:if>
+                                                <aura:if isTrue="{!empty(assetWrapper.endDate)}">
+                                                    <td class="slds-text-align_center" >
+                                                        <ui:outputDate value="{!assetWrapper.quoteEndDate}" class="slds-text-align_center"/>
+                                                    </td>
+                                                    <aura:set attribute="else">
+                                                        <td class="slds-text-align_center" >
+                                                            <ui:outputDate value="{!assetWrapper.endDate}" class="slds-text-align_center"/>
+                                                        </td>
+                                                    </aura:set>
+                                                </aura:if>
+                                                <td class="slds-text-align_center" >
+                                                    <ui:outputText value="{!assetWrapper.quantity}" class="slds-text-align_center"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <lightning:formattedNumber value="{!assetWrapper.listPrice}" style="currency" currencyCode="USD" currencyDisplayAs="code"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <lightning:formattedNumber value="{!assetWrapper.extendedPrice}" style="currency" currencyCode="USD" currencyDisplayAs="code"/>
+                                                </td>
+                                                <td class="slds-text-align_center" > <!--<T01>-->
+                                                    <lightning:formattedNumber value="{!assetWrapper.quoteLineRenewalYear}"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <ui:outputText value="{!assetWrapper.quoteLineOfferingID}" class="slds-text-align_center"/>
+                                                </td>
+                                                <td class="slds-text-align_left" >
+                                                    <ui:outputTextArea value="{!assetWrapper.quoteLineDescription}" class="slds-text-align_center"/>
+                                                </td>                                                                     
+                                                <td class="slds-text-align_center" >
+                                                    <a href="{!'/one/one.app?#/sObject/'+ assetWrapper.originalContractId+ '/view'}" target="_blank"><ui:outputText aura:id ='OriginalcellData' value="{!assetWrapper.originalContractName}" class="slds-text-body--regular"/></a>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <a href="{!'/one/one.app?#/sObject/'+ assetWrapper.originalContractLineId + '/view'}" target="_blank"><ui:outputText aura:id ='OriginalcellData' value="{!assetWrapper.originalContractLineName}" class="slds-text-body--regular"/></a>
+                                                </td>
+                                                <td> <!--<T01>-->
+                                                    <ui:outputText aura:id ='OriginalcellData' value="{!assetWrapper.originalOldOrgOrderNumber}"/>
+                                                </td>
+                                                <td>
+                                                    <ui:outputText aura:id ='OriginalcellData' value="{!assetWrapper.originalProductName}"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <ui:outputText aura:id ='OriginalcellData' value="{!assetWrapper.originalSubscriptionTerm}" class="slds-text-align_center"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <ui:outputDate aura:id ='OriginalcellData' value="{!assetWrapper.originalStartDate}" class="slds-text-align_center"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <ui:outputDate aura:id ='OriginalcellData' value="{!assetWrapper.originalEndDate}" class="slds-text-body--regular"/>
+                                                </td>
+                                                <td class="slds-text-body--regular" >
+                                                    <ui:outputText aura:id ='OriginalcellData' value="{!assetWrapper.originalQuantity}" class="slds-text-align_center"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <lightning:formattedNumber aura:id ='OriginalcellData' value="{!assetWrapper.originalListPrice}" style="currency" currencyCode="USD" currencyDisplayAs="code"/>
+                                                </td>
+                                                <td class="slds-text-align_center" >
+                                                    <lightning:formattedNumber aura:id ='OriginalcellData' value="{!assetWrapper.originalExtendedPrice}" style="currency" currencyCode="USD" currencyDisplayAs="code"/>
+                                                </td>
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- CASE: THERE ARE NO ASSETS -->
+                            <!-- ====================================== -->
+                            <!--<aura:set attribute="else" >
+                                            <h2 class="slds-text-heading_medium slds-align_absolute-center slds-p-top_xx-large">There are no assets to display.</h2>
+                                            </aura:set>-->
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+            <!--</aura:set>-->
+            <!--</aura:if>-->
+            
+            
+            <!-- MODAL FOOTER -->
+            <!-- =============================================================================== -->
+            <footer class="slds-modal__footer">
+                <!-- BUTTONS: RIGHT CORNER -->
+                <!-- ====================================== -->
+                <div class="slds-float--right">
+                    <div class="slds-button">
+                        <lightning:button label="Download" name="Download" onclick="{!c.downloadTable}" disabled="{!v.assetWrapperList.length > 0 ? false : true}"/> <!--<T02>-->
+                        <lightning:button label="Cancel" name="Cancel" onclick="{!c.closeModalOne}" />
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </section>
+    
+    <!--SHADED BACKDROP -->
+    <!-- ===============================================================================-->
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:component>

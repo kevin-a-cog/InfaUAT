@@ -1,0 +1,265 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" controller="revenueSchedulesController" access="global" >
+	
+    <lightning:workspaceAPI aura:id="workspace" />
+    <lightning:navigation aura:id="navService"/>
+    <aura:dependency resource="markup://force:navigateToSObject" type="EVENT"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onLoad}"/>
+    <aura:attribute name="allRevSch" type="blng__RevenueSchedule__c[]"/>
+    <aura:attribute name="allRevSchUpd" type="blng__RevenueSchedule__c[]"/>
+    <aura:attribute name="RS" type="blng__RevenueSchedule__c"/>
+    <aura:attribute name="showRevSchPage" type="Boolean" default="false"/>
+    <aura:attribute name="spinneract" type="Boolean" default="false"/>
+    <aura:attribute name="errMsg" type="Boolean" default="false"/>
+    <aura:attribute name="RSPage" type="Boolean" default="true"/>
+    <aura:attribute name="errorMessage" type="String"/>
+    <aura:attribute name="defDate" type="Date" default=""/>
+    <aura:attribute name="RSAllocate" type="Boolean" default="false"/>
+    <aura:attribute name="RSDef" type="Boolean" default="false"/>
+    <aura:attribute name="userType" type="String"/>
+    
+    
+    
+    <aura:if isTrue="{!v.RSPage}">
+    	<div>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-2">
+                <div class="slds-modal__container" style="position:absolute;height:110%;top:-50px;left:0px;width:100%;">
+                    
+                     <aura:if isTrue="{!v.errMsg}">
+                      			<header class="slds-modal__header">
+                                        <button class="glc-button slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.cancelFlow}">
+                                            <lightning:icon class="slds-button__icon slds-button__icon_large fillColor icn" iconName="utility:close" size="x-small" alternativeText="close" onclick="{!c.cancelFlow}"/>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">ERROR</h2>
+                                                            <lightning:icon iconName="utility:error" alternativeText="Error!" variant="error" title="error variant" />
+                                                            <p class="slds-m-top_x-small">The Action is not complete.</p>
+                        
+                    				</header>
+                                          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                                            <p>
+                                                {!v.errorMessage} <br/> <br/> <br/>
+                                                <b>If the error message is understandable to resolve issue, please go back to Revenue Agreement and make necessary changes. Else, please submit a ticket to <a href="mailto:gsd@informatica.com">Global Service Desk</a> with the screenshot of error and Revenue Agreement details</b>
+                                            </p>
+                                              </div>
+                                     <footer class="slds-modal__footer">
+                                      	<div class="slds-float--right">
+                                            <div class="slds-button">
+                                                <lightning:button label="Cancel" name="Cancel" onclick="{!c.cancelFlow}" />
+                                            </div>
+                                        </div>
+                                	</footer>
+                                       
+                    </aura:if> 
+                    
+                    <aura:if isTrue="{!v.showRevSchPage}">
+                            <header class="slds-modal__header slds-modal__header_empty">
+                                <button class="glc-button slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.cancelFlow}">
+                                    <lightning:icon class="slds-button__icon slds-button__icon_large fillColor icn" iconName="utility:close" size="x-small" alternativeText="close" onclick="{!c.cancelFlow}"/>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                               
+                                
+                            </header>
+                              <aura:if isTrue="{!v.RSDef}">
+                        		<aura:set attribute="else">
+                                    <div class="slds-p-vertical_x-small slds-p-horizontal_large slds-theme_shade">
+                                        
+                                        <div class="slds-form-element">
+                                          
+                                            <div class="slds-grid slds-wrap slds-grid--pull-padded slds-p-top--small" >
+                                               
+                                               	<div class="slds-p-horizontal--small slds-large-size--1-of-5 slds-medium-size--1-of-2  slds-small-size--1-of-1" >                                    	
+                                                    <lightning:input type="date" name="input1" variant = "label-hidden" aura:id="defDate" placeholder="Input Deferred Revenue Acct Date for mass update..."/>
+                                                </div>
+                                                 <div class="slds-p-horizontal--small slds-large-size--1-of-6 slds-medium-size--1-of-2  slds-small-size--1-of-1" > 
+                                                    
+                                                    <lightning:button aura:id="saveMassUpdate" label="Copy to RS" name="Copy to RS" variant="brand" onclick="{!c.massUpdateRS}" />
+                                           		</div>
+                                               
+                                            </div>
+                                            
+                                         </div>
+                                     </div>
+                                   </aura:set>
+  								</aura:if> 
+                        
+                        
+                    <div class="slds-modal__content slds-grid slds-nowrap modal-overflow" id="modal-content-id-2" style="overflow:auto">
+       					<div class="slds-col slds-grid slds-grid_vertical">
+                             
+                            <div class="slds-grow slds-p-top--small">                                
+                                <div class="table-overflow">    
+                   
+                                   <aura:if isTrue="{!v.spinneract}">
+                                        <div class="slds-backdrop slds-backdrop_open">
+                                            <lightning:spinner variant="brand"  title="Processing......" alternativeText="Processing......" size="large"/>
+                                        </div>
+                                    </aura:if> 
+                                   
+                                    
+                                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped slds-no-row-hover" role="grid" style="overflow:auto">
+                                        <thead>
+                                            <tr class="slds-text-title_caps">
+                                                
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="RS Number">RS Number</div>
+                                                </th>
+                                                
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Order Number">Order Number</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Order Product">Order Product</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Product">Product</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="List Unit Price">List Unit Price</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Quantity">Quantity</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Start Date">Start Date</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="End Date">End Date</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Term">Term</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Revenue Category">Revenue Category</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Ship Date">Ship Date</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Deferred Revenue Acct Date">Deferred Revenue Acct Date</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Extended List Price">Extended List Price</div>
+                                                </th>
+                                                
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Sales Price">Sales Price</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Allocated Booking">Allocated Booking</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Manual Allocation">Manual Allocation</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Sent to RMCS">Sent to RMCS</div>
+                                                </th>
+                                                
+                                            </tr>
+                                        </thead>
+                                         
+                                        <tbody>
+                                            
+                                            <aura:iteration items="{!v.allRevSch}" var="allRS" indexVar="indexPB">
+                                                <tr class="slds-border_bottom">
+                                                	
+                                                 
+                                                    <td class="slds-text-align_left" >
+                                                    <a href="{!'/one/one.app?#/sObject/'+ allRS.Id + '/view'}" target="_blank"><ui:outputText aura:id ='PriorcellData' value="{!allRS.RS_Number__c}" class="slds-text-body--regular"/></a>
+                                                </td>
+                                                   <td>
+                                                    	<div class="slds-truncate" title="{!allRS.Order_Number__c}">{!allRS.Order_Number__c}</div>
+                                                    </td>
+                                                    <td class="slds-text-align_center" >
+                                                    <a href="{!'/one/one.app?#/sObject/'+ allRS.blng__OrderProduct__c + '/view'}" target="_blank"><ui:outputText aura:id ='PriorcellData' value="{!allRS.blng__OrderProduct__r.OrderItemNumber}" class="slds-text-body--regular"/></a>
+                                                	</td>
+                                                   
+                                                    <td class="slds-text-align_left" >
+                                                    <a href="{!'/one/one.app?#/sObject/'+ allRS.Product__c + '/view'}" target="_blank"><ui:outputText aura:id ='PriorcellData' value="{!allRS.Product__r.Name}" class="slds-text-body--regular"/></a>
+                                                	</td>
+                                                     <td class="slds-text-align_right">
+                                                    	<div class="slds-truncate" title="{!allRS.blng__OrderProduct__r.PeopleSoft_Extended_List_Price__c}"><lightning:formattedNumber value="{!allRS.blng__OrderProduct__r.PeopleSoft_Extended_List_Price__c}" style="currency" currencyCode="{!allRS.CurrencyIsoCode}" currencyDisplayAs="code" minimumFractionDigits="4" maximumFractionDigits="10"/></div>
+                                                    </td>
+
+                                                    <td class="slds-text-align_center">
+                                                    	<div class="slds-truncate" title="{!allRS.Quantity__c}">{!allRS.Quantity__c}</div>
+                                                    </td>
+                                                    <td class="slds-text-align_center">
+                                                        <div class="slds-truncate" title="{!allRS.blng__RevenueStartDate__c}"><ui:outputDate value="{!allRS.blng__RevenueStartDate__c}" format="MM/DD/YYYY"/></div>
+                                                    </td>
+                                                    <td class="slds-text-align_center">
+                                                    	<div class="slds-truncate" title="{!allRS.blng__RevenueEndDate__c}"><ui:outputDate value="{!allRS.blng__RevenueEndDate__c}" format="MM/DD/YYYY"/></div>
+                                                    </td>
+                                                     <td class="slds-text-align_center">
+                                                    	<div class="slds-truncate" title="{!allRS.Term__c}">{!allRS.Term__c}</div>
+                                                    </td>
+                                                    <td class="slds-text-align_left">
+                                                    	<div class="slds-truncate" title="{!allRS.Revenue_Category__c}">{!allRS.Revenue_Category__c}</div>
+                                                    </td>
+                                                    <td class="slds-text-align_center">
+                                                    	<div class="slds-truncate" title="{!allRS.Ship_Date__c}"><ui:outputDate value="{!allRS.Ship_Date__c}" format="MM/DD/YYYY"/></div>
+                                                    </td>
+                                                    <td class="slds-text-align_left">
+                                                        <div>
+                                                        <lightning:input type="date" value="{!allRS.Deferred_Revenue_Acct_Date__c}" variant = "label-hidden" dateStyle="short" disabled="{!v.RSDef || allRS.Sent_to_RMCS__c}"/>
+                                                    	</div>
+                                                    </td>
+                                                    <td class="slds-text-align_right">
+                                                    	<div class="slds-truncate" title="{!allRS.Extended_List_Price__c}"><lightning:formattedNumber value="{!allRS.Extended_List_Price__c}" style="currency" currencyCode="{!allRS.CurrencyIsoCode}" currencyDisplayAs="code" minimumFractionDigits="4" maximumFractionDigits="10"/></div>
+                                                    </td>
+                                                    <td class="slds-text-align_right">
+                                                    	<div class="slds-truncate" title="{!allRS.blng__TotalRevenueAmount__c}"><lightning:formattedNumber value="{!allRS.blng__TotalRevenueAmount__c}" style="currency" currencyCode="{!allRS.CurrencyIsoCode}" currencyDisplayAs="code" minimumFractionDigits="6" maximumFractionDigits="10"/></div>
+                                                    </td>
+                                                    <td class="slds-text-align_right">
+                                                         <div class="slds-truncate">
+                                                        <lightning:input type="number" name="{!allRS.Allocated_Booking__c}" variant = "label-hidden" value="{!allRS.Allocated_Booking__c}" step="0.01" disabled="{!v.RSAllocate || allRS.Sent_to_RMCS__c}"/>
+                                                            
+                                                    		</div>
+                                                    </td>
+                                                     <td class="slds-text-align_center">
+                                                    	
+                                                         <lightning:input type="checkbox" class="noLabel" checked="{!allRS.Manual_Allocation__c}" variant = "label-hidden" disabled="true"/>
+                                                    </td>
+                                                    <td class="slds-text-align_center">
+                                                    	
+                                                         <lightning:input type="checkbox" class="noLabel" checked="{!allRS.Sent_to_RMCS__c}" variant = "label-hidden" disabled="true"/>
+                                                    </td>
+                                                     
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>
+                
+                                    </table>
+           							
+                             	 </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <footer class="slds-modal__footer">
+                        <div class="slds-float--left">
+                            
+                                <lightning:button label="Cancel" name="Cancel" onclick="{!c.cancelFlow}" />
+                        </div>
+                        <aura:if isTrue="{!v.RSDef}">
+                        <aura:set attribute="else">
+ 							<div class="slds-float--right">
+                                <div class="slds-button">
+                                    <lightning:button label="Submit" name="Submit" onclick="{!c.updateAllRSController}" />
+                                    
+                                </div>
+                            </div>
+                        </aura:set>
+  						</aura:if> 
+                    </footer>
+                        </aura:if> 
+                </div>
+            </section>
+           
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+        </aura:if> 	
+  
+    
+    
+</aura:component>

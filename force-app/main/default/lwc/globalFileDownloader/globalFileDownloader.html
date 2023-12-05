@@ -1,0 +1,65 @@
+<!--
+/*
+ * Name			:	globalFileDownloader
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	11/1/2021
+ * Description	:	This LWC starts the Authorization process with Zoom App.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		11/1/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Id for Quick Action. -->
+	<div style="display: none;">{recordId}</div>
+
+	<!-- Body. -->
+	<lightning-quick-action-panel class="slds-m-top_x-large slds-m-bottom_x-large">
+
+		<!-- Table. -->
+		<template if:true={boolDisplaySpinner}>
+			<div class="slds-is-relative slds-m-top_medium slds-m-bottom_x-large">
+				<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+			</div>
+		</template>
+
+		<!-- Table. -->
+		<template if:false={boolDisplaySpinner}>
+			<c-global-data-table obj-parameters={objParameters} onaction={executeAction}></c-global-data-table>
+		</template>
+	</lightning-quick-action-panel>
+
+	<!-- Modal launched from Custom Cell clicks. -->
+	<template if:true={boolIsModalOpen}>
+		<section class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style={objCustomCellModalProperties.strStyleContainer}>
+				<div style={objCustomCellModalProperties.strStyleContent}>
+
+					<!-- Modal header. -->
+					<header class="slds-modal__header">
+						<lightning-layout>    
+							<lightning-layout-item size="12">
+								<h2 class="slds-text-heading_small">{label.Download_Files_Modal_Title}</h2>
+							</lightning-layout-item> 
+						</lightning-layout>
+					</header>
+
+					<!-- Body. -->
+					<div class="slds-p-around_small slds-m-top_small slds-m-bottom_small">{label.Download_Files_Modal_Confirmation}</div>
+					</div>
+
+					<!-- Footer-->
+					<footer class={objCustomCellModalProperties.strClassesFooter} style={objCustomCellModalProperties.strStyleFooter}>
+						<lightning-button variant="neutral" label={label.Download_Files_Modal_Cancel} onclick={cancelOperation} class="slds-p-around_x-small"></lightning-button>
+						<lightning-button variant="brand" label={label.Download_Files_Modal_Download} onclick={confirmOperation} class="slds-p-around_x-small"></lightning-button>
+					</footer>
+				</div>
+            </div>
+        </section>
+		<div class="slds-backdrop slds-backdrop_open" style="width: 10000%; left: -1000px;"></div>
+	</template>
+</template>

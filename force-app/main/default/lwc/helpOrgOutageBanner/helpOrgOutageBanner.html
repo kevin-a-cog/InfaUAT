@@ -1,0 +1,47 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <template if:true={isCloudCommunity}>
+        <div class="padding-on-top">
+            <lightning-card>
+                <lightning-formatted-text class="service-name" value={bannerOutage.message} slot="title">
+                </lightning-formatted-text>
+                <div onclick={handleOutageDisplay} slot="actions">
+                    <img src={icon_name}>
+                </div>
+                <template class="content-padding" for:each={bannerOutage.services} for:item="service"
+                    if:true={showServices}>
+                    <hr key={service.id} />
+                    <div key={service.id} class={service_pods}>
+                        <lightning-card>
+                            <div class="slds-grid slds-gutters content-margin">
+                                <div class="slds-col " data-id={service.id} onclick={handleExpandCollapse}>
+                                    <span class="service-name"> <img src={collapse} if:true={service.expanded}>
+                                        <img src={expand} if:false={service.expanded}> {service.name}</span>
+                                </div>
+                                <div>
+                                    <a class={service.statusClass} href="https://status.informatica.com/"
+                                        target="_new">{service.status}</a>
+                                </div>
+                            </div>
+                        </lightning-card>
+                    </div>
+                    <template for:each={service.items} for:item="childService" if:true={service.expanded}>
+                        <div key={childService.id} class={service_pods}>
+                            <lightning-card>
+                                <div class="slds-grid slds-gutters content-margin">
+                                    <div class="slds-col ">
+                                        <span class="child-service-name">{childService.name}</span>
+                                    </div>
+                                    <div>
+                                        <a class={childService.statusClass} href="https://status.informatica.com/"
+                                            target="_new">{childService.status}</a>
+                                    </div>
+                                </div>
+                            </lightning-card>
+                        </div>
+                    </template>
+                </template>
+            </lightning-card>
+        </div>
+    </template>
+</template>

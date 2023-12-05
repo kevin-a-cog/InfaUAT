@@ -1,0 +1,13 @@
+.quick-actions-panel {
+    overflow: hidden !important;
+}
+.upcoming-FTO {
+    background-color: aliceblue;
+}
+.upcoming-FTO .slds-table_header-fixed_container{
+    overflow-x: hidden;
+    background-color: #fff;
+}
+.changeowner-popup .slds-modal__container .empty-events {
+    text-align: center;
+}

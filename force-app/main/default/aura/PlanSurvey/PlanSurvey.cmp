@@ -1,0 +1,238 @@
+<aura:component
+    implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickActionwithoutHeader,flexipage:availableForAllPageTypes"
+    access="global" controller="PlanSurveyController">
+    <aura:attribute name="onBoardingSurveySent" type="Boolean" />
+    <aura:attribute name="bizOutcomeSurveySent" type="Boolean" />
+    <aura:attribute name="surveysent" type="Boolean" default="false" />
+    <aura:attribute name="planState" type="String" />
+    <aura:attribute name="LOBContactMail" type="String" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="concolumns" type="List" />
+    <aura:attribute name="contacts" type="Contact[]" />
+    <aura:attribute name="plancontacts" type="Plan_Contact__c[]" />
+    <aura:attribute name="accid" type="Id" />
+    <aura:attribute name="planconids" type="List" />
+    <aura:attribute name="selectedRows" type="List" />
+    <aura:attribute name="searchKeyword" type="String" />
+    <aura:attribute name="pillsList" type="sObject[]" />
+    <aura:attribute name="lstContacts" type="sObject[]" />
+    <aura:attribute name="lstContactsSize" type="Integer" default="0" />
+    <aura:attribute name="cstSurveySent" type="Boolean" />
+    <aura:attribute name="recTypeName" type="String" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:html tag="style">
+        .cuf-content { padding: 0 0rem !important; } .slds-p-around--medium {
+        padding: 0rem !important; } .slds-modal__content{ overflow-y:hidden
+        !important; height:unset !important; max-height:unset !important; } p {
+        font-weight: 600; font-size: 120%; text-align: center; }
+    </aura:html>
+
+    <div class="slds-col modal-header slds-modal__header">
+        <h2 class="title slds-text-heading--medium">Send Survey</h2>
+    </div>
+
+    <aura:if isTrue="{!v.planState}">
+        <aura:if isTrue="{!!v.surveysent}">
+            <div class="slds-p-around_medium">
+                <aura:if isTrue="{!v.recTypeName =='CST_Plan'}">
+                    <aura:if isTrue="{!v.cstSurveySent}">
+                        <p style="color: red">"CSA Survey" has already been sent.</p>
+                    </aura:if>
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!v.planState == 'Onboarding'}">
+                            <p style="color: red">
+                                Please complete the Onboarding State of the Plan to send the
+                                Survey.
+                            </p>
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!and(v.bizOutcomeSurveySent,v.planState == 'Optimize/Grow')}">
+                                    <p style="color: red">
+                                        "Business Outcome Survey" has already been sent.
+                                    </p>
+                                    <aura:set attribute="else">
+                                        <aura:if
+                                            isTrue="{!and(v.onBoardingSurveySent,or(v.planState =='Configuration',v.planState =='Implement'))}">
+                                            <p style="color: red">
+                                                "Onboarding Survey" has already been sent.
+                                            </p>
+                                        </aura:if>
+                                    </aura:set>
+                                </aura:if>
+                            </aura:set>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+
+                <aura:if isTrue="{! or(v.lstContactsSize == null,  v.lstContactsSize == 0) }">
+                    <p style="color: red">
+                        There are no Account Contacts to send the Survey.
+                    </p>
+
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!v.recTypeName=='CST_Plan'}">
+                            <aura:if isTrue="{!not(v.cstSurveySent)}">
+                                <p>Select "CSA Survey" recipients</p>
+                            </aura:if>
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!and(not(v.bizOutcomeSurveySent),v.planState == 'Optimize/Grow')}">
+                                    <p>Select "Business Outcome Survey" recipients</p>
+                                </aura:if>
+                                <aura:if
+                                    isTrue="{!and(not(v.onBoardingSurveySent),or(v.planState =='Configuration',v.planState =='Implement'))}">
+                                    <p>Select "Onboarding Survey" recipients</p>
+                                </aura:if>
+                            </aura:set>
+                        </aura:if>
+             
+
+                        <aura:if
+                            isTrue="{! (
+                                and(not(v.bizOutcomeSurveySent),v.planState == 'Optimize/Grow')||
+                                and(not(v.onBoardingSurveySent), or(v.planState == 'Configuration',v.planState == 'Implement'))||
+                                and(not(v.cstSurveySent),v.recTypeName == 'CST_Plan')
+                            )}">
+
+                            <!--pill section that will show selected records-->
+                            <div class="slds-pill_container slds-pill_container_bare">
+                                <div id="listbox-unique-id" role="listbox">
+                                    <ul class="slds-listbox" role="presentation">
+                                        <li role="presentation" class="slds-listbox__item">
+                                            <div class="slds-p-top--x-small">
+                                                <aura:iteration var="pill" items="{!v.pillsList}">
+                                                    <lightning:pill label="{!pill.Name}" href="{!'/'+ pill.Id}"
+                                                        onremove="{!c.handleRemove }" name="{!pill.Id}">
+                                                        <aura:set attribute="media">
+                                                            <lightning:icon iconName="standard:contact"
+                                                                alternativeText="Contact" />
+                                                        </aura:set>
+                                                    </lightning:pill>
+                                                </aura:iteration>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- added for search Account contacts -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label slds-assistive-text"
+                                    for="combobox-unique-id">Search</label>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-combobox_container">
+                                        <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click"
+                                            aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                                            <div
+                                                class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                                                <ui:inputText updateOn="keyup" keyup="{!c.searchKeyChange}"
+                                                    aura:id="searchId" class="slds-input slds-combobox__input"
+                                                    value="{!v.searchKeyword}" placeholder="Search Account Contacts" />
+
+                                                <span
+                                                    class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right"
+                                                    title="Description of icon when needed">
+                                                    <lightning:icon
+                                                        class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default"
+                                                        iconName="utility:search" size="x-small"
+                                                        alternativeText="search" />
+                                                    <span class="slds-assistive-text">Description of icon</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slds-col modal-body scrollable slds-p-around--medium" style="
+                  height: 200px;
+                  max-height: 400px;
+                  overflow-y: auto !important;
+                ">
+                                <div class="slds-grow">
+                                    <div class="slds-p-top--small">
+                                        <div class="table-overflow">
+                                            <table class="slds-table slds-table_bordered slds-table_cell-buffer"
+                                                role="grid">
+                                                <thead>
+                                                    <tr class="slds-text-title_caps">
+                                                        <th scope="col" role="gridcell" class="slds-cell-shrink">
+                                                            <div class="slds-truncate" title="button"></div>
+                                                        </th>
+                                                        <th scope="col">
+                                                            <div class="slds-truncate" title="Namel}">
+                                                                Name
+                                                            </div>
+                                                        </th>
+                                                        <th>
+                                                            <div class="slds-truncate" title="Email">
+                                                                Email
+                                                            </div>
+                                                        </th>
+                                                        <th>
+                                                            <div class="slds-truncate" title="Title">
+                                                                Title
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    <aura:iteration items="{!v.lstContacts}" var="prod">
+                                                        <tr class="slds-border_bottom">
+                                                            <td role="gridcell" class="slds-cell-shrink">
+                                                                <aura:if isTrue="{!prod.Is_Selected__c}">
+                                                                    <lightning:icon iconName="action:approval"
+                                                                        size="x-small"
+                                                                        class="slds-button slds-button_brand slds-button--icon-container slds-button--icon-border"
+                                                                        alternativeText="Selected" />
+                                                                    <aura:set attribute="else">
+                                                                        <button
+                                                                            class="check_in_button slds-button slds-button--icon-container slds-button--icon-border"
+                                                                            style="font-size: 30px"
+                                                                            data-contact-id="{!prod.Id}"
+                                                                            id="checkoutbtn" onclick="{!c.handleClick}">
+                                                                            +
+                                                                        </button>
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                            </td>
+                                                            <td class="slds-text-body--regular slds-truncate">
+                                                                {!prod.Name}
+                                                            </td>
+                                                            <td class="slds-text-body--regular slds-truncate">
+                                                                {!prod.Email}
+                                                            </td>
+                                                            <td class="slds-text-body--regular slds-truncate">
+                                                                {!prod.Title}
+                                                            </td>
+                                                        </tr>
+                                                    </aura:iteration>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+            </div>
+        </aura:if>
+    </aura:if>
+
+    <aura:if isTrue="{!!v.surveysent}">
+        <div class="slds-col modal-footer slds-modal__footer">
+            <lightning:button variant="neutral" label="Cancel" onclick="{! c.CloseModal }" />
+            <lightning:button variant="brand" label="Send" name="Send" onclick="{!c.onSend}"
+                disabled="{!(v.pillsList.length > 0? false : true)}" />
+        </div>
+    </aura:if>
+
+    <aura:if isTrue="{!v.surveysent}">
+        <div class="slds-col modal-footer slds-modal__footer">
+            <p>Survey has been sent!</p>
+            <lightning:button variant="neutral" label="Ok" onclick="{! c.CloseModal }" />
+        </div>
+    </aura:if>
+</aura:component>

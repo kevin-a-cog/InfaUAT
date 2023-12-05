@@ -1,0 +1,17 @@
+<!--Page to Call Lighting Component for Revenue Schedules-->
+<apex:page standardController="Revenue_Agreement__c">
+    <apex:includeLightning />
+    <div id="lightning" />    
+    
+    <script>
+    var recordId = "{!$CurrentPage.parameters.id}";
+
+    $Lightning.use("c:revenue_schedules_app", function() {
+        $Lightning.createComponent(
+            "c:revenue_schedules",
+            {"recordId" : recordId},
+            "lightning"
+        );
+    });
+    </script>
+</apex:page>

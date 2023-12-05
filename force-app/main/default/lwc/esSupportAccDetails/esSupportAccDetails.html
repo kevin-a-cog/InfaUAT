@@ -1,0 +1,45 @@
+<template>
+    <div class="container">
+      <template if:true={showSpinner}>
+          <lightning-spinner class="slds-is-fixed" alternative-text="Loading" size="large"></lightning-spinner>
+      </template>
+      <div class="row es-organisation-wrapper">
+        <div class="col-md-6">
+            <p class="es-organisation__name">
+              <img src={supportAccountLogo} alt="support-account-logo" />
+              <a class="es-org-name-link" href={manageSupportAccount}>{selectedSupportAccountLabel}</a></p>
+        </div>
+        <div class={selectDropdown}>
+          <template if:true={showMakeFavSpinner}>
+            <lightning-spinner class="es-pin-spinner" alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+        <template if:true={isMultipleSupportAccount}>
+          <form class="es-form">
+            <div class="form-group es-form-group es-lds-form-group m-0 es-item-width">
+              <!--<lightning-combobox
+                  name="supportAccount"
+                  label="Pick a Support Account"
+                  placeholder="Select your support account"
+                  value={selectedSupportAccount}
+                  options={supportAccounts}
+                  onchange={handleAccountSelect}>
+              </lightning-combobox>-->
+              
+              <c-reusable-custom-dropdown-with-search options={supportAccounts}  value={selectedSupportAccount}
+              options-all={supportAllAccounts}  onmyfav={markFav}   field-label="Pick a Support Account" onchange={handleAccountSelect}>                 
+          </c-reusable-custom-dropdown-with-search>
+            </div>
+            
+           
+          </form> 
+           <!--<template if:true={isPinned}>
+            <lightning-icon icon-name="utility:pinned"  class="icn" variant="warning" size="x-small"  onclick={makefav}  alternative-text="My Favorite" title="My Favorite"></lightning-icon>
+           </template>
+           <template if:false={isPinned}>
+            <lightning-icon icon-name="utility:pinned"  class="icn" size="x-small"  onclick={makefav}  alternative-text="My Favorite" title="My Favorite"></lightning-icon>
+           </template>-->
+        </template>
+        </div>
+      </div>
+    </div>
+</template>

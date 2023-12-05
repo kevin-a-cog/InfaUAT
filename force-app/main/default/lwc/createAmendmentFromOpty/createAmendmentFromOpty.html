@@ -1,0 +1,87 @@
+<template>
+    <lightning-quick-action-panel header="Amend an Existing Contract">
+        <template lwc:if={showSpinner}>
+            <div style="height: 200px; position:relative">
+                <c-loading-spinner show-spinner={showSpinner} spinner-message={label.ELEVATESTATUSMESSAGE}></c-loading-spinner>
+            </div>
+        </template>
+        <template lwc:else>
+            <div class="slds-grid">
+                <div class="slds-col slds-size_1-of-2">Account
+                    <div class="slds-scoped-notification_light">
+                        <div class="slds-p-around_xx-small">
+                            <lightning-icon icon-name="standard:account" size="small" alternative-text="Account" title="Account"></lightning-icon>
+                            <span class="slds-p-left_small">{oppAccount}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-col slds-size_1-of-2">
+                    <div class="slds-p-right_large">Opportunity
+                        <div class="slds-scoped-notification_light">
+                            <div class="slds-p-around_xx-small">
+                                <lightning-icon icon-name="standard:opportunity" size="small" alternative-text="Opportunity" title="Opportunity"></lightning-icon>
+                                <span class="slds-p-left_small">{oppName}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <template lwc:if={isStep1}>
+                <div class="slds-p-vertical_medium">
+                    <lightning-radio-group name="radioGroup"
+                        label="Type of Amendment:"
+                        options={amendTypeOptions}
+                        onchange={handleSelection}
+                        value={amendTypeSelected}
+                        type="radio"
+                        required>
+                    </lightning-radio-group>
+                </div>
+            </template>
+            <template lwc:if={isStep2}>
+                <div class="paddingCust">
+                    <lightning-layout multiple-rows="true" vertical-align="center">
+                        <lightning-layout-item size="2"></lightning-layout-item>
+                        <lightning-layout-item size="6">
+                            <!--Input text to Search Account-->
+                            <lightning-input type="text" label="Search for a Contract" placeholder="Enter Contract Number or Contract Name to search"
+                                value={searchKey} onchange={hanldeChangeOnSearchBox}> 
+                            </lightning-input>
+                        </lightning-layout-item >
+                        <lightning-layout-item size="2">
+                            <!--Search Button-->
+                            <div class="marginCust">
+                                <lightning-button label="Search" variant="brand" onclick={handleSearch} class="marginCust" disabled={disableSearch}>
+                                </lightning-button>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="2"></lightning-layout-item>
+                    </lightning-layout>
+                </div>
+                <template lwc:if={noResultMsg}>
+                    <div class="slds-align_absolute-center" ><b>{label.noContractFoundMessage}<br/></b></div>
+                </template>
+                <template lwc:else>
+                    <div>
+                        <lightning-datatable key-field="id" data={data} columns={columns} 
+                                            max-row-selection ="1" column-widths-mode="auto"
+                                            onrowselection={onRowSelection}>
+                        </lightning-datatable>
+                    </div>
+                </template>
+            </template>
+            <!--Footer the displays button-->
+            <div class="slds-m-top_x-small slds-clearfix slds-theme_shade">
+                <div class="slds-p-vertical_small slds-float_right">
+                    <lightning-button label="Cancel" onclick={closeAction} class="slds-m-right_x-small"></lightning-button>
+                    <template lwc:if={isStep2}>
+                        <lightning-button variant="brand-outline" label="Previous" onclick={handlePrevious} class="slds-m-right_x-small"></lightning-button>
+                    </template>
+                    <lightning-button variant="brand" label="Next" onclick={handleNext} class="slds-m-right_x-small" disabled={disableNextBtn}></lightning-button>
+                </div>
+            </div>
+        </template>
+    </lightning-quick-action-panel>
+</template>

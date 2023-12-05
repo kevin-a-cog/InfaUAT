@@ -1,0 +1,823 @@
+<template>
+  <div class="container-fluid infa-container-fluid--grey">
+    <template if:true={showSpinner}>
+      <lightning-spinner class="slds-is-fixed" alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+  </div>
+  <div class="in-header">
+    <template if:true={isAskQuestionModal}>
+      <c-help-ask-a-question-modal heading={heading} selectedpostto={recordId} onclosepopup={closeAskQuestionModal}
+        onsave={saveData} is-loading={isSpinnerLoading}>
+      </c-help-ask-a-question-modal>
+    </template>
+    <div class="container-fluid navbar-bg infa-header infa-h-sticky">
+      <div class={stickyClass}>
+        <div class="row">
+          <div class="col-sm-3 infa-header-logo-container">
+            <template if:true={appLogo}>
+              <a class="navbar-brand" onclick={openDashboard}>
+                <img src={appLogo} alt="Informatica E-Support Logo" class="infa-navbar-logo" />
+              </a>
+            </template>
+          </div>
+          <div class="col-sm-7 infa-header-search-nav-section">
+
+            <!-- <div class="infa-header-search-section">
+              <div class={cssSearchClass}>
+                <div class="search-bar" onkeypress={eSupportSearch}>
+                  <lightning-input onchange={handleSearchInput} placeholder="Search product videos, help resources, documents, discussions etc">
+                  </lightning-input>
+                </div>
+                <div class="infa-navbar-search" style={getSearchIcon} onclick={handleSearchClick}></div>
+              </div>
+            </div> -->
+            <div class="infa-header-search-section">
+              <div class={cssSearchClass}>
+                <div class="search-bar">
+                  <div data-id="searchbox" class="help-header-search-coveo">
+                    <div class="CoveoAnalytics" data-search-hub="InfaNetworkGlobalSearch"></div>
+                    <div class="CoveoSearchbox" data-placeholder={searchPlaceHolder} data-enable-omnibox='true'
+                      data-enable-query-suggest-addon="true" data-enable-query-syntax="false"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="infa-header-nav-section">
+              <div class="infa-header-logo-mobile">
+                <template if:true={appLogo}>
+                  <a class="navbar-brand" onclick={openDashboard}>
+                    <img src={appLogo} alt="Informatica E-Support Logo" class="infa-navbar-logo" />
+                  </a>
+                </template>
+              </div>
+              <nav class="row navbar navbar-expand-lg navbar-light infa-navbar">
+                <!-- <template if:true={userName}>
+                <ul class="infa-header-notifications mobile slds-global-actions" onclick={openNotifications}>
+                  <li class="slds-global-actions__item">
+                    <div class="nav-item dropdown slds-dropdown-trigger slds-dropdown-trigger_click"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <button
+                        class="dropdown-toggle slds-button slds-button_icon slds-button_icon slds-button_icon-container slds-button_icon-small slds-global-actions__notifications slds-global-actions__item-action slds-incoming-notification"
+                        title="1 new notifications" aria-live="assertive" aria-atomic="true" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <lightning-icon class="infa-header-notification-icon" icon-name="utility:notification"
+                          size="small" alternative-text="notifications" title="notifications">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">1 new notification</span>
+                      </button>
+                      <span aria-hidden="true"
+                        class="slds-notification-badge slds-incoming-notification slds-show-notification">1</span>
+                    </div>
+                  </li>
+                </ul>
+              </template> -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                  data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                  aria-label="Toggle navigation">
+                  <span class={cssHamburgerClass} onclick={handleHamburgerClick}></span>
+                </button>
+                <!-- <div class={cssNotificationsClass}>
+                <section aria-describedby="dialog-body-id-7" aria-labelledby="notificationsMenu"
+                  class="infa-header-notification-popup mobile" role="dialog">
+                  <button
+                    class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close"
+                    title="Close dialog">
+                    <svg class="slds-button__icon" aria-hidden="true">
+                      <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    <span class="slds-assistive-text">Close dialog</span>
+                  </button>
+                  <div class="slds-popover__body slds-p-around_none" id="dialog-body-id-7">
+                    <div class="">
+                      <div class="slds-media__body">
+                        <header class="slds-popover__header">
+                          <h2 class="slds-text-heading_small" id="dialog-heading-id-7">Notifications</h2>
+                        </header>
+                        <ul>
+                          <li class="slds-global-header__notification slds-global-header__notification_unread">
+                            <div class="slds-media slds-has-flexi-truncate slds-p-around_x-small">
+                              <div class="slds-media__figure">
+                                <span class="slds-avatar slds-avatar_small">
+                                  <img alt="Val Handerly" src="/assets/images/avatar2.jpg"
+                                    title="Val Handerly avatar" />
+                                </span>
+                              </div>
+                              <div class="slds-media__body">
+                                <div class="slds-grid slds-grid_align-spread">
+                                  <a href="#" class="slds-text-link_reset slds-has-flexi-truncate">
+                                    <div class="infa-header-notif-title slds-truncate"
+                                      title="Val Handerly mentioned you">
+                                      Val Handerly mentioned you
+                                    </div>
+                                    <div class="infa-header-notif-body slds-truncate"
+                                      title="@jrogers Could I please have a review on my presentation deck">
+                                      @jrogers
+                                      Could I please have a review on my presentation deck</div>
+                                    <div class="infa-header-notif-body slds-m-top_x-small slds-text-color_weak">
+                                      10 hours ago
+                                      <abbr class="slds-text-link slds-m-horizontal_xxx-small" title="unread">●</abbr>
+                                    </div>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                          <li class="slds-global-header__notification slds-global-header__notification_unread">
+                            <div class="slds-media slds-has-flexi-truncate slds-p-around_x-small">
+                              <div class="slds-media__figure">
+                                <span class="slds-avatar slds-avatar_small">
+                                  <img alt="Jon Rogers" src="/assets/images/avatar3.jpg" title="Jon Rogers avatar" />
+                                </span>
+                              </div>
+                              <div class="slds-media__body">
+                                <div class="slds-grid slds-grid_align-spread">
+                                  <a href="#" class="slds-text-link_reset slds-has-flexi-truncate">
+                                    <div class="infa-header-notif-title slds-truncate"
+                                      title="Jon Rogers commented on your post">
+                                      Jon Rogers commented on your post
+                                    </div>
+                                    <div class="infa-header-notif-body slds-truncate"
+                                      title="I totally agree with your sentiment">I
+                                      totally
+                                      agree with your sentiment</div>
+                                    <div class="infa-header-notif-body slds-m-top_x-small slds-text-color_weak">
+                                      13 hours ago
+                                      <abbr class="slds-text-link slds-m-horizontal_xxx-small" title="unread">●</abbr>
+                                    </div>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                          <li class="slds-global-header__notification">
+                            <div class="slds-media slds-has-flexi-truncate slds-p-around_x-small">
+                              <div class="slds-media__figure">
+                                <span class="slds-avatar slds-avatar_small">
+                                  <img alt="Rebecca Stone" src="/assets/images/avatar2.jpg"
+                                    title="Rebecca Stone avatar" />
+                                </span>
+                              </div>
+                              <div class="slds-media__body">
+                                <div class="slds-grid slds-grid_align-spread">
+                                  <a href="#" class="slds-text-link_reset slds-has-flexi-truncate">
+                                    <div class="infa-header-notif-title slds-truncate"
+                                      title="Rebecca Stone mentioned you">
+                                      Rebecca Stone mentioned you
+                                    </div>
+                                    <div class="infa-header-notif-body slds-truncate"
+                                      title="@jrogers Here&#x27;s the conversation I mentioned to you">
+                                      @jrogers
+                                      Here&#x27;s the conversation I mentioned to you</div>
+                                    <div class="infa-header-notif-body slds-m-top_x-small slds-text-color_weak">
+                                      1 day ago</div>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div> -->
+                <div class={cssNavListClass}>
+                  <div class="infa-navbar-search-section-mobile">
+                    <div class="infa-header-search-section-mobile">
+                      <div class={cssSearchClass}>
+                        <!-- <div class="search-bar" onkeypress={eSupportSearch}>
+                          <lightning-input onchange={handleSearchInput} placeholder="Search product videos, documents...">
+                          </lightning-input>
+                        </div> 
+                        <div class="infa-navbar-search" style={getSearchIcon} onclick={handleSearchClick}></div> -->
+
+                        <div class="search-bar">
+                          <div data-id="searchbox-mobile" class="help-header-search-coveo">
+                            <div class="CoveoAnalytics" data-search-hub="InfaNetworkGlobalSearch"
+                              data-custom-coveo-function={handleSearchBarAnalytics}></div>
+                            <div class="CoveoSearchbox" data-placeholder="Search product videos, documents..."
+                              data-enable-omnibox='true' data-enable-query-suggest-addon="true"
+                              data-enable-query-syntax="false"></div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <ul class={destopHeaderSearhCssClass}>
+                    <template for:each={navBarData} for:item="item">
+                      <li key={item.id} class="nav-item  infa-header-nav-link dropdown">
+                        <p class="nav-link infa-nav-link dropdown-toggle" role="button" data-toggle="dropdown"
+                          aria-expanded="false" data-target="#">
+                          {item.navBarItem}
+                          <!-- <lightning-icon class="infa-header-chevron chevron-down" icon-name="utility:chevrondown"
+                            size="xx-small" alternative-text="chevrondown">
+                          </lightning-icon> -->
+                        </p>
+                        <template if:true={item.multiLevel}>
+                          <div class="dropdown-menu infa-dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="row">
+                              <div class="col-sm-3 infa-header-dropdown-section left">
+
+                                <div class="in-header-outerdiv">
+                                  <div class="infa-header-dropdown-title">
+                                    {item.title}
+                                  </div>
+                                  <template if:true={item.showLockIcon}>
+                                    <div>
+                                      <lightning-icon class="in-header-lock" icon-name="utility:lock"
+                                        alternative-text="lock" size="x-small">
+                                      </lightning-icon>
+                                    </div>
+                                  </template>
+
+                                </div>
+
+                                <div class="infa-header-dropdown-description">
+                                  {item.description}
+                                </div>
+                              </div>
+
+
+                              <template if:true={item.level2.regularLinks}>
+
+
+                                <div class="col-sm-6 infa-header-dropdown-section middle">
+                                  <div class="row">
+                                    <template for:each={item.level2.featuredLinks} for:item="subItem">
+                                      <div class="col-sm-6" key={subItem.link}>
+
+                                        <template if:false={subItem.isGuestAndShowGreyIcon}>
+                                          <div class="in-header-outerdiv">
+                                            <div class="infa-header-dropdown-title">
+                                              <a data-id={subItem.link} data-section={item.navBarItem}
+                                                data-subsection={subItem.title} data-value={subItem.target}
+                                                onclick={handleOnClick}
+                                                class="infa-navbar-level2-text-heading">{subItem.title}</a>
+                                            </div>
+                                            <template if:true={subItem.showLockIcon}>
+                                              <div>
+                                                <lightning-icon class="in-header-lock" icon-name="utility:lock"
+                                                  alternative-text="lock" size="x-small">
+                                                </lightning-icon>
+                                              </div>
+                                            </template>
+                                          </div>
+                                          <template if:true={subItem.description}>
+                                            <div class="infa-header-dropdown-description">
+                                              {subItem.description}
+                                            </div>
+                                          </template>
+                                        </template>
+
+                                        <template if:true={subItem.isGuestAndShowGreyIcon}>
+                                          <div class="in-header-outerdiv infa-header-dropdown-item-disabled">
+                                            <div class="infa-header-dropdown-title">
+                                              <a class="infa-navbar-level2-text-heading">{subItem.title}</a>
+                                            </div>
+
+                                            <template if:true={subItem.tooltip}>
+                                              <lightning-helptext content="You have No Access."></lightning-helptext>
+                                            </template>
+
+                                            <template if:true={subItem.showLockIcon}>
+                                              <div>
+                                                <lightning-icon class="in-header-lock" icon-name="utility:lock"
+                                                  alternative-text="lock" size="x-small">
+                                                </lightning-icon>
+                                              </div>
+                                            </template>
+                                          </div>
+                                          <template if:true={subItem.description}>
+                                            <div
+                                              class="infa-header-dropdown-description infa-header-dropdown-item-disabled">
+                                              {subItem.description}
+                                            </div>
+                                          </template>
+                                        </template>
+
+                                      </div>
+                                    </template>
+                                  </div>
+                                </div>
+
+
+
+                                <div class="col-sm-3 infa-header-dropdown-section right">
+                                  <template for:each={item.level2.regularLinks} for:item="subItem">
+                                    <div key={subItem.link}>
+                                      <div class="in-header-outerdiv">
+
+                                        <div class="infa-header-dropdown-title">
+                                          <a data-id={subItem.link} data-section={item.navBarItem}
+                                            data-subsection={subItem.title} data-value={subItem.target}
+                                            onclick={handleOnClick}
+                                            class="infa-navbar-level2-text-heading">{subItem.title}</a>
+                                        </div>
+
+                                        <template if:true={subItem.showLockIcon}>
+                                          <div>
+                                            <lightning-icon class="in-header-lock" icon-name="utility:lock"
+                                              alternative-text="lock" size="x-small">
+                                            </lightning-icon>
+                                          </div>
+                                        </template>
+
+                                      </div>
+
+                                      <template if:true={subItem.description}>
+                                        <div class="infa-header-dropdown-description">
+                                          {subItem.description}
+                                        </div>
+                                      </template>
+                                    </div>
+                                  </template>
+                                </div>
+
+
+
+                              </template>
+
+
+                              <template if:false={item.level2.regularLinks}>
+                                <div class="col-sm-9 infa-header-dropdown-section">
+                                  <div class="row">
+                                    <template for:each={item.level2.featuredLinks} for:item="subItem">
+                                      <div class="col-sm-6" key={subItem.link}>
+                                        <template if:true={subItem.authenticated}>
+                                          <template if:true={userName}>
+                                            <div class="in-header-outerdiv">
+                                              <div class="infa-header-dropdown-title">
+                                                <a data-id={subItem.link} data-section={item.navBarItem}
+                                                  data-subsection={subItem.title} data-value={subItem.target}
+                                                  onclick={handleOnClick}
+                                                  class="infa-navbar-level2-text-heading">{subItem.title}</a>
+                                              </div>
+                                              <template if:true={subItem.showLockIcon}>
+                                                <div>
+                                                  <lightning-icon class="in-header-lock" icon-name="utility:lock"
+                                                    alternative-text="lock" size="x-small">
+                                                  </lightning-icon>
+                                                </div>
+                                              </template>
+
+                                            </div>
+
+                                          </template>
+                                          <template if:false={userName}>
+                                            <div class="in-header-outerdiv">
+                                              <div class="infa-header-dropdown-title authenticated">
+                                                <a href="#" onclick={openLoginPage} target={subItem.target}
+                                                  class="infa-navbar-level2-text-heading">{subItem.title}</a>
+                                              </div>
+                                              <template if:true={subItem.showLockIcon}>
+                                                <div>
+                                                  <lightning-icon class="in-header-lock" icon-name="utility:lock"
+                                                    alternative-text="lock" size="x-small">
+                                                  </lightning-icon>
+                                                </div>
+                                              </template>
+
+                                            </div>
+
+                                          </template>
+                                        </template>
+                                        <template if:false={subItem.authenticated}>
+                                          <template if:false={subItem.isGuestAndShowGreyIcon}>
+
+                                            <div class="in-header-outerdiv">
+                                              <div class="infa-header-dropdown-title">
+                                                <a data-id={subItem.link} data-section={item.navBarItem}
+                                                  data-subsection={subItem.title} data-value={subItem.target}
+                                                  onclick={handleOnClick}
+                                                  class="infa-navbar-level2-text-heading">{subItem.title}</a>
+                                              </div>
+                                              <template if:true={subItem.showLockIcon}>
+                                                <div>
+                                                  <lightning-icon class="in-header-lock" icon-name="utility:lock"
+                                                    alternative-text="lock" size="x-small">
+                                                  </lightning-icon>
+                                                </div>
+                                              </template>
+
+                                            </div>
+
+                                            <template if:true={subItem.description}>
+                                              <div class="infa-header-dropdown-description">
+                                                {subItem.description}
+                                              </div>
+                                            </template>
+
+                                          </template>
+
+                                          <template if:true={subItem.isGuestAndShowGreyIcon}>
+
+                                            <div class="in-header-outerdiv infa-header-dropdown-item-disabled"
+                                              data-name={subItem.title} onmouseover={showtooltip}
+                                              onmouseout={hideTooltip}>
+                                              <div class="infa-header-dropdown-title">
+                                                <a class="infa-navbar-level2-text-heading" data-toggle="tooltip"
+                                                  data-placement="top"
+                                                  title="This item is restricted. Please login to access it.">{subItem.title}</a>
+                                              </div>
+
+                                              <template if:true={subItem.tooltip}>
+                                                <lightning-helptext
+                                                  content="This item is restricted. Please login to access it."
+                                                  class="icn"></lightning-helptext>
+                                              </template>
+
+                                              <template if:true={subItem.showLockIcon}>
+                                                <div>
+                                                  <lightning-icon class="in-header-lock" icon-name="utility:lock"
+                                                    alternative-text="lock" size="x-small">
+                                                  </lightning-icon>
+                                                </div>
+                                              </template>
+
+                                            </div>
+
+                                            <template if:true={subItem.description}>
+                                              <div
+                                                class="infa-header-dropdown-description infa-header-dropdown-item-disabled">
+                                                {subItem.description}
+                                              </div>
+                                            </template>
+
+                                          </template>
+
+
+                                        </template>
+
+                                      </div>
+                                    </template>
+                                  </div>
+                                </div>
+                              </template>
+                            </div>
+                          </div>
+                        </template>
+                        <template if:false={item.multiLevel}>
+                          <div class="infa-header-reduced-dropdown">
+                            <div class="dropdown-menu infa-dropdown-menu" aria-labelledby="navbarDropdown">
+                              <div class="infa-header-dropdown-section">
+                                <template for:each={item.level2.datalinks} for:item="subItem">
+                                  <div key={subItem.link}>
+                                    <div class="in-header-outerdiv">
+                                      <div class="infa-header-dropdown-title">
+                                        <a data-id={subItem.link} data-section={item.navBarItem}
+                                          data-subsection={subItem.title} data-value={subItem.target}
+                                          onclick={handleOnClick}
+                                          class="infa-navbar-level2-text-heading">{subItem.title}</a>
+                                      </div>
+                                      <template if:true={subItem.showLockIcon}>
+                                        <div>
+                                          <lightning-icon class="in-header-lock" icon-name="utility:lock"
+                                            alternative-text="lock" size="x-small">
+                                          </lightning-icon>
+                                        </div>
+                                      </template>
+                                    </div>
+
+                                    <template if:true={subItem.description}>
+                                      <div class="infa-header-dropdown-description">
+                                        {subItem.description}
+                                      </div>
+                                    </template>
+                                  </div>
+                                </template>
+                              </div>
+                            </div>
+                          </div>
+                        </template>
+                      </li>
+                    </template>
+                  </ul>
+                  <ul class="navbar-nav infa-header-navbar-nav mobile-nav parent-list">
+                    <template for:each={navBarData} for:item="item">
+                      <li key={item.id} class="nav-item  infa-header-nav-link dropdown">
+                        <p class="nav-link infa-nav-link dropdown-toggle">
+                          <a href={item.link}>{item.navBarItem}</a>
+                          <lightning-icon class="infa-header-chevron chevron-right" icon-name="utility:chevronright"
+                            size="xx-small" alternative-text="chevronright" data-item={item.navBarItem}
+                            onclick={openSubList}></lightning-icon>
+                        </p>
+                      </li>
+                    </template>
+                    <template if:true={userName}>
+                      <li class="nav-item dropdown infa-nav-username">
+                        <p class="nav-link infa-nav-link dropdown-toggle">
+                          <a href={profileUrl}>{userName}</a>
+                          <lightning-icon class="infa-header-chevron chevron-right" icon-name="utility:chevronright"
+                            size="xx-small" alternative-text="chevronright" onclick={openProfileSubList}>
+                          </lightning-icon>
+                        </p>
+                      </li>
+                    </template>
+                    <template if:false={userName}>
+                      <li class="nav-item dropdown infa-nav-username mobile">
+                        <a class="nav-link infa-nav-link" onclick={openLoginPage}>
+                          Login <i class="infa-header-link-arrow-mobile"><span>&#8594;</span></i>
+                        </a>
+                      </li>
+                      <li class="nav-item dropdown infa-nav-logout mobile">
+                        <a class="nav-link infa-nav-link" onclick={openRegisterPage}>
+                          Sign Up <i class="infa-header-link-arrow-mobile"><span>&#8594;</span></i>
+                        </a>
+                      </li>
+                    </template>
+                  </ul>
+                  <template for:each={navBarData} for:item="item">
+                    <ul key={item.id} class="navbar-nav infa-header-navbar-nav subList" data-menu={item.navBarItem}>
+                      <li class="nav-item infa-header-nav-link selected">
+                        <lightning-icon class="infa-header-chevron chevron-left" icon-name="utility:chevronleft"
+                          size="xx-small" alternative-text="Back" onclick={openMainMenu}></lightning-icon>
+                        {item.navBarItem}
+                      </li>
+                      <template if:true={item.multiLevel}>
+                        <template for:each={item.level2.featuredLinks} for:item="subItem">
+                          <li key={subItem.Id} class="nav-item infa-header-nav-link">
+                            <a href={subItem.link} class="nav-link infa-nav-link dropdown-toggle">
+                              {subItem.title}
+                            </a>
+                          </li>
+                        </template>
+                        <template for:each={item.level2.regularLinks} for:item="subItem">
+                          <li key={subItem.Id} class="nav-item infa-header-nav-link">
+                            <a href={subItem.link} class="nav-link infa-nav-link dropdown-toggle">
+                              {subItem.title}
+                            </a>
+                          </li>
+                        </template>
+                      </template>
+                      <template if:false={item.multiLevel}>
+                        <template for:each={item.level2.datalinks} for:item="subItem">
+                          <li key={subItem.Id} class="nav-item infa-header-nav-link">
+                            <a href={subItem.link} class="nav-link infa-nav-link dropdown-toggle">
+                              {subItem.title}
+                            </a>
+                          </li>
+                        </template>
+                      </template>
+                    </ul>
+                  </template>
+                  <ul class="navbar-nav infa-header-navbar-nav profile subList">
+                    <li class="nav-item infa-header-nav-link selected">
+                      <lightning-icon class="infa-header-chevron chevron-left" icon-name="utility:chevronleft"
+                        size="xx-small" alternative-text="Back" onclick={openMainMenu}></lightning-icon>
+                      User Name
+                    </li>
+                    <li class="nav-item infa-header-nav-link" if:false={boolIsCSMCommunity}>
+                      <a class="nav-link infa-nav-link dropdown-toggle" onclick={gotofeedbackLink}>
+                        Feedback
+                      </a>
+                    </li>
+                    <li class="nav-item infa-header-nav-link">
+                      <a class="nav-link infa-nav-link dropdown-toggle" onclick={goToUserProfile}>
+                        View Profile
+                      </a>
+                    </li>
+                    <!-- <li class="nav-item infa-header-nav-link" if:false={boolIsCSMCommunity}>
+                      <a href='#' class="nav-link infa-nav-link dropdown-toggle">
+                        Preferences
+                      </a>
+                    </li> -->
+                    <!-- <li class="nav-item infa-header-nav-link">
+                      <a onclick={goTochangePwURL} class="nav-link infa-nav-link dropdown-toggle">
+                        Change Password
+                      </a>
+                    </li> -->
+                    <li class="nav-item infa-header-nav-link">
+                      <a onclick={goTologoutURL} class="logout-btn">
+                        Logout
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+            </div>
+          </div>
+          <div class="col-sm-2 infa-header-user-links">
+            <div class="row infa-app-header-top-row">
+              <ul class="infa-header-profile-links">
+                <template if:true={userName}>
+                  <div class="navbar navbar-expand-lg p-0">
+                    <!-- <ul class="infa-header-notifications slds-global-actions">
+                    <li class="slds-global-actions__item">
+                      <div class="nav-item dropdown slds-dropdown-trigger slds-dropdown-trigger_click"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button
+                          class="dropdown-toggle slds-button slds-button_icon slds-button_icon slds-button_icon-container slds-button_icon-small slds-global-actions__notifications slds-global-actions__item-action slds-incoming-notification"
+                          title="1 new notifications" aria-live="assertive" aria-atomic="true" data-toggle="dropdown"
+                          aria-haspopup="true" aria-expanded="false">
+                          <lightning-icon class="infa-header-notification-icon" icon-name="utility:notification"
+                            size="small" alternative-text="notifications" title="notifications">
+                          </lightning-icon>
+                          <span class="slds-assistive-text">1 new notification</span>
+                        </button>
+                        <span aria-hidden="true"
+                          class="slds-notification-badge slds-incoming-notification slds-show-notification">1</span>
+
+                        <section aria-describedby="dialog-body-id-7" aria-labelledby="notificationsMenu"
+                          class="infa-header-notification-popup dropdown-menu slds-popover slds-popover_large slds-nubbin_top-right"
+                          role="dialog">
+                          <button
+                            class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close"
+                            title="Close dialog">
+                            <svg class="slds-button__icon" aria-hidden="true">
+                              <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                            </svg>
+                            <span class="slds-assistive-text">Close dialog</span>
+                          </button>
+                          <div class="slds-popover__body slds-p-around_none">
+                            <div class="">
+                              <div class="slds-media__body">
+                                <header class="slds-popover__header">
+                                  <h2 class="slds-text-heading_small">Notifications</h2>
+                                </header>
+                                <ul>
+                                  <li class="slds-global-header__notification slds-global-header__notification_unread">
+                                    <div class="slds-media slds-has-flexi-truncate slds-p-around_x-small">
+                                      <div class="slds-media__figure">
+                                        <span class="slds-avatar slds-avatar_small">
+                                          <img alt="Val Handerly" src="/assets/images/avatar2.jpg"
+                                            title="Val Handerly avatar" />
+                                        </span>
+                                      </div>
+                                      <div class="slds-media__body">
+                                        <div class="slds-grid slds-grid_align-spread">
+                                          <a href="#" class="slds-text-link_reset slds-has-flexi-truncate">
+                                            <div class="infa-header-notif-title slds-truncate"
+                                              title="Val Handerly mentioned you">
+                                              Val Handerly mentioned you
+                                            </div>
+                                            <div class="infa-header-notif-body slds-truncate"
+                                              title="@jrogers Could I please have a review on my presentation deck">
+                                              @jrogers
+                                              Could I please have a review on my presentation deck</div>
+                                            <div class="infa-header-notif-body slds-m-top_x-small slds-text-color_weak">
+                                              10 hours ago
+                                              <abbr class="slds-text-link slds-m-horizontal_xxx-small"
+                                                title="unread">●</abbr>
+                                            </div>
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </li>
+                                  <li class="slds-global-header__notification slds-global-header__notification_unread">
+                                    <div class="slds-media slds-has-flexi-truncate slds-p-around_x-small">
+                                      <div class="slds-media__figure">
+                                        <span class="slds-avatar slds-avatar_small">
+                                          <img alt="Jon Rogers" src="/assets/images/avatar3.jpg"
+                                            title="Jon Rogers avatar" />
+                                        </span>
+                                      </div>
+                                      <div class="slds-media__body">
+                                        <div class="slds-grid slds-grid_align-spread">
+                                          <a href="#" class="slds-text-link_reset slds-has-flexi-truncate">
+                                            <div class="infa-header-notif-title slds-truncate"
+                                              title="Jon Rogers commented on your post">
+                                              Jon Rogers commented on your post
+                                            </div>
+                                            <div class="infa-header-notif-body slds-truncate"
+                                              title="I totally agree with your sentiment">I
+                                              totally
+                                              agree with your sentiment</div>
+                                            <div class="infa-header-notif-body slds-m-top_x-small slds-text-color_weak">
+                                              13 hours ago
+                                              <abbr class="slds-text-link slds-m-horizontal_xxx-small"
+                                                title="unread">●</abbr>
+                                            </div>
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </li>
+                                  <li class="slds-global-header__notification">
+                                    <div class="slds-media slds-has-flexi-truncate slds-p-around_x-small">
+                                      <div class="slds-media__figure">
+                                        <span class="slds-avatar slds-avatar_small">
+                                          <img alt="Rebecca Stone" src="/assets/images/avatar2.jpg"
+                                            title="Rebecca Stone avatar" />
+                                        </span>
+                                      </div>
+                                      <div class="slds-media__body">
+                                        <div class="slds-grid slds-grid_align-spread">
+                                          <a href="#" class="slds-text-link_reset slds-has-flexi-truncate">
+                                            <div class="infa-header-notif-title slds-truncate"
+                                              title="Rebecca Stone mentioned you">
+                                              Rebecca Stone mentioned you
+                                            </div>
+                                            <div class="infa-header-notif-body slds-truncate"
+                                              title="@jrogers Here&#x27;s the conversation I mentioned to you">
+                                              @jrogers
+                                              Here&#x27;s the conversation I mentioned to you</div>
+                                            <div class="infa-header-notif-body slds-m-top_x-small slds-text-color_weak">
+                                              1 day ago</div>
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                      </div>
+                    </li>
+                  </ul> -->
+                    <div class="collapse navbar-collapse">
+                      <ul class="navbar-nav p-0">
+                        <li class="nav-item dropdown infa-nav-username">
+                          <div class="infa-header-avatar">
+                            <img class="profile-img" src={profileIcon}>
+                          </div>
+                          <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            {firstName}
+                            <!-- <lightning-icon class="infa-header-chevron-down chevron-down"
+                              icon-name="utility:chevrondown" size="xx-small" alternative-text="chevrondown"
+                              title="chevrondown">
+                            </lightning-icon> -->
+                          </a>
+                          <div class="dropdown-menu profile-dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <div class="">
+                              <div class="profile-section-1">
+                                <!-- <div class="profile-img-container">
+                                  <img class="profile-img" src={profileIcon}>
+                                </div> -->
+                                <div class="user-name">
+                                  {userName}
+                                </div>
+                                <div class="user-email">
+                                  {email}
+                                </div>
+                              </div>
+                              <div class="">
+                                <div class="mt-2" if:false={boolIsCSMCommunity}>
+                                  <a class="nav-link infa-nav-link pb-0 pl-0" onclick={gotofeedbackLink} role="button">
+                                    Feedback
+                                  </a>
+                                </div>
+                                <div class="">
+                                  <a class="nav-link infa-nav-link pb-0 pl-0" onclick={goToUserProfile} role="button">
+                                    View Profile
+                                  </a>
+                                </div>
+                                <!-- <div class="" if:false={boolIsCSMCommunity}>
+                                  <a class="nav-link infa-nav-link pb-0" href='#'>
+                                    Preferences
+                                  </a>
+                                </div> -->
+                                <!-- <div class="">
+                                  <a class="nav-link infa-nav-link" onclick={goTochangePwURL} role="button">
+                                    Change Password
+                                  </a>
+                                </div> -->
+                                <div class="">
+                                  <div class="nav-item dropdown infa-header-logout-button">
+                                    <span>
+                                      <a class="logout-btn" onclick={goTologoutURL} target="_self">
+                                        Logout
+                                      </a>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </template>
+                <template if:false={userName}>
+                  <li class="nav-item dropdown infa-nav-username">
+                    <a class="nav-link infa-nav-link" onclick={openLoginPage}>
+                      Login
+                    </a>
+                  </li>
+                  <div class="infa-separator"></div>
+                  <li class="nav-item dropdown infa-nav-logout">
+                    <a class="nav-link infa-nav-link" href="#" onclick={openRegisterPage}>
+                      Sign Up
+                    </a>
+                  </li>
+                </template>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div data-custom-content-type="external" id="OmniboxSuggestions" class="OmniboxSuggestions" style="display:none">
+    <!-- <div data-custom-content-type="external" style="display:none">OmniboxSuggestions</div> -->
+    <div style="color: #264ea1;">
+      <a target="_blank" class="CoveoResultLink"></a>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,163 @@
+.blink_text {
+  animation-name: blinker;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  color: red;
+  background-color: red;
+}
+
+@keyframes blinker {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+iframe {
+  border: 0;
+  width: 100%;
+}
+
+.myFieldset {
+  display: block;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding-top: 0.35em;
+  padding-bottom: 0.625em;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  border: 2px groove;
+}
+
+.myLegend {
+  display: block;
+  padding-left: 2px;
+  padding-right: 2px;
+  border: none;
+}
+
+.page-width {
+  /* margin: auto; */
+}
+
+.text-left {
+  text-align: left;
+}
+
+.quotes {
+}
+
+.quotes-slide {
+  width: 100%;
+  padding: 0.4rem;
+  background-color: white;
+  opacity: 0.4;
+  box-shadow: 0px 0px 0px 1px #d5d5d5;
+  line-height: 1.75;
+  font-family: "Roboto", sans-serif;
+  transition: all 0.5s ease;
+  outline: none;
+}
+
+.quotes-slide--active {
+  z-index: 10;
+  opacity: 1;
+  border: none;
+  box-shadow: 1px 0px 10px 5px #eaeaea;
+  color: #222222;
+}
+
+blockquote {
+  margin: 0;
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+  fill: #1a73e8;
+}
+
+.dot {
+  height: 16px;
+  width: 16px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.green-dot {
+  background-color: green;
+}
+
+.orange-dot {
+  background-color: orange;
+}
+
+.red-dot {
+  background-color: red;
+}
+
+.btn.vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.doc-iframe {
+  height: 20rem;
+  zoom: 1;
+  -moz-transform: scale(1);
+  -moz-transform-origin: 0 0;
+  -o-transform: scale(1);
+  -o-transform-origin: 0 0;
+  -webkit-transform: scale(1);
+  -webkit-transform-origin: 0 0;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.fallback-color-red {
+  --sds-c-icon-color-background:#EF6E64;
+  font-weight: bold;
+}
+
+.fallback-color-green {
+  --sds-c-icon-color-background:#4BC076
+  ;
+  font-weight: bold;
+}
+
+.fallback-color-yellow {
+  --sds-c-icon-color-background:#FBB439;
+  font-weight: bold;
+}
+
+.rotate-like-icon{
+  transform: rotate(270deg);
+}
+.actionButton{
+  border: 1px solid #c9c7c5;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.informationIcon{
+  border: 1px solid #c9c7c5;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.actionIcon{
+  
+  cursor: pointer;
+}

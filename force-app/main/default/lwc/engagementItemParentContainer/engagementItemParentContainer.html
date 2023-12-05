@@ -1,0 +1,73 @@
+<template>
+    <div class="app in-wrapper-bg-fuild-grey">
+        <div class="container slds-p-vertical_large slds-is-relative">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                </lightning-spinner>
+            </template>  
+            <template if:true = {displaySingleError}>
+                <lightning-card>
+                    <p class="slds-text-align_center slds-notify slds-notify_alert slds-alert_warning">{label.EC_HasNoActiveExternalPlanMsg}</p>
+                </lightning-card>
+            </template>
+            <template if:false = {displaySingleError}>
+                <template if:true = {EUNotAvailable}>
+                    <lightning-card>
+                        <p class="slds-text-align_center slds-notify slds-notify_alert slds-alert_warning">{label.EC_EUNotPresentErrorMsg}</p>
+                    </lightning-card>
+                </template>
+                <template if:true = {hasNoExternalPlanAccess}>
+                    <lightning-card>
+                        <p class="slds-text-align_center slds-notify slds-notify_alert slds-alert_warning">{label.EC_HasNoActiveExternalPlanMsg}</p>
+                    </lightning-card>
+                </template>
+            </template>
+            <div class="CSA-content-wrapper">
+                <div class="CSA-header slds-p-around_medium">
+                    <h3>Existing Engagements</h3>
+                </div>
+                <div class="slds-p-around_medium slds-p-bottom_medium slds-m-bottom_small">
+                    <c-engagement-item-data-table account-id={accountId}></c-engagement-item-data-table>
+                </div>
+            </div>
+            <template if:true = {displayForm}>
+                <div class="CSA-content-wrapper slds-m-bottom_large">
+                    <div class="CSA-header slds-p-around_medium">
+                        <h3>{actionLabel}</h3>
+                    </div>
+                    <div class="slds-p-horizontal_medium">
+                        <div class="slds-p-bottom_medium">
+                            Engagements Topic Requested:&nbsp;
+                                <lightning-formatted-url value={ECUrlLink}
+                                    label={EC_AEMdata.title}
+                                    target="_blank">
+                                </lightning-formatted-url>
+                            
+                        </div>
+                        <template for:each={questionsList} for:item="eachQuestion">
+                            <c-engagement-item-child-component 
+                                sobject-from-parent={actionsData.sobjectAPIName} 
+                                contact-id-from-parent={contactId} 
+                                plan-id-from-parent={planId} 
+                                mile-stone-from-parent={milestoneId} 
+                                onuploadfiledocs={uploadFiles} 
+                                key={eachQuestion.Name} 
+                                question={eachQuestion}>
+                            </c-engagement-item-child-component>
+                        </template>
+                    </div>
+                    <footer class="slds-modal__footer CSA-content-footer">
+                        <ul class="slds-button-group-row">
+                            <li class="slds-button-group-item">
+                                <button class="slds-button slds-button_neutral" onclick={handleCancel}>Cancel</button>
+                            </li>
+                            <li class="slds-button-group-item">
+                                <button class="slds-button slds-button_brand" onclick={handleSave}>Submit</button>
+                            </li>
+                        </ul>
+                    </footer>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

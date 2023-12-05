@@ -1,0 +1,14 @@
+<template>
+    <!-- <lightning-spinner  alternative-text="loading" size="medium"></lightning-spinner> -->
+    <lightning-quick-action-panel header="Reject Engagement">
+        <template if:true={spinner}>
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+        <lightning-textarea name="rejectName" label="Please enter closing notes" class="validate custom-textarea" onchange={handleTextAreaChange} required></lightning-textarea>
+    </lightning-quick-action-panel>
+
+    <div class="slds-modal__footer">
+        <button class="slds-button slds-button_neutral" onclick={handleCancel}>Cancel</button>
+        <button class="slds-button slds-button_brand" onclick={handleSuccess}>Reject</button>
+    </div>
+</template>

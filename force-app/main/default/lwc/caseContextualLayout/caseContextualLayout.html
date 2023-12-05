@@ -1,0 +1,283 @@
+<!--
+  @description       : 
+  @author            : Tejasvi Royal
+  @group             : 
+  @last modified on  : 09-27-2021
+  @last modified by  : Tejasvi Royal
+
+ Change History
+ **************************************************************************************************************************
+ Modified By            Date            Jira No.            Description                                               Tag
+ **************************************************************************************************************************
+ Vignesh D              06-Jun-2021     UTOPIA              Initial version.                                          NA
+ Vignesh D              22-Jun-2022     I2RT-6484           Show Hypercare section                                    T01
+ Vignesh D              27-Jul-2023     I2RT-8640           Added template condition to show only when business owner T02
+                                                            is available
+-->
+<template>
+    <div class="slds-tabs_card" if:true={displayComponent}>
+<!-- Lightning Spinner -->
+        <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <div class="slds-card__header slds-text-heading_small header-font-weight slds-text-align_left" if:true={label}>
+           <b> {label} </b>
+        </div>
+        <lightning-record-view-form object-api-name="Case" record-id={recordId} record-type-id={recordTypeId}>
+           
+            
+            <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}> 
+
+				<!-- Upcoming Events. -->
+                <!--template if:true={showevents}>
+                    <lightning-accordion-section name="Upcoming Events" label="Upcoming Events">
+                        <div class="slds-col slds-size_2-of-2 pad-left pad-right">
+                            <div class="slds-border_bottom slds-form-element slds-form-element_stacked">
+                                <div class="slds-form-element__control">
+                                    <c-global-upcoming-events record-id={recordId}></c-global-upcoming-events>
+                                </div>
+                            </div>
+                        </div>
+                    </lightning-accordion-section>
+                </template-->
+
+                <!--Escalation Section-->
+                <template if:true={isescalated}>
+                <lightning-accordion-section name="Escalation" label="Escalation">
+                    <div class="slds-grid slds-wrap">
+                <template if:true={showEscalationSection}>
+                  
+                        
+                    <div class="slds-col slds-size_1-of-2 pad-left pad-right">
+                        <lightning-output-field class="slds-border_bottom" field-name="Escalated_Date__c" label="Escalated Date">
+                        </lightning-output-field>
+                    </div>
+                    <!-- <div class="slds-col slds-size_1-of-2 pad-left pad-right">
+                        <lightning-output-field class="slds-border_bottom" field-name="Escalation_Reason__c" label="Escalated Comments">
+                        </lightning-output-field>
+                        <div class="slds-border_bottom slds-form-element slds-form-element_stacked">
+                            <label class="slds-form-element__label">Escalated Comments</label>
+                            <div class="slds-form-element__control">
+                                <lightning-formatted-text class="slds-form-element__static" value="">
+                                </lightning-formatted-text>
+                            </div>
+                        </div>
+                    </div> -->
+                </template>
+
+                <!--GEMS Engagement Section-->
+                <template if:true={showEngagementSection}>
+                    <div class="slds-col slds-size_1-of-2 pad-left pad-right">
+                        <!-- <lightning-output-field class="slds-border_bottom" field-name="Engagement__c" label="Engagement">
+                        </lightning-output-field> -->
+                        <div class="slds-border_bottom slds-form-element slds-form-element_stacked">
+                            <label class="slds-form-element__label">GEMS</label>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <a onclick={navigateToEngagement} onmouseover={linkCellMouseOver} onmouseout={linkCellMouseOut}>{caseEngagement.fields.Engagement_Number__c.value}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="compactLayout slds-is-relative slds-col slds-size_5-of-12 slds-float_right slds-hide">
+                        <template if:true={boolDisplayPopOver}>
+                            <section tabindex="-1" class="slds-popover slds-nubbin_top-left" role="dialog">
+                                <div class="slds-popover__body">
+                                    <lightning-record-form record-id={caseEngagement.id} object-api-name="Engagement__c" layout-type="Compact" mode="readonly" density="density"></lightning-record-form>
+                                </div>
+                            </section>
+                        </template>
+                    </div>
+                    
+
+                    <div class="slds-col slds-size_1-of-2 pad-left pad-right">
+                        <div class="slds-border_bottom slds-form-element slds-form-element_stacked">
+                            <label class="slds-form-element__label">GEMS Priority</label>
+                            <div class="slds-form-element__control">
+                                <lightning-formatted-text class="slds-form-element__static" value={caseEngagement.fields.Priority__c.value}>
+                                </lightning-formatted-text>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="slds-col slds-size_1-of-2 pad-left pad-right">
+                        <div class=" slds-border_bottom slds-form-element slds-form-element_stacked">
+                            <label class="slds-form-element__label">Engagement Status</label>
+                            <div class="slds-form-element__control">
+                                <lightning-formatted-text class="slds-form-element__static" value={caseEngagement.fields.Status__c.value}>
+                                </lightning-formatted-text>
+                            </div>
+                        </div>
+                    </div> -->
+                </template>
+
+                 <!--Notes/Manager Review Comments: displayed only when either "Notes" (or) "MRC" is present-->
+                 <template if:true={showNotesOrMRCSection}>
+                    <div class="slds-col slds-size_1-of-2 pad-left pad-right">
+                        <lightning-output-field class="slds-border_bottom" field-name="Escalation_Notes__c" label="Escalation Notes" size="6">
+                        </lightning-output-field>
+                    </div>
+                    <!-- <div class="slds-col slds-size_1-of-2 pad-left pad-right">
+                        <lightning-output-field class="slds-border_bottom" field-name="Manager_Review_Comments__c" label="Manager Review Comments" size="6">
+                        </lightning-output-field>
+                    </div> -->
+                    </template>
+                </div>
+            </lightning-accordion-section>
+        </template>
+            
+            
+                <!--Monitoring Section: displayed only when Monitoring Enabled flag is true on case-->
+            <template if:true={showMonitoringSection}>                    
+                <lightning-accordion-section name="Monitoring" label="Monitoring">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2 pad-left pad-right">
+                            <lightning-output-field class="slds-border_bottom" field-name="Product_Queues__c" label="Monitoring Queues" size="6">
+                            </lightning-output-field>
+                        </div>
+                           
+                    </div>
+                    <div >
+                        <a href="#" name="Monitoring"   onclick={handleClearMonitoring}>Clear Monitoring</a>
+                        </div>
+                    
+
+                </lightning-accordion-section>                    
+            </template>
+
+                <!--Weekend Monitoring Section: displayed only when Case flagged for weekend support.-->
+                <template if:true={showWeekendMonitoringSection}>                    
+                    <lightning-accordion-section name="Weekend Monitoring" label="Weekend/Holiday Monitoring">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-2 pad-left pad-right">
+                                <lightning-output-field class="slds-border_bottom" field-name="Support_Start_DateTime__c" label="Start Time" size="6">
+                                </lightning-output-field>
+                            </div>
+                            <div class="slds-col slds-size_2-of-2 pad-left pad-right">
+                                <lightning-output-field class="slds-border_bottom" field-name="Support_End_DateTime__c" label="End Time" size="6">
+                                </lightning-output-field>
+                            </div>
+                        </div>
+
+                        <div>
+                               <a href="#" name="Weekend" onclick={handleClearMonitoring}>Clear Weekend Monitoring</a>
+                        </div>
+
+                    </lightning-accordion-section>                    
+                </template>
+
+               
+               
+                
+            
+        
+            
+                <!--Show Close fields only when the case is closed-->
+                <template if:true={showClosingSection}>
+                    <lightning-accordion-section name="Closed" label="Close Case">
+                        <div class="slds-grid slds-wrap">
+                    <template for:each={caseClosingFields} for:item="field">
+                        <template if:true={field.show}>
+                            <div class="slds-col slds-size_1-of-2 pad-left pad-right" key={name} if:false={field.layoutSizeTwo}> 
+                                <lightning-output-field class="slds-border_bottom" field-name={field.name} label={field.label} size="6">
+                                </lightning-output-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 pad-left pad-right" key={name} if:true={field.layoutSizeTwo}> 
+                                <lightning-output-field class="slds-border_bottom" field-name={field.name} label={field.label} size="6">
+                                </lightning-output-field>
+                            </div>
+                        </template>
+                        
+                    </template>
+                    <!-- <div class="slds-col slds-size_1-of-2 pad-left pad-right" for:each={caseClosingFields} for:item="field" key={name}>
+                        <template if:true={field.show}>
+                            <lightning-output-field class="slds-border_bottom" field-name={field.name} label={field.label} size="6">
+                            </lightning-output-field>
+                        </template>
+                    </div> -->
+                
+            </div>
+            </lightning-accordion-section>
+        </template>
+
+        <template if:true={isaaecase}>
+            <lightning-accordion-section name="AAE Session details" label="AAE Session details">
+                <div class="slds-col slds-size_2-of-2 pad-left pad-right">
+                    <div class="slds-border_bottom slds-form-element slds-form-element_stacked">
+                        <!-- <label class="slds-form-element__label">Handling Instructions</label> -->
+                        <div class="slds-form-element__control">
+                            <lightning-formatted-text class="slds-form-element__static" value={aaesessiontime}>
+                            </lightning-formatted-text>
+                        </div>
+                    </div>
+                </div>
+                <!-- <T01> --> 
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 pad-left pad-right"> 
+                            <lightning-output-field class="slds-border_bottom" field-name="AAE_Area_of_expertise__c" label="Area of expertise" size="6">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 pad-left pad-right"> 
+                            <lightning-output-field class="slds-border_bottom" field-name="Category__c" label="Category" size="6">
+                            </lightning-output-field>
+                        </div> 
+                    </div>              
+                <!-- </T01> --> 
+            </lightning-accordion-section>
+         </template>
+
+            
+        <template if:true={handlingInstructions}>
+            <lightning-accordion-section name="Handling Instructions" label="Handling Instructions">
+                <div class="slds-col slds-size_2-of-2 pad-left pad-right">
+                    <div class="slds-border_bottom slds-form-element slds-form-element_stacked">
+                        <!-- <label class="slds-form-element__label">Handling Instructions</label> -->
+                        <div class="slds-form-element__control">
+                            <lightning-formatted-text class="slds-form-element__static" value={handlingInstructions}>
+                            </lightning-formatted-text>
+                        </div>
+                    </div>
+                </div>
+               
+                    
+            </lightning-accordion-section>
+         </template>
+
+        <!-- <T01> -->
+        <template if:true={objHypercareSection.boolShow}>
+            <lightning-accordion-section name="Hypercare" label="Hypercare">
+                <div class="slds-grid slds-wrap">
+                    <template if:true={objHypercareSection.objBusinessOwner.Id}> <!-- <T02> -->
+                        <div class="slds-col slds-size_1-of-1 pad-left pad-right">
+                            <div class="slds-border_bottom slds-form-element slds-form-element_stacked">
+                                <label class="slds-form-element__label">Business Owner</label>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static">
+                                        <a onclick={navigateToUser} data-id={objHypercareSection.objBusinessOwner.Id}>{objHypercareSection.objBusinessOwner.Name}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:true={objHypercareSection.showSupportSME}>
+                        <div class="slds-col slds-size_1-of-1 pad-left pad-right">
+                            <div class="slds-border_bottom slds-form-element slds-form-element_stacked">
+                                <label class="slds-form-element__label">Support SME</label>
+                                <template for:each={objHypercareSection.lstAccountTeamMembers} for:item="accountTeamMember">
+                                    <div class="slds-form-element__control" key={accountTeamMember.Id}>
+                                        <a onclick={navigateToUser} data-id={accountTeamMember.UserId}>{accountTeamMember.User.Name}</a><br>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </lightning-accordion-section>
+        </template>
+        <!-- </T01> -->
+
+        </lightning-accordion>
+        </lightning-record-view-form>
+    </div>
+</template>

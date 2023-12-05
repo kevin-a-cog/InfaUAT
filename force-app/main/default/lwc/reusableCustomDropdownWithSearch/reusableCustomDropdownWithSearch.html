@@ -1,0 +1,118 @@
+<!-- Generic Custom Dropdown with Search LWC -->
+<template>
+<div class="slds-form-element">
+    <!-- Field Label -->
+    <label class={labelClass} for="select-sobject-id">{fieldLabel}</label>
+    <!--/ Field Label -->
+    <div class="slds-form-element_control">
+        <!-- Combobox Container -->
+        <div class="slds-combobox_container">
+            <div class={dropDownClass} aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                    <!-- Readonly Input to display selected value -->
+                    <input type="text"
+                        class="slds-input slds-combobox__input slds-combobox__input-value combobox-input-class"
+                        id="select-sobject-id" autocomplete="off" data-id="select-sobject-id"
+                        aria-autocomplete="list" aria-controls="listbox-id-11" role="textbox"
+                        placeholder={placeholder} title={label} onclick={handleInputClick} value={label} readonly
+                        disabled={disabled}></input>
+                    <!--/ Readonly Input to display selected value -->
+
+                    <!-- Up Arrow icon div if dropdown open -->
+                    <div if:true={isDropdownOpen}>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-input__icon slds-input__icon_right">
+                            <lightning-icon icon-name="utility:up" size="x-small"></lightning-icon>
+                        </span>
+                    </div>
+                    <!--/ Up Arrow icon div if dropdown open -->
+                    <!-- Down Arrow icon div if dropdown close -->
+                    <div if:false={isDropdownOpen}>
+                        <span
+                            class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                            <lightning-icon icon-name="utility:down" size="x-small"></lightning-icon>
+                        </span>
+                    </div>
+                    <!--/ Down Arrow icon div if dropdown close -->
+                </div>
+                <!-- List box to show dropdown options -->
+                <div id="listbox-id-11" class="slds-dropdown slds-dropdown_fluid es-dropdown-searchandfav-container ml-4" role="listbox">
+                    <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                        <!--<li>
+                                Search input box 
+                            <input type="text" class="slds-input search-input-class" role="textbox" placeholder="Search"
+                                value={inputValue} onkeyup={handleKeyPress} onblur={closeDropdown}></input>
+                        </li>-->
+                        <li>
+                            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right slds-var-m-around_small">
+                                <lightning-icon size="x-small" class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" icon-name="utility:search"></lightning-icon>
+                                <input type="text" class="slds-input search-input-class" role="textbox" placeholder="Search"
+                                value={inputValue} onkeyup={handleKeyPress} onblur={closeDropdown}></input>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="slds-listbox slds-listbox_vertical slds-dropdown_length-5 customClass" tabindex="0"
+                        role="presentation" id="supportAccountDropdown"> 
+                        <template for:each={optionsToDisplayAll} for:item="option">
+                            
+                            <li key={option.AccConRel.Account.Id} role="presentation" class="slds-listbox__item list-item"
+                            data-label={option.AccConRel.Account.Name} data-value={option.AccConRel.Account.Id} data-id={option.AccConRel.Account.Id}
+                            title={option.AccConRel.Account.Name} onclick={optionsClickHandler}>
+                            <div id={option.AccConRel.Account.Id}
+                                    class="es-dropdown-searchandfav__list slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                    role="option">
+                                    <span class="slds-media__figure slds-listbox__option-icon check-icon">
+                                        <lightning-icon icon-name="utility:check" class="ico"  disabled="true"  size="x-small"  alternative-text="check" title="Check"></lightning-icon>
+                                    </span>
+                                    <div class="slds-truncate es-dropdown-searchandfav__list-label">
+                                        <span>{option.AccConRel.Account.Name} </span> 
+                                    </div>
+                                    <div class="es-dropdown-searchandfav__list-icon">
+                                            <a href="#">
+                                            <lightning-icon icon-name="utility:new_window" value={option.AccConRel.Account.Id}  class="icn"  size="x-small"  onclick={navigatetoSuppoAcc}  alternative-text="Open link" title="Open link"></lightning-icon>
+                                        </a>
+                                            &nbsp;
+                                            <template if:true={option.isBlnSUpportAccFav}>
+                                                <lightning-icon icon-name="utility:favorite"  disabled="true"  class="icn" value={option.AccConRel.Id} variant="warning" size="x-small"  onclick={makefav}  alternative-text="My Favorite" title="My Favorite"></lightning-icon>
+                                            </template>
+                                         <template if:false={option.isBlnSUpportAccFav}> 
+                                                <lightning-icon icon-name="utility:favorite"  class="icn" value={option.AccConRel.Id} size="x-small"  onclick={makefav}  alternative-text="My Favorite" title="My Favorite"></lightning-icon>
+                                       </template>
+                                  </div>
+                            </div>
+                        </li> 
+                        </template>
+                        <!-- <template for:each={optionsToDisplay} for:item="option">
+                            
+                            <li key={option.value} role="presentation" class="slds-listbox__item"
+                                data-label={option.label} data-value={option.value} 
+                                title={option.label}>
+                                <div id={option.value}
+                                    class="dropdown-list slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                    role="option">
+                                    <span class="slds-media__figure slds-listbox__option-icon">
+                                    </span>
+                                    <div class="slds-truncate">
+                                        <span class="list-label" onclick={optionsClickHandler}>{option.label}</span> 
+                                    </div>
+                                    <div class="icons-list">
+                                        <lightning-icon icon-name="utility:pop_in"  class="icn"  size="x-small"  onclick={makefav}  alternative-text="Open link" title="Open link"></lightning-icon>
+                                        &nbsp;  <lightning-icon icon-name="utility:favorite"  class="icn"  size="x-small"  onclick={makefav}  alternative-text="My Favorite" title="My Favorite"></lightning-icon>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                        </template>-->
+                    </ul>
+                </div>
+                <!--/ List box to show dropdown options -->
+                <div>
+
+                </div>
+            </div>
+        </div>
+        <!--/ Combobox Container -->
+    </div>
+</div>
+</template>
+<!--/ Generic Custom Dropdown with Search LWC -->

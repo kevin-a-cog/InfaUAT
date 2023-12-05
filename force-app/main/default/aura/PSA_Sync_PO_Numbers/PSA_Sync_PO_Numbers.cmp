@@ -1,0 +1,15 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="PSA_Sync_PO_Number_Controller">
+	<aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="message" type="String" />
+    <aura:attribute name="comments" type="String" />
+	<aura:attribute name="showMessage" type="Boolean" default="false"/>
+	<aura:attribute name="showComponent" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!-- <lightning:spinner  aura:id="spinner" alternativeText="Loading" size="large" variant ="brand" class="slds-show">
+</lightning:spinner> -->
+    
+    <div class="slds-text-align--center slds-p-around_large">Syncing PO number in Progress... Please wait...</div>
+	
+</aura:component>

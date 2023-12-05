@@ -1,0 +1,154 @@
+<template>
+    
+    <template if:true={isAccountHold}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{accountHold}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={isAccountHoldLegalCustomerBacklist}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.accountHoldLegalCustomerBacklistBanner}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={isStartDateOnQuoteHeaderIsLater}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.quoteStartDateWarningLabel}</b>
+            </div>
+        </div>
+    </template>
+
+    <div hidden>{coTermLong}</div>
+    <template if:true={coTermLongErr}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.quoteBannerCoTermLongLabel}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={StatusContent}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.quoteBannerWarningLabel}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={StatusContent2}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.quoteBannerWarningLabel2}</b>
+            </div>
+        </div>
+    </template>
+    
+    <div hidden>{checkInactivePBE}</div>
+    <template if:true={inactivePBEErr}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.quoteBannerInactivePBE}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={RTMError}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{RTMError}</b>
+            </div>
+        </div>
+    </template>
+
+    <div hidden>{checkAccounts}</div>
+    <template if:true={newOrRenewalQMismatch}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.quoteBannerAccountMismatchForNewOrRenewal}</b>
+            </div>
+        </div>
+    </template> 
+    
+    <template if:true={amendQMismatch}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.quoteBannerAccountMismatchForAmend}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={checkQLIItemDate}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.quoteLineStartDate}</b>
+            </div>
+        </div>
+        
+    </template>
+    
+    <template if:true={isRTMDetails_Is_AWSPartner}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.RTM_Details_is_AWS_Via_Partner_Banner_Message}</b>
+            </div>
+        </div>
+        
+    </template>
+    
+    <template if:true={isQleTermLessThanAMonth}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.quoteBannerDefaultQLETerm}</b>
+            </div>
+        </div>
+        
+    </template>
+
+    <template if:true={isCountryMisMatch}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.addressCountryMisMatch}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={hasIPUErrors}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{ipuErrorMessage}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={showOutOfSyncBanner}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.QuoteOutOfSync}</b>
+            </div>
+        </div>
+        
+    </template>
+    
+    <template if:true={optyprimaryEst}>	
+        <div class="slds-p-bottom_x-small">	
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">	
+                <b>{labels.OptyPrimaryEstimatorWarningLabel}</b>	
+            </div>	
+        </div>	
+    </template>
+
+    <template if:true={legalHoldOnAccount}>
+        <div class="slds-p-bottom_x-small">	
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">	
+                <b>{labels.LegalAccountHoldError}</b>	
+            </div>	
+        </div>
+    </template>
+
+</template>

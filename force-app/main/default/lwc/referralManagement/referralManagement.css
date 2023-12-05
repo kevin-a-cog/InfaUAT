@@ -1,0 +1,9 @@
+.uiModal--medium .modal-container{
+    max-width:80rem;
+    min-width:60rem;
+    width:100%;
+}
+
+.custom-textarea{
+    --sds-c-textarea-sizing-min-height:65px;
+}

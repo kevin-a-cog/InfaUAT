@@ -1,0 +1,156 @@
+/* CSS Variables */
+:host{
+    --font-roboto: "Roboto";
+}
+
+/* Styling */
+.container{
+    font-family: var(--font-roboto);
+}
+@media screen and (max-width: 768px) {
+    .in-events-container {
+        margin: 0 auto;
+        width: 92%;
+    }
+}
+.in-event-heading{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 42px;
+    color: #373737;
+}
+.in-event-visibility,
+.in-event-type{
+    display: inline-block;
+    font-size: 12px;
+    line-height: 10px;
+    text-align: center;
+    background-color: #00A9BB;
+    color: white;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-right: 5px;
+}
+
+.description{
+    font-family: var(--font-roboto);
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 27px;
+    color: #373737;
+}
+.card{
+    width: 55%;
+    font-size: 20px;
+    padding: 0.5rem;
+}
+.card-icon-color{
+    --lwc-colorTextIconDefault: #FF4D00;
+    --sds-c-button-text-color : #373737;
+    width: 3rem;
+    height: 3rem;
+}
+.in-event-info-container{
+    display: flex;
+    align-items: stretch;
+    margin-top: 2rem;
+}
+@media screen and (max-width: 768px) {
+    .in-event-info-container {
+        flex-direction: column;
+    }
+}
+.in-event-info-item{
+    display: flex;
+    align-items: center;
+}
+.in-event-info-item-container{
+    display: flex;
+    font-family: var(--font-roboto);
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 26px;
+    padding: 1%;
+    border: 0.5px solid #D3D3D3;
+    margin-right: 30px;
+    width: 40%;
+    color: #373737;
+}
+@media screen and (max-width: 768px) {
+    .in-event-info-item-container {
+        width: 100%;
+        margin-bottom: 20px;
+        min-height: 94px;
+    }
+}
+.in-event-info-item-content{
+    padding: 1rem;
+}
+.flexbox-container{
+    display: flex;
+}
+.flexbox-item{
+    margin-right: 2rem;
+}
+.event-footer-item{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 14px;
+    color: #373737;
+    padding-left: 0.5rem;
+    cursor: pointer;
+}
+.event-footer-item span{
+    margin-left: 1rem;
+}
+.event-option-icon-grey{
+    --lwc-colorTextIconDefault: #373737;
+    --sds-c-button-text-color : #373737;
+}
+
+.event-option-icon-green{
+    --lwc-colorTextIconDefault: green;
+    --sds-c-button-text-color : green;
+}
+
+.event-option-icon-orange{
+    --lwc-colorTextIconDefault: #E32400; 
+}
+
+.orange-icon{
+    --lwc-colorTextIconDefault: #FF4D00;
+}
+
+   .in-event-datetime,
+   .in-event-location,
+   .in-event-status,
+   .in-event-groupname {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 26px;
+    line-break: anywhere;
+   }
+   @media screen and (max-width: 768px) {
+    .in-event-datetime,
+    .in-event-location,
+    .in-event-status,
+    .in-event-groupname {
+        min-width: 240px;
+        display: block;
+        line-break: anywhere;
+    }
+   }
+
+   .event-img-size{
+    height:30px;
+    width:70px;
+   }

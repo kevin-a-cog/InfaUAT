@@ -1,0 +1,58 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="KnowledgeTriggerHelper">
+	<aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="message" type="String" />
+    <aura:attribute name="comments" type="String" />
+	<aura:attribute name="showMessage" type="Boolean" default="false"/>
+	<aura:attribute name="showComponent" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:html tag="style">
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+    
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }       
+        
+        .slds-modal__content{
+            overflow-y:hidden !important;
+            height:unset !important;
+            max-height:unset !important;    
+        }
+
+        p {
+            font-weight: 600;
+            font-size: 120%;
+            text-align: center;
+        }
+    </aura:html>
+    
+    <aura:if isTrue = "{!v.showComponent}">
+        <div class="slds-col modal-header slds-modal__header">
+            <h3 class="title slds-text-heading--medium">Submit for Review</h3>
+        </div>
+    
+        <div class="slds-modal__content slds-p-around_medium">
+          <lightning:textarea  placeholder="An article is submitted for review" value="{!v.comments}" label="Comments" maxlength="255" />
+        </div>
+    
+        <div class="slds-col modal-footer slds-modal__footer">
+            <lightning:button aura:id="btnCancel" variant="neutral" label="Cancel" onclick="{!c.doCancel}"/>
+            <lightning:button aura:id="btnSave" variant="brand" label="Submit" onclick="{!c.doSubmit}"/>
+        </div>
+    </aura:if>
+
+    <aura:if isTrue = "{!v.showMessage}">
+        <div class="slds-col modal-header slds-modal__header">
+            <h3 class="title slds-text-heading--medium">Submit for Review</h3>
+        </div>
+    
+        <div class="slds-col modal-footer slds-modal__footer">
+            <p>{!v.message}</p>
+            <lightning:button variant="brand" label="Ok" onclick="{!c.doCancel}"/>      
+        </div>
+    </aura:if>
+
+</aura:component>

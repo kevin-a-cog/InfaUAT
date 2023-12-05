@@ -1,0 +1,111 @@
+<!--
+  /*
+   @created by       : SathishR
+   @created on       : 24-May-2023
+   @Purpose          : KB and IN Search Component Used by Customers
+   @Testclass        :
+   @JIRA             :
+
+
+   Change History
+ ****************************************************************************************************
+ |    Tag     |  Date             |  Modified by              |  Jira reference   |   ChangesMade
+ |     1      |  24-May-2023      |   Ankit Saxena            |     AR-3147       |   Initial Version
+ |     2      |  06-nOV-2023      |   Sathish R               |    I2RT-9485      |   Expand left side coveo filter facets to show all filter values at once on Success Accelerators Internal search page.
+ ****************************************************************************************************
+ */
+-->
+<template>
+    <template if:true={isStillLoading}>
+        <div class="container">
+            <div data-id="csmplan-wrapper" class="csmplan-search-normal">
+                <template if:false={hideExpand}>
+                    <lightning-card class="align-end">
+                        <div class="csm-lightning-card">
+                            <lightning-button-icon icon-name="utility:refresh" class="slds-m-left_xx-small" title="Refresh" slot="actions" onclick={handleRefresh}></lightning-button-icon>
+                            <lightning-button-icon icon-name={popupiconname} class="slds-m-left_xx-small" title={popupicontitle} slot="actions" onclick={handleCsmSearchPopOutIn}></lightning-button-icon>
+                        </div>
+                    </lightning-card>
+                </template>
+                <!-- Coveo START-->
+                <div class="CoveoSearchInterface" data-enable-history="false" data-design="new"
+                    data-results-per-page={numResults} data-excerpt-length="150" data-always-open-in-new-window="true"
+                    data-allow-queries-without-keywords="true" data-auto-trigger-query="true">
+                    <div class="CoveoAnalytics"></div>
+                    <div class="coveo-search-section" style="margin-top:0;background:white;padding:2px;">
+                    <div class="CoveoSearchbox" data-enable-omnibox="true" data-enable-top-query-addon="true"
+                        data-enable-query-syntax="false" data-trigger-query-on-clear="true"
+                        data-enable-query-suggest-addon="true" data-placeholder={searchBoxPlaceholderText}>
+                    </div>
+                    </div>
+                    <div class="coveo-tab-section slds-hide">
+                        <a class="CoveoTab" data-id="EngagementsCatalog" data-caption="Engagements Catalog" data-expression={ecFilterData}></a>
+                    </div>
+                    <div class="coveo-main-section">
+                        <!-- 2 -->
+                        <div class="coveo-facet-column">
+                            <div class="CoveoFacet" data-title={engagementCategoryFacetLabel} data-field="@engagementinternalcategory" data-number-of-values="1000" ></div> <!-- T02 -->
+                            <div class="CoveoFacet" data-title={engagementTypeFacetLabel} data-field="@engagementinternaltype" data-number-of-values="1000" ></div> <!-- T02 -->
+                            <div class="CoveoFacet" data-title={engagementStageFacetLabel} data-field="@engagementinternalstage"></div>
+                            <div class="CoveoFacet" data-title={engagementProductsFacetLabel} data-field="@engagementinternalproducts"></div>
+                            <div class="CoveoFacet" data-title={engagementFocusAreaFacetLabel} data-field="@engagementinternalfocusarea"></div>
+                            <div class="CoveoFacet" data-title={engagementUseCaseFacetLabel} data-field="@engagementinternalusecasetags"></div>
+                          </div>
+                        <div class="coveo-results-column">
+                            <div class="CoveoBreadcrumb"></div>
+                            <div class="coveo-summary-section">
+                                <span class="CoveoQuerySummary"><div class="coveo-show-if-no-results"></div></span>
+                                <span class="CoveoQueryDuration" style="padding-left:4px"></span>
+                              </div>
+                            <div class="CoveoErrorReport"></div>
+                            <div class="CoveoResultList" data-layout="list">
+                                <div class="coveo-show-if-no-results"></div>
+                            </div>
+                            <div class="CoveoPager">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Coveo END-->
+                <div class="CsmPlanResultTemplate" style="display:none;">
+                    <div style="display:none">CsmPlanResultTemplate</div>
+                    <div class="coveo-result-frame">
+                        <div class="coveo-result-row" style="margin-bottom:7px;">
+                            <div class="coveo-result-cell"
+                                style="vertical-align: middle; font-size: 15px;">
+                                <a class="CoveoResultLink" data-always-open-in-new-window="true"></a>
+                                <span class="CoveoFieldValue" data-field="@engagementactionurl" style="display:none;"></span>
+                                <button style="background-color:#ADD8E6;float:right;margin-right:12px;" data-custom-onclick="fnClickRequestCsm">Request This</button>
+                                <a class="CoveoResultLink" data-field="@engagementactionurl" data-custom-onclick="fnClickRequestCsm" data-always-open-in-new-window="true">
+                                    <button style='background-color:#ADD8E6;float:right;margin-right:12px;'>Request This</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row" style="font-size:13px;">
+                                <div class="CoveoExcerpt"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="Default" style="display:none;">
+                    <div style="display:none">Default</div>
+                    <div class="coveo-result-frame">
+                        <div class="coveo-result-row" style="margin-bottom:7px;">
+                            <div class="coveo-result-cell"
+                                style="vertical-align: middle; font-size: 15px;">
+                                <a class="CoveoResultLink" data-always-open-in-new-window="true"></a>
+                                <span class="CoveoFieldValue" data-field="@engagementactionurl" style="display:none;"></span>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row" style="font-size:13px;">
+                                <div class="CoveoExcerpt"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <!-- Create New Engagement -->
+	<template if:true={openEngagementModal}>		
+		<c-csm-create-new-engagement engagement-model="Repeatable" is-repeatable=true record-id={recordId} selected-e-c={selectedEC} is-c-s-t=true onclosemodal={handleCloseModal} onclosecoveo={handleCoveoClose}></c-csm-create-new-engagement>
+	</template>
+</template>

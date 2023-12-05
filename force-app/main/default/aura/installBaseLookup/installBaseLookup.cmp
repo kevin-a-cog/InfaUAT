@@ -1,0 +1,56 @@
+<!--lightning components used to display the lookup field-->
+<aura:component controller="installBaseLookupController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionwithoutHeader" access="global">
+    <!--declare attributes--> 
+    <aura:attribute name="selectedRecord" type="Object" default="{}" description="Use,for store SELECTED sObject Record"/>
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="SearchKeyWord" type="string" default=""/>
+    <aura:attribute name="objectAPIName" type="string" default="InstallBase__c"/>
+    <aura:attribute name="IBIconName" type="string" default="standard:record"/>
+    <aura:attribute name="label" type="string" default=""/>
+    <aura:attribute name="Message" type="String" default=""/>
+    <aura:attribute name="errorMessage" type="String" default=""/>
+    
+    <!--declare events hendlers-->  
+    <aura:handler name="oSelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleComponentEvent}"/>
+    
+    <!--for initializing the lookup record when loaded using another parent component-->
+    <aura:method name="setInitialValue"
+                 description="Used to set the initial Value of the Lookup field">
+        <aura:attribute name="initRec" type="Object" default="{}" />
+    </aura:method>
+    
+    <div onmouseleave="{!c.onblur}" aura:id="searchRes" style="min-height:70%;!important" class="slds-form-element slds-lookup slds-is-close" data-select="single">
+        <!--This part is for display search bar for lookup-->  
+        <div class="slds-form-element__control">
+            
+            <div class="slds-input-has-icon slds-input-has-icon--right">
+                <!--This markup is for when an record is selected -->
+                <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+                    <lightning:pill  class="pillSize" label="{!v.selectedRecord.Name}" name="{!v.selectedRecord.Name}" onremove="{! c.clear }">
+                        <aura:set attribute="media">
+                            <lightning:icon class="slds-input-has-icon slds-input-has-icon--right slds-show" iconName="{!v.IBIconName}" size="x-small" alternativeText=""/>
+                        </aura:set>
+                    </lightning:pill>
+                </div>
+                <div aura:id="lookupField" class="slds-show">
+                    <span class="slds-icon_container  slds-combobox__input-entity-icon" title="record">
+                        <lightning:icon class="slds-input-has-icon slds-input-has-icon--right slds-hide" iconName="{!v.IBIconName}" size="x-small" alternativeText=""/>
+                        <span class="slds-assistive-text"></span>
+                    </span>
+                    <ui:inputText click="{!c.onfocus}" updateOn="keyup" keyup="{!c.keyPressController}" class="slds-lookup__search-input slds-input-has-icon--right slds-input leftPaddingClass" value="{!v.SearchKeyWord}" placeholder="Search InstallBase"/>
+                </div>   
+            </div>	
+            
+            <ul style="min-height:40px;margin-top:0px !important" class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-lookup__menu slds" role="listbox">
+                <lightning:spinner class="slds-hide" variant="brand" size="small" aura:id="mySpinner" alternativeText="..."/>
+                <center> {!v.Message}</center>
+                <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">
+                    <c:installBaseLookupResult oRecord="{!singleRec}" IconName="{!v.IBIconName}"/>
+                </aura:iteration>
+            </ul>
+            
+        </div>
+        
+    </div>
+    
+</aura:component>

@@ -1,0 +1,64 @@
+<!--Lightning component to handle the reinstate contract-->
+<aura:component controller="ReinstateContractController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global">
+    
+    <aura:attribute name="errorMessage" type="String" default="" />
+    <aura:attribute name="errorFlag" type="Boolean" default="false" />    
+    <aura:attribute name="isLoading" type="Boolean" default="true" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="String" />
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    
+    <!--Custom Styles for Modal Header and Footer-->
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>    
+    
+    <!--Spinner when loading-->
+    <aura:if isTrue="{! v.isLoading }">
+        <lightning:spinner alternativeText="Loading"/>
+    </aura:if> 
+    
+    <div>
+        <!--Modal Header-->
+        <div class="slds-col modal-header slds-modal__header">
+            <p class="slds-page-header__title slds-truncate" title="">Reinstate Contract</p>
+        </div>
+        
+        <!--Modal body-->
+        <!--To display error if renewal quote does not exist-->
+        <aura:if isTrue="{!v.errorFlag}">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert" aura:id="error-msg-Id">
+                <span class="slds-assistive-text">Error</span>
+                <h2>
+                    {!v.errorMessage}
+                </h2>
+            </div>
+        <!--If renewal quote exists allow reinstating-->
+        <aura:set attribute="else">
+        	<div class="slds-p-around_x-small">
+                <ul>
+                    <li>1.  The extisting renewal Opportunity and quote will be released from the contract</li>
+                    <li>2.  New renewal Opportunity and quote will be created</li>
+                    <li>Click Proceed to continue, otherwise click on Cancel</li>
+                </ul>
+        	</div>
+        </aura:set>
+  		</aura:if>
+        
+        <!--Modal Footer-->
+        <footer class="slds-modal__footer">
+            <lightning:button label="Cancel" name="Cancel" variant="brand" onclick="{!c.cancel}" />
+            <lightning:button label="Proceed" name="proceed" variant="brand" onclick="{!c.clickProceed}" disabled="{!v.errorFlag}"/>
+        </footer>
+    </div>    
+</aura:component>

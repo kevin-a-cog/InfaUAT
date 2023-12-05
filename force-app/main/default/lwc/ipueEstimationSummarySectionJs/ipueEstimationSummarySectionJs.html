@@ -1,0 +1,34 @@
+<template>
+    <lightning-modal-header label="IPU Estimation Summary"></lightning-modal-header>
+    <lightning-modal-body> 
+        <div class="summaryTable slds-p-around_medium center-div">
+            <table>
+                <tr>
+                    <th>Total IPU</th>
+                    <th style="text-align: right;">{totalIPU}</th>
+                </tr>
+                <tr>
+                    <td colspan="2"><br></td>
+                </tr>
+                <template for:each={data} for:item="page" for:index="pageIndex">
+
+                    <template if:true={page.hasSelectedSections}>
+                        <tr key={page.Id} if:true={page.isPage}>
+                            <td>
+                                <b><lightning-formatted-rich-text value={page.Name}></lightning-formatted-rich-text></b>
+                            </td>
+                        </tr>
+
+                    </template>
+                    <tr key={page.Id} if:false={page.isPage}>
+                        <td style="padding-left: 60px;">
+                            <lightning-formatted-rich-text value={page.Name}></lightning-formatted-rich-text>
+                        </td>
+                        <td style="text-align: right;">{page.Section_Total__c}</td>
+                    </tr>
+                </template>
+
+              </table>
+        </div>
+    </lightning-modal-body>
+</template>

@@ -1,0 +1,80 @@
+/***Banner***/
+.banner-container-fluid {
+    padding: 0;
+    height: 160px;
+    background:  url(/sfsites/c/resource/1606214644000/eSupportRrc/homepage_bg.png) no-repeat center center;
+    /* background:  url("./eSupportRrc/homepage_bg.png") no-repeat center center; */
+    position: relative;
+    background-size: cover;
+}
+.banner-container {
+    position: absolute;
+    bottom: 0;
+    /* top: 50%; */
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+.banner-wrapper {
+    background: #FFFFFFB0;
+    text-align: center;
+    padding: 15px 0 20px 0;
+}
+.banner__title {
+    font-size: 20px;
+    margin-bottom: 28px;
+}
+@media only screen and (max-width: 480px) {
+    .banner-container-fluid {
+        height: auto;
+    }
+    .banner-container {
+        position: static;
+        transform: translate(0,0);
+    }
+}
+/***Cta items - Dashboard ***/
+.link-option-wrapper {
+    display: flex;
+    justify-content: center;
+}
+.link-option__item {
+    list-style: none;
+    background: #FFF;
+    margin-right: 15px;
+    display: flex;
+    flex: 0 0 240px;
+    align-items: center;
+    justify-content: center;
+}
+.link-option__item a {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 10px;
+    color: #000;
+}
+.link-option__item:last-child {
+    margin-right: 0;
+} 
+.link-option__img {
+    margin-right: 10px;
+}
+.link-option__text {
+    line-height: 14px;
+    display: inline-block;
+    text-align: left;
+    color:#000;
+    font-size: 14px;
+}
+.link-options-detail {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+}
+@media only screen and (max-width: 480px) {
+    .link-option-wrapper {
+        flex-wrap: wrap;
+    }
+    .link-option__item {
+        margin: 0 0 10px 0;
+    }
+}

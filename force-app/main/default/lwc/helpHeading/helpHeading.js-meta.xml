@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="title" type="String" description="Enter Title" label="Title" placeholder="Enter Title" default="Heading" />
+            <property name="headingClass" type="String" datasource="in-feeds-heading in-heading in-orange, in-feeds-heading in-heading in-teal,in-feeds-heading in-heading in-white" description="Select Theme" label="Select Theme" placeholder="Select Theme" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

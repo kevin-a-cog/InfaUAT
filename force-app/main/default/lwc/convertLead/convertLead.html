@@ -1,0 +1,120 @@
+<template>   
+    <template lwc:if ={showStdScreen}> 
+    <lightning-quick-action-panel header="Convert Lead">
+         <template if:true={showLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium" class="spinnerClass"></lightning-spinner>
+        </template>
+        <template lwc:if={displayError}>
+            <span class="error-style">
+                <!--lightning-icon icon-name="utility:error" alternative-text="Error!" title="Error"></lightning-icon-->
+                <lightning-formatted-text value={errorMessage}></lightning-formatted-text>
+            </span>
+        </template>
+    
+        <lightning-accordion  allow-multiple-sections-open active-section-name={activeSections}>        
+            <lightning-accordion-section name="A" label="Account" class="account-sec head-sec">
+                <div class="slds-grid slds-gutters slds-p-left_large sec">
+                                <!-- Input Element -->
+                                <div class="slds-col slds-p-right_medium acc-input">
+                                    <lightning-input type="text" disabled="true" value={accountDisplayName} placeholder="Search/Create a new Account..." onchange={handleAccountChange}></lightning-input>
+                                </div>        
+                                <!-- Create Button -->
+                                <div class="slds-col acc-button">
+                                    <lightning-button variant="brand" label="Change/Create Account" title="Primary action" onclick={onClickAccountButton}></lightning-button>
+                                </div>                                    
+                </div>
+                <template lwc:if ={showSearchAccount}>
+                    <c-search-account 
+                    show-search-account ={showSearchAccount}
+                    is-lead-conversion ={isLeadConversion}
+                    lead-company-name ={leadCompanyName}
+                    save-loading = 'true'
+                    onselected ={handleshowSearchAccount}
+                    onclosemodal ={closeSearchAccount}>
+                    </c-search-account>
+                </template>
+            </lightning-accordion-section>
+
+            <lightning-accordion-section name="B" label="Contact" class="contact-sec main-sec">
+               <div class="slds-grid slds-gutters sec">                                           
+                    <div class="slds-col slds-large-size_2-of-5 slds-m-left_large slds-m-bottom_medium slds-p-bottom_medium contact">
+                        <lightning-input name="Email" type="Email" label="Email" disabled=true value={emailID}  class="slds-p-horizontal_xx-small" ></lightning-input> 
+                        <lightning-record-edit-form object-api-name="Contact" record-id={contactId}>
+                            <template for:each={conFields} for:item="field">                                   
+                                <lightning-input-field key={field.key} field-name={field.key} value={field.value} onchange={handleFieldChange} disabled={disableContact} required={field.state} ></lightning-input-field>
+                            </template>
+                        </lightning-record-edit-form>
+                    </div>  
+                    <div class="slds-col slds-grow-none slds-p-vertical_x-small">
+                        <div class="vertical-line"></div>
+                    </div>
+                    <div class="slds-col slds-large-size_2-of-5">                         
+                        <div if:true={ifDupliateContactExists}>
+                            <c-custom-lookup-field
+                                data-id="CustomerContact"
+                                label="Relate to Existing Contact"
+                                placeholder="Select the Contact"
+                                onsearch={handleLookupContactSearch}
+                                onselectionchange={handleContactLookupSelectionChange}
+                                variant ="label-stacked"
+                                onloaddefault={handleLoadContactDefault}
+                                selection={selectedCon}>                                 
+                            </c-custom-lookup-field>  
+                        </div>
+                        <div if:false={ifDupliateContactExists}>
+                            <p class="slds-p-horizontal_small" style="text-align: center;">No matching contacts found.<br> Create new contact via form on the left.</p>
+                        </div>                     
+                    </div>    
+                </div>
+            </lightning-accordion-section>
+
+            <lightning-accordion-section name="C" label="Opportunity" class="oppty-sec foot-sec">
+                <div class="slds-grid slds-gutters sec">
+                    <div class="slds-col slds-large-size_2-of-5 slds-m-left_large slds-m-bottom_medium slds-p-bottom_medium contact">  
+                        <lightning-input class="validate slds-p-horizontal_xx-small slds-p-vertical_xx-small" disabled={disableOpportunity} type="text" label="Opportunity Name" value={opportunityName} onchange={handleOppNameChange} required></lightning-input>
+                        <lightning-input class="slds-p-horizontal_xx-small slds-p-vertical_xx-small" type="text" label="Record Type" value= "New Sales Opportunity"  disabled ></lightning-input>
+                        <lightning-input class="slds-p-horizontal_xx-small slds-p-vertical_xx-small" type="checkbox" label="Create new Opportunity" onchange={handleCreateOpp} checked={isOpptySelected} disabled={disableCreateOpp}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-grow-none slds-p-vertical_x-small">
+                        <div class="vertical-line"></div>
+                    </div>                   
+                    <div class="slds-col slds-large-size_2-of-5 clookup">
+                        <div class="main-clookup" if:true={opportunityExists}>                          
+                            <c-custom-lookup-field
+                                    disabled={disableOppLookUp}
+                                    data-id="CustomerContact"
+                                    label="Relate to Existing Opportunity"
+                                    placeholder="Select the Opportunity"
+                                    onsearch={handleLookupOpptySearch}
+                                    onselectionchange={handleOpportunitySelectionChange}
+                                    variant ="label-stacked"
+                                    onloaddefault={handleLoadOpptyDefault}
+                                    dropdown-alignment="auto"
+                                    selection ={selectedOpp}>
+                            </c-custom-lookup-field> 
+                        </div> 
+                        <div if:false={opportunityExists}>
+                            <p class="slds-p-horizontal_small" style="text-align: center;">No Active Opportunity Present.</p>
+                        </div>
+                    </div>
+                </div>            
+            </lightning-accordion-section>       
+        </lightning-accordion>
+        <!-- Footer starts -->
+        <div slot="footer" class="slds-scrollable_none">
+            <lightning-button variant="neutral" label="Cancel" title="Cancel" onclick={closeModal} class="slds-m-left_x-small"></lightning-button>
+            <lightning-button variant="brand" label="Convert" title="Convert" onclick={handleConvert} class="slds-m-left_x-small"></lightning-button>
+        </div>    
+        <!--Footer Ends-->           
+    </lightning-quick-action-panel>
+    </template>
+    <!--Navigate to Lead Converion Page-->
+    <template lwc:if ={showLeadConversionPage}>
+        <c-lead-conversion-page 
+        account-id ={accountId}
+        contact-id ={contactId}
+        opportunity-id={opportunityId}
+        onclosemodal ={closeConversionPage}>
+        </c-lead-conversion-page>
+    </template>
+</template>

@@ -1,0 +1,28 @@
+<template>
+    <lightning-card>
+        <div style="margin:20px;">
+            <div class="slds-grid slds-gutters" style="align-items:end; margin-bottom:20px;">
+                <div class="slds-col slds-size_6-of-12">
+                    <span>
+                        <lightning-input type="Search" onblur={handleKeyChange}>
+                        </lightning-input>
+                    </span>
+                </div>
+                <div class="slds-col slds-size_2-of-12">
+                    <span>
+                        <lightning-button name="Search" label="Search" onclick={handleKeySearch}></lightning-button>
+                    </span>
+                </div>
+            </div>
+            <template if:true={showTable}>
+                <div style="overflow: auto;">
+                    <lightning-datatable key-field="Id" data={employeeData} columns={employeeColumns}>
+                    </lightning-datatable>
+                </div>
+            </template>
+            <template if:false={showTable}>
+                {error}
+            </template>
+        </div>
+    </lightning-card>
+</template>

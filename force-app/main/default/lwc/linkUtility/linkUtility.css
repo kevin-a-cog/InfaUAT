@@ -1,0 +1,57 @@
+/* Custom Accordion styles */
+
+.c-accordion-heading{
+    margin:0;
+    padding: 0.75rem;
+}
+
+.c-accordion-heading:hover{
+    cursor: pointer;
+}
+
+.right-arrow.hide{
+    display:none;
+}
+
+.left-arrow.hide{
+    display:none;
+}
+
+.c-accordion-heading span{
+    font-size: 16px;
+}
+
+.c-accordion-summary{
+    padding: 0 0 0 5px;
+}
+
+.c-accordion-summary__label{
+    padding: 0 0 0 5px;
+}
+
+.c-accordion-summary__label:hover{
+    text-decoration: underline;
+}
+
+.c-accordion-content{
+    margin:0;
+    padding: 0 1rem;
+    transition: all .3s ease-in;
+}
+
+.c-accordion-content p{
+    padding: 0 0 10px 0;
+}
+
+.c-accordion-content.hide{
+    display: none;
+}
+
+.flex-align-center{
+    font-size: 15px;
+    color: grey;
+    height: 10em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

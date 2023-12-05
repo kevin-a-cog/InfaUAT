@@ -1,0 +1,71 @@
+<!--
+/*
+ * Name			:	GlobalNextBestAction
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	9/14/2021
+ * Description	:	Next Best Action HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		9/14/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	<div class="slds-is-relative">
+		
+		<!-- Spinner. -->
+		<template if:true={boolDisplaySpinner}>
+			<lightning-spinner variant="brand" size="small"></lightning-spinner>
+		</template>
+		<template if:true={boolHasRecommendations}>
+		<!-- Card. -->
+		<lightning-card variant="Narrow" title={label.Next_Best_Action_Title}>
+
+			<!-- Data. -->
+			<template if:false={boolDisplaySpinner}>
+	
+				<!-- Recommendation. -->
+				<template if:true={boolHasRecommendations}>
+					<template for:each={lstRecommendations} for:item="objRecommendation">
+						<div key={objRecommendation} class="slds-grid slds-gutters slds-grid_vertical-align-center recommendationBody">
+							<div class="slds-col slds-size_10-of-12 slds-text-heading_small">{objRecommendation.strRecommendation}</div>
+							<div class="slds-col slds-size_2-of-12 slds-align_absolute-center">
+								<lightning-icon icon-name="utility:like" variant="success" size="x-small" alternative-text={label.Accept_Recommendation} 
+										class="actionButton" title={label.Accept_Recommendation} data-id={objRecommendation.idRecord} onclick={acceptRecommendation}></lightning-icon>
+								&nbsp;
+								<lightning-icon icon-name="utility:dislike" variant="error" size="x-small" alternative-text={label.Reject_Recommendation} 
+										class="actionButton" title={label.Reject_Recommendation} data-id={objRecommendation.idRecord} onclick={rejectRecommendation}></lightning-icon>
+							</div>
+						</div>
+					</template>
+				</template>
+	
+				<!-- Paginator. -->
+				<template if:true={boolDisplayPaginator}>
+					<div class="slds-grid">
+						<div class="slds-col">&nbsp;</div>
+					</div>
+					<c-global-paginator lst-records={lstOriginalRecords} int-total-records={lstOriginalRecords.length} obj-parameters={objPaginatorParameters} 
+							onpaginatorchange={changeTablePage}></c-global-paginator>
+				</template>
+		
+				<!-- No records found. -->
+				<template if:false={boolHasRecommendations}>
+					<div class="slds-grid slds-gutters slds-p-horizontal_small">
+						<div class="slds-col slds-size_12-of-12">
+							<div class="slds-illustration slds-illustration_small" aria-hidden="true">
+								<img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt=""/>
+								<div class="slds-text-color_weak">
+									<h3 class="slds-text-heading_medium">{label.No_Recommendations_Found}</h3>
+								</div>
+							</div>
+						</div>
+					</div>
+				</template>
+			</template>
+		</lightning-card>
+	</template>	
+	</div>
+</template>

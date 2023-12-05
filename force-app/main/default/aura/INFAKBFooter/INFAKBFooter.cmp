@@ -1,0 +1,43 @@
+<!--
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 03-16-2021
+  @last modified by  : Sathish Rajalingam
+  Modifications Log 
+  Ver   Date         Author               Modification
+  1.0   07-19-2020   Sathish Rajalingam   Initial Version
+  2.0	09-07-2020   Divesh Soni		  Updated Footer UI
+-->
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global">
+    <force:recordData aura:id="recordLoader" recordId="{!$SObjectType.CurrentUser.Id}" fields="FirstName"
+    targetFields="{!v.currentUser}" />
+    <ltng:require scripts="{!$Resource.INFAKBResource + '/js/dummy.js'}" afterScriptsLoaded="{!c.doInit}"/>
+
+<footer class="community-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 community-footer-links">
+                    <ul>
+                        <li><a href="https://www.informatica.com/contact-us.html">Contact Us</a></li>
+                        <li><a href="https://www.informatica.com/trademarks.html">Trademarks</a></li>
+                        <li><a href="https://www.informatica.com/terms-of-use.html">Terms of Use</a></li>
+                        <li><a href="https://www.informatica.com/privacy-policy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 community-footer-social-block">
+                    <a href="http://twitter.com/Informatica" class="community-footer-social-link"><img src="{!$Resource.INFAKBResource + '/images/footer-social-twitter.svg'}" alt="Twitter Icon"/></a>
+                    <a href="https://www.facebook.com/InformaticaLLC" class="community-footer-social-link"><img src="{!$Resource.INFAKBResource + '/images/footer-social-facebook.svg'}" alt="Facebook Icon"/></a>
+                    <a href="https://www.linkedin.com/company/informatica/" class="community-footer-social-link"><img src="{!$Resource.INFAKBResource + '/images/footer-social-linkedin.svg'}" alt="Linkedin Icon"/></a>
+                    <a href="https://www.youtube.com/channel/UCvXtdT5kAsavz662XL7umvg" class="community-footer-social-link"><img src="{!$Resource.INFAKBResource + '/images/footer-social-youtube.svg'}" alt="Youtube Icon"/></a>
+                    <a href="https://www.instagram.com/informaticacorp/" class="community-footer-social-link"><img src="{!$Resource.INFAKBResource + '/images/footer-social-instagram.svg'}" alt="Instagram Icon"/></a>
+                </div>
+            </div>
+            <div class="community-footer-copyright">
+                <p>&copy; <span id="footerYear">2020</span>Informatica All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+	
+</aura:component>

@@ -1,0 +1,17 @@
+<template>
+    <!-- <lightning-record-view-form object-api-name={objectApiName} record-id={record}>
+        <lightning-output-field field-name={nameField}> </lightning-output-field>
+    </lightning-record-view-form> -->
+    <div class="slds-col">{fieldName}
+		<div class="slds-scoped-notification_light">
+			<div class="slds-p-around_xx-small">
+                <template if:true={iconName}>
+                    <lightning-icon icon-name={iconName} size="small" alternative-text="Account" title="Account">
+                    </lightning-icon>
+                </template>
+
+				<span class="slds-p-left_small">{fieldValue}</span>
+			</div>
+		</div>
+	</div>
+</template>

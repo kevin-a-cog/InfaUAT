@@ -1,0 +1,234 @@
+<template>
+    <div class="infa-get-started-container teal-container">
+        <div class="container infa-get-started-content">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="infa-get-started-banner-text">
+                        <div class="infa-get-started-title">
+                            Get Started
+                        </div>
+                        <div class="infa-get-started-description">
+                            Informatica Community lets you connect, collaborate, and grow with fellow Informaticans across the globe. The community will provide you with rich repository of resources to help you leverage the most out of our products. 
+                            <br>
+                            Exploring the Informatica Community has never been easier. Watch this short video before you begin.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 infa-get-started-video">
+                    <div class="infa-get-started-video-parent" data-id="video" data-toggle="modal"
+                        onclick={displayVideo} data-target="#getStartedVideoModal">
+                        <img class="in-get-started-video-play-btn" src={playicon}>
+                        <img class="infa-video-thumbnail" src="https://i.ytimg.com/vi/MCr1cNVHRCk/mqdefault.jpg" />
+                    </div>
+                    <div class="modal fade" id="getStartedVideoModal" tabindex="-1" role="dialog"
+                        aria-labelledby="getStartedVideoModalLabel" aria-hidden="true">
+                        <div class="modal-dialog infa-get-started-video-dialog" role="document">
+                            <div class="modal-content in-get-started-video-content">
+                                <button type="button" class="close infa-get-started-video-close" data-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <div class="modal-body infa-get-started-video-body">
+                                    <iframe class="in-video-modal-iframe"
+                                        src="https://www.youtube.com/embed/MCr1cNVHRCk" frameborder="0" allowfullscreen
+                                        allow="autoplay; encrypted-media"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="infa-get-started-container">
+        <div class="container infa-get-started-content">
+            <div class="infa-gs-support-section">
+                <div class="infa-get-started-title">
+                    Information Library
+                </div>
+                <div class="infa-get-started-description">
+                    The Informatica Community is your trusted place to turn for all things data. Use it to find the knowledge and resources you need—all in one place. <a href="https://youtu.be/JNElohjG-EQ"> Watch a video </a> on search experience. 
+                </div>
+                <div class="infa-gs-links">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul>
+                                <li class="infa-gs-links-list">
+                                    <a href="https://knowledge.informatica.com/s/?language=en_US" target="_blank">Knowledge Base</a>
+                                    <div class="infa-get-started-description infa-get-started-description-lib">
+                                        One-stop self-service portal for Solutions, FAQs, Whitepapers, Videos, and more.
+                                    </div>
+                                </li>
+                                <li class="infa-gs-links-list">
+                                    <a href="https://success.informatica.com/" target="_blank">Success Portal</a>
+                                    <div class="infa-get-started-description infa-get-started-description-lib">
+                                        A feature rich microlearning platform that offers free and unlimited learning of Informatica products.
+                                    </div>
+                                </li>
+                                
+                               
+                                <li class="infa-gs-links-list">
+                                    <a href="https://network.informatica.com/s/global-search/#t=PAM&sort=relevancy" target="_blank">PAM and Product Lifecycle</a>
+                                    <div class="infa-get-started-description infa-get-started-description-lib">
+                                        Product Availability Matrix statements and End of Support documents of Informatica products.
+                                    </div>
+                                </li>
+                                <li class="infa-gs-links-list">
+                                    <a href="https://www.informatica.com/in/services-and-training/informatica-university.html" target="_blank">Informatica University</a>
+                                    <div class="infa-get-started-description infa-get-started-description-lib">
+                                        Access OnDemand training, instructor-led courses and more.
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul>
+                                <li class="infa-gs-links-list">
+                                    <a href="https://docs.informatica.com/" target="_blank">Product Documentation</a>
+                                    <div class="infa-get-started-description infa-get-started-description-lib">
+                                        Access all the latest Informatica product documents from the web.
+                                    </div>
+                                </li>
+                                
+                                <li class="infa-gs-links-list">
+                                    <a href="https://success.informatica.com/explore/tt-webinars.html" target="_blank">Tech Tuesdays Webinars</a>
+                                    <div class="infa-get-started-description infa-get-started-description-lib">
+                                        Most popular webinars on product architecture, best practices, and more.
+                                    </div>
+                                </li>
+                                
+                                <li class="infa-gs-links-list">
+                                    <a href="https://network.informatica.com/s/global-search/#t=SupportVideo&sort=relevancy" target="_blank">Support TV</a>
+                                    <div class="infa-get-started-description infa-get-started-description-lib">
+                                        Video channel for step-by-step instructions to use our products, troubleshooting tips, and more.
+                                    </div>
+                                </li>
+                                <li class="infa-gs-links-list">
+                                    <a href="https://network.informatica.com/s/global-search/#t=Blog&sort=relevancy&f:@incontenttype=[SupportFlash]" target="_blank">SupportFlash Monthly Newsletter</a>
+                                    <div class="infa-get-started-description infa-get-started-description-lib">
+                                        Monthly newsletter that provides an insight into the latest product releases, HotFixes, and much more.
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="infa-get-started-container grey-container">
+        <div class="container infa-get-started-content">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="infa-gs-discussion-section">
+                        <div class="infa-get-started-title">
+                            Product Communities and Discussions
+                        </div>
+                        <div class="infa-get-started-description">
+                            Connect and collaborate with Informatica experts and industry peers across
+                            <a href="https://network.informatica.com/s/topiccatalog"> Communities </a>
+                            to get the latest and greatest from seasoned data veterans. Please follow
+                            <a href="https://knowledge.informatica.com/s/article/Informatica-Community-Guidelines" target="_blank"> Community Guidelines</a>.
+                            <br>
+                            <br>
+                            Have a question or want to start a discussion? Go ahead and 
+                            <a href="https://network.informatica.com/s/"> Ask a question </a>
+                            in your community. Engage across Product Communities and User Groups to find the answers you’re looking for.
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="infa-gs-groups-section">
+                        <div class="infa-get-started-title">
+                            User Groups
+                        </div>
+                        <div class="infa-get-started-description">
+                            Did you know there are user groups in your region? 
+                            <a href="https://network.informatica.com/s/group/CollaborationGroup/Default"> Join a User Group </a>
+                            OR
+                            <a href="https://informatica.getfeedback.com/r/V9hxaDme/" target="_blank"> Request to start a User Group </a>
+                            to network, share ideas, and get tips on how to get the most from Informatica products and services.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="infa-get-started-container">
+        <div class="container infa-get-started-content">
+            <div class="infa-gs-support-section">
+                <div class="infa-get-started-title">
+                    Support Center
+                </div>
+                <div class="infa-get-started-description">
+                    Need to contact Support? Informatica Community empowers you with case creation with the click of a button. By sharing your relevant information, you can expedite the process and reduce response time. 
+                    <br>
+                    <br>
+                    Check out the following links to get the most from your Global Customer Support (GCS) team:
+
+                </div>
+                <div class="infa-gs-links">
+                    <ul>
+                        <li class="infa-gs-links-list">
+                            <a href="https://network.informatica.com/docs/DOC-18528" target="_blank">GCS Quick Start Guide [English]
+                            </a>
+                            <a href="https://network.informatica.com/docs/DOC-18542" target="_blank">[Deutsch]</a>
+                            <a href="https://network.informatica.com/docs/DOC-18544" target="_blank">[Français]</a>
+                            <a href="https://network.informatica.com/docs/DOC-18543" target="_blank">[Español]</a>
+                            <a href="https://network.informatica.com/docs/DOC-18550" target="_blank">[日本語]</a>
+                            <a href="https://network.informatica.com/docs/DOC-18555" target="_blank">[Italiano]</a>
+                            <a href="https://network.informatica.com/docs/DOC-18639" target="_blank">[中文]</a>
+                            <a href="https://network.informatica.com/docs/DOC-18551" target="_blank">[Português do Brasil]</a>
+                        </li>
+                        <li class="infa-gs-links-list">
+                            <a href="https://network.informatica.com/docs/DOC-3015" target="_blank">Informatica Global Customer Support Guide</a>
+                        </li>
+                        <li class="infa-gs-links-list">
+                            <a href="https://network.informatica.com/docs/DOC-16182" target="_blank">Informatica Support Statements and Product End-of-Life Information</a>
+                        </li>
+                        <li class="infa-gs-links-list">
+                            <a href="https://youtu.be/8R5vgzZJB50" target="_blank">How to create a new case with Informatica eSupport</a>
+                        </li>
+                        <li class="infa-gs-links-list">
+                            <a href="https://youtu.be/CKNx0wTsY_A" target="_blank">How to update an existing case</a>
+                        </li>
+                        <li class="infa-gs-links-list">
+                            <a href="https://youtu.be/Gd1y4y-lVdw" target="_blank">How to add a support account contact on eSupport</a>
+                        </li>
+                        <li class="infa-gs-links-list">
+                            <a href="https://youtu.be/m260EcVyoZY" target="_blank">How to search & download cases on eSupport</a>
+                        </li>
+                        <li class="infa-gs-links-list">
+                            <a href="https://youtu.be/vSR1aRI8sno" target="_blank">How to schedule your Ask an Expert session</a>
+                        </li>
+                        <li class="infa-gs-links-list">
+                            <a href="https://knowledge.informatica.com/s/article/496242?language=en_US" target="_blank">How to add or update contacts in a support account</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <template if:true={displaymodal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open outerModalContent">
+            <div class="slds-modal__container in-auth-videos-outerModalContent">
+                <header style="border: 0px;" class="slds-modal__header in-auth-videos-popup-header">
+                    <button
+                        class="slds-button slds-button_icon slds-modal__close infa-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" variant="inverse" size="x-small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                <div class="slds-modal__content in-auth-videos-popup">
+                    <iframe width="800" height="450" src={embeddedhtmlmodal} frameborder="0" allowfullscreen
+                        allow="autoplay; encrypted-media"></iframe>
+                </div>
+            </div>
+        </section>
+    </template>
+</template>

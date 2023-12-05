@@ -1,0 +1,241 @@
+<!--
+
+Change History
+****************************************************************************************************
+ModifiedBy      Date        Jira No.    Tag     Description
+****************************************************************************************************
+balajip         11/22/2021  I2RT-4425   T01     to show the list of applied/approved allocations
+-->
+<template>
+    <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+
+    <div class="slds-grid">
+        <div class="slds-col slds-size_3-of-12  lwc-resource">
+            <ul class="slds-accordion">
+                <li class="slds-accordion__list-item">
+                    <section class="slds-accordion__section slds-is-open" style="padding-bottom: 0"
+                        onclick={handleClick} data-name="accordion" data-control='requestHeader'>
+                        <div class="slds-accordion__summary">
+                            <h2 class="slds-accordion__summary-heading">
+                                <button class="slds-button slds-button_reset slds-accordion__summary-action"
+                                    aria-controls="referenceId-45" aria-expanded="true">
+                                    <lightning-icon icon-name="utility:chevrondown" size="x-small"
+                                        class="slds-p-right_x-small" data-controlledicon='requestHeader'>
+                                    </lightning-icon>
+                                    <span class="slds-accordion__summary-content">
+                                        {label}
+                                    </span>
+                                </button>
+                            </h2>
+                        </div>
+                        <div class="slds-accordion__content" id="referenceId-45">
+                            
+                        </div>
+                    </section>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div data-controlled='requestHeader'>
+        <template for:each={requests} for:item="req">
+            <div if:true={req.showRequest} class="slds-grid" key={req.Id}>
+                <!-- Resource Info -->
+                <div class="slds-col slds-size_3-of-12  lwc-resource">
+
+                    <div class="media collapsed">
+                        <div class="slds-page-header expand" style="padding:10px;">
+                            <div class="slds-page-header__row">
+                                <div class="slds-page-header__col-title">
+                                    <div class="slds-media">
+                                        <div class="slds-media__figure">
+                                            <span class="slds-icon_container">
+                                                <div class="media-left">
+
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="slds-media__body" style="padding-top: 5px;">
+
+                                            <div class="slds-page-header__name">
+                                                <div class="slds-page-header__name-title">
+                                                    <h1>
+                                                        <div class="slds-page-header__title slds-truncate slds-text-body_small"
+                                                            title={req.label} style="white-space: normal;">
+                                                            {req.label}
+                                                            <!--lightning-helptext class="slds-var-p-left_x-small"
+                                                                content={req.helpText}>
+                                                            </lightning-helptext-->
+                                                            <!--T01-->
+                                                            <div class="slds-float_right">
+                                                                <lightning-icon icon-name="utility:info" size="x-small" variant="warning"
+                                                                    onmouseover={showAllocations} onmouseout={hideAllocations}
+                                                                    data-id={req.Id}
+                                                                ></lightning-icon>
+                                                            </div>
+                                                            <!--/T01-->
+                                                        </div>
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Resource Info -->
+
+                <!-- Days -->
+                <div class="slds-col slds-is-relative">
+                    <!-- Time Slots-->
+                    <div class="slds-grid slds-is-absolute lwc-timeslots-container">
+                        <template for:each={req.timeSlots} for:item="time" for:index="index">
+                            <div key={time} data-key={time.key} class={time.class} data-index={index}
+                                data-start={time.start} data-end={time.end} 
+                                data-allocationstart={req.Shift_Plan__r.Start_Date__c}
+                                data-allocationend={req.Shift_Plan__r.End_Date__c}>
+                            </div>
+                        </template>
+                    </div>
+                    <!-- /Time Slots-->
+
+                    <!-- Allocations -->
+
+                    <div class="lwc-allocations-container">
+                        <div class="slds-is-relative project-container slds-var-p-around_xx-small">
+                            &nbsp;
+                            <!-- Allocation -->
+                            <div key={req.Id} class={req.Id}>
+                                <div title={req.label} class={req.class} style={req.style} data-id={req.Id}
+                                    data-project={req.Id} data-allocation={req.Id} data-shiftplanid={req.Shift_Plan__c}
+                                    onclick={handleApplyClick} data-name={req.Id}
+                                    data-startdate={req.Shift_Plan__r.Start_Date__c}
+                                    data-enddate={req.Shift_Plan__r.End_Date__c}>
+                                    
+                                    <div class="slds-grid slds-grid_vertical-align-center">
+                                        <!-- Allocation Left Handle -->
+                                        <div class="slds-col slds-grow-none slds-col_bump-right lwc-allocation_handle handle_left"
+                                            data-id={req.Id}>
+                                            <lightning-helptext content={req.helpText}
+                                                    class="slds-var-p-left_x-small">
+                                            </lightning-helptext>
+                                        </div>
+                                        <!-- /Allocation Left Handle -->
+
+                                        <div class="slds-col slds-grow-none lwc-allocation_actions">
+                                            
+                                        </div>
+                                        <!-- Allocation Right Handle -->
+                                        <div class="slds-col slds-grow-none lwc-allocation_handle handle_right"
+                                            data-id={req.Id}>
+                                        </div>
+                                        <!-- /Allocation Right Handle -->
+                                    </div>
+                                </div>
+                                <div class="slds-truncate slds-is-absolute lwc-allocation-label" style={req.labelStyle}>
+                                    <span>
+                                        {req.slotLabel} <span if:true={isHourView}>({req.timeLabel})</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Extra Space -->
+                        <div class="slds-is-relative project-container slds-var-p-around_xx-small">
+                            &nbsp;
+                        </div>
+                        <!-- /Extra Space -->
+                    </div>
+                    <!-- /Allocations -->
+                </div>
+                <!-- /Days -->
+            </div>
+        </template>
+    </div>
+
+    <template if:true={captureEngineerDetail}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Engineer Details</h2>
+                    <p class="slds-var-m-top_x-small">Provide the details for applying to the request</p>
+                </header>
+                <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1"
+                    style="overflow: initial;">
+                    <lightning-layout>
+                        <lightning-layout-item size="6" class="slds-var-p-right_x-small">
+                            <lightning-input type="tel" name="phone" label="Contact Number" data-name='engineerContact'
+                                value={userPhone} required></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" class="slds-var-p-left_x-small">
+                            <lightning-combobox name="location" label="Location" placeholder="Select location..."
+                                options={picklistValueProvider.locationPicklistValues} required={isLocationRequired}
+                                data-name='engineerLocation' value={userLocation}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <lightning-layout if:true={isShiftTypeApplicable}>
+                        <lightning-layout-item size="6" class="slds-var-p-right_x-small">
+                            <lightning-combobox name="shiftType" label="Shift Type" placeholder="Select shift type..."
+                                options={picklistValueProvider.shiftType} required
+                                data-name='engineerShiftType' value={userShiftType}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" name="applyCancel"
+                        onclick={handleClick}>Cancel</button>
+                    <button class="slds-button slds-button_brand" name="applySave" onclick={handleClick}
+                        data-id={selectedReq.Id} data-startdate={selectedReq.Shift_Plan__r.Start_Date__c}
+                        data-enddate={selectedReq.Shift_Plan__r.End_Date__c}>Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!--T01-->
+    <template if:true={showAllocationDetails}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Shift Engineers</h2>
+                </header>
+                <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-2"
+                    style="overflow: initial;">
+
+                    <lightning-layout>
+                        <lightning-layout-item size="6" class="slds-var-p-right_x-small">
+                            <lightning-card title="Approved" icon-name="standard:task2">
+                                <ul class="slds-m-around_medium">
+                                    <template for:each={shiftUsersApproved} for:item="userName">
+                                        <li key={userName}>
+                                            {userName}
+                                        </li>
+                                    </template>
+                                </ul>
+                            </lightning-card>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" class="slds-var-p-left_x-small">
+                            <lightning-card title="Pending Approval" icon-name="standard:approval">
+                                <ul class="slds-m-around_medium">
+                                    <template for:each={shiftUsersPending} for:item="userName">
+                                        <li key={userName}>
+                                            {userName}
+                                        </li>
+                                    </template>
+                                </ul>
+                            </lightning-card>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!--/T01-->
+</template>

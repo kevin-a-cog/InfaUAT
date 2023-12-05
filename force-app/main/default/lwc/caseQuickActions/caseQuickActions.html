@@ -1,0 +1,1300 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 11-01-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   08-09-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+  Change History
+ **************************************************************************************************************************
+ Modified By            Date            Jira No.            Description                                                 Tag
+ **************************************************************************************************************************
+ balajip                22-Aug-2022     I2RT-6867           To not show certain fields for Lite cases                   T01
+ Chetan Shetty          28-Feb-2023     I2RT-7541           Too many scroll bars make it difficult to work              NA
+ Vignesh Divakaran      30-Mar-2023     I2RT-7852           Make product field read only                                T02
+ Shashikanth            19-Sep-2023     I2RT-9026           Capture Components fields even for Fulfilment cases         T03
+
+ Sathish R               17-Sep-2023     I2RT-9046           KB action selection changes on case closure based on 
+                                                             resolution types and resolution codes.                      T04
+ Sathish R               17-Oct-2023     I2RT-9290           User unable to select KB action using TAB button 
+                                                             on case closure screen.                                     T05
+-->
+<template>
+    <div if:false={boolIsInSubtab} class="slds-card">
+        <div class='headerCard'>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_7-of-12">
+                    <lightning-icon icon-name="standard:actions_and_buttons" size="small"></lightning-icon>
+                    <h1 class="header">Next Best Action</h1>
+                </div>
+                <div class="slds-col slds-size_5-of-12 slds-align_absolute-center">
+                    <lightning-button-group>
+                        <c-subscribe-button objectname='Case' recordid={recordId}></c-subscribe-button>
+                    </lightning-button-group>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap slds-align_absolute-center">
+            <template if:true={showacceptreject}>
+                <!-- <lightning-button variant="neutral" label="Accept Solution" title="Accept Solution" onclick={handleAcceptSolution} ></lightning-button> -->
+				<lightning-button variant="neutral" label="Decline Solution" title="Decline Solution" data-method-name="handleRejectSolution" onclick={openSubtab}></lightning-button>
+                <lightning-button variant="neutral" label="Need more time" title="Need more time" data-method-name="handleNeedMoreTime" onclick={openSubtab}></lightning-button>
+            </template>
+
+			<lightning-button if:true={showSendRCA} variant="neutral" label="Send RCA" title="Send RCA" data-method-name="handleSendRCA" onclick={openSubtab}></lightning-button>
+            <lightning-button if:true={showRequestMoreInfoButton} variant="neutral" label="Request More Info" title="Request More Info" data-method-name="handleRequestMoreInfo" onclick={openSubtab}></lightning-button>
+            <lightning-button if:true={showProvideSolutionButtont} variant="neutral" label="Provide Solution" title="Provide Solution" data-method-name="handleProvideSolution" onclick={openSubtab}></lightning-button>
+            <lightning-button if:true={showDelayClosingButton} variant="neutral" label="Delayed Closing" title="Delayed Closing" data-method-name="handleDelayClosing" onclick={openSubtab}></lightning-button>
+            <lightning-button if:true={showCancelDelayClosingButton} variant="neutral" label="Cancel Delayed Closing" title="Cancel Delayed Closing" data-method-name="handleCancelDelayClosing" onclick={openSubtab}></lightning-button>
+            <lightning-button if:true={showCloseCaseButton} variant="neutral" label="Close Case" title="Close Case" data-method-name="handleCloseCase" onclick={openSubtab}></lightning-button>
+			<lightning-button if:true={showDeliveredButton} variant="neutral" label="Delivered" title="Delivered" data-method-name="handleStatusUpdateReason" onclick={openSubtab}></lightning-button>
+            <lightning-button if:true={showCancelled} variant="neutral" label="Cancelled" title="Cancelled" data-method-name="handleStatusUpdateReason" onclick={openSubtab}></lightning-button>
+        </div>
+    </div>
+
+    <!--Modal Box Start-->
+    <template if:true={bShowModalReason}>
+            <!--Modal Header Start-->
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Action Comments</h2>
+            </header>
+            <!--Modal Body Start-->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <lightning-textarea required="true" name="cancelDeliveredReason" label="Description" value="" onchange={cancelDeliverReasonChange}></lightning-textarea>
+            </div>
+            <!--Modal Footer Start-->
+            <footer class="slds-modal__footer">
+                <lightning-button variant="brand" label="Submit" disabled={hasNotesData} onclick={submitCaseCommentAAE}></lightning-button>
+            </footer>
+    </template>
+    <!--Modal Box end-->
+
+	<div if:true={showModal}>
+        <template if:true={showSpinner}>
+            <lightning-spinner variant="brand" alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
+        <header class="slds-modal__header">
+            <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate" style="font-size: 2em;">
+                <lightning-formatted-text value={modalHeader}></lightning-formatted-text>
+            </h2>    
+            <!-- <br /> -->
+            <template if:true={jiraclosemessage}>
+                <p style="font-size: small;color:red;">You have one or more JIRAs associated with this case. Please ensure to update the JIRA(s) with relevant comments as this case is being closed.</p>                
+            </template>
+        </header>
+        <lightning-record-edit-form class="updateCaseModal" object-api-name="Case" record-id={recordId} onsuccess={onCaseCreation} onsubmit={submitCase} onerror={handleError} density="comfy" >
+            <div class="slds-modal__content slds-p-around_medium caseModal_content" id="modal-content-id-2" style="height: 30rem;">
+                <div class={showEditFormFields}>
+                    <template if:true={showProvideSolution}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                    <lightning-input-field placeholder="Enter your Problem Statement" field-name="Problem_Statement__c" label="Problem Statement" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-combobox
+                                        name="Product"
+                                        label="Product"
+                                        value={selectedProduct}
+                                        options={caseProduct}
+                                        onchange={handleChangeProduct} 
+                                        required=true
+                                        variant="label-stacked"
+                                        dropdown-alignment="auto"
+                                        read-only> <!-- <T02> -->
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+                            <template if:false={isCaseLite}> <!-- T01 -->
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Version"
+                                            label="Version"
+                                            value={selectedVersion}
+                                            options={caseVersion} 
+                                            onchange={handleChangeVersion}
+                                            variant="label-stacked"
+                                            read-only= {disabledVersions}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={showsolclosefields}>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-input-field field-name="Next_Steps__c" label="Next Step" required>
+                                        </lightning-input-field>
+                                    </div>
+                                </div>
+                            </template>                                    
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <!-- <T01> -->
+                                    <lightning-input-field field-name="Next_Action__c" label="Next Action" value={selectedNextAction} onchange={handleChangeNextAction} required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <template if:false={isCaseLite}> <!-- T01 -->
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Component"
+                                            label="Component"
+                                            value={selectedComponent}
+                                            options={caseComponent}
+                                            onchange={handleChangeComponent}
+                                            variant="label-stacked"
+                                            read-only= {disabledComponents}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:false={isCaseLite}> <!-- T01 -->
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Sub Component"
+                                            label="Sub Component"
+                                            value={selectedSubComponent}
+                                            options={caseSubComponent}
+                                            onchange={handleChangeSubComponent} 
+                                            variant="label-stacked"
+                                            read-only= {disabledSubComponents}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:false={isCaseLite}> <!-- T01 -->
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Problem Type"
+                                            label="Problem Type"
+                                            value={selectedProblemType}
+                                            options={caseProblemType}
+                                            onchange={handleChangeProblemType} 
+                                            variant = "label-stacked"
+                                            read-only= {disabledProblems}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-input-field field-name="RCA_Pending_flag__c" label="RCA Pending" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_x-small">
+                                    <!-- I2RT-2555: Resolution Type and Resolution Code to display as radio button-->
+                                    <fieldset>
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            Resolution Type
+                                        </label>
+                                        <div class="slds-grid slds-wrap">
+                                            <template if:true={caseResolutionTypes} for:each={caseResolutionTypes} for:item="field">
+                                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12" key={field.label}>
+                                                    <div class="disp-inline-block slds-m-bottom_x-small">
+                                                        <span class="slds-radio disp-inline-block">
+                                                        <input type="radio" id={field.value} value={field.value} name="ResolutionType" checked={field.checked} onclick={resolutionTypeChange}/>
+                                                        <label class="slds-radio__label" for={field.value}>
+                                                            <span class="slds-radio_faux"></span>
+                                                            <span class="slds-form-element__label">{field.label}</span>
+                                                            <lightning-helptext content={field.helpText}></lightning-helptext>
+                                                        </label>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="slds-form-element__help error" if:true={showRequiredRT}>This field is required</div>
+                                    </fieldset>
+                                    <br/>
+
+                                    <fieldset if:true={showResolutionCode}>
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            Resolution Code
+                                        </label>
+                                        <div class="slds-grid slds-wrap">
+                                            <template if:true={caseResolutionCodes} for:each={caseResolutionCodes} for:item="field">
+                                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12" key={field.label}>
+                                                    <div class="disp-inline-block slds-m-bottom_x-small">
+                                                        <span class="slds-radio disp-inline-block">
+                                                        <input type="radio" id={field.value} value={field.value} name="ResolutionCode" checked={field.checked} onclick={resolutionCodeChange}/>
+                                                        <label class="slds-radio__label" for={field.value}>
+                                                            <span class="slds-radio_faux"></span>
+                                                            <span class="slds-form-element__label">{field.label}</span>
+                                                            <lightning-helptext content={field.helpText}></lightning-helptext>
+                                                        </label>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="slds-form-element__help error" if:true={showRequiredRC}>This field is required</div>
+                                    </fieldset>
+                                </div>
+                            </div>                            
+
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                    <lightning-input-field field-name="Root_Cause_Analysis__c" label="Root Cause Analysis" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_x-small textarea_height">
+                                    <label for="fieldid" class="slds-form-element__label">
+                                        <abbr class="slds-required" title="required">*</abbr>{closingnoteslabel}
+                                    </label>
+                                    <lightning-input-rich-text id="fieldid" field-name="Closing_Notes__c" onchange={handleclosingnotes} value={closingnotesvalue} label="Closing Notes / Proposed Solution" variant="label-hidden" required name="closingnotefield">
+                                    </lightning-input-rich-text>
+                                    <div class="slds-form-element__help error" if:true={showClosingNotesRequired}>This field is required</div>
+                                </div>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <!-- T04 -T05-->
+                                    <lightning-combobox 
+                                        label="KB Action" 
+                                        name="KB Action" 
+                                        placeholder="--None--"
+                                        value={kbSelectedAction} 
+                                        options={kbActionOptions}
+                                        onchange={handleKBChange} 
+                                        required=true
+                                        dropdown-alignment="auto" 
+                                        message-when-value-missing="This field is required.">
+                                    </lightning-combobox>
+                                    <!-- T04 -T05-->
+                                </div>
+                            </div>
+
+                        </div>
+                    </template>
+
+                    <template if:true={showAcceptedSolutionField}>
+                        
+                        <div class="slds-m-top_small">
+                            <lightning-input-field field-name="Problem_Statement__c" label="Product" required>
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-m-top_small">
+                            <!-- <lightning-input-field field-name="Forecast_Product__c" label="Product" required>
+                            </lightning-input-field> -->
+                            <lightning-combobox
+                                name="Product"
+                                label="Product"
+                                value={selectedProduct}
+                                options={caseProduct}
+                                onchange={handleChangeProduct} 
+                                required=true
+                                variant="label-stacked"
+                                dropdown-alignment="auto"
+                                read-only> <!-- <T02> -->
+                            </lightning-combobox>
+                        </div>
+                        <template if:false={isCaseLite}> <!-- T01 -->
+                            <div class="slds-m-top_small">
+                                <lightning-combobox
+                                    name="Version"
+                                    label="Version"
+                                    value={selectedVersion}
+                                    options={caseVersion} 
+                                    onchange={handleChangeVersion}
+                                    variant="label-stacked"
+                                    read-only= {disabledVersions}
+                                    required=true
+                                    dropdown-alignment="auto"
+                                    message-when-value-missing="This field is required.">
+                                </lightning-combobox>
+                            </div>
+                        </template>
+                        <template if:true={showsolclosefields}>
+                        <div class="slds-m-top_small">
+                            <lightning-input-field field-name="Next_Steps__c" label="Next Steps" required>
+                            </lightning-input-field>
+                        </div>
+                        </template>
+                        <div class="slds-m-top_small">
+                            <!-- <T01> -->
+                            <lightning-input-field field-name="Next_Action__c" label="Next Action" value={selectedNextAction} onchange={handleChangeNextAction} required>
+                            </lightning-input-field>
+                        </div>
+                        <template if:false={isCaseLite}> <!-- T01 -->
+                            <div class="slds-m-top_small">
+                                <lightning-combobox
+                                    name="Component"
+                                    label="Component"
+                                    value={selectedComponent}
+                                    options={caseComponent}
+                                    onchange={handleChangeComponent}
+                                    variant="label-stacked"
+                                    read-only= {disabledComponents}
+                                    required=true
+                                    dropdown-alignment="auto"
+                                    message-when-value-missing="This field is required.">
+                                </lightning-combobox>
+                            </div>
+                        </template>
+                        <fieldset>
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">*</abbr>
+                                Resolution Type
+                            </label>
+                            <div class="slds-grid slds-wrap">
+                                <template if:true={caseResolutionTypes} for:each={caseResolutionTypes} for:item="field">
+                                    <div class="slds-size_1-of-3" key={field.label}>
+                                        <div class="disp-inline">
+                                            <span class="slds-radio disp-inline-block">
+                                            <input type="radio" id={field.value} value={field.value} name="ResolutionType" checked={field.checked} onclick={resolutionTypeChange}/>
+                                            <label class="slds-radio__label" for={field.value}>
+                                                <span class="slds-radio_faux"></span>
+                                                <span class="slds-form-element__label">{field.label}</span>
+                                                <lightning-helptext content={field.helpText}></lightning-helptext>
+                                            </label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="slds-form-element__help error" if:true={showRequiredRT}>This field is required</div>
+                        </fieldset>
+                        <br/>
+                        <fieldset if:true={showResolutionCode}>
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">*</abbr>
+                                Resolution Code
+                            </label>
+                            <div class="slds-grid slds-wrap">
+                                <template if:true={caseResolutionCodes} for:each={caseResolutionCodes} for:item="field">
+                                    <div class="slds-size_1-of-3" key={field.label}>
+                                        <div class="disp-inline">
+                                            <span class="slds-radio disp-inline-block">
+                                            <input type="radio" id={field.value} value={field.value} name="ResolutionCode" checked={field.checked} onclick={resolutionCodeChange}/>
+                                            <label class="slds-radio__label" for={field.value}>
+                                                <span class="slds-radio_faux"></span>
+                                                <span class="slds-form-element__label">{field.label}</span>
+                                                <lightning-helptext content={field.helpText}></lightning-helptext>
+                                            </label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="slds-form-element__help error" if:true={showRequiredRC}>This field is required</div>
+                        </fieldset>
+                        <template if:false={isCaseLite}> <!-- T01 -->
+                            <div class="slds-m-top_small">
+                                <lightning-combobox
+                                    name="Sub Component"
+                                    label="Sub Component"
+                                    value={selectedSubComponent}
+                                    options={caseSubComponent}
+                                    onchange={handleChangeSubComponent} 
+                                    variant="label-stacked"
+                                    read-only= {disabledSubComponents}
+                                    required=true
+                                    dropdown-alignment="auto"
+                                    message-when-value-missing="This field is required.">
+                                </lightning-combobox>
+                            </div>
+                            <div class="slds-m-top_small">
+                                <lightning-combobox
+                                    name="Problem Type"
+                                    label="Problem Type"
+                                    value={selectedProblemType}
+                                    options={caseProblemType}
+                                    onchange={handleChangeProblemType} 
+                                    variant = "label-stacked"
+                                    read-only= {disabledProblems}
+                                    required=true
+                                    dropdown-alignment="auto"
+                                    message-when-value-missing="This field is required.">
+                                </lightning-combobox>
+                            </div>
+                        </template>
+                        <div class="slds-m-top_small">
+                            <lightning-input-field field-name="Closure_Validated__c" label="Closure Validated" required>
+                            </lightning-input-field>
+                        </div>
+                        
+                    </template>
+                    
+                    <template if:true={showRejectNeedMoreInfoField}>
+                        <div class="slds-m-top_small">
+                            <lightning-input-field field-name="Reason_For_Rejection__c" label="Reason For Rejection" required>
+                            </lightning-input-field>
+                        </div>
+                    </template>
+                    
+                    <template if:true={showNeedMoreTimeField}>
+                        <div class="slds-m-top_small">
+                            <lightning-input type="date" name="Expected_Date__c" label="Expected Date" value={selectedExpectedDate} onchange={setExpectedDate} required>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-m-top_small">
+                            <lightning-input-field field-name="Reason_For_This_Delay__c" label="Reason For This Delay" required>
+                            </lightning-input-field>
+                        </div>
+                    </template>
+                    
+                    <template if:true={showProvideSolutionForAdminFulfillment}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                    <lightning-input-field field-name="Problem_Statement__c" label="Problem Statement" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                    <label class="slds-form-element__label">
+                                        <abbr class="slds-required" title="required">*</abbr>{closingnoteslabel}
+                                    </label>
+                                    <lightning-input-rich-text field-name="Closing_Notes__c" label="Closing Notes / Proposed Solution"
+                                        value={closingnotesvalue} variant="label-hidden" required onchange={handleclosingnotes}>
+                                    </lightning-input-rich-text>
+                                    <div class="slds-form-element__help error" if:true={showClosingNotesRequired}>This field is required</div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <!-- <T01> -->
+                                    <lightning-input-field field-name="Next_Action__c" label="Next Action" value={selectedNextAction}
+                                        onchange={handleChangeNextAction} required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <template if:true={showProductVersionForFulFillment}>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox name="Product" label="Product" value={selectedProduct} options={caseProduct}
+                                            onchange={handleChangeProduct} required=true dropdown-alignment="auto" variant="label-stacked" read-only> <!-- <T02> -->
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox name="Version" label="Version" value={selectedVersion} options={caseVersion}
+                                            onchange={handleChangeVersion} variant="label-stacked" read-only={disabledVersions} required=true
+                                            dropdown-alignment="auto" message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                                <!-- <T03>-->
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Component"
+                                            label="Component"
+                                            value={selectedComponent}
+                                            options={caseComponent}
+                                            onchange={handleChangeComponent}
+                                            variant="label-stacked"
+                                            read-only= {disabledComponents}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Sub Component"
+                                            label="Sub Component"
+                                            value={selectedSubComponent}
+                                            options={caseSubComponent}
+                                            onchange={handleChangeSubComponent} 
+                                            variant="label-stacked"
+                                            read-only= {disabledSubComponents}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                                <!-- </T03>-->
+                            </template>
+                        </div>
+                    </template>
+
+                    <template if:true={showRequestMoreInfo}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                    <lightning-input-field field-name="Problem_Statement__c" label="Problem Statement" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-combobox
+                                        name="Product"
+                                        label="Product"
+                                        value={selectedProduct}
+                                        options={caseProduct}
+                                        onchange={handleChangeProduct} 
+                                        required=true
+                                        variant="label-stacked"
+                                        dropdown-alignment="auto"
+                                        read-only> <!-- <T02> -->
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+                        <template if:false={isCaseLite}> <!-- T01 -->
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-combobox
+                                        name="Version"
+                                        label="Version"
+                                        value={selectedVersion}
+                                        options={caseVersion} 
+                                        onchange={handleChangeVersion}
+                                        variant="label-stacked"
+                                        read-only= {disabledVersions}
+                                        required=true
+                                        dropdown-alignment="auto"
+                                        message-when-value-missing="This field is required.">
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:true={showsolclosefields}>
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-input-field field-name="Next_Steps__c" label="Next Steps" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                        </template>
+                        <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                            <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                <!-- <T01> -->
+                                <lightning-input-field field-name="Next_Action__c" label="Next Action" value={selectedNextAction} onchange={handleChangeNextAction} required>
+                                </lightning-input-field>
+                            </div>
+                        </div>
+                        <template if:false={isCaseLite}> <!-- T01 -->
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-combobox
+                                        name="Component"
+                                        label="Component"
+                                        value={selectedComponent}
+                                        options={caseComponent}
+                                        onchange={handleChangeComponent}
+                                        variant="label-stacked"
+                                        read-only= {disabledComponents}
+                                        required=true
+                                        dropdown-alignment="auto"
+                                        message-when-value-missing="This field is required.">
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+                        </template>
+                        </div>
+                    </template>
+
+                    <template if:true={showRequestMoreInfoForAdminFulfillment}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                    <lightning-input-field field-name="Problem_Statement__c" label="Problem Statement" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <!-- <T01> -->
+                                    <lightning-input-field field-name="Next_Action__c" label="Next Action" value={selectedNextAction}
+                                        onchange={handleChangeNextAction} required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <template if:true={showProductVersionForFulFillment}>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox name="Product" label="Product" value={selectedProduct} options={caseProduct}
+                                            onchange={handleChangeProduct} required=true variant="label-stacked" dropdown-alignment="auto" read-only> <!-- <T02> -->
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox name="Version" label="Version" value={selectedVersion} options={caseVersion}
+                                            onchange={handleChangeVersion} variant="label-stacked" read-only={disabledVersions} required=true
+                                            dropdown-alignment="auto" message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                    <template if:true={showCloseCase}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                    <lightning-input-field field-name="Problem_Statement__c" label="Product" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-combobox
+                                        name="Product"
+                                        label="Product"
+                                        value={selectedProduct}
+                                        options={caseProduct}
+                                        onchange={handleChangeProduct} 
+                                        required=true
+                                        variant="label-stacked"
+                                        dropdown-alignment="auto"
+                                        read-only> <!-- <T02> -->
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+                            <template if:false={isCaseLite}> <!-- T01 -->
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Version"
+                                            label="Version"
+                                            value={selectedVersion}
+                                            options={caseVersion} 
+                                            onchange={handleChangeVersion}
+                                            variant="label-stacked"
+                                            read-only= {disabledVersions}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                            </template>
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <!-- <T01> -->
+                                    <lightning-input-field field-name="Next_Action__c" label="Next Action" value={selectedNextAction} onchange={handleChangeNextAction} required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <template if:false={isCaseLite}> <!-- T01 -->
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Component"
+                                            label="Component"
+                                            value={selectedComponent}
+                                            options={caseComponent}
+                                            onchange={handleChangeComponent}
+                                            variant="label-stacked"
+                                            read-only= {disabledComponents}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={showsolclosefields}>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-input-field field-name="Next_Steps__c" label="Next Steps" required>
+                                        </lightning-input-field>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:false={isCaseLite}> <!-- T01 -->
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Sub Component"
+                                            label="Sub Component"
+                                            value={selectedSubComponent}
+                                            options={caseSubComponent}
+                                            onchange={handleChangeSubComponent} 
+                                            variant="label-stacked"
+                                            read-only= {disabledSubComponents}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Problem Type"
+                                            label="Problem Type"
+                                            value={selectedProblemType}
+                                            options={caseProblemType}
+                                            onchange={handleChangeProblemType} 
+                                            variant = "label-stacked"
+                                            read-only= {disabledProblems}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                            </template>
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-input-field field-name="Closure_Validated__c" label="Closure Validated" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-input-field field-name="RCA_Pending_flag__c" label="RCA Pending" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                        
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_x-small">
+                                    <!-- I2RT-2555: Resolution Type and Resolution Code to display as radio button-->
+                                    <fieldset>
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            Resolution Type
+                                        </label>
+                                        <div class="slds-grid slds-wrap">
+                                            <template if:true={caseResolutionTypes} for:each={caseResolutionTypes} for:item="field">
+                                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12" key={field.label}>
+                                                    <div class="disp-inline-block slds-m-bottom_x-small">
+                                                        <span class="slds-radio disp-inline-block">
+                                                        <input type="radio" id={field.value} value={field.value} name="ResolutionType" checked={field.checked} onclick={resolutionTypeChange}/>
+                                                        <label class="slds-radio__label" for={field.value}>
+                                                            <span class="slds-radio_faux"></span>
+                                                            <span class="slds-form-element__label">{field.label}</span>
+                                                            <lightning-helptext content={field.helpText}></lightning-helptext>
+                                                        </label>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="slds-form-element__help error" if:true={showRequiredRT}>This field is required</div>
+                                    </fieldset>
+                                    <br/>
+                                    <fieldset if:true={showResolutionCode}>
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            Resolution Code
+                                        </label>
+                                        <div class="slds-grid slds-wrap">
+                                            <template if:true={caseResolutionCodes} for:each={caseResolutionCodes} for:item="field">
+                                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12" key={field.label}>
+                                                    <div class="disp-inline-block slds-m-bottom_x-small">
+                                                        <span class="slds-radio disp-inline-block">
+                                                        <input type="radio" id={field.value} value={field.value} name="ResolutionCode" checked={field.checked} onclick={resolutionCodeChange}/>
+                                                        <label class="slds-radio__label" for={field.value}>
+                                                            <span class="slds-radio_faux"></span>
+                                                            <span class="slds-form-element__label">{field.label}</span>
+                                                            <lightning-helptext content={field.helpText}></lightning-helptext>
+                                                        </label>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="slds-form-element__help error" if:true={showRequiredRC}>This field is required</div>
+                                    </fieldset>
+                                </div>
+                            </div>                            
+                                                            
+                            <div class="slds-col slds-size_1-of-1" if:true={showCloseCaseClosingNotesNew}>
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                    <label  class="slds-form-element__label">
+                                        <abbr class="slds-required" title="required">*</abbr>{closingnoteslabel}
+                                    </label>
+                                    <lightning-input-rich-text field-name="Closing_Notes__c" label="Closing Notes / Proposed Solution" value={closingnotesvalue} variant="label-hidden" required onchange={handleclosingnotes}>
+                                    </lightning-input-rich-text>
+                                    <div class="slds-form-element__help error" if:true={showClosingNotesRequired}>This field is required</div>
+                                </div>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <!-- T04 -T05-->
+                                    <lightning-combobox 
+                                        label="KB Action" 
+                                        name="KB Action" 
+                                        placeholder="--None--"
+                                        value={kbSelectedAction} 
+                                        options={kbActionOptions}
+                                        onchange={handleKBChange} 
+                                        required=true
+                                        dropdown-alignment="auto"
+                                        message-when-value-missing="This field is required.">
+                                    </lightning-combobox>
+                                    <!-- T04 -T05-->
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:true={showCloseCaseForAdminFulfillment}>
+                        <div class="slds-grid slds-wrap">
+                            <!-- Vignesh D: 02-Nov-2021 #I2RT-4419 START-->
+                            <div class="slds-col slds-size_1-of-1 slds-p-horizontal_xx-small">
+                                <div class="slds-m-top_small" if:true={showDelayedClosing}>
+                                    <lightning-input type="datetime" name="AutoCloseDate" label="Automatic Closure Date"
+                                        value={selectedAutoCloseDate} onchange={handleAutoCloseDate} variant="label-stacked" required>
+                                    </lightning-input>
+                                </div>
+                            </div>
+                            <!-- Vignesh D: 02-Nov-2021 #I2RT-4419 END-->
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                    <lightning-input-field field-name="Problem_Statement__c" label="Problem Statement" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                    <div class="slds-m-top_small">
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">*</abbr>{closingnoteslabel}
+                                        </label>
+                                        <lightning-input-rich-text field-name="Closing_Notes__c" label="Closing Notes / Proposed Solution"
+                                            value={closingnotesvalue} variant="label-hidden" required onchange={handleclosingnotes}>
+                                        </lightning-input-rich-text>
+                                        <div class="slds-form-element__help error" if:true={showClosingNotesRequired}>This field is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-input-field field-name="Closure_Validated__c" label="Closure Validated" required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <!-- <T01> -->
+                                    <lightning-input-field field-name="Next_Action__c" label="Next Action" value={selectedNextAction}
+                                        onchange={handleChangeNextAction} required>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                            <template if:true={showProductVersionForFulFillment}>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox name="Product" label="Product" value={selectedProduct} options={caseProduct}
+                                            onchange={handleChangeProduct} required=true variant="label-stacked" dropdown-alignment="auto" read-only> <!-- <T02> -->
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox name="Version" label="Version" value={selectedVersion} options={caseVersion}
+                                            onchange={handleChangeVersion} variant="label-stacked" read-only={disabledVersions} required=true
+                                            dropdown-alignment="auto" message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                                <!-- <T03>-->
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Component"
+                                            label="Component"
+                                            value={selectedComponent}
+                                            options={caseComponent}
+                                            onchange={handleChangeComponent}
+                                            variant="label-stacked"
+                                            read-only= {disabledComponents}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                        <lightning-combobox
+                                            name="Sub Component"
+                                            label="Sub Component"
+                                            value={selectedSubComponent}
+                                            options={caseSubComponent}
+                                            onchange={handleChangeSubComponent} 
+                                            variant="label-stacked"
+                                            read-only= {disabledSubComponents}
+                                            required=true
+                                            dropdown-alignment="auto"
+                                            message-when-value-missing="This field is required.">
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                                <!-- </T03>-->
+                            </template>
+                        </div>
+                    </template>
+                </div>
+                <template if:true={showAutoCloserDate}>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-1">
+                            <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                <lightning-input type="datetime" name="AutoCloseDate" label="Automatic Closure Date" value={selectedAutoCloseDate} onchange={handleAutoCloseDate} variant="label-stacked" required>
+                                </lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1">
+                            <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                <lightning-input-field field-name="Problem_Statement__c" label="Problem Statement" required>
+                                </lightning-input-field>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                            <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                <lightning-combobox
+                                    name="Product"
+                                    label="Product"
+                                    value={selectedProduct}
+                                    options={caseProduct}
+                                    onchange={handleChangeProduct} 
+                                    required=true
+                                    variant="label-stacked"
+                                    dropdown-alignment="auto"
+                                    read-only> <!-- <T02> -->
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                        <template if:false={isCaseLite}> <!-- T01 -->
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-combobox
+                                        name="Version"
+                                        label="Version"
+                                        value={selectedVersion}
+                                        options={caseVersion} 
+                                        onchange={handleChangeVersion}
+                                        variant="label-stacked"
+                                        read-only= {disabledVersions}
+                                        required=true
+                                        dropdown-alignment="auto"
+                                        message-when-value-missing="This field is required.">
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+                        </template>
+
+                        <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                            <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                <!-- <T01> -->
+                                <lightning-input-field field-name="Next_Action__c" label="Next Action" value={selectedNextAction} onchange={handleChangeNextAction} required>
+                                </lightning-input-field>
+                            </div>
+                        </div>
+
+                        <template if:false={isCaseLite}> <!-- T01 -->
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-combobox
+                                        name="Component"
+                                        label="Component"
+                                        value={selectedComponent}
+                                        options={caseComponent}
+                                        onchange={handleChangeComponent}
+                                        variant="label-stacked"
+                                        read-only= {disabledComponents}
+                                        required=true
+                                        dropdown-alignment="auto"
+                                        message-when-value-missing="This field is required.">
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template if:false={isCaseLite}> <!-- T01 -->
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-combobox
+                                        name="Sub Component"
+                                        label="Sub Component"
+                                        value={selectedSubComponent}
+                                        options={caseSubComponent}
+                                        onchange={handleChangeSubComponent} 
+                                        variant="label-stacked"
+                                        read-only= {disabledSubComponents}
+                                        required=true
+                                        dropdown-alignment="auto"
+                                        message-when-value-missing="This field is required.">
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                                <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                    <lightning-combobox
+                                        name="Problem Type"
+                                        label="Problem Type"
+                                        value={selectedProblemType}
+                                        options={caseProblemType}
+                                        onchange={handleChangeProblemType} 
+                                        variant = "label-stacked"
+                                        read-only= {disabledProblems}
+                                        required=true
+                                        dropdown-alignment="auto"
+                                        message-when-value-missing="This field is required.">
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+                        </template>
+
+                        <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                            <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                <lightning-input-field field-name="Closure_Validated__c" label="Closure Validated" required>
+                                </lightning-input-field>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                            <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                <lightning-input-field field-name="RCA_Pending_flag__c" label="RCA Pending" required>
+                                </lightning-input-field>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1">
+                            <div class="slds-m-top_small slds-p-horizontal_x-small">
+                                <!-- I2RT-2555: Resolution Type and Resolution Code to display as radio button-->
+                                <fieldset>
+                                    <label class="slds-form-element__label">
+                                        <abbr class="slds-required" title="required">*</abbr>
+                                        Resolution Type
+                                    </label>
+                                    <div class="slds-grid slds-wrap">
+                                        <template if:true={caseResolutionTypes} for:each={caseResolutionTypes} for:item="field">
+                                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12" key={field.label}>
+                                                <div class="disp-inline-block slds-m-bottom_x-small">
+                                                    <span class="slds-radio disp-inline-block">
+                                                    <input type="radio" id={field.value} value={field.value} name="ResolutionType" checked={field.checked} onclick={resolutionTypeChange}/>
+                                                    <label class="slds-radio__label" for={field.value}>
+                                                        <span class="slds-radio_faux"></span>
+                                                        <span class="slds-form-element__label">{field.label}</span>
+                                                        <lightning-helptext content={field.helpText}></lightning-helptext>
+                                                    </label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="slds-form-element__help error" if:true={showRequiredRT}>This field is required</div>
+                                </fieldset>
+                                <br/>
+                                <fieldset if:true={showResolutionCode}>
+                                    <label class="slds-form-element__label">
+                                        <abbr class="slds-required" title="required">*</abbr>
+                                        Resolution Code
+                                    </label>
+                                    <div class="slds-grid slds-wrap">
+                                        <template if:true={caseResolutionCodes} for:each={caseResolutionCodes} for:item="field">
+                                            <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12" key={field.label}>
+                                                <div class="disp-inline-block slds-m-bottom_x-small">
+                                                    <span class="slds-radio disp-inline-block">
+                                                    <input type="radio" id={field.value} value={field.value} name="ResolutionCode" checked={field.checked} onclick={resolutionCodeChange}/>
+                                                    <label class="slds-radio__label" for={field.value}>
+                                                        <span class="slds-radio_faux"></span>
+                                                        <span class="slds-form-element__label">{field.label}</span>
+                                                        <lightning-helptext content={field.helpText}></lightning-helptext>
+                                                    </label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="slds-form-element__help error" if:true={showRequiredRC}>This field is required</div>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                            <div class="slds-m-top_small slds-p-horizontal_xx-small">
+                                <!-- T04 -T05-->
+                                <lightning-combobox 
+                                    label="KB Action" 
+                                    name="KB Action" 
+                                    placeholder="--None--"
+                                    value={kbSelectedAction} 
+                                    options={kbActionOptions}
+                                    onchange={handleKBChange} 
+                                    required=true
+                                    dropdown-alignment="auto"
+                                    message-when-value-missing="This field is required.">
+                                </lightning-combobox>
+                                <!-- T04 -T05-->
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1">
+                            <div class="slds-m-top_small slds-p-horizontal_xx-small textarea_height">
+                                <label  class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">*</abbr>{closingnoteslabel}
+                                </label>
+                                <lightning-input-rich-text field-name="Closing_Notes__c" label="Closing Notes / Proposed Solution" value={closingnotesvalue} variant="label-hidden" required onchange={handleclosingnotes}>
+                                </lightning-input-rich-text>
+                                <div class="slds-form-element__help error" if:true={showClosingNotesRequired}>This field is required</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </template>
+                <template if:true={showCancelDelayClosing}>
+                    <div class="slds-m-top_small">
+                        <lightning-output-field field-name="Automatic_closure_Date__c"></lightning-output-field>
+                    </div>
+                </template>
+                <template if:true={showKBActionSection}>                           
+                                                
+                        <template if:true={showSelectedKBInKBSpace}>
+                            <div style="padding-bottom: 20px;">
+                                <label class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">*</abbr>
+                                    KB
+                                </label>
+                                <div class="divcontainerborder slds-m-horizontal_x-small">
+                                    <div>
+                                        <lightning-datatable class="slds-max-medium-table_stacked" hide-checkbox-column="true"
+                                            key-field="sfid" data={kbSelectedData} columns={kbcolumnswithdeleteupdate}
+                                            onrowaction={handleKBRowActionDeleteUpdate}>
+                                        </lightning-datatable>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:true={showNewKbSection}>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_x-small">
+                                        <lightning-combobox field-name="KB Template" label="KB Template" placeholder="Select Template"
+                                            name="KBTemplate" value={kbSelectedTemplate} options={KbTemplateOptions}
+                                            onchange={handleKBTemplateChange} dropdown-alignment="auto" required><!--05-->
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12">
+                                    <div class="slds-m-top_small slds-p-horizontal_x-small">
+                                        <lightning-input type="text" label="KB Keyword" name="KBKeyword" onchange={handleKeywordChange}
+                                        value={kbCaseKeyword} required></lightning-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:true={showUpdateKbSection}>
+                            <div class="divcontainerborder slds-m-horizontal_x-small">
+                                <template if:true={showUpdateKBSectionSpinner}>
+                                    <div class="slds-is-relative" style="height:3.43rem">
+                                        <lightning-spinner alternative-text="Loading..." variant="brand" size="medium">
+                                        </lightning-spinner>
+                                    </div>
+                                </template>
+                                <template if:true={showSearchTokenError}>
+                                    <div class="slds-p-bottom_large slds-p-left_large" style="color:red;">
+                                        <br />
+                                    </div>
+                                </template>
+                                <template if:true={showSearchTokenSuccess}>
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label" for="text-input-id-1">{searchPlaceholder}</label>
+                                        <div class="slds-list_horizontal">
+                                            <lightning-input style="width: 50%;" type="text" id="kbsearchinput"
+                                                onchange={handleChangeSearchTerm} variant="label-hidden" autocomplete="off"
+                                                placeholder={searchPlaceholder}>
+                                            </lightning-input>
+                                            <lightning-button class="slds-var-m-left_x-small" variant="brand"
+                                                onclick={handleSearchClick} name="Search" label="Search">
+                                            </lightning-button>
+                                            <lightning-button class="slds-var-m-left_x-small" variant="brand"
+                                                onclick={handleClearKBSpace} name="Clear" label="Clear">
+                                            </lightning-button>
+                                        </div>
+                                        <template if:true={showKBSpaceSearchSpinner}>
+                                            <div class="slds-is-relative" style="height:13.5rem">
+                                                <lightning-spinner alternative-text="Loading..." variant="brand" size="medium">
+                                                </lightning-spinner>
+                                            </div>
+                                        </template>
+                                        <template if:true={showSearchSuccess}>
+                                            <div style="padding-top: 17px;padding-bottom: 7px;">Search Result </div>
+                                            <div>
+                                                <lightning-datatable hide-checkbox-column="true" key-field="sfid" data={kbSearchData}
+                                                    columns={kbcolumnswithadd} onrowaction={handleKBRowActionAdd}>
+                                                </lightning-datatable>
+                                            </div>
+                                        </template>
+                                        <template if:true={showSearchNoResult}>
+                                            <div style="padding-top: 17px;height:13.5rem;">No Result</div>
+                                        </template>
+                                    </div>
+                
+                                </template>
+                            </div>
+                        </template>
+                        <template if:true={showErrorInKb}>
+                            <div class="slds-m-top_small slds-m-left_xx-small"
+                                style="color:#FF0000;padding-top: 17px;padding-bottom: 7px;">
+                                No Case Article Found. Please associate a case;
+                            </div>
+                        </template>
+                    
+                </template>
+            </div>
+
+            <footer class="slds-modal__footer">
+                <div class="slds-col slds-align_absolute-center">
+                    <template if:true={showSaveButton}>
+                        <lightning-button class="save-btn slds-var-m-left_x-small"
+                                                variant="brand"
+                                                type="submit"
+                                                name="Save"
+                                                label="Save">
+                        </lightning-button>
+                    </template>
+                    <template if:true={showBackButton}>
+                        <lightning-button class="slds-var-m-left_x-small"
+                            variant="brand"
+                            onclick={handleBackClick}
+                            name="Back"
+                            label="Back">
+                        </lightning-button>
+                    </template>  
+                </div>
+            </footer>
+        </lightning-record-edit-form>
+    </div>
+</template>

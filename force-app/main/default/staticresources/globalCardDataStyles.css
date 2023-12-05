@@ -1,0 +1,15 @@
+/* Slot Buttons. */
+.globalCardDataRow .slds-card__header .slds-no-flex {
+	margin-top: -21px;
+    margin-right: -20px;
+    margin-bottom: -22px;
+}
+
+/* Container. */
+.globalCardDataRow article.slds-card.slds-card_narrow {
+	margin-top: -21px;
+    background-color: transparent;
+}
+.globalCardDataRow .slds-card__body {
+    margin-bottom: 0px;
+}

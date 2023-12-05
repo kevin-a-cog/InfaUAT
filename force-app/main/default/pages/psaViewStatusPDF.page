@@ -1,0 +1,231 @@
+<apex:page language="en-US" standardController="Status_Report__c" renderAs="pdf" applyBodyTag="false" showHeader="false"
+           extensions="psaStatusReportController">
+    
+    <head>
+        <style type="text/css" media="print">
+            @page {
+            size: A4;
+            padding-top: 40px;
+            @top-center {
+            content: element(header);
+            }
+            @bottom-left {
+            content: element(footer);
+            }
+            }
+            div.header {
+            padding: 10px;
+            position: running(header);
+            width: 100%
+            }
+            div.footer {
+            display: block;
+            padding: 5px;
+            position: running(footer);
+            }
+            .pagenumber:before {
+            content: counter(page);
+            }
+            .pagecount:before {
+            content: counter(pages);
+            }
+            table {
+            -fs-table-paginate: paginate;
+            border-collapse: collapse;
+            }
+            thead {
+            display: table-header-group;
+            }
+            
+        </style>
+    </head>
+    
+    <body>
+        <div class="header" name="header">            
+            <apex:image value="{!$Resource.StatusReportHeaderLogo}" width="100%"/>            
+        </div> 
+        <div class="footer">
+            <div>Page <span class="pagenumber"/> of <span class="pagecount"/></div>
+        </div>
+        
+        <div class="content">
+            <div style="text-align:center;"> 
+                <h style="font-family:serif;font-size: 20px;color: #8F2F0A;">{!Status_Report__c.Status_Report_Name__c}</h>
+            </div>
+            <apex:pageBlock rendered="{!hasStopLight}">
+                <table  style="margin-left: auto;margin-right: auto;border-collapse:collapse;">
+                    <tbody>
+                        <tr>
+                            <apex:repeat value="{!stopLightStr}" var="stopLight">
+                                <td>
+                                    <p style="text-align:right;"><span style='font-family:serif;'>&nbsp;{!stopLight}&nbsp;</span></p>
+                                </td>
+                                <td>
+                                    <p style="text-align:right;"><span>&nbsp;<apex:image id="theImage" value="{!stopLightMap[stopLight]}" width="15px" height="15px" />&nbsp;</span></p>
+                                </td>
+                            </apex:repeat>
+                        </tr>
+                    </tbody>
+                </table>
+            </apex:pageBlock>
+            <p><span style='font-family:serif;'>Status Report Period : &nbsp; <apex:outputText value="{0,date,MM/dd/yyyy}">
+                <apex:param value="{!Status_Report__c.PSA_PM_Status_Report_Week__c-7}" />
+                </apex:outputText> -&nbsp;<apex:outputText value="{0,date,MM/dd/yyyy}">
+                <apex:param value="{!Status_Report__c.PSA_PM_Status_Report_Week__c-3}" />
+                </apex:outputText></span></p>
+            <p><span style='font-family:serif;'>Project Manager : {!projectManagerName}</span></p>
+            <br/>
+            <apex:pageBlock rendered="{!Status_Report__c.Executive_Summary__c != null}">
+                <p><span style="font-family:serif;color: #FF6A31;font-size: 20px;">Executive Summary</span></p>                
+                <p><apex:outputField style="font-family:Arial Unicode MS;color: #FF6A31;font-size: 22px;" value="{!Status_Report__c.Executive_Summary__c}" /></p>
+            </apex:pageBlock>
+            <br/>
+            <apex:pageBlock rendered="{!hasKey}">
+                <p><span style="font-family:serif;color: #FF6A31;font-size: 20px;">Key Accomplishments/Activities Worked</span>
+                    <apex:outputField style="font-family:Arial Unicode MS;color: #FF6A31;font-size: 22px;" value="{!Status_Report__c.PSA_PM_Key_Accomplishments__c}" /></p>
+            </apex:pageBlock>
+            <br/>
+            
+            <apex:pageBlock rendered="{!hasIssue}">
+                <div class="row other-pages"  >
+                    <p><span style="font-family:serif;color: #FF6A31;font-size: 20px;">Issues</span></p>
+                    <table border="1" style="width:100%;margin-left:auto;margin-right:auto;border-collapse:collapse;border: 1px solid black;border-style: solid;">
+                        <thead>
+                            <tr>
+                                <th style="width:30%;text-align: center;">
+                                    <strong><span style="font-family:serif;">Issue</span></strong>
+                                </th>
+                                <th style="width:42%;text-align: center;">
+                                    <strong><span style="font-family:serif;">Action Plan</span></strong>
+                                </th>
+                                <th style="width:15%;text-align: center;">
+                                    <strong><span style="font-family:serif;">Owner</span></strong>
+                                </th>
+                                <th style="width:15%;text-align: center;">
+                                    <strong><span style="font-family:serif;">Due Date</span></strong>
+                                </th>
+                                <th style="width:15%;text-align: center;">
+                                    <strong><span style="font-family:serif;">Status</span></strong>
+                                </th>
+                                <th style="width:13%;text-align: center;">
+                                    <strong><span style="font-family:serif;">Priority</span></strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <apex:repeat value="{!issuesLst}" var="issue">
+                                <tr style="page-break-inside: avoid;page-break-after: auto;">
+                                    <td style="width:20%;padding-left:10px;">
+                                        <span style="font-family:serif;">{!issue.PSA_Issue__r.pse__Issue_Description__c}</span>
+                                    </td>
+                                    <td style="width:32%;padding-left:10px;">
+                                        <span style="font-family:serif;">{!issue.PSA_Issue__r.pse__Action_Plan__c}</span>
+                                    </td>
+                                    <td style="width:15%;text-align: center;">
+                                        <span style="font-family:serif;">{!issue.PSA_Issue__r.PSA_Issue_Owner__c}</span>
+                                    </td>
+                                    <td style="width:15%;text-align: center;">
+                                        <span><apex:outputText value="{0,date,MM/dd/yyyy}">
+                                            <apex:param value="{!issue.PSA_Issue__r.PSA_Due_Date__c}" />
+                                            </apex:outputText></span>
+                                    </td>
+                                    <td style="width:15%;text-align: center;">
+                                        <span style="font-family:serif;">{!issue.PSA_Issue__r.PSA_Status__c}</span>
+                                    </td>
+                                    <td style="width:13%;text-align: center;">
+                                        <span style="font-family:serif;">{!issue.PSA_Issue__r.PSA_Priority__c}</span>
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </apex:pageBlock>
+            <br/>
+            <apex:pageBlock rendered="{!hasRisk}">
+                <div class="row other-pages">
+                    <p><span style="font-family:serif;color: #FF6A31;font-size: 20px;">Risks</span></p>
+                    <table border="1" style="width:100%;margin-left:auto;margin-right:auto;border-collapse:collapse;border: 1px solid black;border-style: solid;">
+                        <thead>
+                            <tr>
+                                <th style="width:30%;text-align:center;">
+                                    <strong><span style="font-family:serif;">Risk&nbsp;</span></strong>
+                                </th>
+                                <th style="width:42%;text-align:center;">
+                                    <strong><span style="font-family:serif;">Mitigation Plan</span></strong>
+                                </th>
+                                <th style="width:42%;text-align:center;">
+                                    <strong><span style="font-family:serif;">Owner</span></strong>
+                                </th>
+                                <th style="width:15%;text-align:center;">
+                                    <strong><span style="font-family:serif;">Status</span></strong>
+                                </th>
+                                <th style="width:13%;text-align:center;">
+                                    <strong><span style="font-family:serif;">Impact</span></strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <apex:repeat value="{!risksLst}" var="risk">
+                                <tr  style="page-break-inside: avoid;page-break-after: auto;">
+                                    <td style="width:30%;padding-left:10px">
+                                        <span style="font-family:serif;">{!risk.PSA_Risk__r.pse__Risk_Description__c}</span>
+                                    </td>
+                                    <td style="width:42%;padding-left:10px">
+                                        <span style="font-family:serif;">{!risk.PSA_Risk__r.pse__Mitigation_Plan__c}</span>
+                                    </td>
+                                    <td style="width:15%;text-align:center;">
+                                        <span style="font-family:serif;">{!risk.PSA_Risk__r.PSA_Risk_Owner__c}</span>
+                                    </td>
+                                    <td style="width:15%;text-align:center;">
+                                        <span style="font-family:serif;">{!risk.PSA_Risk__r.PSA_Status__c}</span>
+                                    </td>
+                                    <td style="width:13%;text-align:center;">
+                                        <span style="font-family:serif;">{!risk.PSA_Risk__r.PSA_Impact__c}</span>
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </apex:pageBlock>
+            <br/>
+            <apex:pageBlock rendered="{!hasNext}">
+                <div class="row other-pages"  >
+                    <p><span style="font-family:serif;color: #FF6A31;font-size: 20px;">Next Steps</span>
+                        <apex:outputField value="{!Status_Report__c.PSA_PM_Next_Steps__c}" /></p>
+                </div>
+            </apex:pageBlock>
+            <br/>
+            <apex:pageBlock rendered="{!hastimecards}">
+                <div class="row other-pages"  >
+                    <p><span style="font-family:serif;color: #FF6A31;font-size: 20px;">Hours Worked – Current Period</span></p>
+                    <table border="1" style="width:100%;margin-left:auto;margin-right:auto;border-collapse:collapse;border: 1px solid black;border-style: solid;">
+                        <thead>
+                            <tr>
+                                <th style="padding-left: 10px;">
+                                    <strong><span style="font-family:serif;">Resource</span></strong>
+                                </th>
+                                <th style="text-align: center;">
+                                    <strong><span style="font-family:serif;">IPS Project Hours Current Period</span></strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <apex:repeat value="{!timecardsLst}" var="timecard">
+                                <tr  style="page-break-inside: avoid;page-break-after: auto;">
+                                    <td style="padding-left: 10px;">
+                                        <span style="font-family:serif;">{!timecard.PSA_Timecard__r.pse__Resource__r.Name}</span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span style="font-family:serif;">{!timecard.PSA_Timecard__r.pse__Total_Hours__c}</span>
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </apex:pageBlock>
+        </div> 
+    </body>
+</apex:page>

@@ -1,0 +1,235 @@
+a {
+    color: #373737;
+    font-size: 16px;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #011aff;
+}
+
+@media screen and (min-width: 1400px) {
+    .container {
+        max-width: 1300px !important;
+    }
+}
+
+.infa-get-started-container {
+    padding: 30px 0px;
+}
+
+.infa-get-started-container.teal-container { 
+    background-color: #00a9bb;
+}
+
+.infa-get-started-container.grey-container { 
+    background-color: #eaeaea;
+}
+
+.infa-get-started-title {
+    font-size: 33px;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+.infa-get-started-description {
+    font-size: 16px;
+    font-weight: 300;
+    width: 88%;
+}
+@media screen and (max-width: 768px) {
+    .infa-get-started-content {
+        margin: 0 auto;
+        width: 92%;
+    }
+    .infa-get-started-title {
+        font-size: 24px;
+    }
+    .infa-get-started-description {
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+}
+
+.infa-get-started-banner-text .infa-get-started-title,
+.infa-get-started-banner-text .infa-get-started-description {
+    color: #ffffff;
+}
+
+.infa-gs-banner-links a {
+    color: #ffffff;
+    text-decoration: underline;
+    font-weight: 300;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.infa-gs-banner-links {
+    margin-top: 25px;
+}
+
+.infa-gs-banner-two-links {
+    display: flex;
+}
+.infa-gs-banner-left-link a {
+    border-right: 1px solid #ffffff;
+    padding-right: 15px;
+}
+.infa-gs-banner-right-link a {
+    padding-left: 15px;
+}
+@media screen and (max-width: 768px) {
+    .infa-gs-banner-two-links {
+        flex-direction: column;
+    }
+    .infa-gs-banner-left-link a,
+    .infa-gs-banner-right-link a {
+        padding: 0;
+        border: none;
+    }
+}
+
+.infa-video-thumbnail {
+    min-width: 393px;
+    height: auto;
+}
+@media screen and (max-width: 768px) {
+    .infa-video-thumbnail {
+        min-width: auto;
+    }
+}
+
+.infa-get-started-video {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.infa-get-started-video-parent{
+    position: relative;
+}
+@media screen and (max-width: 768px) {
+    .infa-get-started-video-parent {
+        width: 100%;
+    }
+}
+.in-get-started-video-play-btn {
+    position: absolute;
+    top: 87px;
+    left: 46%;
+    height: 52px;
+    width: 50px !important;
+    background: rgba(0, 26, 255, 0.6);
+    padding: 15px;
+    cursor: pointer;
+}
+.in-get-started-video-content {
+    line-height: 0;
+}
+@media screen and (max-width: 768px) {
+    .in-get-started-video-play-btn{
+        top: 65px;
+        left: 39%;
+    }
+
+}
+
+.in-get-started-video-play-btn:hover {
+    background: rgba(255, 77, 0, 0.6);
+}
+
+.in-video-modal-iframe {
+    width: 800px;
+    height: 450px;
+}
+
+.infa-get-started-video-dialog {
+    max-width: 800px;
+}
+
+@media screen and (max-width: 768px) {
+    .in-video-modal-iframe {
+        width: 100vw;
+        height: 234px;
+    }
+
+    .infa-get-started-video-dialog {
+        max-width: 100vw;
+        margin: 0;
+    }
+}
+
+.infa-get-started-video-body {
+    padding: 0;
+}
+
+.infa-get-started-video-close {
+    position: absolute;
+    z-index: 100;
+    right: 6px;
+    top: 12px;
+}
+
+.infa-get-started-video-close span {
+    color: #ffffff;
+}
+
+.infa-gs-links {
+    margin-top: 30px;
+}
+
+.infa-gs-links-title {
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.infa-gs-links ul {
+    padding: 0;
+}
+
+.infa-gs-links-list {
+    list-style-type: none;
+    margin-bottom: 15px;
+}
+
+.infa-gs-links-list a {
+    color: #011aff;
+    font-weight: 300;
+}
+
+.infa-get-started-description a{
+    color: #011aff;
+}
+
+
+.in-auth-videos-outerModalContent {
+    padding: 0;
+    max-width: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.in-auth-videos-popup {
+    overflow: hidden;
+}
+
+.in-auth-videos-popup-header {
+    border: 0px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.slds-modal__header {
+    padding: 0px;
+}
+
+.infa-modal__close{
+    position: absolute;
+    top: 0.5rem;
+    right: 0rem;
+}
+
+.infa-get-started-description-lib{
+    font-size: 14px !important;
+}

@@ -1,0 +1,7 @@
+<aura:component implements="force:appHostable,flexipage:availableForRecordHome,lightning:isUrlAddressable,force:hasRecordId,force:lightningQuickAction,lightning:actionOverride" access="global" >
+    <lightning:workspaceAPI aura:id="workspace"/> 
+    <lightning:navigation aura:id="navService"/>
+    <div class="backgroundColor">
+    	<c:notificationSubscription recordId = "{!v.recordId}" oncloseclicked="{!c.closeTab}"/>
+    </div>
+</aura:component>

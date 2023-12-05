@@ -1,0 +1,133 @@
+<!--
+/*
+ * Name			:	EventDetail
+ * Author		:	Narpavi Prabu
+ * Created Date	: 	 21/03/2022	
+ * Description	:	This LWC is used to create event in user group.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		              Description							                                     Tag
+ **********************************************************************************************************
+ Narpavi Prabu		  21/03/2022		 		Initial version.					                                                              N/A
+ Deeksha Shetty       17/10/2022                 I2RT-7272             Giving option for the admin/Leader to edit the events without               1
+                                                                       notifying the user
+ Deeksha Shetty       17/10/2022                 I2RT-7201             Event: Create an event window not showing the formatting options            2 
+ Deeksha Shetty       17/10/2022                 I2RT-7399             Event: Showing Timezone in create/Modify event page                         3                                                                      
+ */
+-->
+<template>
+
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+        aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open in-modal-wrapper">
+        <div class="slds-modal__container">
+            <div class="in-modal__content">
+
+                <!-- Modal Header -->
+                <header class="slds-modal__header in-modal__header">
+                    <button class="in-button--only-icon" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="xx-small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium slds-hyphenate">Create an Event</h2>
+                </header>
+
+                <!-- Modal Body -->
+                <div class="in-modal__faux-body">
+                    <div class="in-modal__body">
+
+                        <div class="slds-is-relative">
+                            <lightning-spinner alternative-text="Loading" size="medium" if:true={isLoading}>
+                            </lightning-spinner>
+                            <div class="event-create-form">
+                                <lightning-input type="text" name="Subject" label="Subject" value={objEvent.Subject}
+                                    onchange={inputChange} required>
+                                </lightning-input>
+                                
+                            <!--Tag 2 - Event: Create an event window not showing the formatting options -->
+                                <lightning-input-rich-text name="Description" label="Description"
+                                    value={objEvent.Description} onchange={inputChange} variant="bottom-toolbar"
+                                    message-when-bad-input="This field is required." valid={validity} required
+                                    label-visible>
+                                </lightning-input-rich-text>
+                                 <!--Tag 2 ends here-->
+
+                                  <!--Tag 3 starts -->
+
+                                <div class="help-tz">
+
+                                    <lightning-input type="datetime" name="StartDateTime" label="Start DateTime"
+                                        value={StartDateTime} min={todaydate} onchange={inputChange}
+                                        variant="label-stacked" required>
+                                    </lightning-input>
+
+                                    <div class="help-start-timeZone">
+                                        <span class="help-timeZone">{userTZ}</span>
+                                        <div class="help-icon-wrap">
+                                            <lightning-helptext class="iconwrap slds-p-top_none" content={toolTipMsg}>
+                                            </lightning-helptext>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="help-tz">
+
+                                    <lightning-input type="datetime" name="EndDateTime" label="End DateTime"
+                                        value={EndDateTime} min={todaydate} onchange={inputChange}
+                                        variant="label-stacked" required>
+                                    </lightning-input>
+                                    <div class="help-end-timeZone">
+                                        <span class="help-timeZone">{userTZ}</span>
+                                        <div class="help-icon-wrap">
+                                            <lightning-helptext class="iconwrap slds-p-top_none" content={toolTipMsg}>
+                                            </lightning-helptext>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!--Tag 3 ends -->
+
+                                <lightning-input type="text" name="Location" label="Location" value={objEvent.Location}
+                                    onchange={inputChange} required>
+                                </lightning-input>
+
+                                <lightning-combobox name="Type" label="Type" placeholder="Select Type"
+                                    options={typeOptions} value={objEvent.Type} onchange={inputChange} required>
+                                </lightning-combobox>
+
+                                <!--Tag 1 Starts-->
+                                <div class="help-text-icon">
+                                    <lightning-input class="mt-3" type="checkbox" name="emailNotify"
+                                        label="Notify all the members?" checked={showBool}
+                                        onchange={handleMailNotification}>
+                                    </lightning-input>
+
+                                    <div class="help-icon-wrap1">
+                                        <lightning-helptext class="iconwrap slds-p-top_none" content={mailhelpText}>
+                                        </lightning-helptext>
+                                    </div>
+                                </div>
+                                <!--Tag 1 Ends-->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <footer class="in-modal__footer in-btn-grp d-flex justify-content-end">
+                    <lightning-button style="padding-right: 18px" label="Create" onclick={createEvent}
+                        disabled={isLoading}>
+                    </lightning-button>
+                    <lightning-button label="Cancel" onclick={closeModal} disabled={isLoading}></lightning-button>
+                </footer>
+
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+
+</template>

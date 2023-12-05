@@ -1,0 +1,17 @@
+<!--This Page to Call Lighting Component for Custom Opportunity view all Related Products-->
+<apex:page standardController="OpportunityLineItem">
+    <apex:includeLightning />
+    <div id="lightning" />    
+    
+    <script>
+    var recordId = "{!JSENCODE($CurrentPage.parameters.actUrl)}";
+    
+    $Lightning.use("c:ViewAllOpportunityProductsApp", function() {
+        $Lightning.createComponent(
+            "c:ViewAllOpportunityProducts",
+            {"recordId" : recordId},
+            "lightning"
+        );
+    });
+    </script>
+</apex:page>

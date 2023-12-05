@@ -1,0 +1,93 @@
+<!--
+/*
+ * Name			:	globalNestedDataViewer
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	6/16/2021
+ * Description	:	Nested Data Viewer.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		6/16/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+	<!-- Initial iteration. -->
+	<template if:true={objInitialParameters}>
+		<div class="slds-is-relative">
+
+			<!-- Spinner. -->
+			<div class="spinner">
+				<template if:true={boolDisplaySpinner}>
+					<lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+				</template>
+			</div>
+			<lightning-card class="globalNestedDataViewer">
+				<p class="slds-p-horizontal_small">
+					<c-global-nested-data-viewer class="collapsiblePanel" obj-parameters={objParameters} onadditeration={addIterationToParent} 
+							onremoveiteration={removeIterationFromParent}></c-global-nested-data-viewer>
+				</p>
+			</lightning-card>
+		</div>
+	</template>
+
+	<!-- If the current iteration has a Panel. -->
+	<template if:true={objPanel}>
+		<lightning-accordion allow-multiple-sections-open active-section-name={lstActiveSections}>
+			<template for:each={objPanel.lstRecords} for:item="objRecord">
+				<lightning-accordion-section key={objRecord.strRecordId} name={objRecord.strLabel} label={objRecord.strLabel} data-level={objRecord.intLevel} 
+						data-accordion-id={objRecord.strRecordId}>
+					
+					<!-- Action buttons. -->
+					<template if:true={objRecord.boolHasActionButtons}>
+						<lightning-button-menu slot="actions" alternative-text={objRecord.objButtons.strAlternativeText} icon-size={objRecord.objButtons.strIconSize} 
+								menu-alignment={objRecord.objButtons.strMenuAlignment}>
+							<template for:each={objRecord.objButtons.lstButtons} for:item="objButton">
+								<lightning-menu-item key={objButton.strId} value={objButton.strValue} label={objButton.strLabel}></lightning-menu-item>
+							</template>
+						</lightning-button-menu>
+					</template>
+
+					<!-- Right-aligned text. -->
+					<template if:true={objParametersLocal.strHeaderLabel}>
+						<div slot="actions">{objParametersLocal.strHeaderLabel}</div>
+					</template>
+	
+					<!-- Collapsible panel checkbox. -->
+					<template if:true={objRecord.boolDisplayCheckbox}>
+						<lightning-input class="slds-is-absolute positionParentCheckboxes collapsibleCheckbox" data-id={objRecord.strRecordId} data-label={objRecord.strLabel} 
+								data-link-id={objRecord.strRecordId} onchange={checkUncheckOtherCheckboxes} type="checkbox" slot="actions" disabled={objRecord.boolIsCheckboxDisabled}
+								checked></lightning-input>
+					</template>
+	
+					<!-- Next iteration -->
+					<template if:true={objRecord.lstChildSections}>
+						<template for:each={objRecord.lstChildSections} for:item="objChildPanel">
+							<c-global-nested-data-viewer key={objChildPanel.strRecordId} class="collapsiblePanel" obj-parameters={objChildPanel} data-link-id={objRecord.strRecordId} 
+									str-record-id={objRecord.strRecordId} onchildcheboxchanged={updateCheckbox} onadditeration={addIterationToParent} 
+									onremoveiteration={removeIterationFromParent}></c-global-nested-data-viewer>
+						</template>
+					</template>
+				</lightning-accordion-section>
+			</template>
+		</lightning-accordion>
+	</template>
+
+	<!-- If the current iteration has a Table. -->
+	<template if:true={objTable}>
+		<template if:true={boolDisplayTable}>
+			<div class="tableElement">
+				&nbsp;
+				<template if:true={objParametersLocal.strHeaderLabel}>
+					<div class="slds-text-heading_medium">{objParametersLocal.strHeaderLabel}</div>
+				</template>
+				<c-global-data-table class="customDataTable" obj-parameters={objTable} onaction={executeAction}></c-global-data-table>
+			</div>
+		</template>
+	</template>
+</template>

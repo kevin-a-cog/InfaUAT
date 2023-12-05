@@ -1,0 +1,354 @@
+<!--
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 10-30-2020
+  @last modified by  : Sathish Rajalingam
+  Modifications Log 
+  Ver   Date         Author               Modification
+  1.0   10-28-2020   Sathish Rajalingam   Initial Version
+
+Change History
+***************************************************************************************************************************************************
+Modified By            Date            Jira No.            Description                                                                   Tag
+***************************************************************************************************************************************************
+Deeksha Shetty        10-Apr-2023      I2RT-8075         UAT Env - Parameter article type - Issue observed in "Article Details" screen    T1
+                                                         
+-->
+
+<apex:page showHeader="false" standardcontroller="Knowledge__kav" extensions="knowledgeRenderAsPDF" applyBodyTag="false"
+    cache="False" applyHtmlTag="false" renderAs="pdf">
+
+    <html>
+
+    <head>
+        <link rel="stylesheet" href="{!$Resource.INFAKBResource + '/css/KBSharepointSalesforceMigration.css'}" type="text/css" />
+        <link rel="stylesheet" href="{!$Resource.INFAKBResource + '/css/KBSharepointSalesforceMigrationCoreV4.css'}" type="text/css"
+        />
+        <link rel="stylesheet" href="{!$Resource.INFAKBResource + '/css/header.css'}" type="text/css" />
+        <link rel="stylesheet" href="{!$Resource.INFAKBResource + '/css/article.css'}" type="text/css" />
+
+
+
+        <style type="text/css" media="print">
+            @page :first {
+                margin-left: 0mm;
+                margin-right: 0mm;
+                margin-top: 0mm;
+                margin-bottom: 15mm;
+                size: A4;
+
+            }
+
+            @page {
+                margin-left: 0mm;
+                margin-right: 0mm;
+                margin-top: 15mm;
+                margin-bottom: 15mm;
+                size: A4;
+
+            }
+            
+            {!NonEngCss}
+
+            .header {
+                background-color: black;
+                top: 0px;
+                width: 100%;
+                clear: both;
+            }
+
+            .header-content {
+                max-width: 700px;
+                margin: auto;
+            }
+
+            .header-content {
+                padding-top: 30px;
+                padding-left: 30px;
+                padding-bottom: 30px;
+            }
+
+            .content {
+
+                top: 150px;
+                width: 100%;
+
+            }
+
+            .article {
+
+                right: 0px;
+                left: 0px;
+                margin-left: 10mm;
+                margin-right: 10mm;
+            }
+
+            .article-title {
+                background-color: #F7F8F9;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                padding-left: 10mm;
+                padding-right: 10mm;
+            }
+
+            .content-block {
+                margin-bottom: 0px;
+                border-bottom: 1px solid #D4D4D4;
+                padding-bottom: 10px;
+                right: 0px;
+                left: 0px;
+                width: 100%;
+
+            }
+
+            .article-field-label {
+                padding-bottom: 15px;
+                padding-top: 10px;
+                padding-bottom: 6px;
+                padding-top: 10px;
+                font-size: 16px;
+            }
+
+            .article-field-value {
+                padding-bottom: 6px;
+                font-size: 13px;
+                line-height: 1.4em;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <div class="header">
+            <div class="header-content">
+                <apex:image value="{!URLFOR($Resource.INFAKBResource,'images/INlogo.png')}" />
+            </div>
+        </div>
+        <div class="content">
+            <apex:pageBlock >
+                <div class="article-title">
+                    <apex:outputfield value="{!knwldgeRec.title}" />
+                </div>
+                <div class="article">
+                    <apex:outputpanel rendered="{!knwldgeRec.Description__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Description</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Description__c}" />
+                            </div>
+                           
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Solution__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Solution</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Solution__c}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Additional_Information__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Additional Information</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.Additional_Information__c}" />
+                            </div>
+                           </div>
+                    </apex:outputpanel>                    
+                    
+                    <!-- T1 starts -->                    
+                    <apex:outputpanel rendered="{!knwldgeRec.Parameter_Name__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Parameter Name</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Parameter_Name__c}" />
+                            </div>
+                           
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Definition__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Definition</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Definition__c}" />
+                            </div>
+                           
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Component_Applicable__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Component Applicable</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Component_Applicable__c}" />
+                            </div>
+                           
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Parameter_Data_Type__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Parameter Data Type</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Parameter_Data_Type__c}" />
+                            </div>
+                           
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Recommended_Value__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Recommended Value</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Recommended_Value__c}" />
+                            </div>
+                           
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Behavior_with_Default_Value__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Behavior with Default Value</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Behavior_with_Default_Value__c}" />
+                            </div>
+                           
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Alternate_Value__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Alternate Value</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Alternate_Value__c}" />
+                            </div>
+                           
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Behavior_with_Alternate_value__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Behavior with Alternate value</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Behavior_with_Alternate_value__c}" />
+                            </div>
+                           
+                        </div>
+                    </apex:outputpanel>                    
+                    <apex:outputpanel rendered="{!knwldgeRec.Possible_Error_Symptoms__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Possible Error Symptoms</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Possible_Error_Symptoms__c}" />
+                            </div>
+                           
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Error_Signatures__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Error Signatures</div>
+                            <div>
+                                <apex:outputfield value="{!knwldgeRec.Error_Signatures__c}" />
+                            </div>
+                           
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Steps_to_configure_the_parameter__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Steps to configure the parameter</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.Steps_to_configure_the_parameter__c}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Any_additional_details_like_Screenshots__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Additional Information</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.Any_additional_details_like_Screenshots__c}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <!-- T1 ends -->
+                    <apex:outputpanel rendered="{!knwldgeRec.Problem_Type__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Problem Type</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.Problem_Type__c}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.User_Types__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">User Type</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.User_Types__c}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Project_Phases__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Project Phases</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.Project_Phases__c}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Primary_Product__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Primary Product</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.Primary_Product__c}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Product_Component__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Product Component</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.Product_Component__c}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Product_Version__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Product Version</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.Product_Version__c}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Also_Applies_To__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Also Applies To</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.Also_Applies_To__c}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.Last_Modified_Date__c != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Last Modified Date</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.Last_Modified_Date__c}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.urlname != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">URL Name</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.urlname}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!knwldgeRec.urlname != null}">
+                        <div class="content-block">
+                            <div class="article-field-label">Language</div>
+                            <div class="article-field-value">
+                                <apex:outputfield value="{!knwldgeRec.language}" />
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                </div>
+            </apex:pageBlock>
+        </div>
+    </body>
+
+    </html>
+</apex:page>

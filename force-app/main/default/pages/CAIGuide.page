@@ -1,0 +1,13 @@
+<!--
+*  @VF Page: CAIGuide
+*  @Author: Nishit S
+*  @Date: Aug 17 2023
+*  @Description:
+-->
+<apex:page id="pageId">
+    <apex:slds />
+    <!--Displaying the ICRT Guide-->
+    <apex:PageBlock id="icrt" rendered="true">
+        <icrt:AeSalesGuides alwaysNewGuide="true" guideName="{!$CurrentPage.parameters.guideName}" objectType="{!$CurrentPage.parameters.objectName}" objectId="{!$CurrentPage.parameters.objectId}" height="600px"/>      
+    </apex:PageBlock>
+</apex:page>

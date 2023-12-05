@@ -1,0 +1,51 @@
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium"
+        aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Edit Shift
+                    Request</h2>
+            </header>
+            <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1" style="overflow: initial;">
+                <lightning-record-edit-form object-api-name="Shift_Request__c" name='shiftRequestAdd'
+                    record-id={shiftRequestId}>
+                    <lightning-layout multiple-rows>
+                        
+                        <lightning-layout-item size="6">
+                            <div class="slds-var-m-left_x-small">
+                                <lightning-input-field field-name="Skill__c" required data-ind={ind}
+                                    data-name="Skill__c" variant="label-stacked">
+                                </lightning-input-field>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6">
+                            <div class="slds-var-m-right_x-small">
+                                <lightning-input-field field-name="Resource_Count__c" data-ind={ind}
+                                    variant="label-stacked" required data-name="Resource_Count__c">
+                                </lightning-input-field>
+                            </div>
+                        </lightning-layout-item>
+                        
+                    </lightning-layout>
+                </lightning-record-edit-form>
+            </div>
+            <footer class="slds-modal__footer">
+                <template if:true={showSpinner} class="slds-is-relative">
+                    <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+                </template>
+                <button class="slds-button slds-button_neutral" name="cancelShiftPlan"
+                    onclick={handleClick}>Cancel</button>
+                <lightning-button icon-name="utility:close" variant="destructive-text"
+                    class="slds-float_left  slds-var-m-left_small" onclick={handleClick} label="Delete" name="removeReq">
+                </lightning-button>
+                <lightning-button class="slds-var-m-top_small slds-var-m-left_small" variant="brand" name="saveShiftPlan"
+                    label="Save" onclick={handleClick}>
+                </lightning-button>
+            </footer>
+        </div>
+        <!--remove-request style="color:white;" -->
+
+    </section>
+
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

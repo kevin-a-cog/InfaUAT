@@ -1,0 +1,126 @@
+<template>
+    <template if:true={isAskQuestionModal}>
+        <c-help-group-ask-a-question heading={heading} selectedpostto={recordId} onclosepopup={closeAskQuestionModal}
+            onsave={saveData} is-loading={isSpinnerLoading}>
+        </c-help-group-ask-a-question>
+    </template>
+    <template if:true={showAnnouncementModal}>
+        <c-help-create-announcement heading="Create an Announcement" group-id={recordId}
+            onclosepopup={closeAnnouncementModal} onsave={createAnnouncement}>
+        </c-help-create-announcement>
+    </template>
+    <template if:true={showAnnouncementsModal}>
+        <c-help-edit-announcements announcements={announcements} heading="Edit Announcements" group-id={recordId}
+            onclosepopup={closeAnnouncementsModal} onsave={saveAnnouncement}>
+        </c-help-edit-announcements>
+    </template>
+
+    <template if:true={showGroupModal}>
+        <c-help-group-create-event selectedpostto={recordId} onclose={closeEventModal}> </c-help-group-create-event>
+    </template>
+
+    <template if:true={showpollModal}>
+        <c-help-create-poll-post selectedpostto={recordId} onclosemodal={closePollModal}> </c-help-create-poll-post>
+    </template>
+
+    <template if:true={isGuestUser}>
+        <div class="in-group-actions-container">
+            <ul>
+                <template if:false={isFollowing}>
+                    <template if:true={ispublicGroup}>
+                        <h4 class="in-heading in-teal in-heading-bottom mb-0">Actions</h4>
+                        <li class="list-item">
+                            <div class="action-item" onclick={handlejoinGroup}>
+                                <img src={followgroupLogo} alt="group" class="in-group-action-icon">
+                                <div class="action-name">Join the Group</div>
+                            </div>
+                        </li>
+                    </template>
+                </template>
+            </ul>
+        </div>
+    </template>
+
+
+    <template if:false={isGuestUser}>
+        <div class="in-group-actions-container">
+            <ul>
+                <h3 class="in-heading in-teal in-heading-bottom mb-0">Actions</h3>
+                <template if:false={isFollowing}>
+                    <template if:true={ispublicGroup}>
+                        <li class="list-item">
+                            <div class="action-item" onclick={handlejoinGroup}>
+                                <img src={followgroupLogo} alt="group" class="in-group-action-icon">
+                                <div class="action-name">Join the Group</div>
+                            </div>
+                        </li>
+                    </template>
+                    <template if:true={isprivateGroup}>
+                        <li class="list-item">
+                            <div class="action-item" onclick={handleasktojoinagroup}>
+                                <img src={followgroupLogo} alt="group" class="in-group-action-icon">
+                                <div class="action-name">Ask to Join the Group</div>
+                            </div>
+                        </li>
+                    </template>
+                </template>
+                <template if:true={isFollowing}>
+                    <template if:true={showAskAQuestion}>
+                        <li class="list-item">
+                            <div class="action-item" onclick={handleAskQuestion}>
+                                <img src={questionLogo} alt="question" class="in-group-action-icon">
+                                <div class="action-name">Ask a Question</div>
+                            </div>
+                        </li>
+                    </template>
+                    <li class="list-item">
+                        <div class="action-item" onclick={handleCreatePoll}>
+                            <img src={createpolllogo} alt="Poll" class="in-group-action-icon">
+                            <div class="action-name">Create a Poll</div>
+                        </div>
+                    </li>
+                    <template if:true={isGroupAdmin}>
+                        <!-- T3 - show options to group admin - internal user condition not required <template if:true={isInternaluser}></template>-->
+                            <li class="list-item">
+                                <div class="action-item" onclick={handleCreateEvent}>
+                                    <img src={createeventLogo} alt="event" class="in-group-action-icon">
+                                    <div class="action-name">Create an Event</div>
+                                </div>
+                            </li>
+                        
+                        <li class="list-item">
+                            <div class="action-item" onclick={handleCreateAnnouncement}>
+                                <img src={announcementLogo} alt="announcement" class="in-group-action-icon">
+                                <div class="action-name">Create an Announcement</div>
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <div class="action-item" onclick={handleEditAnnouncements}>
+                                <img src={announcementLogo} alt="announcement" class="in-group-action-icon">
+                                <div class="action-name">Edit Announcements</div>
+                            </div>
+                        </li>
+                    </template>
+                </template>
+                <template if:true={isFollowing}>
+                    <li class="list-item">
+                        <div class="action-item" onclick={openLink}>
+                            <img src={leadausergrouplogo} alt="group" class="in-group-action-icon">
+                            <div class="action-name">Lead a User Group</div>
+                        </div>
+
+                    </li>
+                </template>
+                <!-- <template if:true={ispublicGroup}></template> -->
+                <template if:true={isFollowing}>
+                    <li class="list-item">
+                        <div class="action-item" onclick={handleunfollowgroup}>
+                            <img src={leaveGroupLogo} alt="group" class="in-group-action-icon">
+                            <div class="action-name">Leave the Group</div>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,43 @@
+<template>
+    <template if:true={showBadges}>
+        <div class="in-gamification-container">
+            <div class="in-heading in-teal in-heading-bottom">Badges</div>
+            <ul>
+
+                <li class="list-item">
+                    <div class="item-flex">
+                        <div class="in-gamification-badge-container">
+                            <template if:true={onestar}>
+                                <div>
+                                    <img class="help-gam-badge" src={onestarimg}>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="in-gamification-badge-container">
+                            <template if:true={twostar}>
+                                <div>
+                                    <img class="help-gam-badge" src={twostarimg}>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="in-gamification-badge-container">
+                            <template if:true={threestar}>
+                                <div>
+                                    <img class="help-gam-badge" src={threestarimg}>
+                                </div>
+                            </template>
+
+                        </div>
+                        <div class="in-gamification-badge-container">
+                            <template if:true={fourstar}>
+                                <div>
+                                    <img class="help-gam-badge" src={fourstarimg}>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </template>
+</template>

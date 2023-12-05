@@ -1,0 +1,11 @@
+.file-upload-input {
+    display: block;
+}
+
+.file-upload-input .slds-file-selector_files .slds-file-selector__body {
+    margin-bottom: 0;
+}
+
+.custom-textarea {
+    --sds-c-textarea-sizing-min-height:100px;
+}

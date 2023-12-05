@@ -1,0 +1,138 @@
+<!--
+/*
+ * Name			:	EventDetail
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	09/02/2022
+ * Description	:	This LWC is used to display the deatils related to the event.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description							Tag
+ **********************************************************************************************************
+ Vignesh Divakaran		09/02/2022		I2RT-5251		Initial version.					N/A
+ */
+-->
+<template>
+
+    <!-- Show spinner when the component is loading -->
+    <template if:true={isLoading}>
+        <div class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+    </template>
+
+    <!-- Show data when the component has finished loading-->
+    <template if:false={isLoading}>
+
+        <div class="container in-events-container">
+
+            <div class="in-event-heading">{objEvent.Subject}</div>
+            <div style="display: flex;margin-top: 1%;">
+                <div class="in-event-visibility">{objEvent.eventVisibility}</div>
+                <div class="in-event-type">{objEvent.Type}</div>
+            </div>
+
+            <br><br>
+            <lightning-formatted-rich-text class="description" value={objEvent.Description}>
+            </lightning-formatted-rich-text>
+            <br><br>
+
+            <div class="in-event-heading">Time & Location</div>
+            <div class="in-event-info-container">
+                <div class="in-event-info-item-container">
+                    <div class="in-event-info-item">
+                        <div class="in-event-info-item-content">
+                            <img class="event-img-size" src={Icons.Calender} alt="Calender" />
+                        </div>
+                        <div class="in-event-info-item-content">
+                            <span class="in-event-datetime">{objEvent.eventDateTimeFormatted}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="in-event-info-item-container">
+                    <div class="in-event-info-item">
+                        <div class="in-event-info-item-content">
+                            <img class="event-img-size" src={Icons.LocationMarker} alt="Calender" />
+                        </div>
+                    </div>
+                    <template if:true={vaUrl}>
+                        <div class="in-event-info-item">
+                            <div class="in-event-info-item-content">
+                                <a href={objEvent.Location} target="_blank"
+                                    class="in-event-location">{objEvent.Location}</a>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:false={vaUrl}>
+                        <div class="in-event-info-item">
+                            <div class="in-event-info-item-content">
+                                <span class="in-event-location">{objEvent.Location}</span>
+                            </div>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+            <br><br><br>
+
+            <div class="in-event-heading">Event Details</div>
+            <div class="in-event-info-container">
+                <div class="in-event-info-item-container">
+                    <div class="in-event-info-item">
+                        <div class="in-event-info-item-content">
+                            <img class="event-img-size" src={Icons.Calender} alt="Calender" />
+                        </div>
+                        <div class="in-event-info-item-content">
+                            <span class="in-event-status">{eventstatus}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <template if:true={groupName}>
+                    <div class="in-event-info-item-container">
+                        <div class="in-event-info-item">
+                            <div class="in-event-info-item-content">
+                                <lightning-icon class="orange-icon" icon-name="utility:groups" alternative-text="groups"
+                                    size="medium">
+                                </lightning-icon>
+                            </div>
+                            <div class="in-event-info-item-content">
+                                <span class="in-event-groupname">{groupName}</span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+            <br><br><br>
+
+            <div class="flexbox-container event-footer">
+                <template for:each={objEventOptions} for:item="eventOption">
+                    <template if:true={eventOption.switch}>
+                        <div class="flexbox-item event-footer-item" data-option={eventOption.on.key}
+                            key={eventOption.on.key} onclick={optionSelected}>
+                            <lightning-button-icon variant={eventOption.on.variant} name={eventOption.name}
+                                icon-name={eventOption.on.iconName} size={eventOption.on.size}
+                                class={eventOption.on.className}>
+                            </lightning-button-icon>
+                            <span data-option={eventOption.on.key}
+                                onclick={optionSelected}>{eventOption.on.label}</span>
+                        </div>
+                    </template>
+                    <template if:false={eventOption.switch}>
+                        <div class="flexbox-item event-footer-item" data-option={eventOption.off.key}
+                            key={eventOption.off.key} onclick={optionSelected}>
+                            <lightning-button-icon variant={eventOption.off.variant} name={eventOption.name}
+                                icon-name={eventOption.off.iconName} size={eventOption.off.size}
+                                class={eventOption.off.className}>
+                            </lightning-button-icon>
+                            <span data-option={eventOption.off.key}
+                                onclick={optionSelected}>{eventOption.off.label}</span>
+                        </div>
+                    </template>
+                </template>
+            </div>
+        </div>
+    </template>
+</template>

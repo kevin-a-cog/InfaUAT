@@ -1,0 +1,50 @@
+<template>
+
+    <template if:true={isPopout}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container styledPopIn" style="min-width: 100%;margin: 0;">
+                <header class="slds-modal__header">
+                    <div class="slds-page-header">
+                        <div class="slds-page-header__row">
+                            <div class="slds-page-header__col-title">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <span class="slds-icon_container" title="Incidents">
+                                            <lightning-icon icon-name="custom:custom103">
+                                            </lightning-icon>
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <div class="slds-page-header__name">
+                                            <div class="slds-page-header__name-title">
+                                                <h1>
+                                                    <span class="slds-page-header__title slds-truncate"
+                                                        title="Case Comments">Repro Environments</span>
+                                                </h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-page-header__col-actions">
+                                        <div class="slds-grid">
+                                            <div class="slds-col">
+                                                <lightning-button-icon icon-name="utility:pop_in" alternative-text="Pop In" onclick={handlepopin}
+                                                    name="popin" class="slds-m-left_small styledPopIn" title="Pop In">
+                                                </lightning-button-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>    
+                <c-repro-environments record-id={recordId}> </c-repro-environments>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <template if:false={isPopout}>
+    <c-repro-environments record-id={recordId} oncallrepro={setpop}> </c-repro-environments>
+    </template>
+</template>

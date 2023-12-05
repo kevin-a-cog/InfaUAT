@@ -1,0 +1,28 @@
+<!--
+* Name			:	globalCommunitySelectedFilters
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	9/26/2022
+ * Description	:	This is used to show the selected filters and options to clear them.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Vignesh Divakaran	    9/26/2022		I2RT-6880		Initial version.			N/A
+ */
+-->
+<template>
+    
+    <div class="row row-paddings pt-0">
+        <template for:each={lstFilters} for:item="objFilter">
+            <div key={objFilter.strValue}>
+                <div class="in-search-cta search-filter">
+                    {objFilter.strValue}
+                    <lightning-icon class="ml-3 change-pointer" icon-name="utility:close" alternative-text="close" title="close" size="xx-small" data-value={objFilter.strValue} data-name={objFilter.strName} onclick={removeSelection}></lightning-icon>
+                </div>
+            </div>
+        </template>
+        <div class="pl-2 change-pointer clear-filter" onclick={clearAllFilters}>{strLabel}</div>
+    </div>
+
+</template>

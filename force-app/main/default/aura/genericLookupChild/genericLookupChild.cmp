@@ -1,0 +1,144 @@
+<!--
+         Change History
+*************************************************************************************************************************************
+    ModifiedBy               Date        Requested By        Description                                         Tag
+ Chandana Gowda			  30-Oct-2019       AR-1016       Modified the component to use Lightning:datatable        T1
+*************************************************************************************************************************************    
+-->
+<aura:component controller="genericLookupChildController" implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickActionwithoutHeader,flexipage:availableForAllPageTypes" access="global" >
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>    
+    <aura:handler event="force:refreshView" action="{!c.isRefreshed}" />
+    
+    <aura:attribute name="hasPermission" type="boolean" />
+    <aura:attribute name="customPermissions" type="List"/>
+    
+    <aura:attribute name="buttonName" type="String"/>    
+    <aura:attribute name="ParentObj" type="String"/>
+    
+    <aura:attribute name="Child1Object" type="String"/>	
+    <aura:attribute name="Child1ParentField" type="String"/>	
+    <aura:attribute name="Child1JunctionSourceObjField" type="String"/>
+    
+    <aura:attribute name="Child2Id" type="Id" />	
+    <aura:attribute name="Child2Object" type="String"/>
+    <aura:attribute name="Child2ParentField" type="String"/>
+    <aura:attribute name="Child2ParentRelationship" type="String"/>
+    
+    <aura:attribute name="JunctionObject" type="String"/>
+    <aura:attribute name="JunctionField1" type="String"/>
+    <aura:attribute name="JunctionField2" type="String"/>
+    <aura:attribute name="filterCriteria" type="String"/>
+    
+    <aura:attribute name="fieldSetName" type="String"/>
+    <aura:attribute name="searchFieldName" type="String"/>
+    
+    <aura:attribute name="JunctionField1SourceObj" type="String"/>	
+    
+    <aura:attribute name="searchKeyword" type="string" default=""/>
+    <aura:attribute name="pillsList" type="sObject[]" />     
+    <aura:attribute name="lstContacts" type="sObject[]"/>
+    <aura:attribute name="fieldarray" type="List" />
+    <aura:attribute name="fieldStrQry" type="String" />
+    <aura:attribute name="sortedBy" type="String"/>
+    <aura:attribute name="sortedDirection" type="String" default="asc"/>    
+    <aura:attribute name="saveBtnClicked" type="Boolean" default="false"/>
+    <aura:attribute name="lookupFields" type="List" default="[]"/>
+    <aura:attribute name="recordCount" type="String"/>
+    <aura:attribute name="riskrec" type="String" default=" "/>
+    <aura:attribute name="fromcreatescreen" type="Boolean" default="false" />
+    <aura:attribute name="selectedrec" type="String" default=" "/>
+    
+    
+    
+    <aura:html tag="style">
+        .slds-modal__container{
+            max-width: 100% !important;
+            width:90% !important;
+        }        
+    </aura:html>   
+    
+    <!-- check if user has csm permission -->
+    
+    <aura:if isTrue="{!v.JunctionObject}">
+        <aura:if isTrue="{!(!v.hasPermission) }">        
+            <lightning:icon iconName="utility:error" alternativeText="Error!" variant="error"/>
+            <p>It looks you do not have permission to perform this action.</p>
+        </aura:if>
+    </aura:if> 
+    
+    <aura:if isTrue="{!v.hasPermission }">
+        <aura:if isTrue="{!v.JunctionObject}"> 
+            
+            <!--The Search Box-->
+            <div class="slds-form-element">
+                <label class="slds-form-element__label slds-assistive-text" for="combobox-unique-id">Search</label>
+                <div class="slds-form-element__control">
+                    <div class="slds-combobox_container">
+                        <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">                            
+                            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                                <ui:inputText updateOn="keyup" keyup="{!c.searchContact}" aura:id="searchId" class="slds-input slds-combobox__input" value="{!v.searchKeyword}" placeholder="Search"/>                                
+                                <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right" title="Description of icon when needed">
+                                    <lightning:icon class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" iconName="utility:search" size="x-small" alternativeText="search"/>
+                                    <span class="slds-assistive-text">Description of icon</span>
+                                </span>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+            
+            <!--pill section that will show selected records-->  
+            <div class="slds-pill_container slds-pill_container_bare">                
+                <div id="listbox-unique-id" role="listbox">
+                    <ul class="slds-listbox" role="presentation">
+                        <li role="presentation" class="slds-listbox__item">
+                            <div class="slds-p-top--x-small">                                
+                                <aura:iteration var="pill" items="{!v.pillsList}">                                    
+                                    <lightning:pill label="{!pill.Name}" href="{!'/'+ pill.Id}" onremove="{!c.handleRemove }" name="{!pill.Id}">
+                                        <aura:set attribute="media">
+                                            <lightning:icon iconName="standard:contact"  alternativeText="Contact"/>
+                                        </aura:set>
+                                    </lightning:pill>
+                                </aura:iteration>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!--Table-->
+            <div class="slds-col modal-body scrollable slds-p-around--medium" style="height: 200px; max-height: 400px; overflow-y: auto !important">
+                <div class="slds-border_top">
+                    <lightning:datatable
+                                         columns="{! v.fieldarray }"
+                                         data="{! v.lstContacts }"
+                                         keyField="Id"
+                                         hideCheckboxColumn ="true"
+                                         showRowNumberColumn="false"
+                                         onrowaction="{! c.handleRowAction }"
+                                         onsort="{!c.handleSort}"
+                                         sortedBy="{!v.sortedBy}"
+                                         sortedDirection="{!v.sortedDirection}"
+                                         suppressBottomBar="true"
+                                         />                        
+                </div>
+                <div class="slds-text-body_regular">
+                    <div class="slds-clearfix">
+                        <div class="slds-float_right">
+                            {!v.recordCount} records returned
+                        </div>
+                    </div>
+                </div>            
+            </div>
+            
+            <div class="slds-col modal-footer slds-modal__footer">
+                <lightning:button variant="neutral" label="Cancel" onclick="{! c.CloseModalOne }"/>      
+                <aura:if isTrue="{!(v.showNext == true)? false : true}" >
+                    <lightning:button aura:id="saveBtn" label="Save" name="Save" variant="brand" onclick="{!c.save}" disabled="{!v.pillsList.length > 0 ? false : true}"/>
+                </aura:if>
+            </div> 
+        </aura:if> 
+    </aura:if>  
+</aura:component>

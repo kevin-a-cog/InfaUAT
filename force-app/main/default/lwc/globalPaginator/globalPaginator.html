@@ -1,0 +1,73 @@
+<!--
+/*
+ * Name			:	globalPaginator
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	6/21/2021
+ * Description	:	This LWC exposes the generica Paginator component created for Global.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		6/21/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+    <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+
+		<!-- Full Layout. -->
+		<template if:true={boolLayoutFull}>
+
+			<!-- Records per page. -->
+			<div class="slds-col">
+				<div  class="slds-list_inline slds-p-bottom_xx-small customSelect">
+					<label class="slds-text-color_weak slds-p-horizontal_x-small slds-p-top_x-small" for="recordsPerPage">{label.Records_Per_Page}</label> 
+					<div class="slds-select_container">
+						<select class="slds-select" id="recordsPerPage" onchange={handleRecordsPerPage}>
+							<template for:each={objPageSizeOptions} for:item="objOption">
+								<option key={objOption.intNumber} value={objOption.intNumber} selected={objOption.boolIsDefault}>{objOption.intNumber}</option>
+							</template>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<!-- Page navigation. -->
+			<div class="slds-col">
+				<div>
+					<div class="slds-col slds-p-bottom_xx-small">
+						<span >
+							<lightning-button-icon icon-name="utility:left" variant="bare" size="medium" alternative-text={label.Previous_Page} onclick={previousPage}></lightning-button-icon>
+						</span>
+						<label class="slds-text-color_weak slds-p-horizontal_x-small" for="pageNum">{label.Page}</label> 
+						<input type="number" id="pageNum" value={intPageNumber} maxlength="4" onkeypress={handlePageNumberChange} class="customInput" title={label.Go_To_Page}></input>
+						<span>&nbsp;{label.Of}&nbsp;<b id="totalPages">{intTotalPages}</b></span>
+						<span>
+							<lightning-button-icon icon-name="utility:right" variant="bare" size="medium" alternative-text={label.Next_Page} onclick={nextPage} 
+									class="slds-p-horizontal_x-small"></lightning-button-icon>
+						</span>
+					</div>
+				</div>
+			</div>
+		</template>
+
+		<!-- Simplified Layout. -->
+		<template if:true={boolLayoutSimplified}>
+			<div class="slds-col slds-size_3-of-12">&nbsp;</div>
+			<div class="slds-col slds-size_6-of-12">
+				<div class="slds-grid slds-gutters slds-grid_align-center">
+					<div class={strStyleClassPreviousIcon} onclick={previousPage}>
+						<lightning-icon icon-name="utility:chevronleft" size="small"></lightning-icon>
+					</div>
+					<template for:each={lstPages} for:item="objPage">
+						<div key={objPage.intNumber} class={objPage.strStyleClass} onclick={handlePageNumberChangeSimplified} data-page-number={objPage.intNumber}>{objPage.intNumber}</div>
+					</template>
+					<div class={strStyleClassNextIcon} onclick={nextPage}>
+						<lightning-icon icon-name="utility:chevronright" size="small"></lightning-icon>
+					</div>
+				</div>
+			</div>
+			<div class="slds-col slds-size_3-of-12">&nbsp;</div>
+		</template>
+    </div>
+</template>

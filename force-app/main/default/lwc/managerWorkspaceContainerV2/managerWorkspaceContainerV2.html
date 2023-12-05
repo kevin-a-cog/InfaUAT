@@ -1,0 +1,309 @@
+<!-- Change History
+****************************************************************************************************
+ModifiedBy      Date        Jira No.    Tag     Description
+****************************************************************************************************
+Isha Bansal     26/10/2023  I2RT-9220   T01     Placement of Teams component below the queue section under case accordion
+-->
+
+<template>
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+    <div class="slds-card">
+        <div class="slds-page-header slds-page-header_record-home ">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+
+                    <lightning-layout horizontal-align="spread">
+                        <lightning-layout-item size="4">
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="6">
+                                    <lightning-icon icon-name="utility:ad_set" class="fillRed" size="x-small">
+                                    </lightning-icon>
+                                    &nbsp;<span style="font-size: 8pt;">Engineer Workspace</span>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="2" class="slds-align_absolute-center">
+                            <h1>
+                                <span class="slds-page-header__title slds-truncate" title={header}>{header}</span>
+                            </h1>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" class="slds-is-relative">
+							<lightning-layout>
+
+								<!-- Autorefresh. -->
+								<template if:true={boolIsAutorefreshActive}>
+									<lightning-layout-item size="4">
+										<lightning-input type="toggle" label={strAutorefreshCounterLabel} name="autorefresh" class="autorefreshToggle slds-float_right" checked={boolIsAutorefreshActive}
+												onchange={activateDeactivateAutorefresh}></lightning-input>
+									</lightning-layout-item>	
+									<lightning-layout-item size="3">
+										<lightning-combobox value={strSelectedTimeframe} options={lstTimeframeOptions} onchange={changeTimeframe} class="timeframePicklist slds-p-left_small"></lightning-combobox>
+									</lightning-layout-item>
+									<lightning-layout-item size="1">
+					
+										<!-- Refresh Icon for table. -->
+										<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-left_xx-small slds-float_right" onclick={refreshTables} 
+												data-name="all"></lightning-button-icon>
+									</lightning-layout-item>
+									<lightning-layout-item size="4">
+										<lightning-button-group>
+											<lightning-button label="Queues" onclick={handleClick} name="queues"
+												variant={stateVariant.queueVariant}>
+											</lightning-button>
+											<lightning-button label="All" onclick={handleClick} name="all"
+												variant={stateVariant.allVariant}>
+											</lightning-button>
+											<lightning-button label="Teams" onclick={handleClick} name="teams"
+												variant={stateVariant.teamsVariant}>
+											</lightning-button>
+											<lightning-button style="margin-left:10px;" label="Dashboard" onclick={handleClick} name="dashboard"
+												variant={stateVariant.dashboardVariant}>
+											</lightning-button>
+										</lightning-button-group>
+									</lightning-layout-item>
+								</template>
+								<template if:false={boolIsAutorefreshActive}>
+									<lightning-layout-item size="6">
+										<lightning-input type="toggle" label={strAutorefreshCounterLabel} name="autorefresh" class="autorefreshToggle slds-float_right" checked={boolIsAutorefreshActive}
+												onchange={activateDeactivateAutorefresh}></lightning-input>
+									</lightning-layout-item>
+									<lightning-layout-item size="1">
+					
+										<!-- Refresh Icon for table. -->
+										<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-left_xx-small slds-float_right" onclick={refreshTables} 
+												data-name="all"></lightning-button-icon>
+									</lightning-layout-item>
+									<lightning-layout-item size="5">
+										<lightning-button-group>
+											<lightning-button label="Queues" onclick={handleClick} name="queues"
+												variant={stateVariant.queueVariant}>
+											</lightning-button>
+											<lightning-button label="All" onclick={handleClick} name="all"
+												variant={stateVariant.allVariant}>
+											</lightning-button>
+											<lightning-button label="Teams" onclick={handleClick} name="teams"
+												variant={stateVariant.teamsVariant}>
+											</lightning-button>
+											<lightning-button style="margin-left:10px;" label="Dashboard" onclick={handleClick} name="dashboard"
+												variant={stateVariant.dashboardVariant}>
+											</lightning-button>
+										</lightning-button-group>
+									</lightning-layout-item>
+								</template>
+							</lightning-layout>
+                        </lightning-layout-item>
+                    </lightning-layout>
+ 
+                </div>
+            </div>
+        </div>
+
+        <lightning-accordion active-section-name={activeSections} allow-multiple-sections-open>
+            <template if:true={isShowCases}>
+                <lightning-accordion-section name="Case" label="Case">
+                    <div class="slds-p-around_small">
+                        <!-- <lightning-layout horizontal-align="spread"> --> <!--T01 : commented this-->
+                            <template if:true={isShowQueue}>								
+								<div class="slds-text-heading_medium" ><!--T01-->
+									<h2 >Queues</h2> <!--T01-->
+								</div>							
+                               <!--  <lightning-layout-item size={columnSize} class="slds-p-right_small"> --> <!--T01 : commented this-->
+									<section class={objCaseQueuesModalProperties.strClassesSection}>
+										<div class={objCaseQueuesModalProperties.strClassesContainer} style={objCaseQueuesModalProperties.strStyleContainer}>
+											<div style={objCaseQueuesModalProperties.strStyleContent}>
+												<div class={objCaseQueuesModalProperties.strClassesBody}>
+													<c-manager-workspace-queues-v2 class="targetTable" onopenmodal={openModal} onchildconfiguration={childConfiguration} 
+															data-component="Queues" onpopout={popOut} str-field-set-name="Manager_Workspace_Section_Case"></c-manager-workspace-queues-v2>
+												</div>
+											</div>
+										</div>
+									</section>
+                               <!--    </lightning-layout-item> -->
+                            </template>
+                            <template if:true={isShowTeams}>								
+								<div class="slds-text-heading_medium slds-p-top_medium"> <!--T01-->
+									<h2 >Teams</h2> <!--T01-->
+								</div>
+							
+                             <!--     <lightning-layout-item size={columnSize} class="slds-p-left_small"> --> <!--T01 : commented this-->
+									<section class={objCaseTeamsModalProperties.strClassesSection}>
+										<div class={objCaseTeamsModalProperties.strClassesContainer} style={objCaseTeamsModalProperties.strStyleContainer}>
+											<div style={objCaseTeamsModalProperties.strStyleContent}>
+												<div class={objCaseTeamsModalProperties.strClassesBody}>													
+													<c-manager-workspace-teams-v2 class="targetTable" onopenmodal={openModal} onchildconfiguration={childConfiguration} 
+															data-component="Teams" onpopout={popOut} str-field-set-name="Manager_Workspace_Section_Case"></c-manager-workspace-teams-v2>
+												</div>
+											</div>
+										</div>
+									</section>
+                            <!--      </lightning-layout-item> -->
+                            </template>
+						
+                     <!--    </lightning-layout> -->
+                    </div>
+                </lightning-accordion-section>
+            </template>
+            
+            <template if:true={isShowQueue}>
+            <lightning-accordion-section name="RaiseHand " label="Collaborate ">
+                <div class="slds-p-around_small">
+                    <lightning-layout horizontal-align="spread">
+						<lightning-layout-item size="12" class="slds-p-right_small" >
+							<section class={objCollaborateModalProperties.strClassesSection}>
+								<div class={objCollaborateModalProperties.strClassesContainer} style={objCollaborateModalProperties.strStyleContainer}>
+									<div style={objCollaborateModalProperties.strStyleContent}>
+										<div class={objCollaborateModalProperties.strClassesBody}>
+											<c-manager-workspace-queues-v2 is-raise-hand class="targetTable" onopenmodal={openModal} onchildconfiguration={childConfiguration} 
+													data-component="Collaborate" onpopout={popOut} str-field-set-name="Manager_Workspace_Section_Collaborate"></c-manager-workspace-queues-v2>
+										</div>
+									</div>
+								</div>
+							</section>
+						</lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </lightning-accordion-section>
+            </template>
+
+            <template if:true={isShowQueue}>
+            <lightning-accordion-section name="Attention Request " label="Attention Request">
+                <div class="slds-p-around_small">
+                    <lightning-layout horizontal-align="spread">
+						<lightning-layout-item size="12" class="slds-p-right_small" >
+							<section class={objAttentionModalProperties.strClassesSection}>
+								<div class={objAttentionModalProperties.strClassesContainer} style={objAttentionModalProperties.strStyleContainer}>
+									<div style={objAttentionModalProperties.strStyleContent}>
+										<div class={objAttentionModalProperties.strClassesBody}>
+											<c-manager-workspace-queues-v2 is-urgent-request class="targetTable" onopenmodal={openModal} onchildconfiguration={childConfiguration} 
+													data-component="Attention" onpopout={popOut} str-field-set-name="Manager_Workspace_Section_Attention"></c-manager-workspace-queues-v2>
+										</div>
+									</div>
+								</div>
+							</section>
+						</lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </lightning-accordion-section>
+            </template>
+
+
+            <template if:true={isShowGEMS}>
+            <lightning-accordion-section name="Escalations(GEMS)" label="Escalations(GEMS)">
+                <div class="slds-p-around_small">
+                    <lightning-layout horizontal-align="spread">
+						<lightning-layout-item size="12" class="slds-p-left_small">
+							<section class={objEscalationsModalProperties.strClassesSection}>
+								<div class={objEscalationsModalProperties.strClassesContainer} style={objEscalationsModalProperties.strStyleContainer}>
+									<div style={objEscalationsModalProperties.strStyleContent}>
+										<div class={objEscalationsModalProperties.strClassesBody}>
+											<c-manager-workspace-Engagements-v2 class="targetTable" onopenmodal={openModal} onchildconfiguration={childConfiguration} 
+													data-component="Escalations" onpopout={popOut} str-field-set-name="Manager_Workspace_Section_GEMS"></c-manager-workspace-Engagements-v2>
+										</div>
+									</div>
+								</div>
+							</section>
+						</lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </lightning-accordion-section>
+            </template>
+
+            <template if:true={isShowDashboard}>
+                <lightning-accordion-section name="Operations Dashboard" label="Operations Dashboard">
+                    <div class="slds-p-around_small">
+                        <lightning-layout horizontal-align="spread">
+                                <lightning-layout-item size="12" class="slds-p-left_small">
+                                    
+                                    <iframe frameborder="0" title="data visualization" 
+                                        marginheight="0" marginwidth="0" 
+                                        style="display: block; width: 100%; height: 550px; visibility: visible;" 
+                                        src={metadataRecordURL}></iframe>
+                                </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </lightning-accordion-section>
+            </template>
+        </lightning-accordion>
+    </div>
+
+	<!-- Modal launched from Custom Cell clicks. -->
+	<template if:true={boolIsModalOpen}>
+		<section class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style={objCustomCellModalProperties.strStyleContainer}>
+				<div style={objCustomCellModalProperties.strStyleContent}>
+
+					<!-- Modal header. -->
+					<header class="slds-modal__header">
+						<lightning-layout>    
+							<lightning-layout-item size="11">
+								<h2 class="slds-text-heading_small">Change ownership</h2>
+							</lightning-layout-item>    
+							<lightning-layout-item size="1">
+								<template if:false={boolIsCustomCellModalPoppedOut}>
+									<lightning-button-icon icon-name="utility:new_window" class="slds-float_right" onclick={popOut}></lightning-button-icon>
+								</template>
+								<template if:true={boolIsCustomCellModalPoppedOut}>
+									<lightning-button-icon icon-name="utility:pop_in" class="slds-float_right" onclick={popOut}></lightning-button-icon>
+								</template>
+							</lightning-layout-item>
+						</lightning-layout>
+					</header>
+
+					<!-- Body. -->
+					<div class="slds-p-around_small slds-m-top_small slds-m-bottom_small modalBody">
+
+						<!-- Table section. -->
+						<div class="slds-is-relative">
+		
+							<!-- Spinner. -->
+							<template if:true={boolDisplayModalSpinner}>
+								<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+								<p>&nbsp;</p>
+							</template>
+			
+							<!-- Functionality. -->
+							<template if:false={boolDisplayModalSpinner}>
+
+								<!-- Table. -->
+								<template if:false={boolDisplayChangeOwnerLookupField}>
+									<c-global-data-table obj-parameters={objModalTable} onaction={executeAction}></c-global-data-table>
+									</template>
+
+								<!-- Lookup. -->
+								<template if:true={boolDisplayChangeOwnerLookupField}>
+								<!--	<lightning-record-edit-form object-api-name="Case">
+										<lightning-input-field field-name="Case_Owner_Manager__c" onchange={selectNewOwner}></lightning-input-field>
+									</lightning-record-edit-form>
+								-->
+									<c-custom-lookup-field label="" placeholder="Search People..." sobjectapiname="Case" onsearch={handleCombinedLookupSearch} onselectionchange={handleCombinedLookupSelectionChange} isusersearchonly="true" required> </c-custom-lookup-field>
+									<c-user-upcoming-events userid={idNewOwner} if:true={booldisplayftotable}></c-user-upcoming-events> <!-- T03 : I2RT-6727-->
+								</template>
+							</template>
+						</div>
+					</div>
+
+					<!-- Footer-->
+					<footer class={objCustomCellModalProperties.strClassesFooter} style={objCustomCellModalProperties.strStyleFooter}>
+						<lightning-button variant="neutral" label="Cancel" onclick={cancelOperation} class="slds-p-around_x-small" disabled={boolDisplayModalSpinner}></lightning-button>
+	
+						<!-- Main buttons. -->
+						<template if:false={boolDisplayChangeOwnerLookupField}>
+							<lightning-button variant="brand" label="Accept" onclick={autoAssign} class="slds-p-around_x-small" disabled={boolDisplayModalSpinner}></lightning-button>
+							<lightning-button variant="brand" label="Change Owner" onclick={changeOwner} class="slds-p-around_x-small" disabled={boolDisplayModalSpinner}></lightning-button>
+						</template>
+	
+						<!-- Change owner buttons. -->
+						<template if:true={boolDisplayChangeOwnerLookupField}>
+							<lightning-button variant="brand" label="Confirm Change" onclick={executeOwnerChange} class="slds-p-around_x-small" disabled={boolDisplayModalSpinner}></lightning-button>
+						</template>
+					</footer>
+				</div>
+            </div>
+        </section>
+		<template if:false={boolIsCustomCellModalPoppedOut}>
+			<div class="slds-backdrop slds-backdrop_open"></div>
+		</template>
+	</template>
+</template>

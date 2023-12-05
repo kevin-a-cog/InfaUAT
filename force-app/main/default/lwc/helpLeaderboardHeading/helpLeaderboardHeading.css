@@ -1,0 +1,21 @@
+.help-hof-heading-container {
+    margin-top: 24px;
+}
+@media screen and (max-width:768px) {
+    .help-hof-heading-container {
+        margin-left: auto;
+        margin-right: auto;
+        width: 92%;
+    }
+}
+.help-hall-of-fame-heading {
+    font-weight: 300;
+    font-size: 33px;
+    color: #373737;
+}
+
+@media screen and (max-width:768px) {
+    .help-hall-of-fame-heading {
+        font-size: 24px;
+    }
+}

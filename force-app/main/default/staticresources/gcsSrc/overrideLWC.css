@@ -1,0 +1,3 @@
+.custom-word-break .slds-cell-wrap .slds-hyphenate {
+    word-break: break-word;
+}

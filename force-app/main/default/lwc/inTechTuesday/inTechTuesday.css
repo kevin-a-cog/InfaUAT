@@ -1,0 +1,23 @@
+.TTClass{
+    width: 100%;
+    border: none;
+    min-height: 700px;
+}
+
+a.h3 {
+    font-size: 33px;
+    font-weight: 300;
+}
+
+.discussion-heading {
+    font-weight: 300;
+    font-size: 33.55px;
+    color: #373737;
+    margin-left: -10px;
+}
+  
+@media screen and (max-width: 768px) {
+    .discussion-heading {
+        font-size: 24px;
+    }
+}

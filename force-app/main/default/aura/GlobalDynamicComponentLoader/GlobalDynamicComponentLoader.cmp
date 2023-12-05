@@ -1,0 +1,47 @@
+<!--
+/*
+ * Name			:	GlobalDynamicComponentLoader
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	10/6/2022
+ * Description	:	This component loads Aura / LWC components, dynamically.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description										Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		10/06/2022		N/A				Initial version.								N/A
+ balajip				11/25/2022		I2RT-7519		added new component variable strCaseTabId		T01
+ */
+-->
+<aura:component implements="lightning:isUrlAddressable">
+
+	<!-- Variables. -->
+	<aura:attribute name="boolIsPoppedOut" type="Boolean" default="false" />
+	<aura:attribute name="strComponentName" type="String" default="" />
+	<aura:attribute name="strCaseTabId" type="String" default="" />
+	<aura:attribute name="lstCSS" type="List" default="[]" />
+
+	<!-- Handlers. -->
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+	<!-- APIs. -->
+	<lightning:workspaceAPI aura:id="workspace" />
+
+	<!-- Container. -->
+	<div class="container">
+		<div class="popOutContainer slds-col--bump-left">
+			<span>
+				<aura:renderIf isTrue="{!v.boolIsPoppedOut}">
+					<lightning:icon iconName="utility:pop_in" size="small" onclick="{!c.popIn}" class="pointer" />
+					<aura:set attribute="else">
+						<lightning:icon iconName="utility:new_window" size="small" onclick="{!c.popOut}" class="pointer" />
+					</aura:set>
+				</aura:renderIf>
+			</span>
+		</div>
+		<div>{!v.body}</div>
+	</div>
+
+	<!-- Custom CSS component loader. -->
+	<c:globalCustomCSSLWC aura:id="customCSSComponent" />
+</aura:component>

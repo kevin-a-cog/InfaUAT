@@ -1,0 +1,231 @@
+<!--
+/*
+ Change History
+ **************************************************************************************************************************
+ Modified By            Date            Jira No.            Description                                               Tag
+ **************************************************************************************************************************
+ balajip                05-Apr-2022     I2RT-5459           Added subtab My Tagged user the tab Internal              T01
+ Vignesh Divakaran      16-Jun-2022     I2RT-6503           Incorrect onactive handler                                T02
+ Karthi G               27-May-2022     I2RT-6196           Added code to handle platform event subscription         T03
+ Isha Bansal            22-Mar-2023     I2RT-7615           Show collaboration comment category comment in collaboration tab also  T04
+*/
+
+--><template>
+    <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+    <div class="slds-float_right">
+        <lightning-button-icon icon-name="utility:new_window" alternative-text="Pop Out" onclick={handleClick}
+            name="popout" class="slds-m-left_small" title="Pop Out">
+        </lightning-button-icon>
+    </div>
+   
+
+    <lightning-tabset>
+        
+          <!--Deva ITRT 2636 Updated tab labels dynamically to display unread counter-->   
+        <template if:true={showAllIcon}>
+          <lightning-avatar variant="circle" initials={allLabelText} fallback-icon-name="action:close" alternative-text={allLabelText}  class="slds-m-right_small tab1 my-fallback-color" size="x-small"></lightning-avatar>       
+        </template>
+        <lightning-tab label="All" value="All" onactive={resetLabels}>     
+            <c-case-comment-list-view data-my-id="Alltab" record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} onloadcomments={handleCommentData} onresetdata={resetLabels} tab-name="AllMainTab"></c-case-comment-list-view>
+        </lightning-tab> 
+        <template if:true={showInboundIcon}>
+            <lightning-avatar variant="circle" initials={inboundLabelText} fallback-icon-name="action:close" alternative-text={inboundLabelText} class="slds-m-right_small tab2 my-fallback-color" size="x-small"></lightning-avatar>       
+          </template>
+        <lightning-tab label="Inbound" value="Inbound" onactive={resetLabels}> 
+            <c-case-comment-list-view data-my-id="inboundtab" record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-inbound=TRUE></c-case-comment-list-view>
+        </lightning-tab>       
+        <!--Deva: Start:  I2RT-3566 :  Clubbing Attention Request Category should have the related to Escalation Call Back Revise Priority Live Assistance
+        Hence Commented the tabs which are not required and updated.
+        -->
+        <template if:true={showAttReqIcon}>
+            <lightning-avatar variant="circle" initials={attentionRequestLabelText} fallback-icon-name="action:close" alternative-text={attentionRequestLabelText} class="slds-m-right_small tab3 my-fallback-color fadeSmallCounterIcon" size="x-small"></lightning-avatar>       
+        </template>
+        <lightning-tab label="Attention Request" value="Attention Request" onactive={resetLabels}>        
+            <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="Attention Request"> </c-case-comment-list-view>
+        </lightning-tab>
+        <!--<lightning-avatar variant="circle" initials="4" fallback-icon-name="action:close" alternative-text="Salesforce" class="slds-m-right_small tab4 my-fallback-color" size="x-small"></lightning-avatar>            
+        <lightning-tab label={callbackLabelText} value={callbackLabelText} onactive={resetLabels}>      
+            <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="Callback"></c-case-comment-list-view>
+        </lightning-tab>
+        <lightning-avatar variant="circle" initials="5" fallback-icon-name="action:close" alternative-text="Salesforce" class="slds-m-right_small tab5 my-fallback-color" size="x-small"></lightning-avatar>            
+        <lightning-tab label={rpLabelText} value={rpLabelText} onactive={resetLabels}>      
+            <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="Revise Priority"></c-case-comment-list-view>
+        </lightning-tab>-->
+         <!--Deva: End:  I2RT-3566 : -->
+         <template if:true={showExternalIcon}>
+            <lightning-avatar variant="circle" initials={externalLabelText} fallback-icon-name="action:close" alternative-text={externalLabelText}  class="slds-m-right_small tab4 my-fallback-color fadeSmallCounterIcon" size="x-small"></lightning-avatar>       
+        </template>
+        <lightning-tab label="External" value="External" onactive={resetLabels}>   
+            <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="External"></c-case-comment-list-view>
+        </lightning-tab>
+        <template if:true={showInternalIcon}>
+            <lightning-avatar variant="circle" initials={internalLabelText} fallback-icon-name="action:close" alternative-text={internalLabelText}  class="slds-m-right_small tab5 my-fallback-color fadeSmallCounterIcon" size="x-small"></lightning-avatar>       
+        </template>
+        <lightning-tab label="Internal" value="Internal"  onactive={resetLabels}>
+            <!-- @Akhilesh 5 May 2021 - start-->
+            <!--<c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal"></c-case-comment-list-view>-->
+            <lightning-tabset>
+                <lightning-tab label="All" value="Internal-All" onactive={onActive}>
+                    <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="All" tab-name="InternalAllTab"></c-case-comment-list-view>
+                </lightning-tab>
+                <lightning-tab label="General Comments" value="Internal-General Comments" onactive={onActive}>
+                    <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="General Comments"></c-case-comment-list-view>
+                </lightning-tab>
+                <lightning-tab label="Handoff Summary" value="Internal-Handoff Summary" onactive={onActive}>
+                    <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="Handoff Summary"></c-case-comment-list-view>
+                </lightning-tab>
+                <lightning-tab label="Case Owner Review" value="Internal-Case Owner Review" onactive={onActive}>
+                    <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="Case Owner Review"></c-case-comment-list-view>
+                </lightning-tab>
+                <lightning-tab label="Manager Review" value="Internal-Manager Review" onactive={onActive}>
+                    <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="Manager Review"></c-case-comment-list-view>
+                </lightning-tab>
+                <lightning-tab label="Escalation Notes" value="Internal-Escalation Notes" onactive={onActive}>
+                    <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="Escalation Notes"></c-case-comment-list-view>
+                </lightning-tab>
+                <!-- T01 -->
+                <lightning-tab label="My Tagged" value="My Tagged">
+                    <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" tagged-user-id={curUserId}></c-case-comment-list-view>
+                </lightning-tab>
+            </lightning-tabset>
+        <!-- @Akhilesh 5 May 2021 - end-->
+        </lightning-tab>
+        <template if:true={showPrivateIcon}>
+            <lightning-avatar variant="circle" initials={privateLabelText} fallback-icon-name="action:close" alternative-text={privateLabelText} class="slds-m-right_small tab6 my-fallback-color fadeSmallCounterIcon" size="x-small"></lightning-avatar>       
+        </template>
+        <lightning-tab label="Private" value="Private" onactive={resetLabels}> <!-- T02 -->
+            <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Private"></c-case-comment-list-view>
+        </lightning-tab>
+        <template if:true={showRaiseHandIcon}>
+            <lightning-avatar variant="circle" initials={raiseHandLabelText} fallback-icon-name="action:close" alternative-text={raiseHandLabelText} class="slds-m-right_small tab7 my-fallback-color fadeSmallCounterIcon fadeMediumCounterIcon fadeLargerCounterIcon" size="x-small"></lightning-avatar>       
+        </template>
+        <lightning-tab label="Collaborate" value="Raise Hand" onactive={resetLabels}> <!-- T02 -->
+            <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="Raise Hand" comment-category="Collaboration"></c-case-comment-list-view> <!-- T04 I2RT-7615 added comment category parameter-->
+        </lightning-tab>
+        <template if:true={showJiraIcon}>
+            <lightning-avatar variant="circle" initials={jiraLabelText} fallback-icon-name="action:close" alternative-text={jiraLabelText} class="slds-m-right_small tab8 my-fallback-color fadeSmallCounterIcon fadeMediumCounterIcon fadeLargerCounterIcon" size="x-small"></lightning-avatar>       
+        </template>
+        <lightning-tab label="JIRA Request" value="JIRA Request" onactive={resetLabels}> <!-- T02 -->
+            <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="JIRA Request"></c-case-comment-list-view>
+        </lightning-tab>
+       <!--  <lightning-tab label="Tasks" value="Tasks" onactive={restLabels}>
+            <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="Tasks"></c-case-comment-list-view>
+        </lightning-tab> -->
+    </lightning-tabset>
+
+    <template if:true={isPopout}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+                <header class="slds-modal__header">
+                    <div class="slds-page-header">
+                        <div class="slds-page-header__row">
+                            <div class="slds-page-header__col-title">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <span class="slds-icon_container" title="Case Comments">
+                                            <lightning-icon icon-name="custom:custom103">
+                                            </lightning-icon>
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <div class="slds-page-header__name">
+                                            <div class="slds-page-header__name-title">
+                                                <h1>
+                                                    <span class="slds-page-header__title slds-truncate"
+                                                        title="Case Comments">Case Comments</span>
+                                                </h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-page-header__col-actions">
+                                        <div class="slds-grid">
+                                            <div class="slds-col">
+                                                <lightning-button-icon icon-name="utility:pop_in" alternative-text="Pop In" onclick={handleClick}
+                                                    name="popin" class="slds-m-left_small styledPopIn" title="Pop In">
+                                                </lightning-button-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="min-height: 87vh;">
+
+                    <div class="slds-m-around_small"> 
+                        <lightning-tabset>
+                            <lightning-tab label="All" value="All">
+                                <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen}></c-case-comment-list-view>
+                            </lightning-tab>
+                            <lightning-tab label="Inbound" value="Inbound">                                
+                                <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-inbound=TRUE></c-case-comment-list-view>
+                            </lightning-tab>
+                            <!--Deva: Start:  I2RT-3566 :  Clubbing Attention Request Category should have the related to Escalation Call Back Revise Priority Live Assistance
+                            Hence Commented the tabs which are not required and updated.
+                            -->
+                            <lightning-tab label="Attention Request" value="Attention Request">                               
+                                <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="Attention Request"> </c-case-comment-list-view>
+                            </lightning-tab>
+                            <!--<lightning-tab label="Callback" value="Callback">                              
+                                <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="Callback"></c-case-comment-list-view>
+                            </lightning-tab>
+                            <lightning-tab label="Revise Priority" value="Revise Priority">                               
+                                <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="Revise Priority"></c-case-comment-list-view>
+                            </lightning-tab>-->
+                            <!--Deva: End:  I2RT-3566 : -->
+                            <lightning-tab label="External" value="External">                               
+                                <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="External"></c-case-comment-list-view>
+                            </lightning-tab>
+                            <lightning-tab label="Internal" value="Internal">
+                                <!-- @Akhilesh 5 May 2021 - start-->
+                                <!--<c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal"></c-case-comment-list-view>-->
+                                <lightning-tabset>
+                                    <lightning-tab label="All" value="All">
+                                        <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="All" ></c-case-comment-list-view>
+                                    </lightning-tab>
+                                    <lightning-tab label="General Comments" value="General Comments">
+                                        <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="General Comments"></c-case-comment-list-view>
+                                    </lightning-tab>
+                                    <lightning-tab label="Handoff Summary" value="Handoff Summary">
+                                        <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="Handoff Summary"></c-case-comment-list-view>
+                                    </lightning-tab>
+                                    <lightning-tab label="Case Owner Review" value="Case Owner Review">
+                                        <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="Case Owner Review"></c-case-comment-list-view>
+                                    </lightning-tab>
+                                    <lightning-tab label="Manager Review" value="Manager Review">
+                                        <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="Manager Review"></c-case-comment-list-view>
+                                    </lightning-tab>
+                                    <lightning-tab label="Escalation Notes" value="Escalation Notes">
+                                        <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" comment-category="Escalation Notes"></c-case-comment-list-view>
+                                    </lightning-tab>
+                                    <!-- T01 -->
+                                    <lightning-tab label="My Tagged" value="My Tagged">
+                                        <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Internal" tagged-user-id={curUserId}></c-case-comment-list-view>
+                                    </lightning-tab>
+                                </lightning-tabset>
+                                <!-- @Akhilesh 5 May 2021 - end-->
+                            </lightning-tab>
+                            <lightning-tab label="Private" value="Private">
+                                <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-visibility="Private"></c-case-comment-list-view>
+                            </lightning-tab>
+                            <lightning-tab label="Collaborate" value="Raise Hand">
+                                <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="Raise Hand" comment-category="Collaboration"></c-case-comment-list-view> <!-- T04 I2RT-7615 added comment category parameter-->
+                            </lightning-tab>
+                            <lightning-tab label="JIRA Request" value="JIRA Request">
+                                <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="JIRA Request"></c-case-comment-list-view>
+                            </lightning-tab>
+                            <lightning-tab label="Tasks" value="Tasks" onactive={resetLabels}> <!-- T02 -->
+                                <c-case-comment-list-view record-id={recordId} full-screen={isPopout} cc-full-screen={isCCFullScreen} comment-type="Tasks"></c-case-comment-list-view>
+                            </lightning-tab>
+                        </lightning-tabset>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    
+</template>

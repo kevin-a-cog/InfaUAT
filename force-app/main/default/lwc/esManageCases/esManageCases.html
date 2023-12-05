@@ -1,0 +1,164 @@
+<!--
+/*
+ * Name			:	esManageCases
+ * Author		:	Chetan Shetty
+ * Created Date	: 	9/23/2022
+ * Description	:	This is used to show & manage cases in eSupport.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description                         Tag
+ **********************************************************************************************************
+ Chetan Shetty		    9/23/2022		I2RT-6880		Initial version.                    N/A
+ Vignesh Divakaran	    9/24/2022		I2RT-6880		Initial version.                    T01
+ balajip        		1/12/2023		I2RT-7537		Updated the sorting order logic     T02
+ */
+-->
+<template>
+
+    <!-- Spinner. -->
+    <lightning-spinner variant="brand" if:true={boolInitialLoad}></lightning-spinner>
+
+    <template if:false={boolInitialLoad}>
+        <!-- Banner -->
+        <template if:false={showErrorMessage}>
+            <div class="container-fluid position-relative p-0">
+                <div class="es-banner-container">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2 class="es-banner__heading">Cases</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <img class="es-case-banner" src={image.Case_Banner} alt="Case Banner"/>
+            </div>
+    
+            <div class="in-wrapper-bg-fuild-grey in-events-landing-bg">
+                <div class="container">
+
+                    <!-- Top actions -->
+                    <div class="tab-bar-wrapper justify-content-end">
+                        <div class="button-wrapper">
+                            <lightning-button label="Download" title="Download case" icon-name="utility:download" class="es-button es-button--primary mr-2" onclick={openDownload}></lightning-button>
+                            <lightning-button label="Create New Case" title="Create case" icon-name="utility:edit" class="es-button es-button--primary mr-2" onclick={redirectToCaseCreation}></lightning-button>
+                        </div>
+                        <div class="searchBox">
+                            <lightning-input type="search" placeholder="Search Cases" name="Search Cases" value={strSearchTerm} onchange={search}></lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="in-wrapper-bg-fuild-white help-bgfluid in-events-landing-container">
+                        <!-- Tabs. -->
+                        <lightning-tabset class="tab-active">
+                            
+                            <div class="row m-auto filter-wrapper">
+                                <c-global-community-filter-picklist class="filter-combo" data-name="ORG ID" str-name="ORG ID" str-label="FILTER BY" str-placeholder="Select ORG ID" lst-options={lstOrgs} onvalueselection={filterSelect}></c-global-community-filter-picklist>
+                                <c-global-community-filter-picklist class="filter-combo" data-name="Status" str-name="Status" str-placeholder="Select Status" lst-options={lstStatus} onvalueselection={filterSelect}></c-global-community-filter-picklist>
+                                
+                                <!-- T02 -->
+                                <lightning-combobox label="SORT BY CASE NUMBER" placeholder="Select" options={lstSortValues} value={strCaseNumberSorting} onchange={setSortDirection} class="filter-combo in-events-sort ml-auto"></lightning-combobox>
+
+                                <img onclick={toggleView} class="tile-icon" data-id="1" src={tileImage}>
+                                <img onclick={toggleView} class="list-icon" data-id="2" src={listImage}>
+                            </div>
+
+                            <!-- Show selected filters -->
+                            <template if:true={showSelectedFilters}>
+                                <c-global-community-selected-filters str-label={label.Clear_All_Filters} lst-filters={lstAllFilters} onremoveselection={removeSelection} onclearall={clearFilters}></c-global-community-selected-filters>
+                            </template>
+                            
+                            <lightning-tab label={label.My_Cases} value="1" onactive={setActiveTab}></lightning-tab>
+                            <lightning-tab label={label.All_Cases} value="2" onactive={setActiveTab}></lightning-tab>
+                        </lightning-tabset>
+                    </div>
+
+                    <!-- Spinner. -->
+                    <lightning-spinner variant="brand" if:true={boolDisplaySpinner}></lightning-spinner>
+                      
+                    <template if:false={boolDisplaySpinner}>
+                        <!-- Show records -->
+                        <template if:true={boolHasRecords}>
+                            <div class="row in-wrapper-bg-fuild-grey case-view-wrapper">
+                                <template for:each={lstRecords} for:item="objRecord">
+                                    <template if:true={objRecord.boolIsVisible}>
+                                        
+                                        <!-- Tile view -->
+                                        <template if:true={boolShowTileView}>
+                                            <div class="col-12 col-md-6 col-lg-4 mt-4" key={objRecord.Id}>
+                                                <c-es-case-card-view obj-case={objRecord}></c-es-case-card-view>
+                                            </div>
+                                        </template>
+            
+                                        <!-- List view -->
+                                        <template if:false={boolShowTileView}>
+                                            <div class="col-12" key={objRecord.Id}>
+                                                <c-es-case-list-view obj-case={objRecord}></c-es-case-list-view>
+                                            </div>
+                                        </template>
+
+                                    </template>
+                                </template>
+                            </div>
+                            <br />
+                            <template if:true={showViewMore}>
+                                <div class="row d-flex justify-content-center pb-3 in-wrapper-bg-fuild-grey">
+                                    <!-- Spinner without container-->
+                                    <template if:true={boolLoadingMoreRecords}>
+                                        <div class="demo-only demo--inverse" style="height:4rem;position:relative">
+                                            <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                                <span class="slds-assistive-text">Loading</span>
+                                                <div class="slds-spinner__dot-a"></div>
+                                                <div class="slds-spinner__dot-b"></div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <a onclick={loadMore} class="view-more-btn" if:false={boolLoadingMoreRecords}>View More</a>
+                                </div>
+                            </template>
+                        </template>
+
+                        <!-- No records found. -->
+                        <template if:false={boolHasRecords}>
+                            <br />
+                            <div class="slds-col slds-size_12-of-12">
+                                <div class="slds-illustration slds-illustration_small" aria-hidden="true">
+                                    <img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt={label.No_Records_Found} />
+                                    <div class="slds-text-color_weak">
+                                        <h3 class="slds-text-heading_medium">{label.No_Records_Found}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                        </template>
+                    </template>
+                
+                </div>
+            </div>
+
+            <!-- Case Download Widget -->
+            <template if:true={boolShowDownload}>
+                <c-es-case-download bool-show-support-account={boolShowSupportAccount} onclose={closeDownload}></c-es-case-download>
+            </template>
+        </template>
+
+        <!-- Show error message-->
+        <template if:true={showErrorMessage}>
+
+            <div class="in-wrapper-bg-fuild-grey in-events-landing-bg">
+                <div class="container">
+                    <div class="slds-col slds-size_12-of-12 slds-var-p-around_xx-large">
+                        <div class="slds-illustration slds-illustration_large" aria-hidden="true">
+                            <div class="slds-text-color_weak">
+                                <h3 class="slds-text-heading_medium">{strErrorMessage}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </template>
+
+</template>

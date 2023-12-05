@@ -1,0 +1,255 @@
+<template>
+    <template if:false={isGEMSEscation}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <template if:false={showCoveoCmp}>
+                <button class="slds-button slds-button_icon slds-modal__close closeIcon slds-button_icon-bare slds-button_icon-inverse" title="Close" onclick={handleCancel}>
+                    <lightning-icon icon-name="utility:close" class="my-icon" alternative-text="Close" title="close" ></lightning-icon>
+                </button>
+            </template>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{headerName}</h2>
+            </header>
+            <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="small"></lightning-spinner>
+                <template if:true={showRecordTypeSelection}>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                    <div>
+                        <div>
+                            <legend>
+                                <span class="slds-required">*</span>
+                                Select a Record Type <br/> <br/>
+                            </legend>
+                            <template for:each={recordTypeArray} for:item="record">                                
+                                <div key={record.Name} class="slds-form-element__control">
+                                    <span class="slds-radio">
+                                        <input type="radio" key={record.Name} id={record.Name} value={record.Id} name={record.Name} onchange={handleRecordTypeChange}/>
+                                        <label key={record.Name} class="slds-radio__label" for={record.Name}>
+                                          <span  class="slds-radio_faux"></span>
+                                          <span  class="slds-form-element__label">{record.Name} <br/> &nbsp; &nbsp; &nbsp; &nbsp; {record.Description}</span>                                          
+                                        </label>
+                                      </span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral slds-float_left" onclick={handleCancel}>Cancel</button>               
+                        <button class="slds-button slds-button_brand" onclick={handleNext}>Next</button>
+                    </footer>
+                </template>
+
+                <!--IPS Jumpstart-->
+                <template if:false={showRecordTypeSelection}>
+                    <template if:true={isIPSJumpstart}>
+                        <lightning-record-edit-form object-api-name="Engagement__c" onsuccess={handleSuccess} onsubmit={handleSubmit} onerror={handleError} record-type-id={selectedRecordType}>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+                            <lightning-layout multiple-rows>
+
+                                <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                    <lightning-input-field  field-name="Account__c" value={accountId} variant="label-stacked" disabled required>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                    <lightning-input-field  field-name="Plan__c" value={recordId} variant="label-stacked" disabled required>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6" class="slds-p-left_x-small">                                    
+                                    <c-custom-lookup-field
+                                    data-id="Opportunity"
+                                    label="Opportunity"
+                                    placeholder="Enter the Opportunity Name"
+                                    onsearch={handleLookupSearch}
+                                    onselectionchange={handleLookupSelectionChange}
+                                    variant ="label-stacked"
+                                    onloaddefault={handleLoadDefault}
+                                    required
+                                    ></c-custom-lookup-field>
+                                </lightning-layout-item>
+                                <template if:true={displayProject}>
+                                    <lightning-layout-item size="6" class="slds-p-left_x-small">                                    
+                                        <c-custom-lookup-field
+                                        label="Project"
+                                        placeholder="Select the Project"
+                                        onsearch={handleLookupSearch}
+                                        onselectionchange={handleLookupSelectionChange}
+                                        variant ="label-stacked"
+                                        data-id="pse__Proj__c"
+                                        onloaddefault={handleLoadDefault} selection={defaultProj}
+                                        required
+                                        >
+                                        </c-custom-lookup-field>
+                                    </lightning-layout-item>
+                                </template>
+                                <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                    
+                                    <c-custom-lookup-field
+                                    label="Key Customer Contact"
+                                    placeholder="Select the Key Customer Contact"
+                                    onsearch={handleLookupSearch}
+                                    onselectionchange={handleLookupSelectionChange}
+                                    variant ="label-stacked"
+                                    data-id="Contact"
+                                    onloaddefault={handleLoadDefault}
+                                    required
+                                    >
+                                    </c-custom-lookup-field>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                    <lightning-input-field  field-name="Estimated_Start_Date__c" variant="label-stacked" required>
+                                    </lightning-input-field>
+                                </lightning-layout-item>                       
+                                
+                                <!-- <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                    <lightning-input-field  field-name="Description__c" placeholder="test" variant="label-stacked" required>
+                                    </lightning-input-field>
+                                </lightning-layout-item>    -->     
+
+                                <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                    <lightning-textarea name="description" max-length="32768" value={description} required label="Description" placeholder={descPlaceholder} onchange={handleChange}></lightning-textarea>
+                                </lightning-layout-item>
+                                
+                                <!--lightning-layout-item size="6" class="slds-p-left_x-small">
+                                    <lightning-input-field  field-name="Partner_name_if_any__c" variant="label-stacked" required>
+                                    </lightning-input-field>
+                                </lightning-layout-item-->
+
+                                <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                    <lightning-input-field  field-name="IPS_Package__c" variant="label-stacked" required>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                    <lightning-input-field  field-name="Primary_challenges__c" variant="label-stacked" required>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                                
+                                
+                            </lightning-layout>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_neutral slds-float_left" onclick={handleCancel}>Cancel</button>               
+                                <button class="slds-button slds-button_brand" type="submit">Save</button>
+                            </footer>
+                        </lightning-record-edit-form>
+                    </template>
+
+                    <!--CST-->
+                    <template if:true={isCST}>
+                        <lightning-record-edit-form object-api-name="Engagement__c" onsuccess={handleSuccess} onsubmit={handleSubmit} onerror={handleError} record-type-id={selectedRecordType}>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-4">
+                                
+                            <template if:false={isRepeatable}>
+                                <h2><b>{repeatableMsgTitle} <lightning-button variant="base" label="here" onclick={handleECFocus} class="slds-m-left_none slds-p-left_none"></lightning-button></b></h2>
+                                
+                            </template>
+                            <lightning-layout multiple-rows>
+
+                            <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                <label for="namefield" class="slds-form-element__label">
+                                    <abbr lightning-textarea_textarea="" class="slds-required" title="required">*</abbr>
+                                    Engagement Topic Title
+                                </label>
+                                <lightning-input-field variant="label-hidden" id="namefield" max-length=80 message-when-range-overflow="Name value should be within 80 characters" field-name="Name" value={ecName} required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+
+                            
+                            <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                <lightning-input-field  field-name="CSM_Summary__c"  variant="label-stacked" required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                <lightning-input-field  field-name="Account__c" value={accountId} variant="label-stacked" disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                <lightning-input-field  field-name="Plan__c" value={recordId} variant="label-stacked" disabled required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                <lightning-input-field  field-name="CST_Requested_for__c" variant="label-stacked" value={csaRequestedFor} required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                <c-custom-lookup-field
+                                    data-id="Opportunity"
+                                    label="Opportunity"
+                                    placeholder="Enter the Opportunity Name"
+                                    onsearch={handleLookupSearch}
+                                    onselectionchange={handleLookupSelectionChange}
+                                    onloaddefault={handleLoadDefault}
+                                    variant ="label-stacked"                                 
+                                    ></c-custom-lookup-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                <lightning-combobox name="milestone" data-validate label="Milestone" value={selectedMilestone} placeholder="Select a milestone" options={milestoneOptions} onchange={handleMilestoneChange} required={mileStoneRequired}></lightning-combobox>
+                            </lightning-layout-item> 
+                            <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                <lightning-combobox name="contact" label="Customer Contact" value={selectedContact}  placeholder="Select a Customer Contact" options={contactOptions} onchange={handleContactChange} ></lightning-combobox>
+                            </lightning-layout-item> 
+                            <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                <lightning-input-field  field-name="Engagement_Journey__c" variant="label-stacked" value={journey} required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                <lightning-input-field  field-name="Customer_Time_Zone__c"  variant="label-stacked" value={timeZone} required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                <lightning-input-field  field-name="RecType__c" value={recType} variant="label-stacked" disabled required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+
+                        </lightning-layout>
+                        </div>
+
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral slds-float_left" onclick={handleCancel}>Cancel</button>               
+                            <button class="slds-button slds-button_brand" type="submit">Save</button>
+                        </footer>						
+                            
+                        </lightning-record-edit-form>							
+                    </template>
+
+                  					
+            </template>
+    </div>
+</section>
+
+<div class="slds-backdrop slds-backdrop_open"></div> 
+</template>
+  <!-- GEMS Escalation-->
+  <template if:true={isGEMSEscation}>
+                        
+    <c-support-acc-escalate record-id={accountId} sobject-record-id={recordId} onclose={handleCancel}></c-support-acc-escalate>                            
+    >
+    <div class="slds-backdrop slds-backdrop_open"></div> 
+</template>	
+
+<template if:true={showCoveoCmp}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-03" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+        <div class="slds-modal__container csm_coveo_max">
+            <div class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close closeIcon slds-button_icon-bare slds-button_icon-inverse" title="Close" onclick={handleCoveoClose}>
+                    <lightning-icon icon-name="utility:close" class="my-icon" alternative-text="Close" title="close" ></lightning-icon>
+                </button>
+                <h2 id="modal-heading-03" class="slds-modal__title slds-hyphenate">Success Accelerators</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around_medium coveomodal" id="modal-content-id-7">
+            <c-csm-plan-search hide-expand=true record-id={recordId} num-results={coveoLabel.EC_Coveo_NoofRecords} onclosecoveoparent={handleCoveoClose} request-action-label={coveoLabel.EC_Coveo_RequestButton} search-box-placeholder-text={coveoLabel.EC_Coveo_Placeholder} ec-filter-data={coveoLabel.EC_Coveo_Path} engagement-category-facet-label={coveoLabel.EC_Coveo_EngagementCategory} engagement-type-facet-label={coveoLabel.EC_Coveo_EngagementType} engagement-stage-facet-label={coveoLabel.EC_Coveo_Stage} engagement-products-facet-label={coveoLabel.EC_Coveo_Products} engagement-focus-area-facet-label={coveoLabel.EC_Coveo_FocusArea} engagement-use-case-facet-label={coveoLabel.EC_Coveo_UseTags}></c-csm-plan-search>
+            </div>
+            <div class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={handleCoveoClose}>Cancel</button>  
+            </div>	
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"  role="presentation"></div> 
+</template>
+</template>

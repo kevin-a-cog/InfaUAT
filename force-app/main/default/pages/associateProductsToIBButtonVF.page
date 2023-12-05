@@ -1,0 +1,20 @@
+<apex:page standardController="InstallBase__c">
+    <apex:includeLightning />
+    
+    <div id="lightning" />
+    
+    <script>
+    $Lightning.use("c:associateProductToIBApp", function() {
+        $Lightning.createComponent("c:associateProductsToIB",
+                                   {
+                                       "recordId" : "{!$CurrentPage.parameters.id}"
+                                   },
+                                   "lightning",
+                                   function(cmp) {
+                                       console.log("Component was created");
+                                       // do some stuff
+                                   }
+                                  );
+    });
+    </script>
+</apex:page>

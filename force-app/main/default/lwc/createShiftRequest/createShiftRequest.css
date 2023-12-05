@@ -1,0 +1,5 @@
+.custom-modal{
+    --sds-c-modal-header-color-background: beige;
+    --sds-c-modal-content-color-background: beige;
+    --sds-c-modal-footer-color-background: beige;
+}

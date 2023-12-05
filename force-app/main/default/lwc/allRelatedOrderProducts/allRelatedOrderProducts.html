@@ -1,0 +1,18 @@
+<template>
+    <div>
+        <lightning-card title="All Related Order Products">
+        <template if:true={data}>
+            <div class="datatable-height">
+
+                <c-custom-orderproduct-datatable
+                    columns={columns} 
+                    data={data} 
+                    key-field="Id" 
+                    hide-checkbox-column>
+            </c-custom-orderproduct-datatable>
+
+            </div>
+        </template>        
+    </lightning-card>    
+</div>
+</template>

@@ -1,0 +1,31 @@
+<template>
+    <template if:true={checkFieldSet}>
+        <lightning-datatable 
+            data={records} 
+            columns={columns} 
+            key-field="Id" 
+            hide-checkbox-column="true"
+            default-sort-direction={defaultSortDirection}
+            sorted-direction={sortDirection}
+            sorted-by={sortedBy}
+            onsort={onHandleSort}>
+        </lightning-datatable>
+        <template if:true={totalPage}>
+            <div class="slds-col slds-p-bottom_xx-small slds-p-top_x-small">
+                <span>
+                    <lightning-button-icon icon-name="utility:chevronleft" size="small" alternative-text="Previous" onclick={previousHandler} disabled={disablePrevious}></lightning-button-icon>
+                </span>
+                <label class="slds-text-color_weak slds-p-horizontal_x-small">Showing</label> 
+                <span>{currentPage}</span>
+                <span>&nbsp;of&nbsp;<label>{totalPage}</label></span>
+                <span>&nbsp;&nbsp;Page(s)</span>
+                <span>
+                    <lightning-button-icon icon-name="utility:chevronright" size="small" alternative-text="Next" onclick={nextHandler} class="slds-p-horizontal_x-small" disabled={disableNext}></lightning-button-icon>
+                </span>
+            </div>
+        </template>
+    </template>
+    <template if:true={displayNoEngagements}>
+            <p>{label.EC_NoEngagementsMsg}</p>
+    </template>
+</template>

@@ -1,0 +1,87 @@
+<!--
+ Change History
+ ******************************************************************************************************************************
+ Modified By            Date            Jira No.        Tag         Description                                             
+ ******************************************************************************************************************************
+ Shashikanth            6/20/2023       I2RT-8365       T02         User Profile - Add shift Time Start and End Time
+-->
+<template>
+    <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+
+    <div class="slds-m-around_medium">
+        <template if:true={usr}>
+            <lightning-combobox
+                name="GCSTeam"
+                label="GCS Team"
+                data-field="GCSTeam"
+                value={gcsTeamValue}
+                placeholder="-- None --"
+                options={gcsTeamOptions}
+                onchange={handleChange}
+                read-only={disabled}
+                 
+            ></lightning-combobox>
+            </br>
+            <!--T01-->
+        <lightning-combobox
+            name="Region"
+            label="Region"
+            data-field="Region"
+            value={regionValue}
+            placeholder="- None -"
+            options={regionOptions}
+            onchange={handleChange}
+            read-only={disabled}
+             
+        ></lightning-combobox>
+        <!--T01-->
+        <!-- <T02> -->
+        </br>
+            <lightning-combobox
+            name="TimeZone"
+            label="Time Zone"
+            data-field="TimeZone"
+            value={timeZoneValue}
+            placeholder="-- None --"
+            options={timeZoneOptions}
+            onchange={handleChange}
+            read-only={disabled}
+        ></lightning-combobox>
+        </br>
+        <lightning-input 
+            type="time" 
+            name="shiftStartTime"
+            label="Shift Start Time"
+            data-field="shiftStartTime"
+            value={shiftStartTimeValue}
+            disabled={disabled}
+            read-only={disabled}></lightning-input>
+        </br>
+        <lightning-input 
+            type="time" 
+            name="shiftEndTime"
+            label="Shift End Time"
+            data-field="shiftEndTime"
+            value={shiftEndTimeValue}
+            disabled={disabled}
+            read-only={disabled}></lightning-input>
+        <!-- </T02> -->
+            </br>
+            <lightning-layout horizontal-align="end">
+                <lightning-layout-item>
+                    <lightning-button label="Reset" variant="brand" onclick={resetGCSTeam} disabled={disabled}
+                        class="slds-m-left_x-small"
+                    ></lightning-button>
+                </lightning-layout-item>
+                <lightning-layout-item>
+                    <lightning-button label="Update" variant="brand" onclick={updateUser} disabled={disabled}
+                        class="slds-m-left_x-small"
+                    ></lightning-button>
+                </lightning-layout-item>   
+            </lightning-layout>
+        </template>
+        <template if:true={error}>
+            {error}
+        </template>
+    </div>
+</template>

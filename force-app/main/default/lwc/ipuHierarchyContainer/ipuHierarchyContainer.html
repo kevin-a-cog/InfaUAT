@@ -1,0 +1,33 @@
+<!--
+/*
+ * Name			:	IpuHierarchyContainer
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	1/24/2023
+ * Description	:	This component allows users to see the IPU Hierarchy related to a Fulfillment record.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		1/24/2023		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	
+	<!-- If the component is Popped Out. -->
+    <template if:true={isPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-ipu-hierarchy" aria-modal="true" aria-describedby="modal-content-id-ipu-hierarchy" 
+				class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%; margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-ipu-hierarchy" style="min-height: 100vh;">
+                    <c-ipu-hierarchy record-id={recordId} onpopout={popOut} is-popped-out></c-ipu-hierarchy>
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+    <template if:false={isPoppedOut}>
+        <c-ipu-hierarchy record-id={recordId} onpopout={popOut}></c-ipu-hierarchy>
+    </template>
+</template>

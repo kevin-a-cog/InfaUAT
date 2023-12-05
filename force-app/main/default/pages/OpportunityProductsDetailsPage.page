@@ -1,0 +1,19 @@
+<apex:page standardController="Opportunity" showHeader="false" standardStylesheets="false">
+    <apex:includeLightning />
+    <div id="lightning" />    
+    <script>
+    var recordId = "{!JSENCODE($CurrentPage.parameters.id)}";
+
+    $Lightning.use("c:OpportunityProdDetails", function() {
+        $Lightning.createComponent(
+            "c:OpportunityProductsDetails",
+            {
+                "recordId" : recordId
+                // "prevURL" : prevURL
+            },
+            "lightning"
+        );
+        
+    });
+    </script>
+</apex:page>

@@ -1,0 +1,24 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 09-22-2020
+  @last modified by  : Venky K
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   08-14-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<template>
+
+  <lightning-datatable
+          data={mydata}
+          columns={columns}
+          key-field="Id"
+          onrowselection={getSelectedName}
+          sorted-by={sortBy}
+          sorted-direction={sortDirection}
+          onsort={handleSortdata}
+          onrowaction={handleRowAction}
+          >
+  </lightning-datatable>
+</template>

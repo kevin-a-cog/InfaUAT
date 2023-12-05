@@ -1,0 +1,194 @@
+.in-announcement-heading {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 33px;
+  padding: 24px 0px;
+}
+
+@media screen and (max-width: 768px) {
+  .in-announcement-heading {
+      font-size: 24px;
+  }
+  .in-announcement-container {
+      margin: 0 auto;
+      width: 93%;
+  }
+}
+.in-announcement-img {
+  position: relative;
+  margin-bottom: 18px;
+  box-shadow: 5px 5px 18px rgba(0,0,0,0.12);
+}
+
+.in-announcement-title {
+  font-weight: 300;
+  font-size: 21px;
+  line-height: 32px;
+  letter-spacing: 0.02em;
+  color: black;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.in-announcement-details {
+  position: absolute;
+  bottom: 0px;
+  height: 33%;
+  width: 100%;
+  background-color: white;
+  padding: 15px;
+}
+
+.in-announcement-link {
+  display: none;
+}
+
+.in-announcement-img:hover .in-announcement-details {
+  background: rgb(0, 0, 0, 0.85);
+  height: 45%;
+}
+.in-announcement-img:hover .in-announcement-title {
+  color: white;
+}
+.in-announcement-img:hover .in-announcement-link {
+  display: block;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 28px;
+  font-style: normal;
+  color: #ff4d00;
+  position: absolute;
+  bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+img {
+  height: 260px;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/* Parent wrapper to carousel. Width can be changed as needed. */
+.carousel-wrapper {
+  overflow: hidden;
+  width: 100%;
+  min-height: 100px;
+  margin: auto;
+}
+
+/* Apply 'border-box' to 'box-sizing' so border and padding is included in the width and height. */
+.carousel-wrapper * {
+  box-sizing: border-box;
+}
+
+/* We'll be using the 'transform' property to move the carousel's items, so setting the 'transform-style' to 'preserve-3d' will make sure our nested elements are rendered properly in the 3D space. */
+.carousel {
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+/* By default we're hiding items (except the initial one) until the JS initiates. Elements are absolutely positioned with a width of 100% (as we're styling for mobile first), letting the content's height dictate the height of the carousel. Our magic property here for all our animation needs is 'transition', taking the properties we wish to animate 'transform' and 'opacity', along with the length of time in seconds. */
+.carousel__photo {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  padding: 1rem 3rem;
+  z-index: 100;
+  transition: transform 0.5s, opacity 0.5s, z-index 0.5s;
+}
+
+/* Display the initial item and bring it to the front using 'z-index'. These styles also apply to the 'active' item. */
+.carousel__photo.initial,
+.carousel__photo.active {
+  opacity: 1;
+  position: relative;
+  z-index: 900;
+  transition: transform 600ms;
+}
+
+/* Set 'z-index' to sit behind our '.active' item. */
+.carousel__photo.prev,
+.carousel__photo.next {
+  z-index: 800;
+}
+
+/* Translate previous item to the left */
+.carousel__photo.prev {
+  transform: translateX(-100%);
+}
+
+/* Translate next item to the right */
+.carousel__photo.next {
+  transform: translateX(100%);
+}
+
+/* Style navigation buttons to sit in the middle, either side of the carousel. */
+.carousel__button--prev,
+.carousel__button--next {
+  position: absolute;
+  top: 50%;
+  width: 3rem;
+  height: 3rem;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.carousel__button--prev {
+  left: 0;
+}
+
+.carousel__button--next {
+  right: 0;
+}
+
+/* Use pseudo elements to insert arrows inside of navigation buttons */
+.carousel__button--prev::after,
+.carousel__button--next::after {
+  content: " ";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 50%;
+  left: 54%;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  transform: translate(-50%, -50%) rotate(135deg);
+}
+
+.carousel__button--next::after {
+  left: 47%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.top-wrapper {
+  margin-top: -25px;
+  padding-top: 25px;
+}
+
+.item-padding {
+  padding: 1rem 0rem;
+}
+
+@media screen and (max-width: 768px) {
+  .owl-dots {
+    display: flex;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    position: relative;
+    margin-top: 30px;
+  }
+}

@@ -1,0 +1,40 @@
+<!--
+/*
+ * Name			:   csmAdotionFactorView
+ * Author		:	Deva M
+ * Created Date	: 	07/02/2021
+ * Description	:	This LWC serves as a container for the PAF functionality.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Deva M         		07/02/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	
+     <!-- Spinner for normal cases-->
+     <!-- Spinner. -->
+			<div class="spinner">
+				<template if:true={boolDisplaySpinner}>
+					<lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+				</template>
+			</div>
+	<!-- If the component is Popped Out. -->
+    <template if:true={isPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-manage-plan-partners" aria-modal="true" aria-describedby="modal-content-id-manage-plan-partners" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-manage-plan-partners" style="min-height: 100vh;">                   
+                     <c-csm-manage-adoption-factor-framework record-id={recordId} onpopout={popOut} is-popped-out></c-csm-manage-adoption-factor-framework>
+                     <c-csm-manage-cassini-framwork record-id={recordId}></c-csm-manage-cassini-framwork>
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+    <template if:false={isPoppedOut}>
+       <c-csm-manage-adoption-factor-framework  record-id={recordId} onpopout={popOut}></c-csm-manage-adoption-factor-framework >
+    </template>
+</template>

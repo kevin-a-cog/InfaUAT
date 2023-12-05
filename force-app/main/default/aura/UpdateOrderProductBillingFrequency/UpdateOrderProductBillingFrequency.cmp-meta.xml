@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuraDefinitionBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>51.0</apiVersion>
+    <description>I2C-1072 : Enable &apos;Mass Update&apos; Capability on the Order for Billing Frequency Changes</description>
+</AuraDefinitionBundle>

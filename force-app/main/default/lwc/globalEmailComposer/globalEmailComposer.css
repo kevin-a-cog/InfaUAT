@@ -1,0 +1,31 @@
+/* Footer. */
+.customFooter {
+	height: 75px;
+}
+
+/* Pop over. */
+.customPopOver {
+	margin-top: -10px;
+}
+
+/* Rich Text Area. */
+.customTextArea {
+	height: 310px;
+}
+
+/* Spinner. */
+.customSpinnerArea {
+	height: 600px;
+}
+
+/* Modal container. */
+.container {
+	display: flex;
+	min-height: 634px;
+	flex-direction: column;
+}
+
+/* Body. */
+.customBody {
+	flex: 1;
+}

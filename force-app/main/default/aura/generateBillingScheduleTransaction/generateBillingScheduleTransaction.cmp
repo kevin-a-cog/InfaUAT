@@ -1,0 +1,173 @@
+<!--
+Developed for JIRA SALESRT-11712 on 03/11/2020 by RamEsh M S
+Aura component for 'Custom Invoicing' quick action on Order.
+This is used to create Billing Schedule & Billing Transaction and also cancel pending Billing Transactions.
+-->
+
+<aura:component controller="generateBillingScheduleTransactionAC" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionwithoutHeader" access="global">
+	<aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+         .slds-modal__container{
+        width: 80%;
+        max-width: 70rem;
+        }  
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>
+    <aura:attribute name="InvMessage" type="String"/>
+    <aura:attribute name="goBack" type="boolean"/>
+    <aura:attribute name="goNext" type="boolean"/>
+    <aura:attribute name="BSBTSUC" type="boolean"/>
+    <aura:attribute name="BSBTFAIL" type="boolean"/>
+    <aura:attribute name="BSBTCANSUC" type="boolean"/>
+    <aura:attribute name="BSBTCANFAIL" type="boolean"/>
+    <aura:attribute name="ErrorMessage" type="String"/>
+    <aura:attribute name="CreateMessage" type="String"/>
+    <aura:attribute name="CancelMessage" type="String"/>
+    <aura:attribute name="spinneract" type="boolean"/>
+   
+    
+    <aura:handler name="init" value="{!this}" action="{!c.onLoad}"/>
+    
+    <aura:if isTrue="{!v.goBack}">
+        
+        <div class="slds-col modal-header slds-modal__header" style="width:100%;height:10%;">
+        	<lightning:icon iconName="utility:warning" alternativeText="Warning!" variant="warning"
+            title="warning variant" />
+            <p class="slds-page-header__title slds-truncate" title="">The Action could not be completed</p>
+    	</div>
+	
+	    <div class="slds-p-around_small slds-clearfix" style="width:100%;height:80%;">
+            <center>
+                <h2>
+                    <aura:unescapedHtml value="{!v.InvMessage}" /> <br/> <br/> <br/>
+                    
+                </h2>
+         	</center>
+         	<b>Note: </b>The Sum of Bill Plan's <b>Bill Amount</b> OR <b>Calculated Amount</b> should not exceed the <b>Order Amount</b>. <br/> <br/>
+		</div>
+		<footer class="slds-modal__footer" style="width:100%;height:10%;">
+			<button class="slds-button slds-button_neutral" onclick="{!c.goToOrder}">Go to Order</button>
+		</footer>
+	
+    </aura:if> 
+    
+    <aura:if isTrue="{!v.goNext}">
+        
+        <div class="slds-col modal-header slds-modal__header" style="width:100%;height:10%;">
+        	<p class="slds-page-header__title slds-truncate" title="">Custom Billing</p>
+    	</div>
+	
+	    <div class="slds-p-around_small slds-clearfix" style="width:100%;height:80%;">
+        	<aura:if isTrue="{!v.spinneract}">
+            	<div class="slds-backdrop slds-backdrop_open">
+                    <lightning:spinner variant="brand"  size="medium"/>
+                </div>
+            </aura:if> 
+		<center><p>
+			<lightning:button label="Generate Billing Schedule and Transaction" iconName="utility:connected_apps" iconPosition="right" variant="brand" onclick="{!c.doAction}"/> <br/> <br/> <br/>
+		</p>
+            </center>
+            
+         <center><p>
+			<lightning:button label="Cancel Pending Billing Schedule and Transaction" iconName="utility:connected_apps" iconPosition="right" variant="brand" onclick="{!c.cancelBS}"/> <br/> <br/> <br/>
+		</p>
+         </center>
+             <center><p>
+			<lightning:button label="Cancel Pending Billing Transaction and Regenerate" iconName="utility:connected_apps" iconPosition="right" variant="brand" onclick="{!c.cancelBSRebill}"/> <br/> <br/> <br/>
+		</p>
+         </center>
+		</div>
+		<footer class="slds-modal__footer" style="width:100%;height:10%;">
+			<button class="slds-button slds-button_neutral" onclick="{!c.goToOrder}">Go to Order</button>
+		</footer>
+		
+	</aura:if> 
+    
+    <aura:if isTrue="{!v.BSBTSUC}">
+        
+		<div class="slds-col modal-header slds-modal__header" style="width:100%;height:10%;">
+        <lightning:icon iconName="utility:success" alternativeText="Success!" variant="Success"
+            title="success variant" />
+		    <p class="slds-page-header__title slds-truncate" title="">The Action is Complete</p>
+    	</div>
+	
+	    <div class="slds-p-around_small slds-clearfix" style="width:100%;height:80%;">
+        <center>   
+            <h2>
+                The Billing Schedules and Billing Transactions are created for the Order based on Invoice Schedule. Please navigate to the Order and find the details. <br/> <br/> <br/>
+            </h2>
+        </center>
+		</div>
+		<footer class="slds-modal__footer" style="width:100%;height:10%;">
+			<button class="slds-button slds-button_neutral" onclick="{!c.gotoBS}">Go to Billing Schedules</button>
+		</footer>
+		</aura:if> 
+    
+    
+    <aura:if isTrue="{!v.BSBTCANSUC}">
+        <div class="slds-col modal-header slds-modal__header" style="width:100%;height:10%;">
+        <lightning:icon iconName="utility:success" alternativeText="Success!" variant="Success"
+            title="success variant" />
+		    <p class="slds-page-header__title slds-truncate" title="">The Action is Complete</p>
+    	</div>
+	
+	    <div class="slds-p-around_small slds-clearfix" style="width:100%;height:80%;">
+        <center>   
+            <h2>
+                The pending Billing Schedules and Billing Transactions are cancelled. Please navigate to the Order and find the details. <br/> <br/> <br/>
+            </h2>
+        </center>
+		</div>
+		<footer class="slds-modal__footer" style="width:100%;height:10%;">
+			<button class="slds-button slds-button_neutral" onclick="{!c.gotoBS}">Go to Billing Schedules</button>
+		</footer>
+		
+	</aura:if> 
+    
+    <aura:if isTrue="{!v.BSBTFAIL}">
+        <div class="slds-col modal-header slds-modal__header" style="width:100%;height:10%;">
+            <lightning:icon iconName="utility:error" alternativeText="Error!" variant="error" title="error variant" />
+		    <p class="slds-page-header__title slds-truncate" title="">The Action is not Complete</p>
+    	</div>
+	
+	    <div class="slds-p-around_small slds-clearfix" style="width:100%;height:80%;">
+        	<p>
+                {!v.ErrorMessage} <br/> <br/> <br/>
+                <b>If the error message is understandable to resolve issue, please go back to Order and make necessary changes. Else, please submit a ticket to <a href="mailto:gsd@informatica.com">Global Service Desk</a> with the screenshot of error and Order details</b>
+            </p><br/>
+		</div>
+		<footer class="slds-modal__footer" style="width:100%;height:10%;">
+			<button class="slds-button slds-button_neutral" onclick="{!c.goToOrder}">Go to Order</button>
+		</footer>
+		
+    </aura:if> 
+        
+        <aura:if isTrue="{!v.BSBTCANFAIL}">
+        
+		 <div class="slds-col modal-header slds-modal__header" style="width:100%;height:10%;">
+            <lightning:icon iconName="utility:error" alternativeText="Error!" variant="error" title="error variant" />
+		     <p class="slds-page-header__title slds-truncate" title="">The Action is not Complete</p>
+    	</div>
+	
+	    <div class="slds-p-around_small slds-clearfix" style="width:100%;height:80%;">
+            <p>
+                {!v.ErrorMessage} <br/> <br/> <br/>
+                <b>The Pending Billing Transactions could not be cancelled. If the error message is understandable to resolve issue, please go back to Order and make necessary changes. Else, please submit a ticket to <a href="mailto:gsd@informatica.com">Global Service Desk</a> with the screenshot of error and Order details</b>
+            </p><br/>
+		</div>
+		<footer class="slds-modal__footer" style="width:100%;height:10%;">
+			<button class="slds-button slds-button_neutral" onclick="{!c.goToOrder}">Go to Order</button>
+		</footer>
+		
+    </aura:if> 
+       
+</aura:component>

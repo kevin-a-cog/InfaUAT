@@ -1,0 +1,93 @@
+<template>
+    <div class="slds-card">
+        <div class="slds-grid">
+            <div class="slds-col">
+
+                <header class="slds-card__header slds-text-heading_medium header-font-weight" style= "font-weight: 400">
+                    Manage Risk Products
+                </header>
+            </div>
+            <div class="slds-col slds-text-align_right slds-var-p-around_small">
+
+                <header class="slds-card__header">
+                    <lightning-button-icon icon-name="action:refresh" size="medium" alternative-text="Refresh"
+                        class="slds-var-m-left_xx-small" onclick={handleIconRefresh}></lightning-button-icon>
+                </header>
+
+            </div>
+        </div>
+        
+        <div class="spinner">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                </lightning-spinner>
+            </template>
+        </div>
+
+        <div class="border-bottom-shadow"></div>
+        <lightning-tabset variant="default" active-tab-value={defaultTabOnInitialization}>
+            <template for:each={tabs} for:item="tabObj">
+                <lightning-tab label={tabObj.tab} value={tabObj.tab} key={tabObj.tab} onactive={handleActiveTab}
+                    title={tabObj.helpText}>
+                    
+                    <template if:true={showErrorMessage}>
+                        <div class="slds-col align-center " style ="color: #c23934;
+                        padding-bottom: 1rem">
+                            {showErrorMessage}
+                        </div>
+                    </template>
+
+                    <template if:true={data}>
+
+                        <!-- <div class="slds-card top-component">
+                                    <div class="slds-grid">
+                                        <div class="slds-col align-right">                                        
+                                                                          
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                        <div class="slds-card">
+                            <div class="scrollable slds-var-p-around_medium"
+                                style="height: 250px; max-height: 400px; overflow-y: auto !important">
+                                <lightning-datatable columns={columns} data={data} key-field="Id"  draft-values={draftValues} 
+                                    onrowselection={handleRowSelected} suppress-bottom-bar="true">
+                                </lightning-datatable>
+                            </div>
+                            <!--  DataTable action buttons -->
+                            <template if:true={displayDataTableFooter}>
+                                <div class="slds-col slds-modal__footer">
+
+                                    <!-- Common buttons to be displayed on the tabs -->
+                                    <lightning-button variant="Neutral" label="Cancel" title="Cancel"
+                                        onclick={handleCancel} class="slds-var-m-left_x-small"></lightning-button>
+
+
+                                    <!-- Display button only when active tab is Assigned Products -->
+                                    <template if:true={displayRemoveBTN}>
+                                        <lightning-button variant="Brand" label="Remove" title="Remove"
+                                            onclick={handleRemove} class="slds-var-m-left_x-small">
+                                        </lightning-button>
+                                    </template>
+
+                                    <!-- Display button only when active tab is Unassigned Products -->
+                                    <template if:true={displayAddBTN}>
+                                        <!-- Pavithra  -->
+                                        <lightning-button variant="Brand" label="Add" title="Add" disabled={disableAddButton} onclick={handleAdd}
+                                            class="slds-var-m-left_x-small"></lightning-button>
+                                    </template>
+
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                    <!-- Show No Products to display message when there are no records under the active tab -->
+                    <template if:true={NoDataAfterRendering}>
+                        <h1 class="align-center">No Products to display</h1>
+                    </template>
+                </lightning-tab>
+            </template>
+        </lightning-tabset>
+    </div>
+</template>

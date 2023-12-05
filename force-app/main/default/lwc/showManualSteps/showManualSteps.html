@@ -1,0 +1,11 @@
+<template>
+    <template if:true={manualSteps.data}>
+        <template for:each={manualSteps.data} for:item="manualStep">
+            <div class="slds-p-top_x-small" key={manualStep.Id}>
+                <lightning-card>
+                    <b style="color:#067bbe;font-size: 100%;" class="slds-align_absolute-center">{manualStep.Manual_Step__c}</b>
+                </lightning-card>
+            </div>
+        </template>
+    </template>
+</template>

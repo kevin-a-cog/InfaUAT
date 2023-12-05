@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <isExposed>true</isExposed>
+	<masterLabel>Scheduler Ask An Expert</masterLabel>
+	<description>This LWC books timeslots and creates Service Appointments for "Ask An Expert".</description>
+    <targets>
+		<target>lightningCommunity__Page</target>
+		<target>lightning__FlowScreen</target>
+    </targets>
+	<targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+			<property name="strWorkTypeGroupId" label="Selected Product" type="String" role="inputOnly"/>
+			<property name="strSelectedTimeSlotAAE" label="Selected Time Slot" type="String"/>
+			<property name="datTSelectedStartTime" label="Selected Start Date Time" type="DateTime" role="outputOnly" />
+			<property name="datTSelectedEndTime" label="Selected End Date Time" type="DateTime" role="outputOnly" />
+			<property name="strSelectedDisplayStartTime" label="Selected Display Start Time" type="String" role="outputOnly" />
+			<property name="strSelectedDisplayEndTime" label="Selected Display End Time" type="String" role="outputOnly" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

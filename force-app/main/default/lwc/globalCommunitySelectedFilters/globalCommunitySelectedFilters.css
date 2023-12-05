@@ -1,0 +1,29 @@
+.row-paddings {
+    align-items: end;
+    margin: 0px auto;
+    /* padding: 10px; */
+}
+.in-search-cta {
+    background: #eaeaea;
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 32px;
+    color: #373737;
+    padding: 0px 5px;
+}
+.search-filter:first-child {
+    margin-left: 10px;
+}
+.change-pointer {
+    cursor: pointer;
+}
+.clear-filter {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 32px;
+    color: #001aff;
+    text-transform: uppercase;
+}

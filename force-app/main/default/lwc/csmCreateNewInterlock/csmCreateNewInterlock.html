@@ -1,0 +1,50 @@
+<template>
+
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close closeIcon slds-button_icon-bare slds-button_icon-inverse" title="Close" onclick={handleCancel}>
+                    <lightning-icon icon-name="utility:close" class="my-icon" alternative-text="Close" title="close" ></lightning-icon>
+                </button>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">New Interlock</h2>
+            </header>
+            <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="small"></lightning-spinner>
+
+        <lightning-record-edit-form object-api-name="Related_Opportunity_Plan__c" onsuccess={handleSuccess} onsubmit={handleSubmit} onerror={handleError}>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+            <lightning-layout multiple-rows>
+
+                <lightning-layout-item size="6" class="slds-p-left_x-small">
+                    <lightning-input-field  field-name="Account__c" value={accountId} variant="label-stacked" disabled required>
+                    </lightning-input-field>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="6" class="slds-p-left_x-small">
+                    <lightning-input-field  field-name="Plan__c" value={recordId} variant="label-stacked" disabled required>
+                    </lightning-input-field>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" class={customLookupClass}>                                    
+                    <c-custom-lookup-field
+                    data-id="Opportunity"
+                    label="Opportunity"
+                    placeholder="Select the Opportunity"
+                    onsearch={handleLookupSearch}
+                    onselectionchange={handleLookupSelectionChange}
+                    variant ="label-stacked"
+                    required                  
+                    ></c-custom-lookup-field>
+                </lightning-layout-item>
+            </lightning-layout>
+            </div>
+            <footer class="slds-modal__footer">
+                <button type="reset" class="slds-button slds-button_neutral slds-float_left" onclick={handleCancel}>Cancel</button>               
+                <button class="slds-button slds-button_brand" type="submit">Save</button>
+            </footer>
+        </lightning-record-edit-form>
+
+        </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div> 
+    
+</template>

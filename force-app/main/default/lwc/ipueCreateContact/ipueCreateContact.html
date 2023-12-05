@@ -1,0 +1,67 @@
+<template>
+    <!--Modal Window to display a custom form to create contact-->
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+        <div class="slds-modal__container">
+            <!--Moadl Header-->
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close" title="Close" onclick={handleCancel}>
+                    <lightning-icon icon-name="utility:close" size="small" variant="inverse">
+                    </lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Contact: Customer Contact</h2>
+            </header>
+
+            <!--Modal Body-->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">    
+
+                <template if:true={showSpinner}>        
+                    <lightning-spinner variant="brand" alternative-text="creating contact" size="medium"></lightning-spinner>
+                </template>
+
+                <!--display the form once the account is loaded-->
+                <template if:true={accountId}>
+                    <div class="slds-p-vertical_large">
+                    <lightning-record-edit-form object-api-name="Contact" 
+                                                onsuccess={handleSuccess} 
+                                                onerror={handleError} 
+                                                onsubmit={handleSubmit}>
+                        <!--Form Body-->
+                        <lightning-messages></lightning-messages>
+                        <div class="slds-grid">      
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name={nameField} required=true> </lightning-input-field>          
+                                <lightning-input-field field-name={emailField} required=true> </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">                
+                                <b class="slds-form-element__label">Mailing Address</b> 
+                                <lightning-input-field field-name={streetField} value={contactStreet}> </lightning-input-field>
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_2-of-3">
+                                        <lightning-input-field field-name={cityField} value={contactCity}> </lightning-input-field>
+                                        <lightning-input-field field-name={zipcodeField} value={contactZipCode}> </lightning-input-field>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-3">
+                                        <lightning-input-field field-name={stateField} value={contactState}> </lightning-input-field>
+                                        <lightning-input-field field-name={countryField} value={contactCountry}> </lightning-input-field>
+                                    </div>
+                                </div>
+                                <lightning-input-field field-name={accountfield} required=true value={accountId}> </lightning-input-field>  
+                                <lightning-input-field field-name={phoneField} required=true> </lightning-input-field>            
+                            </div>
+                        </div>
+
+                        <!--Form Footer-->
+                        <div class="slds-m-top_x-small slds-clearfix slds-theme_shade">
+                            <div class="slds-p-vertical_small slds-float_right">
+                                <lightning-button class="slds-p-right_x-small" label="Cancel" onclick={handleCancel}></lightning-button>
+                                <lightning-button label="Save" variant="brand" type="submit"></lightning-button>
+                            </div>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+                </template>
+            </div>
+        </div>
+    </section>    
+</template>

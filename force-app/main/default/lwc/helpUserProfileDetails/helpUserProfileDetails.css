@@ -1,0 +1,226 @@
+.help-img {
+    flex: 0 0 33.333%;
+    padding: 20px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.help-contentPic {
+    box-sizing: border-box;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    border: 2px solid rgba(151, 151, 151, 0.418405);
+}
+.help-user-name {
+    display: flex;
+    align-items: center;
+    color: #373737;
+    margin-bottom: 15px;
+}
+.help-user-name.mobile {
+    display: none;
+}
+.help-user-name.desktop {
+    display: block;
+}
+.bg-color {
+    background-color: #ffffff;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+}
+.help-outer-div {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+.help-company-address,
+.help-email-phone {
+    display: flex;
+}
+.help-edit {
+    padding-left: 4%;
+    display: flex;
+}
+
+.help-points {
+    margin-top: 8px;
+    font-weight: bold;
+    font-size: 12px;
+    color: #ffffff;
+    background-color: #00A9BB;
+    display: inline-block;
+    padding: 3px 14px;
+    border-radius: 30px;
+}
+.help-edit-icon {
+    margin-left: auto;
+    --lwc-colorTextIconDefault: #001aff;
+}
+
+.help-edit-text {
+    font-size: 18px;
+    color: #001aff;
+    margin-right: 15px;
+    margin-top: 6px;
+    display: inline-block;
+}
+
+.help-input-text {
+    border-width: 0px;
+    border: none;
+    font-size: 16px;
+    color: #373737;
+    margin-bottom: 10px;
+    pointer-events: none;
+    width: 100%; /* I2RT-8960 */
+    /* I2RT-9028 starts */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    /* I2RT-9028 ends */
+}
+
+.help-input-label {    
+    font-weight: 300;
+    font-size: 12px;
+    color: #373737;
+    margin: 0;
+}
+
+.help-follow {
+    padding-left: 5%;
+}
+
+.help-profile-detail {
+    width: calc(100% - 33.333%);
+    padding: 20px;
+}
+
+.help-follow-button {
+    margin-left: auto;
+}
+
+.help-firstLast-name.desktop{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.help-firstLast-name.mobile{
+    display: none;
+}
+.help-userinfo{
+    width: calc(100% - 33.333%);
+    padding: 20px;
+}
+
+.help-nickname-edit{
+    padding-top: 2px;
+    padding-left: 10px;
+}
+.help-name-edit-outer{
+    display: flex;
+    padding-top: 10px;
+    justify-content: center;
+}
+.in-button--only-icon{
+    top:0px;
+}
+
+.vl{
+    border-left: 2px solid rgba(151, 151, 151, 0.418405);
+}
+
+.help-nickname-block{
+    padding-top: 43px;
+    width: 100%;
+}
+.help-nickname-input{
+    width: 100%;
+}
+
+.help-display-name{
+    font-size:14px;
+    color: #373737;
+    line-break: anywhere;
+    /* white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 165px; */
+}
+
+.help-image-block{
+    width: 100%;
+    text-align: center;
+    flex: 0 0 33%;
+    padding: 20px;
+}
+
+.help-tick-icon{
+    --lwc-colorTextIconDefault: #94d13c;
+}
+
+.help-cross-icon{
+    --lwc-colorTextIconDefault: red;
+}
+
+/* .help-save-icon{
+    padding-right: 20px;
+} */
+
+.help-save-cancel{
+    padding-top: 10px;
+    justify-content: center;
+}
+@media screen and (max-width: 991px) {
+    
+}
+@media screen and (max-width: 768px) {
+    .bg-color {
+        margin: 0 auto;
+        width: 92%;
+    }
+    .help-outer-div {
+        flex-direction: column;
+    }
+    .help-company-address,
+    .help-email-phone {
+        flex-direction: column;
+    }
+    /* .help-points {
+        justify-content: flex-start;
+        padding: 0;
+        padding-bottom: 20px;
+    } */
+    .help-firstLast-name.mobile {
+        display: block;
+    }
+    /* .help-firstLast-name.desktop{
+        display: none;
+    } */
+    .vl{
+        display: none;
+    }
+    .help-nickname-edit{
+        margin-left: 6%;
+        margin-top: 0%;
+    }
+    .help-userinfo, .help-profile-detail{
+        /* padding-left: 0px;
+        margin-left: 1px; */
+        width: 100%;
+        padding-top: 0px;
+    }
+
+    .help-nickname-block{
+        padding-left: 0px;
+    }
+    .help-user-name.mobile {
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 0px;
+    }
+    .help-user-name.desktop {
+        display: none;
+    }
+    
+}

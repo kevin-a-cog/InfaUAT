@@ -1,0 +1,109 @@
+<template>
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+	<!-- Spinner. -->
+	<template if:true={boolGlobalSpinnerShown}>
+		<div class="slds-is-relative slds-m-top_xx-large">
+			<lightning-spinner variant="brand" size="small"></lightning-spinner>
+		</div>
+	</template>
+
+	<!-- All tables. -->
+	<template if:false={boolGlobalSpinnerShown}>
+		<lightning-tabset>
+			<lightning-tab label="My Queues">
+				<div class="slds-clearfix">
+					<div class="slds-float_right" style="margin-top: -3.1rem">
+						<lightning-button-menu alternative-text="Show menu" variant="container" icon-name="utility:settings"
+							onselect={handleMenuSelect}>
+							<lightning-menu-item value="configureQueues" label="Configure Queues"></lightning-menu-item>
+							<lightning-menu-item value="configureColumns" label="Configure Columns"></lightning-menu-item>
+						</lightning-button-menu>
+	
+						<!-- Refresh Icon for table. -->
+						<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" 
+								onclick={refreshTable}></lightning-button-icon>
+							
+						<!-- Pop out. -->
+						<template if:false={boolIsPoppedOut}>
+							<lightning-button-icon icon-name="utility:new_window" class="slds-m-left_xx-small" onclick={popOut}></lightning-button-icon>
+						</template>
+						<template if:true={boolIsPoppedOut}>
+							<lightning-button-icon icon-name="utility:pop_in" class="slds-m-left_xx-small" onclick={popOut}></lightning-button-icon>
+						</template>
+					</div>
+				</div>
+	
+				<!-- My table. -->
+				<div class="slds-is-relative slds-m-top_small">
+					<c-global-data-table obj-parameters={objMyTable} onaction={executeAction}></c-global-data-table>
+				</div>
+			</lightning-tab>
+			<lightning-tab label="All Queues">
+				<div class="slds-clearfix">
+					<div class="slds-float_right" style="margin-top: -3.1rem">
+						<lightning-button-menu alternative-text="Show menu" variant="container" icon-name="utility:settings"
+							onselect={handleMenuSelect}>
+							<lightning-menu-item value="configureAllColumns" label="Configure Columns">
+							</lightning-menu-item>
+						</lightning-button-menu>
+	
+						<!-- Refresh Icon for table. -->
+						<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" 
+								onclick={refreshTable}></lightning-button-icon>
+							
+						<!-- Pop out. -->
+						<template if:false={boolIsPoppedOut}>
+							<lightning-button-icon icon-name="utility:new_window" class="slds-m-left_xx-small" onclick={popOut}></lightning-button-icon>
+						</template>
+						<template if:true={boolIsPoppedOut}>
+							<lightning-button-icon icon-name="utility:pop_in" class="slds-m-left_xx-small" onclick={popOut}></lightning-button-icon>
+						</template>
+					</div>
+				</div>
+	
+				<!-- All table. -->
+				<div class="slds-is-relative slds-m-top_small">
+					<c-global-data-table obj-parameters={objAllTable} onaction={executeAction}></c-global-data-table>
+				</div>
+			</lightning-tab>
+		</lightning-tabset>
+	</template>
+    
+	<!-- Modal. -->
+    <template if:true={showModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small"
+            aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container" style="width: 25% !important;">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{modalHeader}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-align_absolute-center1">
+                        <lightning-dual-listbox if:true={isConfigureQueues} name="myQueues" label="Select Queues"
+                            source-label="Available" selected-label="Selected" value={myQueueList}
+                            options={picklistValueProvider.queuesPicklistValues}>
+                        </lightning-dual-listbox>
+
+                        <lightning-dual-listbox if:true={isConfigureColumns} name="myQueueColumns"
+                            label="Select Columns" source-label="Available" selected-label="Selected"
+                            value={myColumnList} options={picklistValueProvider.lstAvailableQueueColumns}>
+                        </lightning-dual-listbox>
+
+                        <lightning-dual-listbox if:true={isConfigureAllColumns} name="allQueueColumns"
+                            label="Select Columns" source-label="Available" selected-label="Selected"
+                            options={picklistValueProvider.lstAvailableQueueColumns} value={allColumnList}>
+                        </lightning-dual-listbox>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={handleClick} name="cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={handleClick} name="save">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

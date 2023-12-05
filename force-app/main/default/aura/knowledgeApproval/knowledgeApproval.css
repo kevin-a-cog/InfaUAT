@@ -1,0 +1,62 @@
+.THIS .textMsg {
+    margin-left: 20px;
+    margin-top: -21px;
+}
+
+.THIS .gdprdata-content-in-approval::-webkit-scrollbar {
+    height: 5px;
+}
+
+/* Track */
+
+.THIS .gdprdata-content-in-approval::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+
+.THIS .gdprdata-content-in-approval::-webkit-scrollbar-thumb {
+    background: #C1C1C1;
+}
+
+/* Handle on hover */
+
+.THIS .gdprdata-content-in-approval::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.THIS .gdprdata-content-in-approval {
+    scrollbar-width: thin;
+}
+
+/*************************************** */
+
+.THIS .knowledge-approval::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.THIS .knowledge-approval {
+    scrollbar-width: thin;
+}
+
+/* section of 
+   /* width */
+
+.THIS .knowledge-approval::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+/* Track */
+
+.THIS .knowledge-approval::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+
+.THIS .knowledge-approval::-webkit-scrollbar-thumb {
+    background: #C1C1C1;
+}
+
+/*************************************** */

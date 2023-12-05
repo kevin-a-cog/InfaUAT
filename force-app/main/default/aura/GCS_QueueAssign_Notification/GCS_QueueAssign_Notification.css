@@ -1,0 +1,6 @@
+.THIS.removeScroll{
+    overflow:hidden;
+}
+.THIS .slds-has-notification .slds-utility-bar__action {
+    background: green !important;
+}

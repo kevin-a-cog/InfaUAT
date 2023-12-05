@@ -1,0 +1,112 @@
+<template>
+    <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+    <div class="in-action-items-container">
+        <h1 class="in-heading in-teal in-heading-bottom mb-0">Actions</h1>
+        <template if:true={isAskQuestionModal}>
+            <c-help-ask-a-question-modal heading={heading} selectedpostto={recordId}
+                onclosepopup={closeAskQuestionModal} onsave={saveData} is-loading={isSpinnerLoading}>
+            </c-help-ask-a-question-modal>
+        </template>
+
+        <template if:true={showIdeaModal}>
+            <c-help-create-idea-modal selectedpostto={recordId} onclosemodal={closeIdeaModal}>
+            </c-help-create-idea-modal>
+        </template>
+
+        <template if:true={showpollModal}>
+            <c-help-create-poll-post selectedpostto={topicId} object-api-name ={objectApiName} onclosemodal={closePollModal} ongettopicid={getTopicId} > </c-help-create-poll-post>
+        </template>
+
+        <template if:true={showAnnouncementModal}>
+            <c-help-create-announcement heading="Create an Announcement" group-id={groupId}
+                onclosepopup={closeAnnouncementModal} onsave={createAnnouncement}>
+            </c-help-create-announcement>
+        </template>
+
+        <template if:true={showEditAnnouncementModal}>
+            <c-help-edit-announcements announcements={announcements} heading="Edit Announcements" group-id={groupId}
+                onclosepopup={closeEditAnnouncementModal} onsave={saveAnnouncement}>
+            </c-help-edit-announcements>
+        </template>
+
+        <ul>
+            <template if:true={showAskAQuestion}>
+                <li class="list-item">
+                    <div class="action-item" onclick={handleAskQuestion}>
+                        <img src={questionLogo} alt="question">
+                        <div class="action-name">Ask a Question</div>
+                    </div>
+                </li>
+            </template>
+            <template if:true={showCreateAnIdea}>
+                <li class="list-item">
+                    <div class="action-item" onclick={handleCreateIdea}>
+                        <img src={ideaLogo} alt="idea">
+                        <div class="action-name">Create an Idea</div>
+                    </div>
+                </li>
+            </template>
+
+            <template if:true={showPollActionItem}>
+                <li class="list-item">
+                    <div class="action-item" onclick={handleCreatePoll}>
+                        <img src={createpolllogo} alt="Poll" class="in-group-action-icon">
+                        <div class="action-name">Create a Poll</div>
+                    </div>
+                </li>
+
+            </template>
+
+            <template if:true={showCreateCaseButton}>
+                <li class="list-item">
+                    <div class="action-item" onclick={handleCreateCase}>
+                        <img src={createCaseLogo} alt="case">
+                        <div class="action-name">Create Case</div>
+                    </div>
+                </li>
+            </template>
+
+            <template if:true={showManageCaseButton}>
+                <li class="list-item">
+                    <div class="action-item" onclick={handleManageCase}>
+                        <img src={manageCaseLogo} alt="case">
+                        <div class="action-name">Manage Case</div>
+                    </div>
+                </li>
+            </template>
+
+            <template if:true={showFollow}>
+                <template if:false={isFollowing}>
+                    <li class="list-item">
+                        <div class="action-item" onclick={handlefollowCommunity}>
+                            <img src={followCommunityLogo} alt="community">
+                            <div class="action-name">Follow this Community</div>
+                        </div>
+                    </li>
+                </template>
+                <template if:true={isFollowing}>
+                    <li class="list-item">
+                        <div class="action-item" onclick={handleunfollowCommunity}>
+                            <img src={followCommunityLogo} alt="community">
+                            <div class="action-name">Unfollow this Community</div>
+                        </div>
+                    </li>
+                </template>
+            </template>
+            <template if:true={isInternaluser}>
+                <li class="list-item">
+                    <div class="action-item" onclick={handleCreateAnnouncement}>
+                        <img src={announcementLogo} alt="announcement" class="in-group-action-icon">
+                        <div class="action-name">Create an Announcement</div>
+                    </div>
+                </li>
+                <li class="list-item">
+                    <div class="action-item" onclick={handleEditAnnouncements}>
+                        <img src={announcementLogo} alt="announcement" class="in-group-action-icon">
+                        <div class="action-name">Edit Announcements</div>
+                    </div>
+                </li>
+            </template>
+        </ul>
+    </div>
+</template>

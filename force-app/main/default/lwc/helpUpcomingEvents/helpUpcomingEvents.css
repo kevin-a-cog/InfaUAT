@@ -1,0 +1,251 @@
+.in-upcoming-events-data {
+    box-shadow: 0px 5px 15px rgb(0, 0, 0, 0.25);
+    margin-top: 0;
+    padding: 20px;
+    margin-left: 20px;
+}
+@media screen and (max-width: 768px) {
+    .in-upcoming-events-container {
+        margin: 0 auto;
+        width: 92%;
+    }
+    .in-upcoming-events-list,
+    .in-upcoming-events-calendar {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .upcomingEvents-header {
+        margin: 20px 0px;
+        padding: 0 !important;
+    }
+    .in-upcoming-events-item {
+        padding-left: 0 !important;
+    }
+    .in-upcoming-events-data {
+        padding: 10px;
+        margin: 0;
+    }
+}
+
+.event-heading{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 33px;
+    color: #333333;
+    margin: 24px 0px;
+    display: inline-block;
+}
+@media screen and (max-width: 768px) {
+    .event-heading {
+        font-size: 24px;
+    }
+}
+
+.heading-wrapper{
+    background-size: 100% 100%;
+}
+
+.upcomingEvents-header{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #7F8B97;
+    padding-left: 0;
+    margin-top: 0;
+}
+.no-events{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 21px;
+    color: #7F8B97;
+    display: flex;
+    justify-content: center;
+}
+.no-upcoming-events{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 21px;
+    color: #7F8B97;
+    display: flex;
+    justify-content: center;
+    padding-top: 150px;
+}
+.upcoming-event-subject{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 21px;
+    line-height: 29px;
+    display: flex;
+    align-items: center;
+    color: #373737;
+    cursor: pointer;
+    
+}
+.event-subject-truncate{
+    width: 100%;
+    overflow:hidden; 
+    white-space:nowrap; 
+    text-overflow: ellipsis;
+    display: inline-block
+}
+
+/*.upcoming-event-subject {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text 
+ }
+*/
+
+/* Tooltip text */
+.upcoming-event-subject .tooltiptext {
+  visibility: hidden;
+  width: auto;
+  
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 21px;
+
+  background-color: black;
+  color: #fff;
+  text-align: left;
+  padding: 5px 4px;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.upcoming-event-subject:hover .tooltiptext {
+  visibility: visible;
+}
+
+.upcoming-event-subject:hover { 
+    color: #001aff;
+}
+
+.my-event-subject {
+    font-size: 16px;
+}
+.upcoming-event-type{
+    background-color: #00a9bb;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    padding: 2px 10px;
+    font-size: 10px;
+    margin-top: 5px;
+    display: inline-block;
+    font-weight: 400;
+}
+.upcoming-event-datetime{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 18px;
+    color: #373737;
+}
+.hr-tag{
+    display: block;
+    margin: var(--lwc-spacingXSmall,1rem) 0;
+    border-top: 1px solid var(--lwc-colorBorder,#070606);
+    height: 1px;
+    clear: both;
+}
+
+.help-upcoming-events-calendar-body{
+    background: #FFFFFF;
+    box-shadow: 4.93646px 4.93646px 17.7712px rgba(0, 0, 0, 0.12);
+}
+
+.fc-scroller{
+    height: 100% !important;
+}
+
+.join-btn-css{
+    display: flex;
+    justify-content: flex-end;
+}
+.in-upcoming-events-item {
+    padding: 12px 0px;
+}
+.in-upcoming-events-item:not(:last-child) {
+    border-bottom: 1px solid #eaeaea;
+}
+.in-upcoming-event-datetime {
+    margin-right: 12px;
+}
+.in-my-events-list {
+    margin: 10px auto;
+    width: 94%;
+    padding-bottom: 5px;
+}
+.in-my-events-list:not(:last-child) {
+    border-bottom: 1px solid #eaeaea;
+}
+.my-event-datetime {
+    height: auto;
+    width: 3%;
+    margin: 10px 5px 11px 0px;
+}
+.my-event-datetimelocation {
+    font-size: 10px;    
+    align-items: center;
+}
+@media screen and (max-width: 768px) {
+    .my-event-datetimelocation {
+        flex-direction: row !important;
+    }
+}
+
+.right-chev:hover{
+    cursor: pointer;
+}
+.upcoming-event-datetimelocation {
+    display: flex;
+    margin-top: 10px;
+}
+@media screen and (max-width: 768px) {
+    .upcoming-event-datetimelocation {
+        flex-direction: column;
+    }
+}
+.my-events-header {
+    margin-top: 10px;
+}
+.upcoming-event-info {
+    margin-right: 15px;
+}
+@media screen and (max-width: 768px) {
+    .upcoming-event-info {
+        margin-bottom: 10px;
+    }
+}
+
+.help-events-subject{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.in-upcoming-event-title{
+    align-items: center;
+}
+
+.in-heading-upcoming-events{
+    width: fit-content;
+}

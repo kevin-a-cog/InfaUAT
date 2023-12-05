@@ -1,0 +1,51 @@
+<template>
+    <div class="slds-card slds-is-relative slds-m-top_small">
+        <!--<lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>-->
+        <!--<lightning-button-icon icon-name="utility:delete" variant="bare" class="slds-float_right slds-m-right_xx-small"
+            data-name="remove" onclick={handleClick}>
+        </lightning-button-icon>-->
+        <div class="slds-p-around_medium">
+            <lightning-record-edit-form object-api-name="Milestone__c" record-id={milestoneId} onload={handleLoad}>
+                <lightning-messages></lightning-messages>
+                <h3 class="slds-section__title slds-theme_shade">Informationn</h3>
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item size="6">
+                        <lightning-input-field field-name="Name" variant="label-stacked" onchange={handleChange}
+                            required>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <lightning-input-field field-name="Objective__c" class="slds-hide" value={objectiveId}>
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Key_Milestone__c" variant="label-stacked"
+                            data-name="keyMilestone" onchange={handleChange}></lightning-input-field>
+                    </lightning-layout-item>                   
+                </lightning-layout>
+                <lightning-layout  multiple-rows="true">
+                    <lightning-layout-item size="12">
+                        <lightning-input-field field-name="Description__c" variant="label-stacked" required>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item size="6">
+                        <lightning-input-field field-name="Status__c" variant="label-stacked" required value="Yet to Start">
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <lightning-input-field field-name="Milestone_type__c" variant="label-stacked" required>
+                        </lightning-input-field>
+                    </lightning-layout-item>                     
+                </lightning-layout>             
+                <lightning-layout  multiple-rows="true">
+                    <lightning-layout-item size="6">
+                        <lightning-input-field field-name="Planned_Completion_Date__c" variant="label-stacked">
+                        </lightning-input-field>
+                    </lightning-layout-item>  
+                </lightning-layout>
+            </lightning-record-edit-form>
+
+           
+        </div>
+    </div>
+</template>

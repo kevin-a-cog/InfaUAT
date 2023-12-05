@@ -1,0 +1,44 @@
+<!--
+/*
+ * Name			:	CsmDeactivateEntitledProducts
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	6/23/2022
+ * Description	:	This LWC servers as a container for the Deactivate Entitled Products feature.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		6/23/2022		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Id for Quick Action. -->
+	<div style="display: none;">{recordId}</div>
+
+	<!-- Spinner. -->
+	<div if:true={boolDisplaySpinner}>
+		<lightning-card>
+            <p class="slds-p-horizontal_medium slds-m-top_x-large" style="padding-top: 100px;">
+				<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+			</p>
+        </lightning-card>
+	</div>
+
+	<!-- Alert message. -->
+	<div if:false={boolDisplaySpinner}>
+		<lightning-card title={label.Please_Verify}>
+            <p class="slds-p-horizontal_medium">
+				<template for:each={lstReports} for:item="objReport">
+					<p key={objReport.Id}>
+						<a data-id={objReport.Id} onclick={openReport}>{objReport.Name}</a>
+					</p>
+				</template>
+			</p>
+            <p slot="footer">
+				<lightning-button variant="brand" label={label.Confirm} onclick={deactivationConfirmed}></lightning-button>
+			</p>
+        </lightning-card>
+	</div>
+</template>

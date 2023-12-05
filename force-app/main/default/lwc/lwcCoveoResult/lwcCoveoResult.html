@@ -1,0 +1,83 @@
+<!--
+  /*
+   @created by       : 
+   @created on       : 
+   @Purpose          : 
+   @Testclass        :
+   @JIRA             :
+
+
+   Change History
+ ****************************************************************************************************
+ |    Tag     |  Date             |  Modified by              |  Jira reference   |   ChangesMade
+ |     1      |  13-Apr-2021      |   Sathish R               |                   |   Initial Version
+ |     2      |  07-Nov-2023      |   Sathish R               |                   |   Coveo Chat Bot customization
+ ****************************************************************************************************
+ */
+-->
+<template>
+    <template if:true={isYoutube}>
+        <div class="coveo-result-container youtube-result">
+            <a href={result.clickUri} target="_blank" class="result-title" onclick={handleClick}>
+                <h4>{result.title}</h4>
+            </a>
+            <iframe src={content} allowfullscreen>
+            </iframe>
+        </div>
+    </template>
+    <template if:true={isAnswer}>
+        <div class="coveo-result-container">
+            <div role="tabpanel" style="display:inline-block">
+                <div style="clear:none">
+                    <lightning-formatted-rich-text value={result.raw.sfprocedurec}>
+                    </lightning-formatted-rich-text>
+                </div>
+            </div>
+            <a href={result.clickUri} target="_blank" class="result-title" onclick={handleClick}>
+                <h4>Read More</h4>
+            </a>
+        </div>
+    </template>
+    <template if:true={isAnythingElse}>
+        <div class="coveo-result-container">
+            <a href={result.clickUri} target="_blank" class="result-title" onclick={handleClick}>
+                <h4>{result.title}</h4>
+            </a>
+            <span class="coveo-excerpt">
+                {result.excerpt}
+            </span>
+        </div>
+    </template>
+    <!--T02-->
+    <template if:true={isDiscussionBlog}>
+        <div class="coveo-result-container">
+            <a href={result.clickUri} target="_blank" class="result-title" onclick={handleClick}>
+                <h4>{result.title}</h4>
+            </a>            
+            <span class="coveo-excerpt">
+                {result.excerpt}
+            </span>
+        </div>
+    </template>
+    <template if:true={isFeedComment}>
+        <div class="coveo-result-container">
+            <a href={result.clickUri} target="_blank" class="result-title" onclick={handleClick}>
+                <h4>{result.raw.sffeedcommenttitle}</h4>
+            </a>            
+            <span class="coveo-excerpt">
+                {result.excerpt}
+            </span>
+        </div>
+    </template>
+    <template if:true={isProductDoc}>
+        <div class="coveo-result-container">
+            <a href={result.clickUri} target="_blank" class="result-title" onclick={handleClick}>
+                <h4>{result.title}</h4>
+            </a>            
+            <span class="coveo-excerpt">
+                {result.excerpt}
+            </span>
+        </div>
+    </template>
+    <!--T02-->
+</template>

@@ -1,0 +1,117 @@
+<!--
+/*
+ * Name			:	csmIPUConsumptionGoals
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	3/15/2023
+ * Description	:	This LWC displays the IPU Consumption Goals component.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		3/15/2023		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Read only mode. -->
+	<template if:true={boolLocalIsReadOnly}>
+	
+		<!-- Spinner. -->
+		<lightning-spinner if:true={boolDisplaySpinner} variant="brand"></lightning-spinner>
+
+		<!-- Feature section. -->
+		<template if:false={boolDisplaySpinner}>
+		
+			<!-- Table section. -->
+			<lightning-tabset>
+				<lightning-tab label={label.Active_Tab} value="active" onactive={setActiveTab}>
+					<c-csm-accountipu-summary hide-header=true record-id={recordId} field-name="Account__c"></c-csm-accountipu-summary>
+					<c-global-data-table data-id="active" bool-enhanced-collapse-system=true obj-parameters={objParametersActive} has-nested-childs=true></c-global-data-table>
+				</lightning-tab>
+				<lightning-tab label={label.Inactive_Tab} value="inactive" onactive={setActiveTab}>
+					<c-global-data-table data-id="inactive" bool-enhanced-collapse-system=true obj-parameters={objParametersInactive} has-nested-childs=true></c-global-data-table>
+				</lightning-tab>
+				<template if:true={boolDisplayCassiniURL}>
+					<lightning-tab label={label.Cassini_Usage_Information} value="cassini">
+						<c-global-iframe-viewer str-u-r-l={strCassiniURL} str-margin-height="0" str-margin-width="0" str-frame-border="0" 
+								str-style={strCassiniStyle}></c-global-iframe-viewer>
+					</lightning-tab>
+				</template>
+			</lightning-tabset>
+		</template>
+	</template>
+
+	<!-- Edit mode. -->
+	<template if:false={boolLocalIsReadOnly}>
+
+		<!-- Modal. -->
+		<section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+			<div class="slds-modal__container" data-popped-out={boolIsPoppedOut}>
+	
+				<!-- Header. -->
+				<header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small" ></lightning-icon>
+                    </button>
+					<h2 class="slds-modal__title slds-hyphenate">{label.TitlePUConsumptionGoals}</h2>
+				</header>
+	
+				<!-- Body. -->
+				<div class="slds-modal__content slds-p-around_medium slds-is-relative minHeigth overflow" data-popped-out={boolIsPoppedOut}>
+	
+					<!-- Spinner. -->
+					<lightning-spinner if:true={boolDisplaySpinner} variant="brand"></lightning-spinner>
+					<lightning-spinner if:true={boolDisplayOverlaySpinner} variant="brand"></lightning-spinner>
+	
+					<!-- Feature section. -->
+					<template if:false={boolDisplaySpinner}>
+
+						<!-- Refresh and Pop Out buttons. -->
+						<div class="slds-clearfix">
+							<div class="slds-float_right">
+								<lightning-button-icon icon-name="action:new" variant="border-filled" size="medium" class="slds-m-right_medium" onclick={newRecord}></lightning-button-icon>
+								<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-right_medium" onclick={loadRecords}></lightning-button-icon>
+								<lightning-button-icon if:false={boolIsPoppedOut} icon-name="utility:new_window" class="slds-m-right_medium" onclick={popInPopOut}></lightning-button-icon>
+								<lightning-button-icon if:true={boolIsPoppedOut} icon-name="utility:pop_in" class="slds-m-right_medium" onclick={popInPopOut}></lightning-button-icon>
+							</div>
+						</div>
+					
+						<!-- Table section. -->
+						<lightning-tabset>
+							<lightning-tab label={label.Active_Tab} value="active" onactive={setActiveTab}>
+								
+								<c-csm-accountipu-summary hide-header=true record-id={recordId} field-name="Account__c"></c-csm-accountipu-summary>
+								<c-global-data-table data-id="active" bool-enhanced-collapse-system=true obj-parameters={objParametersActive} has-nested-childs=true 
+										onaction={executeAction} onkeydown={moveToNextField} onchanged={cellChanged}></c-global-data-table>
+							</lightning-tab>
+							<lightning-tab label={label.Inactive_Tab} value="inactive" onactive={setActiveTab}>
+								<c-global-data-table data-id="inactive" bool-enhanced-collapse-system=true obj-parameters={objParametersInactive} 
+										has-nested-childs=true></c-global-data-table>
+							</lightning-tab>
+							<template if:true={boolDisplayCassiniURL}>
+								<lightning-tab label={label.Cassini_Usage_Information} value="cassini">
+									<c-global-iframe-viewer str-u-r-l={strCassiniURL} str-margin-height="0" str-margin-width="0" str-frame-border="0" 
+											str-style={strCassiniStyle}></c-global-iframe-viewer>
+								</lightning-tab>
+							</template>
+						</lightning-tabset>
+					</template>
+				</div>
+	
+				<!-- Footer.-->
+				<footer class="slds-modal__footer">
+	
+					<!-- Table section. -->
+					<lightning-button variant="neutral" label={label.CancelIPUConsumptionGoals} onclick={closeModal}></lightning-button>
+					<lightning-button data-type="save" variant="brand" label={strSaveLabel} class="slds-m-left_x-small" onclick={createRecord}></lightning-button>
+					<lightning-button if:true={boolDisplaySaveAndUpdateRiskButton} data-type="saveandrisk" variant="brand" label={label.Save_And_Update_Risk} class="slds-m-left_x-small" 
+							onclick={createRecord}></lightning-button>
+				</footer>
+			</div>
+		</section>
+		
+		<!-- Backdrop. -->
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</template>
+</template>

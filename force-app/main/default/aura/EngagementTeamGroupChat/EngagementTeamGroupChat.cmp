@@ -1,0 +1,31 @@
+<aura:component controller="MSTeamsServiceController" implements="force:hasRecordId,force:lightningQuickActionwithoutHeader">
+    <aura:attribute name="spinner" type="boolean" default="true"/>
+    <aura:attribute name="engFields" type="Object"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+
+    <force:recordData 
+        aura:id="recordLoader"
+        recordId="{!v.recordId}"
+        fields="Engagement_Number__c,MSTeam_Group_Chat_Id__c"
+        targetFields="{!v.engFields}"
+        targetError="{!v.recordLoadError}"
+        recordUpdated="{!c.onRecordLoad}"
+    />
+    
+    <div class="slds-col modal-header slds-modal__header">
+        <h2 class="title slds-text-heading_medium">Creating Group Chat. Please Wait...</h2>
+    </div>
+     
+    <!--loading spinner start-->
+    <aura:if isTrue="{!v.spinner}">
+        <!--div style="background-image: url('{!$Resource.yourNamespace__resourceName}');height: 500px;"/ -->
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- Loading spinner end--> 
+</aura:component>

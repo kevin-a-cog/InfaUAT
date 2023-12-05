@@ -1,0 +1,92 @@
+<template>
+    <div class="slds-page-header branding-setup onesetupSetupHeader">
+		<div class="overflow uiBlock">
+			<div class="slds-grid slds-wrap slds-gutters_small">
+				<div class="slds-col slds-size_4-of-12">
+					<div class="setup-header-element slds-show_inline-block slds-m-right_small">
+						<span class="setup-icon slds-icon_container slds-icon-standard-home branding-primary-background">
+                            <div style="background-color:transparent" class="slds-icon slds-page-header__icon forceEntityIcon">
+                                <lightning-button-icon icon-name="utility:user"   variant="brand" alternative-text="User License Details" class="slds-m-left_xx-small slds-float_left" title="User License Details"></lightning-button-icon>
+                            </div>
+					    </span>
+				    </div>
+                    <div class="setup-header-element slds-show_inline-block">
+                        <div class="onesetupBreadcrumbs">
+                            <div>
+                                <span dir="ltr" title="" class="breadcrumb uiOutputURL onesetupBreadcrumb">User</span>
+                            </div>
+                            <div>
+                                <h1>
+                                    <strong class="breadcrumbDetail uiOutputText slds-text-heading_small">License Details</strong>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+			    </div>
+                <div class="slds-col slds-size_8-of-12">
+                    <div class="slds-grid slds-wrap slds-gutters_small">
+                        <div class="slds-col slds-size_10-of-12">
+                            <lightning-combobox style="width:50%"
+                                name="filter"
+                                label="Licenses"
+                                value={selectedLicense}
+                                options={licenseOptions}
+                                onchange={handleLicenseChange}
+                                placeholder="Select a License">
+                            </lightning-combobox>
+                        </div>
+                        <div class="slds-col slds-size_2-of-12">
+                            <template if:true={allUserLicensesData}>
+                                <lightning-button variant="neutral" lwc:if={totalPages} label="Export CSV" class='slds-float_right slds-m-top_large' title="Export CSV" onclick={handleExportCSV}></lightning-button>
+                            </template>
+                        </div>
+                    </div>
+			    </div>
+		    </div>
+	    </div>
+	</div>
+
+    <lightning-card>
+        <template if:true={allUserLicensesData}>
+            <div>
+                <article class="slds-card">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title slds-p-left_medium">
+                            <span class="slds-truncate" title="User(s) List">
+                                <span>User(s) List</span>
+                            </span>
+                            </h2>
+                        </div>
+                    </header>
+                    <div class="slds-card__body slds-card__body_inner">
+                        <div class="slds-grid slds-wrap slds-gutters_small">
+                            <div class="slds-col slds-size_12-of-12 slds-p-around_medium">
+                                <lightning-datatable data={userData} hide-checkbox-column columns={userColumns} key-field="Id" 
+                                default-sort-direction={defaultSortDirection} sorted-direction={sortDirection} sorted-by={sortedBy} onsort={onHandleSort} >
+                                </lightning-datatable>
+                                <template lwc:if={totalPages}>
+                                        <div class="slds-col slds-p-bottom_xx-small slds-p-top_x-small slds-align_absolute-center">
+                                            <span>
+                                                <lightning-button-icon icon-name="utility:chevronleft" size="small" alternative-text="Previous" onclick={previousPage} disabled={disablePrevious}></lightning-button-icon>
+                                            </span>
+                                            <label class="slds-text-color_weak slds-p-horizontal_x-small">Showing</label> 
+                                            <span>{currentPage}</span>
+                                            <span>&nbsp;of&nbsp;<label>{totalPages}</label></span>
+                                            <span>&nbsp;&nbsp;Page(s)</span>
+                                            <span>
+                                                <lightning-button-icon icon-name="utility:chevronright" size="small" alternative-text="Next" onclick={nextPage} class="slds-p-horizontal_x-small" disabled={disableNext}></lightning-button-icon>
+                                            </span>
+                                        </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </template>
+        <template if:true={noUserList}>
+            <div style="width:100%; padding:1rem;"> No users are assigned to the selected license.</div>
+        </template>
+</lightning-card>
+</template>

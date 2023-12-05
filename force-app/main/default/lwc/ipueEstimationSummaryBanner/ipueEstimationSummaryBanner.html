@@ -1,0 +1,70 @@
+<template>
+    <!--Banners for Internal Users-->
+    <template if:false={isExternalUser}>
+        <template if:true={submitEstimateBanner}>
+            <div class="slds-p-bottom_x-small">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                    <h2>The customer has submitted the estimation. Please click on <b>Finalize Agreement</b> Button to accept the estimation.</h2>
+                </div>
+            </div>
+        </template>
+        <template if:true={closeEstimateBanner}>
+            <div class="slds-p-bottom_x-small">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                    <h2>The estimator is accepted and closed for further processing.</h2>
+                </div>
+            </div>
+        </template>
+        <template if:true={primaryEstimateBanner}>
+            <div class="slds-p-bottom_x-small">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                    <h2>This estimation summary is the primary for the opportunity - {OptyName}</h2>
+                </div>
+            </div>
+        </template>
+        <template if:true={isLevel1}>
+            <div class="slds-p-bottom_x-small">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                    <b>{label.level1Label}</b>
+                </div>
+            </div>
+        </template>
+        <template if:true={isLevel2}>
+            <div class="slds-p-bottom_x-small">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                    <b>{label.level2Label}</b>
+                </div>
+            </div>
+        </template>
+        <!--<div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{label.checkboxUncheckWarning}</b>
+            </div>
+        </div>-->
+        <template if:true={showEndOfLife}>
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{label.EndOfLifeError}</b>
+            </div>
+        </template>
+    </template>
+
+    <!--Banners for community Users-->
+    <template if:true={isExternalUser}>
+        <!--On Submit of Estimator-->
+        <template if:true={submitEstimateBanner}>
+            <div class="slds-p-bottom_x-small">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                    <b>Submitted to Informatica for review and pricing.</b>
+                </div>
+            </div>
+        </template>
+        <!--On closing of Estimator-->
+        <template if:true={closeEstimateBanner}>
+            <div class="slds-p-bottom_x-small">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                    <b>The estimator is accepted and closed for further processing.</b>
+                </div>
+            </div>
+        </template>
+    </template>
+</template>

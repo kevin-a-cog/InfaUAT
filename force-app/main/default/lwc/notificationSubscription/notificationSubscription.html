@@ -1,0 +1,583 @@
+<!--
+
+@created by       : balajip
+@created on       : 10/06/2021
+@Purpose          : Controller for NotificationSubscription LWC
+@Testclass        : NotificationSubscriptionControllerTest
+@JIRA             : 
+    
+Change History
+****************************************************************************************************
+ModifiedBy      Date        Jira No.    Tag     Description
+****************************************************************************************************
+balajip         05/24/2022  I2RT-6268   T01     Added feature to be able to configure Queue or Related Users for notification
+
+-->
+<template>
+    <lightning-card class="slds-text-align_center">
+        <slot name="title" class="slds-text-heading_medium">
+            <span>Notification Subscription</span>        
+        </slot>
+    </lightning-card>
+
+    <lightning-card>
+        <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+        <div slot="title" class="slds-text-heading_small">
+            <span>Step 1: Subscription Details</span>
+        </div>
+
+        <lightning-layout vertical-align='center' >
+            <lightning-layout-item class="slds-var-p-around_x-small gcs-align-fields" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                <lightning-input access-key="NameField" variant="label-stacked" type="text" label="Name" name="criteriaName"
+                    placeholder="Enter the Notification Name" value={criteriaRecord.fields.Name} onchange={handleCriteriaFieldChange} required>
+                </lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item class="slds-var-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                <lightning-combobox
+                    name="criteriaObject"
+                    label="Object"
+                    value={criteriaRecord.fields.Object__c} 
+                    options={objectOptions}
+                    onchange={handleCriteriaFieldChange} 
+                    variant="label-stacked"
+                    required
+                    >
+                </lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item class="slds-var-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                <lightning-combobox
+                    name="criteriaTrigger"
+                    label="Evaluation Trigger"
+                    value={criteriaRecord.fields.Evaluation_Trigger__c} 
+                    options={triggerOptions}
+                    onchange={handleCriteriaFieldChange} 
+                    variant="label-stacked"
+                    required
+                    >
+                </lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item class="slds-var-p-around_x-small" size="12" small-device-size="2" medium-device-size="2" large-device-size="2">
+                <lightning-helptext icon-variant="warning" if:true={isCaseCommentObject} content="Changing the Evaluation Trigger value may result in Notifications not getting send. Change only if absolutely required!"></lightning-helptext>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+
+    <lightning-card>
+        <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+        <div slot="title" class="slds-text-heading_small">
+            <span>Step 2: Filter Criteria</span>
+        </div>
+        <div class="slds-var-p-around_x-small">
+            <lightning-button variant="container" label="Add Criteria Item" title="Add Criteria Item" icon-name="utility:new" onclick={addRow}></lightning-button> 
+        </div>
+
+        <lightning-layout>
+            <!-- <lightning-layout-item padding="horizontal-small" size="12" small-device-size="1" medium-device-size="1" large-device-size="1">Section</lightning-layout-item> -->
+            <lightning-layout-item class="gcs-offset" padding="horizontal-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">Field</lightning-layout-item>
+            <lightning-layout-item padding="horizontal-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">Operator</lightning-layout-item>
+            <lightning-layout-item padding="horizontal-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">Value</lightning-layout-item>
+        </lightning-layout>
+
+        <template for:each={criteriaList} for:item="item" for:index="index"> 
+        <lightning-layout key={item.id}>
+            <!-- <lightning-layout-item key={item.id} class="slds-p-around_x-small" size="12" small-device-size="1" medium-device-size="1" large-device-size="1">
+                <span>{item.section} </span>
+            </lightning-layout-item> -->
+            <lightning-layout-item key={item.id} class="slds-var-p-around_x-small slds-grid" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                <div class="slds-col slds-size_1-of-12" style="align-self: center;">{item.section}</div>
+                <div class="slds-col slds-size_11-of-12">
+                    <lightning-combobox
+                    key={item.id}
+                    access-key={item.id}
+                    name="Field"
+                    label="Field"
+                    value={item.fieldLabel}
+                    options={fieldNameOptions}
+                    onchange={handlefieldNamechange}                 
+                    variant = "label-hidden"
+                    >
+                </lightning-combobox>
+                </div>
+            </lightning-layout-item>
+                <lightning-layout-item key={item.id} class="slds-var-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                    <lightning-combobox
+                    key={item.id}
+                    access-key={item.id}
+                    name="Operator"
+                    label="Operator"
+                    options={item.operatorsList}
+                    onchange={handleoperatorChange}                 
+                    variant = "label-hidden"
+                    value={item.operator}
+                    >
+                </lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item key={item.id} class="slds-var-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                <c-input-field-dynamic
+                    key={item.id}
+                    access-key={item.id}
+                    name="DynamicField"
+                    item={item}
+                    onvaluechange={handleCriteriaLineValueChange} 
+                    onrendercomplete={stopSpinner}
+                    >
+                </c-input-field-dynamic>
+            </lightning-layout-item>
+
+            <lightning-layout-item key={item.id} class="slds-var-p-around_x-small" size="12" small-device-size="2" medium-device-size="2" large-device-size="2">
+                <lightning-icon if:true={item.allowDelete} icon-name="action:delete" class="small-icon" access-key={item.id} id={index}
+                        alternative-text="Delete Row" size="xx-small" title="Delete Row" onclick={removeRow}>
+                </lightning-icon>
+                <lightning-helptext icon-variant="warning" if:true={item.showWarning} content="Modifying this Criteria Item may result in Notifications not getting send. Modify only if absolutely required!"></lightning-helptext>
+            </lightning-layout-item>
+        </lightning-layout>
+        </template>
+
+        <lightning-accordion class="gcs-filter-wrapper" allow-multiple-sections-open>
+            <lightning-accordion-section name="CustomLogic" label="Filter Logic">
+                <lightning-input access-key="CustomLogic" value={criteriaRecord.fields.Custom_Logic__c} label="Custom Logic" variant="label-hidden" onchange={handleCustomLogicChange}></lightning-input>
+            </lightning-accordion-section>
+            <lightning-helptext class="gcs-filter-tooltip" content="Filter logic governs how and when filters apply to your list view. Use AND and OR operators to fine tune your results"></lightning-helptext>
+        </lightning-accordion>
+
+    </lightning-card>
+
+    <lightning-card>
+        <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+        <div slot="title" class="slds-text-heading_small">
+            <span>Step 3: Notification Channel</span>
+        </div>
+
+        <lightning-layout>
+            <lightning-layout-item class="slds-var-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                <label class="slds-form-element__label">* Channel(s)</label>
+                <c-multi-select-pick-list  
+                        name="criteriaNotifType"
+                        label="Notification Type"
+                        options={notificationTypeOptions}
+                        onvaluechange={handleCriteriaFieldChange} 
+                        variant="label-stacked"
+                        access-key="NotificationType"
+                        required= true                       
+                        >
+                </c-multi-select-pick-list>
+            </lightning-layout-item>
+            
+            <template if:true={showTeamsEmailField}>
+                <lightning-layout-item class="slds-var-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                    <lightning-input access-key="emailField" variant="label-stacked" type="email" label="Teams Channel Email" 
+                        name="criteriaTeamsEmail" value={criteriaRecord.fields.MS_Teams_Email__c} 
+                        placeholder="Enter Teams Channel Email" onchange={handleCriteriaFieldChange}>
+                    </lightning-input>
+                </lightning-layout-item>
+            </template>
+
+            <template if:true={showChatterGroupEmailField}>
+                <lightning-layout-item class="slds-var-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                    <lightning-input access-key="chatterEmailField" variant="label-stacked" type="email" label="Chatter Group Email" 
+                        name="criteriaChatterEmail" value={criteriaRecord.fields.SF_Chatter_Post_Email__c} 
+                        placeholder="Enter Chatter Group Email" onchange={handleCriteriaFieldChange}>
+                    </lightning-input>
+                </lightning-layout-item> 
+            </template>
+
+            <template if:true={showExpirationDate}>
+                <lightning-layout-item class="slds-var-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                    <lightning-input access-key="expiryDay" variant="label-stacked" type="number" label="Expire In(Days)" min="1" required
+                        name="criteriaExpiryDay" value={criteriaRecord.fields.Platform_Notification_Expiration__c} 
+                        placeholder="Enter Expiry Date for Platform Notification" onchange={handleCriteriaFieldChange}>
+                    </lightning-input>
+                </lightning-layout-item> 
+            </template>
+
+        </lightning-layout>
+
+        <template if:false={showExpirationDate}>
+            <div class="slds-var-p-around_x-small">
+                <lightning-button variant="container" label="Add Recipients" title="Add Recipients" icon-name="utility:new" onclick={addUserRow}></lightning-button> 
+            </div> 
+        </template>  
+
+        <lightning-record-edit-form object-api-name="Notification_User__c">
+            <template for:each={useritemList} for:item="item" for:index="index">
+                <lightning-layout  key={item.id} vertical-align="center" multiple-rows>
+                    <!-- T01 -->
+                    <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                        class="slds-p-around_x-small">
+                            <lightning-combobox
+                            key={item.id}
+                            access-key={item.id}
+                            data-id={item.id}
+                            name="Recipient_Type__c"
+                            label="Recipient Type"
+                            options={recipientTypeOptions}
+                            placeholder = "Select the Recipient Type"
+                            onchange={handleUserFieldChange} 
+                            value={item.User_Type__c}                      
+                            >
+                            </lightning-combobox>
+                    </lightning-layout-item>
+                    <!-- /T01 -->
+
+
+
+                    <template if:true={item.isUser}><!-- T01 -->
+                        <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                        class="slds-var-p-around_x-small">
+                            <lightning-input-field data-id={item.id} name="User__c" field-name="User__c" label="User" 
+                                value ={item.User__c} onchange={handleUserFieldChange} >
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        
+                        <template if:true={showUserPhoneColumn}>
+                            <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                                class="slds-var-p-around_x-small">                            
+        
+                                <lightning-input type="tel" data-id={item.id} access-key={item.id} label="Phone Number (SMS)"
+                                    name="User_Phone__c" onchange={handleUserFieldChange} value={item.User_Phone__c} 
+                                    placeholder ="Enter Phone number" 
+                                    pattern="^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"
+                                    message-when-pattern-mismatch="Your entry should match the allowed pattern for ex: +91 XXXXXXXXXX">
+                                </lightning-input>
+                            </lightning-layout-item>
+                        </template>     
+                        
+                        <template if:true={showUserEmailColumn}>
+                            <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                                class="slds-var-p-around_x-small">                            
+
+                                <lightning-input type="email" data-id={item.id} label="Email"
+                                    name="User_Email__c" onchange={handleUserFieldChange} value={item.User_Email__c} 
+                                    placeholder ="Enter Email address"></lightning-input>
+
+                            </lightning-layout-item>
+                        </template> 
+                    </template>
+
+                    <template if:true={item.isDL}><!-- T01 -->
+                        <template if:true={showUserEmailColumn}>
+                            <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                                class="slds-var-p-around_x-small">                            
+
+                                <lightning-input type="email" data-id={item.id} label="Distribution List"
+                                    name="User_Email__c" onchange={handleUserFieldChange} value={item.User_Email__c} 
+                                    placeholder ="Enter Email address"  required></lightning-input>
+
+                            </lightning-layout-item>
+                        </template> 
+                    </template>
+
+                    <!-- T01 -->
+                    <template if:true={item.isQueue}>
+                        <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                            class="slds-var-p-around_x-small">                            
+
+                            <lightning-combobox
+                                key={item.id}
+                                access-key={item.id}
+                                data-id={item.id}
+                                name="Queue_Name__c"
+                                label="Queue"
+                                options={queueOptions}
+                                placeholder = "Select the Queue"
+                                onchange={handleUserFieldChange}  
+                                value={item.Queue_Name__c}
+                                required                       
+                                variant="label-stacked"
+                                >
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </template> 
+                    <!-- /T01 -->
+
+                    <template if:true={item.isSpecificUserRole}>
+                        <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2" class="slds-var-p-around_x-small">
+                            <lightning-input type="text" data-id={item.id} label="Platform User Role" name="Platform_Recipient_Role__c" onchange={handleUserFieldChange} value={item.Platform_Recipient_Role__c} 
+                                placeholder ="Enter Platform User Role"  required>
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </template>                    
+
+                    <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2">
+                        <lightning-icon if:true={item.allowDelete} icon-name="action:delete" class="small-icon" access-key={item.id} item-number={item.id} id={index}
+                            alternative-text="Delete Row" size="xx-small" title="Delete Row" onclick={removeUserRow}>
+                        </lightning-icon>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+        </lightning-record-edit-form>
+    </lightning-card>
+
+    <lightning-card>
+        <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+        <div slot="title" class="slds-text-heading_small">
+            <span>Step 4: Choose your Team</span>
+            <!--lightning-helptext class="gcs-team-tooltip" content="Choose your Account/Case Team to be notified."></lightning-helptext-->
+        </div>
+        
+        <!-- T01 -->
+        <div class="slds-var-p-around_x-small">
+            <lightning-button variant="container" label="Add Team" title="Add Team" icon-name="utility:new" onclick={addUserTeamRow}></lightning-button> 
+        </div>
+        <!-- /T01 -->
+
+        <lightning-record-edit-form object-api-name="Notification_User__c">
+            <template for:each={userTeamList} for:item="userTeam" for:index="index">
+                <lightning-layout  key={userTeam.id} vertical-align="center" multiple-rows>                
+                    <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                        class="slds-p-around_x-small">
+                            <lightning-combobox
+                            key={userTeam.id}
+                            access-key={userTeam.id}
+                            data-id={userTeam.id}
+                            name="User_Type__c"
+                            label="User Type"
+                            options={teamTypeOptions}
+                            placeholder = "Select the Team"
+                            onchange={handleUserFieldChange} 
+                            value={userTeam.User_Type__c}                      
+                            >
+                            </lightning-combobox>
+                    </lightning-layout-item>
+
+                    <!--Related User Fields-->
+                    <!-- T01 -->
+                    <template if:true={userTeam.isRelatedUser}>
+                        <lightning-layout-item size="12" small-device-size="3" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+                            <label class="slds-form-element__label">Related User(s)</label>
+
+                            <c-multi-select-pick-list  
+                                name="Related_Fields__c"
+                                label="Role"
+                                data-id={userTeam.id}
+                                options={userTeam.userFieldOptions}
+                                onvaluechange={handleUserFieldChange} 
+                                variant="label-stacked"
+                                access-key="Related_Fields__c"
+                                value={userTeam.Related_Fields__c}
+                                required                                                     
+                                >
+                            </c-multi-select-pick-list>
+                        </lightning-layout-item>
+                    </template>
+                    <!-- /T01 -->
+
+                    <!--Account Team Fields-->
+                    <template if:true={userTeam.isAccountTeam}>
+                        <lightning-layout-item size="12" small-device-size="3" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+                        <lightning-combobox
+                            key={userTeam.id}
+                            access-key={userTeam.id}
+                            data-id={userTeam.id}
+                            name="Account_Case_Fields__c"
+                            label="Account Fields"
+                            options={accountFieldOptions}
+                            placeholder = "Select the Account fields"
+                            onchange={handleUserFieldChange}  
+                            value={userTeam.Account_Case_Fields__c}
+                            required                       
+                            variant="label-stacked"
+                            >
+                            </lightning-combobox>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item class="slds-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                            <label class="slds-form-element__label">Team Member Role</label>
+                            
+                            <c-multi-select-pick-list  
+                                    name="Team_Member_Role__c"
+                                    label="Role"
+                                    data-id={userTeam.id}
+                                    options={userTeam.TeamMemberOptions}
+                                    onvaluechange={handleUserFieldChange} 
+                                    variant="label-stacked"
+                                    access-key="Team_Member_Role__c"
+                                    value={userTeam.Team_Member_Role__c}
+                                    required                                                     
+                                    >
+                            </c-multi-select-pick-list>
+                        </lightning-layout-item>
+                    </template>
+
+                    <!--Case Team Fields-->
+                    <template if:true={userTeam.isCaseTeam}>
+                        
+                        <lightning-layout-item class="slds-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                            <label class="slds-form-element__label">Team Member Role</label>
+                            
+                            <c-multi-select-pick-list  
+                                    name="Team_Member_Role__c"
+                                    label="Role"
+                                    data-id={userTeam.id}
+                                    options={userTeam.TeamRoleOptions}
+                                    onvaluechange={handleUserFieldChange} 
+                                    variant="label-stacked"
+                                    access-key="Team_Member_Role__c"
+                                    value={userTeam.Team_Member_Role__c}
+                                    required= true                                                     
+                                    >
+                            </c-multi-select-pick-list>
+                        </lightning-layout-item>
+                    </template>
+
+                    <!--Plan Team Fields-->
+                    <template if:true={userTeam.isPlanTeam}>
+                        
+                        <lightning-layout-item class="slds-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                            <label class="slds-form-element__label">Plan Team Role</label>
+                            
+                            <c-multi-select-pick-list  
+                                    name="Team_Member_Role__c"
+                                    label="Role"
+                                    data-id={userTeam.id}
+                                    options={userTeam.PlanTeamOptions}
+                                    onvaluechange={handleUserFieldChange} 
+                                    variant="label-stacked"
+                                    access-key="Team_Member_Role__c"
+                                    value={userTeam.Team_Member_Role__c}
+                                    required= true                                                     
+                                    >
+                            </c-multi-select-pick-list>
+                        </lightning-layout-item>
+                    </template>
+
+                    <!--Case Team Fields-->
+                    <template if:true={userTeam.isOpportunityTeam}>
+
+                        <lightning-layout-item size="12" small-device-size="3" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+                        <lightning-combobox
+                            key={userTeam.id}
+                            access-key={userTeam.id}
+                            data-id={userTeam.id}
+                            name="Account_Case_Fields__c"
+                            label="Opportunity Fields"
+                            options={opportunityFieldOptions}
+                            placeholder = "Select the Opportunity fields"
+                            onchange={handleUserFieldChange}  
+                            value={userTeam.Account_Case_Fields__c}
+                            required                       
+                            variant="label-stacked"
+                            >
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        
+                        <lightning-layout-item class="slds-p-around_x-small" size="12" small-device-size="3" medium-device-size="3" large-device-size="3">
+                            <label class="slds-form-element__label">Team Member Role</label>
+                            
+                            <c-multi-select-pick-list  
+                                    name="Team_Member_Role__c"
+                                    label="Role"
+                                    data-id={userTeam.id}
+                                    options={userTeam.OpportunityTeamOptions}
+                                    onvaluechange={handleUserFieldChange} 
+                                    variant="label-stacked"
+                                    access-key="Team_Member_Role__c"
+                                    value={userTeam.Team_Member_Role__c}
+                                    required= true                                                     
+                                    >
+                            </c-multi-select-pick-list>
+                        </lightning-layout-item>
+                    </template>
+                    
+                    <!-- T01 -->
+                    <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2" padding="around-small">
+                        <lightning-icon if:true={userTeam.allowDelete} icon-name="action:delete" class="small-icon" access-key={userTeam.id} item-number={userTeam.id} id={index}
+                            alternative-text="Delete Row" size="xx-small" title="Delete Row" onclick={removeUserTeamRow}>
+                        </lightning-icon>
+                    </lightning-layout-item>
+                    <!-- /T01 -->
+                </lightning-layout>
+            </template>
+        </lightning-record-edit-form>
+    </lightning-card>
+
+    <lightning-card>
+        <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+        <div slot="title" class="slds-text-heading_small">
+            <span>Step 5: Template</span>
+        </div>
+        <lightning-layout vertical-align='center' multiple-rows>
+            <lightning-layout-item class="slds-var-p-around_x-small gcs-align-fields" size="3">
+                <lightning-combobox
+                    name="criteriaTemplate"
+                    label="Template"
+                    value={criteriaRecord.fields.Template_Name__c} 
+                    options={templateOptions}
+                    onchange={handleCriteriaFieldChange} 
+                    variant="label-stacked"
+                    required
+                    >
+                </lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item class="slds-var-p-around_x-small gcs-align-button" size="3">
+                <lightning-button variant="container" label="Preview" title="Preview" 
+                    icon-name="action:preview" onclick={previewTemplate}>
+                </lightning-button> 
+            </lightning-layout-item>
+        </lightning-layout>
+
+    </lightning-card>
+
+    <!-- Object Change Confirmation -->
+    <template if:true={showConfirmationModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large"
+            aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container custom-container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Object Change Confirmation</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_large lwcbody" id="modal-content-id-1">
+                    Changing the Object will clear the criteria defined below. Do you want to continue?
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="brand" label="Cancel" title="Cancel" onclick={cancelObjectChange} class="slds-m-left_x-small"></lightning-button>
+                    <lightning-button variant="brand" label="Continue" title="Continue" onclick={saveObjectChange} class="slds-m-left_x-small"></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Template Preview -->
+    <template if:true={showPreview}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large"
+            aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-2">
+            <div class="slds-modal__container custom-container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Preview</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_large lwcbody" id="modal-content-id-2">
+                    <lightning-formatted-rich-text
+                        value={templatePreview}
+                    ></lightning-formatted-rich-text>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="brand" label="Close" title="Close" onclick={closePreview} class="slds-m-left_x-small"></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <lightning-card>
+        <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+        <lightning-layout horizontal-align="center">
+            <lightning-layout-item>
+                <lightning-button variant="brand" label="Cancel" title="Cancel" onclick={handleCancel} class="slds-m-left_x-small"></lightning-button>
+            </lightning-layout-item>
+            <lightning-layout-item>
+                <lightning-button variant="brand" label="Save" title="Save" onclick={handleSave} class="slds-m-left_x-small"></lightning-button>
+            </lightning-layout-item>   
+        </lightning-layout>
+
+        <lightning-layout horizontal-align="center">
+            <lightning-layout-item padding="around-small" size="12" small-device-size="1" medium-device-size="1" large-device-size="1"></lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>

@@ -1,0 +1,15 @@
+.pad-5{
+    padding: 0.5rem;
+}
+
+.slds-is-absolute{
+    position: relative !important;
+}
+
+.datatable-height{
+    height: 400px;
+}
+
+.hideActionButton{
+    opacity: 0; 
+}

@@ -1,0 +1,254 @@
+<template>
+    <template if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+    <div>
+        <template if:false={hideProductPage}>
+            <lightning-card icon-name="standard:opportunity" title="New Product Request Form">
+                <h1 slot="title" style="font-weight: 700;">New Product Request Form</h1>
+                <div class="slds-p-horizontal_small">
+                    <div class="header" style="padding-top: 10px;">
+                        <h1>New Product Request</h1>
+                    </div>
+                    <div class="content">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="5" class="margin-vertical">
+                                <label for="name">Product Request Name<span style="color:red;">*</span></label>
+                                <lightning-input variant="label-hidden" type="text" name="Name"
+                                    label="Product Request Name" data-name="Name" value={engagementData.Name}
+                                    onchange={engagementDataChange} required max-length="80"></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2" class="margin-vertical"></lightning-layout-item>
+                            <lightning-layout-item size="5" class="margin-vertical">
+                                <label for="areyouworkingonopp">Are you working on an opportunity?</label>
+                                <lightning-input variant="label-hidden" type="checkbox"
+                                    name="Are_you_working_on_Opportunity__c" label="Are you working on an opportunity?"
+                                    data-name="Are_you_working_on_Opportunity__c"
+                                    checked={engagementData.Are_you_working_on_Opportunity__c}
+                                    onchange={engagementDataChange}></lightning-input> <!--workingOppChange-->
+                            </lightning-layout-item>
+                            <lightning-layout-item size="5" class="margin-vertical">
+                                <label for="howsoftused">Request Reason<span style="color:red;">*</span></label>
+                                <lightning-dual-listbox name="How_will_this_software_be_used__c" label="Request Reason"
+                                    source-label="Available" variant="label-hidden" selected-label="Selected"
+                                    field-level-help="Request Reason Help" options={requestReasonOptions}
+                                    onchange={engagementDataChangeRequest}
+                                    value={engagementData.How_will_this_software_be_used__c}>
+                                </lightning-dual-listbox>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2" class="margin-vertical"></lightning-layout-item>
+                            <lightning-layout-item size="5" class="margin-vertical">
+                                <lightning-combobox name="Is_customer_in_a_CIS_country__c"
+                                    label="Is Customer in a CIS Country?" placeholder="--None--"
+                                    options={cisCustomerOptions} onchange={engagementDataChange}
+                                    value={engagementData.Is_customer_in_a_CIS_country__c}
+                                    data-name="Is_customer_in_a_CIS_country__c" required={workingOpportunityMandate}
+                                    field-level-help={label.PRM_CISHelptext}>
+                                </lightning-combobox>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="5" class="margin-vertical">
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2" class="margin-vertical"></lightning-layout-item>
+                            <lightning-layout-item size="5" class="margin-vertical">
+                                <lightning-input type="text" name="Customer_Name__c" label="Customer Name"
+                                    data-name="Customer_Name__c" value={engagementData.Customer_Name__c}
+                                    onchange={engagementDataChange}
+                                    required={workingOpportunityMandate} max-length="255"></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="5" class="margin-vertical">
+                                <label for="dealstrategycomment">Comments</label>
+                                <lightning-input variant="label-hidden" type="text" name="Comments__c"
+                                    label="Opportunity Id" data-name="Comments__c" value={engagementData.Comments__c}
+                                    onchange={engagementDataChange} max-length="255"></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2" class="margin-vertical"></lightning-layout-item>
+                            <lightning-layout-item size="5" class="margin-vertical">
+                                <lightning-input type="text" name="Opportunity_Id__c" label="Opportunity Id"
+                                    data-name="Opportunity_Id__c" value={engagementData.Opportunity_Id__c}
+                                    onchange={engagementDataChange}
+                                    required={workingOpportunityMandate} max-length="255"></lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                    </br>
+                    </br>
+                    <div class="header" style="padding-top: 10px;">
+                        <h1>Products To Provision</h1>
+                    </div>
+                    <div class="content">
+                        <lightning-accordion onsectiontoggle={handleToggleSection}
+                            active-section-name={activeSectionNames} allow-multiple-sections-open>
+                            <lightning-accordion-section name="Cloud" label="Cloud">
+                                <lightning-accordion
+                                    active-section-name={activeSectionNamesChild} allow-multiple-sections-open>
+                                    <lightning-accordion-section name="Cloud Services" label="Cloud Services">
+                                        <lightning-layout multiple-rows>
+                                            <lightning-layout-item size="4" class="margin-vertical">
+                                                <lightning-input name="Enable Cloud Service"
+                                                    label="Enable Cloud Service" type="checkbox"
+                                                    onchange={enableCloudService} checked={cloudServiceMandate}>
+                                                </lightning-input>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="8"
+                                                class="margin-vertical">
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="5"
+                                                class="margin-vertical">
+                                                <lightning-input type="text" name="productName" label="Cloud Product"
+                                                    value={defaultCloudProduct.Name}
+                                                    disabled></lightning-input>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="2" class="margin-vertical">
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="5" class="margin-vertical">
+                                                <label for="name">Training Completed<span if:true={cloudServiceMandate}
+                                                        style="color:red;">*</span></label>
+                                                <lightning-combobox name="trainingcompletedcloud"
+                                                    label="Training Completed" placeholder="--None--"
+                                                    options={trainingCompletedOption} onchange={cloudServiceChange}
+                                                    value={trainingCompletedCloud} data-name="cloudTrainingCompleted"
+                                                    variant="label-hidden" required={cloudServiceMandate}
+                                                    disabled={disableCloudService}>
+                                                </lightning-combobox>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="5" class="margin-vertical">
+                                                <label for="name">Provisioning Environment<span
+                                                        if:true={cloudServiceMandate}
+                                                        style="color:red;">*</span></label>
+                                                <lightning-combobox name="provisioningenvironment"
+                                                    label="Provisioning Environment" placeholder="--None--"
+                                                    options={provisionEnvironmentOptions} required={cloudServiceMandate}
+                                                    disabled={disableCloudService} onchange={cloudServiceChange}
+                                                    value={provisionEnvironment} data-name="provisionEnvironment"
+                                                    variant="label-hidden">
+                                                </lightning-combobox>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="2"
+                                                class="margin-vertical">
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="5" class="margin-vertical">
+                                                <lightning-input type="text" name="orgid" label="Org Id"
+                                                    field-level-help={label.PRM_OrgIdHelptext}
+                                                    data-name="cloudorgid" value={cloudOrgId}
+                                                    onchange={cloudServiceChange}
+                                                    disabled={disableCloudService} max-length="255"></lightning-input>
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </lightning-accordion-section>
+                                    <lightning-accordion-section name="MDM and 360 Applications"
+                                        label="MDM and 360 Applications">
+                                        <lightning-layout multiple-rows>
+                                            <lightning-layout-item size="5">
+                                                <div class="slds-p-around_small">
+                                                    <lightning-dual-listbox name="mdmservices" label="Services"
+                                                        source-label="Available" selected-label="Selected"
+                                                        field-level-help="Select MDM Services" options={mdmListOptions}
+                                                        onchange={handleMDMChange} value={selectedMDMValues}>
+                                                    </lightning-dual-listbox>
+                                                </div>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="2"></lightning-layout-item>
+                                            <lightning-layout-item size="5">
+                                                <label for="name">Training Completed</label>
+                                                <lightning-combobox name="trainingcompletedmdm"
+                                                    label="Training Completed" placeholder="--None--"
+                                                    options={trainingCompletedOption} onchange={mdmChange}
+                                                    value={trainingCompletedMdm} data-name="trainingCompletedMdm"
+                                                    variant="label-hidden">
+                                                </lightning-combobox>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="7" class="margin-vertical">
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="5" class="margin-vertical">
+                                                <lightning-input
+                                                    field-level-help={label.PRM_OrgIdHelptext}
+                                                    type="text" name="orgid" label="Org Id" data-name="mdmorgid"
+                                                    value={mdmOrgId} onchange={mdmChange} max-length="255"></lightning-input>
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </lightning-accordion-section>
+                                    <lightning-accordion-section name="Cloud Data Governance"
+                                        label="Cloud Data Governance">
+                                        <lightning-layout multiple-rows>
+                                            <lightning-layout-item size="5">
+                                                <div class="slds-p-around_small">
+                                                    <lightning-dual-listbox name="cdgcservice" label="Services"
+                                                        source-label="Available" selected-label="Selected"
+                                                        field-level-help="Select CDGC Services" options={cdgcOptions}
+                                                        onchange={handleCDGCChange} value={selectedCDGCValues}>
+                                                    </lightning-dual-listbox>
+                                                </div>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="2"></lightning-layout-item>
+                                            <lightning-layout-item size="5">
+                                                <label for="name">Training Completed</label>
+                                                <lightning-combobox name="trainingcompletedcdgc"
+                                                    label="Training Completed" placeholder="--None--"
+                                                    options={trainingCompletedOption} onchange={cdgcChange}
+                                                    value={trainingCompletedCdgc} data-name="cdgcTrainingCompleted"
+                                                    variant="label-hidden">
+                                                </lightning-combobox>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="7" class="margin-vertical">
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="5" class="margin-vertical">
+                                                <lightning-input
+                                                    field-level-help={label.PRM_OrgIdHelptext}
+                                                    type="text" name="orgid" label="Org Id" data-name="cdgcorgid"
+                                                    value={cdgcOrgId} onchange={cdgcChange} max-length="255"></lightning-input>
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </lightning-accordion-section>
+                                </lightning-accordion>
+                            </lightning-accordion-section>
+                            <lightning-accordion-section name="OnPremise" label="On-Premise">
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="5">
+                                        <lightning-button name="Add/Remove Products" label="Add/Remove Products"
+                                            onclick={showProducts}></lightning-button>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="2"></lightning-layout-item>
+                                    <lightning-layout-item size="5">
+                                        <label for="name">Training Completed</label>
+                                        <lightning-combobox name="trainingcompletedonprem" label="Training Completed"
+                                            placeholder="--None--" options={trainingCompletedOption}
+                                            onchange={onPremChange} value={onPremTrainingComp}
+                                            data-name="onPremTrainingCompleted" variant="label-hidden">
+                                        </lightning-combobox>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-accordion-section>
+                        </lightning-accordion>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="brand" label="Submit" onclick={submitClick}> </lightning-button>
+                    <lightning-button name="Save as Draft" label="Save as Draft"
+                        onclick={saveAsDraft}></lightning-button>
+                </footer>
+            </lightning-card>
+            <c-add-edit-products-engagement finalproductlist={onPremProducts}
+                onsaveclick={getSaveData}></c-add-edit-products-engagement>
+        </template>
+        <template if:true={hideProductPage}>
+            <div class="slds-card slds-theme_shade">
+                <div class="slds-card__header slds-grid">
+                    <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                        <span class="slds-assistive-text">Warning</span>
+                        <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                            title="Description of icon when needed">
+                            <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#warning"></use>
+                            </svg>
+                        </span>
+                        <h2>{errorMessage}&nbsp;
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <center><lightning-button variant="brand" label="Go Back" onclick={goBack}> </lightning-button></center>
+        </template>
+    </div>
+</template>

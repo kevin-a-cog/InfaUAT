@@ -1,0 +1,66 @@
+.sp-dropdown-searchandfav-container {
+  min-width: 350px;
+  right: 0;
+}
+.sp-dropdown-searchandfav__list {
+  display: flex;
+  justify-content: flex-start;
+  cursor: context-menu;
+  align-items: center;
+}
+.sp-dropdown-searchandfav__list-label {
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 24px;
+}
+.sp-dropdown-searchandfav__list-icon {
+  margin-left: auto;
+  display: inline-flex;
+}
+.sp-dropdown-item--selected {
+  background-color: #e3f1ff;
+}
+.check-icon {
+  visibility: hidden;
+}
+.sp-dropdown-item--selected .check-icon {
+  visibility: visible;
+}
+/* Can be moved to Global */
+.sp-icon--medium {
+  height: 24px;
+  border-radius: 2px;
+  padding: 4px;
+  margin-left: 3px;
+  cursor: pointer;
+}
+/***/
+.search-input-class {
+  border: 1px solid #8f8f8f;
+  font-style: italic;
+  font-size: 14px;
+  line-height: 10px;
+  box-shadow: none;
+}
+.combobox-input-class {
+  cursor: pointer;
+  line-height: 10px;
+  height: 28px;
+  min-height: 28px;
+}
+@media only screen and (max-width: 420px) {
+  .sp-dropdown-searchandfav-container {
+    min-width: 280px;
+    left: 0;
+  }
+  .sp-dropdown-searchandfav__list-item {
+    max-width: 65%;
+    overflow: visible;
+    white-space: pre-line;
+    text-overflow: clip;
+  }
+  .sp-dropdown-searchandfav__list-label {
+    line-height: 16px;
+  }
+}

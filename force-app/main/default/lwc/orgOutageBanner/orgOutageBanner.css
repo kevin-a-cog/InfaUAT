@@ -1,0 +1,102 @@
+/***Banner***/
+.banner-container-fluid {
+    padding: 0;
+    height: 170px;
+    background: url(https://www.informatica.com//content/dam/informatica-com/en/images/c01v2/c01v2-data-engineering.png) no-repeat 50%;
+    position: relative;
+    background-size: cover;
+}
+.banner-container {
+     position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+.banner-wrapper {
+    text-align: center;
+    padding: 15px 0 20px 0;
+}
+.banner__title {
+    font-size: 20px;
+    margin-bottom: 28px;
+}
+@media only screen and (max-width: 480px) {
+    .banner-container-fluid {
+        height: auto;
+    }
+    .banner-container {
+        position: static;
+        transform: translate(0,0);
+    }
+}
+/***Cta items - Dashboard ***/
+.link-option-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0;
+}
+.link-option__item {
+    list-style: none;
+    background: #001aff;
+    margin-right: 15px;
+    display: flex;
+    flex: 0 0 240px;
+    align-items: center;
+    border-radius: 2px;
+}
+.link-option__item a {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 10px;
+    color: #fff;
+    text-transform: uppercase;
+}
+.link-option__item:last-child {
+    margin-right: 0;
+} 
+.link-option__img {
+    margin-right: 10px;
+    height: 22px;
+}
+.link-option__text {
+    line-height: 14px;
+    display: inline-block;
+    text-align: left;
+    font-size: 14px;
+}
+.link-options-detail {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+}
+@media only screen and (max-width: 480px) {
+    .link-option-wrapper {
+        flex-wrap: wrap;
+    }
+    .link-option__item {
+        margin: 0 0 10px 0;
+        text-align: left;
+    }
+}
+
+a:hover{
+    background-color: #ff8200;
+}
+
+.infacom-arrow-right-white {
+    display: inline-block;
+    font-style: normal;
+    margin-left: 10px;
+    color: #fff;
+    line-height: 15px;
+   
+}
+
+a:hover .infacom-arrow-right-white{
+    -webkit-transition: -webkit-transform .5s ease-in;
+    transition: -webkit-transform .5s ease-in;
+    transition: transform .5s ease-in;
+    transition: transform .5s ease-in,-webkit-transform .5s ease-in;
+    -webkit-transform: translateX(50%);
+    transform: translateX(50%);
+}

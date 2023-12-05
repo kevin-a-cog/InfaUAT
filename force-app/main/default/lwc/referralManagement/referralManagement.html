@@ -1,0 +1,103 @@
+<!--
+*******************************************************************************************************************
+MODIFIED BY     MODIFIED Date   JIRA        DESCRIPTION                                                         TAG
+*******************************************************************************************************************
+balajip         27-Sep-2022     I2RT-7159   added onchange event for the Account lookup field
+                                             to capture the selected Account                                    T01
+Vignesh D		10-Nov-2023		I2RT-8172	Show base component search for Case & Account record pages			T02
+ChaitanyaT      15-Nov-2023     AR-3555     UAT Feedback - Expansion Lead                                       T03
+-->
+<template>    
+
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">New Referral</h2>
+    </header>
+    
+    <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="small"></lightning-spinner>
+
+            <lightning-record-edit-form object-api-name="iCare_Referral__c" onsuccess={handleSuccess} onsubmit={handleSubmit} onerror={handleError}  onload={handleLoad}>
+                <div class="slds-modal__content slds-p-around_medium "> 
+                    <lightning-layout multiple-rows>  
+                        <lightning-layout-item size="6" class="slds-p-left_x-small">
+                            <lightning-input-field class="csmMarginbottom" field-name="Customer_Account__c" value={accountId} 
+                                onchange={handleAccountChange} required disabled="true"> <!--T01-->
+                            </lightning-input-field>
+                        </lightning-layout-item>  
+                        
+                        <lightning-layout-item size="6" class="slds-p-left_x-small">
+                          <!-- <T02> -->
+                            <template lwc:if={showStandardSearch}>
+                                <lightning-input-field class="csmMarginbottom" field-name="Customer_Contact__c" required>
+                                </lightning-input-field>
+                            </template>
+
+                            <template lwc:else>
+                            <c-custom-lookup-field
+                                    data-id="CustomerContact"
+                                    label="Contact"
+                                    placeholder="Select the Contact"
+                                    onsearch={handleLookupSearch}
+                                    onselectionchange={handleLookupSelectionChange}
+                                    class="csmMarginbottom"
+                                    onloaddefault={handleLoadDefault}
+                                    required>
+                                </c-custom-lookup-field>
+                            </template>
+                          <!-- </T02> -->
+                        </lightning-layout-item>
+                        
+                        <lightning-layout-item size="6" class="slds-p-left_x-small">
+                            <!-- <lightning-input-field class="csmMarginbottom" field-name="Description__c" variant="label-inline" required placeholder={waterMarkForDescription}>
+                            </lightning-input-field> -->
+                            <lightning-textarea class="csmMarginbottom custom-textarea" label="Description" onchange={handleTextAreaChange} required placeholder={waterMarkForDescription}>
+                            </lightning-textarea>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6" class="slds-p-left_x-small">
+                            <lightning-input-field class="csmMarginbottom" field-name="Product__c" required={productsMandatory} onchange={handleInputfieldChange} ><!--T03-->
+                            </lightning-input-field>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6" class="slds-p-left_x-small">
+                            <lightning-input-field class="csmMarginbottom" field-name="Status__c" required value="New" disabled="true">
+                            </lightning-input-field>
+                        </lightning-layout-item>  
+
+                        <lightning-layout-item size="6" class="slds-p-left_x-small">
+                            <lightning-input-field class="csmMarginbottom" field-name="Source__c"  value={source} data-id="Source__c" onchange={handleInputfieldChange} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="6" if:true={showOther} class="slds-p-left_x-small">
+                            <lightning-input-field class="csmMarginbottom" field-name="Other__c" required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <template lwc:if={displayFileUpload}>
+                            <lightning-layout-item size="6" class="slds-p-left_x-small slds-p-around_small">
+                                <lightning-file-upload
+                                    label="Attach or Share Files"
+                                    class="file-upload-input slds-m-bottom_small"
+                                    name="Attach or Share Files"
+                                    accept={acceptedFormats}
+                                    onuploadfinished={handleUploadFinished}
+                                    multiple><!--T03-->
+                                </lightning-file-upload>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12">
+                                <template lwc:if={uploadedFiles}>
+                                    <template for:each={uploadedFiles} for:item="file">
+                                        <lightning-pill class="slds-p-around_xx-small" key={file.documentId} label={file.name} name={file.name} onremove={handleFileRemove}></lightning-pill>         
+                                    </template>
+                                </template>
+                            </lightning-layout-item>
+                            
+                        </template>                        
+                    </lightning-layout>
+                </div>
+        <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral slds-float_left" type="button" onclick={closeModal}>Cancel</button>               
+            <button class="slds-button slds-button_brand" type="submit">Save</button>
+        </footer>
+    </lightning-record-edit-form>       
+    
+</template>

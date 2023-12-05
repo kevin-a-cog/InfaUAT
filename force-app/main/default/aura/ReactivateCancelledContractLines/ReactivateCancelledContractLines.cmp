@@ -1,0 +1,109 @@
+<aura:component controller="ReactivateContractLinesController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionwithoutHeader" access="global" >
+    <!-- Attribute initiations -->
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="fieldarray" type="Object[]" />
+    <aura:attribute name="fieldStrQry" type="String" />
+    <aura:attribute name="ListOfSubscriptions" type="SBQQ__Subscription__c[]" default = "" />
+    <aura:attribute name="selectedCount" type="integer" default="0"/>
+    <aura:attribute name="loaded" type="boolean" default="False" />
+    <aura:attribute name="isReleasedClicked" type="boolean" default="False" />
+    <aura:attribute name="message" type="String" default =""/>
+    
+    <!--aura init handler-->   
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!--Custom Styles for Modal Header and Footer--> 
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-modal__container{
+        width:80%;
+        max-width:unset !important;
+        } 
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }  
+         .slds-modal__content{
+        height:unset !important;
+        max-height:unset !important;
+        }
+        
+    </aura:html> 
+    
+    <!-- Component body -->
+    <div>
+        <!--Header part-->
+        <div class="slds-col modal-header slds-modal__header" >
+            <!-- <div class="slds-page-header"> -->
+            <p class="slds-page-header__title slds-truncate" title="">Split Contracts</p>
+            <span class="slds-badge">Selected records:{!v.selectedCount}</span>
+            <aura:if isTrue="{!v.message.length > 0 ? True : False }">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert" aura:id="error-msg-Id">  
+                    <span class="slds-assistive-text">error</span>
+                    <h2><ui:outputText value="{!v.message}"/></h2>        
+                </div>
+            </aura:if>
+            <!-- </div>-->
+        </div>
+       
+        <aura:if isTrue="{! v.loaded }">
+            <!--Dynamic body table part--> 
+            <div class="slds-scrollable" style="width:100%;height:80%;">
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer" >
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th style="width:3.25rem;" class="slds-text-align--right">
+                                <!--<div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            
+                        </div>
+                    </div> -->
+                            </th>
+                            <aura:iteration items="{!v.fieldarray}" var="f">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="{!f.label}">{!f.label}</div>
+                                </th>
+                            </aura:iteration>
+                        </tr>
+                    </thead>
+                    <!--table body start, Iterate contact list as a <tr>-->
+                    <tbody>
+                        <aura:iteration items="{!v.ListOfSubscriptions}" var="sub">
+                            <tr>
+                                <td scope="row" class="slds-text-align--right" style="width:3.25rem;">
+                                    <div class="slds-form-element">
+                                        <div class="slds-form-element__control">
+                                            <label class="slds-checkbox">
+                                                <ui:inputCheckbox text="{!sub.Id}" aura:id="boxPack" value="" change="{!c.checkboxSelect}"/>
+                                                <span class="slds-checkbox--faux"></span>
+                                                <span class="slds-form-element__label text"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <aura:iteration items="{!v.fieldarray}" var="f">
+                                    <td class="slds-text-body--regular slds-truncate">
+                                        <c:rendertext obj="{!sub}" field="{!f}"/> 
+                                    </td>
+                                </aura:iteration>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+            <aura:set attribute="else">
+                <div class="slds-notify slds-notify_alert">
+                    <lightning:spinner alternativeText="Loading" size="large"/>
+                </div>
+            </aura:set>
+        </aura:if>
+         
+        <!-- Footer Section of the quick action -->
+ 		<div class="slds-col modal-footer slds-modal__footer" >
+            <lightning:button variant="neutral" label="Cancel" onclick="{! c.CloseModalOne }"/>
+            <lightning:button aura:id="releaseBtn" label="{!v.isReleasedClicked ? 'Releasing...' : 'Release'}" name="Release" variant="brand" onclick="{!c.releaseSelected}" disabled ="{!v.isReleasedClicked ? True : (v.ListOfSubscriptions[0].SBQQ__Contract__r.SBQQ__RenewalQuoted__c ? (v.selectedCount > 0 ? False : True) : (and(v.selectedCount > 0, v.selectedCount != v.ListOfSubscriptions.length) ? False : True))}" />
+        </div>        
+    </div>
+   
+</aura:component>

@@ -1,0 +1,40 @@
+<!-- sldsValidatorIgnore -->
+<template>
+        <template if:true={userAccess}>
+            <template if:true={isSelectDraft}>
+                <lightning-button class="slds-align_absolute-center" 
+                    variant="brand"
+                    label={clickedButtonLabel} title="Initialize Agreement" onfocus={handleClick}
+                ></lightning-button>
+            </template>
+        </template> 
+
+    <template if:true={showSpinner} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+    </template>
+    <template if:true={isSelected}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <p>Once you submit this estimator, you will not be able to make any further changes on this portal. Future changes need to be coordinated with your Informatica Seller.</p><br/><br/>
+            </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button
+                        variant="neutral"
+                        label="Cancel"
+                        onclick={closeAction}
+                    ></lightning-button>
+                    <lightning-button
+                        variant="brand"
+                        label="Proceed"
+                        class="slds-m-left_x-small"
+                        data-record-id={record.Id}
+                        onclick={handleSuccess}
+                    ></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+    
+</template>

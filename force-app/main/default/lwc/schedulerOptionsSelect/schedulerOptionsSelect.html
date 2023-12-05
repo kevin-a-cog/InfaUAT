@@ -1,0 +1,49 @@
+<!--
+/*
+ * Name			:	schedulerOptionsSelect
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	9/13/2023
+ * Description	:	This LWC shows additional details required by the Ask An Expert scheduler.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					                Tag
+ **********************************************************************************************************
+ Vignesh Divakaran	    9/13/2023		I2RT-9063		Initial version.			                N/A
+ */
+-->
+<template>
+
+    <div class="slds-align_absolute-center">
+        <lightning-layout multiple-rows>
+
+            <!-- Area -->
+            <lightning-layout-item size="12" padding="around-small">
+                <lightning-combobox 
+                    name="Area__c"
+                    label="Product Area"
+                    value={_objServiceAppointment.Area__c}
+                    placeholder="Select Product Area"
+                    options={lstAreas}
+                    onchange={inputChange}
+                    required>
+                </lightning-combobox>
+            </lightning-layout-item>
+
+            <!-- Category -->
+            <lightning-layout-item size="12" padding="around-small">
+                <lightning-combobox 
+                    name="Category__c"
+                    label="Category"
+                    value={_objServiceAppointment.Category__c}
+                    placeholder="Select a Category"
+                    options={lstCategories}
+                    onchange={inputChange}
+                    required>
+                </lightning-combobox>
+            </lightning-layout-item>
+
+        </lightning-layout>
+    </div>
+    
+</template>

@@ -1,0 +1,238 @@
+<!-- 
+ Change History
+ *********************************************************************************************************************************************
+ Modified By            Date            Jira No.        Tag         Description                                                 
+ *********************************************************************************************************************************************
+ Shashikanth            6/16/2023       I2RT-8535       T01         GEMS: Manage Escalated cases to have all cases from that Customer Account
+-->
+<template>
+    <div class="container-fluid es-container-fluid--grey">
+           <div class="container">
+       <lightning-card  title="Manage Escalated Cases">
+           <div class="slds-p-bottom_medium" style="padding-left: 20px;padding-right: 20px;">
+               <lightning-spinner variant="brand" if:true={showInProgress}></lightning-spinner>
+
+               <!--div style="float: right;" >
+                   <lightning-button name="updateCaseNotes" variant="brand" label="Update Escalation Notes" onclick={updateCaseNotes}></lightning-button>
+               </div-->
+
+               <lightning-tabset  >
+                   <lightning-tab label="Escalated Cases" value="Escalated Cases" onactive={handleActiveTab}>
+                       <div class="slds-clearfix">
+                           <div class="slds-float_right" style="margin-top: -3.0rem">
+                               <button title="Assign" class="slds-button slds-button_brand" onclick={removecases}>Remove</button>
+                               <lightning-button-menu alternative-text="Show menu" variant="container" icon-name="utility:settings"
+                                   onselect={configureColumns}>                                
+                                   <lightning-menu-item value="configureColumns" label="Configure Columns"></lightning-menu-item>
+                               </lightning-button-menu>
+                           </div>
+                       </div>
+                       <div style="height:400px">
+                       <c-case-datatable
+                               key-field="id"
+                               data-id="caseList"
+                               data={cases}
+                               columns={caseColumns}
+                               draft-values={draftValues}
+                               onsave={handleSave}
+                               onrowaction={handleRowAction}
+                               sorted-by={sortBy}
+                               sorted-direction={sortDirection}
+                               onsort={doSorting}
+                               >
+                       </c-case-datatable>
+                       </div>
+                   </lightning-tab>
+                   <lightning-tab label="Other Cases" value="Other Cases" onactive={handleActiveTab}>
+                       <div class="slds-clearfix">
+                           <div class="slds-float_right" style="margin-top: -3.0rem">
+                               <button title="Assign" class="slds-button slds-button_brand" onclick={assignCases}>Assign</button>
+                               <lightning-button-menu alternative-text="Show menu" variant="container" icon-name="utility:settings"
+                                   onselect={configureColumns}>                                
+                                   <lightning-menu-item value="configureColumns" label="Configure Columns"></lightning-menu-item>
+                               </lightning-button-menu>
+                           </div>
+                       </div>
+                       <div style="height:400px">
+                           <lightning-input type="search" label="" placeholder="filter" onchange={onOtherCaseSearch}></lightning-input>
+                           <c-case-datatable
+                                   key-field="id"
+                                   data-id="otherCaseList"
+                                   data={filteredOtherCases}
+                                   columns={caseColumns}
+                                   sorted-by={sortBy}
+                                   sorted-direction={sortDirection}
+                                   onsort={doSorting}>
+                           </c-case-datatable>
+                       </div>
+                   </lightning-tab>
+                   <!-- <T01> -->
+                   <lightning-tab label="All Customer Cases" value="All Customer Cases" onactive={handleActiveTab}>
+                    <div class="slds-clearfix">
+                        <div class="slds-float_right" style="margin-top: -3.0rem">
+                            <button title="Assign" class="slds-button slds-button_brand" onclick={assignAllCasesSelected}>Assign</button>
+                            <lightning-button-menu alternative-text="Show menu" variant="container" icon-name="utility:settings"
+                                onselect={configureColumns}>                                
+                                <lightning-menu-item value="configureColumns" label="Configure Columns"></lightning-menu-item>
+                            </lightning-button-menu>
+                        </div>
+                    </div>
+                    <div style="height:400px">
+                        <lightning-input type="search" label="" placeholder="filter" onchange={onAllCaseSearch}></lightning-input>
+                        <c-case-datatable
+                                key-field="id"
+                                data-id="allCaseList"
+                                data={filteredAllCases}
+                                columns={caseColumns}
+                                sorted-by={sortBy}
+                                sorted-direction={sortDirection}
+                                onsort={doSorting}>
+                        </c-case-datatable>
+                    </div>
+                </lightning-tab>
+                 <!-- </T01> -->
+               </lightning-tabset>
+           </div>
+       </lightning-card>
+   </div>
+
+   <template if:true={showConfirmationModal}>
+       <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large"
+           aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+           <div class="slds-modal__container custom-container">
+               <header class="slds-modal__header">
+                   <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Confirmation</h2>
+               </header>
+               <template if:false={escalatecase}>
+                   <div class="slds-modal__content slds-var-p-around_large lwcbody" id="modal-content-id-0">
+                       The selected cases will be removed from Engagement. Do you want to continue?
+                   </div>
+               </template>
+               <template if:true={escalatecase}>
+                   <div class="slds-modal__content slds-var-p-around_large lwcbody" id="modal-content-id-1">
+                       The selected cases will be escalated and associated with this Engagement. Do you want to continue?
+                   </div>
+               </template>
+               <footer class="slds-modal__footer">
+                   <lightning-button variant="brand" label="Cancel" title="Cancel" onclick={cancelAssignCases} class="slds-m-left_x-small"></lightning-button>
+                   <lightning-button variant="brand" label="Continue" title="Continue" onclick={continueAssignCases} class="slds-m-left_x-small"></lightning-button>
+               </footer>
+           </div>
+       </section>
+       <div class="slds-backdrop slds-backdrop_open"></div>
+   </template>
+
+   <template if:true={showColumnConfig}>
+       <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open"
+         aria-labelledby="modal-heading-03" aria-modal="true" aria-describedby="modal-content-id-3">
+           <div class="slds-modal__container">
+               <header class="slds-modal__header">
+                   <h2 id="modal-heading-03" class="slds-modal__title slds-hyphenate">Column Selection</h2>
+               </header>
+               <div class="slds-modal__content slds-var-p-around_medium" style="overflow: initial;" id="modal-content-id-3">
+                   <lightning-dual-listbox name="languages" data-id="selectedColumns" style="padding-left: 25px;"
+                       label="Select Columns"
+                       source-label="Available"
+                       selected-label="Selected"
+                       field-level-help="Select the fields to be included in the table"
+                       options={caseTableColumns}
+                       value={selectedColumns}>
+                   </lightning-dual-listbox>
+               </div>
+               <footer class="slds-modal__footer slds-modal__footer_directional">
+                   <button title="Cancel" class="slds-button slds-button_neutral" onclick={cancelColumnConfig}>Cancel</button>
+                   <button title="Save" class="slds-button slds-button_brand" onclick={saveColumnConfig}>Save</button>
+               </footer>
+           </div>
+       </section>
+       <div class="slds-backdrop slds-backdrop_open"></div>
+   </template>
+
+   <template if:true={showCollab}>
+       <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+           aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
+           <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+               <header class="slds-modal__header">
+                   <div class="slds-page-header">
+                       <div class="slds-page-header__row">
+                           <div class="slds-page-header__col-title">
+                               <div class="slds-media">
+                                   <div class="slds-media__figure">
+                                       <span class="slds-icon_container" title="Case Communication">
+                                           <lightning-icon icon-name="custom:custom103" ></lightning-icon>
+                                       </span>
+                                   </div>
+                                   <div class="slds-media__body">
+                                       <div class="slds-page-header__name">
+                                           <div class="slds-page-header__name-title">
+                                               <h1>
+                                                   <span class="slds-page-header__title slds-truncate"
+                                                       title="Case Communication">Case Communication</span>
+                                               </h1>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="slds-page-header__col-actions">
+                                       <div class="slds-grid">
+                                           <div class="slds-col">
+                                               <lightning-button icon-name="utility:add" label="Add"
+                                                   name="newCaseComment" onclick={handleAddComment} ></lightning-button>
+                                           </div>
+
+                                           <div class="slds-col">
+                                               <lightning-button-icon icon-name="utility:close"
+                                                   alternative-text="Close" onclick={handleClose} name="close"
+                                                   class="styledPopIn" ></lightning-button-icon>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </header>
+               <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2" style="min-height: 87vh;">
+                   <div class="slds-border_bottom slds-p-bottom_medium">
+                       <div class="slds-p-bottom_large">
+                           <c-case-comment-create
+                               record-id={rowActionCaseId}>
+                           </c-case-comment-create>
+                       </div>
+                   </div>
+                   
+                   <div class="slds-m-around_small">
+                       <c-case-comment-time-line-view 
+                           record-id={rowActionCaseId}>
+                       </c-case-comment-time-line-view>
+                   </div>
+               </div>
+           </div>
+       </section>
+       <div class="slds-backdrop slds-backdrop_open"></div>
+   </template>
+   
+   <template if:true={showUpdateNotes}>
+       <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small"
+         aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-4">
+           <div class="slds-modal__container">
+               <header class="slds-modal__header">
+                   <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Update Escalation Notes</h2>
+               </header>
+               <div if:true={showSpinner}>
+                   <lightning-spinner variant="brand"></lightning-spinner>
+               </div>
+               <div class="slds-modal__content slds-p-around_medium" style="overflow: initial;" id="modal-content-id-4">
+                   <lightning-textarea data-id="escalationNotes" data-field="Escalation_Notes__c" name="EscalationNotes"
+                       label="Escalation Notes" placeholder="Enter your escalation notes..">
+                   </lightning-textarea>
+               </div>
+               <footer class="slds-modal__footer">
+                   <lightning-button label="Cancel" title="Cancel" onclick={cancelModal}></lightning-button>
+                   <lightning-button label="Save" title="Save" variant="brand" onclick={saveModal}></lightning-button>
+               </footer>
+           </div>
+       </section>
+       <div class="slds-backdrop slds-backdrop_open"></div>
+   </template>
+   </div>
+</template>

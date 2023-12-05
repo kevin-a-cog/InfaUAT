@@ -1,0 +1,96 @@
+<aura:component  implements="force:lightningQuickAction,force:hasRecordId" controller="ShipCompleteInlineEditCtrl">
+
+    <!-- attributes 
+    implements="force:lightningQuickAction"
+    -->
+    <aura:attribute name="recordId" type="String" default="a3d540000001TMlAAM"/>
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="errors" type="Object" default="[]"/>
+    <aura:attribute name="errorMessage" type="String" />
+
+    <aura:attribute name="draftValues" type="Object" />
+    <aura:attribute name="orderProducts" type="List" default="[]"/>
+    <aura:attribute name="orderProductsTemp" type="List" default="[]"/>
+    <aura:attribute name="orderItemColumns" type="List" default="[]"/>
+    <aura:attribute name="keyField" type="String" default="Id"/>
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="draftValuesTemp" type="Object"/> 
+    
+    <!-- $Resource.Shipping + '/LtngSampleData.js',
+    //
+    -->
+    
+    <ltng:require
+                  styles = "{!$Resource.Shipping + '/shippingModal.css'}"
+                  scripts="{!join(',', 
+                                      $Resource.Shipping + '/jquery3.4.1.min.js',
+                                      $Resource.Shipping + '/underscore.min.js')
+                            }"
+                  
+                  afterScriptsLoaded="{!c.afterScriptsLoaded}" />
+
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+    <div class="slds-p-around_medium">
+        <h1 class="slds-text-heading_large">Provision Fulfillment Lines</h1>
+    </div>
+
+    <!-- the container element determine the height of the datatable -->
+    <aura:if isTrue="{! v.errorMessage!=null }">
+      <div>
+        <p style='color:red'>{! v.errorMessage}</p>
+      </div>
+  </aura:if> 
+    <lightning:navigation aura:id="navService"/>
+    <div id="viewfulfillments" style="height:300px">
+       
+            <lightning:datatable
+                columns="{! v.columns }"
+                data="{! v.data }"
+                keyField="id"
+                errors="{! v.errors }"
+                draftValues="{! v.draftValues }"
+                onsave="{! c.handleSaveEdition }"
+                onrowaction="{! c.handleRowAction }"
+                hideCheckboxColumn="true"
+                oncellchange  = "{! c.handleCellChange}"
+                oncancel = "{!c.handleCancel}"
+            />
+        
+    </div>
+   
+    <section role="dialog" tabindex="-1" class="slds-modal  slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" id="manageOrderlines">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.closeModal }">
+                    <lightning:icon iconName="utility:close" size="xx-small" />
+              <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Order Products</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <div>
+                        <div style="height: 300px">
+                            <lightning:datatable
+                                columns="{! v.orderItemColumns }"
+                                data="{! v.orderProductsTemp }"
+                                keyField="{! v.keyField }"
+                                hideCheckboxColumn="true"
+                                
+                                />
+                        </div>
+            
+                    </div>
+           </div>
+          <footer class="slds-modal__footer">
+          </footer>
+        </div>
+      </section>
+
+      <aura:if isTrue="{! v.isLoading }">
+            <lightning:spinner alternativeText="Loading"/>
+        </aura:if>
+    
+</aura:component>

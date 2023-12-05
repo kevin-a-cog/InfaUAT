@@ -1,0 +1,38 @@
+.notif-element {
+    background-color: white;
+    box-shadow: 2px 2px 10px grey;
+    /*font-family: futura-pt; */
+    font-style: normal;
+    font-weight: 400;
+}
+
+.notif-namevalue {
+    display: table;
+}
+
+.notif-name {
+    padding-left: 20px;
+    /*padding-right: 15px;*/
+    padding-bottom: 7px;
+    display: table-cell;
+    width: 85px;
+}
+
+.notif-value {
+    padding-left: 15px;
+    padding-right: 15px;
+    display: table-cell;
+}
+
+.notif-value img {
+    width: 30px;
+}
+
+.hr-line {
+    margin-bottom: 10px;
+    margin-top: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: black;
+    border-top: 1px solid;
+}

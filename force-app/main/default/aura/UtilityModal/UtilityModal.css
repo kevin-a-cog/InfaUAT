@@ -1,0 +1,14 @@
+.THIS {
+}
+
+@media screen and (max-width: 900px) and (min-width: 300px){
+	.THIS.cLIModalWindow .slds-modal__footer .slds-button {
+		min-width: 0;
+		margin: .20em;
+		padding: .20em;
+	}
+	.THIS.cLIModalWindow .slds-modal__footer {
+		padding: .75rem 0;
+		text-align: right;
+	}
+}

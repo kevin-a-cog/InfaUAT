@@ -1,0 +1,10 @@
+global class helpCoveoArticleCalloutMock  implements HttpCalloutMock{
+     global HTTPResponse respond(HTTPRequest req) {   
+        // Create a fake response
+        HttpResponse res = new HttpResponse();
+        res.setHeader('Content-Type', 'application/json');
+        res.setBody('{"totalCount":184,"totalCountFiltered":184,"duration":24,"indexDuration":6,"requestDuration":23,"searchUid":"3793de9b-dda2-40ae-abf5-8129d9c42dba","pipeline":"IN","apiVersion":2,"index":"informaticasandbox-uz3am623birb2gqzy2poftcepq-Indexer-2-vvyp4vvaj7rnxgctzehv2o2czq","indexRegion":"us-east-1","indexToken":"aW5mb3JtYXRpY2FzYW5kYm94LXV6M2FtNjIzYmlyYjJncXp5MnBvZnRjZXBxLUluZGV4ZXItMi12dnlwNHZ2YWo3cm54Z2N0emVodjJvMmN6cQ==","refinedKeywords":[],"triggers":[],"termsToHighlight":{},"phrasesToHighlight":{},"queryCorrections":[],"groupByResults":[],"facets":[],"suggestedFacets":[],"categoryFacets":[],"results":[{"title":"FAQ: Is it possible to modify the run options for the Scheduled Workflows using any command-line utility?","uri":"http://www.salesforce.com/org:organization/articletype:Knowledge/article:kA03K0000004qO9SAI/language:en_US","printableUri":"https://satish-infa.cs125.force.com/support/s/article/122822?language=en_US","clickUri":"https://satish-infa.cs125.force.com/support/s/article/122822?language=en_US","uniqueId":"42.20561$http://www.salesforce.com/org:organization/articletype:Knowledge/article:kA03K0000004qO9SAI/language:en_US","excerpt":"It would take a lot of effort to modify each of them from the Workflow Manager. ... The answer is: No. ... PowerCenter ... Administrator Configuration Configure ... 000173406 122822","raw":{"infapublicurl":"https://satish-infa.cs125.force.com/support/s/article/122822?language=en_US","athenatabname":["Knowledge Base"],"infadocumentstatus":"Active","athenaproduct":["PowerCenter"],"sfcreateddate":1641461856000,"infaexpirationdate":1650067200000,"clickableuri":"https://satish-infa.cs125.force.com/support/s/article/122822?language=en_US","infacontenttype":["KB articles","KB articles|FAQ"],"infamoderationstatus":"0","infadocumenttype":"KB"}}]}');
+        res.setStatusCode(200);
+        return res;
+    }
+}

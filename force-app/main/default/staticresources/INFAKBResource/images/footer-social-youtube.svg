@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>footer-social-youtube</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M16,0 C24.837,0 32,7.1634 32,16 C32,24.8366 24.837,32 16,32 C7.163,32 0,24.8366 0,16 C0,7.1634 7.163,0 16,0 Z" id="path-1"></path>
+        <path d="M24,15.1269 L24,16.3675 C24,17.6909 23.84,19.0137 23.84,19.0137 C23.84,19.0137 23.684,20.1404 23.204,20.6365 C22.595,21.288 21.914,21.291 21.601,21.3293 C19.362,21.4949 16,21.5 16,21.5 C16,21.5 11.84,21.4612 10.56,21.3355 C10.204,21.2675 9.405,21.288 8.795,20.6365 C8.316,20.1404 8.16,19.0137 8.16,19.0137 C8.16,19.0137 8,17.6909 8,16.3675 L8,15.1269 C8,13.804 8.16,12.4807 8.16,12.4807 C8.16,12.4807 8.316,11.354 8.795,10.8579 C9.405,10.2064 10.086,10.2034 10.399,10.1655 C12.638,10 15.996,10 15.996,10 L16.004,10 C16.004,10 19.362,10 21.601,10.1655 C21.914,10.2034 22.595,10.2064 23.204,10.8579 C23.684,11.354 23.84,12.4807 23.84,12.4807 C23.84,12.4807 24,13.804 24,15.1269 Z M14.348,17.8707 L18.67,15.5816 L14.348,13.2767 L14.348,17.8707 Z" id="path-3"></path>
+    </defs>
+    <g id="footer-social-youtube" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <g id="Clip-24"></g>
+        <mask id="mask-4" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+        <g id="Clip-27"></g>
+        <polygon id="Fill-26" fill="#999999" mask="url(#mask-4)" points="3 3 29 3 29 29 3 29"></polygon>
+    </g>
+</svg>

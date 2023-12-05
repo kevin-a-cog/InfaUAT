@@ -1,0 +1,26 @@
+<!--Component for Dynamic text field value for Hybrid Deal Management (Opportunity)-->
+<aura:component controller="RenderTextController" implements="force:appHostable,flexipage:availableForAllPageTypes">
+	<aura:attribute name="obj" type="Object" />
+	<aura:attribute name="field" type="String" />
+	<aura:attribute name="displayVal" type="String" default="TEST"/>
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+	<!-- <p>{!v.displayVal}</p> -->
+	<aura:if isTrue="{!v.field.fieldPath == 'Orderable__c'}">
+		<aura:if isTrue="{!v.obj.Orderable__c}">
+			<p>New</p>
+			<aura:set attribute="else">
+				<p>Old</p>
+			</aura:set>
+		</aura:if>
+		<aura:set attribute="else">
+            <aura:if isTrue="{!v.field.fieldPath == 'SBQQ__QuoteLine__c'}">
+            	<ui:outputText value="{!v.obj.SBQQ__QuoteLine__r.Name}" />
+                <aura:set attribute="else">   
+                    <ui:outputText value="{!v.displayVal}" />
+                </aura:set>
+            </aura:if>   
+		</aura:set>
+	</aura:if>
+	
+</aura:component>

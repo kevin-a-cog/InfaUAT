@@ -1,0 +1,95 @@
+<template>
+    <div class="container-fluid es-container-fluid--grey full-height">
+        <div class="container">
+            <h2 class="es-page__heading">
+                <lightning-button-icon variant="container" size="medium" icon-name="utility:chevronleft" title="Back" onclick={backButton}>
+                </lightning-button-icon>
+                Create a New Case
+            </h2>
+            <div class="es-case-wrapper">
+                <h3 class="es-case__heading"> <span class="es-case__step es-case__step--active">1</span> Please select a
+                    case type </h3>
+                <div class="row es-card__items">
+                    <template for:each={cases} for:item="caseList">
+                        <div class="col-xs-4 col-sm-6 col-md-6 col-lg-4" key={caseList.Id}>
+                            <div class="es-card-wrapper">
+                                <h3 class="es-card__title">
+                                    <img class="es-card__title-img" src={caseList.Img} /></span>
+                                    {caseList.Title}
+                                </h3>
+                                <div class="es-card__content">
+                                    <ul class={caseList.Multicolumn}>
+                                        <template for:each={caseList.Items} for:item="caseItems">
+                                            <li class="es-card__list-item" key={caseItems}>{caseItems}</li>
+                                        </template>
+                                    </ul>
+                                    <template if:true={caseList.Upgrade}>
+                                        <template if:true={isCaseCountVisible}>
+                                            <p class="es-card__note">
+                                                <span>{caseCountString}</span>
+                                                <a onclick={handleUpgradeMessage} class="es-card__note--link">Upgrade</a>
+                                            </p>
+                                        </template>
+                                    </template>
+                                </div>
+                                <template if:true={caseList.CaseTypeTechnical}>
+                                    <template if:true={isProceedButtonVisible}>
+                                        <template if:true={isTechCaseProceedButtonEnabled}>
+                                            <template if:false={isTechCaseProceedButtonDisabledForMaxLimit}>
+                                                <button class="es-card__button" type="submit">
+                                                    <a href={caseList.Link} data-link={caseList.Link} data-name={caseList.Title} value={caseList.Title} onclick={createCase}>
+                                                        Proceed
+                                                        <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                            class="bi bi-chevron-right" fill="currentColor"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd"
+                                                                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                                                            </path>
+                                                        </svg>
+                                                    </a>
+                                                </button>
+                                            </template>
+                                        </template>
+                                        <template if:false={isTechCaseProceedButtonEnabled}>
+                                            <template if:false={isTechCaseProceedButtonDisabledForMaxLimit}>
+                                                <button class="es-card__button-disabled" type="submit">
+                                                    <span>
+                                                        Proceed
+                                                        <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                            class="bi bi-chevron-right" fill="currentColor"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd"
+                                                                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                                                            </path>
+                                                        </svg>
+                                                    </span>
+                                                </button>
+                                            </template>
+                                        </template>
+                                    </template>
+                                </template>
+                                <template if:false={caseList.CaseTypeTechnical}>
+                                    <template if:true={isProceedButtonVisible}>
+                                        <button class="es-card__button" type="submit">
+                                            <a href={caseList.Link} data-link={caseList.Link} data-name={caseList.Title} value={caseList.Title} onclick={createCase}>
+                                                Proceed
+                                                <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                    class="bi bi-chevron-right" fill="currentColor"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd"
+                                                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                                                    </path>
+                                                </svg>
+                                            </a>
+                                        </button>
+                                    </template>
+                                </template>
+                                <!-- <lightning-button label="Proceed" icon-name="utility:chevronright" class="es-button es-button--primary" icon-position="right" onclick={handleNavigate}></lightning-button> -->
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

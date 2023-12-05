@@ -1,0 +1,3 @@
+<apex:page standardController="Opportunity">
+     <icrt:AeSalesGuides objectType="Opportunity" guideName="RequestProductSpecialist" objectId="{!Opportunity.Id}"/>
+</apex:page>

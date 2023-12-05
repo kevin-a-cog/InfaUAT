@@ -1,0 +1,36 @@
+<template>
+    <div class="es-app-footer">
+        <div class="container">
+            <div class="es-app-main-footer">
+                <ul class="es-app-footer-list">
+                    <li class="es-app-footer-item">
+                        <img src={appLogo} class="es-app-footer-logo"
+                            alt="ESupport Logo">
+                    </li>
+                    <template for:each={footerData} for:item="item">
+                        <li key={item.id} class="es-app-footer-item">
+                            <a href={item.link} target="_blank">
+                                {item.footerItem}
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+                <div class="social-links">
+                    <template for:each={socialLinks} for:item="item"
+                        class="infacom-social-block">
+                        <li key={item.id} class="es-social-link">
+                            <a href={item.link} target="_blank">
+                                <img src={item.src} alt={item.alt}
+                                    class="b-lazy img-fluid inline b-loaded">
+                            </a>
+                        </li>
+                    </template>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <p>&copy;<span class="footer-year"></span>Informatica. All
+                    Rights Reserved</p>
+            </div>
+        </div>
+    </div>
+</template>

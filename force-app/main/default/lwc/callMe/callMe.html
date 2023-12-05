@@ -1,0 +1,37 @@
+<!--
+  @description       : 
+  @author            : SF Developer
+  @group             : 
+  @last modified on  : 01-25-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   12-10-2020   SF Developer   Initial Version
+-->
+<template>
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Callback from Engineer</h2>
+    </header>
+
+    <div class="slds-p-around_medium">
+        <p>Callback request submitted successfully. Support Engineer will get back to you</p>
+    </div>
+    <!-- div class="slds-modal__content lwcbody">
+        <lightning-combobox data-id="requestType"
+            name="RequestType"
+            label="Request Type"
+            required
+            value={reason}
+            placeholder="Choose the request type"
+            options={requestTypeOptions}>
+        </lightning-combobox>
+    </div -->
+
+    <footer class="slds-modal__footer">
+        <div if:true={saveInProgress} class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+        </div>
+        <lightning-button label="Cancel" title="Cancel" onclick={cancel}>Cancel</lightning-button>
+        <lightning-button label="Submit" title="Submit" variant="brand" onclick={submit}></lightning-button>
+    </footer>
+</template>

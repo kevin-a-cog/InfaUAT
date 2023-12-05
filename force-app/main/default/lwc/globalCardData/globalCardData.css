@@ -1,0 +1,17 @@
+/* Container. */
+.card_background {
+	background-color: white;
+	width: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+/* Row margin. */
+.rowMargin {
+	padding: 5px;
+}
+
+/* Links */
+.links {
+	cursor: pointer;
+}

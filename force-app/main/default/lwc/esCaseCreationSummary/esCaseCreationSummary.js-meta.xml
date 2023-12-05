@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>50.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="caseType" type="String" default="" label="Case Type"/>
+            <property name="caseInformation" type="String" label="Case information"/>
+            <property name="category" type="String" default="" label="Category"/>
+            <property name="problemArea" type="String" default="Contact Management" label="Problem Area"/>
+            <property name="product" type="String" default="B2B Data Exchange" label="Product"/>
+            <property name="environment" type="String" default="Production" label="Enivroment"/>
+            <property name="showEnvironment" type="Boolean" default="false" label="Show Environment Field"/>
+            <property name="showProduct" type="Boolean" default="false" label="Show Product Field"/>
+            <property name="showProblemArea" type="Boolean" default="false" label="Show Problem Area Field"/>
+            <property name="showRelatedComponent" type="Boolean" default="false" label="Show Related Component Field"/>
+            <property name="showStrengthMeter" type="Boolean" default="false" label="Show Strengthmeter Field"/>
+            <property name="showAdditionalCaseInformation" type="Boolean" default="false" label="Show Additional Case Information"/>
+            <property name="proceedUrl" type="String" label="Proceed url"/>
+            <property name="goBackUrl" type="String" label="Go back url"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

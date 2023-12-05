@@ -1,0 +1,39 @@
+<template>
+        <lightning-card title="Object Limits" icon-name="custom:custom19">
+            <div class="exampleHolder">
+                <lightning-spinner alternative-text="Loading" size="large" if:true={showLoader}></lightning-spinner>
+            </div>
+                
+                <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_2-of-3">
+                    <div class="c-container slds-box" style="border: none;">
+                        <lightning-layout vertical-align="end">
+                                <lightning-layout-item padding="around-x-small" size="6" class="layoutItem">
+                                    <lightning-combobox
+                                        name="progress"
+                                        value={value}
+                                        label="Select Object"
+                                        placeholder="Select Object"
+                                        options={options}
+                                        onchange={handleChange} >
+                                    </lightning-combobox>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-x-small" size="6" class="layoutItem">
+                                        <lightning-button variant="success" label="Get Limits" title="Get Limits" onclick={handleBtnClick} class="slds-m-left_x-small"></lightning-button>
+                                </lightning-layout-item>
+                        </lightning-layout>
+                        
+                </div>
+                </div>
+                
+                </div>
+                <div class="c-container slds-box" if:true={showTable}>
+                        <lightning-datatable
+                        key-field="Label"
+                        data={objectLimits}
+                        columns={columns}
+                        hide-checkbox-column>
+                    </lightning-datatable>
+                </div>
+            </lightning-card>
+</template>

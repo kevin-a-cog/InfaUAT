@@ -1,0 +1,33 @@
+/* Collapsible row items. */
+.collapsibleRowElement {
+	background-color: white !important;
+    border-width: 0px !important;
+    box-shadow: none !important;
+}
+
+/* Details section. */
+.detailsCell {
+	border-top: none;
+	background-color: #F6F6F6; 
+	border: 0px; 
+}
+
+/* Stripes. */
+tr[data-stripes=true]:not([data-parent-id]) {
+	background-color: aliceblue;
+}
+tr[data-stripes=true][data-parent-id] td {
+	background-color: azure;
+    border: white solid medium;
+}
+tr[data-stripes=true][data-parent-id] td[data-field-type="expandable"] {
+    border-color: white;
+    border-width: medium;
+	border-right: none;
+}
+tr[data-stripes=true][data-parent-id] td[data-field-type="expandable"] + td {
+    border-color: white;
+    border-width: medium;
+	border-right: white solid medium;
+	border-left: none;
+}

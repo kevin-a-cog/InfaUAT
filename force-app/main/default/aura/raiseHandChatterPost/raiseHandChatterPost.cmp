@@ -1,0 +1,18 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" >
+    <lightning:workspaceAPI aura:id="workspace" />
+
+    <!--aura:handler name="init" value="{!this}" action="{!c.doInit}"/-->
+
+    <aura:attribute name="raiseHand" type="Object"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    
+    <force:recordData aura:id="recordLoader"
+        recordId="{!v.recordId}"
+        fields="Feed_Item_Id__c,Type__c"
+        targetFields="{!v.raiseHand}"
+        targetError="{!v.recordLoadError}"
+        recordUpdated="{!c.onDataLoaded}"
+    />
+
+    <a href="" onclick="{!c.openChatterPostInSubTab}">Chatter Post</a> 
+</aura:component>

@@ -1,0 +1,35 @@
+.es-learning-path {
+    width: 100%;
+    height: 460px;
+    border: none;
+}
+
+@media screen and (min-width: 768px){
+    .es-learning-path .lp-summary-main {
+        max-width: 100%
+    }
+}
+
+@media screen and (max-width: 768px){
+    .es-learning-path{
+        height: 500px;
+    }
+}
+
+.es-learning-path .lp-summary-tile {
+    max-width: 50%;
+    flex: 1 1 50%;   
+}
+
+.discussion-heading {
+    font-weight: 300;
+    font-size: 33.55px;
+    color: #373737;
+    padding: 24px 0px;
+}
+  
+@media screen and (max-width: 768px) {
+    .discussion-heading {
+        font-size: 24px;
+    }
+}

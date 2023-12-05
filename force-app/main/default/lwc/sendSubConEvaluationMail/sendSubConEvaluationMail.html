@@ -1,0 +1,23 @@
+<template>    
+    <lightning-card class="slds-card" title="Send Subcontractor Evaluation">
+        <div class="slds-card__body slds-card__body_inner">Please select the assignments to send evaluation for, and hit Save.</div>
+        <template if:true={hasRecords}>
+            <template if:true={loaded}>
+                <div class="scrolldiv" style="padding:10px">                  
+                    <lightning-datatable key-field="Id"
+                                        hide-checkbox-column="false"
+                                        data={records} 
+                                        columns={columns}
+                                        onsave={handleSave}
+                                        oncancel={handleCancel}
+                                        draft-values={draftValues}
+                                        min-column-width="100">
+                    </lightning-datatable>
+                </div> 
+            </template>
+            <template if:false={loaded}>
+                <lightning-spinner alternativetext="Loading"></lightning-spinner>
+            </template>
+        </template>
+    </lightning-card>
+</template>

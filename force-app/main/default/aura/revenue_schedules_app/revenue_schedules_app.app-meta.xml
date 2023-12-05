@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuraDefinitionBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <description>I2C-659 : This lightning component will be used on Revenue Agreement to display all associated Revenue Schedules with columns and mass update</description>
+</AuraDefinitionBundle>

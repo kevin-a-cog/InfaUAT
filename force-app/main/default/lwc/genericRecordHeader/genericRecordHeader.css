@@ -1,0 +1,18 @@
+.header-column {
+    padding: 0 1rem;
+}
+.field-title {
+    font-size: .75rem;
+    font-weight: 100;
+    line-height: 1.25;
+    margin-bottom: .25rem;
+}
+.hyperlink{
+    color:#0a32c6;
+}
+
+.headerbgm{
+    background: rgb(243, 243, 243);
+    background-clip: padding-box;
+    border-radius: 5px;
+}

@@ -1,0 +1,10 @@
+﻿DeveloperName,Label,Product__c,Period__c,Period_Flag__c,Case_Index__c,Segment__c
+CSPC_18,CSPC - 18,Mass Ingestion,180,P180,5,Preferred
+CSPC_16,CSPC - 16,Reference 360 SaaS,180,P180,5,Preferred
+CSPC_17,CSPC - 17,Supplier 360 SaaS,180,P180,5,Preferred
+CSPC_12,CSPC - 12,Cloud Data Market Place,180,P180,5,Preferred
+CSPC_11,CSPC - 11,Cloud Data Governance and Catalog,180,P180,5,Preferred
+CSPC_15,CSPC - 15,Product 360 SaaS,180,P180,5,Preferred
+CSPC_14,CSPC - 14,MDM Multidomain SaaS,270,P270,5,Preferred
+CSPC_13,CSPC - 13,Customer 360 SaaS,270,P270,5,Preferred
+CSPC_19,CSPC - 19,Cloud Data Quality,180,P180,5,Preferred

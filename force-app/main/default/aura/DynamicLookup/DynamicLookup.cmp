@@ -1,0 +1,169 @@
+<aura:component controller="DynamicLookupController" implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickActionwithoutHeader,flexipage:availableForAllPageTypes" access="global" >
+    <!-- <ltng:require styles="/resource/slds212/assets/styles/salesforce-lightning-design-system.css" />-->
+    <aura:attribute name="objectType" type="String" default="test"/>
+    <aura:attribute name="showSave" type="Boolean" default="false"/>
+    <aura:attribute name="disabledSave" type="Boolean" />
+    <aura:attribute name="ErrorMsgLst" type="string[]"/>
+    <aura:attribute name="sObjectName" type="String" />
+
+    <aura:attribute name="lstContacts" type="sObject[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!-- search attributes --> 
+    <aura:attribute name="searchKeyword" type="string" default=""/>
+    <aura:attribute name="fieldarray" type="Object[]" />
+    <aura:attribute name="fieldStrQry" type="String" />
+    <aura:attribute name="saveBtnClicked" type="Boolean" default="false"/>
+    <aura:attribute name="roleMap" type="Map"/>
+    <aura:attribute name="roleOptions" type="List" />
+    <aura:attribute name="hasPermission" type="boolean" default="true" /> 
+    
+    <!--attribute for pill section-->
+    <aura:attribute name="pillsList" type="sObject[]" />  
+    <!-- added for search LOB contacts -->
+    
+    <aura:handler event="force:refreshView" action="{!c.isRefreshed}" />
+    
+    <!-- check if user has csm permission -->
+    <aura:if isTrue="{!(!v.hasPermission) }">
+        
+        <lightning:icon iconName="utility:error" alternativeText="Error!" variant="error"/>
+            <p>It looks you do not have permission to perform this action.</p>
+    </aura:if>  
+    <aura:if isTrue="{!v.hasPermission }">
+        <!-- added for search LOB contacts --> 
+        <div class="slds-col modal-header slds-modal__header">
+             <h2 class="title slds-text-heading--medium">Add LOB Contacts</h2>
+        </div>
+        
+        <!-- added for search LOB contacts --> 
+        <div class="slds-form-element">
+                <label class="slds-form-element__label slds-assistive-text" for="combobox-unique-id">Search</label>
+                <div class="slds-form-element__control">
+                    <div class="slds-combobox_container">
+                        <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                            
+                            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                                <ui:inputText updateOn="keyup" keyup="{!c.searchContact}" aura:id="searchId" class="slds-input slds-combobox__input" value="{!v.searchKeyword}" placeholder="Search Contacts"/>
+                                
+                                <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right" title="Description of icon when needed">
+                                    <lightning:icon class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" iconName="utility:search" size="x-small" alternativeText="search"/>
+                                    <span class="slds-assistive-text">Description of icon</span>
+                                </span>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+            
+            <!--pill section that will show selected records-->  
+            <div class="slds-pill_container slds-pill_container_bare">
+                
+                <div id="listbox-unique-id" role="listbox">
+                    <ul class="slds-listbox" role="presentation">
+                        <li role="presentation" class="slds-listbox__item">
+                            <div class="slds-p-top--x-small">
+                                
+                                <aura:iteration var="pill" items="{!v.pillsList}">
+                                    
+                                    <lightning:pill label="{!pill.Name}" href="{!'/'+ pill.Id}" onremove="{!c.handleRemove }" name="{!pill.Id}">
+                                        <aura:set attribute="media">
+                                            <lightning:icon iconName="standard:contact"  alternativeText="Contact"/>
+                                        </aura:set>
+                                    </lightning:pill>
+                                </aura:iteration>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="slds-col modal-body scrollable slds-p-around--medium" style="height: 200px; max-height: 400px; overflow-y: auto !important">
+                <!-- ADD PRODUCT WINDOW: LIST OF PRODUCTS == FIELDS USING FIELDSET -->  
+                <!-- DYNAMIC TABLE GOES HERE     -->
+                <!-- =============================================================================== -->               
+                <div class="slds-grow">
+                    <div class="slds-p-top--small">
+                        <aura:if isTrue="{!v.lstContacts.length > 0}">
+                            <div class="table-overflow">
+                                <table class="slds-table slds-table_bordered slds-table_cell-buffer" role="grid">
+                                    <thead>
+                                        <tr class="slds-text-title_caps">
+                                            <th scope="col" role="gridcell" class="slds-cell-shrink">
+                                                <div class="slds-truncate" title="button"></div>
+                                            </th>
+                                            
+                                            
+                                            <aura:iteration items="{!v.fieldarray}" var="f">
+                                                <!--aura:if isTrue="{!f.label != 'Is Selected'}"-->
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="{!f.label}">{!f.label}</div>
+                                                </th>
+                                                <!--/aura:if-->
+                                            </aura:iteration>
+                                            <th>
+                                                <div class="slds-truncate" title="Role">Role</div>
+                                            </th>
+                                        </tr>
+                                        
+                                    </thead>
+                                    <tbody>
+                                        <aura:iteration items="{!v.lstContacts}" var="prod">
+                                            <tr class="slds-border_bottom">
+                                                <td role="gridcell" class="slds-cell-shrink">
+                                                    <!--<lightning:input type="checkbox" label=" " name="blue" checked="{!prod.isSelected}"/>-->
+                                                    
+                                                    <aura:if isTrue="{!prod.Is_Selected__c}">
+                                                        <lightning:icon iconName="action:approval"  size="x-small" class="slds-button slds-button_brand slds-button--icon-container slds-button--icon-border" alternativeText="Selected"/>
+                                                        <aura:set attribute="else">
+                                                            <button class="check_in_button slds-button slds-button--icon-container slds-button--icon-border" style="font-size:30px" data-contact-id="{!prod.Id}" id="checkoutbtn" onclick="{!c.handleClick}" >
+                                                                +</button>
+                                                        </aura:set>
+                                                    </aura:if> 
+                                                </td>
+                                                <aura:iteration items="{!v.fieldarray}" var="f">
+                                                    <!--aura:if isTrue="{!f.fieldPath != 'Is_Selected__c'}"-->
+                                                    <td class="slds-text-body--regular slds-truncate">
+                                                        <c:rendertext obj="{!prod}" field="{!f}"/> 
+                                                    </td>
+                                                    <!--/aura:if-->
+                                                </aura:iteration>
+                                                
+                                                <!-- Role Picklist go here  -->
+                                                <td class="slds-text-body--regular">
+                                                    <div class="slds-combobox-picklist" >
+                                                        <lightning:select aura:id="rolePL" name="{!prod.Id}" onchange="{!c.onRoleChange}" >
+                                                            <aura:iteration items="{!v.roleOptions}" var="roleValue">
+                                                                <aura:if isTrue="{!roleValue.value == v.opportunityType}">
+                                                                    <option value="{!roleValue.value}" text="{!roleValue.label}" selected="true" />
+                                                                    <aura:set attribute="else">
+                                                                        <option value="{!roleValue.value}" text="{!roleValue.label}" />
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                    
+                                                </td>
+                                                
+                                                
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </aura:if>
+                    </div>
+                </div>
+                
+            </div>
+            
+        
+        <div class="slds-col modal-footer slds-modal__footer">
+            <lightning:button variant="neutral" label="Cancel" onclick="{! c.CloseModalOne }"/>      
+            <aura:if isTrue="{!(v.showNext == true)? false : true}" >
+                <lightning:button aura:id="saveBtn" label="Save" name="Save" variant="brand" onclick="{!c.save}" disabled="{!v.pillsList.length > 0 ? false : true}"/>
+            </aura:if>
+        </div>
+        
+    </aura:if>  
+</aura:component>

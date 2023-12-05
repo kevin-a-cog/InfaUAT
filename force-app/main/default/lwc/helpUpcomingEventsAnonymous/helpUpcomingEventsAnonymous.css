@@ -1,0 +1,330 @@
+.bg-color{
+    background-color: #eaeaea;
+    padding-bottom: 55px;
+}
+
+
+.title{            
+    font-weight: 300;
+    font-size: 33px;
+    font-style: normal;
+    padding: 24px 0px;
+    color:#373737;
+}
+@media screen and (max-width:768px) {
+    .in-upcoming-events-container{
+        margin: 0 auto;
+        width: 93%;
+}
+    .title{
+        font-size: 24px;
+        padding: 10px 0px;
+        margin: 0;
+}
+    .in-upcoming-events-text {
+        font-size: 14px;
+}
+}
+
+.change-pointer{
+    cursor: pointer;
+}
+
+.in-community-tile{
+    box-shadow: 0px 5px 10px rgb(0 0 0 / 25%);
+    background-color: #FFFFFF;
+    padding: 15px;
+}
+
+@media screen and (max-width: 768px) {
+    .in-community-tile{
+        margin-bottom: 25px;
+    }
+}
+
+.in-community-name{
+    font-style: normal;
+    font-weight: 300;
+    font-size: 24px;
+    color: #373737;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 80px;
+    padding-top: 5px;
+}
+
+@media screen and (max-width: 768px) {
+    .in-community-name {
+        font-size: 18px;
+        height: 55px;
+    }
+}
+
+.in-community-name1{
+    font-style: normal;
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 29.3px;
+    display: flex;
+    align-items: center;
+    color: #373737;
+    min-height: 39px;
+}
+
+.in-take-me-cta{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    color: #001AFF;
+    margin: auto;
+    padding: 10px 0px;
+}
+
+.in-community-desc{
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    height: 100%;
+    font-style: normal;
+    font-size: 15px;
+    color: #373737;
+}
+
+.in-community-desc-list{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 36px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 18px;
+    color: #000000;
+}
+
+.in-followed{
+    padding: 4px;
+    color: white;
+    display: inline-block;
+    background: #ff4d00;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+}
+.add-button{
+    background: rgba(0, 26, 255, 0.6);
+    mix-blend-mode: normal;
+    opacity: 0.15;
+    border-radius: 5px;
+    width: 29px;
+    height: 29px;
+    position: relative;
+    top: 20px;
+    left: 6px;
+}
+.add-button-list{
+    background: rgba(0, 26, 255, 0.6);
+    mix-blend-mode: normal;
+    opacity: 0.15;
+    border-radius: 5px;
+    width: 29px;
+    height: 29px;
+    position: relative;
+    top: -7px;
+    left: 6px;
+}
+.add-img{
+    position: relative;
+    left: 13px;
+    top: -4px;
+}
+
+.add-img-list{
+    position: relative;
+    right: 16px;
+    top: 20px;
+    height: 100%;
+}
+.minus-button{
+    width: 29px;
+    height: 29px;
+    background: #C1C1C1;
+    mix-blend-mode: normal;
+    opacity: 0.2;
+    border-radius: 5px;
+    position: relative;
+    top: 20px;
+    left: 6px;
+}
+.minus-button-list{
+    width: 29px;
+    height: 29px;
+    background: #C1C1C1;
+    mix-blend-mode: normal;
+    opacity: 0.2;
+    border-radius: 5px;
+    position: relative;
+    top: -7px;
+    left: 6px;
+}
+.minus-img{
+    position: relative;
+    left: 12px;
+    top: -5px;
+}
+.minus-img-list{
+    position: relative;
+    right: 16px;
+    top: 28px;
+    height: 100%;
+}
+.in-title-follow{
+    width: 75%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+}
+.hr{
+    border: 1px solid rgba(151, 151, 151, 0.418405);
+    transform: matrix(1, 0, 0, -1, 0, 0);
+    margin: -15px -15px 10px -15px;
+}
+
+.join-event-btn{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+    background: #FF4D00;
+    padding: 2px 3px;
+}
+
+.view-more-btn{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 21px;
+    line-height: 32px;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+    background: #FF4D00;
+    padding: 10px 30px;
+}
+
+.parent-comm-name{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+    text-transform: capitalize;
+    color: #001AFF;
+}
+
+.row-margin{
+    margin-right: -25px;
+}
+
+.row-list:last-child{
+    padding-bottom: 20px;
+}
+
+.row-paddings{
+    align-items: end;
+    margin: 0px -10px;
+    padding: 10px;
+}
+
+.search-filter:first-child{
+    margin-left: 10px
+}
+
+.clear-filter{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 32px;
+    color: #001AFF;
+    text-transform: uppercase;
+}
+
+.slds-status2{
+    display: inline-block;
+      font-size: 12px;
+      line-height: 14px;
+      text-align: center;
+      background-color: #00A9BB;
+      color: white;
+      white-space: nowrap;
+      padding: 5px 10px;
+      margin-top: 3%;
+      text-transform: uppercase;
+      font-weight: 400;
+  }
+
+  .slds-status3{
+    width: 55px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+    background-color: white;
+    color: #FF4D00;
+    border-color:#FF4D00;
+    border-radius: 1rem;
+    white-space: nowrap;
+    padding: 4px;
+    margin-top: 3%;
+}
+
+  .slds-ul{
+    margin-top: 10%;
+    list-style-type: none;
+    width: 100%;
+  }
+  
+  .slds-ul2{
+    margin-top: 6%;
+    list-style-type: none;
+    width: 40%;
+  }
+
+  .iconcolor{
+    --lwc-colorTextIconDefault: #373737;
+  }
+
+  .in-upcoming-events-row {
+      margin: 15px 0px;
+  }
+  @media screen and (max-width: 768px) {
+    .in-upcoming-events-row {
+        margin: 10px 0px;
+    } 
+  }
+
+  .in-upcoming-events-row .col-sm-6 {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+  }
+
+  .in-upcoming-events-icon {
+      margin-right: 10px;
+  }
+
+  .in-upcoming-events-cta {
+      margin-top: 20px;
+  }
+  .in-upcoming-events-location {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+  }

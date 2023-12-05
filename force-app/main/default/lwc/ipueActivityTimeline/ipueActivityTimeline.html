@@ -1,0 +1,41 @@
+<template>
+    <lightning-card>
+
+        <template if:false={loadData}>
+            <lightning-spinner variant="brand"> </lightning-spinner>
+        </template>
+
+        <template if:true={loadData}>
+
+            <lightning-layout>
+
+                <lightning-layout-item padding="" size="9" flexibility="auto">
+                     <!-- running loop on activity list fetched from server -->
+                    <template for:each={activityIteration} for:item="act" for:index="index" if:true={loadData}>
+
+                        <c-ipue-activity-timeline-child-renderer key={act.feedId}  activity={act}> 
+                        </c-ipue-activity-timeline-child-renderer>
+                    </template>
+                </lightning-layout-item>
+
+                <lightning-layout-item flexibility="auto">
+                    <div class="grid-container">
+                        The interaction feed is in chronological order,
+                    </div>
+
+                    <div class="grid-container">
+                        with the most recent comment at the top.
+                    </div>
+                 
+                </lightning-layout-item>
+            </lightning-layout>
+
+</template>
+        <!-- showing illustration when no feed data present -->
+        <template if:false={activityIteration.length}>
+            <c-ipue-illustration message="No Feeds Available">
+            </c-ipue-illustration>
+        </template>
+        
+    </lightning-card>
+</template>

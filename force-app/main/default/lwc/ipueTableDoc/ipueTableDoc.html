@@ -1,0 +1,228 @@
+<template>
+
+    <div class="table-container slds-is-relative">
+
+        <template if:true={loadingRows}>
+            <lightning-spinner variant="brand"></lightning-spinner>
+        </template>
+
+        <template if:true={isLoaded}>
+
+            <table class="table" aria-label="">
+                <thead>
+                    <!-- Header Row -->
+                    <tr class="slds-line-height_reset">
+
+                        <template if:true={table.isElastic}>
+                            <th class="elastic-cell">
+                                <span></span>
+                            </th>
+                        </template>
+
+                        <!-- Create Header Cells -->
+                        <template for:each={header.cells} for:item="cell" for:index="rowIndex">
+                            <!-- Header Cell -->
+                            <th key={cell.columnNumber} class={cell.cellStyle} scope="col">
+                                <div class="slds-truncate" id={cell.columnNumber} title={cell.columnNumber}>
+                                    <input class={cell.inputStyle} value={cell.value} disabled></input>
+                                </div>
+                            </th>
+                        </template>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <!-- Create Table Rows -->
+                    <template for:each={rows} for:item="row" for:index="rowIndex">
+
+                        <!-- Table Row -->
+                        <tr class="slds-hint-parent" key={row.rowNumber}>
+
+                            <template if:true={table.isElastic}>
+                                <td class="elastic-cell">
+                                    <template if:false={disableInputs}>
+                                        <template if:true={row.isLastRow}>
+
+                                            <!-- Add Row Icon (Last Row Only)-->
+                                            <lightning-button-icon icon-name="utility:add" alternative-text="Add Row"
+                                                variant="container" size="x-small" title="Add Row"
+                                                class="elastic-button-icon add-button" data-row-index={rowIndex}
+                                                onclick={handleAddRow}></lightning-button-icon>
+                                        </template>
+
+                                        <template if:false={row.isLastRow}>
+                                            <!-- Remove Row Icon -->
+                                            <lightning-button-icon icon-name="utility:dash"
+                                                alternative-text="Remove Row" variant="container" size="x-small"
+                                                title="Remove Row" class="elastic-button-icon remove-button"
+                                                data-row-index={rowIndex}
+                                                onclick={handleOpenRemoveRowModal}></lightning-button-icon>
+                                        </template>
+                                    </template>
+                                </td>
+                            </template>
+
+                            <!-- Create Table Cells -->
+                            <template for:each={row.cells} for:item="cell" for:index="cellIndex">
+
+                                <!-- Table Cell -->
+                                <td key={cell.columnNumber} data-label={cell.rowNumber} class={cell.cellStyle}>
+
+                                    <!-- Non-Picklist Input -->
+                                    <template if:false={cell.isPicklist}>
+                                        <template lwc:if={cell.isNumber}>
+                                            <div class="slds-truncate" title={cell.rowNumber}>
+                                                <lightning-input class="input-text-align_right table-cell"
+                                                    value={cell.value} type="Number" disabled={cell.isReadOnly}
+                                                    data-row-index={rowIndex} data-cell-index={cellIndex}
+                                                    onchange={handleInput}></lightning-input>
+                                            </div>
+                                        </template>
+                                        <template lwc:else>
+                                            <div class="slds-truncate" title={cell.rowNumber}>
+                                                <input class={cell.inputStyle} value={cell.value} type={cell.dataType}
+                                                    disabled={cell.isReadOnly} data-row-index={rowIndex}
+                                                    data-cell-index={cellIndex} onchange={handleInput}></input>
+                                            </div>
+                                        </template>
+                                    </template>
+
+                                    <!-- Picklist Input -->
+                                    <template if:true={cell.isPicklist}>
+                                        <div>
+                                            <lightning-combobox variant="label-hidden" disabled={disableInputs}
+                                                value={cell.output.picklistValue} options={cell.picklistValues}
+                                                data-row-index={rowIndex} data-cell-index={cellIndex}
+                                                onchange={handleInput}></lightning-combobox>
+                                        </div>
+                                    </template>
+                                </td>
+                            </template>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+    </div>
+
+    <template if:true={openModal}>
+        <div>
+            <section class="slds-modal slds-fade-in-open" role="dialog" tabindex="-1" aria-labelledby="modal-heading-01"
+                aria-modal="true" aria-describedby="modal-content-id-1">
+                <!-- Modal Container -->
+                <div class="slds-modal__container slds-is-relative slds-p-around_medium">
+
+                    <!-- Modal Header -->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={handleCloseRemoveRowModal}>
+                            <lightning-icon class="close-icon" icon-name="utility:close" size="medium"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Confirm Row Deletion
+                        </h2>
+                    </header>
+
+                    <!-- Modal Body -->
+                    <div class="slds-modal__content slds-p-around_medium modal-body">
+
+                        <div class="slds-m-around_medium confirm-modal">
+                            Are you sure you would like to delete this table row?
+                        </div>
+
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                            onclick={handleCloseRemoveRowModal}>Cancel</button>
+                        <button class="slds-button slds-button_brand" onclick={onConfirmRowDelete}>Confirm</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Modal Backdrop -->
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+</template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+<lightning-layout>
+
+    <template for:each={row.cells} for:item="cell" for:index="cellIndex">
+        <lightning-layout-item key={cell.columnNumber} flexibility="auto" class="table-cell"> 
+            <div class={cell.style}>   
+                    <input 
+                        class={cell.style} 
+                        disabled={cell.isReadOnly} 
+                        value={cell.value}
+                    ></input>                               
+            </div>
+        </lightning-layout-item>
+    </template>
+
+</lightning-layout> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <template for:each={table.rows} for:item="row" for:index="rowIndex">
+                <div key={row.rowNumber}>
+
+
+
+                    <lightning-layout>
+
+                        <template for:each={row.cellsSorted} for:item="cell" for:index="cellIndex">
+                            <lightning-layout-item key={cell.columnNumber} flexibility="auto" padding="around-small">
+                                    
+                                <input class="background" disabled={cell.isDisabled} value={cell.value}></input>
+                            </lightning-layout-item>
+                        </template>
+
+                    </lightning-layout> 
+
+                </div>
+            </template> -->
+
+
+<!-- <lightning-layout>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <div class="custom-box slds-box slds-p-around_medium slds-text-align_center">1</div>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <div class="custom-box slds-box slds-p-around_medium slds-text-align_center">2</div>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <div class="custom-box slds-box slds-p-around_medium slds-text-align_center">3</div>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <div class="custom-box slds-box slds-p-around_medium slds-text-align_center">4</div>
+                </lightning-layout-item>
+            </lightning-layout> -->

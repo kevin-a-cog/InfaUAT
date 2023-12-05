@@ -1,0 +1,409 @@
+<!--
+Change History
+**************************************************************************************************************************
+Modified By     Date            Jira No.    Description                                                     Tag
+**************************************************************************************************************************
+balajip         05-Apr-2022     I2RT-5459   Added feature to tag users in a Case Comment                    T01
+Vignesh D       25-Oct-2022     I2RT-7114   Removed template if:true condition to show comment category     T02
+                                            on all case comments
+-->
+<template>
+    <div class="container slds-m-top_small">
+        <div class="row" style="background: rgb(243, 242, 242);margin: -1rem;">
+            <div class={caseCommentStyles} style="margin: 0.25rem;overflow-y:scroll;" onscroll={handleWheel}>
+                <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+
+                <!-- <ul class="timeline-v2 slds-scrollable_y" style="max-height:800px" onscroll={handleWheel}> -->
+                <ul class="timeline-v2">
+                    <template for:each={commentList} for:item="notif">
+                        <li key={notif.date}  style="margin-right: .65rem;" >
+                            <!-- <T01> -->
+                            <!-- <lightning-formatted-text value={notif.date} style="margin-left: -15px;"></lightning-formatted-text> -->
+                            <!-- </T01> -->
+                            <template for:each={notif.comments} for:item="comment">
+                                <!--<c-case-comment-timeline-item key={comment.Id} comment={comment} access={access}>
+                                </c-case-comment-timeline-item>-->
+                                <div key={comment.time} data-id={comment.Id} class="d-md-flex">
+                                    <img src={comment.iconName}  class="slds-icon_container comment_icon" />
+                                    <div class="media collapsed expanded" data-uid={comment.uid} data-name="parent">
+                                        <div class="slds-page-header expand" style="padding:5px;"
+                                            onclick={handleShowMore} data-uuid={comment.uid} data-name="control">
+                                            <div class="slds-page-header__row">
+                                                <div class="slds-page-header__col-title">
+                                                    <div class="slds-media">
+                                                        <div class="slds-media__figure">
+                                                            <span class="slds-icon_container">
+                                                                <div class="media-left">
+                                                                    <lightning-icon data-icon={comment.uid}
+                                                                        class="slds-m-right_xx-small" size="xx-small"
+                                                                        icon-name="utility:switch">
+                                                                    </lightning-icon>                                                                    
+                                                                    <!--@Akhilesh 20 Apr 2021 - start-->
+                                                                    <!-- <T02> -->
+                                                                    <span style="margin-left:8px;font-weight:bold;">
+                                                                        {comment.commentCatgory}
+                                                                    </span>
+                                                                    <span>&nbsp;</span>
+                                                                    <!-- </T02> -->
+                                                                    <!--@Akhilesh 01 Jul 2021 - start-->    
+                                                                    <!--<lightning-button-icon icon-name="action:email" alternative-text="View Email Metrics"
+                                                                        variant="bare" name="modalOpen" data-id={comment.Id}
+                                                                        onclick={sModal} size="small">
+                                                                        </lightning-button-icon>--> 
+
+                                                                        <!-- only show the mail icon when Not internal and not inbound-->
+                                                                        <template if:false={comment.isPrivate}>
+                                                                        <template if:false={comment.isInternal}>
+                                                                            <template if:false={comment.isInbound}>
+                                                                                <template if:true={comment.isEmailOpened}>
+                                                                                    <lightning-button-icon icon-name="utility:email_open" alternative-text="View Email Metrics"
+                                                                                    variant="bare" name="modalOpen" data-id={comment.Id}
+                                                                                    onclick={sModal} size="small">
+                                                                                    </lightning-button-icon>
+                                                                                </template>
+                                                                                <template if:true={comment.isEmailSent} >	
+                                                                                <template if:false={comment.isEmailOpened}>
+                                                                                    <lightning-button-icon icon-name="utility:email" alternative-text="View Email Metrics"
+                                                                                        variant="bare" name="modalOpen" data-id={comment.Id}
+                                                                                        onclick={sModal} size="small">
+                                                                                        </lightning-button-icon>
+                                                                                </template>
+                                                                                </template>
+                                                                            </template>
+                                                                        </template>
+                                                                        </template>
+                                                                        <!--@Akhilesh 01 Jul 2021 - end--> 
+
+                                                                    <!--@Akhilesh 20 Apr 2021 - end-->
+                                                                </div>
+                                                            </span>
+                                                        </div>
+                                                        <div class="slds-media__body">
+                                                            <div class="slds-float_right" if:true={showbutton}>
+                                                                <span style="font-size: 7pt">{comment.countdown}</span>
+                                                                <span class="slds-m-left_small"
+                                                                    if:true={comment.isEditable}>
+                                                                    <lightning-button-icon icon-name="utility:edit"
+                                                                        variant="bare" name="edit" data-id={comment.Id} 
+                                                                        onclick={handleClick} size="small">
+                                                                    </lightning-button-icon> 
+                                                                </span>
+                                                                <span class="slds-m-left_small"
+                                                                    if:true={comment.isDeletable}>
+                                                                    <lightning-button-icon icon-name="utility:delete"
+                                                                        variant="bare" name="delete" data-id={comment.Id}
+                                                                        onclick={handleClick} size="small">
+                                                                    </lightning-button-icon>
+                                                                </span>
+                                                               
+                                                                
+                                                             </div>
+                                                            <!-- <div class="slds-float_right"
+                                                                if:false={comment.isSubmitted}>
+                                                                <lightning-button-icon icon-name="utility:edit"
+                                                                    variant="bare" name="edit" data-id={comment.Id}
+                                                                    onclick={handleClick}>
+                                                                </lightning-button-icon>
+                                                            </div> -->
+                                                            <div style="float:right;" class={comment.titleClass}>
+                                                                <div class="slds-page-header__name-title">
+                                                                    <h1>
+                                                                        <div class="slds-page-header__title slds-truncate"
+                                                                            style="font-size: 9pt;">
+                                                                            <!-- Deva : I2RT-2630 : Added a block to display Createddate -->
+                                                                            <span class='slds-m-left_x-small'
+                                                                                if:true={comment.createdDate}>
+                                                                                <span>{comment.createdDate}</span>
+                                                                            </span>
+                                                                            <a href="javascript:void(0);">
+                                                                                <img class="image--cover"
+                                                                                    src={comment.fullPhotoUrl}
+                                                                                    width="16px;">
+                                                                            </a>
+                                                                            <span class='slds-m-left_xx-small'>
+                                                                                {comment.creatorName}
+                                                                            </span>
+                                                                            <span if:true={comment.role}
+                                                                                style="font-size: 7pt;" class='slds-m-left_xx-small'>({comment.role})</span>
+                                                                            <span class='slds-m-left_x-small'
+                                                                                if:true={comment.isDraft}>
+                                                                                <img src={imageURL.draft_16} title="Draft"
+                                                                                    width="12px;">
+                                                                            </span>
+                                                                            <span class='slds-m-left_x-small'
+                                                                                if:true={comment.isScheduled}>
+                                                                                <img src={imageURL.calendar_16} title="Scheduled"
+                                                                                    width="12px;">
+                                                                            </span>
+                                                                            <span class='slds-m-left_x-small'
+                                                                                if:true={comment.isSubmitted}>
+                                                                                <img src={imageURL.submitted_16} title="Submitted"
+                                                                                    width="12px;">
+                                                                            </span>
+                                                                            <span class='slds-m-left_x-small' title="Important"
+                                                                                if:true={comment.isHighImportance}>
+                                                                                <span class="dot highImportance"></span>
+                                                                            </span>
+                                                                            <span class='slds-m-left_x-small' title="Private"
+                                                                                if:true={comment.isPrivate}>
+                                                                                <span class="circle private">P</span>
+                                                                            </span>
+                                                                            <span class='slds-m-left_x-small' title="Internal"
+                                                                                if:true={comment.isInternal}>
+                                                                                <span class="circle internal">I</span>
+                                                                            </span>                                                                            
+                                                                            <span class='slds-m-left_x-small' title="External"
+                                                                                if:true={comment.isExternal}>
+                                                                                <span class="circle external">E</span>
+                                                                            </span>
+                                                                            <template if:true={comment.caseCommentFeedBackItem}>
+                                                                                <span class='slds-m-left_x-small' title="feedback">                                                                                    
+                                                                                        <lightning-button-icon-stateful icon-name="utility:like" size="x-small" selected={comment.likeState} onclick={handleClick} alternative-text="Like" name="like" class="slds-m-left_xx-small" data-id={comment.Id}></lightning-button-icon-stateful>
+                                                                                        <lightning-button-icon-stateful icon-name="utility:dislike" size="x-small" selected={comment.disLikeState} onclick={handleClick} alternative-text="Dislike" name="dislike" class="slds-m-left_xx-small" data-id={comment.Id}></lightning-button-icon-stateful>
+                                                                                </span>
+                                                                            </template>
+                                                                               <!--Deva Hyperlink buttons to open task or event-->
+                                                                            <template if:true={comment.taskRecord}>
+                                                                                <span class='slds-m-left_x-small' title="Task"> 
+                                                                                    <lightning-button-icon icon-name="utility:task" alternative-text="Task Link"   class="slds-m-left_xx-small" onclick={handleClick} title="Click Here..." name="task" data-id={comment.Id}></lightning-button-icon>
+                                                                                </span>
+                                                                            </template>
+                                                                            <template if:true={comment.eventRecord}>
+                                                                                <span class='slds-m-left_x-small' title="Event"> 
+                                                                                    <lightning-button-icon icon-name="utility:event" alternative-text="Event Link" class="slds-m-left_xx-small" onclick={handleClick} title="Click Here.." name="event" data-id={comment.Id}></lightning-button-icon>
+                                                                                </span> 
+                                                                            </template>
+                                                                        </div>
+                                                                    </h1>
+                                                                </div>
+                                                            </div>
+                                                            <!--<div class="slds-page-header__name-meta">{comment.role}
+                                                                <span class='slds-m-left_x-small'
+                                                                    if:true={comment.isDraft}>
+                                                                    <img src={imageURL.draft_16} width="12px;">
+                                                                </span>
+                                                                <span class='slds-m-left_x-small'
+                                                                    if:true={comment.isScheduled}>
+                                                                    <img src={imageURL.calendar_16} width="12px;">
+                                                                </span>
+                                                                <span class='slds-m-left_x-small'
+                                                                    if:true={comment.isSubmitted}>
+                                                                    <img src={imageURL.submitted_16} width="12px;">
+                                                                </span>
+                                                                <span class='slds-m-left_x-small'
+                                                                    if:true={comment.isHighImportance}>
+                                                                    <span class="dot highImportance"></span>
+                                                                </span>
+                                                                <span class='slds-m-left_x-small'
+                                                                    if:true={comment.isMediumImportance}>
+                                                                    <span class="dot mediumImportance"></span>
+                                                                </span>
+                                                                <span class='slds-m-left_x-small'
+                                                                    if:true={comment.isLowImportance}>
+                                                                    <span class="dot lowImportance"></span>
+                                                                </span>
+                                                                <span class="slds-float_right">
+                                                                    {comment.countdown}</span>
+                                                            </div>-->
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="media-body media-middle slds-m-top_xx-small " data-time={comment.datetime}>
+                                            <lightning-formatted-rich-text value={comment.commentText}>
+                                            </lightning-formatted-rich-text>
+                                        </div>
+                                        <!-- T01 Tagged Users -->
+                                        <div class="slds-m-top_xx-small" if:true={comment.hasTaggedUsers}>
+                                            <lightning-pill-container items={comment.taggedUsers} data-id={recordId}
+                                                    class="timelineAttachments">
+                                            </lightning-pill-container>
+                                        </div>
+                                        <div class="slds-m-top_xx-small" if:true={comment.hasAttachments}>
+                                            <div class="slds-border_bottom">
+                                                <lightning-icon size="xx-small" icon-name="utility:attach">
+                                                </lightning-icon>&nbsp;Attachments ({comment.attachmentCount})
+                                            </div>
+
+                                            <lightning-pill-container items={comment.attachments}
+                                                class="timelineAttachments">
+                                            </lightning-pill-container>
+                                        </div>
+                                        <div class="slds-m-top_x-small" if:true={comment.canReply}>
+                                            <lightning-button-icon icon-name="utility:comments" variant="bare"
+                                                icon-class="fill_brand" disabled={caseStatus} class="fill_brand" name="reply"
+                                                data-id={comment.Id} data-hidezissuereply={comment.hideZIssueReply} onclick={handleClick} data-zissue={comment.ZIssue__c}> <!-- I2RT-7491. Added property data-zissue-->
+                                            </lightning-button-icon> 
+                                        </div>
+                                        
+                                        <div if:true={comment.Case_Comments__r} class="slds-m-top_x-small">
+                                            <a if:false={comment.showReplies} href="javascript:void()"
+                                                onclick={handleClick} name="showReply" class="slds-m-bottom_x-small"
+                                                data-id={comment.Id} style="display:inline-block">View Reply</a>
+
+                                            <template if:true={comment.showReplies}>                                                
+                                                <a if:true={comment.showReplies} href="javascript:void()"
+                                                    onclick={handleClick} name="hideReply" class="slds-p-bottom_small"
+                                                    data-id={comment.Id} style="display:inline-block">Hide Reply</a>
+                                                <c-case-comment-timeline comment-list={comment.replies} showbutton="true" onpassfeedback={handlePassFeedBack}>
+                                                </c-case-comment-timeline>
+                                                <!--Vignesh D commented the below code as there's a logic bug on comment.Case_Comments__r, referencing undefined/null value in template array/loop-->
+                                                <!-- <template for:each={comment.Case_Comments__r} for:item="reply">
+                                                    <c-case-comment-timeline comment-list={reply.replies} onpassfeedback={handlePassFeedBack} key={reply}>
+                                                    </c-case-comment-timeline>
+                                                </template> -->
+                                            </template>
+                                        </div>
+
+                                        <!--Vignesh D commented the below code as there's a logic bug on comment.Case_Comments__r, referencing undefined/null value in template array/loop-->
+                                        <!-- <template for:each={comment.Case_Comments__r} for:item="reply">
+                                            <c-case-comment-timeline comment-list={reply.replies} onpassfeedback={handlePassFeedBack} key={reply}>
+                                            </c-case-comment-timeline>
+                                        </template>
+
+                                        <template for:each={comment.replies} for:item="reply">
+                                            <c-case-comment-timeline comment-list={reply} onpassfeedback={handlePassFeedBack} key={reply}>
+                                            </c-case-comment-timeline>
+                                        </template> -->
+
+                                    </div>
+                                    <!-- <div class="">Show More
+                                    </div> -->
+                                </div>
+                            </template>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <template if:true={showModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open " aria-labelledby="modal-heading-01"
+            aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+
+
+                <header class="slds-modal__header slds-clearfix">
+                    <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                        onclick={handleClick} name="close" class="slds-float_right">
+                    </lightning-button-icon>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{modalHeader}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <template if:true={isEdit}>
+                        <c-case-comment-create onsave={handleSuccess} comment-record={caseCommentToEdit}
+                            record-id={caseRecordId} is-z-issue-linked={zissue} is-edit > <!-- I2RT-7491. Added property isZIssueLinked-->
+                        </c-case-comment-create>
+                    </template>
+                    <template if:true={isReply}>
+                        <c-case-comment-create onsave={handleSuccess} parent-comment-id={parentCommentId}  hide-zissue-reply-val={hideZissueReplyVal}
+                            record-id={caseRecordId} is-z-issue-linked={zissue}> <!-- I2RT-7491. Added property isZIssueLinked-->
+                        </c-case-comment-create>
+                    </template>
+
+                </div>
+                <!--<footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral">Cancel</button>
+                    <lightning-button type="submit" label="Save" variant="brand"></lightning-button>
+                </footer>
+                <lightning-record-edit-form object-api-name="Case_Comment__c" record-id={recordId}
+                    onsuccess={handleSuccess}>
+                </lightning-record-edit-form>-->
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <template if:true={oModal}>  
+        <div class="slds-modal slds-fade-in-open slds-backdrop">  
+          <div class="slds-modal__container">  
+            <!------HEADER Section-->  
+            <div class="slds-modal__header">  
+              <lightning-button-icon icon-name="utility:close" alternative-text="Close this window" size="large"  
+                variant="bare-inverse" onclick={cModal} class="slds-modal__close">  
+              </lightning-button-icon>  
+              <h2 style="font-size:large">Email Metrics</h2>  
+            </div>  
+            <!------Body Section-->  
+            <div class="slds-modal__content slds-p-around_medium">  
+                <div >
+                   <!-- <p style="font-weight:bold;font-size:medium"> Email Delivery Status - <span style="font-weight:bold;font-size:medium">{caseCommentToShow.Delivery__c }</span></p>
+                    <p style="font-weight:bold;font-size:medium"> Customer has Read the Email - <span style="font-weight:bold;font-size:medium">{caseCommentToShow.Email_Opened__c }</span></p>-->
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                        <thead>
+                            <tr>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Email">Email Send To</div>
+                                 </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Email Opened">Email Opened</div>
+                                 </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Email Clicked">Any Links in the Email Clicked </div>
+                                        </th>
+                                            <th class="" scope="col">
+                                                <div class="slds-truncate" title="Delivery">Delivery</div>
+                                            </th>
+                                   
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <template for:each={caseCommentToShow} for:item="caseComment">
+                                <tr key={caseComment.Id}>
+                                    <td>{caseComment.Email__c }</td>
+                                    <td><lightning-input type="checkbox" checked={caseComment.Email_Opened__c} disabled> </lightning-input></td>
+                                    <td><lightning-input type="checkbox" checked={caseComment.Email_Clicked__c} disabled> </lightning-input></td>
+                                    <td>{caseComment.Delivery__c }</td>
+                                </tr>
+                                </template>
+                           
+                        </tbody>
+                        
+                    </table>
+                </div>   
+            </div>  
+            <!------Footer Section-->  
+            <div class="slds-modal__footer">  
+              <lightning-button icon-name="utility:close" label="close" variant="brand" onclick={cModal}>  
+              </lightning-button>  
+            </div>  
+          </div>  
+        </div>  
+      </template>  
+
+      <!--Deva Start: to capture feedback value on like and dislike comment-->
+<template if:true={feedbackModelOpen}>
+    <!-- Modal/Popup Box LWC starts here -->
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <!-- Modal/Popup Box LWC header here -->
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeFeedbackModal}>
+                    <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" ></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="feedback_modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Feedback</h2>
+            </header>
+            <!-- Modal/Popup Box LWC body starts here -->
+            <div class="slds-modal__content slds-p-around_medium" id="feedback_modal-content-id-1">
+                <lightning-textarea name="feedbackinput" label="Feedback" value={feedbackCommnet} onchange={captureEnteredTextData}></lightning-textarea>
+            </div>
+            <!-- Modal/Popup Box LWC footer starts here -->
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={closeFeedbackModal} title="Cancel">Cancel</button>
+                <button class="slds-button slds-button_brand" onclick={submitFeedbackDetails} title="Save">Save</button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+<!--Deva End to Capture Feedback-->
+</template>

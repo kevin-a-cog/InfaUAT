@@ -1,0 +1,231 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-spinner if:true={showSpinner}></lightning-spinner>
+
+    <template if:true={showHotfixDlds}>
+        <template if:false={showSpinner}>
+            <div class="download-header">
+                <span class="download-center container">Download Center</span>
+            </div>
+            <div class="container">
+                <div class="padding-tp">
+                    <div class="card-shadow">
+                        <lightning-card>
+                            <div class="slds-grid content">
+                                <div class="slds-col slds-size_2-of-3">
+                                    <div class="hotfix-header">
+                                        <span>Hotfix Downloads</span>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3">
+                                    <div class="btn-style">
+                                        <lightning-button class="help-hotfix-ebf-btn" variant="brand" data-name="EBFDownload"
+                                            value="https://tsftp.informatica.com/?human.aspx?Arg12=folders&rd=1&orgid=6020"
+                                            label="EBF Download" onclick={handleClick}>
+                                        </lightning-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning-card>
+                    </div>
+                </div>
+                <div class="padding-tp">
+                    <div class="card-shadow">
+                        <lightning-card>
+                            <div class="slds-grid content">
+                                <div class="slds-col slds-size_2-of-3">
+                                    <span class="information-header">Information</span>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3">
+                                    <lightning-button-icon class="information-icon-style" icon-name={getInformationIcon}
+                                        onclick={handleInformationChange}></lightning-button-icon>
+                                </div>
+                            </div>
+                            <template if:true={showInformation}>
+                                <div class="content">
+                                    <div class="slds-p-top_medium">
+                                        <p>Use the following login credentials to download the HotFixes:</p>
+                                        <div class="information-content">
+                                            <p>Username:<span class="hotfix-cred__val">{dcUsername}</span></p>
+                                            <p>Password:<span class="hotfix-cred__val">{dcPassword}</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="slds-border_top slds-p-around_medium">
+                                        <p class="sub-content">This HotFix download section lets you download the latest
+                                            HotFix for Informatica
+                                            products. HotFixes consist of a number of bug fixes and is considered to be
+                                            a
+                                            maintenance release for fixing critical issues. Please read the release
+                                            notes
+                                            and
+                                            hotfix documentation for complete details. To request a major version of
+                                            Informatica
+                                            product, you will need to open a Service request through our "Online
+                                            Support"
+                                            interface on the community.</p>
+                                    </div>
+                                    <div class="slds-border_top slds-p-top_medium">
+                                        <h6 class="tnc">Terms and Conditions</h6>
+                                        <p class="sub-content">
+                                            BY DOWNLOADING ANY OF THE DOWNLOADABLE HOTFIX ON THIS SITE, YOU AGREE TO THE
+                                            FOLLOWING TERMS AND CONDITIONS IN ADDITION TO THOSE SET FORTH IN YOUR END
+                                            USER
+                                            LICENSE AGREEMENT FOR INFORMATICA SOFTWARE:
+                                        </p>
+                                        <p class="sub-content">
+                                            1. You have paid the applicable Support Services Fee due for the current
+                                            period
+                                            related to the particular Informatica software product for which you are
+                                            downloading
+                                            a HotFix.
+                                        </p>
+                                        <p class="sub-content">
+                                            2. These terms and conditions are in addition to and do not alter the
+                                            license
+                                            terms
+                                            and conditions contained in your End User License Agreement for Informatica
+                                            software, which terms apply to all downloadable Hotfixes.
+                                        </p>
+                                    </div>
+                                </div>
+                            </template>
+                        </lightning-card>
+                    </div>
+                </div>
+                <div class="padding-tp">
+                    <div class="card-shadow">
+                        <lightning-card>
+                            <div class="padding-lr search-hotfixes" role="none">
+                                <lightning-input name="enter-search" type="search" placeholder="Search Hotfixes"
+                                    label="Search for Hotfixes" value={searchTerm} onchange={handleSearchChange}
+                                    class="slds-input__icon slds-input__icon_right slds-icon-text-default">
+                                </lightning-input>
+                            </div>
+                            <div class="padding-lr">
+                                <div class="container p-0">
+                                    <div class="row row-paddings">
+                                        <c-help-multi-pick-list if:true={productLst} options={productLst}
+                                            selectedfilters={selectedfilters} onvaluechange={handleChange}
+                                            label="FILTER BY" placeholder="Products" class="filter-combo"
+                                            data-name="product">
+                                        </c-help-multi-pick-list>
+                                        <c-help-multi-pick-list if:true={osLst} options={osLst}
+                                            selectedfilters={selectedfilters} onvaluechange={handleChange} label=""
+                                            placeholder="Operating Systems" class="filter-combo"
+                                            data-name="operatingSystem">
+                                        </c-help-multi-pick-list>
+                                        <c-help-multi-pick-list if:true={processorLst} options={processorLst}
+                                            onvaluechange={handleChange} label="" placeholder="Processors"
+                                            class="filter-combo" data-name="processor">
+                                        </c-help-multi-pick-list>
+                                        <lightning-combobox label="SORT BY" placeholder="Select" value={selectedSort}
+                                            options={sortList} onchange={handleSort} class="filter-combo help-hotfix-ml-auto">
+                                        </lightning-combobox>
+                                    </div>
+                                    <template if:true={showClearAllFilters}>
+                                        <div class="row row-paddings pt-0">
+                                            <template for:each={appliedFilters} for:item="map">
+                                                <template key={map.key} for:each={map.value} for:item="filter">
+                                                    <div key={filter} class="in-search-cta search-filter">
+                                                        {filter}
+                                                        <lightning-icon class="ml-3 change-pointer"
+                                                            icon-name="utility:close" data-name="Remove"
+                                                            data-value={filter} onclick={handleRemove} size="xx-small"
+                                                            alternative-text="close" title="close" data-id={map.key}>
+                                                        </lightning-icon>
+                                                    </div>
+                                                    <span key={filter} style="padding: 5px;"> </span>
+                                                </template>
+                                            </template>
+
+                                            <div class="pl-2 change-pointer clear-filter" data-name="RemoveAll"
+                                                onclick={handleRemove}>
+                                                Clear All Filters
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </lightning-card>
+                    </div>
+                </div>
+
+            </div>
+            <div class="grey-color">
+                <div class="container">
+                    <lightning-tabset>
+                        <lightning-tab label="Current Releases" value="Current" onactive={handleTabChange}></lightning-tab>
+                        <lightning-tab label="Previous Releases" value="Previous" onactive={handleTabChange}>
+                        </lightning-tab>
+                    </lightning-tabset>
+                </div>
+            </div>
+            <div class="help-padding grey-color">
+                <template for:each={getReleases} for:item="release">
+                    <div key={release.Name} class="padding-tp container">
+                        <lightning-card key={release.Name}>
+                            <div class="hotfix-title content">
+                                <lightning-formatted-text value={release.Name}>
+                                </lightning-formatted-text>
+                            </div>
+                            <hr>
+                            <div class="slds-grid content help-description-container-mobile">
+                                <div class="slds-col slds-size_2-of-3 help-hotfix-description-mobile">
+                                    <div class="hotfix-description">
+                                        <lightning-formatted-rich-text value={release.Html_Description__c}>
+                                        </lightning-formatted-rich-text>
+                                    </div>
+                                    <div class="other-downloads" if:true={release.Other_Downloads__c}>Other Downloads
+                                    </div>
+                                    <div if:true={release.Other_Downloads__c}>
+                                        <lightning-formatted-rich-text value={release.Other_Downloads__c}>
+                                        </lightning-formatted-rich-text>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 help-hotfix-description-mobile">
+                                    <div class="btn-style">
+
+                                        <lightning-button variant="brand" value={release.Download_Url__c}
+                                            data-title={release.Name} data-product={release.Product__c}
+                                            data-name="download" label="Download Installer" title="Download Installer"
+                                            onclick={handleClick}>
+                                        </lightning-button>
+
+                                        <br />
+
+                                        <lightning-button variant="brand-outline" class="ml-3" value={release.Release_Notes_URL__c}
+                                            data-title={release.Name} data-product={release.Product__c}
+                                            data-name="relnotes" label="Release Notes" title="Release Notes"
+                                            onclick={handleClick}>
+                                        </lightning-button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning-card>
+                    </div>
+
+                </template>
+                <div class="d-flex justify-content-center btn-style float-none slds-p-top_medium">
+                    <lightning-button variant="brand" data-name="viewmore" label="View More" class="view-more"
+                        title="View More" onclick={handleClick} if:true={showViewMoreBtn}></lightning-button>
+                </div>
+            </div>
+        </template>
+    </template>
+
+    <template if:false={showHotfixDlds}>
+        <div class="in-wrapper-bg-fuild-grey in-events-landing-bg">
+            <div class="container">
+                <div class="slds-col slds-size_12-of-12 slds-var-p-around_xx-large">
+                    <div class="slds-illustration slds-illustration_large" aria-hidden="true">
+                        <div class="slds-text-color_weak">
+                            <h3 class="slds-text-heading_medium">{strErrorMessage}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+</template>

@@ -1,0 +1,13 @@
+<template>
+    <lightning-layout>
+        <lightning-layout-item class="mr-auto my-2 swap-first-layout-button">
+            <lightning-button class="es-button es-button--secondary mr-1" label="First" icon-name="utility:arrow_left" onclick={firstHandler}></lightning-button>
+            <lightning-button class="es-button es-button--primary mt-1 mt-sm-0" label="Previous" icon-name="utility:chevronleft" onclick={previousHandler}></lightning-button>
+        </lightning-layout-item>
+        <lightning-layout-item class="middle-space" flexibility="grow"></lightning-layout-item>
+        <lightning-layout-item class="ml-auto my-2 swap-second-layout-button">
+            <lightning-button class="es-button es-button--primary mt-1 mt-sm-0" label="Next" icon-name="utility:chevronright" icon-position="right" onclick={nextHandler}></lightning-button>
+            <lightning-button class="es-button es-button--secondary ml-1" label="Last" icon-name="utility:arrow_right" icon-position="right" onclick={lastHandler}></lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

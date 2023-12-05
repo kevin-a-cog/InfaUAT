@@ -1,0 +1,412 @@
+<!--
+/*
+ * Name			:	csmNextBestActionManagement
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	9/23/2021
+ * Description	:	Next Best Action Management HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		9/23/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+	<!-- Clipboard field. -->
+	<input class="clipboard" style="position:fixed;top:-5rem;height:1px;width:10px;"></input>
+
+	<!-- Body. -->
+	<div class="slds-is-relative">
+		
+		<!-- Spinner. -->
+		<template if:true={boolDisplaySpinner}>
+			<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+		</template>
+
+		<!-- Card. -->
+		<lightning-card variant="Narrow" class="minHeightContainer">
+
+			<!-- Data. -->
+			<template if:false={boolDisplaySpinner}>
+				<lightning-accordion allow-multiple-sections-open active-section-name={lstActiveSections}>
+
+					<!-- Step 1. -->
+					<lightning-accordion-section name="Step 1" label={label.Step_1}>
+						<div class="slds-grid slds-gutters">
+							<div class="slds-col slds-size_6-of-12">
+								<lightning-input type="text" label={label.Recommendation} value={strRecommendation} onblur={setRecommendation}></lightning-input>
+							</div>
+							<div class="slds-col slds-size_6-of-12">
+								<lightning-combobox label={label.Object_Label} value={strSelectedObject} options={lstAvailableObjects} onchange={selectObject}></lightning-combobox>
+							</div>
+						</div>
+						<div class="slds-grid slds-gutters">
+							<div class="slds-col slds-size_6-of-12">
+								<lightning-combobox label={label.Recurrence} value={strRecurrence} options={lstRecurrences} onchange={selectRecurrence}></lightning-combobox>
+							</div>
+							<div class="slds-col slds-size_6-of-12">
+								<template if:true={boolIsRecurrence}>
+									<lightning-input type="number" label={label.Interval} value={strRecurrenceInterval} onblur={selectInterval}></lightning-input>
+								</template>
+							</div>
+						</div>
+					</lightning-accordion-section>
+
+					<!-- Step 2. -->
+					<lightning-accordion-section name="Step 2" label={label.Step_2}>
+						<div class="slds-grid slds-gutters">
+							<div class="slds-col slds-size_12-of-12">
+								<lightning-tabset active-tab-value={strCurrentStep2Tab}>
+
+									<!-- Formula. -->
+									<lightning-tab label={label.Formula} value="Formula" onactive={changeSecondStepTab}>
+										<div class="slds-grid slds-gutters">
+											<div class="slds-col slds-size_6-of-12">
+
+												<!-- Options. -->
+												<lightning-tabset>
+													<lightning-tab label={label.Comparison}>
+
+														<!-- Card. -->
+														<lightning-card>
+
+															<!-- Body. -->
+															<p class="slds-p-horizontal_small">
+																<lightning-progress-indicator current-step={strFormulaCurrentIndex} type="path" variant="base">
+																	<lightning-progress-step label={label.Operator} value="S1" data-index="1" onclick={changeFormulaStep}></lightning-progress-step>
+																	<lightning-progress-step label={label.Values} value="S2" data-index="2" onclick={changeFormulaStep}></lightning-progress-step>
+																	<lightning-progress-step label={label.Review} value="S3" data-index="3" onclick={changeFormulaStep}></lightning-progress-step>
+																</lightning-progress-indicator>
+
+																<!-- Operator. -->
+																<template if:true={boolIsOperatorStep}>
+																	<lightning-combobox value={strOperator} options={lstOperators} onchange={selectOperator}></lightning-combobox>
+																</template>
+
+																<!-- Values. -->
+																<template if:true={boolIsValuesStep}>
+																	<div class="slds-grid slds-gutters">
+																		<div class="slds-col slds-size_12-of-12">&nbsp;</div>
+																	</div>
+																	<div class="slds-grid slds-gutters">
+																		<div class="slds-col slds-size_12-of-12">
+																			<div class="slds-text-title_caps">{label.First_Field}</div>
+																		</div>
+																	</div>
+																	<div class="slds-grid slds-gutters">
+																		<div class="slds-col slds-size_6-of-12">
+																			<lightning-combobox label={label.Field_Type} value={strFieldTypeOne} options={lstValueType} data-id="1"
+																					onchange={selectFieldType}></lightning-combobox>
+																		</div>
+																		<div class="slds-col slds-size_6-of-12">
+
+																			<!-- Field. -->
+																			<template if:true={boolIsFieldValueOne}>
+																				<lightning-combobox label={label.Value} value={strSelectedFieldOne} options={lstRelatedFields} 
+																						data-id="1" onchange={selectField}></lightning-combobox>
+																			</template>
+
+																			<!-- Formatted Value. -->
+																			<template if:true={boolIsFormattedValueOne}>
+																				<lightning-record-edit-form object-api-name={strSelectedObject}>
+																					<lightning-input-field value={strSelectedFormattedValueOne} data-id="1"
+																							field-name={strSelectedFieldTwo} onchange={selectFormattedValue}></lightning-input-field>
+																				</lightning-record-edit-form>
+																			</template>
+
+																			<!-- Custom Value. -->
+																			<template if:true={boolIsCustomValueOne}>
+																				<lightning-input type="text" label={label.Value} value={strSelectedCustomValueOne} data-id="1"
+																						onchange={selectCustomValue}></lightning-input>
+																			</template>
+																		</div>
+																	</div>
+																	<div class="slds-grid slds-gutters">
+																		<div class="slds-col slds-size_12-of-12">&nbsp;</div>
+																	</div>
+																	<div class="slds-grid slds-gutters">
+																		<div class="slds-col slds-size_12-of-12">
+																			<div class="slds-text-title_caps">{label.Second_Field}</div>
+																		</div>
+																	</div>
+																	<div class="slds-grid slds-gutters">
+																		<div class="slds-col slds-size_6-of-12">
+																			<lightning-combobox label={label.Field_Type} value={strFieldTypeTwo} options={lstValueType} data-id="2"
+																					onchange={selectFieldType}></lightning-combobox>
+																		</div>
+																		<div class="slds-col slds-size_6-of-12">
+
+																			<!-- Field. -->
+																			<template if:true={boolIsFieldValueTwo}>
+																				<lightning-combobox label={label.Value} value={strSelectedFieldTwo} options={lstRelatedFields} 
+																						data-id="2" onchange={selectField}></lightning-combobox>
+																			</template>
+
+																			<!-- Formatted Value. -->
+																			<template if:true={boolIsFormattedValueTwo}>
+																				<lightning-record-edit-form object-api-name={strSelectedObject}>
+																					<lightning-input-field value={strSelectedFormattedValueTwo} data-id="2"
+																							field-name={strSelectedFieldOne} onchange={selectFormattedValue}></lightning-input-field>
+																				</lightning-record-edit-form>
+																			</template>
+
+																			<!-- Custom Value. -->
+																			<template if:true={boolIsCustomValueTwo}>
+																				<lightning-input type="text" label={label.Value} value={strSelectedCustomValueTwo} data-id="2"
+																						onchange={selectCustomValue}></lightning-input>
+																			</template>
+																		</div>
+																	</div>
+																</template>
+
+																<!-- Review. -->
+																<template if:true={boolIsReviewStep}>
+																	<div class="slds-grid slds-gutters">
+																		<div class="slds-col slds-size_12-of-12">&nbsp;</div>
+																	</div>
+																	<div class="slds-grid slds-gutters">
+																		<div class="slds-col slds-size_12-of-12">
+																			<div class="slds-text-heading_medium slds-align_absolute-center">{strGeneratedFormula}</div>
+																		</div>
+																	</div>
+																</template>
+															</p>
+
+															<!-- Footer. -->
+															<p slot="footer">
+																
+																<!-- Back button. -->
+																<template if:false={boolIsOperatorStep}>
+																	<lightning-button label={label.Back} onclick={previousStep}></lightning-button>
+																</template>
+																
+																<!-- Next button. -->
+																<template if:false={boolIsReviewStep}>
+																	<lightning-button variant="brand" class="slds-m-left_x-small" label={label.Next} onclick={nextStep}></lightning-button>
+																</template>
+																
+																<!-- Copy button. -->
+																<template if:true={boolIsReviewStep}>
+																	<lightning-button variant="brand" class="slds-m-left_x-small" label={label.Copy_To_Clipboard} 
+																			onclick={copyToClipboardFormula}></lightning-button>
+																	<lightning-button variant="brand" class="slds-m-left_x-small" label={label.Insert} 
+																			onclick={insertFormula}></lightning-button>
+																</template>
+															</p>
+														</lightning-card>
+													</lightning-tab>
+													<lightning-tab label={label.Logic}>
+														<div class="slds-grid slds-gutters">
+
+															<!-- Copy to Clipboard. -->
+															<div class="slds-col slds-size_6-of-12">
+														
+																<!-- Card. -->
+																<lightning-card>
+		
+																	<!-- Header. -->
+																	<h3 slot="title">{label.Copy_To_Clipboard}</h3>
+		
+																	<!-- Body. -->
+																	<p class="slds-p-horizontal_small slds-align_absolute-center">
+																		<lightning-button variant="brand" class="slds-m-left_x-small" label={label.AND} data-value="AND(,,)"
+																				onclick={copyToClipboardLogic}></lightning-button>
+																		<lightning-button variant="brand" class="slds-m-left_x-small" label={label.OR} data-value="OR(,,)"
+																				onclick={copyToClipboardLogic}></lightning-button>
+																		<lightning-button variant="brand" class="slds-m-left_x-small" label={label.NOT} data-value="NOT()"
+																				onclick={copyToClipboardLogic}></lightning-button>
+																	</p>
+																</lightning-card>
+															</div>
+
+															<!-- Insert. -->
+															<div class="slds-col slds-size_6-of-12">
+														
+																<!-- Card. -->
+																<lightning-card>
+		
+																	<!-- Header. -->
+																	<h3 slot="title">Insert</h3>
+		
+																	<!-- Body. -->
+																	<p class="slds-p-horizontal_small slds-align_absolute-center">
+																		<lightning-button variant="brand" class="slds-m-left_x-small" label={label.AND} data-value="AND(,,)"
+																				onclick={insertLogic}></lightning-button>
+																		<lightning-button variant="brand" class="slds-m-left_x-small" label={label.OR} data-value="OR(,,)"
+																				onclick={insertLogic}></lightning-button>
+																		<lightning-button variant="brand" class="slds-m-left_x-small" label={label.NOT} data-value="NOT()"
+																				onclick={insertLogic}></lightning-button>
+																	</p>
+																</lightning-card>
+															</div>
+														</div>
+													</lightning-tab>
+												</lightning-tabset>
+											</div>
+											<div class="slds-col slds-size_6-of-12">
+
+												<!-- Formula. -->
+												<lightning-card>
+													<h3 slot="title">{label.Formula}</h3>
+													<div class="slds-p-horizontal_small">
+														<div class="slds-grid slds-gutters">
+															<div class="slds-col slds-size_9-of-12">
+																<lightning-input type="text" class="inlineField" value={strFormula} onblur={updateFormula}></lightning-input>
+															</div>
+															<div class="slds-col slds-size_3-of-12">
+																<lightning-button variant={strVerifyFormulaVariant} label={strVerifyFormulaLabel} onclick={verifyFormula}></lightning-button>
+															</div>
+														</div>
+													</div>
+												</lightning-card>
+											</div>
+										</div>
+									</lightning-tab>
+
+									<!-- Single query. -->
+									<lightning-tab label={label.SOQL} value="SOQL" onactive={changeSecondStepTab}>
+										<div class="slds-grid slds-gutters">
+											<div class="slds-col slds-size_2-of-12">
+												<lightning-button variant="brand" class="slds-m-left_x-small inlineButtonMargin" label={label.Insert_Record_Id_Clause} data-value="Id = '{!Id}'" 
+														onclick={insertRecordIdClause}></lightning-button>
+											</div>
+											<div class="slds-col slds-size_6-of-12">
+												<lightning-input type="text" label={label.Query} value={strQuery} onblur={updateQuery}></lightning-input>
+											</div>
+											<div class="slds-col slds-size_2-of-12">
+												<lightning-combobox label={label.Threshold_Criteria} value={strThresholdCriteria} options={lstThresholdCriterias} 
+														onchange={selectThresholdCriteria}></lightning-combobox>
+											</div>
+											<div class="slds-col slds-size_1-of-12">
+												<lightning-input type="number" label={label.Threshold} value={strThreshold} onchange={selectThreshold}></lightning-input>
+											</div>
+											<div class="slds-col slds-size_1-of-12">
+												<lightning-button variant={strVerifyQueryVariant} label={strVerifyQueryLabel} class="inlineButtonMargin" onclick={verifyQuery}></lightning-button>
+											</div>
+										</div>
+									</lightning-tab>
+
+									<!-- Multiple queries. -->
+									<lightning-tab label={label.Multiple_SOQL} value="Multiple SOQL" onactive={changeSecondStepTab}>
+
+										<!-- Logic. -->
+										<div class="slds-grid slds-gutters">
+											<div class="slds-col slds-size_12-of-12">
+												<lightning-card>
+													<h3 slot="title">{label.Logic}</h3>
+													<div class="slds-p-horizontal_small">
+														<div class="slds-grid slds-gutters">
+															<div class="slds-col slds-size_2-of-12">
+																<p class="slds-p-horizontal_small slds-align_absolute-center">
+																	<lightning-button variant="brand" class="slds-m-left_x-small" label={label.AND} data-value="AND(,,)"
+																			onclick={insertLogicMultipleQueries}></lightning-button>
+																	<lightning-button variant="brand" class="slds-m-left_x-small" label={label.OR} data-value="OR(,,)"
+																			onclick={insertLogicMultipleQueries}></lightning-button>
+																	<lightning-button variant="brand" class="slds-m-left_x-small" label={label.NOT} data-value="NOT()"
+																			onclick={insertLogicMultipleQueries}></lightning-button>
+																</p>
+															</div>
+															<div class="slds-col slds-size_8-of-12">
+																<lightning-input type="text" class="inlineField" value={strLogic} onblur={updateLogic}></lightning-input>
+															</div>
+															<div class="slds-col slds-size_2-of-12">
+																<lightning-button variant={strVerifyLogicVariant} label={strVerifyLogicLabel} onclick={verifyLogic}></lightning-button>
+															</div>
+														</div>
+													</div>
+												</lightning-card>
+											</div>
+										</div>
+
+										<!-- Queries. -->
+										<lightning-card>
+											<h3 slot="title">{label.Queries}</h3>
+											<lightning-icon icon-name="utility:new" class="slds-float_right addIcon" slot="actions" onclick={addQuery}></lightning-icon>
+											<div class="slds-p-horizontal_small">
+												<template for:each={lstMultipleQueries} for:item="objQueryRow">
+													<div key={objQueryRow.key} class="slds-grid slds-gutters">
+														<div class="slds-col slds-size_2-of-12">
+															<lightning-button variant="brand" class="slds-m-left_x-small inlineButtonMargin" label={label.Insert_Record_Id_Clause} 
+																	data-value="Id = '{!Id}'" data-id={objQueryRow.strIndex} onclick={insertRecordIdClause}></lightning-button>
+														</div>
+														<div class="slds-col slds-size_1-of-12">
+															<lightning-button variant="brand" class="slds-m-left_x-small inlineButtonMargin" label={objQueryRow.strIndex} 
+																	data-value={objQueryRow.strIndex} data-id={objQueryRow.strIndex} onclick={insertIndex}></lightning-button>
+														</div>
+														<div class="slds-col slds-size_4-of-12">
+															<lightning-input type="text" label={label.Query} value={objQueryRow.strQuery} data-id={objQueryRow.strIndex} 
+																	onblur={updateQuery}></lightning-input>
+														</div>
+														<div class="slds-col slds-size_2-of-12">
+															<lightning-combobox label={label.Threshold_Criteria} value={objQueryRow.strThresholdCriteria} options={lstThresholdCriterias} 
+																	data-id={objQueryRow.strIndex} onchange={selectThresholdCriteria}></lightning-combobox>
+														</div>
+														<div class="slds-col slds-size_1-of-12">
+															<lightning-input type="number" label={label.Threshold} value={objQueryRow.strThreshold} data-id={objQueryRow.strIndex}
+																	onchange={selectThreshold}></lightning-input>
+														</div>
+														<div class="slds-col slds-size_1-of-12">
+															<lightning-button variant={objQueryRow.strVerifyQueryVariant} label={objQueryRow.strVerifyQueryLabel} class="inlineButtonMargin" 
+																	data-id={objQueryRow.strIndex} onclick={verifyQuery}></lightning-button>
+														</div>
+														<div class="slds-col slds-size_1-of-12">
+															<template if:true={objQueryRow.boolDisplayRemoveQuery}>
+																<lightning-icon icon-name="utility:delete" class="inlineButtonMargin" data-value={objQueryRow.strIndex} 
+																		onclick={removeQuery}></lightning-icon>
+															</template>
+														</div>
+													</div>
+													<div key={objQueryRow.key} class="slds-grid slds-gutters">
+														<div class="slds-col slds-size_12-of-12">&nbsp;</div>
+													</div>
+												</template>
+											</div>
+										</lightning-card>
+									</lightning-tab>
+								</lightning-tabset>
+							</div>
+						</div>
+					</lightning-accordion-section>
+
+					<!-- Step 3. -->
+					<lightning-accordion-section name="Step 3" label={label.Step_3}>
+						<div class="slds-grid slds-gutters">
+
+							<!-- Accept. -->
+							<div class="slds-col slds-size_6-of-12">
+								<lightning-card>
+									<h3 slot="title">{label.Accept}</h3>
+									<div class="slds-p-horizontal_small">
+										<lightning-combobox value={strActionAccepted} options={lstActions} onchange={selectActionAccepted}></lightning-combobox>
+									</div>
+								</lightning-card>
+							</div>
+
+							<!-- Reject. -->
+							<div class="slds-col slds-size_6-of-12">
+								<lightning-card>
+									<h3 slot="title">{label.Reject}</h3>
+									<div class="slds-p-horizontal_small">
+										<lightning-combobox value={strActionRejected} options={lstActions} onchange={selectActionRejected}></lightning-combobox>
+									</div>
+								</lightning-card>
+							</div>
+						</div>
+					</lightning-accordion-section>
+				</lightning-accordion>
+
+				<!-- Save button. -->
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col slds-size_12-of-12 slds-align_absolute-center">
+						<lightning-button variant="brand" label={label.Save} onclick={createRecord}></lightning-button>
+					</div>
+				</div>
+			</template>
+		</lightning-card>
+	</div>
+</template>

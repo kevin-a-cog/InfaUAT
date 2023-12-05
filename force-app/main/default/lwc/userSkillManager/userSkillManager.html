@@ -1,0 +1,335 @@
+<!--
+  @description       : 
+  @author            : SF Developer
+  @group             : 
+  @last modified on  : 01-29-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   01-10-2021   SF Developer   Initial Version
+-->
+<template>
+
+   <template if:true={bShowSpinner}>
+      <lightning-spinner style="z-index: 9999;position: fixed;" alternative-text="Loading" size="medium"></lightning-spinner>
+   </template> 
+  <!-- modal start -->        
+  <template if:true={bShowModal}>
+   
+     <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+        <div class="slds-modal__container">
+           <!-- modal header start -->
+           <header class="slds-modal__header">
+              <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                 <lightning-icon icon-name="utility:close"
+                    alternative-text="close"
+                    variant="inverse"
+                    size="small" ></lightning-icon>
+                 <span class="slds-assistive-text">Close</span>
+              </button>
+              <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Add/Remove Skill
+              <!--lightning-layout>
+               <lightning-layout-item size="6" class="slds-p-top_medium" -->
+                 <input type="search" style="float:right;" placeholder="Search Skill" onkeyup={searchSkillHandler} ></input>
+               <!--/lightning-layout-item>
+             </lightning-layout-->
+            </h2>
+           </header>
+           <!-- modal body start -->
+           <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+              <template if:true={bShowStepOne}>
+               <h3 class="slds-section__title slds-theme_shade slds-align_absolute-center">
+                  <span class="slds-truncate slds-p-horizontal_small"  title="Product Skill">Product Based Skills</span>
+                </h3>
+                 <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <!--Table Head Start-->
+                    <thead>
+                       <tr class="slds-line-height_reset">
+                          <!--th class="slds-truncate" scope="col">
+                             <div class="slds-truncate">Select</div>
+                          </th -->
+                          <th class="slds-truncate" scope="col">
+                              <a data-id="name" onclick={sort}>
+                             <div class="slds-truncate">Product Name
+                                    <span if:true={isAsc}>
+                                       &#9650;
+                                    </span>
+                                 <span if:true={isDsc}>
+                                       &#9660;
+                                 </span>
+                             </div>
+                             </a>
+                          </th>
+                          <th class="slds-truncate" scope="col">
+                              <div class="slds-truncate">Engineer</div>
+                          </th>
+                          <th class="slds-truncate" scope="col">
+                              <div class="slds-truncate">Product Specialist (PS)</div>
+                          </th>
+                          <th class="slds-truncate" scope="col">
+                              <div class="slds-truncate">KB Technical Reviewer</div>
+                          </th>
+                          <th class="slds-truncate" scope="col">
+                              <div class="slds-truncate">Manager</div>
+                          </th>
+                       </tr>
+                    </thead>
+                    <!--Table Head End-->
+                    <!--Table Body Start-->
+                    <tbody>
+                       <template for:each={lstProfileSkill} for:item="PS">
+                          <template if:false={PS.roleBased}>
+                          <tr class="slds-hint-parent" key={PS.Id}>
+                              <td>
+                                 <div class="slds-truncate">{PS.name}</div>
+                              </td>
+                              
+                              <template for:each={PS.lstSkillType} for:item="skillType">
+                                 <template if:true={skillType.showSkill}>
+                                    <td key={skillType.keyval}>
+                                       <div class="slds-truncate">
+                                          <lightning-input type="checkbox" disabled={skillType.disabled} checked={skillType.assigned} name={skillType.type} data-id={skillType.type} data-name={PS.name} onchange={handleChange}></lightning-input>
+                                       </div>
+                                    </td>   
+                                 </template>
+                              </template>                              
+                          </tr>
+                        </template>
+                       </template>
+                    </tbody>
+                    <!--Table Body End-->
+                 </table>
+
+                 <!-- #### For disabled Products ####### -->
+                 <br/><br/>
+
+                 <h3 class="slds-section__title slds-theme_shade slds-align_absolute-center">
+                  <span class="slds-truncate slds-p-horizontal_small"  title="Role Skill">Role Based Skills</span>
+                </h3>
+
+                 <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                  <!--Table Head Start-->
+                  <thead>
+                     <tr class="slds-line-height_reset">
+                        <th class="slds-truncate" scope="col">
+                           <div class="slds-truncate">Product Name</div>
+                        </th>
+                        <th class="slds-truncate" scope="col">
+                           <div class="slds-truncate">Engineer</div>
+                        </th>
+                     </tr>
+                  </thead>
+                  <!--Table Head End-->
+                  <!--Table Body Start-->
+                  <tbody>
+                     <template for:each={lstProfileSkill} for:item="PS">
+                        <template if:true={PS.roleBased}>
+                        <tr class="slds-hint-parent" key={PS.Id}>
+                           <td>
+                              <div class="slds-truncate">{PS.name}</div>
+                           </td>
+                           <template for:each={PS.lstSkillType} for:item="skillType">
+                              <td key={skillType.keyval}>
+                                 <div class="slds-truncate">
+                                    <lightning-input type="checkbox" checked={skillType.assigned} name={skillType.type} data-id={skillType.type} data-name={PS.name} onchange={handleChange}></lightning-input>
+                                 </div>
+                              </td>
+                           </template>
+                        </tr>
+                        </template>
+                     </template>
+                  </tbody>
+                  <!--Table Body End-->
+               </table>
+
+              </template>
+              <template if:true={bShowStepTwo}>
+                 <lightning-layout multiple-rows>
+                    <lightning-layout-item size="6" padding="around-small">
+                       <lightning-dual-listbox name="Priority"
+                          label="Priority"
+                          source-label="Available"
+                          selected-label="Selected"
+                          options={PriorityOpts}
+                          onchange={handleMultiplicklistChange}>
+                       </lightning-dual-listbox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small">
+                       <lightning-dual-listbox name="Component"
+                          label="Component"
+                          source-label="Available"
+                          selected-label="Selected"
+                          options={ComponentOpts}
+                          onchange={handleMultiplicklistChange}>
+                       </lightning-dual-listbox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small">
+                       <lightning-dual-listbox name="Success Offering"
+                          label="Success Offering"
+                          source-label="Available"
+                          selected-label="Selected"
+                          options={SupportLevelOpts}
+                          onchange={handleMultiplicklistChange}>
+                       </lightning-dual-listbox>
+                    </lightning-layout-item>
+                 </lightning-layout>
+              </template>
+           </div>
+           <!-- modal footer start-->
+           <footer class="slds-modal__footer">
+            
+           <lightning-button label="Cancel" style="float: left;" onclick={closeModal}></lightning-button> &nbsp;&nbsp;
+
+           <template if:true={hasUserQuestion}>
+            
+             <template if:true={showbackBtn}>
+               <lightning-button label="Back" onclick={goBack}></lightning-button> &nbsp;&nbsp;
+             </template>   
+
+             <template if:false={bShowStepTwo}>
+             
+               <lightning-button variant="brand"
+                                 disabled={bDisableNextBtn}
+                                 label="Next"
+                                 onclick={NextStep}>
+               </lightning-button>
+             
+            </template>
+
+           </template> 
+
+             <template if:false={hasUserQuestion}> 
+                &nbsp;&nbsp;
+                <template if:true={bShowSubmitBtn}> 
+                  <lightning-button variant="brand"
+                                    disabled={bDisableNextBtn}
+                                    label="Apply" 
+                                    onclick={addNewSkill}>
+                  </lightning-button>
+                </template>
+                
+                <template if:false={bShowSubmitBtn}> 
+               <lightning-button variant="brand"
+                                 disabled={bDisableNextBtn}
+                                 label="Submit For Approval"
+                                 onclick={submitSkillForApproval}>
+               </lightning-button>
+            </template>
+             </template>
+
+             <template if:true={bShowStepTwo}>
+               &nbsp;&nbsp;
+               <template if:true={bShowSubmitBtn}> 
+                 <lightning-button variant="brand"
+                                   disabled={bDisableNextBtn}
+                                   label="Apply" 
+                                   onclick={addNewSkill}>
+                 </lightning-button>
+               </template>
+               
+               <template if:false={bShowSubmitBtn}> 
+              <lightning-button variant="brand"
+                                disabled={bDisableNextBtn}
+                                label="Submit For Approval"
+                                onclick={submitSkillForApproval}>
+              </lightning-button>
+           </template>
+            </template>
+           </footer>
+        </div>
+     </section>
+     <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+  <!-- modal end -->
+  <article class="slds-card slds-card_boundary">
+     <div class="slds-card__header slds-grid">
+        <header class="slds-media slds-media_center slds-has-flexi-truncate">
+           <div class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-account">
+                 <lightning-icon icon-name="standard:skill" alternative-text="skill">
+                 </lightning-icon>
+              </span>
+           </div>
+           <div class="slds-media__body">
+              <h2 class="slds-card__header-title">Products</h2>              
+           </div>
+           <template if:true={ismanager}>
+           <div class="slds-no-flex">
+              <lightning-button variant="brand" label="Add/Remove Skill" onclick={addNewValue} ></lightning-button>
+           </div>
+         </template>
+        </header>
+      
+     </div>
+   
+     <div class="slds-card__body slds-card__body_inner">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+           <!--Table Head Start-->
+           <thead>
+              <tr class="slds-line-height_reset">
+                 <th class="slds-truncate" scope="col">
+                    <div class="slds-truncate">Product</div>
+                 </th>
+                 <!--<th class="slds-truncate" scope="col">
+                    <div class="slds-truncate">Endorsement Count</div>
+                 </th>-->
+                 <th class="slds-truncate" scope="col" style="width:10px">
+                  <div class="slds-truncate">Status</div>
+               </th>
+               <template if:true={ismanager}>
+                 <th class="slds-truncate" scope="col" style="width:10px">
+                    <div class="slds-truncate">Delete</div>
+                 </th>
+               </template>
+                 <!--th class="slds-truncate" scope="col" style="width:10px">
+                    <div class="slds-truncate">Endorse</div>
+                 </th -->
+                
+              </tr>
+           </thead>
+           <!--Table Head End-->
+           <!--Table Body Start-->
+           <tbody>
+              <template for:each={lstProfileSkillData} for:item="PSD">
+                 <tr class="slds-hint-parent" key={PSD.oProfileSkillUser.Id}>
+                     <td>
+                        <div class="slds-truncate"><a data-recid={PSD.oProfileSkillUser.ProfileSkill.Id} onclick={navigateToProfileSkill}>{PSD.oProfileSkillUser.ProfileSkill.Name}</a></div>
+                     </td>
+                     <td style="width:10px">
+                     <template if:true={PSD.oProfileSkillUser.pendingapproval}>
+                        <lightning-icon icon-name="action:defer" size="x-small" alternative-text="Waiting For Approval" title="Waiting For Approval"></lightning-icon>
+                     </template>
+
+                     <template if:false={PSD.oProfileSkillUser.pendingapproval}>
+                        <template if:false={PSD.oProfileSkillUser.rejected}>
+                        <lightning-icon icon-name="action:approval" size="x-small" alternative-text="approval" title="Active"></lightning-icon>
+                     </template>
+                     </template>
+
+                     <template if:true={PSD.oProfileSkillUser.rejected}>
+                        <lightning-icon icon-name="action:reject" size="x-small" alternative-text="Rejected" title="Rejected"></lightning-icon>
+                     </template>
+
+                     </td>
+                    
+                    <td style="width:10px">
+                       <div class="slds-truncate">
+                        <template if:true={ismanager}>  <a>
+                             <lightning-button-icon size="small"
+                                icon-name="utility:delete"
+                                name={PSD.oProfileSkillUser.Id}
+                                data-id={PSD.oProfileSkillUser.ProfileSkill.Name}
+                                onclick={deleteSkill}
+                                alternative-text="delete">
+                             </lightning-button-icon>
+                          </a></template>
+                       </div>
+                    </td>
+                 </tr>
+              </template>
+           </tbody>
+           <!--Table Body End-->
+        </table>
+     </div>
+  </article>
+</template>

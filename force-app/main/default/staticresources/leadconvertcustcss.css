@@ -1,0 +1,34 @@
+.slds-modal__container{
+    max-width: 100% !important;
+    width: 70% !important;
+}
+
+.slds-modal__content{
+    padding: 0 !important;
+    max-height: fit-content !important;
+}
+
+.slds-dropdown_fluid[role=presentation]
+{
+    position: relative !important;
+    border: none;
+    max-height: 20rem;
+    overflow: auto;
+    top: 0;
+}
+
+.slds-accordion__section{
+    background-color: #f3f3f3;
+}
+
+.slds-accordion__summary{
+    padding: 1.1rem;
+}
+
+.main-clookup .slds-has-inline-listbox .slds-combobox, .slds-has-object-switcher .slds-combobox{
+    width: 50px !important;
+}
+
+lightning-formatted-address > a{
+    display: flex;
+}

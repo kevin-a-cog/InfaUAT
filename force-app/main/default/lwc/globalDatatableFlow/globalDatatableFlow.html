@@ -1,0 +1,36 @@
+<!--
+/*
+ * Name			:	globalDatatableFlow
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	26/05/2022
+ * Description	:	This is a resuable LWC and will be used in Flow.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description							Tag
+ **********************************************************************************************************
+ Vignesh Divakaran		26/05/2022		I2RT-6149		Initial version.					N/A
+ */
+-->
+<template>
+    
+    <div class="slds-is-relative">
+
+        <!-- Lightning Spinner -->
+        <lightning-spinner alternative-text="Loading" size="medium" if:true={isLoading}></lightning-spinner>
+
+        <!-- Datatable -->
+        <template if:false={isLoading}>
+            <lightning-datatable
+                    key-field="id"
+                    data={lstData}
+                    columns={lstColumns}
+                    onrowselection={selectRecords}
+                    if:true={lstData}
+                    wrap-text-max-lines="3">
+            </lightning-datatable>
+        </template>
+
+    </div>
+
+</template>

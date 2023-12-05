@@ -1,0 +1,34 @@
+<!--
+/*
+ * Name			:	globalSchedulerContainer
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	7/28/2021
+ * Description	:	This LWC servers as a container for the Scheduler LWC.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		7/28/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	
+	<!-- If the component is Popped Out. -->
+    <template if:true={boolIsPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-scheduler" aria-modal="true" aria-describedby="modal-content-id-scheduler" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%; margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-scheduler" style="min-height: 100vh;">
+                    <c-global-scheduler record-id={recordId} onpopout={popOut} bool-send-back-response={boolSendBackResponse} bool-is-send-schedule={boolIsSendSchedule} 
+							bool-is-create-invite={boolIsCreateInvite} onschedulermessage={populateCommentField} bool-is-popped-out></c-global-scheduler>
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+    <template if:false={boolIsPoppedOut}>
+        <c-global-scheduler record-id={recordId} onpopout={popOut} bool-send-back-response={boolSendBackResponse} bool-is-send-schedule={boolIsSendSchedule} 
+				bool-is-create-invite={boolIsCreateInvite} onschedulermessage={populateCommentField}></c-global-scheduler>
+    </template>
+</template>

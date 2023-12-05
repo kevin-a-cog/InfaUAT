@@ -1,0 +1,195 @@
+<!--
+
+Change History
+****************************************************************************************************
+ModifiedBy      Date        Jira No.    Tag     Description
+****************************************************************************************************
+balajip         11/22/2021  I2RT-4425   T01     added option to delete a shift plan
+-->
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium"
+        aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container" style="min-width:80rem;">
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Shift Plan</h2>
+            </header>
+            <div class="slds-modal__content slds-var-p-around_medium slds-scrollable_y" id="modal-content-id-1">
+                <div class="slds-var-m-top_small">
+                    <lightning-record-edit-form object-api-name="Shift_Plan__c" name='shiftPlanForm'>
+
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="6">
+                            <div class="slds-var-m-right_small">
+                                <lightning-input-field label="Type" name="Type__c" variant="label-stacked" 
+                                    data-name="Type__c" field-name="Type__c"
+                                    data-field="shiftPlanField" required>
+                                </lightning-input-field>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6">
+                            <div class="slds-var-m-left_small">
+                                <lightning-input label="Name" name="Name" variant="label-stacked" data-name="Name"
+                                    data-field="shiftPlanField" max-length="80" required>
+                                </lightning-input>
+                            </div>
+                        </lightning-layout-item>
+                        <template if:true={showBusinessHoursField}>
+                            <lightning-layout-item size="6">
+                                <div class="slds-var-m-right_small">
+                                    <lightning-input-field label="Business Hours" name="Business_Hours__c" variant="label-stacked" 
+                                        data-name="Business_Hours__c" field-name="Business_Hours__c"
+                                        data-field="shiftPlanField" max-length="80">
+                                    </lightning-input-field>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6">
+                                <div class="slds-var-m-left_small">
+                                </div>
+                            </lightning-layout-item>    
+                        </template>
+                        <lightning-layout-item size="6">
+                            <div class="slds-var-m-right_small">
+                                <lightning-input type="date" label="Start Date" name="Start_Date__c"
+                                    data-name="Start_Date__c" variant="label-stacked" value={startDate}
+                                    data-field="shiftPlanField" required>
+                                </lightning-input>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6">
+                            <div class="slds-var-m-left_small">
+                                <lightning-input type="date" label="End Date" name="End_Date__c" value={endDate}
+                                    data-name="End_Date__c" variant="label-stacked" required
+                                    data-field="shiftPlanField">
+                                </lightning-input>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    </lightning-record-edit-form>
+                </div>
+                
+                <div class="slds-border_bottom slds-var-p-bottom_x-small slds-var-m-top_small"
+                    style="border-color:rgb(141, 173, 214); color:rgb(3, 62, 115); font-size: 16px; font-weight:bold;">
+                    Shift Request
+                </div>
+
+                <template if:false={shiftPlanIdForEdit}>
+                    <div style="width: 50%" class="slds-var-m-top_small">
+                        Search for an existing plan to copy requests from: 
+                        <c-lookup label="" placeholder="Type few characters of the plan name..." onsearch={handleSearch}
+                            onselectionchange={handleSelectionChange}>
+                        </c-lookup>
+                    </div>
+                    
+                </template>
+                <div class="slds-var-m-top_medium">
+
+                    <lightning-layout vertical-align="end" multiple-rows>
+                        
+                        <lightning-layout-item size="3">
+                            <div class="slds-var-m-horizontal_small" if:true={isSkillRequestAvailable}>
+                                Skill
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="2">
+                            <div class="slds-var-m-left_small" if:true={isSkillRequestAvailable}>
+                                Resource Count
+                            </div>
+                        </lightning-layout-item>
+                        
+                        <lightning-layout-item size="2">
+                            <div class="slds-var-p-around_x-small">
+                                <lightning-button variant="container" name="addReq" label="Add Row" title="Add Row" 
+                                    icon-name="utility:new" onclick={handleClick}>
+                                </lightning-button> 
+                            </div>
+                        </lightning-layout-item>
+
+                        <template for:each={skillRequests} for:item="skillReq" for:index="ind">
+                            <lightning-layout-item size="12" key={skillReq.Id}
+                                class="slds-var-p-vertical_small slds-border_bottom">
+
+                                <lightning-record-edit-form object-api-name="Shift_Request__c" name='shiftRequestAdd'
+                                    record-id={skillReq.Id}>
+                                    <lightning-layout multiple-rows>
+                                        
+                                        <lightning-layout-item size="3">
+                                            <div class="slds-var-m-horizontal_small">
+                                                <lightning-input-field field-name="Skill__c"
+                                                    required={skillReq.isSkillRequired} data-ind={ind}
+                                                    data-name="Skill__c" variant="label-hidden"
+                                                    onchange={handleChange}>
+                                                </lightning-input-field>
+                                            </div>
+                                        </lightning-layout-item>
+
+                                        <lightning-layout-item size="2">
+                                            <div class="slds-var-m-horizontal_small">
+                                                <lightning-input-field field-name="Resource_Count__c" data-ind={ind}
+                                                    variant="label-hidden" required data-name="Resource_Count__c">
+                                                </lightning-input-field>
+                                            </div>
+                                        </lightning-layout-item>
+                                        
+                                        <lightning-layout-item size="1">
+                                            <div class="slds-var-m-right_small slds-align_absolute-center">
+                                                <!--lightning-button-icon icon-name="action:delete" class="remove-request"
+                                                    data-index={ind} onclick={handleClick} name="removeReq">
+                                                </lightning-button-icon-->
+                                                <lightning-icon name="removeReq" icon-name="action:delete"
+                                                    alternative-text="Delete Row" size="xx-small" title="Delete Row"
+                                                    data-index={ind} onclick={handleClick} >
+                                                </lightning-icon>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </lightning-record-edit-form>
+
+                            </lightning-layout-item>
+                        </template>
+                    </lightning-layout>
+                </div>
+            </div>
+            <footer class="slds-modal__footer">
+                <template if:true={showSpinner} class="slds-is-relative">
+                    <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+                </template>
+                <button class="slds-button slds-button_neutral" name="cancelShiftPlan"
+                    onclick={handleClick}>Cancel</button>
+                <!--T01-->
+                <template if:true={shiftPlanIdForEdit}>
+                    <lightning-button icon-name="utility:close" variant="destructive-text"
+                        class="slds-float_left slds-var-m-left_small" onclick={handleClick} label="Delete" name="removePlan">
+                    </lightning-button>
+                </template>
+                <!--/T01-->
+                <lightning-button class="slds-var-m-top_small slds-var-m-left_small" variant="brand" name="saveShiftPlan"
+                    label="Save" onclick={handleClick}>
+                </lightning-button>
+            </footer>
+        </div>
+    </section>
+
+    <!--T01-->
+    <!-- Confirmation Modal-->
+    <template if:true={showConfirmationModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small custom-modal"
+            aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Confirmation</h2>
+                </header>
+                <div class="slds-modal__content slds-var-p-around_large" id="modal-content-id-2">
+                    This will delete the Shift Plan and the action cannot be reverted. Do you want to continue?
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="brand" label="Cancel" title="Cancel" onclick={cancelDeletePlan} class="slds-m-left_x-small"></lightning-button>
+                    <lightning-button variant="brand" label="Continue" title="Continue" onclick={continueDeletePlan} class="slds-m-left_x-small"></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!--/T01-->
+
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

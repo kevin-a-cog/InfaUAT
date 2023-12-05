@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>50.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Case Comment List View</masterLabel>
+    <description>Case Comment List View</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property label="Visibility" name="commentVisibility" type="String" datasource="Private,Internal,External" default=""/>
+            <property label="Status" name="commentStatus" type="String" datasource="Draft,Scheduled,Submitted,Pre Draft" default=""/>
+            <property label="Type" name="commentType" type="String" datasource="Callback,Revise Priority,Escalation" default=""/>
+            <objects>
+                <object>Case</object>
+            </objects>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

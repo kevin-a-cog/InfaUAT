@@ -1,0 +1,67 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 08-16-2020
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   08-08-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<template>         
+  <lightning-card >
+    
+      <div class=" slds-card">  
+          <div class="slds-m-top_medium  slds-m-bottom_x-large">
+             <div class="slds-m-around--small"   >               
+                 <span> Was this article helpful? </span>                 
+                 <div class="slds-float_right">
+                 
+                  
+                   <lightning-button-icon data-id="likebutton"  class=" " icon-name="utility:like"  onclick={handlelike}  variant={likevariant} alternative-text="Like"></lightning-button-icon>
+                   <lightning-button-icon data-id="dislikebutton" class= "slds-m-left_x-small" icon-name="utility:dislike"  onclick={handledislike} variant={dislikevariant} alternative-text="Dislike"  title="Dislike"></lightning-button-icon>
+                   <!--button class="btn"><i class="fa fa-thumbs-down"></i>hi</button-->            
+                  
+                 
+                 </div>              
+              </div>    
+          </div>
+
+         <div  data-id="feedbacksec" class="slds-m-around--small slds-is-collapsed ">
+          <div data-id="feedbackreason" class="slds-form-element slds-hidden slds-is-collapsed">      
+            <div class="slds-form-element__control">
+           <lightning-combobox style="color:black"  data-id="feedbackcombobox"
+                  name="Reason"        
+                  label="Choose a reason"       
+                  value={feedbackreason}
+                  required
+                  placeholder="Choose a reason"
+                  options={reasonoptions}              
+                  onchange={handlereason} >
+            </lightning-combobox>
+            
+            </div>
+           </div>
+        
+
+            <div data-id="descriptionblock" class="slds-form-element slds-hidden">
+              <label style="color:black" class="slds-form-element__label" for="textarea-id-01">
+                
+                <span style="color:black" >Feedback Comments</span>
+                <abbr data-id="descripstar" class="slds-hidden" title="required">* </abbr>
+              </label>
+              <div class="slds-form-element__control">
+                  <textarea required={feedback} class="slds-textarea" placeholder="Please leave us some feedback"></textarea>
+              </div>
+            </div>
+          </div> 
+          <!--lightning-button data-id="submitbt" style="color:black"  class="slds-align_absolute-center slds-m-around--medium slds-is-collapsed"  variant="brand" label="submit" title="submit" onclick={handlesubmit}></lightning-button -->
+        </div>
+          
+  
+      
+      <div data-id="submitbt" class="slds-align_absolute-center slds-m-around--medium slds-is-collapsed">
+        <lightning-button    variant="brand" label="Submit" title="Submit" onclick={handlesubmit}></lightning-button>       
+      </div>
+</lightning-card>    
+</template>

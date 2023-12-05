@@ -1,0 +1,57 @@
+<!--
+/*
+ * Name			:	csmManageMilestoneProductsModal
+ * Author		:	Deva M
+ * Created Date	: 	31/08/2021
+ * Description	:	This LWC exposes modal container to show managemilestoneproducts.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Deva           		07/07/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+    <template if:false={showMilestoneScreen}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+        aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" data-name="cancel" onclick={handleClick}>
+                    <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" data-name="cancel"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{label.Manage_Milestone_Product_Title}</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                	<!-- Spinner. -->
+                <div class="spinner">
+                    <template if:true={boolDisplaySpinner}>
+                        <lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+                    </template>
+                </div>
+                <c-csm-manage-milestone-products record-id={planRecordId} milestone-id={milestoneRecordId} onselectedrows={handleProductSelect}  str-default-tab={strDefaultTab} bool-pre-select={boolPreSelect}></c-csm-manage-milestone-products>
+            </div>
+            <footer class="slds-modal__footer"> 
+                <button class="slds-button slds-button_neutral slds-float_left" data-name="cancel" onclick={handleClick}>{label.Cancel_Button}</button>
+                <button class="slds-button slds-button_brand" data-name="save" onclick={handleClick} if:true={hideSaveButton}>{label.Add_Button}</button>
+                <!--<button class="slds-button slds-button_brand" data-name="saveandaddmilestone" onclick={handleClick} if:true={hideSaveButton}>Save &amp; Add Milestone</button>-->
+
+                <button if:true={hideDeleteButton} class="slds-button slds-button_brand" data-name="delete" onclick={handleClick}>{label.Remove_Button}</button>
+               <!-- <button class="slds-button slds-button_brand" data-name="deleteandaddmilestone" onclick={handleClick} if:true={hideDeleteButton}>Remove &amp; Add Milestone</button>-->
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>  
+    </template>
+    <template if:true={showMilestoneScreen}>
+    <c-csm-create-milestone-with-product-modal objective-id={objectiveId} plan-id={planRecordId} onclose={handleCancel} str-default-tab={strDefaultTab} bool-pre-select={boolPreSelect}>
+        
+    </c-csm-create-milestone-with-product-modal>
+</template>
+    
+</template>

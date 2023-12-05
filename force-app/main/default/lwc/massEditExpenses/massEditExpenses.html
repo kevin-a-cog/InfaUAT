@@ -1,0 +1,33 @@
+<template>    
+    <lightning-card title="Mass Edit Expenses">
+        <template if:true={hasRecords}>
+            <template if:true={loaded}>
+                    <div style="padding-left: 10px;">
+                        <lightning-textarea name="AuditNotes" onchange={handleFormInputChange} value={auditNotes} label="Audit Notes" ></lightning-textarea>
+                    </div>  
+                    <div style="padding-left: 10px; width: 200px">
+                        <lightning-input name="SSCReviewedDate"  type="date" onchange={handleDateInputChange} value={sscReviewedDate} label="SSC Reviewed Date" ></lightning-input>
+                    </div> 
+                    <div class="scrolldiv">                  
+                        <lightning-datatable key-field="Id" 
+                                                data={records} 
+                                                columns={columns} 
+                                                onsave={handleSave}
+                                                oncancel={handleCancel}
+                                                draft-values={draftValues}
+                                                min-column-width="70"
+                                                >
+                        </lightning-datatable>
+                </div> 
+            </template>
+            <template if:false={loaded}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+        </template>
+        <template if:false={hasRecords}>
+            <div style="padding-left: 10px;">
+                No Expense records found
+            </div>
+        </template>  
+    </lightning-card>
+</template>

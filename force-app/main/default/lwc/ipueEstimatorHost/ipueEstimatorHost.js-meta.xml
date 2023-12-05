@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage , lightningCommunity__Default">
+            <property name="formId" type="String" default="a4c2f0000005E6UAAU" description="Id of the form to use (for now)" label="Form ID"/>
+            <property name="recordId" type="String" label="Record ID" description="The value should be {!recordId}."/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

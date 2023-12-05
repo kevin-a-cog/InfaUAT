@@ -1,0 +1,43 @@
+@media screen and (max-width: 768px) {
+    .help-annonymous-award-container {
+        margin: 0 auto;
+        width: 93%;
+    }
+}
+.help-annonymous-award-img{
+    height: auto;
+    max-width: 320px;
+}
+@media screen and (max-width: 768px) {
+    .help-annonymous-award-img{
+        max-width: 200px;
+    }
+}
+.help-annonymous-award-heading {
+    font-weight: 300;
+    font-size: 33px;
+    color: #373737;
+}
+@media screen and (max-width:768px) {
+    .help-annonymous-award-heading {
+        font-size: 24px;
+    }
+}
+.help-anonymous-awards-content {
+    padding-bottom: 35px;
+}
+.help-anonymous-award-item {
+    display: flex;
+    height: 270px;
+    box-shadow: 5px 5px 18px rgb(0 0 0 / 12%);
+    padding: 30px;
+    justify-content: center;
+}
+@media screen and (max-width:768px) {
+    .help-anonymous-award-item {
+        margin-bottom: 25px;
+        display: flex;
+        justify-content: center;
+        height: 230px;
+    }
+}

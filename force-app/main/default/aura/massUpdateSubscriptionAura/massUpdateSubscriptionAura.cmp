@@ -1,0 +1,5 @@
+<aura:component implements="lightning:isUrlAddressable">
+    <aura:attribute name="contractId" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.onPageReferenceChange}"/>
+    <c:massUpdateSubscriptions recordId="{!v.contractId}"/>     
+</aura:component>

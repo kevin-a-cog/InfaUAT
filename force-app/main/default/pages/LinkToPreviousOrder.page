@@ -1,0 +1,46 @@
+<!--------------------------------------
+    Change History
+    ******************************************************************************************************************
+    ModifiedBy      Date              JIRA No.     Requested By               Description                                     Tag
+    ******************************************************************************************************************
+    Anil Solanki   30/Oct/2019     SALESRT-11091     Nov Build              Page on Order to Link with previous Orders                                   
+                                                                                        
+-------------------------------------->
+<apex:page standardController="Order" extensions="LinkToPreviousOrderController" >
+    <apex:pagemessages />
+    <apex:form id="formId">     
+       
+        
+        
+         <apex:pageBlock >
+         
+             <apex:pageBlockSection >
+            
+           
+             <apex:pageBlockTable value="{!PreviousOrderList}" var="va" id="previousOrderTable">
+                 <apex:column headerValue="Previous Order Number CPQ" >
+                     <apex:inputfield value="{!va.Previour_Order_CPQ__c}"/>                     
+                 </apex:column>
+                 <apex:column headerValue="Previous Order Number Apttus" >
+                     <apex:inputfield value="{!va.Previous_Order_Apttus__c}"/>                     
+                 </apex:column>
+                  <apex:column headerValue="Previous Order Date" >
+                     <apex:inputField value="{!va.Previous_Order_Date__c}"/>                     
+                 </apex:column>
+                  <apex:column headerValue="Previous Order Notes" >
+                     <apex:inputField value="{!va.Previous_Order_Notes__c}"/>                    
+                 </apex:column>
+             </apex:pageBlockTable>
+             
+            
+            
+                 
+             </apex:pageBlockSection>
+         </apex:pageBlock>
+         
+         <div align="centre"><apex:commandButton style="float:centre" value="Save" action="{!SaveOrderRecords}"  /></div>
+           
+        
+            
+ </apex:form>
+</apex:page>

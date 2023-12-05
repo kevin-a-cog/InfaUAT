@@ -1,0 +1,4 @@
+.in-anouncement-textwrap ul li,
+.in-anouncement-textwrap ol li {
+   list-style-position: inside;
+}

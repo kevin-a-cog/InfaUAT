@@ -1,0 +1,166 @@
+<!--
+@author : RamEsh M S
+@date 	: 28-Apr-2021
+@purpose: I2C-1125 - Close Finance Period
+-->
+<aura:component controller="closeFinancePeriodController"
+    implements="force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global">
+    <!--Custom Styles for Modal Header and Footer-->
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+         .slds-modal__container{
+        width: 80%;
+        max-width: 70rem;
+        }  
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>
+    <aura:attribute name="isLoading" type="boolean" default="false" />
+    <aura:attribute name="isProcessing" type="boolean" default="false" />
+    <aura:attribute name="FPList" type="List" />
+    <aura:attribute name="ProceedButton" type="boolean" default="true"/>
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="goToFP" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="CloseDate" type="Date" default="today"/>
+    
+    
+    <!--Spinner-->
+    <aura:if isTrue="{!v.isProcessing}">
+        <lightning:spinner aura:id="myProcessSpinner" variant="brand" title="Closing Finance Period and moving backlog Orders......" alternativeText="Closing Finance Period and moving backlog Orders......"/>
+    </aura:if>
+	
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner aura:id="myLoadSpinner" variant="brand" title="Fetching Finance Period details......" alternativeText="Fetching Finance Period details......"/>
+    </aura:if>
+
+    <!--Header-->
+    <div class="slds-col modal-header slds-modal__header" style="width:100%;height:10%;">
+        <p class="slds-page-header__title slds-truncate" title="">Close Finance Period</p>
+    </div>
+	<aura:if isTrue="{!v.ProceedButton}">
+    <div class="slds-p-around_small slds-clearfix" style="width:100%;height:80%;">
+        <ul>
+            <li>1. This Finance Period will be <b>closed</b> and action cannot be undone.</li>
+            <li>2. The next open Finance Period will become <b>active</b>.</li>
+            <li>3. A new Finance Period for future orders will be created with status as <b>OPEN</b></li>
+            <li>4. All Orders without RA or with RA (Draft/Pre-Allocate) will be moved to next open FP.
+                   The Generate Date will be reset to Start Date of Finance Period.</li>
+            <br></br>
+                   <br></br>	
+               <aura:if isTrue="{!not(empty(v.FPList))}">      
+              <div class="textInput">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered  slds-border_right slds-border_bottom slds-border_left">
+                    <thead>
+                        <tr class="slds-line-height_reset">                            
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="FP Name">FP Name</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Start Date">Start Date</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="End Date">End Date</div>
+                            </th>    
+                              <th class="" scope="col">
+                                <div class="slds-truncate" title="Status">Status</div>
+                            </th>  
+                             <th class="" scope="col">
+                                    <div class="slds-truncate" title="Active">Active</div>
+                                </th>
+                            <th class="" scope="col">
+                            	<div class="slds-truncate" title="Close Date">Close Date</div>
+                            </th>
+                                 <th class="" scope="col">
+                                    <div class="slds-truncate" title="Comments">Comments</div>
+                                </th> 
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration var="FP" items="{!v.FPList}">
+                            <tr class="slds-hint-parent slds-is-selected">
+                                
+                                <th data-label="FP Name" scope="row">
+                                    <div class="slds-truncate" >{!FP.Name}</div>
+                                </th>
+                                <td data-label="Start Date">
+                                    <div class="slds-truncate" ><ui:outputDate value="{!FP.blng__PeriodStartDate__c}" format="MM/DD/YYYY"/></div>
+                                </td>
+                                <td data-label="End Date">
+                                    <div class="slds-truncate" ><ui:outputDate value="{!FP.blng__PeriodEndDate__c}" format="MM/DD/YYYY"/></div>
+                                </td> 
+                                  <td data-label="Status">
+                                    <div class="slds-truncate" >
+                                       {!FP.blng__PeriodStatus__c}
+                                      </div>
+                                </td>  
+                                 <td data-label="Active">
+                                     <aura:if isTrue="{!FP.Active__c}">
+                                     	<lightning:icon iconName="action:approval" size="x-small" alternativeText="Active" title="Active"/>
+                                     <aura:set attribute="else">
+        	                             <lightning:icon iconName="action:remove" size="x-small" alternativeText="Active" title="Active"/>
+							       	 </aura:set>
+  									 </aura:if> 
+                                    </td> 
+                                <td data-label="Close Date">
+                                    <aura:if isTrue="{!FP.Active__c}">
+                                    	<lightning:input type="date" name="input1" variant = "label-hidden" aura:id="CloseDate" placeholder="Input Close Date for FP....."/>
+                                    <aura:set attribute="else">
+                                        N/A
+                                    </aura:set>   
+                                    </aura:if>
+                                </td>
+                                     <td data-label="Comments">
+                                        <div class="slds-truncate" >
+                                            <aura:if isTrue="{!FP.Active__c}">
+                                                This Finance Period will be <b>CLOSED   </b> <lightning:icon iconName="action:close" size="x-small" alternativeText="CLOSED" title="CLOSE"/>.
+                                            </aura:if>
+                                            <aura:if isTrue="{!!(FP.Active__c)}">
+                                                <aura:if isTrue="{!!!(FP.Id)}">
+                                                	This Finance Period will become <b>ACTIVE  </b> <lightning:icon iconName="action:update_status" size="x-small" alternativeText="ACTIVATED" title="Active"/>.
+                                                </aura:if>
+                                            </aura:if>
+                                            <aura:if isTrue="{!!(FP.Id)}">
+                                            	This Finance Period will be <b>created</b> for <b>FUTURE ORDERS   </b> <lightning:icon iconName="action:new_opportunity" size="x-small" alternativeText="ACTIVATED" title="Active"/>.
+                                            </aura:if>
+                                            
+                                        </div>
+                                    </td>  
+                            </tr>
+                        </aura:iteration> 
+                    </tbody>
+                </table>  
+                <br></br>
+                   
+       </div>
+ </aura:if>
+            <li>Click Proceed to continue, otherwise click on Cancel</li>
+        </ul>
+        
+    </div>
+    <aura:set attribute="else"> 
+        {!v.message}
+    </aura:set>
+	</aura:if>
+    <!--Footer-->
+    <footer class="slds-modal__footer" style="width:100%;height:10%;">
+        <aura:if isTrue="{!v.goToFP}">
+        	<lightning:button label="Go to Active FP" variant="brand" onclick="{!c.goToFPController}" />
+      	<aura:set attribute="else">
+        	  <lightning:button label="Cancel" variant="destructive" onclick="{!c.closeModal}" />
+        </aura:set>
+        </aura:if>
+        <aura:if isTrue="{!v.ProceedButton}">
+        	<lightning:button label="Proceed" variant="brand" onclick="{!c.closeAndMove}" />
+        </aura:if>
+    </footer>
+</aura:component>

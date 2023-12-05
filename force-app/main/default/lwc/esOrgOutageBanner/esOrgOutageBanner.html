@@ -1,0 +1,43 @@
+<template>
+
+    <template if:true={message}>
+        <template if:true={bannerOutage.isOutage}>
+            <div class="col-md-12 pl-3">
+
+                <div class="form-row es-form-group es-lds-form-group">
+                    <div class="container-fluid banner-container-fluid">
+                        <div class="slds-box_x-small d-flex es-background">
+                            <img class="inline-display es-alert-img" src={alertImage} />
+                            <div class="components-container">
+                                <span class="es-outage-banner-message">{bannerOutage.message}  -
+                                    <a class="pod-component-status" href="https://status.informatica.com/" target="_new"> {bannerOutage.podsData.status}</a>
+                                </span>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </template>
+    <template if:true={isPopupMsg}>
+        <template if:true={bannerOutage.isOutage}>
+            <div class="container">
+                <c-es-alert class="es-outage-banner" alert-message={bannerOutage.message}
+                    service-details={bannerOutage.podsData}></c-es-alert>
+
+            </div>
+        </template>
+    </template>
+    <template if:true={ShowMultiMsg}>
+        <template if:true={bannerOutage.isOutage}>
+            <div class="slds-box slds-box_x-small">
+                <p> {bannerOutage.message}</p>
+                <template for:each={bannerOutage.podsData} for:item="data">
+                    <li key={data}>{data.name}</li>
+                </template>
+            </div>
+        </template>
+    </template>
+
+</template>

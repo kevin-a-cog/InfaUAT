@@ -1,0 +1,40 @@
+<!--
+  @description       : 
+  @author            : Venky K
+  @group             : 
+  @last modified on  : 10-02-2020
+  @last modified by  : Venky K
+  Modifications Log 
+  Ver   Date         Author    Modification
+  1.0   10-02-2020   Venky K   Initial Version
+-->
+<template>
+    <!--lightning-record-form
+    record-id="a3kS0000000IUMZIA4"
+    object-api-name="Related_KB__c"
+    fields={fields}
+    
+    mode="readonly">
+</lightning-record-form -->
+
+        <template if:true={kbrecords.length}>
+            <div class="related-articles-container">
+                <div class="test-id__field-label-container slds-form-element__label">
+                    <span class="test-id__field-label" style="color: black;"> Related Articles </span>
+                </div>
+                <div class="related-articles-list">
+                    <template for:each={kbrecords} for:item="kbrec"> 
+                  
+                        <div key={kbrec.key} class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                            
+                            <div class="slds-form-element__control slds-grid itemBody">
+                                <a href={kbrec.value} target="_blank">
+                                    <span class="test-id__field-value slds-form-element__static slds-grow  is-read-only"> {kbrec.key}</span>
+                                </a>   
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>   
+</template>

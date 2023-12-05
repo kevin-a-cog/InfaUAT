@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="25px" height="24px" viewBox="0 0 25 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>SupportAccount</title>
+    <g id="VD" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Nav_Support" transform="translate(-399.000000, -87.000000)">
+            <g id="Group-7" transform="translate(137.000000, 72.000000)">
+                <g id="SupportAccount" transform="translate(262.900781, 15.000000)">
+                    <rect id="Rectangle" fill="#BBBBBB" fill-rule="nonzero" x="0" y="8.28" width="24" height="15.72"></rect>
+                    <path d="M15.72,13.8 C15.72,13.8 15.72,15.12 15.72,15.6 C15.72,16.2 15.12,16.56 14.4,16.56 L9.48,16.56 C8.76,16.56 8.16,16.2 8.16,15.6 C8.16,15 8.16,13.8 8.16,13.8 L6.36,13.8 C6.36,13.8 6.36,14.04 6.36,15.6 C6.36,17.16 7.68,18.36 9.36,18.36 L14.52,18.36 C16.2,18.36 17.52,17.16 17.52,15.6 C17.52,14.04 17.52,13.8 17.52,13.8 L15.72,13.8 Z" id="Path" fill="#ECF0F1"></path>
+                    <polygon id="Path" fill="#FFD300" points="23.04 5.52 0.96 5.52 0 7.44 24 7.44"></polygon>
+                    <polygon id="Path" fill="#FCBC06" points="21.24 2.76 2.76 2.76 1.8 4.56 22.2 4.56"></polygon>
+                    <polygon id="Path" fill="#CC9817" points="19.44 0 4.56 0 3.72 1.8 20.28 1.8"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

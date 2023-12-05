@@ -1,0 +1,59 @@
+<!--
+*  @VF Page: UpdateTaIcrt
+*  @Author: Chandana Gowda
+*  @Date: 22 Jun 2021
+*  @Description: TAX-141 : Vf Page displayed on update Tax from Quote
+-->
+<apex:page id="pageId" standardController="SBQQ__Quote__c" extensions="taxICRTControllerExtension" action="{!updateQuote}">
+    <apex:slds />
+    <Script Language="JavaScript">
+        function generateDocument() {
+        	sforce.one.navigateToURL('{!URLFOR($Action.SBQQ__Quote__c.Conga_Composer_Generate_Document,SBQQ__Quote__c.Id)}');
+        }
+        function generatePartnerDocument() {
+        	sforce.one.navigateToURL('{!URLFOR($Action.SBQQ__Quote__c.Conga_Composer_Generate_Partner_Document,SBQQ__Quote__c.Id)}');
+        }                    
+    </Script>
+    
+    <!--TAX-167, Removed the error message from screen-->
+    <!--If Exempt Status is Override,if Tax not applicable or if Quote has no lines-->
+    <!--<apex:PageBlock rendered="{!renderOnLoadError}">
+        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <h2>{!status}</h2>
+        </div>
+    </apex:PageBlock> -->
+    
+    <!--Displaying the ICRT Guide-->
+    <apex:PageBlock id="icrt" rendered="true">
+        <apex:form >
+            <apex:actionPoller action="{!getTaxStatus}" reRender="renderComp" interval="5" enabled="{!taxUpdateStatus == 'Running'}"></apex:actionPoller>
+        </apex:form>
+        <icrt:AeSalesGuides alwaysNewGuide="true" guideName="OnesourceTaxCalculation" objectType="SBQQ__Quote__c" objectId="{!SBQQ__Quote__c.Id}" height="600px"/>      
+    </apex:PageBlock>
+        
+    <apex:outputPanel id="renderComp">
+        <!--Generate Document and Generate Partner Document Buttons-->
+        <apex:form rendered="{!renderButtons}">
+            <div align="center">
+                <apex:commandButton rendered="{!calledFrom == 'generateDoc' || calledFrom == 'updateTax'}" value="Generate Document" onclick="generateDocument()" styleClass="slds-button slds-button--brand"/>
+                <apex:commandButton rendered="{!calledFrom == 'generatePartnerDoc' || calledFrom == 'updateTax'}" value="Generate Partner Document" onclick="generatePartnerDocument()" styleClass="slds-button slds-button--brand"/>
+                <apex:commandButton action="{!onReturnToQuote}" value="Return to Quote" styleClass="slds-button slds-button--brand"/>
+            </div>
+        </apex:form>
+        
+        <!--To Navigate to Document Generation when tax is successfully updated-->
+        <apex:outputText rendered="{!calledFrom == 'generateDoc' && taxUpdateStatus == 'Success'}">
+            <script>
+            generateDocument();
+            </script>
+        </apex:outputText>  
+        
+        <!--To Navigate to Partner Document Generation when tax is successfully updated-->
+        <apex:outputText rendered="{!calledFrom == 'generatePartnerDoc' && taxUpdateStatus == 'Success'}">
+            <script>
+            generatePartnerDocument();
+            </script>
+        </apex:outputText>        
+    </apex:outputPanel>   
+</apex:page>

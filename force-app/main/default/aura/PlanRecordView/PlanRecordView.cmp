@@ -1,0 +1,52 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,flexipage:availableForRecordHome,force:hasRecordId" access="global" 
+                controller="ManagePlanProductsController">
+    <aura:attribute name="showplanprod" type="boolean" default="false"/>
+    
+    <!--aura:handler name="planprodevent" event="c:Planaddproductevent" action="{!c.handleComponentEvent}"/ --> 
+	  
+     <aura:html tag="style">
+        .slds-modal__container{
+            max-width: 100% !important;
+            width:90% !important;
+            height: 90% !important;
+            max-height: 90% !important;
+        } .THIS {
+            background-color: white;
+            }
+         
+           
+        }
+    </aura:html>     
+    
+    
+	<lightning:recordForm  aura:id="myRecordForm"
+        recordId="{!v.recordId}"
+        objectApiName="Plan__c"
+        layoutType="Full"
+        columns="2"
+        mode="view"         
+        onsubmit="{!c.handleSubmit}"	/>
+    <!-- lightning:recordViewForm recordId="{v.recordId}" objectApiName="Plan__c">
+       
+    </lightning:recordViewForm -->
+    <aura:if isTrue = "{!v.showplanprod}" >
+       <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class=" slds-modal slds-modal-container  slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close closeIcon slds-button_icon-bare slds-button_icon-inverse" title="Close" onclick="{!c.handleCancel}">
+                    <lightning:icon iconName="utility:close" alternativeText="Close" title="close" />
+                </button>
+                <!-- h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">New Plan</h2 -->
+            </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                
+                <lightning:notificationsLibrary aura:id="notifLib"/>
+        <!-- c:AddPlanProduct2 recordId = "{!v.recordId}" calledfromplaninlineedit="true" parent="{!this}"/ -->
+                 <c:managePlanProducts fromeditpage = "true" recordId = "{!v.recordId}"  />
+                 
+            </div>
+           </div>
+        </section>
+    </aura:if>
+        
+</aura:component>

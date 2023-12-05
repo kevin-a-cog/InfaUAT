@@ -1,0 +1,119 @@
+﻿c-es-case-deflection .CoveoSearchbox {
+    height: 25px;
+}
+
+c-es-case-deflection .CoveoSearchButton {
+    height: 25px;
+}
+
+c-es-case-deflection .CoveoOmnibox {
+    height: 24px;
+}
+
+c-es-case-deflection .CoveoSearchbox .magic-box .magic-box-input {
+    height: 22px;
+}
+
+c-es-case-deflection .CoveoOmnibox.magic-box .magic-box-input .magic-box-underlay {
+    height: 24px;
+}
+
+c-es-case-deflection .CoveoOmnibox .magic-box-underlay>input {
+    height: 23px;
+}
+
+c-es-case-deflection .CoveoSearchbox .magic-box .magic-box-input>input {
+    height: 23px;
+    font-size: 12px;
+}
+
+c-es-case-deflection .CoveoSearchbox .CoveoSearchButton {
+    height: 24px;
+    width: 30px;
+}
+
+c-es-case-deflection svg:not(:root) {
+    height: 11px;
+}
+
+c-es-case-deflection .magic-box .magic-box-clear {
+    line-height: 18px;
+}
+
+c-es-case-deflection .CoveoSearchbox .magic-box .magic-box-clear-svg {
+    height: 10px;
+}
+
+c-es-case-deflection .magic-box.magic-box-notEmpty .magic-box-clear {
+    width: 25px;
+    height: 22px;
+}
+
+c-es-case-deflection .CoveoSearchButton .coveo-search-button-loading-svg {
+    height: 11px !important;
+}
+
+c-es-case-deflection .coveo-executing-query .CoveoSearchButton .coveo-search-button-loading-svg {
+    height: 15px;
+}
+
+c-es-case-deflection .magic-box .magic-box-input .magic-box-underlay, c-es-case-deflection .magic-box .magic-box-input>input {
+    color: #212121;
+    text-align: left;
+    padding: 10px 25px 10px 5px;
+    text-indent: 0;
+    font-family: arial, sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 48px;
+    white-space: pre;
+    overflow: auto;
+    box-sizing: border-box;
+    display: block;
+}
+
+c-es-case-deflection .magic-box-icon {
+    height: 22px;
+}
+
+c-es-case-deflection .magic-box .magic-box-suggestions .magic-box-suggestion {
+    font-size: 12px;
+    line-height: 15px;
+    padding: 6px;
+}
+
+
+/* I2RT-7585 KB Recomendation Widget Floating Start */
+
+c-es-case-deflection .coveo-main-section::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+/* Track */
+
+c-es-case-deflection .coveo-main-section::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+
+c-es-case-deflection .coveo-main-section::-webkit-scrollbar-thumb {
+    background: #C1C1C1;
+}
+
+/* Handle on hover */
+
+c-es-case-deflection .coveo-main-section::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+c-es-case-deflection .coveo-main-section {
+    overflow: auto;
+    scrollbar-width: thin;
+}
+/* I2RT-7585 KB Recomendation Widget Floating End */

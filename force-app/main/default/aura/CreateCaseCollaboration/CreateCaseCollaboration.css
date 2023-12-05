@@ -1,0 +1,14 @@
+.THIS {
+}
+
+.THIS .center-text {
+  text-align: center;
+}
+
+.THIS .styledPopIn svg {
+  fill: rgb(0, 95, 178);
+}
+
+.THIS .styledPopIn {
+  background: white;
+}

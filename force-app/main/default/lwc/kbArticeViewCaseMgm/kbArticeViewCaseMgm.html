@@ -1,0 +1,242 @@
+<!--
+  @description       : 
+  @author            : Sathish R
+  @group             : 
+  @last modified on  : 25-08-2022
+  @last modified by  : Sathish R
+-->
+<template>
+    <template if:false={isDataAvailableOnLoad}>
+        <div class=" slds-card">
+            <div class="slds-align_absolute-center" style="height:5rem">
+                <lightning-spinner alternative-text="Loading..." variant="brand" size="small"
+                    style="margin: 1px; top:35px;">
+                </lightning-spinner>
+            </div>
+        </div>
+    </template>
+    <template if:true={isDataAvailableOnLoad}>
+        <div class="slds-card slds-card_boundary" style="display: none;">
+            <div class="slds-grid slds-page-header">
+                <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <div class="slds-media__figure stencil slds-avatar slds-avatar_small" aria-hidden="true">
+                        <div class="extraSmall forceEntityIcon" style="background-color: #747E96"><span
+                                class="uiImage"><img src="/img/icon/t4v35/standard/custom_120.png" class="icon " alt=""
+                                    title=""></span>
+                        </div>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title"><span
+                                class="slds-card__header-link baseCard__header-title-container">
+                                <span class="slds-truncate slds-m-right--xx-small"
+                                    title="Related Knowledge Article">Referred in Cases</span><span
+                                    class="slds-shrink-none slds-m-right--xx-small"
+                                    title={kbToCaseReferenceCount}>({kbToCaseReferenceCount})</span></span>
+                        </h2>
+                    </div>
+                </header>
+                <template if:true={isContentViewable}>
+                    <div class="slds-no-flex">
+                        <div class="actionsContainer">
+                            <ul
+                                class="branding-actions slds-button-group slds-m-left--xx-small small oneActionsRibbon forceActionsContainer">
+                                <lightning-button label="New" title="New" onclick={openModal}
+                                    class="slds-m-left_x-small">
+                                </lightning-button>
+                            </ul>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <template if:true={showLinkedCases}>
+                <div style="padding: 0px;margin:0px;" class={expandminimizeWidgetCss}>
+                    <lightning-datatable hide-checkbox-column="true" key-field="Id" data={caseLinkedData}
+                        columns={casecolumnswithdelete} onrowaction={handleCaseRowActionDelete}>
+                    </lightning-datatable>
+                </div>
+                <div class="slds-card__footer" style="margin-top:-1px;"><a class="view-all-label"
+                        onclick={expandminimizeWidget}>{expandminimizeLinkText}</a></div>
+            </template>
+        </div>
+        <div class=" slds-card">
+            <div class="slds-m-top_medium  slds-m-bottom_medium">
+                <div class="slds-m-around--small">
+                    <span class="slds-form-element__label"> Attach to Case </span>
+                    <div class="slds-float_right">
+                        <template if:true={isContentViewable}>
+                            <div class="slds-no-flex">
+                                <div class="actionsContainer">
+                                    <span>
+                                        <lightning-button label="Browse" title="Browse" onclick={openModal}
+                                            class="slds-var-m-left_x-small" variant="brand">
+                                        </lightning-button>
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:true={isModalOpen}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{wizardtitle}
+                    </h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium link-case-popup-content"
+                    style="padding: 20px;max-height:800px" id="modal-content-id-1">
+                    <div style="flex-basis: 100%;">
+                        <template if:true={isDataLoadInProgress}>
+                            <div class="slds-is-relative" style="display: flex;width:100%;">
+                                <div class="slds-align_absolute-center" style={searchSpaceHeight}>
+                                    <lightning-spinner alternative-text="Loading..." variant="brand" size="small" style="margin: 1px; top:65px;">
+                                    </lightning-spinner>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:true={isDataAvailable}>
+                            <template if:true={showSearchTokenSuccess}>
+                                <div class="divcasecontainerborder">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"
+                                            for="text-input-id-1">{searchPlaceholder}</label>
+                                        <div class="slds-list_horizontal">
+                                            <lightning-input style="width: 50%;" type="text" id="casesearchinput"
+                                                onchange={handleChangeSearchTerm} variant="label-hidden"
+                                                autocomplete="off" placeholder={searchPlaceholder} value={searchTerm}>
+                                            </lightning-input>
+                                            <lightning-button class="slds-var-m-left_x-small" variant="brand"
+                                                onclick={handleSearchClick} name="Search" label="Search">
+                                            </lightning-button>
+                                            <lightning-button class="slds-var-m-left_x-small" variant="brand"
+                                                onclick={handleClearCase} name="Clear" label="Clear">
+                                            </lightning-button>
+                                        </div>
+                                        <div style={searchResultHeight} class="link-case-popup-content">
+                                            <template if:true={showSearchSpinner}>
+                                                <div class="slds-is-relative">
+                                                    <div class="slds-align_absolute-center" style={searchSpaceHeight}>
+                                                        <lightning-spinner alternative-text="Loading..." variant="brand"
+                                                            size="small" style="margin: 1px; top:65px;">
+                                                        </lightning-spinner>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:true={showSearchSuccess}>
+                                                <div style="padding-top: 17px;padding-bottom: 7px;">Search Result
+                                                </div>
+                                                <div>
+                                                    <lightning-datatable hide-checkbox-column="true" key-field="sfid"
+                                                        data={caseSearchData} columns={casecolumnswithselect}
+                                                        onrowaction={handleCaseRowActionSelect}>
+                                                    </lightning-datatable>
+                                                </div>
+                                            </template>
+                                            <template if:true={showSearchNoResult}>
+                                                <div style="padding-top: 17px;">No Result</div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={showSearchTokenError}>
+                                <div class="divcontainerborder">
+                                    <div class="slds-p-bottom_large slds-p-left_large" style="color:red;">
+                                        <lightning-formatted-rich-text class='preview-field-value' value={errorMessage}>
+                                        </lightning-formatted-rich-text></br>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={showSelectedCases}>
+                                <div class="divcasecontainerborder" style="min-height:11.2rem">
+                                    <div class="slds-form-element">
+                                        <div style="display:none;">
+                                            <lightning-combobox name="KB Action" label="KB Action"
+                                                placeholder="Select KB Action" value={selectedCaseKBAction}
+                                                options={kbActionType} onchange={handleChangekbActionType}>
+                                            </lightning-combobox>
+                                        </div>
+                                        <div style="padding-top: 10px;">
+                                            <lightning-input type="text" label="Case" value={selectedCaseNumber}
+                                                read-only="true">
+                                            </lightning-input>
+                                        </div>
+                                        <div>
+                                            <lightning-input type="text" label="Title" value={selectedCaseTitle}
+                                                read-only="true">
+                                            </lightning-input>
+                                        </div>
+                                        <div class="slds-align_absolute-center">
+                                            <lightning-button class="slds-var-m-left_x-small" variant="brand"
+                                                onclick={handleUnSelectClick} name="Delete" label="Delete">
+                                            </lightning-button>
+                                            <lightning-button class="slds-var-m-left_x-small" variant="brand"
+                                                onclick={handleSaveClick} name="Save" label="Save">
+                                            </lightning-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <div class="slds-align_absolute-center">
+                        <button class="slds-button slds-button_brand" onclick={closeModal}>Close</button>
+                    </div>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <template if:true={isDeleteModalOpen}>
+        <div role="dialog" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!--Modal Box Header Start-->
+                <header class="slds-modal__header">
+                    <h1 class="slds-text-heading--medium">Delete Case KB</h1>
+                </header>
+                <!--Modal Box Header End-->
+
+                <!--Modal Box Content Start-->
+                <div class="slds-modal__content slds-p-around--medium">
+                    <center>Are you sure you want to delete this Case KB?</center>
+                </div>
+                <!--Modal Box Content End-->
+
+                <!--Modal Box Button Start-->
+                <footer class="slds-modal__footer">
+                    <lightning-button class="slds-var-m-left_x-small" variant="brand" onclick={closeDeleteModal}
+                        name="Cancel" label="Cancel">
+                    </lightning-button>
+                    <lightning-button class="slds-var-m-left_x-small" variant="brand" onclick={handleDeleteClick}
+                        name="Delete" label="Delete">
+                    </lightning-button>
+                </footer>
+                <!--Modal Box Button End-->
+                <template if:true={isDeleteConfirmed}>
+                    <div>
+                        <lightning-spinner alternative-text="Loading..." variant="brand" size="small"
+                            style="height:10rem;" class="slds-align_absolute-center">
+                        </lightning-spinner>
+                    </div>
+                </template>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </template>
+</template>

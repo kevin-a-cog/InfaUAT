@@ -1,0 +1,60 @@
+/* Variables. */
+:root {
+	--globalNestedDataViewer-brandLight: rgb(244, 246, 254);
+}
+
+/* Removing the undeline of the Collapsible header. */
+.globalNestedDataViewer button.section-control.slds-button.slds-button_reset.slds-accordion__summary-action  {
+	text-decoration: none;
+}
+
+/* Accordion Item. */
+.globalNestedDataViewer .slds-accordion__section {
+	border-style: solid;
+    border-width: var(--sds-c-button-sizing-border, var(--lwc-borderWidthThin,1px));
+    border-radius: var(--sds-c-button-radius-border, var(--lwc-buttonBorderRadius,.25rem));
+    box-shadow: var(--sds-c-button-shadow);
+    line-height: var(--sds-c-button-line-height, var(--lwc-lineHeightButton,1.875rem));
+	border-color: var(--sds-c-button-neutral-color-border, var(--lwc-buttonColorBorderPrimary,rgb(221, 219, 218)));
+}
+
+/* Accordion Header. */
+.globalNestedDataViewer .slds-accordion__summary {
+	background-color: var(--globalNestedDataViewer-brandLight);
+	border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: solid;
+    border-left-style: none;
+    border-width: var(--sds-c-button-sizing-border, var(--lwc-borderWidthThin,1px));
+    border-radius: var(--sds-c-button-radius-border, var(--lwc-buttonBorderRadius,.25rem));
+    box-shadow: var(--sds-c-button-shadow);
+    line-height: var(--sds-c-button-line-height, var(--lwc-lineHeightButton,1.875rem));
+	border-color: var(--sds-c-button-neutral-color-border, var(--lwc-buttonColorBorderPrimary,rgb(221, 219, 218)));
+	color: black;
+}
+
+/* Removing margins for inner accordions. */
+.globalNestedDataViewer lightning-accordion .slds-accordion__content {
+	margin-top: -1px;
+    margin-bottom: -13px;
+    margin-left: -13px;
+    margin-right: -13px;
+}
+
+/* Adjusting table inside the content section. */
+.globalNestedDataViewer .tableElement {
+	padding-left: 1px;
+    padding-right: 1px;
+	padding-top: 1px;
+}
+.globalNestedDataViewer span.slds-cell-fixed {
+    background-color: white;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+.globalNestedDataViewer .slds-table_header-fixed_container.slds-scrollable_x {
+	background-color: white;
+}
+.globalNestedDataViewer .slds-resizable__divider {
+	display: none;
+}

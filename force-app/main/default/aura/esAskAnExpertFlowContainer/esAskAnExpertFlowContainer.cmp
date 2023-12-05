@@ -1,0 +1,93 @@
+<!--
+ Change History
+ *************************************************************************************************************************************
+ Modified By            Date            Jira No.            Description                                   Tag
+ *************************************************************************************************************************************
+ Shashikanth			10/19/2023		I2RT-7702		    AAE descriptiontText change                   T01
+-->
+   
+
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="esAskAnExpertFlowContainerController">
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:attribute name="data" type="list" />
+    <aura:attribute name="column" type="list" />
+    <aura:attribute name="tabId" type="String" default="newSlot"/>
+    <aura:attribute name="suppportAccountId" type="String" default=""/>
+    <aura:attribute name="serviceResourceId" type="String" default=""/>
+    <aura:attribute name="serviceterritoryId" type="String" />
+    <aura:attribute name="bShowSpinner" type="boolean" default="false" />
+
+    <aura:if isTrue="{!v.bShowSpinner}">
+      <lightning:spinner alternativeText="loading" size="medium" aura:id="spinnerId"></lightning:spinner>
+    </aura:if>
+
+    <div class="container-fluid es-container-fluid--grey-with-border">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="es-page__heading es-page__heading-without-border d-flex justify-content-between align-items-center">
+                        <span>Ask an Expert</span>
+                        <!--<div class="es-progressbar-wrapper d-flex align-items-center col-md-3">
+                            <span class="es-progressbar__level">1/2 Booked</span>
+                            <div class="es-progressbar__indicator">
+                                <lightning:progressBar
+                                value="50"
+                                size="small"
+                                ></lightning:progressBar>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="container my-4">
+            <p>Ask an Expert is a project entitlement that Informatica offers to its Premium Success, Signature Success &amp; Signature Select customers. In these sessions you can connect with Subject Matter Experts to discuss topics around Best Practices, Product roadmaps, Product Feature clarity, its functionality and other areas of interest. Ask an Expert is a session of 1 Hour of discussion with Subject Matter Experts from Informatica.  You can avail up to 2 Ask an Expert session per month for each Support Account and these can be pre-booked as per your convenience. </p>   <!--T01 -->
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                  
+                    <lightning:tabset class="es-tabs" selectedTabId="{!v.tabId}">
+                        <lightning:tab label="Book a new slot" id="newSlot" class="es-tabs__label" onactive="{!c.onSlotActive}">
+                            <aura:if isTrue="false" aura:id="errMsgId">
+                                <div class="slds-notify_container slds-is-relative">
+                                    <div class="slds-notify slds-notify_toast slds-theme_error" role="status">
+                                      <span class="slds-assistive-text">error</span>
+                                      <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                                        <lightning:icon variant="inverse" iconName="utility:error" alternativeText="error" size="small"></lightning:icon>
+                                      </span>
+                                      <div class="slds-notify__content">
+                                        <h2 class="slds-text-heading_small ">Monthly Booking Limit Reached : You have already booked 2 appointment for support account.</h2>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                
+                            </aura:if>
+                            <aura:if isTrue="true" aura:id="flowDisplay">
+                            <div class="es-flows-wrapper">
+                                <lightning:flow aura:id="flowData" onstatuschange="{!c.handleStatusChange}"/>
+                                <div class="slds-clearfix">
+                                    <div class="slds-float_left">
+                                        <lightning:button  variant="brand" label="Cancel" onclick="{!c.cancel}" class="customBtn slds-m-around_small"></lightning:button>
+                                    </div>
+                                  </div>
+                                
+                            </div>   
+                            </aura:if>
+                        </lightning:tab>
+                        <lightning:tab label="Upcoming Bookings" id="upcomingBookings" class="es-tabs__label" onactive="{!c.onUpcomingBookingActive}">
+                             <c:esAskAnExpertUpcomingBooking aura:id="childlwc" parentRecordId="{!v.suppportAccountId}"/>                               
+                        </lightning:tab>
+                    </lightning:tabset> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+</aura:component>

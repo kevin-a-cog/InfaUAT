@@ -1,0 +1,7 @@
+<template>
+    <template if:true={isMultiLanguageArticle}>
+        <lightning-combobox name="Language" label="Language" value={selectedLanguage} placeholder="Select Language"
+            options={selectOptions} onchange={handleChange}>
+        </lightning-combobox>
+    </template>
+</template>

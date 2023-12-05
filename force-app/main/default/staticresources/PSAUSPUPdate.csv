@@ -1,0 +1,45 @@
+﻿DeveloperName,Label,Permission_Set_Group__c,Role_Based_PSGs__c
+IPS_Administrator,IPS Administrator,PSA_Operations,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Approvals Admin;CPQ Billing;CPQ Billing Admin;CPQ Quote;CPQ Quote Admin;Conga Composer
+IPS_Administrator1,IPS Administrator,PSA_Operations,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Approvals Admin;CPQ Billing;CPQ Billing Admin;CPQ Quote;CPQ Quote Admin;Conga Composer
+IPS_Associate_Consultant,IPS Associate Consultant,PSA_User,Success - Internal Users;Hero Read Only User
+IPS_Associate_Consultant1,IPS Associate Consultant,PSA_User,Success - Internal Users;Hero Read Only User
+IPS_Consultant,IPS Consultant,PSA_User,Success - Internal Users;Hero Read Only User
+IPS_Consultant1,IPS Consultant,PSA_User,Success - Internal Users;Hero Read Only User
+IPS_Deal_Desk,IPS Deal Desk,PSA_Deal_Desk,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Approvals Admin;CPQ Billing;CPQ Billing Admin;CPQ Quote;CPQ Quote Admin;Conga Composer
+IPS_Deal_Desk1,IPS Deal Desk,PSA_Deal_Desk,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Approvals Admin;CPQ Billing;CPQ Billing Admin;CPQ Quote;CPQ Quote Admin;Conga Composer
+IPS_Delivery_Manager,IPS Delivery Manager,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_Delivery_Manager1,IPS Delivery Manager,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_Enablement,IPS Enablement,PSA_User,Success - Internal Users;Hero Read Only User
+IPS_Enablement1,IPS Enablement,PSA_User,Success - Internal Users;Hero Read Only User
+IPS_Intern,IPS Intern,PSA_User,Success - Internal Users;Hero Read Only User
+IPS_Intern1,IPS Intern,PSA_User,Success - Internal Users;Hero Read Only User
+IPS_Management,IPS Management,PSA_Sales,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Billing;CPQ Quote;Conga Composer
+IPS_Management1,IPS Management,PSA_Sales,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Billing;CPQ Quote;Conga Composer
+IPS_Portfolio_Owner,IPS Portfolio Owner,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_Portfolio_Owner1,IPS Portfolio Owner,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_Practice_Manager,IPS Practice Manager,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_Practice_Manager1,IPS Practice Manager,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_Principal_Consultant,IPS Principal Consultant,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_Principal_Consultant1,IPS Principal Consultant,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_PS_Operations,IPS PS Operations,PSA_Operations,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Approvals Admin;CPQ Billing;CPQ Billing Admin;CPQ Quote;CPQ Quote Admin;Conga Composer
+IPS_PS_Operations1,IPS PS Operations,PSA_Operations,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Approvals Admin;CPQ Billing;CPQ Billing Admin;CPQ Quote;CPQ Quote Admin;Conga Composer
+IPS_Regional_Director,IPS Regional Director,PSA_Sales,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Billing;CPQ Quote;Conga Composer
+IPS_Regional_Director1,IPS Regional Director,PSA_Sales,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Billing;CPQ Quote;Conga Composer
+IPS_Regional_Manager,IPS Regional Manager,PSA_Sales,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Billing;CPQ Quote;Conga Composer
+IPS_Regional_Manager1,IPS Regional Manager,PSA_Sales,Success - Internal Users;Hero Read Only User;CPQ Approvals;CPQ Billing;CPQ Quote;Conga Composer
+IPS_Resource_Management,IPS Resource Management,PSA_Resource_Manager,Success - Internal Users;Hero Read Only User
+IPS_Resource_Management1,IPS Resource Management,PSA_Resource_Manager,Success - Internal Users;Hero Read Only User
+IPS_Senior_Consultant,IPS Senior Consultant,PSA_User,Success - Internal Users;Hero Read Only User
+IPS_Senior_Consultant1,IPS Senior Consultant,PSA_User,Success - Internal Users;Hero Read Only User
+IPS_Senior_Principal_Consultant,IPS Senior Principal Consultant,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_Senior_Principal_Consultant1,IPS Senior Principal Consultant,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_Solution_Architect,IPS Solution Architect,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_Solution_Architect1,IPS Solution Architect,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_SSC,IPS SSC,PSA_Read_Only,Success - Internal Users;Hero Read Only User
+IPS_SSC1,IPS SSC,PSA_Read_Only,Success - Internal Users;Hero Read Only User
+IPS_Subcon_Retainer,IPS Subcon-Retainer,PSA_Subcontractor,Success - Internal Users;Hero Read Only User
+IPS_Subcon_Retainer1,IPS Subcon-Retainer,PSA_Subcontractor,Success - Internal Users;Hero Read Only User
+IPS_Subcontractor,IPS Subcontractor,PSA_Subcontractor,Success - Internal Users;Hero Read Only User
+IPS_Subcontractor1,IPS Subcontractor,PSA_Subcontractor,Success - Internal Users;Hero Read Only User
+IPS_Team_Manager,IPS Team Manager,PSA_Project_Manager,Success - Internal Users;Hero Read Only User
+IPS_Team_Manager1,IPS Team Manager,PSA_Project_Manager,Success - Internal Users;Hero Read Only User

@@ -1,0 +1,49 @@
+<!--
+/*
+ * Name			:	globalCommunityFilterPicklist
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	9/26/2022
+ * Description	:	This is used to multi-select filter options.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Vignesh Divakaran	    9/26/2022		I2RT-6880		Initial version.			N/A
+ */
+-->
+<template>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">{strLabel}</label>
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container">
+                <div aria-expanded="false" aria-haspopup="listbox" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" role="combobox">
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                        <input aria-controls="listbox-id-1" class="slds-input slds-combobox__input" data-id="combobox-id-1" onclick={openDropdown} role="textbox" placeholder={strPlaceholder} readonly type="text" onblur={onBlur}>
+                        <div class="slds-input__icon-group slds-input__icon-group_right">
+                            <lightning-icon class="slds-input__icon slds-input__icon_right" icon-name="utility:down" size="xx-small"></lightning-icon>
+                        </div>
+                    </div>
+                    <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid in-multipicklist-dropdown" id="5" onmouseenter={mouseEnter} onmouseleave={mouseLeave} role="listbox">
+                        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                            <template for:each={lstOptions} for:item="objOption">
+                                <li class="slds-listbox__item" data-value={objOption.strValue} key={objOption.strValue} role="presentation" onclick={select}>
+                                    <div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small" role="option" data-id={objOption.strValue}>
+                                        <span class="slds-media__figure in-multipicklist-checkbox">
+                                            <lightning-icon class="slds-icon-utility-check slds-current-color slds-listbox__icon-selected slds-icon_container" icon-name="utility:check" size="x-small"></lightning-icon>
+                                        </span>
+                                        <span class="slds-media__body">
+                                            <span title={objOption.strLabel}>{objOption.strLabel}</span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</template>

@@ -1,0 +1,227 @@
+<!--
+/*
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description                         Tag
+ **********************************************************************************************************
+ NA             	    NA		        NA		        Initial version.                    N/A
+ Vignesh Divakaran	    3/30/2023		I2RT-7852		Make product field read only        T01
+ */
+-->
+
+<template>
+    <template if:true={displayComponent}>
+
+    <!-- BUTTON SECTION -->
+        <!-- <div class="container">
+            <template if:true={isReadOnly}>
+                <div class="slds-clearfix">
+                    <lightning-button variant="brand" label="Edit Product Details" onclick={handleEdit} class=" slds-align_absolute-center"></lightning-button>
+                </div>
+            </template>
+
+            <template if:false={isReadOnly}>
+                <div class="outer">
+                    <div class="inner">
+                    <lightning-button variant="brand" label="Save" onclick={handleSave} class=" slds-align_absolute-center"></lightning-button>
+                </div>
+                <div class="inner"> &nbsp; &nbsp; &nbsp; </div>
+                    <div class="inner">
+                        <lightning-button variant="brand" label="Cancel" onclick={handleCancel} class=" slds-align_absolute-center"></lightning-button>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <br>  -->
+
+        <!-- SPINNER SECTION -->
+        <template if:true={isLoading}>
+            <div class="slds-is-relative" >
+                <lightning-spinner alternative-text="Loading" variant="brand" size="medium">
+                </lightning-spinner>
+            </div>
+        </template>
+
+        <!-- DISPLAY ERROR MESSAGE -->
+        <template if:true={showErrorMessage}>
+            <div class="slds-col align-center " style ="color: #c23934;padding-bottom: 1rem">
+                {showErrorMessage}
+            </div>
+        </template>
+
+        <!-- READ ONLY SECTION-->
+        <template if:true={isReadOnly}>
+            <lightning-record-view-form record-id={recordId} object-api-name="Case" density="compact">
+                <div class="slds-section slds-is-open" id="productDetails">         
+                    <h3 class="slds-section__title" onclick={handleToggle}>
+                        <div class="slds-button slds-section__title-action">
+                            <span>
+                                <lightning-icon icon-name={iconName}
+                                                alternative-text="button icon"
+                                                size="x-small"
+                                                class="slds-section__title-action-icon slds-button__icon_left">
+                                </lightning-icon>
+                            </span>
+                            <span class="slds-truncate" title="Hosted">{productSectionLabel}</span>
+                        </div>
+                    </h3>
+
+                    <div class={className}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 pad-left pad-right" for:each={productSectionFields} for:item="field" key={name}>
+                                <template if:true={field.show}>
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col custom-col-size-9 slds-border_bottom">
+                                            <lightning-output-field if:false={field.editable} field-name={field.name} size="6">
+                                            </lightning-output-field>
+                                        </div>
+                                        <template if:true={canEdit}>
+                                            <div if:true={field.updateable} class="slds-col custom-col-size-1">
+                                                <span class="pointer" if:true={field.showEditPencil} onclick={handleEdit}>
+                                                    <lightning-icon class="fill-color" icon-name="utility:edit" alternative-text="edit" size="xx-small">
+                                                    </lightning-icon>
+                                                </span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </lightning-record-view-form>
+        </template>           
+
+        <!-- EDIT MODE -->
+        <template if:false={isReadOnly}>
+            <lightning-record-edit-form record-id={recordId} object-api-name="Case">
+                <div class="slds-section slds-is-open gcs-dropdown" id="productDetails2">         
+                    <h3 class="slds-section__title">
+                        <div class="slds-button slds-section__title-action">
+                            <span>
+                                <lightning-icon icon-name="utility:switch"
+                                                alternative-text="button icon"
+                                                size="x-small"
+                                                class="slds-section__title-action-icon slds-button__icon_left">
+                                </lightning-icon>
+                            </span>
+                            <span class="slds-truncate" title="Hosted">{productSectionLabel}</span>
+                        </div>
+                    </h3>
+                    <div class="slds-section__content">
+                        <div class="slds-grid slds-wrap slds-form_horizontal slds-form">
+                            <div class="slds-col slds-size_1-of-2 pad-left pad-right gcs-option" if:true={productOBJ.show}>
+                                <lightning-combobox
+                                    name="Product"
+                                    label="Product"
+                                    value={selectedProduct}
+                                    options={caseProduct}
+                                    onchange={handleChangeProduct} 
+                                    required= {isRequired}
+                                    dropdown-alignment="auto"
+                                    variant = "label-inline"
+                                    class="test"
+                                    read-only> <!-- <T01> -->
+                                </lightning-combobox>
+                            </div>
+                    
+                            <div class="slds-col slds-size_1-of-2 pad-left pad-right gcs-option" if:true={versionOBJ.show}>
+                                <lightning-combobox
+                                    name="Version"
+                                    label="Version"
+                                    value={selectedVersion}
+                                    options={caseVersion} 
+                                    onchange={handleChangeVersion}
+                                    variant = "label-inline"
+                                    dropdown-alignment="auto"
+                                    read-only= {disabledVersions}
+                                    required= true>
+                                </lightning-combobox>
+                            </div>
+                    
+                            <div class="slds-col slds-size_1-of-2 pad-left pad-right gcs-option" if:true={componentOBJ.show}>
+                                <lightning-combobox
+                                    name="Component"
+                                    label="Component"
+                                    value={selectedComponent}
+                                    options={caseComponent}
+                                    onchange={handleChangeComponent}
+                                    variant = "label-inline"
+                                    dropdown-alignment="auto"
+                                    read-only= {disabledComponents}>
+                                </lightning-combobox>
+                            </div>
+                        
+                            <div class="slds-col slds-size_1-of-2 pad-left pad-right" if:true={subCompOBJ.show}>
+                                <lightning-combobox
+                                    name="Sub Component"
+                                    label="Sub Component"
+                                    value={selectedSubComponent}
+                                    options={caseSubComponent}
+                                    onchange={handleChangeSubComponent} 
+                                    variant = "label-inline"
+                                    read-only= {disabledSubComponents}>
+                                </lightning-combobox>
+                            </div>
+                
+                            <div class="slds-col slds-size_1-of-2 pad-left pad-right gcs-option" if:true={problemTypeOBJ.show}>
+                                <lightning-combobox
+                                    name="Problem Type"
+                                    label="Problem Type"
+                                    value={selectedProblemType}
+                                    options={caseProblemType}
+                                    onchange={handleChangeProblemType} 
+                                    variant = "label-inline"
+                                    dropdown-alignment="auto"
+                                    read-only= {disabledProblems}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-2 pad-left pad-right" if:true={unentitledProductOBJ.show}>
+                                <lightning-input-field field-name="Unentitled_Product__c" onchange={setUnentitledProd}></lightning-input-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-modal__footer slds-align_absolute-center" if:false={isReadOnly}>
+                    <lightning-button variant="Brand" label="Save" onclick={handleSave} class="slds-var-m-left_x-small"></lightning-button>
+                    <lightning-button variant="Neutral" label="Cancel" onclick={handleCancel} class="slds-var-m-left_x-small"></lightning-button>
+                </div>
+            </lightning-record-edit-form>
+        </template> 
+        <!-- <lightning-accordion class="example-accordion"
+                         onsectiontoggle={handleToggleSection}
+                         active-section-name={accordianSection}
+                         allow-multiple-sections-open>
+        <lightning-accordion-section name="A" label="Accordion Title A">
+            <lightning-button-menu slot="actions"
+                                  alternative-text="Show menu"
+                                  icon-size="x-small"
+                                  menu-alignment="right">
+                <lightning-menu-item value="New" label="Menu Item One"></lightning-menu-item>
+                <lightning-menu-item value="Edit" label="Menu Item Two"></lightning-menu-item>
+            </lightning-button-menu>
+            <p>This is the content area for section A.</p>
+            <p>.</p>
+            <p>.</p>
+            <p>.</p>
+            <p>The section height expands to fit your content.</p>
+        </lightning-accordion-section>
+        <lightning-accordion-section name="B" label="Accordion Title B">
+            <lightning-button-menu slot="actions"
+                                  alternative-text="Show menu"
+                                  icon-size="x-small"
+                                  menu-alignment="right">
+                <lightning-menu-item value="New" label="Menu Item One"></lightning-menu-item>
+                <lightning-menu-item value="Edit" label="Menu Item Two"></lightning-menu-item>
+            </lightning-button-menu>
+            <p>This is the content area for section B.</p>
+            <p>.</p>
+            <p>.</p>
+            <p>.</p>
+            <p>The section height expands to fit your content.</p>
+        </lightning-accordion-section>
+        </lightning-accordion> -->
+    </template>
+</template>

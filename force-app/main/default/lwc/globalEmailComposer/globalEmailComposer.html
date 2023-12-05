@@ -1,0 +1,119 @@
+<!--
+/*
+ * Name			:	GlobalEmailComposer
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	10/05/2021
+ * Description	:	This LWC allows users to send emails.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		10/05/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+	<!-- Spinner. -->
+	<template if:true={boolDisplaySpinner}>
+		<div class="slds-is-relative customSpinnerArea">
+			<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+		</div>
+	</template>
+
+	<!-- Email component. -->
+	<template if:false={boolDisplaySpinner}>
+
+		<!-- Container. -->
+		<div class="container">
+
+			<!-- Body. -->
+			<div class="slds-grid slds-m-left_medium slds-m-right_medium customBody">
+				<div class="slds-col slds-size_12-of-12">
+					<div class="slds-grid">
+						<div class="slds-col slds-size_12-of-12">
+							<lightning-combobox label={label.From} value={strFromAddress} options={lstToAddresses} onchange={saveFromAddress}></lightning-combobox>
+						</div>
+					</div>
+					<div class="slds-grid">
+						<div class="slds-col slds-size_12-of-12">
+							<lightning-input type="text" label={label.To} data-id={label.To} value={strToAddresses}></lightning-input>
+						</div>
+					</div>
+					<div class="slds-grid">
+						<div class="slds-col slds-size_12-of-12">
+							<lightning-input type="text" label={label.CC} data-id={label.CC} value={strCCAddresses}></lightning-input>
+						</div>
+					</div>
+					<div class="slds-grid">
+						<div class="slds-col slds-size_12-of-12">
+							<lightning-input type="text" label={label.BCC} data-id={label.BCC} value={strBCCAddresses}></lightning-input>
+						</div>
+					</div>
+					<div class="slds-grid">
+						<div class="slds-col slds-size_12-of-12">
+							<lightning-input type="text" label={label.Subject} data-id={label.Subject} value={strSubject}></lightning-input>
+						</div>
+					</div>
+					<div class="slds-grid">
+						<div class="slds-col slds-size_12-of-12">&nbsp;</div>
+					</div>
+					<div class="slds-grid">
+						<div class="slds-col slds-size_12-of-12">
+							{label.Attachments}
+							<template for:each={lstAttachments} for:item="objAttachment">
+								<lightning-pill key={objAttachment.strId} label={objAttachment.strName} data-id={objAttachment.strId} onremove={removeAttachment}
+										class="slds-m-left_medium"></lightning-pill>
+							</template>
+						</div>
+					</div>
+					<div class="slds-grid">
+						<div class="slds-col slds-size_12-of-12">&nbsp;</div>
+					</div>
+					<div class="slds-grid">
+						<div class="slds-col slds-size_12-of-12">
+							<lightning-input-rich-text class="customTextArea" value={strBody} onchange={saveBody}></lightning-input-rich-text>
+						</div>
+					</div>
+				</div>
+			</div>
+	
+			<!-- Footer. -->
+			<div class="slds-modal__footer customFooter">
+				<div class="slds-float_left slds-m-top_xx-small">
+	
+					<!-- Attachments icon. -->
+					<lightning-button-icon-stateful icon-name="utility:attach" selected={boolAttachmentIconActive} data-icon="attachment" onclick={switchState}></lightning-button-icon-stateful>
+					<template if:true={boolAttachmentIconActive}>
+						<section tabindex="-1" class="slds-popover slds-m-left_medium slds-nubbin_left customPopOver" role="dialog">
+							<div class="slds-popover__body">
+								<lightning-input class="hideSpan" onchange={processAttachments} type="file" multiple></lightning-input>
+							</div>
+						</section>
+					</template>
+	
+					<!-- Template icon. -->
+					<lightning-button-icon-stateful icon-name="utility:insert_template" class="slds-m-left_xx-small" selected={boolTemplateIconActive} data-icon="template" 
+							onclick={switchState} disabled={boolIsTemplateIconDisabled}></lightning-button-icon-stateful>
+					<template if:true={boolTemplateIconActive}>
+						<section tabindex="-1" class="slds-popover slds-m-left_medium slds-nubbin_left customPopOver" role="dialog">
+							<div class="slds-popover__body">
+								<lightning-combobox class="hideLabel" dropdown-alignment="bottom-left" options={lstEmailTemplates} 
+										onchange={applyEmailTemplate}></lightning-combobox>
+							</div>
+						</section>
+					</template>
+				</div>
+	
+				<!-- Control buttons. -->
+				<div class="slds-float_right slds-m-top_xx-small">
+					<lightning-button variant="neutral" label={label.Cancel} onclick={closeQuickAction} class="slds-m-left_x-small" if:true={boolShowCancelButton}></lightning-button>
+					<lightning-button variant="brand" label={label.Send} onclick={send} class="slds-m-left_x-small"></lightning-button>
+				</div>
+			</div>
+		</div>
+	</template>
+</template>

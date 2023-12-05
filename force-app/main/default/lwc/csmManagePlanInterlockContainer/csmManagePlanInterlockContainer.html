@@ -1,0 +1,17 @@
+<template>
+    <!-- If the component is Popped Out. -->
+    <template if:true={isPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-plan-risks" aria-modal="true" aria-describedby="modal-content-id-plan-risks" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-plan-risks" style="min-height: 100vh;">
+                    <c-csm-manage-plan-interlock record-id={recordId} onpopout={popOut} is-popped-out></c-csm-manage-plan-interlock>
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+    <template if:false={isPoppedOut}>
+        <c-csm-manage-plan-interlock record-id={recordId} onpopout={popOut}></c-csm-manage-plan-interlock>
+    </template>
+</template>

@@ -1,0 +1,18 @@
+<template>
+
+    <div class="slds-box slds-p-around_none slds-m-top_x-small slds-m-bottom_medium slds-m-horizontal_none">
+        
+                <lightning-card title="Scheduled Jobs">
+                    <div class="slds-m-around_medium">
+                        <lightning-input type="search" onchange={handleKeyChange} class="slds-m-bottom_small"
+                            label="Search" value={searchKey}></lightning-input>
+                        <div style="height: 300px;">
+                            <lightning-datatable key-field="id" data={data} hide-checkbox-column columns={jobColumns}>
+                            </lightning-datatable>
+                        </div>
+                    </div>
+                </lightning-card>
+           
+    </div>
+
+</template>

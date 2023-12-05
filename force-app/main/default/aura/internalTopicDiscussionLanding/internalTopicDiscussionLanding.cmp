@@ -1,0 +1,100 @@
+<aura:component controller="internalTopicDiscussionsCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" 
+                access="global" >
+    
+    <aura:attribute name="streams" type="object" />
+    <aura:attribute name="topicsWithoutStream" type="object" />
+    <aura:attribute name="siteName" type="String" />
+    <aura:attribute name="networkId" type="String" />
+    <aura:attribute name="streamOrigin" type="String" default="internal" />
+    <aura:attribute name="showCreateStreamsButton" type="Boolean" default="false" />
+    <aura:attribute name="selectedStream" type="String" default="" />
+    <aura:attribute name="selectedStreamName" type="String" default="No stream avaliable!" />
+    <aura:attribute name="showStreamsList" type="Boolean" default="false" />
+    <aura:attribute name="showTopicsList" type="Boolean" default="false" />
+    <aura:attribute name="loader" type="Boolean" default="false" />
+    <aura:attribute name="streamsCount" type="Integer" default="0" />
+    <aura:attribute name="topicsCount" type="Integer" default="0" />
+    
+    <!--Declare Handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    
+    
+    <div class="slds-box slds-theme_default">
+        
+        <lightning:card title="{!v.siteName}">
+            <aura:set attribute="actions">
+                <aura:if isTrue="{!v.showCreateStreamsButton}">
+                    <lightning:button variant="brand" label="Create Streams" onclick="{! c.handleCreateStreams }"/>
+                </aura:if>
+            </aura:set>
+            
+            <p class="slds-p-horizontal_small">
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem padding="around-small" size="12">
+                        {!v.streams}
+                        <lightning:layout>
+                            <lightning:layoutItem padding="around-small" size="3">
+                                <aura:if isTrue="{!v.showStreamsList}">
+                                    <div class="slds-dueling-list__column slds-dueling-list__column_responsive" style="width:90%">
+                                        <span class="slds-form-element__label" id="label-111">Available Topics ({!v.streamsCount}):</span>
+                                        <div class="slds-dueling-list__options">
+                                            <ul aria-describedby="option-drag-label" aria-labelledby="label-111" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                                                <aura:iteration items="{!v.streams}" var="stream" indexVar="key">                    
+                                                    <li role="presentation" class="slds-listbox__item">
+                                                        <div class="slds-listbox__option slds-listbox__option_plain slds-media slds-media_small slds-media_inline" aria-selected="false" draggable="true" role="option" tabindex="0">
+                                                            <span class="slds-media__body">
+                                                                <span class="slds-truncate" data-num="{!stream.key}" data-streamname="{!stream.value}" title="{!stream.value}" onclick="{!c.handleStreamChange}">{!stream.value}</span>
+                                                            </span>
+                                                        </div>
+                                                    </li>
+                                                </aura:iteration>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <aura:set attribute="else">
+                                        No streams avaliable!
+                                    </aura:set>
+                                </aura:if>
+                                
+                                
+                                <aura:if isTrue="{!v.showTopicsList}">
+                                    <div class="slds-dueling-list__column slds-dueling-list__column_responsive" style="width:90%">
+                                        <span class="slds-form-element__label" id="label-111">Available Topics with No Streams ({!v.topicsCount}):</span>
+                                        <div class="slds-dueling-list__options">
+                                            <ul aria-describedby="option-drag-label" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                                                <aura:iteration items="{!v.topicsWithoutStream}" var="stream" indexVar="key">                    
+                                                    <li role="presentation" class="slds-listbox__item">
+                                                        <div class="slds-listbox__option slds-listbox__option_plain slds-media slds-media_small slds-media_inline" aria-selected="false" draggable="true" role="option" tabindex="0">
+                                                            <span class="slds-media__body">
+                                                                <span class="slds-truncate" data-num="{!stream.key}" data-streamname="{!stream.value}" title="{!stream.value}">{!stream.value}</span> <!--  onclick="{!c.handleStreamChange}" -->
+                                                            </span>
+                                                        </div>
+                                                    </li>
+                                                </aura:iteration>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </aura:if>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem padding="around-small" size="9">
+                                <lightning:card title="{!v.selectedStreamName}">
+                                    <aura:set attribute="actions"></aura:set>
+                                    <div aura:id="feedContainer" class="feed-container"></div>
+                                </lightning:card>
+                                
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                
+            </p>
+            
+        </lightning:card>
+        <aura:if isTrue="{!v.loader}">
+        <div class="backgroundInverse">
+            <lightning:spinner alternativeText="Loading" variant="inverse" />
+        </div>
+    </aura:if>
+        <br/><br/>
+    </div>
+</aura:component>

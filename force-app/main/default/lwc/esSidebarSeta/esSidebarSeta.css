@@ -1,0 +1,65 @@
+.es-sidebar-wrapper {
+    background: #fff;
+    padding: 16px 14px;
+    height: 100%;
+}
+.es-sidebar__item {
+    margin-bottom: 25px;
+}
+.es-sidebar__header {
+    font-size: 16px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #BBB;
+    font-weight: 500;
+}
+.es-success-offering__name {
+    font-size: 14px;
+}
+.es-success-offering__name img{
+    margin-right: 20px;
+    width: 20px;
+    height: 20px;
+}
+.es-success-offering__link {
+    padding-left: 40px;
+}
+.es-team-info-horizontal__info-item {
+    /* display: flex; */
+    margin-bottom: 15px;
+}
+.es-team-info-horizontal__label {
+    /* flex: 1 0 60%; */
+    color: #112128;
+    font-size: 14px;
+    font-weight: 400;
+    padding-bottom: 6px;
+}
+.es-team-info-horizontal__value {
+    /* flex: 1 0 40%; */
+    font-size: 12px;
+    color: #001aff;
+}
+.es-team-info-horizontal__value a:hover {
+    color: #ff4d00;
+    text-decoration: none;
+}
+.es-team-info-horizontal__value a {
+    font-size: 12px;
+    color: #001aff;
+    font-weight: 400;
+    font-family: 'Roboto';
+    line-height: 1.6px;
+}
+.es-infa-orange {
+    color: #ff4d00;
+}
+.es-success-offering__link .es-link {
+    color: #001aff;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+.es-success-offering__link .es-link:hover {
+    color: #ff4d00;
+    text-decoration: none;
+}

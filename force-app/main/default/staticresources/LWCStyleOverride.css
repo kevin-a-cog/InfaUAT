@@ -1,0 +1,109 @@
+.icon-fill-white svg {
+  fill: white;
+}
+
+li:hover .icon-fill-white svg {
+  fill:#16325c;
+}
+
+.slds-radio {
+  display: inline !important;
+}
+
+.section-heading::before {
+  content: "";
+  width: 2.5rem;
+  height: 4px;
+  background-color: #9ec0e3;
+  position: absolute;
+  margin-top: -12px;
+}
+
+.button-brand-override button {
+  border: 2px solid rgb(0, 95, 178);
+  border-radius: 2px;
+  color: white;
+  background: rgb(0, 95, 178);
+  padding: 0 20px;
+}
+
+.button-neutral-override button {
+  border: 2px solid rgb(176, 173, 171);
+  border-radius: 2px;
+  color: rgb(112, 110, 107);
+  padding: 0 20px;
+}
+
+.button-neutral-override button:hover,
+.button-neutral-override button:active,
+.button-neutral-override button:focus {
+  color: rgb(112, 110, 107);
+}
+
+.icon_brand svg {
+  fill: #005fb2;
+}
+
+.button-brand-override button:disabled {
+  background: rgba(0, 95, 178, 0.4);
+  border-color: rgba(0, 95, 178, -0.6);
+}
+
+.help-text_icon-overridden button {
+  margin-top: -3px;
+  background: #005fb2;
+  border-radius: 50%;
+  border: 1px solid #005fb2;
+}
+
+.icon_neutral svg {
+  fill: white;
+  padding: 2px;
+}
+
+.help-text_icon-overridden button:hover svg,
+.help-text_icon-overridden button:active svg,
+.help-text_icon-overridden button:focus svg {
+  fill: white !important;
+}
+
+
+
+.helptext_success button {
+  background: #32af5c;
+  border-color: #32af5c;
+}
+
+.calendar .calendar_navigation .slds-button {
+  border-radius: 50%;
+  border-color: #001d51 !important;
+  background: #001d51 !important;
+}
+
+.calendar .button-brand-override button {
+  border: 2px solid #001d51;
+  border-radius: 2px;
+  color: white;
+  background: #001d51;
+  padding: 0 20px;
+}
+
+.calendar .button-box button {
+  border-radius: 0 !important;
+}
+
+.calendar .button-neutral-override button {
+  border: 2px solid #001d51 !important;
+  border-radius: 2px;
+  color: #001d51;
+  background: white;
+  padding: 0 20px;
+}
+
+.spin .slds-spinner_small.slds-spinner::before, .slds-spinner_small .slds-spinner__dot-a::before, .slds-spinner_small .slds-spinner__dot-b::before, .slds-spinner--small.slds-spinner::before, .slds-spinner--small .slds-spinner__dot-a::before, .slds-spinner--small .slds-spinner__dot-b::before {
+  background: #001d51 !important;
+}
+
+.spin .slds-spinner_small.slds-spinner::after, .slds-spinner_small .slds-spinner__dot-a::after, .slds-spinner_small .slds-spinner__dot-b::after, .slds-spinner--small.slds-spinner::after, .slds-spinner--small .slds-spinner__dot-a::after, .slds-spinner--small .slds-spinner__dot-b::after {
+  background: #001d51 !important;
+}

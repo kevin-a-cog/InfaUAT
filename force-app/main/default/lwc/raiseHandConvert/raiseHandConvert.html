@@ -1,0 +1,47 @@
+<!--
+  @description       : 
+  @author            : SF Developer
+  @group             : 
+  @last modified on  : 12-10-2020
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   12-10-2020   SF Developer   Initial Version
+-->
+<template>
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Raise Hand Request</h2>
+    </header>
+
+    <div class="slds-modal__content lwcbody">
+        
+        <lightning-combobox data-id="requestSubtype" name="RequestSubtype" label="Collaborate With" onchange={loadSkills} required
+            value={requestSubtype} placeholder="Select the type of request" options={subtypeOptions}>
+        </lightning-combobox>
+        <br/>
+        <lightning-combobox data-id="productName" name="ProductName" label="Skill" required
+            value={productName} placeholder="Select the Product" options={productOptions}>
+        </lightning-combobox>
+        <br/>
+        <lightning-combobox data-id="urgency" name="Urgency" label="Urgency" required
+            value={urgency} placeholder="Select the urgency" options={urgencyOptions}>
+        </lightning-combobox>
+        <br/>
+        <lightning-combobox data-id="typeOfIssue" name="TypeOfIssue" label="Type Of Issue" required
+            value={typeOfIssue} placeholder="Select the type of Issue" options={typeOfIssueOptions}>
+        </lightning-combobox>
+        <br/>
+        <lightning-textarea data-id="description" name="Description" label="Description"
+            value={description} placeholder="Enter your description">
+        </lightning-textarea>
+        
+    </div>
+
+    <footer class="slds-modal__footer">
+        <div if:true={saveInProgress} class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+        </div>
+        <lightning-button label="Cancel" title="Cancel" onclick={cancel}>Cancel</lightning-button>
+        <lightning-button label="Submit" title="Submit" variant="brand" onclick={submit}></lightning-button>
+    </footer>
+</template>

@@ -1,0 +1,544 @@
+<!--
+
+Change History
+****************************************************************************************************
+ModifiedBy      Date        Jira No.    Tag     Description
+****************************************************************************************************
+balajip         12/03/2021  I2RT-4812   T02     to make Org Id field mandatory only for Hosted Multi Tenant products
+Vignesh D       07/22/2022  I2RT-6593   T03     Show Business Impact and Estimated date for Milestone
+                                                for P1 Technical/Operations cases
+Vignesh D       09/05/2022  I2RT-6986   T04     Added logic to show Estimated Milestone date 
+                                                based on the checkbox selected by user
+-->
+<template>
+
+    <div if:true={hideModalHeadingLabel}>
+        <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{pageTitle}</h2>          
+        </header>
+    </div>
+
+    <template if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+
+    <template if:true={error}>
+        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">
+                <lightning-icon icon-name="utility:error" alternative-text="Error!" title="Error"></lightning-icon>
+            </span>
+            <h2>Case creation is not allowed for an inactive accounts.</h2>
+        </div>
+    </template>
+
+    <template if:false={error}>
+
+        <template if:true={showSupportAccount}>
+            <template if:true={recordId}>
+                <div class="slds-m-top_small" style="width: 50%;">
+                    <label class="slds-form-element__label">Support Account Name</label> <br/> {accountName}               
+                </div>
+            </template>
+        </template>
+
+        <template if:true={objectInfo.data}>
+            <div class="slds-m-top_small">
+                <lightning-combobox name="recordType" label="Case Type" placeholder="Choose Case Type"
+                    value={selectedCaseType} 
+                    options={caseRecordTypes}
+                    onchange={handleRecordTypeChange} required message-when-value-missing={requiredFieldErrMsg}>
+                </lightning-combobox>
+            </div>
+        </template>
+
+        <template if:true={showProductPicklist}>
+            <div class="slds-m-top_small">
+                <lightning-combobox name="product" label="Product " placeholder="Choose Product"
+                    value={productSelected}
+                    options={productdropdownValues}
+                    onchange={handleProductChange} required message-when-value-missing={requiredFieldErrMsg}>
+                </lightning-combobox>
+            </div>
+            <template if:true={showUntitledMessage}>
+                <label style="color:rgb(194, 57, 52)">Warning: Selected Product not part of Customer's current entitlements.</label> 
+            </template>
+        </template>
+
+        <template if:true={showVersionPicklist}>
+            <div class="slds-m-top_small">
+                <lightning-combobox name="version" label="Version " placeholder="Choose Version"
+                    value={versionSelected}
+                    options={versiondropdownValues}
+                    onchange={handleVersionChange} required message-when-value-missing={requiredFieldErrMsg}>
+                </lightning-combobox>
+            </div>
+        </template>
+
+        <template if:true={objectInfo.data}>
+            <template if:true={selectedCaseType}>
+                <div class="slds-m-top_small">
+                    <lightning-combobox
+                        name="priority"
+                        label="Priority"
+                        placeholder="Select priority"
+                        options={priorities}
+                        value={selectedPriority}
+                        onchange={handlePriorityChange}
+                        required message-when-value-missing={requiredFieldErrMsg}>
+                    </lightning-combobox>
+                </div>
+            </template>
+        </template>
+
+        <!-- <T03> -->
+        <template if:true={showBusinessImpactFields}>
+            <div class="slds-m-top_small">
+                <lightning-combobox
+                    name="businessImpact"
+                    label="Business Impact"
+                    placeholder="Select Business Impact"
+                    options={lstBusinessImpacts.data.values}
+                    value={selectedBusinessImpact}
+                    onchange={handleBusinessImpactChange}
+                    message-when-value-missing={requiredFieldErrMsg}
+                    required="true">
+                </lightning-combobox>
+            </div>
+            <!-- <T04> -->
+            <div class="slds-m-top_small">
+                <lightning-input class='milestone-checkbox' label="This may impact an upcoming milestone" type="checkbox" onchange={handleTick} checked={impactCheckbox}>
+                </lightning-input>
+            </div>
+            <!-- </T04> -->
+            <div class="slds-m-top_small" if:true={doesImpactMilestone}>
+                <lightning-input
+                    type="date"
+                    name="estimatedMilestoneDate"
+                    label="Estimated Date for Milestone"
+                    value={selectedEstimateDate}
+                    onchange={handleMilestoneDateChange}
+                    message-when-bad-input="Please enter a valid time in future"
+                    message-when-range-underflow="Please enter a valid time in future"
+                    required="true">
+                </lightning-input>
+            </div>
+        </template>
+        <!-- </T03> -->
+        
+        <!--Operations case record edit form ends-->
+        <template if:true={showOperationTypeFields}>
+            <!-- <div class="slds-m-top_small">
+                <lightning-combobox field-name="Component__c"  label="Component" placeholder="Select Component"
+                    value={selectedComponent}
+                    options={componentDropdownOptions}
+                    onchange={handleComponentChange} required message-when-value-missing={requiredFieldErrMsg}>
+                </lightning-combobox>
+            </div> -->
+            <div class="slds-m-top_small">
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item size="6">
+                    
+                    </lightning-layout-item>
+                    <!-- <lightning-layout-item size="12">
+                        <lightning-combobox label="Case Type" placeholder="Select Case Type"
+                                    value={selectedCaseType}
+                                    options={showCaseTypes}
+                                    onchange={handleCaseTypeChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item> -->
+                    <lightning-layout-item size="6">
+                        <div class="slds-float_right">
+                            <lightning-input type="checkbox" label="Add Org Id Manually" checked={OrgIdCheckbox} onchange={handleOrgIdCheckboxChange}></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <template if:true={showOrgIdDropDown}>
+                            <div>
+                                <lightning-combobox label="Org Id" placeholder="Select Org ID"
+                                    value={selectedOrgId}
+                                    options={orgIdDropDownValues}
+                                    onchange = {handleOrgIdChange} required = {isOrgIdRequired}
+                                    message-when-value-missing={requiredFieldErrMsg}>
+                                </lightning-combobox>
+                            </div>
+                            <template if:true={noOrgsAvailable}>
+                                <label class="custom-slds-error">There are no Orgs to display.</label> 
+                            </template>
+                        </template>
+                        <template if:true={showOrgIdInputBox}>
+                            <lightning-input type="text" label="Org Id" placeholder="Enter Org Id" value={orgIdManual} onchange={handleManualOrgIdChange} required = {isOrgIdRequired} message-when-value-missing={requiredFieldErrMsg}></lightning-input>
+                        </template>
+                        
+                    </lightning-layout-item>
+                </lightning-layout>
+                
+            </div>
+            <div class="slds-m-top_small">
+                <lightning-input type="text" label="Secure Agent" placeholder="" value={caseSecureAgent} onchange={handleSecureAgent}></lightning-input>
+            </div>
+            <div class="slds-m-top_small">
+                <lightning-combobox
+                    label="Environment"
+                    placeholder="Select Environment"
+                    value={selectedEnvironment}
+                    options={environments}
+                    onchange={handleEnvironmentChange}
+                    dropdown-alignment="bottom-left" 
+                    required={isEnvironmentRequired}
+                    message-when-value-missing={requiredFieldErrMsg}>
+                </lightning-combobox>
+            </div>
+            <div class="slds-m-top_small">
+                <lightning-combobox 
+                    label="Activity Type"
+                    placeholder="Select Activity Type"
+                    value={selectedActivityType}
+                    options={lstActivityTypes}
+                    onchange={activityTypeOnChange}
+                    dropdown-alignment="bottom-left" 
+                    required message-when-value-missing={requiredFieldErrMsg}>
+                </lightning-combobox>
+            </div>
+            
+            <!--Operations Case: Show Session Slots fields-->
+            <template if:true={showSessionDate}>
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item size="12">
+                        <div class="slds-m-top_small padding-stacked">
+                            <label class="es-form-label">Time Zone: {userTimeZone}</label>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <div class="slds-m-top_small padding-stacked">
+                            <lightning-combobox
+                                name="SessionDate"
+                                label="Select a date"
+                                placeholder="Please select a date"
+                                options={availableDates}
+                                value={selectedDate}
+                                onchange={handleDateSelect}
+                                dropdown-alignment="bottom-left"
+                                required message-when-value-missing={requiredFieldErrMsg}>
+                            </lightning-combobox>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <div class="slds-m-top_small padding-stacked">
+                            <lightning-combobox
+                                name="availableSlots"
+                                label="Available Slots"
+                                placeholder="Select a slot"
+                                options={availableSlots}
+                                value={selectedSlot}
+                                onchange={handleSlotSelect}
+                                dropdown-alignment="bottom-left"
+                                required message-when-value-missing={requiredFieldErrMsg}>
+                            </lightning-combobox>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+
+        </template>
+        <!-- Operations case type ends-->
+
+        <!--Technical: Hosted Muti Tenant fields-->
+        <template if:true={showMultiTenantFields}>
+            <div class="slds-m-top_small">
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item size="6">
+                    
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <div class="slds-float_right">
+                            <lightning-input type="checkbox" label="Add Org Id Manually" checked={OrgIdCheckbox} onchange={handleOrgIdCheckboxChange}></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <template if:true={showOrgIdDropDown}>
+                            <div>
+                                <lightning-combobox label="Org Id" placeholder="Select Org ID"
+                                    value={selectedOrgId}
+                                    options={orgIdDropDownValues}
+                                    onchange = {handleOrgIdChange} required = {isOrgIdRequired}
+                                    message-when-value-missing={requiredFieldErrMsg}>
+                                </lightning-combobox>
+                            </div>
+                            <template if:true={noOrgsAvailable}>
+                                <label class="custom-slds-error">There are no Orgs to display.</label> 
+                            </template>
+                        </template>
+                        <template if:true={showOrgIdInputBox}>
+                            <lightning-input type="text" label="Org Id" placeholder="Enter Org Id" value={orgIdManual} onchange={handleManualOrgIdChange} required = {isOrgIdRequired} message-when-value-missing={requiredFieldErrMsg}></lightning-input>
+                        </template>
+                        
+                    </lightning-layout-item>
+                </lightning-layout>
+                
+            </div>
+            <div class="slds-m-top_small">
+                <lightning-input type="text" label="Secure Agent" placeholder="" value={caseSecureAgent} onchange={handleSecureAgent}></lightning-input>
+            </div>
+        </template>
+
+        <template if:true={showProblemArea}>
+            <div class="slds-m-top_small">
+                <lightning-combobox name="problem_Area" label="Problem Area" placeholder="Choose Problem Area"
+                    value={selectedProblemArea} 
+                    options={problemAreas}
+                    onchange={handleProblemAreaChange}>
+                </lightning-combobox>
+            </div>
+        </template>
+
+        <!--   next button to redirect to Technical  case type-->
+        <template if:false={showRecordForm}>
+            <div class="slds-align_absolute-center slds-m-top_small slds-p-bottom_small">
+                <lightning-button variant="Neutral" label="Cancel" title="Cancel" onclick={closequickaction} class="slds-m-left_x-small">
+                </lightning-button>
+                <lightning-button variant="brand" label="Next" title="Next" onclick={showNextScreen} class="slds-m-left_x-small">
+                </lightning-button>
+            </div>
+            <!-- <div class="slds-col slds-modal__footer slds-align_absolute-center">
+                <lightning-button variant="brand" label="Next" title="Next" onclick={showNextScreen} class="slds-m-left_x-small">
+                </lightning-button>
+            </div> -->
+        </template>
+        <!--button ends-->
+
+        <!--record edit form technical case type-->
+        <template if:true={showRecordForm}>
+            <lightning-record-edit-form class="recordEditForm" density="comfy" record-id={sourceCaseId} record-type-id={caseRecoTypeId} object-api-name={caseObj} onsuccess={handleSuccess} onerror={handleError} onsubmit={handleSubmit}>
+                <lightning-layout multiple-rows="true" horizontal-align="space">
+                    <lightning-layout-item size="12">
+                        <div class="slds-card" style="background-color: #f3f2f2;">
+                            <div class="slds-p-around_x-small">
+                                <h2>Case Information</h2>
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                    
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Success_Offering__c' label="Success Offering">
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+                    
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Timezone__c' label="Timezone">
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Next_Action__c' label="Next Action">
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+
+                    <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Subject' label="Subject" required message-when-value-missing={requiredFieldErrMsg}>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Description' label="Description" required message-when-value-missing={requiredFieldErrMsg}>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Root_Cause_Analysis__c' label="Root Cause Analysis (RCA)">
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Next_Steps__c' label="Next Steps">
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Closing_Notes__c' label="Closing Notes">
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Escalation_Notes__c' label="Escalation Notes">
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Contact_Salutation__c' label="Contact Salutation">
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+
+                    <lightning-layout-item size="6" class="slds-m-top_small slds-m-bottom_small padding-stacked"> 
+                        <lightning-combobox class={contactClass} label="Contact" placeholder={contactPlaceHolder}
+                            value={selectedContact}
+                            options={relatedContacts}
+                            onchange={handleContactChange} required message-when-value-missing={requiredFieldErrMsg}>
+                        </lightning-combobox>
+                        <!-- <template if:true={showContactError}>
+                            <label style="color:rgb(194, 57, 52)">Complete this field.</label>
+                        </template>  -->
+                    </lightning-layout-item>
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small" >                   
+                    </lightning-layout-item> -->
+                    <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Error_Message__c' label="Error Message">
+                        </lightning-input-field>
+                    </lightning-layout-item> 
+                    
+                    <!-- <lightning-layout-item size="12">
+                        <div class="slds-card" style="background-color: #f3f2f2;">
+                            <div class="slds-p-around_x-small">
+                                <h2>Additional Information</h2>
+                            </div>
+                        </div>
+                    </lightning-layout-item> -->
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Attention_Request__c' label="Attention Request">
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='IsEscalated' label="Escalated">
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Status' label="Status" required message-when-value-missing={requiredFieldErrMsg}>
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Escalation_Reason__c' label="Escalation Reason">
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Type' label="Type">
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+                    <lightning-layout-item size="6" class="slds-m-top_small slds-m-bottom_small padding-stacked">
+                        <!-- <lightning-input-field field-name='Priority' label="Priority" required message-when-value-missing={requiredFieldErrMsg}>
+                        </lightning-input-field> -->
+                        <!-- <lightning-combobox
+                            name="priority"
+                            label="Priority"
+                            placeholder="Select priority"
+                            options={priorities}
+                            value={selectedPriority}
+                            onchange={handlePriorityChange}
+                            required message-when-value-missing={requiredFieldErrMsg}>
+                        </lightning-combobox> -->
+                    </lightning-layout-item>
+
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Reason' label="Case Reason">
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Engagement__c' label="Engagement">
+                        </lightning-input-field>
+                    </lightning-layout-item> -->
+                    
+                    <template if:true={isNotAdminCase}>
+                        <lightning-layout-item size="12">
+                            <div class="slds-card" style="background-color: #f3f2f2;">
+                                <div class="slds-p-around_x-small">
+                                    <h2>Product Details</h2>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" class="slds-m-top_small">
+                            <lightning-input-field field-name='Forecast_Product__c' label="Product" value={forecastProduct} disabled="true">
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" class="slds-m-top_small">
+                            <template if:true={showVersionComponent}>
+                                    <lightning-input-field field-name='Version__c' label="Version" value={versionSelected} disabled="true">
+                                    </lightning-input-field>
+                            </template>
+                        </lightning-layout-item>
+                        <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                            <template if:true={showVersionComponent}>
+                                
+                                <lightning-combobox field-name="Component__c"  label="Component" placeholder="Select Component"
+                                    value={selectedComponent}
+                                    options={componentDropdownOptions}
+                                    onchange={handleComponentChange} required message-when-value-missing={requiredFieldErrMsg}>
+                                </lightning-combobox>
+                               
+                                <lightning-input-field field-name='Sub_Component__c' label="Sub Component">
+                                </lightning-input-field>
+                            </template>
+                        </lightning-layout-item> -->
+                        
+                    </template>
+                    
+                    <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Sub_Component__c' label="Sub Component">
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Problem_Type__c' label="Problem Type">
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" class="slds-m-top_small">
+                        
+                    </lightning-layout-item> -->
+
+                   <!-- <lightning-layout-item size="12">
+                        <div class="slds-card" style="background-color: #f3f2f2;">
+                            <div class="slds-p-around_x-small">
+                                <h2>System Information</h2>
+                            </div>
+                        </div>
+                    </lightning-layout-item> -->
+                    <lightning-layout-item size="6" class="slds-m-top_small">
+                        <label for="fieldid">Internal/External Case (Used for CRE)</label>
+                        <!-- <T01> -->
+                            <!-- <lightning-input-field id =fieldid field-name='Is_Internal_Or_External_Case__c' variant="label-hidden" label="External Or Internal"  value={internalexternal} onchange={handleinternal}>
+                            </lightning-input-field> -->
+                            <lightning-combobox 
+                                name="Is_Internal_Or_External_Case__c"
+                                variant="label-hidden"
+                                placeholder="Select"
+                                value={internalexternal} 
+                                options={caseTypeOptions.data.values}
+                                onchange={handleinternal}>
+                            </lightning-combobox>
+                        <!-- </T01> -->
+                    </lightning-layout-item>
+
+                   
+
+                    <lightning-layout-item size="6" class="slds-m-top_small">
+                        <lightning-input-field field-name='Is_AssignmentRules__c' label="Auto Assignment" value=true onchange={handleAssignment}>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    
+                    <!--lightning-layout-item size="6" class="slds-m-top_small">
+                        <template if:true={showCaseSource}>
+                            <lightning-input-field field-name='Origin' label="Case Origin">
+                            </lightning-input-field>
+                        </template>
+                    </lightning-layout-item-->                    
+                    <lightning-layout-item size="6" class="slds-m-top_small">
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+                    <div class="slds-col slds-align_absolute-center">
+                        <!-- <lightning-layout-item size="6" class="slds-m-top_small">
+                            <lightning-button label="Previous" title="Previous" onclick={goPreviousSection} class="slds-float_right">
+                            </lightning-button>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" class="slds-m-top_small">
+                            <lightning-button label="Submit" variant="brand" title="Submit" type="submit" class="slds-m-left_x-small">
+                            </lightning-button>
+                        </lightning-layout-item>  --> 
+                        <lightning-button label="Previous" title="Previous" onclick={goPreviousSection} class="slds-var-m-left_x-small">
+                        </lightning-button>
+
+                        <lightning-button label="Submit" variant="brand" title="Submit" type="submit" class="slds-var-m-left_x-small">
+                        </lightning-button> 
+                    </div>            
+            </lightning-record-edit-form>
+
+        </template>
+    </template>
+    <div class="pad-bottom"></div>
+</template>

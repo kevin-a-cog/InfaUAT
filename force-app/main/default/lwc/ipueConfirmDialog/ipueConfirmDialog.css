@@ -1,0 +1,8 @@
+.modal-body {
+    min-height: 100px;
+    vertical-align: middle;
+}
+
+.close-icon {
+    --lwc-colorTextIconDefault: white;
+}

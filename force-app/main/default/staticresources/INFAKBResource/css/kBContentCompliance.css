@@ -1,0 +1,143 @@
+c-k-b-content-compliance .slds-accordion__section {
+    padding: 5px 0px 5px 0px;
+}
+
+c-k-b-content-compliance lightning-primitive-icon svg {
+    height: 13px !important;
+    vertical-align: baseline;
+}
+
+c-k-b-content-compliance button span {
+    font-size: 13px;
+}
+
+c-k-b-content-compliance lightning-tab-bar li {
+    font-size: 14px;
+    height: 30px;
+}
+
+c-k-b-content-compliance lightning-tab-bar ul {
+    height: 31px;
+}
+
+c-k-b-content-compliance lightning-tab-bar a {
+    height: 30px !important;
+    line-height: 30px !important;
+}
+
+c-k-b-content-compliance .slds-accordion__summary-action {
+    background: var(--lwc-colorBackground, rgb(243, 242, 242));
+    height: 26px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+c-k-b-content-compliance .slds-accordion__summary {
+    
+    
+}
+
+c-k-b-content-compliance .slds-accordion__list-item {
+    border-top-width: var(--sds-c-accordion-sizing-border, var(--lwc-borderWidthThin, 1px));
+    border-top-style: none;
+    border-top-color: var(--sds-c-accordion-color-border, var(--lwc-colorBorder, rgb(221, 219, 218)));
+}
+
+.gdprdata {
+    margin-top: -1.5rem;
+}
+
+.gdprdata lightning-icon {
+    display: inline-block;
+    margin-left: 13px;
+}
+
+.gdprdata .header {
+    padding-bottom: 15px;
+    font-size: 16PX;
+    font-weight: 400;
+    display: inline-block;
+    padding-left: 10px;
+    line-height: 1.25;
+    vertical-align: baseline;
+    word-break: break-word;
+    width: 70%;
+}
+
+.gdprdata .gdprdata-header {
+    padding-top: 10px;
+    background-color: #f3f2f2;
+}
+
+.gdprdata table {
+    width: 100%;
+}
+
+/* width */
+
+.gdprdata-content::-webkit-scrollbar {
+    height: 5px;
+}
+
+/* Track */
+
+.gdprdata-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+
+.gdprdata-content::-webkit-scrollbar-thumb {
+    background: #C1C1C1;
+}
+
+/* Handle on hover */
+
+.gdprdata-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.gdprdata-content {
+    scrollbar-width: thin;
+}
+
+/* section of 
+   /* width */
+
+.gdprdata-popup-content::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+/* Track */
+
+.gdprdata-popup-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+
+.gdprdata-popup-content::-webkit-scrollbar-thumb {
+    background: #C1C1C1;
+}
+
+/* Handle on hover */
+
+.gdprdata-popup-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.gdprdata-popup-content {
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+.gdprdata-content-minimized {
+    max-height: 12rem;    
+}
+
+.gdprdata-content-expanded {
+    max-height: 100%;
+}
+
+

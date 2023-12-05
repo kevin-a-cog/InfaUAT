@@ -1,0 +1,5 @@
+({
+	checkForFeedEnabled : function(component) {
+		
+	}
+})

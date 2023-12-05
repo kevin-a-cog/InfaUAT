@@ -1,0 +1,814 @@
+<!-- I2RT-8339 T11-->
+<template>
+
+    <!--Show Spinner when page is loaded initially-->
+    <template if:true={boolDisplaySpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+
+    <!--Hide Spinner after page is loaded successfully-->
+    <template if:false={boolDisplaySpinner}>
+
+        <!--Show page content when user has access-->
+        <template if:true={boolHasAccess}>
+            <div if:false={isLoaded} class="slds-is-relative">
+                <!-- <lightning-spinner
+                    alternative-text="Loading..." variant="brand">
+                </lightning-spinner> -->
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            </div>
+            <div class="container-fluid es-container-fluid--grey">
+                <template if:true={showSpinner}>
+                    <lightning-spinner class="slds-is-fixed" alternative-text="Loading" size="medium"></lightning-spinner>
+                </template>
+                <div class="container">
+                    <h2 class="es-page__heading">
+                        
+                        <template if:false={isEcomAcc}>
+                            <span>{supportAccount.Name}</span>
+                        </template>
+                        <template if:true={isEcomAcc}>
+                            <span>{orgDetails.Name}</span>
+                        </template>
+                    </h2>
+                    <div class="row">
+                        <div class="col-md-12">   
+                            <div class="es-case-wrapper">
+                                <h3 class="es-case__heading es-case__heading--with-border mt-3">
+                                    <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="accountDetails"></lightning-button-icon>
+                                    <template if:false={isEcomAcc}>
+                                        Support Account Details
+                                    </template>
+                                    <template if:true={isEcomAcc}>
+                                        Org Details
+                                    </template>
+                                </h3>
+                                <div data-id="accountDetails" class="slds-show">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <p class="es-case-info__label">
+                                                <template if:false={isEcomAcc}>
+                                                    Support Account Name
+                                                </template>
+                                                <template if:true={isEcomAcc}>
+                                                    ORG Name
+                                                </template>
+                                            </p>
+                                            <template if:false={isEcomAcc}>
+                                                <p class="es-case-info__value">{supportAccount.Name}</p>
+                                            </template>
+                                            <template if:true={isEcomAcc}>
+                                                <p class="es-case-info__value">{orgDetails.Name}</p>
+                                            </template>
+                                            
+                                        </div>
+                                        <div class="col-md-4">
+                                            <template if:false={isEcomAcc}>
+                                                <p class="es-case-info__label">Support Account ID</p>
+                                                <p class="es-case-info__value">{supportAccount.New_Org_Account_Number__c}</p>
+                                            </template>
+                                            <template if:true={isEcomAcc}>
+                                                <p class="es-case-info__label">ORG ID</p>
+                                                <p class="es-case-info__value">{orgDetails.OrgID__c}</p>
+                                            </template>
+                                        </div>
+                                        <template if:false={isEcomAcc}>
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Entitlement End Date</p>
+                                                <!-- <template if:true={entitlement}>
+                                                    <p class="es-case-info__value">{entitlement.EndDate}</p>
+                                                </template>
+                                                <template if:false={entitlement}>
+                                                    <p class="es-case-info__value"></p>
+                                                </template> -->
+                                                <p class="es-case-info__value">{supportAccount.End_Date__c}</p>
+                                                <p class="es-case-info__value"></p>
+                                            </div>
+                                        
+                                    
+                                            <!-- //Amarender -> I2RT-2951 -->
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Entitlement Status</p>
+                                                <!-- <template if:true={entitlement}>
+                                                    <p class="es-case-info__value">{entitlement.Status}</p>
+                                                </template>
+                                                <template if:false={entitlement}>
+                                                    <p class="es-case-info__value"></p>
+                                                </template> -->
+                                                <p class="es-case-info__value">{supportAccount.Support_Account_Status__c}</p>
+                                                <p class="es-case-info__value"></p>
+                                            </div>
+                                            <!-- //Amarender -> I2RT-2951 -->
+                                        </template>
+                                        <div class="col-md-4">
+                                            <p class="es-case-info__label">
+                                                <template if:false={isEcomAcc}>
+                                                    <p class="es-case-info__label">Success Offerings</p>
+                                                </template>
+                                                <template if:true={isEcomAcc}>
+                                                    <p class="es-case-info__label">POD Location</p>
+                                                </template>
+                                            </p>
+                                            <template if:false={isEcomAcc}>
+                                                <p class="es-case-info__value es-success-offering__name"><img src={signatureSuccesssIcon} alt="signature success icon" /> {supportAccount.Success_Offering__c}</p>
+                                            </template>
+                                            <template if:true={isEcomAcc}>
+                                                <p class="es-case-info__value es-success-offering__name">{orgDetails.Pod_Location__c}</p>
+                                            </template>
+                                            
+                                            
+                                        </div>
+                                        <template if:false={isEcomAcc}>
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Infa Account Field Sales Representative</p>
+                                                <p class="es-case-info__value">{owner}</p>
+                                            </div>
+                                        </template>
+                                        <template if:true={isEcomAcc}>
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">POD Name</p>
+                                                <p class="es-case-info__value">{orgDetails.Pod_Name__c}</p>
+                                            </div>
+                                        </template>
+                                        <div class="col-md-4">
+                                            <template if:false={isEcomAcc}>
+                                                <p class="es-case-info__label">Type of Support Account</p>
+                                            </template>
+                                            <template if:true={isEcomAcc}>
+                                                <p class="es-case-info__label">POD Region</p>
+                                            </template>
+                                            <template if:false={isEcomAcc}>
+                                                <p class="es-case-info__value">{supportAccount.Support_Account_Type__c}</p>
+                                            </template>
+                                            <template if:true={isEcomAcc}>
+                                                <p class="es-case-info__value">{orgDetails.Pod_Region__c}</p>
+                                            </template>
+                                            
+                                        </div>
+                                        <template if:false={isEcomAcc}>
+                                            <div class="col-md-4">
+                                                <!-- //Amarender -> I2RT-2951 -->
+                                                <p class="es-case-info__label">Time Zone</p>
+                                                <template if:true={timezone}>
+                                                    <p class="es-case-info__value">{timezone.Name}</p>
+                                                </template>
+                                                <template if:false={timezone}>
+                                                    <p class="es-case-info__value"></p>
+                                                </template>
+                                                <!-- //Amarender -> I2RT-2951 -->
+                                            </div>
+                                        
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Max Customer R/W Contacts</p>
+                                                <p class="es-case-info__value">{supportAccount.Max_Customer_R_W_Contacts__c}</p>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Active Customer R/W Contacts</p>
+                                                <p class="es-case-info__value">{supportAccount.Active_Customer_R_W_Contacts__c}</p>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <template if:false={isEcomAcc}>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <p class="es-case-info__label">Description</p>
+                                                <p class="es-case-info__value">{supportAccount.Description}</p>
+                                                
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                                <div class="d-md-flex justify-content-between align-items-center">
+                                    <h3 class="es-case__heading mt-3">
+                                        <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="accountContacts"></lightning-button-icon>
+                                        Contacts
+                                    </h3>
+                                    <div class="d-md-flex align-items-center">
+                                        <!-- <div class="es-lds-form-group">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                                                    <lightning-icon size="xx-small" class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" icon-name="utility:search"></lightning-icon>
+                                                    <input type="text" placeholder="Find something" class="slds-input" />
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <div class="d-flex align-items-center float-md-right">
+                                            Search &nbsp;&nbsp;
+                                            <div class="es-lds-form-group"> 
+                                                <lightning-input type="text" placeholder="Enter Search Text.." label="Search" variant="label-hidden" slot="actions" onchange={handleSearchText} disabled={disableSearch}></lightning-input>
+                                            </div>
+                                        </div>
+                                        <template if:false={isEcomAcc}>
+                                            <template if:true={isPrimaryContact}>
+                                                <div class="es-contact-mobile">
+                                                    <lightning-button label="Manage  Contacts" class="es-button es-button--primary ml-md-2"  onclick={openAlternateContactModal}></lightning-button>
+                                                    <lightning-button label="Create New Contact" class="es-button es-button--primary ml-2" onclick={openContactModal}></lightning-button>  
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </div>
+                                
+                                <div data-id="accountContacts" class="slds-show">
+                                    <div class="table-responsive es-datatable es-casetable">
+                                        <lightning-datatable class="slds-max-medium-table_stacked" columns={columns}  data={getContacts}   key-field="Id"   suppress-bottom-bar="true"      default-sort-direction={defaultSortDirection}   
+                                        sorted-direction={sortDirection} onrowaction={handleRowAction}  sorted-by={sortedBy}  onsort={onHandleSort} hide-checkbox-column ="true"            >
+                                        </lightning-datatable>
+                                    </div>
+                                    
+                                    <div class="es-table-pagination mt-2">
+                                        <p class="es-table__pagination-count">Showing {startingRecord}- {endingRecord} of {totalRecountCount} contacts</p>
+                                    </div>
+                                    <c-es-do-p-agination onfirst={firstHandler} onprevious={previousHandler} onnext={nextHandler} onlast={lastHandler}> </c-es-do-p-agination>
+                                </div> 
+                                
+                                <!-- <div data-id="accountContacts" class="slds-show">
+                                    <div class="table-responsive">
+                                        <table class="table es-table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">First Name</th>
+                                                <th scope="col">Last Name</th>
+                                                <th scope="col">Email Address</th>
+                                                <th scope="col">Phone Number</th>
+                                                <th scope="col">Privileges</th>
+                                                <th scope="col">Contact Time Zone</th>
+                                                <th scope="col">Language</th>
+                                                <th scope="col">&nbsp;</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={contacts} for:item="contact">
+                                                    <tr key={contact.id}>
+                                                        <td>
+                                                            {contact.FirstName}
+                                                            <span class="es-table__case-contact-type" if:true={contact.Is_Primary__c}>Primary</span>
+                                                        </td>
+                                                        <td>{contact.LastName}</td>
+                                                        <td>{contact.Email}</td>
+                                                        <td>{contact.Phone}</td>
+                                                        <td>
+                                                            {contact.Access_Level__c}
+                                                        </td>
+                                                        <td>{contact.Timezone__c}</td>
+                                                        <td>{contact.INFA_Language__c}</td>
+                                                        <td class="es-button--icon-in-table text-right">
+                                                            <template if:true={isPrimaryContact}>
+                                                                <lightning-button-icon class="es-button--editable" variant="container" size="x-small" icon-name="utility:edit" title="edit" onclick={openEditModal}></lightning-button-icon>
+                                                            </template>
+                                                            <template if:false={isPrimaryContact}>
+                                                                <lightning-button-icon class="es-button--non-editable" variant="container" size="x-small" icon-name="utility:edit" title="edit" onclick={openEditModal}></lightning-button-icon>
+                                                            </template>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table> 
+                                    </div> 
+                                </div> -->
+                                <template if:false={isEcomAcc}>
+                                    <div class="d-md-flex justify-content-between align-items-center">
+                                        <h3 class="es-case__heading mt-3">
+                                            <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="projectDocuments"></lightning-button-icon>
+                                            Project Documents
+                                        </h3>
+                                        <template if:true= {isPrimaryContact} >
+                                            <lightning-button label="Add Updates/Files" class="es-button es-button--primary slds-float_right" onclick={handleAddAttachmentClick}></lightning-button>
+                                        </template>
+                                    </div>
+                                    <div data-id="projectDocuments">
+                                        
+                                            <div class="table-responsive">
+                                                <table class="table es-table es-project-doc">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Description</th>
+                                                        <th scope="col">Content Type</th>
+                                                        <th scope="col">Last Modified Date</th>
+                                                        <th scope="col">Created By</th>
+                                                        <template if:true= {isPrimaryContact} >
+                                                        <th scope="col">&nbsp;</th>
+                                                        </template>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <template if:false={attachmentsAvailable}>
+                                                            <tr class="es-table--empty">
+                                                                <td colspan="9">There are no project documents available.</td>
+                                                            </tr>
+                                                        </template>
+                                                        <template if:true={attachmentsAvailable}>
+                                                            <template for:each={caseAttachments} for:item="attachment">
+                                                                <tr key={attachment.Id}>                                      
+                                                                    <td><a href="#" data-id={attachment.Id} onclick={downloadDoc}>{attachment.Title}</a></td>
+                                                                    <td>{attachment.Description}</td>
+                                                                    <td>{attachment.FileType }</td>
+                                                                    <td>{attachment.LastModifiedDate}</td>
+                                                                    <td>{attachment.Name}</td>
+                                                                    <template if:true= {isPrimaryContact} >
+                                                                        <td class="es-button--icon-in-table text-right">
+                                                                            
+                                                                            <lightning-button-icon variant="container" size="x-small" icon-name="utility:edit" title="edit" class="mr-3" value={attachment.Id} onclick={openEditModal}></lightning-button-icon>
+                                                                            <lightning-button-icon variant="container" size="x-small" icon-name="utility:delete" title="delete" value={attachment.Id} onclick={removeAttachmentDetails}></lightning-button-icon>
+                                                                        </td>
+                                                                    </template>
+                                                                </tr>
+                                                            </template>
+                                                        </template> 
+                                                    </tbody>
+                                                </table> 
+                                            </div> 
+                                    <!--  <template if:true={attachmentsAvailable}>
+                                            <div class="table-responsive es-datatable">
+                                                <lightning-datatable data-id="PdDatatable"  columns={pdColumns}  data={getProjectDocuments}   key-field="Id"   suppress-bottom-bar="true"      default-sort-direction={defaultSortDirection}   
+                                                sorted-direction={sortDirection} sorted-by={sortedBy}  onsort={onHandlePDSort} hide-checkbox-column ="true"   onrowaction={handlePDRowAction}         >
+                                                </lightning-datatable>
+                                            </div>
+                                        </template> -->
+                                    </div>
+                                    <!-- <T01> -->
+                                    <h3 class="es-case__heading mt-3">
+                                        <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="changeRequests"></lightning-button-icon>
+                                        Change Requests
+                                    </h3>
+                                    <div data-id="changeRequests">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <template if:true={isChangeRequests}>
+                                            <div class="table-responsive es-datatable">
+                                                <lightning-datatable data-id="crdatatable"  columns={crcolumns}  data={changeRequests} key-field="Id"  suppress-bottom-bar="true"  default-sort-direction={defaultSortDirection}   
+                                                sorted-direction={sortDirection} sorted-by={sortedBy}  onsort={onHandleCRSort} hide-checkbox-column ="true" column-widths-mode="auto" >
+                                                </lightning-datatable>
+                                            </div>
+                                            </template>
+                                        <template if:false={isChangeRequests}>
+                                            <div class="table-responsive">
+                                                <table class="table es-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Change Request Number</th> <!--T12 changed column names-->
+                                                            <th scope="col">Type</th>                                                             
+                                                            <th scope="col">Title</th> 
+                                                            <th scope="col">Product</th>                                                            
+                                                            <th scope="col">Status</th> 
+                                                            <th scope="col">To be fixed in version</th> 
+                                                            
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr class="es-table--empty">
+                                                            <td colspan="9">There are no active change requests right now.</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </template>
+                                        </div>
+                                    </div>
+                                    <!-- </T01> -->
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <template if:true={isAddUpdateAttachment}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                    <div class="slds-modal__container">
+                        <div class="es-modal__content">
+                            <header class="slds-modal__header es-modal__header">
+                                <button class="es-button--only-icon" title="Close" onclick={closeAddAttachment}>
+                                    <lightning-icon icon-name="utility:close"
+                                        alternative-text="close"
+                                        size="xx-small" ></lightning-icon>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 class="slds-text-heading_medium slds-hyphenate">Add Updates/Files</h2>
+                            </header>
+                            <div class="es-modal__faux-body">
+                                <div class="es-modal__body es-modal__body--fix-height">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <form class="es-form">
+                                                <div class="form-row">
+                                                    <div class="form-group es-form-group es-lds-form-group es-lds-file-select col-md-12 ">
+                                                        <lightning-textarea
+                                                            value={docDescription}
+                                                            onchange={handleDocDescriptionChange}
+                                                            disabled-categories="FORMAT_FONT"
+                                                            placeholder="Enter file description."
+                                                            label="Description"
+                                                            required>
+                                                        </lightning-textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">                                
+                                                    <div class="form-group es-form-group es-lds-form-group es-lds-file-select">
+                                                        <div class="clearfix">
+                                                            <lightning-icon class="es-form__icon-with-upload" size="x-small" icon-name="utility:attach"></lightning-icon>
+                                                            <lightning-file-upload
+                                                                label="Attach Files (Upload limit is 2GB)"
+                                                                name="fileUploader"
+                                                                accept={acceptedFormats}
+                                                                record-id={accountId}
+                                                                onuploadfinished={handleUploadFinished}
+                                                                multiple="false">
+                                                            </lightning-file-upload>                                        
+                                                        </div>
+                                                    </div>
+                                                    <div class="p-1"><a href="https://infportalsb.oktapreview.com/home/template_saml_2_0/0oa4mptwr0PK3tvFK0h7/1541" target="_blank">Try Attaching Files via TSFTP if size > 2GB</a></div>
+                                                </div>
+                                            </form>    
+                                            <div class="es-case__note es-case__note--info es-case__note--big col-md-12">
+                                                <p class="es-case__note-main-text">By Proceeding, you are accepting the Privacy Policy.</p>
+                                                <p class="es-case__note-sub-text">Do not upload any sensitive personal data, including but not limited to <span class="es-case__note-highlight">Personally Identifiable Information (PII)</span>, <span class="es-case__note-highlight">Protected Health Information (PHI)</span> or <span class="es-case__note-highlight">Protected Financial Information (PFI)</span> to this system. In the event sensitive data is mistakenly uploaded, notify Informatica immediately to ensure deletion from the system.</p>
+                                            </div>                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>            	
+                            <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                <lightning-button label="Discard" class="es-button es-button--secondary" onclick={closeAddAttachment}></lightning-button>
+                                <lightning-button label="Update" class="es-button es-button--primary" onclick={updateFileDetails}></lightning-button>		
+                            </footer>
+                        </div>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+            <template if:true={isAlternateContactModal}>
+                
+
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                    <div class="slds-modal__container">
+                        <div class="es-modal__content">
+                            <header class="slds-modal__header es-modal__header">
+                                <button class="es-button--only-icon" title="Close" onclick={closeAlternateContactModal}>
+                                    <lightning-icon icon-name="utility:close"
+                                        alternative-text="close"
+                                        size="xx-small" ></lightning-icon>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 class="slds-text-heading_medium slds-hyphenate">Manage Contacts</h2>
+                            </header>
+
+                            <div class="es-modal__faux-body">
+                                <div class="es-modal__body es-modal__body--fix-height">
+                                    <template if:true={altContactsAvailable}>
+                                    <div class="slds-card">
+                                        <div class="es-datatable">
+                                            <lightning-datatable 
+                                                class="slds-max-medium-table_stacked"
+                                                columns={altConColumns} 
+                                                data={altContacts} 
+                                                key-field="Id" 
+                                                onrowselection={handleAltContactsRowSelected} 
+                                                suppress-bottom-bar="true"
+                                                default-sort-direction={defaultSortDirection}
+                                                sorted-direction={sortDirection}
+                                                sorted-by={sortedBy}
+                                                onsort={onHandleSort}
+                                                max-row-selection="1"> <!-- T11-->
+                                            </lightning-datatable>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template if:false={altContactsAvailable}>
+                                    <div class="datatable-height flex-align-center">
+                                        No Contacts to display
+                                    </div>
+                                </template>
+                                </div>
+                            </div>  
+                            <template if:true={showAssignBtn}>
+                            <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                <p>Please Note : You will be contacted by Informatica Support Executive as per your Contact Time Zone.</p>
+                                <lightning-button label="Assign" class="es-button es-button--primary" onclick={handleAssignContacts}></lightning-button>		
+                            </footer> 
+                            </template>
+                        <!-- <div class="es-modal__faux-body">
+                                <div class="es-modal__body es-modal__body--fix-height">
+                                    <div class="d-md-flex align-items-center justify-content-between mb-2">
+                                        <p>Alternate Contacts </p>
+                                        <div class="d-md-flex align-items-center">
+                                            <div class="es-lds-form-group">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                                                        <lightning-icon size="xx-small" class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" icon-name="utility:search"></lightning-icon>
+                                                        <lightning-input type="text" placeholder="Enter Search Text.." label="Search" variant="label-hidden" slot="actions" onchange={handleSearchText} disabled={disableSearch}></lightning-input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-p-horizontal_small es-dropdown">
+                                                <lightning-button-menu icon-name="utility:sort" alternative-text="Show menu" menu-alignment="right" icon-size="large">
+                                                    <lightning-menu-item value="MenuItemOne" label="First Name"></lightning-menu-item>
+                                                    <lightning-menu-item value="MenuItemTwo" label="Last Name"></lightning-menu-item>
+                                                    <lightning-menu-item value="MenuItemThree" label="Email"></lightning-menu-item>
+                                                </lightning-button-menu>
+                                            </div>  
+                                            <div class="d-flex align-items-center float-md-right mb-2">
+                                                Search &nbsp;&nbsp;
+                                                <div class="es-lds-form-group"> 
+                                                    <lightning-input type="text" placeholder="Enter Search Text.." label="Search" variant="label-hidden" slot="actions" onchange={handleSearchText} disabled={disableSearch}></lightning-input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    
+                                    <!-- <div class="table-responsive es-datatable">
+                                        <lightning-datatable   columns={columns}  data={getContacts}   key-field="Id"   suppress-bottom-bar="true"      default-sort-direction={defaultSortDirection}   
+                                        sorted-direction={sortDirection} onrowaction={handleRowAction}  sorted-by={sortedBy}  onsort={onHandleSort}    >
+                                        </lightning-datatable>
+                                    </div>
+                                    
+                                    <div class="es-table-pagination mt-2">
+                                        <p class="es-table__pagination-count">Showing {startingRecord}- {endingRecord} of {totalRecountCount} contacts</p>
+                                    </div>
+                                    <c-es-do-p-agination onfirst={firstHandler} onprevious={previousHandler} onnext={nextHandler} onlast={lastHandler}> </c-es-do-p-agination> -->
+
+                                    <!-- <div class="table-responsive">
+                                        <table class="table es-table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col"  class="es-table__contact-name-heading">First Name</th>
+                                                <th scope="col">Last Name</th>
+                                                <th scope="col">Email Address</th>
+                                                <th scope="col">Phone Number</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={dataAccountContacts} for:item="altContact">
+                                                    <tr key={altContact.id}>
+                                                        <td class="es-table__contact-name">
+                                                            <lightning-input label="" type="checkbox" checked="checked">
+                                                            </lightning-input>
+                                                            <span class="es-table__two-vals">{altContact.firstName}</span>
+                                                        </td>
+                                                        <td>{altContact.lastName}</td>
+                                                        <td>{altContact.email}</td>
+                                                        <td>{altContact.phoneNumber}</td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table> 
+                                        <div class="es-table-pagination d-flex align-items-center justify-content-between">
+                                            <p class="es-table__pagination-count">1-5 of 27</p>
+                                            <ul class="es-table__pagination-items">
+                                                <li class="es-table__pagination-item es-table__pagination-item--current">1</li>
+                                                <li class="es-table__pagination-item">2</li>
+                                                <li class="es-table__pagination-item">3</li>
+                                            </ul>
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>            	
+                            -->
+                        </div>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+            <template if:true={isContactModal}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                    <div class="slds-modal__container">
+                        <div class="es-modal__content">
+                            <header class="slds-modal__header es-modal__header">
+                                <button class="es-button--only-icon" title="Close" onclick={closeContactModal}>
+                                    <lightning-icon icon-name="utility:close"
+                                        alternative-text="close"
+                                        size="xx-small" ></lightning-icon>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <template if:true={isEditContact}>
+                                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Update Contact</h2>
+                                </template>
+                                <template if:false={isEditContact}>
+                                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Create New Contact</h2>
+                                </template>
+                            </header>
+                            <div class="es-modal__faux-body">
+                                <div class="es-modal__body es-modal__body--fix-height" id="modal-content-id-1">
+                                    <div class="form-row">                                
+                                        <div class="form-group es-form-group es-lds-form-group col-md-8">
+                                            <lightning-input name="firstname" type="text" label="First Name" onchange={handleFirstNameChange} value={conFirstName} required="true" placeholder="Enter First name"></lightning-input>
+                                        </div>
+                                        <div class="form-group es-form-group es-lds-form-group col-md-8">
+                                            <lightning-input name="lastname" type="text" label="Last Name" onchange={handleLastNameChange} value={conLastName} required="true" placeholder="Enter Last name"></lightning-input>
+                                        </div>
+                                    </div>
+                                    <div class="form-row" if:false={isEditContact}>                                
+                                        <div class="form-group es-form-group es-lds-form-group col-md-8">
+                                            <lightning-input name="email" type="text" label="Email Address" onchange={handleConEmailChange} value={conEmail} required placeholder="Enter the email address"></lightning-input>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">                                
+                                        <div class="form-group es-form-group es-lds-form-group col-md-8">
+                                            <lightning-input name="contact" type="text" label="Contact Number" onchange={handleConPhoneChange} value={conPhone} required placeholder="Enter the contact number"></lightning-input>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group es-form-group es-lds-form-group col-md-8">
+                                            <lightning-combobox
+                                                name="language"
+                                                label="Language"
+                                                placeholder="Select language"
+                                                value={conLanguage}
+                                                options={languageOptions.data.values}
+                                                onchange={handleConLanguageChange}
+                                                required
+                                            >
+                                            </lightning-combobox>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">                                
+                                        <div class="form-group es-form-group es-lds-form-group col-md-8">
+                                            <lightning-combobox
+                                                name="Region"
+                                                label="Region"
+                                                placeholder="Select Region"
+                                                value={conTimezoneRegion}
+                                                options={regionOptions}
+                                                onchange={handleRegionChange}
+                                                required>
+                                            </lightning-combobox>
+                                            <!-- <lightning-input name="email" type="text" label="Contact Time Zone" placeholder="Enter the contact time zone"></lightning-input> -->
+                                        </div>
+                                    </div>
+                                    <div class="form-row">                                
+                                        <div class="form-group es-form-group es-lds-form-group col-md-8">
+                                            <lightning-combobox
+                                                name="Location"
+                                                label="Location"
+                                                placeholder="Select Location"
+                                                value={conTimezoneLocation}
+                                                options={locationOptions}
+                                                onchange={handleLocationChange}
+                                                required>
+                                            </lightning-combobox>
+                                            <!-- <lightning-input name="email" type="text" label="Contact Time Zone" placeholder="Enter the contact time zone"></lightning-input> -->
+                                        </div>
+                                    </div>
+                                    <!--<div class="form-row">                                
+                                        <div class="form-group es-form-group es-lds-form-group col-md-8">
+                                            <lightning-combobox
+                                                name="ContactTimeZone"
+                                                label="Contact Time Zone"
+                                                placeholder="Select Time Zone"
+                                                value={conTimezone}
+                                                options={timeZoneOptions.data.values}
+                                                onchange={handleConTimeZoneChange}
+                                                required>
+                                            </lightning-combobox>
+                                        </div>
+                                    </div>-->
+                                    <div class="form-row">
+                                        <div class="form-group es-form-group es-lds-form-group col-md-8">
+                                            <lightning-input type="checkbox" label="Primary" name="Primary" checked={conPrimary}
+                                            onchange={handleConPrimaryChange}></lightning-input>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group es-form-group es-lds-form-group es-lds-radio col-md-8">
+                                            <lightning-radio-group name="radioGroup"
+                                                label="Privileges"
+                                                options={options}
+                                                value={conPrivilege}
+                                                onchange={handleConPrivilegeChange}
+                                                type="radio"
+                                                required>
+                                            </lightning-radio-group>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <footer class="es-modal__footer d-flex">
+                                <p>Please Note : You will be contacted by Informatica Support Executive as per your Contact Time zone.</p>
+                                <lightning-button label="Confirm" class={buttonCss}  onclick={confirmContact} disabled={disableConfirmButton}></lightning-button>		
+                            </footer>
+                        </div>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>	
+            <template if:true={isDeleteModal}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                    <div class="slds-modal__container">
+                        <div class="es-modal__content">
+                            <header class="slds-modal__header es-modal__header">
+                                <button class="es-button--only-icon" title="Close" onclick={closeDeleteModal}>
+                                    <lightning-icon icon-name="utility:close"
+                                        alternative-text="close"
+                                        size="xx-small" ></lightning-icon>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 class="slds-text-heading_medium slds-hyphenate">Confirm Cancellation</h2>
+                            </header>
+                            <div class="es-modal__faux-body">
+                                <div class="es-modal__body">
+                                    <p>Are you sure you want to delete this document?</p>
+                                </div>
+                            </div>
+                            <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                <lightning-button label="No" class="es-button es-button--secondary"  onclick={cancelFileRemoveDetail}></lightning-button>
+                                <lightning-button label="Yes" class="es-button es-button--primary"  onclick={confirmFileRemoveDetail}></lightning-button>		
+                            </footer>
+                        </div>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+            <template if:true={isEditModal}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                    <div class="slds-modal__container">
+                        <div class="es-modal__content">
+                            <header class="slds-modal__header es-modal__header">
+                                <button class="es-button--only-icon" title="Close" onclick={closeEditModal}>
+                                    <lightning-icon icon-name="utility:close"
+                                        alternative-text="close"
+                                        size="xx-small" ></lightning-icon>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 class="slds-text-heading_medium slds-hyphenate">Edit Project Documents</h2>
+                            </header>
+                            <div class="es-modal__faux-body">
+                                <div class="es-modal__body">
+                                    <div class="form-row">                                
+                                        <lightning-file-upload
+                                            label="Upload Files (Upload limit is 2GB)"
+                                            name="fileUploader"
+                                            accept={acceptedFormats}
+                                            record-id={accountId}
+                                            onuploadfinished={handleUploadFinished}
+                                            multiple>
+                                        </lightning-file-upload>
+                                    </div>
+                                    <div class="form-row">                             
+                                        <div class="form-group es-form-group es-lds-form-group col-md-6">  
+                                            <lightning-textarea name="description" label="Description" placeholder="Placeholder text about the description needed. Try adding more details about the issue" 
+                                            value={docDescription}
+                                            onchange={handleDocDescriptionChange}></lightning-textarea>
+                                        </div>
+                                    </div> 
+                                <!--  <div class="form-row">                                
+                                        <div class="form-group es-form-group es-lds-form-group col-md-6">
+                                            <lightning-input type="text" name="createdBy" label="Created By" placeholder="Enter Created By"></lightning-input>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                <lightning-button label="No" class="es-button es-button--secondary"  onclick={closeEditModal}></lightning-button>
+                                <lightning-button label="Yes" class="es-button es-button--primary"  onclick={updateDoc}></lightning-button>		
+                            </footer>
+                        </div>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+            <template if:true={isDeleteContactModal}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                    <div class="slds-modal__container">
+                        <div class="es-modal__content">
+                            <header class="slds-modal__header es-modal__header">
+                                <button class="es-button--only-icon" title="Close" onclick={closeDeleteContactModal}>
+                                    <lightning-icon icon-name="utility:close"
+                                        alternative-text="close"
+                                        size="xx-small" ></lightning-icon>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 class="slds-text-heading_medium slds-hyphenate">Confirm Delete</h2>
+                            </header>
+                            <div class="es-modal__faux-body">
+                                <div class="es-modal__body">
+                                    <p>Are you sure you want to delete this Contact?</p>
+                                </div>
+                            </div>                    
+                            <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                <lightning-button label="No" class="es-button es-button--secondary"  onclick={closeDeleteContactModal}></lightning-button>
+                                <lightning-button label="Yes" class="es-button es-button--primary"  onclick={confirmDeleteContact}></lightning-button>		
+                            </footer>
+                        </div>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+        </template>
+
+        <!--Show Error message when user doesn't have access or error while fetching data-->
+        <template if:false={boolHasAccess}>
+            <div class="container-fluid es-container-fluid--grey">
+                <div class="container">
+                    <div class="slds-col slds-size_12-of-12 slds-var-p-around_xx-large">
+                        <div class="slds-illustration slds-illustration_large" aria-hidden="true">
+                            <div class="slds-text-color_weak">
+                                <h3 class="slds-text-heading_medium">You don't have access to record.</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
+
+</template>

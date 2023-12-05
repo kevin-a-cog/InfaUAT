@@ -1,0 +1,67 @@
+<!--
+/*
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description								 Tag
+ **********************************************************************************************************
+ NA		                NA		        UTOPIA			Initial version.						 NA
+ Vignesh Divakaran      30-Sep-2022     I2RT-6880       Replaced case download LWC              T01
+ */
+-->
+<template>
+    <div>         
+        <div class={buttonSearchClass} data-id="button-search">
+            <lightning-button class="es-button es-button--primary mr-2" icon-name="utility:download"  label="Download" 
+                                  title="Download" onclick={downloadCSVFile} variant="na"></lightning-button>
+            
+                 <div class="es-lds-form-group"> 
+                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                    <lightning-icon size="xx-small" class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" icon-name="utility:search"></lightning-icon>
+                      <!-- <input type="text" placeholder="Enter Search Text.." label="Search" variant="label-hidden" slot="actions" onchange={handleSearchText} disabled={disableSearch} />
+                      -->
+                 <lightning-input type="text" placeholder="Enter Search Text.." label="Search" variant="label-hidden" slot="actions" onchange={handleSearchText} disabled={disableSearch}></lightning-input>
+            </div>
+            </div>
+        </div>
+        
+        <div class=" table-responsive es-datatable">
+          <!--  <lightning-datatable class="slds-max-medium-table_stacked"   columns={columns}  data={getcaselist}   key-field="Id"   suppress-bottom-bar="true"        
+            sorted-by={sortedBy} sorted-direction={sortDirection}     onsort={onHandleSort} hide-checkbox-column ="false"            >
+            </lightning-datatable> --> 
+            
+            <lightning-datatable data={getcaselist} class="slds-max-medium-table_stacked" 
+                                     columns={columns}
+                                     key-field="id"
+                                     sorted-by={sortBy}
+                                     sorted-direction={sortDirection}
+                                     onsort={onHandleSort}
+                                     hide-checkbox-column="true"></lightning-datatable>
+        </div>        
+        <div class="es-table-pagination mt-2">
+            <p class="es-table__pagination-count">
+                <template if:false={isOneRecord}> 
+                    Showing {startingRecord}- {endingRecord} of {totalRecountCount} cases
+                    </template>
+                <template if:true={isOneRecord}> 
+                    Showing {startingRecord}- {endingRecord} of {totalRecountCount} case
+                </template>
+                
+                </p>
+        </div>
+        
+        <c-es-do-p-agination onfirst={firstHandler} onprevious={previousHandler} onnext={nextHandler} onlast={lastHandler}> </c-es-do-p-agination>
+       
+    </div>
+    <!-- <T01> -->
+    <template if:true={showModal}>
+        <c-es-case-download bool-show-support-account={boolShowSupportAccount} onclose={closeDownload}></c-es-case-download>
+    </template>
+    <!-- </T01> -->
+    
+   
+    <svg class="d-none">
+        <symbol class="icon icons-8" id="flag">
+            ><path d="M13 8.4c0 .08-.731 1.2-2.762 1.2-.894 0-1.707-.24-2.52-.64-1.38-.56-2.762-.88-4.306-.8-.812.08-1.624.16-2.437.4v7.04c.081.4-.325.4-.487.4C.325 16 0 16 0 15.52V.88C1.3.32 2.681 0 4.063 0c1.38.08 2.68.32 3.9.88.73.32 1.543.56 2.356.56 1.056.08 2.112-.4 2.681-1.28V8.4zm-1.056-6.32c-.488.24-1.057.4-1.625.32-.894 0-1.788-.24-2.682-.64C6.582 1.2 5.444.88 4.226.88c-1.137 0-2.194.16-3.25.48v6.08c.813-.24 1.706-.4 2.6-.4 1.625 0 3.169.32 4.631 1.04.65.32 1.382.48 2.113.48.568 0 1.137-.16 1.543-.48.082-.4.082-6 .082-6z"></path>
+        </symbol>
+    </svg>
+    </template>

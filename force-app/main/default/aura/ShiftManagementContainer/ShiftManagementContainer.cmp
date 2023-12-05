@@ -1,0 +1,7 @@
+<aura:component implements="force:appHostable">
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+
+    <lightning:workspaceAPI aura:id="workspace" />
+
+    <c:shiftManagement />
+</aura:component>

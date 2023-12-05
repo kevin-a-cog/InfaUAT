@@ -1,0 +1,38 @@
+/*.tab1  { position:absolute;top:var(--lwc-borderWidthThin, 1px);left:30px }
+.tab2  { position:absolute;top:var(--lwc-borderWidthThin, 1px);left:100px}
+.tab3  { position:absolute;top:var(--lwc-borderWidthThin, 1px);left:170px }
+.tab4  { position:absolute;top:var(--lwc-borderWidthThin, 1px);left:238px }
+.tab5  {  position:absolute;top:var(--lwc-borderWidthThin, 1px);left:298px}
+.tab6  { position:absolute;top:var(--lwc-borderWidthThin, 1px);left:348px}*/
+/*Apply the color of icon to red*/
+.my-fallback-color {
+  --sds-c-icon-color-background: red;
+  font-weight: bold;
+}
+
+
+.lightning-tab{
+  position: absolute; 
+  top: -10px;
+  right: -18px;
+}
+
+/*Hide the icons if the screen size shrinked*/
+/* For 765 Resolution */  
+@media only screen and (max-width: 765px) {
+  .fadeSmallCounterIcon {
+      display: none;
+  }
+}
+/* For 1024 Resolution */  
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+   .fadeMediumCounterIcon {
+      display: none;
+    }
+}
+/* For 1500 Resolution */ 
+@media only screen and (min-width: 1030px) and (max-width: 1500px){  
+  .fadeLargerCounterIcon {
+    display: none;
+  }
+}

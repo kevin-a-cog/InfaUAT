@@ -1,0 +1,51 @@
+.container{
+    padding: 0;
+    background: #FFFFFF;
+    box-shadow: 5px 5px 18px rgba(0, 0, 0, 0.12);
+}
+@media screen and (max-width:768px){
+    .in-event-attendees-container {
+        margin: 0 auto;
+        width: 92%;
+    }
+}
+.event-attendees-info{
+    border-bottom: 1px solid #D8D8D8;
+}
+.flexbox-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: center;
+    padding: 10px 16px;
+}
+.flexbox-item{
+    padding: 0.5rem;
+}
+.count{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 21px;
+    line-height: 5px;    
+    color: #FF4D00;
+}
+.label{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 18px;
+}
+.divider{
+    border-left: 1px solid #D8D8D8;
+}
+.awaiting-responses{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 18px;
+    color: #373737;
+    padding: 2rem;
+}

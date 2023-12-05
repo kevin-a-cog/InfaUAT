@@ -1,0 +1,15 @@
+.THIS {
+    background-color: white; 
+    border-color: white;
+    border:0px;
+    margin-top: -30px;
+  }
+
+  .THIS .CoveoSearchbox .magic-box-clear
+{
+    line-height:40px;
+}
+
+.THIS .search-position{
+  padding: 0px;
+}

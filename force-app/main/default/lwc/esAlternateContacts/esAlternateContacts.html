@@ -1,0 +1,97 @@
+<!--
+/*
+ * Name			:	esAlternateContacts
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	10/25/2022
+ * Description	:	This LWC displays alternate contacts.
+
+ Change History
+ ****************************************************************************************************************
+ Modified By			Date			Jira No.		Description					                        Tag
+ ****************************************************************************************************************
+ Vignesh Divakaran      10/25/2022		I2RT-7256		Initial version.			                        N/A
+ */
+-->
+<template>
+    
+    <div class="container">
+        <h2 class="es-page__heading">
+            <lightning-button-icon variant="container" size="medium" icon-name="utility:chevronleft" title="Back"></lightning-button-icon>
+            Create a New Case
+        </h2>
+        <div class="row">
+            <div class="col-md-12">
+                <c-es-case-creation-filled filled-step="1" filled-label="Case Type" filled-value={objParameters.strCaseType}></c-es-case-creation-filled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <c-es-case-creation-filled filled-step="2" filled-label="Case Information" filled-value={objParameters.strCaseInformation}></c-es-case-creation-filled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <c-es-case-creation-filled filled-step="3" filled-label="Additional Case Information" filled-value={objParameters.strCaseAttachmentNumber}></c-es-case-creation-filled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="es-case-wrapper">
+                    <h3 class="es-case__heading"> 
+                        <span class="es-case__step es-case__step--active">4</span> 
+                        Alternate Contacts
+                    </h3>
+                        <div class="es-case-section">
+                            <p class="mb-4">{objParameters.strAlternateContactsDescription}</p>
+                            <div class="d-md-flex align-items-center justify-content-between mb-2">
+                                {alternateContactMessage}                                
+                                <div class="es-lds-form-group d-md-flex align-items-center">
+                                    <div class="d-flex align-items-center float-md-right">
+                                        Search &nbsp;&nbsp;
+                                        <div class="es-lds-form-group"> 
+                                            <lightning-input type="text" placeholder="Enter Search Text.." label="Search" variant="label-hidden" slot="actions" onchange={search}></lightning-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <template if:true={showContacts}>
+                                <div data-id="accountContacts" class="slds-show">
+                                    <div class="table-responsive es-datatable">
+                                        <lightning-datatable 
+                                            class="slds-max-medium-table_stacked"
+                                            columns={lstColumns}
+                                            data={lstContacts}
+                                            key-field="strId"
+                                            suppress-bottom-bar="true"
+                                            sorted-direction={strSortDirection}
+                                            sorted-by={strSortedBy}
+                                            onsort={sort}
+                                            onrowselection={select}
+                                            selected-rows={lstAllSelectedRecordIds}>
+                                        </lightning-datatable>
+                                    </div>
+                                    
+                                    <div class="es-table-pagination mt-2">
+                                        <p class="es-table__pagination-count">Showing {startingRecord} - {endingRecord} of {intTotalRecords} contacts</p>
+                                    </div>
+                                    <c-es-do-p-agination onfirst={first} onprevious={previous} onnext={next} onlast={last}> </c-es-do-p-agination>
+                                </div>
+                            </template>
+                            <template if:false={showContacts}>
+                                <tr class="es-table--empty">
+                                    <td colspan="9">There are no Alternate Contacts available.</td>
+                                </tr>
+                            </template>  
+                        </div>               
+                    <div class="es-btn-grp d-md-flex d-sm-inline-flex justify-content-end">
+                        <lightning-button label="Cancel" class="es-button es-button--secondary" onclick={cancelCaseCreation}></lightning-button>
+                        <lightning-button label="Go Back" class="es-button es-button--secondary" onclick={goToPreviousStep}></lightning-button>
+                        <lightning-button label={buttonLabel} class="es-button es-button--primary" onclick={proceed}></lightning-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</template>

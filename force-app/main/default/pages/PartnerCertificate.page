@@ -1,0 +1,53 @@
+<!--
+        Change History
+    ********************************************************************************************************************************************
+        ModifiedBy          Date        Requested By        Description                                                            Tag
+        
+     Nisarg Devdhar       4/12/2021      PRM                PRMRT-1139 Added Partner Level   
+    ********************************************************************************************************************************************
+-->
+<apex:page standardController="Account" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" renderAs="pdf" >
+    <html>
+        <div style="text-align: right">
+            <span><img src="{!$Resource.informatica}" style="float: right" width="50%"/></span>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div style="text-align: right">
+            <span >Date:</span>
+            <apex:outputText value="{0, date, MMM d','  yyyy}">
+                <apex:param value="{!NOW()}" /> 
+            </apex:outputText>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+         <p style="text-align: left; margin-left: 10px;">
+             To Whom It May Concern:
+        </p>
+        <p style="text-align: left; margin-left:10px;">
+            This is to confirm that&nbsp;<apex:outputText escape="false" value="{!Account.Name}"/> is an Authorized&nbsp; <apex:outputText escape="false" value="{!Account.Partner_Level__c}"/>&nbsp; <apex:outputText value="{!Account.Partner_Type__c}"/> in good standing, with its legal address at:
+            <br/><br/>
+            <div style="margin-left: 50px;">
+                <apex:outputText value="{!Account.BillingStreet}"/><br/>
+                <apex:outputText value="{!Account.BillingCity}"/>, &nbsp; 
+                <apex:outputText value="{!Account.BillingState}"/>&nbsp;
+                <apex:outputText value="{!Account.BillingPostalCode}"/><br/>
+                <apex:outputText value="{!Account.BillingCountry}"/><br/>
+            </div>
+            <br/>
+            <br/>
+            <div style="margin-left: 10px">
+                Yours truly,                
+            </div>
+            <div style="margin-left: 40px">
+                <img src="{!$Resource.PartnerCertificateSignature}" width="40%" />
+            </div>
+        </p>
+    </html>
+</apex:page>

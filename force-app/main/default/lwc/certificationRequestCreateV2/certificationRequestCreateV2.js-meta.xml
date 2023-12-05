@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Create Certification Request V2</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+        <target>lightning__RecordPage</target>
+    </targets>
+   <targetConfigs>
+       <targetConfig targets="lightning__FlowScreen">
+            <propertyType name="A" extends="SObject" label="Select object API name" description="Please select Account as the object" />
+            <propertyType name="B" extends="SObject" label="Select object API name" description="Please select AccountTeamMember as the object" />
+            <propertyType name="C" extends="SObject" label="Select object API name" description="Please select Certification_Request__c as the object" />
+            <propertyType name="D" extends="SObject" label="Select object API name" description="Please select Case_Period_Segment_Configuration__mdt as the object" />
+            <property name="objSupportAccount" type="{A}" label="Support Account record" role="inputOnly"/>
+            <property name="objAccountTeamMember" type="{B}" label="Account Team Member record" role="inputOnly"/>
+            <property name="lstCertificationRequests" type="{C[]}" label="List of Certification Requests" role="inputOnly"/>
+            <property name="lstCaseSegmentPeriodConfigurations" type="{D[]}" label="List of Case Segment Period Configurations" role="inputOnly"/>
+            <property name="recordId" type="String" label="Record Id"/>
+            <property name="objCertificationRequest" type="{C}" label="Certification Request record" role="outputOnly"/>
+            <property name="boolRequiredFieldsFilled" type="Boolean" label="Indicates whether all required fields to create Certification Request are entered" role="outputOnly"/>
+            <property name="objCertificationRequestDraft" type="{C}" label="Draft Certification Request" description="Stores the user input values in draft incase of an error to persist the data"/>
+            <property name="boolShowErrorMessage" type="Boolean" label="Indicates whether error message should be displayed." role="outputOnly"/>
+            <property name="strErrorMessage" type="String" label="Error message" role="outputOnly"/>
+       </targetConfig>
+   </targetConfigs>
+</LightningComponentBundle>

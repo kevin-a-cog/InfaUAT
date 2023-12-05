@@ -1,0 +1,53 @@
+<template>
+<table class="slds-table slds-no-row-hover slds-table_bordered slds-p-around_small">
+        <thead>
+            <tr class="slds-line-height_reset">                
+                <template for:each={objConfiguration.columns} for:item="label">
+                    <th class="" scope="col" key={label} >
+                        <div class="slds-truncate slds-align_absolute-center" title={label}>{label}</div>
+                    </th>
+                </template>
+            </tr>
+        </thead>
+        <tbody>
+            <template for:each={objConfiguration.data} for:item="obj" >
+                <tr key={obj.project}  class="slds-line-height_reset">
+                    <td  key={obj.project.strId}>
+                        <div class="slds-truncate" >
+                            <!--<lightning-button-stateful label-when-off={obj.project.strLabel} 
+                                                        label-when-on={obj.project.strLabel} 
+                                                        variant={obj.project.strState} 
+                                                        data-id={obj.project.strId} 
+                                                        onclick={clickSlot} class="slds-button slds-button_brand slds-button_stretch">
+                                                    </lightning-button-stateful>-->
+                            <button type="submit" class={obj.project.strState} onclick={clickSlot}  data-id={obj.project.strId} >{obj.project.strLabel} </button>
+                        </div>
+                    </td>
+                    <td  key={obj.product.strId}>
+                        <div class="slds-truncate">
+                            <!--<lightning-button-stateful label-when-off={obj.product.strLabel} 
+                                                        label-when-on={obj.product.strLabel} 
+                                                        variant={obj.product.strState} 
+                                                        data-id={obj.product.strId} 
+                                                        onclick={clickSlot} class="slds-button slds-button_brand slds-button_stretch">
+                            </lightning-button-stateful>-->
+                            <button type="submit" class={obj.product.strState} onclick={clickSlot} data-id={obj.product.strId} >{obj.product.strLabel} </button>
+                        </div>
+                    </td>
+                    <td  key={obj.engagement.strId}>
+                        <div class="slds-truncate">
+                            <!--<lightning-button-stateful label-when-off={obj.engagement.strLabel} 
+                                                        label-when-on={obj.engagement.strLabel} 
+                                                        variant={obj.engagement.strState} 
+                                                        data-id={obj.engagement.strId} 
+                                                        onclick={clickSlot} class="slds-button slds-button_brand slds-button_stretch">
+                            </lightning-button-stateful>-->
+
+                            <button type="submit" class={obj.engagement.strState} onclick={clickSlot} data-id={obj.engagement.strId} >{obj.engagement.strLabel} </button>
+                        </div>
+                    </td>
+                </tr>              
+            </template>
+        </tbody>
+    </table>
+</template>

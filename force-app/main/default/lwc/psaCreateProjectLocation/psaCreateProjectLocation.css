@@ -1,0 +1,20 @@
+/*
+.slds-modal__container {
+    max-width: 90% !important;
+    width: 90% !important;
+    }
+    */
+    /*
+    .combobox {
+        height: 375px;
+        overflow: auto;
+    }
+    */
+    /*
+    .slds-box {
+        border: 1px solid #0176D3;
+    }
+    */
+    :host {        
+        /* Other CSS custom properties here */
+      }

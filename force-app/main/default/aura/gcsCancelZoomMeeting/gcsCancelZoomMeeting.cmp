@@ -1,0 +1,25 @@
+<!--
+/*
+ * Name			:	gcsCancelZoomMeeting
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	11/02/2021
+ * Description	:	This Aura Bundle cancels a Zoom invite.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		11/02/2021		N/A				Initial version.			N/A
+ */
+-->
+<aura:component implements="force:lightningQuickAction,force:hasRecordId" access="global">
+
+	<!-- APIs. -->
+	<lightning:workspaceAPI aura:id="workspace" />
+
+	<!-- Variables. -->
+	<aura:attribute name="recordId" type="String" />
+
+    <!-- LWC. -->
+    <c:cancelZoomMeeting recordId="{!v.recordId}" onexecuteaction="{!c.executeAction}" />
+</aura:component>

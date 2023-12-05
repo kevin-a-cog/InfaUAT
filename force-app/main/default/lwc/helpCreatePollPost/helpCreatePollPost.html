@@ -1,0 +1,87 @@
+<!--
+ * Name			:	helpCreatePoll
+ * Author		:	Narpavi Prabu
+ * Created Date	: 	21/03/2022	
+ * Description	:	This LWC is used to create polls.
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description							                                 Tag
+ **********************************************************************************************************
+ Narpavi Prabu	  21/03/2022		 		            Initial version.					                                 N/A
+ Deeksha Shetty   2/09/2022          I2RT-7428          Poll : Not able to create a poll in User group                       T1
+ Deeksha Shetty   13/06/2023         I2RT-8423          Provision to create poll in product community                        T2
+ 
+-->
+
+<template>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+        aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open in-modal-wrapper">
+        <div class="slds-modal__container">
+            <div class="in-modal__content">
+                <header class="slds-modal__header in-modal__header">
+                    <button class="in-button--only-icon" title="Close" onclick={handleModalClose}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="xx-small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium slds-hyphenate">{heading}</h2>
+                </header>
+                <div class="in-modal__faux-body">
+
+                    <div class="in-modal__body">
+                        <!--T1 -Added spinner-->
+                        <div class="slds-is-relative">
+                            <lightning-spinner alternative-text="Loading" size="medium" if:true={isLoading}>
+                            </lightning-spinner>
+
+                            <template if:true={showSpamMessage}>
+                                <div class="popup-alert__msg">
+                                    {spammedErrorMsg}
+                                </div>
+                            </template>
+
+                            <!--T2 starts-->
+                            <template if:true={showPollAction}>
+                                <lightning-combobox name="Post To" label="Post To" placeholder="Select Community"
+                                    options={options} value={selectedpostto} onchange={handlePostChange} required>
+                                </lightning-combobox>
+                            </template>
+                            <!--T2 ends-->
+
+                            <lightning-textarea class="pollQuesCmp" name="Question" label="Question" value={bodyVal}
+                                onchange={handleBody} required>
+                            </lightning-textarea>
+
+                            <abbr title="required" class="slds-required">*</abbr>
+                            <label>{choicelabel}</label>
+
+                            <lightning-input class="choiceOneCmp" type="text" name="Choice1" value={choiceVal}
+                                onchange={handleChoice} required>
+                            </lightning-input>
+
+                            <template for:each={listofChoice} for:item="rec" for:index="indx">
+                                <div key={rec}>
+                                    <lightning-input type="text" class="choiceMultipleCmp" data-id={rec.index}
+                                        name="ChoiceBody" value={rec.ChoiceBody} onchange={handleInputChange} required>
+                                    </lightning-input>
+                                </div>
+                            </template>
+
+                            <br>
+                            <lightning-button variant="neutral" label="Add new Choice" title="add additional row"
+                                icon-name="utility:add" onclick={addNewRow}></lightning-button>
+
+                        </div>
+                    </div>
+                </div>
+                <footer class="in-modal__footer in-btn-grp d-flex justify-content-end">
+                    <lightning-button style="padding-right: 18px" label="Create" onclick={handleCreatePoll}>
+                    </lightning-button>
+                    <lightning-button label="Cancel" onclick={handleModalClose}></lightning-button>
+                </footer>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+
+</template>

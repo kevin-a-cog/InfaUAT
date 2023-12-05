@@ -1,0 +1,400 @@
+<!--
+  /*
+   @created by       : 
+   @created on       : 13/04/2023
+   @Purpose          : 
+   @Testclass        :
+   @JIRA             :
+
+
+   Change History
+ ****************************************************************************************************
+ |    Tag     |  Date             |  Modified by              |  Jira reference   |   ChangesMade
+ |     1      |  13-Apr-2021      |   Sathish R               |                   |   Initial Version
+ |     2      |  06-Sep-2023      |   Sathish R               |     I2RT-8843     |   PROD - IN Community - Discussion - In "Product" dropdown values are mismatching, not displaying the entire list of "Product Community" name. 
+ |     3      |  26-Oct-2023      |   Prashanth Bhat          |     I2RT-9228     |   Pagination
+ ****************************************************************************************************
+ */
+-->
+
+<template>
+    <div class="heading-wrapper">
+        <div class="in-banner__content">
+            <div class="container">
+                <div class="in-banner-heading">{title}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="in-wrapper-bg-fuild-grey">
+        <div class="container">
+            <div class="pt-3">
+                <!-- Tag 1 start -->
+                <div id="help-discussion-search" data-id={coveoSearchId} class="CoveoSearchInterface help-discussion-search" 
+                data-enable-history="true" data-design="new"
+                data-results-per-page={numOfItems} data-always-open-in-new-window="true" data-allow-queries-without-keywords="true"  data-auto-trigger-query="true" 
+                data-enable-automatic-responsive-mode="true">
+                <div class="CoveoAnalytics"></div>
+                <!-- Tag 1 end -->
+                
+                <div class="CoveoFoldingForThread" data-field="@foldfoldingfield" data-parent="@foldchildfield"
+                data-child="@foldparentfield" data-maximum-expanded-results="4" data-range="2" data-tab="MyDiscussions"></div>
+                <div class="disc-landing-tab">
+                    <template if:true={isAskQuestionModal}>
+                        <c-help-ask-a-question-modal heading={heading} selectedpostto={recordId}
+                            onclosepopup={closeAskQuestionModal} onsave={saveData} is-loading={isSpinnerLoading}>
+                        </c-help-ask-a-question-modal>
+                    </template>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="help-disc-tab-section">
+                                <div class="help-disc-tab-wrapper">
+                                    <template if:false={isGuestUser}>
+                                        <!-- Tag 1 start -->
+                                        <!-- Tag 2 start -->
+                                        <a class="CoveoTab" data-id="MyDiscussions" data-caption="My Discussions"
+                                        data-expression={myDiscTabFilter} data-sort="@increateddate descending"> </a>                               
+                                    </template>
+                                    <a class="CoveoTab" data-id="All" data-caption="All Discussions"
+                                    data-expression="@infadocumenttype==UserFeed" data-sort="@increateddate descending"> </a>
+                                    <!-- Tag 2 end -->
+                                    <!-- Tag 4 start -->
+                                    <template if:false={isGuestUser}>
+                                        <a class="CoveoTab" data-id="Recommended" data-caption="Recommended Discussions"
+                                        data-expression={recommendedTabFilter} data-sort="relevancy"> </a>
+                                    </template>
+                                    <!-- Tag 4 end -->
+                                    <!-- Tag 1 end -->
+                                </div>
+
+                                <!-- filter and search button -->
+                                <div class="help-disc-filter-search-wrapper">                              
+                                    <lightning-button variant="brand" label="Ask a Question" onclick={handleAskQuestion}
+                                        class="in-askButton"></lightning-button>
+
+                                    <div class="filterButton">
+                                        <button variant="brand" class="slds-button slds-button_brand" onclick={handleShowFilters}>
+                                            <img class="in-btn-icon" src="/resource/./informaticaNetwork3/Filter-Icon.svg" />
+                                            <span class="slds-p-left_x-small">
+                                                Filters
+                                            </span>
+                                        </button>
+                                    </div>
+                                
+                                    <div class="coveo-search-box-wrapper">
+                                        <div class="CoveoSearchbox help-discussion-box slds-form-element__control slds-grow slds-input-has-icon slds-input-has-icon_left-right"
+                                            title="Enter the terms you wish to search for." data-inline="false" data-placeholder="Search Discussions"
+                                            data-add-search-button="true" data-enable-wildcards="true" data-enable-omnibox="true"
+                                            data-enable-simple-addon="false" data-enable-field-addon="false" data-enable-top-query-addon="true"
+                                            data-enable-reveal-query-suggest-addon="true" data-enable-query-extension-addon="true"
+                                            data-trigger-query-on-clear="true"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="help-disc-filterbar-wrapper">
+                                <div class="help-disc-filterbar">
+                                    <div class="help-disc-filter">
+                                        <div class="help-disc-inputWrap">
+                                            <label class="slds-form-element__label">FILTER BY</label>
+                                            <!-- Tag 5 start -->
+                                            <div class="infa-discussion-landing-dropdown dropdown">
+                                                <!-- Tag 1 start -->
+                                                <button onclick={checkDropdown} class="infa-discussion-landing-btn-dropdown dropdown-toggle" type="button"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Select Product
+                                                    <span class="infa-discussion-landing-dropdown-icon">
+                                                        <svg focusable="false" enable-background="new 0 0 10 6" viewBox="0 0 10 6"
+                                                            xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Arrow Down"
+                                                            class="coveo-dynamic-facet-collapse-toggle-svg">
+                                                            <title>Arrow Down</title>
+                                                            <g fill="currentColor">
+                                                                <path
+                                                                    d="m5 5.932c-.222 0-.443-.084-.612-.253l-4.134-4.134c-.338-.338-.338-.886 0-1.224s.886-.338 1.224 0l3.522 3.521 3.523-3.521c.336-.338.886-.338 1.224 0s .337.886-.001 1.224l-4.135 4.134c-.168.169-.39.253-.611.253z">
+                                                                </path>
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                </button>
+                                                <div class="infa-discussion-landing-dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <div class="CoveoDynamicFacet disc-product infa-discussion-landing-coveo-dropdown"
+                                                        data-field="@athenaproduct" data-title="Select Product" data-id="product" data-enable-collapse="true"
+                                                        data-preserve-position="false" data-collapsed-by-default="false" data-include-in-breadcrumb="true"
+                                                        data-enable-facet-search="false" data-enable-more-less="false" data-number-of-values="200" data-injection-depth="3500"> <!-- Tag 2 -->
+                                                    </div>
+                                                </div>
+                                        
+                                                <!-- Tag 1 end -->
+                                            </div>
+                                            <!-- Tag 5 end -->
+                                        </div>
+
+                                        <div class="help-disc-inputWrap">
+                                            <!-- Tag 5 start -->
+                                            <div class="infa-discussion-landing-dropdown dropdown">
+                                                <!-- Tag 1 start -->
+                                                <button onclick={checkDropdown} class="infa-discussion-landing-btn-dropdown dropdown-toggle" type="button"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Answered Type
+                                                    <span class="infa-discussion-landing-dropdown-icon">
+                                                        <svg focusable="false" enable-background="new 0 0 10 6" viewBox="0 0 10 6"
+                                                            xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Arrow Down"
+                                                            class="coveo-dynamic-facet-collapse-toggle-svg">
+                                                            <title>Arrow Down</title>
+                                                            <g fill="currentColor">
+                                                                <path
+                                                                    d="m5 5.932c-.222 0-.443-.084-.612-.253l-4.134-4.134c-.338-.338-.338-.886 0-1.224s.886-.338 1.224 0l3.522 3.521 3.523-3.521c.336-.338.886-.338 1.224 0s .337.886-.001 1.224l-4.135 4.134c-.168.169-.39.253-.611.253z">
+                                                                </path>
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                </button>
+                                                <div class="infa-discussion-landing-dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <div class="CoveoDynamicFacet disc-answered-type" data-field="@inansweredtype" data-title="Answered Type"
+                                                        data-id="type" data-enable-collapse="true" data-preserve-position="false"
+                                                        data-collapsed-by-default="false" data-include-in-breadcrumb="true" data-enable-facet-search="false"
+                                                        data-enable-more-less="false" data-number-of-values="30">
+                                                    </div>
+                                                </div>
+                                        
+                                                <!-- Tag 1 end -->
+                                            </div>
+                                            <!-- Tag 5 end -->
+                                        </div>
+
+                                    </div>
+                                    <div class="help-disc-sortWrap">
+                                        <div class="slds-form-element disc-sort-by">
+                                            <label class="slds-form-element__label">SORT BY</label>
+                                            <div class="slds-form-element__control">
+                                                <div class="CoveoSortDropdown disc-sort-dropdown" style="border-right: 1px solid #bcbcbc;">
+                                                    <!-- Tag 2 start -->
+                                                    <span class="CoveoSort" data-sort-criteria="@increateddate descending" data-caption="Latest"></span>
+                                                    <span class="CoveoSort" data-sort-criteria="@increateddate ascending" data-caption="Oldest"></span>
+                                                    <!-- Tag 2 end -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="CoveoBreadcrumb in-disc-filter"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="coveo-main-section help-discussion-main-content" data-mode="search">
+                    <div class="coveo-facet-column"></div>
+                    <div class="coveo-results-column p-0">
+                        <div class="CoveoCustomNoResults" data-template-id="helpDiscLandingNoResults">
+                            <div class="no-results">
+                                <p><span id="no-results-query"></span></p>
+                                <div id="didyoumean"></div>
+                            </div>
+                        </div>
+
+                        <div class="CoveoResultList" data-wait-animation="fade" data-auto-select-fields-to-include="false" data-layout="list">
+                            <div class="coveo-show-if-no-results text-center">
+                                <p>No Results Found.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Tag 3 start -->
+                <div class="in-coveo__pager">
+                    <div class="CoveoPager in-coveo__pager-list"></div>
+                </div>
+                 <!-- Tag 3 end -->
+                </div>
+            </div>
+        </div>    
+    </div>
+    
+    <div data-custom-content-type="external" class="Default" style="display:none">
+        <div data-custom-content-type="external" style="display:none">Default</div>
+        <div class="coveo-result-row row discussion-content-row px-3">
+            <div class="col discussion-imgWrap p-0">
+                <img src={discussionLogo} alt="question" class="w-100" />
+            </div>
+
+            <div class="col discussion-contentwrap">
+                <div class="help-disc-content">
+					<div class="coveo-title">
+                        <a class="CoveoResultLink help-disc-title" target="_blank"></a>
+                    </div>
+					<div class="help-disc-info-wrap">
+						 <div class="help-disc-info">
+                            <span class="CoveoFieldValue help-disc-item" data-field="@coveochatterfeedtopics" data-helper="helpDiscLandingProdDisplay" data-html-value="false"></span>
+                            <span class="CoveoFieldValue help-disc-item" data-field="@sfcreatedbyname" data-html-value="false"></span>
+                            <span class="CoveoFieldValue help-disc-item" data-field="@increateddate" data-helper-options-predefined-format="MMM dd, yyyy" data-helper="date"></span>
+                        </div>
+						<div class="help-disc-wrap ml-auto">
+                            <span class="CoveoFieldValue help-disc-count" data-field="@sfbestcommentid" data-html-value="true" data-helper="helpBestAnswered"></span>
+                            <span class="CoveoFieldValue help-disc-count" data-field="@sffeedlikescount" data-html-value="false" data-helper="helpDiscGetLikes">
+                                <i class="fas fa-thumbs-up mr-1" aria-hidden="true"></i>
+                            </span>
+                            <span class="CoveoFieldValue help-disc-count" data-field="@sffeedcommentscount" data-html-value="false" data-helper="helpDiscGetComments">
+                                <i class="fa fa-comment mr-1" aria-hidden="true"></i>
+                            </span>
+                        </div>				
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+    
+    <div data-custom-content-type="external" class="helpDiscLandingList" style="display:none">
+        <div data-custom-content-type="external" style="display:none">helpDiscLandingList</div>
+        <div class="coveo-result-row row discussion-content-row px-3">
+            <div class="col discussion-imgWrap p-0">
+                <img src={discussionLogo} alt="question" class="w-100" />
+            </div>													
+			<div class="col discussion-contentwrap">
+				<div class="help-disc-content">
+					<div class="coveo-title">
+                        <a class="CoveoResultLink help-disc-title" target="_blank"></a>
+                    </div>
+					<div class="help-disc-info-wrap">
+						 <div class="help-disc-info">
+                            <span class="CoveoFieldValue help-disc-item" data-field="@coveochatterfeedtopics" data-helper="helpDiscLandingProdDisplay" data-html-value="false"></span>
+                            <span class="CoveoFieldValue help-disc-item" data-field="@sfcreatedbyname" data-html-value="false"></span>
+                            <span class="CoveoFieldValue help-disc-item" data-field="@increateddate" data-helper-options-predefined-format="MMM dd, yyyy" data-helper="date"></span>
+                        </div>
+						<div class="help-disc-wrap ml-auto">
+                            <span class="CoveoFieldValue help-disc-count" data-field="@sfbestcommentid" data-html-value="true" data-helper="helpBestAnswered"></span>
+                            <span class="CoveoFieldValue help-disc-count" data-field="@sffeedlikescount" data-html-value="false" data-helper="helpDiscGetLikes">
+                                <i class="fas fa-thumbs-up mr-1" aria-hidden="true"></i>
+                            </span>
+                            <span class="CoveoFieldValue help-disc-count" data-field="@sffeedcommentscount" data-html-value="false" data-helper="helpDiscGetComments">
+                                <i class="fa fa-comment mr-1" aria-hidden="true"></i>
+                            </span>
+                        </div>				
+					</div>
+				</div>
+			</div>			
+            
+        </div>
+        <div class="coveo-result-row">
+            <div class="coveo-result-cell" style="width:85px;text-align:center">
+
+            </div>
+            <div class="coveo-result-cell">
+                <!-- <div class="CoveoTemplateLoader" data-template-id="helpDiscChildResults"></div> -->
+                <div class="coveo-result-row" style="display: none;">
+                    <div class="coveo-result-cell" style="font-size:13px">
+                        <span class="CoveoResultFolding" data-result-template-id="helpDiscChildResults"
+                            data-one-result-caption="Displaying the only reply in this discussion"
+                            data-normal-caption="Most Relevant Replies" data-expanded-caption="All Replies"
+                            data-more-caption="Show More Replies"
+                            data-less-caption="Show Only Top Relevant Replies"></span>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <div data-custom-content-type="external" class="helpDiscComment" style="display:none">
+        <div data-custom-content-type="external" style="display:none">helpDiscComment</div>
+        <div class="coveo-result-row row discussion-content-row px-3">
+
+            <div class="col discussion-imgWrap p-0">
+                <img src={discussionLogo} alt="question" class="w-100" />
+            </div>
+
+            <div class="col discussion-contentwrap">
+				<div class="help-disc-content">
+					<div class="coveo-title">
+                        <a class="CoveoResultLink help-disc-title" target="_blank">
+                            <span class="CoveoFieldValue" data-field="@sffeedcommenttitle" data-html-value="false"></span>
+                        </a>
+                    </div>
+					<div class="help-disc-info-wrap">
+						 <div class="help-disc-info">
+                            <span class="CoveoFieldValue help-disc-item" data-field="@coveochatterfeedtopics" data-helper="helpDiscLandingProdDisplay" data-html-value="false"></span>
+                            <span class="CoveoFieldValue help-disc-item" data-field="@sffeedcreatedbyname" data-html-value="false"></span>
+                            <span class="CoveoFieldValue help-disc-item" data-field="@increateddate" data-helper-options-predefined-format="MMM dd, yyyy" data-helper="date"></span>
+                        </div>
+						<div class="help-disc-wrap ml-auto">
+                            <span class="CoveoFieldValue help-disc-count" data-field="@sfbestcommentid" data-html-value="true" data-helper="helpBestAnswered"></span>
+                            <span class="CoveoFieldValue help-disc-count" data-field="@sffeedlikescount" data-html-value="false" data-helper="helpDiscGetLikes">
+                                <i class="fas fa-thumbs-up mr-1" aria-hidden="true"></i>
+                            </span>
+                            <span class="CoveoFieldValue help-disc-count" data-field="@sffeedcommentscount" data-html-value="false" data-helper="helpDiscGetComments">
+                                <i class="fa fa-comment mr-1" aria-hidden="true"></i>
+                            </span>
+                        </div>				
+					</div>
+				</div>
+			</div>
+        </div>       
+    </div>
+    <div data-custom-content-type="external" class="helpDiscChildResults" style="display:none">
+        <div data-custom-content-type="external" style="display:none">helpDiscChildResults</div>
+        <div class="coveo-result-frame">
+            <div class="coveo-result-row">
+                <div class="coveo-result-cell" style="width:50px;text-align:center">
+                    <span class="CoveoIcon search-kb-icon"
+                        style="width: 20px !important;height: 20px !important;background-color:transparent;"></span>
+                        <!-- <div class="CoveoQuickview" style="font-size:12px;">
+                            <div class="custom-coveo-icon-for-quickview"></div>
+                            <div class="custom-coveo-quickview-text">Quick View</div>
+                        </div> -->
+                </div>
+                <div class="coveo-result-cell">
+                    <div class="coveo-result-row">
+                        <div class="coveo-result-cell coveo-comment-header">
+                            <span class="coveo-comment-from"> From: 
+                                <span class="CoveoFieldValue" data-field="@sysauthor"></span>
+                                <span class="CoveoFieldValue" data-field="@sfcreatedbyname"></span>
+                            </span>
+                        </div>
+                        <!-- <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoFieldValue" data-field="@sfcreatedbyname" data-helper="inanswercreatedDisplay" data-html-value="true"></div>
+                            </div>
+                        </div> -->
+                        <div class="coveo-result-cell coveo-date" style="width:120px; text-align:right;">
+                            <!-- Tag 2 start -->
+                            <span class="CoveoFieldValue" data-field="@increateddate"
+                                data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            <!-- Tag 2 end -->
+                            <span class="jive-badge jive-status" style="display: none;"
+                                data-custom-coveo-class="data-custom-coveo-html-value">Helpful</span>
+                        </div>
+                    </div>
+                    <div class="coveo-result-row">
+                        <div class="coveo-result-cell" style="font-size: 16px;padding-top:5px;padding-bottom:5px;">
+                            <a class="CoveoResultLink" target="_blank">
+                                <span class="CoveoExcerpt"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- <T02> -->
+                    <div class="coveo-result-row">
+                        <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                title="This information is browser specific"></span>
+                        </div>
+                    </div>
+                    <!-- </T02> -->
+                    <div class="coveo-result-row">
+                        <div class="coveo-result-cell" style="padding-bottom:5px; padding-top:5px">
+                            <span class="CoveoChatterLikedBy" data-nb-likes-to-render="1"></span>
+                        </div>
+                    </div>
+                    <div class="coveo-result-row">
+                        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+                            <span class="CoveoChatterPostAttachment"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

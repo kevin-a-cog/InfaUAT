@@ -1,0 +1,53 @@
+<template>
+    <div>
+        <div class="container in-anon-discussions-container pt-4">
+
+            <template if:true={isAskQuestionModal}>
+                <c-help-ask-a-question-modal heading={heading} selectedpostto={recordId}
+                    onclosepopup={closeAskQuestionModal} onsave={saveData} is-loading={isSpinnerLoading}>
+                </c-help-ask-a-question-modal>
+            </template>
+            <div class="d-flex align-items-center d-flex">
+                <a href={searchPage} class="d-flex in-section-link-header">
+                    <div class="in-section-heading">Discussions</div>
+                    <lightning-icon class="chevron-down right-chev"
+                        icon-name="utility:chevronright" size="x-small">
+                    </lightning-icon>
+                </a>
+                <div class="action-item d-flex ml-auto align-items-center d-flex" onclick={handleAskQuestion}>
+                    <img src={questionLogo} alt="question" class="action-img">
+                    <div class="action-name pl-2">Ask a Question</div>
+                </div>
+            </div>
+            <div class="discussion-div">
+                <template for:each={discussions} for:item="discussion">
+                    <div key={discussion.Id} class="d-flex item-bg">
+                        <img src={discussionLogo} alt="question" class="discussion-img">
+                        <div>
+                            <a href={discussion.URL} class="discussion-title" data-value={discussion.Title} data-community={discussion.CommunityName} onclick={handleOnClick}>{discussion.Title}</a>
+                            <div class="discussion-info">{discussion.CommunityName} - {discussion.CreatedByName} -
+                                <lightning-formatted-date-time value={discussion.ModifiedDate} year="numeric"
+                                    month="short" day="2-digit" hour="numeric"></lightning-formatted-date-time>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center in-anon-discussions-info ml-auto">
+                            <div class="in-anon-discussions-likes">
+                                <lightning-icon class="chevron-down align-items-center d-flex" icon-name="utility:like"
+                                    size="x-small">
+                                </lightning-icon>
+                                <div class="discussion-count pl-2">{discussion.LikeCount}</div>
+                            </div>
+                            <div class="in-anon-discussions-replies">
+                                <lightning-icon class="chevron-down align-items-center d-flex"
+                                    icon-name="utility:anywhere_chat" size="x-small">
+                                </lightning-icon>
+                                <div class="discussion-count pl-2 pr-2"> {discussion.CommentCount}</div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+</template>

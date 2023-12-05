@@ -1,0 +1,116 @@
+<!--
+ * Name			    :	CsmCreateMilestoneWithProductModal
+ * Author		    :	Deva M
+ * Created Date	    :   17/09/2021
+ * Description	    :	CsmCreateMilestoneWithProductModal.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			    Jira No.		Description					Tag
+ **********************************************************************************************************
+ Deva M		        17/09/2021		        N/A				Initial version.			N/A
+-->
+<template>
+<template if:false={createObjective}>
+    <template if:false={showMileStoneModal}>
+        <template if:false={showSecondMilestoneModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium"
+            aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container ">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" data-name="cancel" onclick={handleClick}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" data-name="cancel"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Add Milestone</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium slds-is-relative" style="min-height: 20rem"
+                    id="modal-content-id-1">
+                    
+                        <!--Creation of milestones and products screen-->
+                        <lightning-record-edit-form object-api-name="Milestone__c" record-id={milestoneId} onload={handleLoad}
+                        onsuccess={handleMilestoneSuccess}  onerror={handleError} onsubmit={handleSubmit} if:false={boolDisplaySpinner}>
+                            <lightning-messages></lightning-messages>
+                            <h3 class="slds-section__title slds-theme_shade">Information</h3>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item size="6">
+                                    <lightning-input-field field-name="Name" variant="label-stacked"
+                                        required>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6">
+                                    <lightning-input-field field-name="Milestone_Type__c" variant="label-stacked" required >
+                                    </lightning-input-field>
+                                </lightning-layout-item>  
+
+                                <lightning-layout-item size="12">
+                                    <lightning-input-field field-name="Description__c" variant="label-stacked" required>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6">
+                                    <lightning-input-field field-name="Status__c" variant="label-stacked" data-name="status" required value="Yet to Start">
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6">
+                                    <lightning-input-field field-name="Planned_Completion_Date__c" variant="label-stacked" required>
+                                    </lightning-input-field>
+                                </lightning-layout-item>  
+                                <lightning-layout-item size="6">
+                                    <lightning-input-field field-name="Milestone_Completion__c" variant="label-stacked" required>
+                                    </lightning-input-field>
+                                </lightning-layout-item> 
+                                <lightning-layout-item size="6">
+                                    <lightning-input-field field-name="Objective__c" class="slds-hide" value={objectiveId}>
+                                    </lightning-input-field>
+                                    <lightning-input-field field-name="Key_Milestone__c" variant="label-stacked"
+                                        data-name="keyMilestone" ></lightning-input-field>
+                                </lightning-layout-item>   
+                                
+                                <lightning-layout-item size="6">
+                                    <lightning-input-field field-name="Is_Internal__c" value={isObjectiveInternal} variant="label-stacked" disabled={isObjectiveInternal} if:false={boolIsCSMCommunity}>
+                                    </lightning-input-field>
+                                </lightning-layout-item>  
+                            </lightning-layout>
+                            <lightning-button class="slds-hide" type="submit" name="Save" label="Save Milestone"
+                                data-name="milestoneFormSubmitButton">
+                            </lightning-button>
+                        </lightning-record-edit-form> 
+                      
+                        <!-- Spinner. -->
+                        <div class="spinner">
+                            <template if:true={boolDisplaySpinner}>
+                                <lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+                            </template>
+                        </div>
+                              
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral slds-float_left" data-name="cancel" onclick={handleClick}>Close</button>
+                    <button if:true={showMileStoneProducts} class="slds-button slds-button_brand" data-name="saveAndAddMilestoneProducts" onclick={handleClick}>Save &amp; Add Milestone Products</button>
+                    <button class="slds-button slds-button_brand" data-name="save" onclick={handleClick}>Save &amp; Close</button>
+                    <button class="slds-button slds-button_brand" data-name="saveAndAddMilestone" onclick={handleClick}>Save &amp; Add Milestone</button>
+                    <!--<button class="slds-button slds-button_brand" data-name="saveandcreateobjective" onclick={handleClick}>Save &amp; Create Objective</button>-->                    
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+        <template if:true={showSecondMilestoneModal}>
+                <c-csm-create-milestone-with-product-modal objective-id={objectiveId} plan-id={planId} onclose={handleCancel} str-default-tab={strDefaultTab} bool-pre-select={boolPreSelect}> </c-csm-create-milestone-with-product-modal>                  
+            </template>
+        </template>
+        <!--Manage milestone product screen-->
+        <template if:true={showMileStoneModal}>
+            <c-csm-manage-milestone-products-modal plan-record-id={planId} milestone-record-id={milestoneId} onclose={handleCancel} str-default-tab={strDefaultTab} bool-pre-select={boolPreSelect}></c-csm-manage-milestone-products-modal>
+        </template> 
+</template>
+    <template if:true={createObjective}>
+        <c-csm-create-objective-and-milestone-modal plan-record={planId} onclose={handleCancel}></c-csm-create-objective-and-milestone-modal>
+    </template>
+</template>

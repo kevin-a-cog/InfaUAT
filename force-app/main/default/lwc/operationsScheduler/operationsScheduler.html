@@ -1,0 +1,54 @@
+<template>
+    <lightning-quick-action-panel title="Reschedule Session">
+        <div class="spinner-relative">
+            <lightning-spinner alternative-text="Loading" size="medium" if:true={saveInProgress}></lightning-spinner>
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Reschedule Session</h2>
+            </header>
+
+            <div class="slds-p-around_large">
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item size="12" padding="around-small">
+                        <label class="es-form-label">Time Zone: {userTimeZone}</label>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small">
+                        <lightning-combobox
+                            name="SessionDate"
+                            label="Select a date"
+                            placeholder="Please select a date"
+                            options={availableDates}
+                            value={selectedDate}
+                            onchange={handleDateSelect}
+                            dropdown-alignment="auto"
+                            required>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small">
+                        <lightning-combobox
+                            name="availableSlots"
+                            label="Available Slots"
+                            placeholder="Select a slot"
+                            options={availableSlots}
+                            value={selectedSlot}
+                            onchange={handleSlotSelect}
+                            dropdown-alignment="auto"
+                            required>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+
+            <!-- <footer class="slds-modal__footer">
+                <lightning-button label="Cancel" title="Cancel" onclick={cancel}>Cancel</lightning-button>
+                &nbsp; &nbsp;
+                <lightning-button label="Submit" title="Submit" variant="brand" onclick={escalateCase}></lightning-button>
+            </footer> -->
+
+        </div>
+        <div slot="footer">
+            <lightning-button label="Cancel" title="Cancel" variant="neutral" onclick={cancel} disabled={disableSaveCancel}></lightning-button>
+            &nbsp; &nbsp;
+            <lightning-button label="Save" title="Submit" variant="brand" onclick={rescheduleSession} disabled={disableSaveCancel}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

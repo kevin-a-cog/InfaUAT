@@ -1,0 +1,23 @@
+<template>
+    <div onclick={handleClick}>
+        <lightning-card variant="Narrow" class="card-border slds-card_boundary">
+            <h2 slot="title" title={name}>
+                <img if:true={isSalesforceRecord} src="https://cdn.iconscout.com/icon/free/png-256/salesforce-282298.png" alt={name}>
+                <img if:false={isSalesforceRecord} src={mdmLogo} alt={name}>
+            </h2>
+            <div slot="actions">
+                <b>{idnumber}</b>
+                <lightning-icon if:true={isClicked} icon-name="utility:success" variant="success" size="small"></lightning-icon>
+            </div>
+            <h2><p class="slds-p-horizontal_small custom-font">{name}</p></h2>
+            <p class="slds-p-horizontal_small"><b>Address</b>: {address}</p>
+            <p class="slds-p-horizontal_small">{city} {state}</p>
+            <p class="slds-p-horizontal_small">{postalCode} {country}</p>
+            <p class="slds-p-horizontal_small"><b>Phone Number</b>: {phoneNumber}</p>
+            <p class="slds-p-horizontal_small"><b>Website</b>: {website}</p>
+            <p if:true={isDunsAvailable} class="slds-p-horizontal_small"><b>Site DUNS</b>: {gduns}</p>
+            <!--SALESRT-13356-->
+            <p if:true={isAccTypeAvailable} class="slds-p-horizontal_small"><b>Account Type</b>: {accountType}</p> 
+        </lightning-card>
+    </div>
+</template>

@@ -1,0 +1,249 @@
+<!--
+* Name : HelpModerationItemDetail
+* Author : Deeksha Shetty
+* Created Date :  March 30,2022
+* Description : This Component displays Moderation Items
+ Change History
+ **************************************************************************************************************************
+ Modified By            Date            Jira No.            Description                                                 Tag
+ **************************************************************************************************************************
+ Deeksha Shetty        1-Feb-2022     I2RT-5249            Initial version.                                              NA
+ Deeksha Shetty       25-Jul-2023     I2RT-8306            Moderator functionality - enhancement                         T1
+
+-->
+
+<template>
+    <!---T1 starts -->
+    <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+    <template if:true={records}>
+
+        <lightning-card icon-name="standard:feed" title="Feed Details">
+
+            <div class="slds-feed-wrapper">
+                <ul class="slds-feed__list">
+                    <li class="slds-feed__item">
+                        <article class="slds-post">
+                            <header class="slds-m-bottom_large slds-media in-vertical-align-center">
+                                <div class="slds-media__figure">
+                                    <a href="#" class="slds-avatar slds-avatar_circle slds-avatar_large">
+                                        <img src="/resource/./informaticaNetwork/User-icon.svg"
+                                            alt={records.FeedCreatorName} title={records.FeedCreatorName} />
+                                    </a>
+                                </div>
+
+                                <div class="slds-media__body">
+                                    <div
+                                        class="slds-grid slds-grid_align-spread slds-has-flexi-truncate in-vertical-align-center">
+                                        <div class="in-user-detailWrapper">
+                                            <div class="slds-text-body">
+                                                <a href={records.FeedCreatedByIdURL}
+                                                    target="_blank">{records.FeedCreatorName}</a>
+                                                <span class="in-seperator-pipe">|</span>
+                                                <a href={records.CommunityUrl} title={records.CommunityName}
+                                                    target="_blank">{records.CommunityName}</a>
+                                            </div>
+                                            <div class="slds-text-body_small">
+                                                <a href="#" title="Click for single-item view of this post"
+                                                    class="slds-text-link_reset">{records.CreatedDate}</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="in-action-btnWrapper">
+                                            <lightning-button variant="brand" label="Approve" title="Approve action"
+                                                onclick={handleApprove} class="slds-m-left_x-small"></lightning-button>
+                                            <lightning-button label="Reject" title="Primary action"
+                                                onclick={handleReject} class="slds-m-left_x-small"></lightning-button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </header>
+
+                            <div class="slds-post__header">
+                                <div class="slds-text-heading_small slds-m-bottom_x-small">
+                                    <a href={records.QuestionURL}>{records.FeedTitle}</a>
+                                </div>
+                                <div class="in-progress-status">{records.Status}</div>
+                            </div>
+
+
+                            <div class="slds-post__content slds-text-longform">
+                                <lightning-formatted-rich-text value={records.FeedBody} access="global">
+                                </lightning-formatted-rich-text>
+
+                                <template lwc:if={records.imageUrlList}>
+                                    <template for:each={records.imageUrlList} for:item="file">
+                                        <img class="in-desc-img" key={file.ImageURL} src={file.ImageURL}
+                                            alt="Image Description">
+                                    </template>
+                                </template>
+
+                            </div>
+
+                            <template lwc:if={filesList}>
+                                <div class="slds-post__payload">
+                                    <ul class="slds-grid slds-grid_pull-padded-xx-small slds-wrap">
+
+                                        <template lwc:if={imageFileList}>
+                                            <template for:each={imageFileList} for:item="file">
+                                                <li key={file.value}
+                                                    class="slds-p-around_xx-small slds-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-6">
+                                                    <div class="slds-file slds-file_card slds-has-title">
+                                                        <figure>
+                                                            <div data-id={file.value} onclick={previewHandler}
+                                                                class="slds-file__crop slds-file__crop_16-by-9">
+                                                                <span class="slds-assistive-text">Preview:</span>
+                                                                <img src={file.url} alt="Image Descriptiom" />
+                                                            </div>
+
+                                                            <figcaption
+                                                                class="slds-file__title slds-file__title_card slds-file-has-actions">
+                                                                <div
+                                                                    class="slds-media slds-media_small slds-media_center">
+                                                                    <div
+                                                                        class="slds-media__figure slds-line-height_reset">
+                                                                        <lightning-icon class="slds-icon_container"
+                                                                            icon-name="doctype:image"
+                                                                            alternative-text="Image file"
+                                                                            title={file.label} size="x-small">
+                                                                        </lightning-icon>
+                                                                    </div>
+                                                                    <div class="slds-media__body">
+                                                                        <span class="slds-file__text slds-truncate"
+                                                                            title={file.label}>{file.label}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </figcaption>
+                                                        </figure>
+                                                        <div class="slds-file__actions-menu">
+                                                            <div class="slds-button-group" role="group">
+                                                                <a href={file.url} download
+                                                                    class="slds-button slds-button_icon slds-button_icon"
+                                                                    title="Download">
+                                                                    <lightning-icon
+                                                                        class="slds-icon_container slds-icon-utility-download slds-m-right_xx-small"
+                                                                        icon-name="utility:download"
+                                                                        alternative-text="Download" size="x-small">
+                                                                    </lightning-icon>
+                                                                </a>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </template>
+                                        </template>
+
+
+                                        <template lwc:if={excelFileList}>
+                                            <template for:each={excelFileList} for:item="file">
+                                                <li key={file.value}
+                                                    class="slds-p-around_xx-small slds-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-6">
+                                                    <div class="slds-file slds-file_card slds-has-title">
+                                                        <figure>
+                                                            <div data-id={file.value} onclick={previewHandler}
+                                                                class="slds-file__crop slds-file__crop_16-by-9">
+                                                                <span class="slds-assistive-text">Preview:</span>
+                                                                <span class="slds-file__icon slds-icon_container"
+                                                                    title={file.iconName}>
+                                                                    <lightning-icon icon-name={file.iconName}
+                                                                        alternative-text="doc" title="View File"
+                                                                        size="large"></lightning-icon>
+                                                                </span>
+                                                            </div>
+
+                                                            <figcaption
+                                                                class="slds-file__title slds-file__title_card slds-file-has-actions">
+                                                                <div
+                                                                    class="slds-media slds-media_small slds-media_center">
+                                                                    <div
+                                                                        class="slds-media__figure slds-line-height_reset">
+                                                                        <lightning-icon class="slds-icon_container"
+                                                                            icon-name={file.iconName}
+                                                                            alternative-text="file" title={file.label}
+                                                                            size="x-small">
+                                                                        </lightning-icon>
+                                                                    </div>
+                                                                    <div class="slds-media__body">
+                                                                        <span class="slds-file__text slds-truncate"
+                                                                            title={file.label}>{file.label}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </figcaption>
+                                                        </figure>
+                                                        <div class="slds-file__actions-menu">
+                                                            <div class="slds-button-group" role="group">
+                                                                <a href={file.url} download
+                                                                    class="slds-button slds-button_icon slds-button_icon"
+                                                                    title="Download">
+                                                                    <lightning-icon
+                                                                        class="slds-icon_container slds-icon-utility-download slds-m-right_xx-small"
+                                                                        icon-name="utility:download"
+                                                                        alternative-text="Download" size="x-small">
+                                                                    </lightning-icon>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </template>
+                                        </template>
+
+                                    </ul>
+                                </div>
+                            </template>
+                        </article>
+
+                        <template lwc:if={records.Comment}>
+                            <div class="slds-feed__item-comments slds-m-around_x-small">
+                                <ul>
+                                    <li>
+                                        <article class="slds-comment slds-media slds-hint-parent">
+                                            <div class="slds-media__figure">
+                                                <a href="#" class="slds-avatar slds-avatar_circle slds-avatar_medium">
+                                                    <img src="/resource/./informaticaNetwork/User-icon.svg" />
+                                                </a>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <header class="slds-media slds-media_center">
+                                                    <div
+                                                        class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">
+                                                        <div class="slds-truncate">
+                                                            <a
+                                                                href={records.FeedCommentCreatedByIdURL}>{records.FeedCommentCreatorName}</a>
+                                                            <span class="in-progress-text">- (Pending Review)</span>
+                                                        </div>
+                                                    </div>
+                                                </header>
+                                                <lightning-formatted-rich-text value={records.Comment} access="global">
+                                                </lightning-formatted-rich-text>
+
+
+
+
+                                                <template lwc:if={records.CommentimageUrlList}>
+                                                    <div class="in-comment-imgWrap">
+                                                        <template for:each={records.CommentimageUrlList}
+                                                            for:item="file">
+                                                            <img key={file.ImageURL} class="in-desc-img"
+                                                                src={file.ImageURL} alt="Image Description">
+                                                        </template>
+                                                    </div>
+                                                </template>
+
+                                            </div>
+                                        </article>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </template>
+
+                    </li>
+                </ul>
+            </div>
+        </lightning-card>
+        <!-- T1 ends here -->
+    </template>
+</template>

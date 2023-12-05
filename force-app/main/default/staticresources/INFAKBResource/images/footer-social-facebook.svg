@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>footer-social-facebook</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M16,0 C24.837,0 32,7.1634 32,16 C32,24.8366 24.837,32 16,32 C7.163,32 0,24.8366 0,16 C0,7.1634 7.163,0 16,0 Z" id="path-1"></path>
+        <path d="M16.546,24 L8.883,24 C8.395,24 8,23.6045 8,23.1169 L8,8.8831 C8,8.3953 8.395,8 8.883,8 L23.117,8 C23.605,8 24,8.3953 24,8.8831 L24,23.1169 C24,23.6046 23.605,24 23.117,24 L19.04,24 L19.04,17.8039 L21.12,17.8039 L21.431,15.3892 L19.04,15.3892 L19.04,13.8475 C19.04,13.1484 19.234,12.672 20.236,12.672 L21.515,12.6714 L21.515,10.5117 C21.294,10.4823 20.535,10.4165 19.652,10.4165 C17.808,10.4165 16.546,11.5418 16.546,13.6084 L16.546,15.3892 L14.461,15.3892 L14.461,17.8039 L16.546,17.8039 L16.546,24 Z" id="path-3"></path>
+    </defs>
+    <g id="footer-social-facebook" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <g id="Clip-36"></g>
+        <mask id="mask-4" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+        <g id="Clip-39"></g>
+        <polygon id="Fill-38" fill="#999999" mask="url(#mask-4)" points="3 3 29 3 29 29 3 29"></polygon>
+    </g>
+</svg>

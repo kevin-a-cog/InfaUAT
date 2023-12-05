@@ -1,0 +1,15 @@
+<!--
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 07-03-2021
+  @last modified by  : Sathish Rajalingam
+  Modifications Log 
+  Ver   Date         Author               Modification
+  1.0   04-13-2021   Sathish Rajalingam   Initial Version
+-->
+<aura:component controller="KBContentSearch"
+    implements="lightning:isUrlAddressable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+    access="global">
+    <aura:handler name="init" value="this" action="{!c.doInit}" />
+</aura:component>

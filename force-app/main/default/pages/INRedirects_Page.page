@@ -1,0 +1,105 @@
+<!--
+        Change History
+    ********************************************************************************************************************************************
+        ModifiedBy          Date        Requested By        Description                                                            Tag
+        
+     
+    ********************************************************************************************************************************************
+-->
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" >
+<script type="text/javascript">
+    console.log('onload javascript');
+        console.log('Error Page');
+        try {
+            console.log('inside try javascript ' + window.top.location.href);
+            var IN_CommunityName = '{!$Label.IN_CommunityName}';
+            var KB_Community_External = '{!$Label.KB_Community_External}';
+            var eSupport_Community_URL = '{!$Label.eSupport_Community_URL}';
+            var IN_OnlineHelp_Url = '{!$Label.IN_OnlineHelp_Url}';
+            var varCurrentURL = window.top.location.href;
+
+            if (varCurrentURL.toString().toLowerCase().trim().indexOf('/ideas/') != -1) {
+                console.log('inside ideas condition');
+                var varNewURL = IN_CommunityName  + 'ideas';
+                window.top.location.href =varNewURL;
+                
+            }
+            else if (varCurrentURL.toString().toLowerCase().trim().indexOf('/thread/') != -1) {
+                console.log('inside thread condition');
+                var varNewURL = IN_CommunityName + 'global-search/%20#t=Blog&f:@incontenttype=[Discussion]';
+
+                window.top.location.href =varNewURL;
+            }
+            else if (varCurrentURL.toString().toLowerCase().trim().indexOf('/events/') != -1) {
+                console.log('inside events condition');
+                var varNewURL = IN_CommunityName + 'event-landing';
+                window.top.location.href = varNewURL;
+            }
+            else if (varCurrentURL.toString().toLowerCase().trim().indexOf('/videos/') != -1) {
+                console.log('inside events condition');
+                var varNewURL = IN_CommunityName + 'global-search/%20#t=SupportVideo';
+                window.top.location.href = varNewURL;
+            }
+            else if (varCurrentURL.toString().toLowerCase().trim().indexOf('/polls/') != -1) {
+                console.log('inside events condition');
+                var varNewURL = IN_CommunityName + 'polls';
+                window.top.location.href = varNewURL;
+            }
+            else if (varCurrentURL.toString().toLowerCase().trim().indexOf('/message/') != -1) {
+                console.log('inside message condition');
+                var varNewURL = IN_CommunityName + 'global-search/%20#t=Blog&f:@incontenttype=[Message]';
+                window.top.location.href =varNewURL;
+            }
+            else if (varCurrentURL.toString().toLowerCase().trim().indexOf('/blog/') != -1) {
+                console.log('inside blog condition');
+                var varCurrentURLName = document.location.pathname.substring((document.location.pathname.lastIndexOf('/') + 1));
+                var varNewURL = KB_Community_External + '/' + varCurrentURLName;                
+                window.top.location.href =varNewURL;
+            }
+            else if (varCurrentURL.toString().toLowerCase().trim().indexOf('/docs/') != -1) {
+                console.log('inside docs condition');
+                var varCurrentURLName = document.location.pathname.substring((document.location.pathname.lastIndexOf('/') + 1));
+                var varNewURL = KB_Community_External + '/' + varCurrentURLName;
+                window.top.location.href = varNewURL;
+            }
+            else if (varCurrentURL.toString().toLowerCase().trim().indexOf('/downloadsview.jspa') != -1) {
+                console.log('inside downloadsview condition');
+                var varNewURL = eSupport_Community_URL + 'hotfix-downloads';
+                window.top.location.href = varNewURL;
+            }
+            else if (varCurrentURL.toString().toLowerCase().trim().indexOf('/onlinehelp/') != -1) {
+                console.log('inside onlinehelp V ' + window.top.location.href);
+                var urlPart = varCurrentURL.split('/onlinehelp/')[1];
+                var varNewURL = IN_OnlineHelp_Url + '/' + urlPart;
+                window.top.location.href = varNewURL;
+            }
+            else if (varCurrentURL.toString().toLowerCase().trim().indexOf('/videos/') != -1) {
+                var varNewURL = IN_CommunityName + 'global-search/%20#t=SupportVideo';
+                window.top.location.href = varNewURL;
+            }
+            else if (varCurrentURL.toString().toLowerCase().trim().indexOf('/cr/') != -1) {
+                var varNewURL = IN_CommunityName + 'global-search/%20#t=CR';
+                window.top.location.href = varNewURL;
+            }
+            else {
+                console.log('inside try else ' + window.top.location.href);
+                var varNewURL = IN_CommunityName + 'global-search/%20#t=All';
+                window.top.location.href = varNewURL;
+            }
+        }
+        catch (error) {
+            console.log('catch javascript');
+        }
+</script>
+    <html>
+        <div style="text-align: right">
+            
+        </div>
+        <br/>
+        <br/>
+         <p style="text-align: left; margin-left: 10px;">
+            This Page No Longer Exists             
+        </p>
+       
+    </html>
+</apex:page>

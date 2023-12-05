@@ -1,0 +1,4 @@
+<design:component>
+	<design:attribute name="isFeedEnabled" label="is Feed Enabled?" description="this boolean value when enabled will use recordId to store chatter feeds and not perform any server call"/>
+	<design:attribute name="isFeedMetaNeeded" label="is Feed Meta Needed?" description="this boolean value when enabled will create feedMeta record and not use recordId to store chatter feeds"/>
+</design:component>

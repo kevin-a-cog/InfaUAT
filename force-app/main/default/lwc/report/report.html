@@ -1,0 +1,123 @@
+<template>
+    <lightning-card  title={accName} class={templateClass}> 
+        <div class="row rowData slds-grid slds-wrap">        
+            
+            <div class="slds-col slds-size_1-of-3">
+                <span class="header">Case Open Date</span>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-size_1-of-2">
+                        <lightning-input type="date" data-id="OpenStartDate" name="OpenStartDate" value={opendatestart} label="Start" onchange={handleDateChange} ></lightning-input>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <lightning-input type="date" name="OpenEndDate" label="End" onchange={handleDateChange} ></lightning-input>
+                    </div>
+                </div>
+            </div>
+           <!-- <div class="slds-col slds-size_1-of-3" style="padding-left:15px;">
+                <span class="header">Close Date</span>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-size_1-of-2">
+                        <lightning-input type="date" name="CloseStartDate" label="Start" onchange={handleDateChange} ></lightning-input>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <lightning-input type="date" name="CloseEndDate" label="End" onchange={handleDateChange} ></lightning-input>
+                    </div>
+                </div>
+            </div>-->
+            <div class="slds-col slds-size_1-of-3"></div>
+            <div class="slds-col slds-size_1-of-3" style="padding-top:18px;">
+                <c-reusable-custom-dropdown-with-search options={supportAccounts}  value={accountId}
+                    label={accName} options-all={supportAllAccounts}  onmyfav={markFav}   field-label="Pick a Support Account" onchange={handleAccountSelect}>                 
+                </c-reusable-custom-dropdown-with-search>
+            </div>
+        </div>  
+        <div class="row rowData">
+            <table class="caseTable">
+                <tr style="color:#fff; Background-color:#12446d;">
+                    <th>Cases Created</th>
+                    <th>Cases Open</th>
+                    <th>Cases Closed</th>
+                    <th>Escalations</th>
+                    <!--<th>Avg Days to Close</th>-->
+                    <th>Avg CES</th>
+                </tr>
+                <tr>
+                    <td>{totalCases}</td>
+                    <td>{OpenCases}</td>
+                    <td>{ClosedCases}</td>
+                    <td>{Escalations}%</td>
+                    <!--<td>{AvgDays}</td>-->
+                    <td>{CSAT}</td>
+                </tr>
+            </table>
+        </div>
+    </lightning-card>
+    <div  class={templateClass}>
+        <div class='slds-box slds-theme_default custom-background'>
+
+            <div class="slds-grid slds-wrap">
+                <div class="slds-size_1-of-2">
+                    <c-report-chart closestart={closedatestart} closeend={closedateend} openend={opendateend} openstart={opendatestart} chart-type="bar" chart-color="#4b76ab" account-id={accountId} label='Cases By Priority' filter="priority"></c-report-chart>
+                </div>
+                <div class="slds-size_1-of-2">
+                    <c-report-chart closestart={closedatestart} closeend={closedateend} openend={opendateend} openstart={opendatestart}  chart-type="horizontalBar" chart-color="#4b76ab" account-id={accountId} label='Cases By Status' filter="Status"></c-report-chart>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-size_1-of-2">
+                    <c-report-chart closestart={closedatestart} closeend={closedateend} openend={opendateend} openstart={opendatestart}  chart-type="horizontalBar" chart-color="#4b76ab" account-id={accountId} label='Cases By Product Type' filter="Forecast_Product__c"></c-report-chart>
+                </div>
+                <div class="slds-box slds-size_1-of-2">
+                
+                
+                    <template if:true={chartConfigurationForAvgDays}>
+                        <div class='slds-box slds-theme_default custom-background'>
+                            <div style="text-align:center; color:#787676">Cases By Contact</div>
+                            <template if:true={showError}>        
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-size_1-of-1 noCharts">
+                                        No data to display 
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:false={showError}>   
+                                <c-chart-comp chart-config={chartConfigurationForAvgDays} is-chart-js-initialized={functioncalled}></c-chart-comp>
+                            </template>
+                        </div>
+                    </template>
+                    
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-box slds-size_1-of-2">
+                    
+                    
+                    <template if:true={chartConfigurationFormonthly}>
+                        <div class='slds-box slds-theme_default custom-background'>
+                            <div style="text-align:center; color:#787676">Case Trend By Month</div>
+                            <template if:true={showError}>        
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-size_1-of-1 noCharts">
+                                        No data to display 
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:false={showError}>   
+                                <c-chart-comp chart-config={chartConfigurationFormonthly} is-chart-js-initialized={functioncalled}></c-chart-comp>
+                            </template>
+                        </div>
+                    </template>
+                    
+                </div>
+                <div class="slds-size_1-of-2">
+                    <c-report-chart closestart={closedatestart} closeend={closedateend} openend={opendateend} openstart={opendatestart}  chart-type="horizontalBar" chart-color="#4b76ab" account-id={accountId} label='Cases By Root Cause' filter="Resolution_Code__c"></c-report-chart>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <!--<lwcc-chart type="bar">
+        <lwcc-title text="# of LWCC installs"></lwcc-title>
+        <lwcc-legend position="bottom"></lwcc-legend>
+      </lwcc-chart>-->
+</template>

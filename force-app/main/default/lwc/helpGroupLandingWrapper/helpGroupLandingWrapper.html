@@ -1,0 +1,83 @@
+<template>
+    <div class="heading-wrapper">
+        <div class="in-banner__content">
+            <div class="container">
+                <div class="in-banner-heading">User Groups</div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="in-wrapper-bg-fuild-grey">
+            <div class="container">
+                <div class="pt-3">
+                    <div class="in-wrapper-bg-fuild-white in-communities-wrapper">
+
+                        <div class="filter-search-wrapper">
+                            <template if:false={isGuestUser}>
+                                <lightning-button variant="brand" label="Request a New User Group" onclick={openLink}
+                                    class="in-groupButton"></lightning-button>
+                            </template>
+                            <template if:true={isInternaluser}>
+                                <lightning-button variant="brand" label="Create a Group" onclick={handleCreateGroup}
+                                    class="in-groupButton"></lightning-button>
+                                <template if:true={showGroupModal}>
+                                    <c-help-create-group-modal onclosemodal={closeIdeaModal}>
+                                    </c-help-create-group-modal>
+                                </template>
+                            </template>
+                            <div class="filterButton">
+                                <button variant="brand" class="slds-button slds-button_brand" onclick={handleShowFilters}>
+                                    <img class="in-btn-icon" src="/resource/./informaticaNetwork3/Filter-Icon.svg" />
+                                    <span class="slds-p-left_x-small">
+                                        Filters
+                                    </span>
+                                </button>
+                            </div>
+                            <lightning-input type="search" variant="label-hidden" placeholder="Search Groups"
+                                name="Search Groups" class="searchBox" value={searchval} onchange={searchGroup}>
+                            </lightning-input>
+                        </div>
+
+                        <lightning-tabset active-tab-value={activeTab} class="in-communities-tab__section">
+                            <template if:false={isGuestUser}>
+                                <lightning-tab label="My Groups" title="My Groups" value="2" onactive={handleActive}>
+                                    <c-help-groups-landing result-set={manipulatedArr} community-logo={communityLogo}
+                                        first-filter={firstFilterlist} onfirstfilterchange={handleFirstFilter}
+                                        show-filters={showFilters} firstplaceholder="Select Type"
+                                        nosearchresult={noSearchResult} selectedfilters={selectedFilters}
+                                        onclearall={handleClearAll} 
+                                        onclearselectfilter={handleclearselectfilter}
+                                        selected-product={selectedSortFilter} product-list={options}
+                                        onsortbyfilterchange={handlesortfilter}></c-help-groups-landing>
+
+                                </lightning-tab>
+                            </template>
+
+
+                            <lightning-tab label="All Groups" value="3" onactive={handleActive}>
+                                <c-help-groups-landing result-set={manipulatedArr} community-logo={communityLogo}
+                                    first-filter={firstFilterlist} onfirstfilterchange={handleFirstFilter}
+                                    show-filters={showFilters} firstplaceholder="Select Type"
+                                    nosearchresult={noSearchResult} selectedfilters={selectedFilters}
+                                    onclearall={handleClearAll}
+                                    onclearselectfilter={handleclearselectfilter} 
+                                    selected-product={selectedSortFilter} product-list={options}
+                                    onsortbyfilterchange={handlesortfilter}></c-help-groups-landing>
+
+                            </lightning-tab>
+
+                        </lightning-tabset>
+                    </div>
+                </div>
+             <template lwc:if={showPagination}>
+                    <c-help-pagination
+                                current-page={currentPage}
+                                total-pages={totalPages}
+                                onsendcurrentpage={onPageRequest}>
+                    </c-help-pagination>
+             </template>
+            </div>
+        </div>   
+    </div>
+</template>

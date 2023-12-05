@@ -1,0 +1,14 @@
+.THIS .my-icon {
+    --sds-c-icon-color-foreground-default: white;
+}
+
+.THIS .padding {
+    padding : 0px 5px 0px 5px;
+}
+
+.THIS.spinnerHolder{
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+}

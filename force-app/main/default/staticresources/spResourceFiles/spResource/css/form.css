@@ -1,0 +1,158 @@
+:root{
+    --customValueSmall: 24px;
+}
+@media only screen and ( max-width: 420px ){
+    :root{
+        --customValueSmall: 22px;
+    }
+}
+.sp-form__icon-with-upload {
+    float: left;
+    padding: 5px 5px 0 0;
+}
+.sp-form__file-name {
+    margin: 6px 6px 0 0;
+    display: inline-block;
+}
+/*** Bootstrap items - Label, input, select, textarea
+checkbox ***/
+.sp-form-label {
+    font-size: 12px;
+    color: #333;
+    font-weight: 400;
+    margin-bottom: 2px;
+}
+/*** LDS component override ***/
+.sp-lds-form-group .slds-input {
+    /* height: var( --customValueSmall );
+    min-height: var( --customValueSmall ); */
+    height: 28px;
+    min-height: 28px;
+    border-radius: 2px;
+    border: 1px solid #BBBBBB;
+    box-shadow: none;
+}
+.sp-lds-form-group .slds-combobox__input {
+    /* height: var( --customValueSmall );
+    min-height: var( --customValueSmall ); */
+    height: 28px;
+    min-height: 28px;
+    line-height: 28px;
+    border-radius: 2px;
+    border: 1px solid #BBBBBB;
+    box-shadow: none;
+    font-weight: 400;
+}
+/* .sp-lds-form-group.sp-pri-dropdown .slds-combobox__input {
+    background: #FF6710;
+    border: 1px solid #FF6710;
+    color: #fff;
+}
+.sp-lds-form-group.sp-pri-dropdown .slds-input__icon .slds-icon {
+    fill: #fff;
+} */
+@media screen and (max-width: 420px) {
+    .sp-lds-form-group.sp-primary-dropdown {
+        margin: 10px 0 0 60px;
+    }
+}
+.sp-lds-form-group.sp-primary-dropdown .slds-dropdown-trigger {
+    border: 1px solid #FF6710;
+    background: #FF6710;
+    border-radius: 5px;
+    padding: 0 12px;
+}
+.sp-lds-form-group.sp-primary-dropdown .slds-button {
+    color: #fff;
+    line-height: 24px;
+}
+.sp-lds-form-group .slds-textarea {
+    height: 150px;
+    border-radius: 2px;
+    border: 1px solid #BBBBBB;
+}
+.sp-lds-form-group--small .slds-textarea {
+    height: 80px;
+}
+.sp-lds-form-group--big .slds-textarea {
+    height: 270px;
+}
+.sp-lds-form-group .slds-rich-text-area__content {
+    --slds-c-textarea-sizing-min-height: 7em;
+}
+.sp-lds-form-group .slds-form-element__label {
+    font-size: 12px;
+    color: #333;
+    font-weight: 400;
+}
+.sp-lds-file-select .slds-file-selector__dropzone {
+    border: 0 none;
+}
+.sp-lds-file-select .slds-file-selector__button {
+    border: 1px solid #BBBBBB;
+    border-radius: 2px;
+}
+.sp-lds-check.sp-lds-checkbox--horizontal .slds-form-element__control{
+    display: flex;
+}
+.sp-lds-radio .slds-form-element__label,
+.sp-lds-chip .slds-form-element__label {
+    font-size: 12px;
+    font-weight: 400;
+}
+.sp-lds-radio .slds-radio_faux {
+    border-color: #BBB;
+}
+.sp-lds-radio .slds-form-element__control {
+    display: flex;
+}
+.sp-lds-radio--multicolumn .slds-form-element__control {
+    flex-wrap: wrap;
+}
+.sp-lds-radio--multicolumn .slds-radio {
+    flex-basis: 50%;
+}
+.sp-lds-chip .slds-form-element__control {
+    display: flex;
+    flex-wrap: wrap;
+}
+.sp-lds-chip .slds-radio [type="radio"] + .slds-radio__label .slds-radio_faux {
+    display: none;
+}
+.sp-lds-chip .slds-radio [type="radio"] + .slds-radio__label {
+    border: 1px solid #BBBBBB;
+    padding: 2px 15px;
+    width: 225px;
+    border-radius: 2px;
+    margin-right: 12px;
+    height: 30px;
+    vertical-align: middle;
+    line-height: 24px;
+}
+.sp-lds-chip .slds-radio [type="radio"]:checked + .slds-radio__label {
+    border: 1px solid #FF5800;
+    padding: 2px 15px;
+    width: 225px;
+    border-radius: 2px;
+}
+.sp-lds-chip .slds-radio [type="radio"]:checked + .slds-radio__label .slds-form-element__label {
+    color: #FF5800;
+}
+.sp-lds-chip .slds-form-element__control .slds-radio {
+    display: initial;
+    flex: 1 1 50%;
+}
+/* Fix the height of the pin icon */
+.sp-pin-inline .slds-button_icon{
+    height: 24px;
+}
+.sp-datepicker .slds-datepicker__filter .slds-datepicker__filter_month h2 {
+    font-size: 14px;
+}
+/*** Clear float from form input box ***/
+.CSA-content-wrapper .sp-form__icon-with-upload {
+    display: inline-block;
+    float: none;
+    margin-bottom: 12px;
+}
+/*** Ends here ***/

@@ -1,0 +1,11 @@
+.modalWidth{
+    width: 50% !important;
+}
+
+.modalHeight{
+    min-height: 10rem !important;
+}
+
+.modalPosition{
+    margin-left: 20% !important;
+}

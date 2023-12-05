@@ -1,0 +1,25 @@
+<aura:component controller="ManageFulfillmentCtrl" implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionwithoutHeader" access="global">
+<aura:attribute name="recordId" type="String" />           
+<aura:attribute name="firstName" type="String" default="world"/>           
+<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+
+
+<div class="c-container">
+    <lightning:layout verticalAlign="center" class="large">
+        <lightning:layoutItem flexibility="auto" padding="around-small">
+            <div class="custom-box">
+                <h1>
+
+                    Creating Fulfillment lines.....
+                
+                </h1>
+            </div>
+        </lightning:layoutItem>
+       
+    </lightning:layout>
+</div> 
+
+
+</aura:component>

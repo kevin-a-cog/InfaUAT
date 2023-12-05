@@ -1,0 +1,103 @@
+<template>
+    <div class="heading-wrapper">
+        <div class="in-banner__content">
+            <div class="container">
+                <div class="in-banner-heading">Change Requests</div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="in-wrapper-bg-fuild-grey in-communities-landing-bg in-body-height">
+            <div class="container">
+                <div class="pt-3">
+                    <div class="in-wrapper-bg-fuild-white in-communities-wrapper">
+                        <div class="filter-search-wrapper">
+                            <div class="filterButton">
+                                <button variant="brand" class="slds-button slds-button_brand"
+                                    onclick={handleShowFilters}>
+                                    <img class="in-btn-icon" src="/resource/./informaticaNetwork3/Filter-Icon.svg" />
+                                    <span class="slds-p-left_x-small">
+                                        Filters
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="searchBox">
+                                <lightning-input type="search" variant="label-hidden" placeholder="Search CRs"
+                                    name="Search CRs" value={searchval} onchange={searchCrs}>
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <lightning-tabset active-tab-value={selectedTab} class="in-communities-tab__section">
+
+                            <template lwc:if={usrId}>
+
+                                <lightning-tab label="My CRs" value="1" onactive={handleActive}>
+                                    <c-help-change-request-filter result-set={manipulatedArr} first-filter={firstFilterlist}
+                                        firstplaceholder="Select Status" onfirstfilterchange={handleFirstFilter}
+                                        show-filters={showFilters} selectedfilters={selectedFilters}
+                                        onclearall={handleClearAll} onclearselectfilter={handleclearselectfilter}
+                                        nosearchresult={noSearchResult} product-list={options}
+                                        selected-product={selectedSortFilter} onsortbyfilterchange={handlesortfilter}>
+                                    </c-help-change-request-filter>
+                                </lightning-tab>
+
+
+                                <template lwc:if={showSupportAccFilter}>
+                                    <lightning-tab label="My Account CRs" value="3" onactive={handleActive}>
+                                        <c-help-change-request-filter result-set={manipulatedArr} first-filter={firstFilterlist}
+                                            firstplaceholder="Select Status" onfirstfilterchange={handleFirstFilter}
+                                            second-filter={secondFilterList} secondplaceholder="Support Account"
+                                            onsecondfilterchange={handleSecondFilterChange} show-filters={showFilters}
+                                            selectedfilters={selectedFilters}
+                                            onclearall={handleClearAll}
+                                            onclearselectfilter={handleclearselectfilter}
+                                            nosearchresult={noSearchResult} product-list={options}
+                                            selected-product={selectedSortFilter}
+                                            onsortbyfilterchange={handlesortfilter}>
+                                        </c-help-change-request-filter>
+                                    </lightning-tab>
+                                </template>
+
+                                <template lwc:if={hideSupportAccFilter}>
+                                    <lightning-tab label="My Account CRs" value="3" onactive={handleActive}>
+                                        <c-help-change-request-filter result-set={manipulatedArr} first-filter={firstFilterlist}
+                                            firstplaceholder="Select Status" onfirstfilterchange={handleFirstFilter}
+                                            show-filters={showFilters} selectedfilters={selectedFilters}
+                                            onclearall={handleClearAll} onclearselectfilter={handleclearselectfilter}
+                                            nosearchresult={noSearchResult} product-list={options}
+                                            selected-product={selectedSortFilter}
+                                            onsortbyfilterchange={handlesortfilter}>
+                                        </c-help-change-request-filter>
+                                    </lightning-tab>
+                                </template>
+
+                            </template>
+
+
+                            <lightning-tab label="All CRs" value="2" onactive={handleActive}>
+                                <c-help-change-request-filter result-set={manipulatedArr} first-filter={firstFilterlist}
+                                    firstplaceholder="Select Status" onfirstfilterchange={handleFirstFilter}
+                                    show-filters={showFilters} selectedfilters={selectedFilters}
+                                    onclearall={handleClearAll}
+                                    nosearchresult={noSearchResult} onclearselectfilter={handleclearselectfilter}
+                                    product-list={options} selected-product={selectedSortFilter}
+                                    onsortbyfilterchange={handlesortfilter}>
+                                </c-help-change-request-filter>
+                            </lightning-tab>
+
+                        </lightning-tabset>
+                    </div>
+                </div>
+                <template lwc:if={showPagination}>
+                    <c-help-pagination
+                                current-page={currentPage}
+                                total-pages={totalPages}
+                                onsendcurrentpage={onPageRequest}>
+                    </c-help-pagination>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>

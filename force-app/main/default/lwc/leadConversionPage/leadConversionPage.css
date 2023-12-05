@@ -1,0 +1,53 @@
+.slds-modal__container{
+    max-width: 150% !important;
+    width: 100% !important;
+}
+
+.slds-modal__content{
+    border-top-right-radius: var(--slds-c-modal-radius-border, var(--sds-c-modal-radius-border, var(--lwc-borderRadiusMedium,0.25rem)));
+    border-top-left-radius: var(--slds-c-modal-radius-border, var(--sds-c-modal-radius-border, var(--lwc-borderRadiusMedium,0.25rem)));
+    background-color: #f3f3f3;
+}
+
+.final-head .final-img{
+    text-align: center !important;
+    justify-content: center !important;
+}
+
+.subtitle-image{
+    height:9rem;
+}
+
+.heading{
+    font-size: 1.75rem !important;
+    font-weight: lighter;
+}
+
+.obj_head{
+    font-size: 1.3rem;
+    font-weight: lighter;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.card-main{
+    background-color: white !important;
+    border: rgb(201, 201, 201);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0.25rem;
+    min-height: 11rem;
+}
+
+.card{
+    width: 20rem;
+}
+
+.icn{
+    fill: white;
+}
+
+.close{
+    color: #f3f3f3;
+}

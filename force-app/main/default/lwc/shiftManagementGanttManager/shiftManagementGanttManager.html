@@ -1,0 +1,258 @@
+<template>
+    <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+
+    <div class="slds-grid">
+        <div class="slds-col slds-size_3-of-12  lwc-resource">
+            <ul class="slds-accordion">
+                <li class="slds-accordion__list-item">
+                    <section class="slds-accordion__section slds-is-open" style="padding-bottom: 0"
+                        onclick={handleClick} data-name="accordion" data-control={request.Id}>
+                        <div class="slds-accordion__summary">
+                            <h2 class="slds-accordion__summary-heading">
+                                <button class="slds-button slds-button_reset slds-accordion__summary-action"
+                                    aria-controls="referenceId-45" aria-expanded="true">
+                                    <lightning-icon icon-name="utility:chevrondown" size="x-small"
+                                        class="slds-p-right_x-small" data-controlledicon={request.Id}></lightning-icon>
+                                    <span class="slds-accordion__summary-content slds-text-body_small" style="white-space: normal;">
+                                        {request.label}
+                                        <!--lightning-helptext content={request.helpText}
+                                            class="slds-var-p-left_x-small">
+                                        </lightning-helptext-->
+                                    </span>
+                                </button>
+                            </h2>
+                        </div>
+                        <div class="slds-accordion__content" id="referenceId-45"></div>
+                    </section>
+                </li>
+            </ul>
+        </div>
+        <div class="slds-col slds-is-relative">
+            <div class="slds-grid slds-is-absolute lwc-timeslots-container">
+                <template for:each={times} for:item="time" for:index="index">
+                    <div key={time} class={time.class} data-index={index} data-start={time.start} data-end={time.end}
+                        ondragenter={handleDragEnter}>
+                        <!-- onclick={handleTimeslotClick}  -->
+                    </div>
+                </template>
+            </div>
+
+            <div class="lwc-allocations-container">
+                <div class="slds-is-relative project-container slds-var-p-around_xx-small">
+                    &nbsp;
+                    <div class={request.Id}>
+                        <div title={request.label} class={request.class} style={request.style} data-id={request.Id}
+                            data-project={request.Id} data-allocation={request.Id} draggable="false"
+                            ondragstart={handleDragStart} ondragend={handleDragEnd}>
+                            
+                            <div class="slds-grid slds-grid_vertical-align-center">
+                                <div class="slds-col slds-grow-none slds-col_bump-right lwc-allocation_handle handle_left"
+                                    data-id={request.Id} draggable="true" ondragstart={handleLeftDragStart}>
+                                    <lightning-helptext content={request.helpText}
+                                            class="slds-var-p-left_x-small">
+                                    </lightning-helptext>
+                                    
+                                </div>
+                                <div class="slds-col slds-grow-none">
+                                    <lightning-button-icon icon-name="utility:edit" variant="bare-inverse" size="small"
+                                        data-id={request.Id} name="edit" onclick={handleClick}
+                                        if:false={request.Shift_Allocations__r} data-shiftplan={request.Shift_Plan__c}>
+                                    </lightning-button-icon>
+                                    
+                                </div>
+                                <div class="slds-col slds-grow-none lwc-allocation_handle handle_right"
+                                    data-id={request.Id} draggable="true" ondragstart={handleRightDragStart}>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div if:true={isHourView} class="slds-truncate slds-is-absolute lwc-allocation-label"
+                            style={request.labelStyle}>
+                            {request.timeLabel}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div if:true={menuData.show} class="lwc-allocation-actions-container">
+                <div class="slds-dropdown slds-dropdown_left slds-is-absolute" style={menuData.style}>
+                    <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+                        <li class="slds-dropdown__item" role="presentation" onclick={handleModalEditClick}
+                            data-id={menuData.allocationId}>
+                            <a href="javascript:void(0);" role="menuitem" tabindex="0">
+                                <span class="slds-truncate" title="Edit">Edit</span>
+                            </a>
+                        </li>
+                        <li class="slds-dropdown__item" role="presentation" onclick={handleMenuDeleteClick}>
+                            <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                                <span class="slds-truncate" title="Delete">Delete</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /Allocation Actions-->
+        </div>
+    </div>
+    <div data-controlled={request.Id}>
+        <template for:each={request.Shift_Allocations__r} for:item="allocation">
+            <template if:true={allocation.showAllocation}>
+            <div class="slds-grid" key={allocation.Id}>
+                <!-- Resource Info -->
+                <div class="slds-col slds-size_3-of-12  lwc-resource">
+
+                    <div class="media collapsed">
+                        <div class="slds-page-header expand" style="padding:6px;">
+                            <div class="slds-page-header__row">
+                                <div class="slds-page-header__col-title">
+                                    <div class="slds-media">
+                                        <div class="slds-media__body gcs-media__body">
+                                            <div class="slds-media__figure">
+                                                <span class="slds-icon_container">
+                                                    <div class="media-left">
+                                                        <lightning-icon
+                                                            if:false={allocation.Service_Resource__r.RelatedRecord.FullPhotoUrl}
+                                                            icon-name="action:user" size="xx-small">
+                                                        </lightning-icon>
+                                                        <a href="javascript:void(0);"
+                                                            if:true={allocation.Service_Resource__r.RelatedRecord.FullPhotoUrl}>
+                                                            <img class="image--cover"
+                                                                src={allocation.Service_Resource__r.RelatedRecord.FullPhotoUrl}
+                                                                width="16px;">
+                                                        </a>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                            <div class="slds-page-header__name">
+                                                <div class="slds-page-header__name-title">
+                                                    <div class="slds-truncate"
+                                                        title={allocation.Service_Resource__r.RelatedRecord.Name}
+                                                        style="font-size: 9pt;">
+                                                        {allocation.Service_Resource__r.RelatedRecord.Name}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-float_right">
+                                                <template if:true={allocation.isPending}>
+                                                    <lightning-button-group>
+                                                        <lightning-button variant="brand" label="Approve"
+                                                            name="approveReject" onclick={handleClick}
+                                                            data-id={allocation.Id} data-status="Approve">
+                                                        </lightning-button>
+
+                                                        <lightning-button label="Reject" name="approveReject"
+                                                            onclick={handleClick} data-id={allocation.Id}
+                                                            data-status="Reject" class="reject-allocation">
+                                                        </lightning-button>
+                                                    </lightning-button-group>
+
+                                                </template>
+                                                
+                                                <template if:true={allocation.isRejected}>
+                                                    <lightning-button label="Rejected" disabled
+                                                        class="rejected-allocation">
+                                                    </lightning-button>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Resource Info -->
+
+                <!-- Days -->
+                <div class="slds-col slds-is-relative">
+                    <!-- Time Slots-->
+                    <div class="slds-grid slds-is-absolute lwc-timeslots-container">
+                        <template for:each={times} for:item="time" for:index="index">
+                            <div key={time} class={time.class} data-index={index} data-start={time.start}
+                                data-end={time.end}>
+                                <!-- onclick={handleTimeslotClick} ondragenter={handleDragEnter} nothing -->
+                            </div>
+                        </template>
+                    </div>
+                    <!-- /Time Slots-->
+
+                    <!-- Allocations -->
+
+                    <div class="lwc-allocations-container">
+                        <div class="slds-is-relative project-container">
+                            &nbsp;
+                            <!-- Allocation -->
+                            <div key={allocation.Id} class={allocation.Id}>
+                                <div title={allocation.Name} class={allocation.class} style={allocation.style}
+                                    data-id={allocation.Id} data-project={allocation.Id}
+                                    data-allocation={allocation.Id}>
+                                    <!-- draggable="false" ondragstart={handleDragStart}
+                                        ondragend={handleDragEnd} -->
+                                    <div class="slds-grid slds-grid_vertical-align-center">
+                                        <!-- Allocation Left Handle -->
+                                        <div class="slds-col slds-grow-none slds-col_bump-right lwc-allocation_handle handle_left"
+                                            data-id={allocation.Id}>
+                                            
+                                            <span>&nbsp;</span>
+                                        </div>
+                                        <!-- /Allocation Left Handle -->
+
+                                        <div class="slds-col slds-grow-none lwc-allocation_actions">
+                                            <!-- <lightning-button-icon icon-name="utility:down" variant="bare-inverse"
+                                                size="small" onclick={openAllocationMenu} data-id={allocation.Id}>
+                                            </lightning-button-icon> -->
+                                        </div>
+
+                                        <!-- Allocation Right Handle -->
+                                        <div class="slds-col slds-grow-none lwc-allocation_handle handle_right"
+                                            data-id={allocation.Id}>
+                                            <lightning-button-icon icon-name="utility:delete" variant="bare-inverse" size="small"
+                                                data-id={allocation.Id} name="deleteAllocation" onclick={handleClick}
+                                                if:true={allocation.isApproved}>
+                                            </lightning-button-icon>
+                                        </div>
+                                        <!-- /Allocation Right Handle -->
+                                    </div>
+                                </div>
+                                <div if:true={isHourView} class="slds-truncate slds-is-absolute lwc-allocation-label"
+                                    style={allocation.labelStyle}>
+                                    {allocation.timeLabel}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Extra Space -->
+                        <div class="slds-is-relative project-container slds-var-p-around_xx-small">
+                            &nbsp;
+                        </div>
+                        <!-- /Extra Space -->
+                    </div>
+                    <!-- /Allocations -->
+                </div>
+                <!-- /Days -->
+            </div>                        
+            </template>
+        </template>
+    </div>
+
+    <!-- Confirmation Modal-->
+    <template if:true={showConfirmationModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small"
+            aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container custom-container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Confirmation</h2>
+                </header>
+                <div class="slds-modal__content slds-var-p-around_large lwcbody" id="modal-content-id-1">
+                    This will delete the allocation and the action cannot be reverted. Do you want to continue?
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="brand" label="Cancel" title="Cancel" onclick={cancelDeleteAllocation} class="slds-m-left_x-small"></lightning-button>
+                    <lightning-button variant="brand" label="Continue" title="Continue" onclick={saveDeleteAllocation} class="slds-m-left_x-small"></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

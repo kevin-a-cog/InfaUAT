@@ -1,0 +1,162 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 08-16-2020
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   08-09-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+  2.0   15-11-2022   Sathish Rajalingam                   I2RT-4931
+-->
+<template>
+    <!--lightning-button data-id="divblock1" variant="brand" label="Extend and Publish" title="Extend and Publish" onclick={handleClick} class="slds-m-left-large slds-align_absolute-center"></lightning-button-->
+    <!--lightning-input data-id="divblock2" type="date" name="input1" label="Enter a date" class={inp} ></lightning-input -->
+
+    <!-- lightning-button data-id="divblock3" variant="neutral" label="Publish Translation" title="Publish" onclick={handlepublish} class="slds-m-around--small "></lightning-button -->
+    <lightning-card>
+        <template if:true={isStillLoading}>
+            <div class="slds-align_absolute-center" style="height:9rem">
+                <lightning-spinner alternative-text="Loading..." variant="brand" size="small">
+                </lightning-spinner>
+            </div>
+        </template>
+        <template if:false={isStillLoading}>
+            <div class='headerCard'>
+                <lightning-icon icon-name="standard:actions_and_buttons" size="small"></lightning-icon>
+                <h1 class="header">Custom Actions</h1>
+            </div>
+            <div class="slds-var-p-around_small">
+
+                <lightning-button data-id="divblock4" variant="neutral" label="Extend Article Expiry" title="Publish"
+                    onclick={handleextend}></lightning-button>
+                <lightning-button data-id="divblock5" variant="neutral" label="Submit for Archival" title="Archive"
+                    onclick={handlearchive}></lightning-button>
+                <template if:true={showcopyurl}>
+                    <lightning-button data-id="divblock4" variant="neutral" label={copyButton} title="Copy to Clipboard"
+                        onclick={handlecopy}></lightning-button>
+                </template>
+                <div>&nbsp;</div>
+                <template if:true={showcrfeedback}>
+                    <lightning-button data-id="btncrfeedback" variant="neutral" label={labelbtncrfeedback}
+                        title="CR Feedback" onclick={handlecrfeedback}></lightning-button>
+                </template>
+            </div>
+            <div data-id="card" class={classNameCard}>
+                <div data-id="extensioncombobox" class="slds-m-around--small slds-is-collapsed ">
+                    <lightning-combobox name="Extension" label="Extend Expiry Term by" value={feedbackextension}
+                        required placeholder="Select" options={extendterm} onchange={handleextension}>
+                    </lightning-combobox>
+
+                </div>
+
+                <div data-id="descriptionblock" class={classNameDesc}>
+                    <div>
+                        <lightning-textarea onchange={getReasonForArchival} placeholder="Please leave us some feedback"
+                            required value={reasonforArchival} label="Reason for archival" maxlength="255">
+                        </lightning-textarea>
+
+                    </div>
+                </div>
+            </div>
+
+            <div data-id="butn" class={classNameBtnSec}>
+                <lightning-button data-id="submitbt" class={classNameSubmit} variant="brand"
+                    label="Submit" title="Submit" onclick={handlesubmit}></lightning-button>
+                <lightning-button data-id="cancelbt" class={classNameCancel} variant="brand"
+                    label="Cancel" title="Cancel" onclick={handlecancel}></lightning-button>
+            </div>
+            <template if:true={textareacrfeedback}>
+
+                <div class="slds-card slds-m-around--small">
+                    <div class="slds-is-expanded">
+                        <div>
+                            <lightning-input-rich-text onchange={getCRFeedback} placeholder="Content Reviewers comments"
+                                required value={crFeedbackComment} label="Comments"></lightning-input-rich-text>
+                            <!-- <lightning-textarea  onchange={getCRFeedback} placeholder="Content Reviewers comments" required  value={crFeedbackComment} label="Comments"></lightning-textarea> -->
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-is-expanded  slds-m-left_x-small">
+                    <lightning-button class="slds-is-expanded  slds-m-left_x-small" variant="brand" label="Submit"
+                        title="Submit" onclick={handlecrfeedbacksubmit}></lightning-button>
+                    <lightning-button class="slds-is-expanded  slds-m-left_x-small" variant="brand" label="Cancel"
+                        title="Cancel" onclick={handlecrfeedbackcancel}></lightning-button>
+                </div>
+
+            </template>
+        </template>
+        <template if:true={isModalOpen}>
+            <!-- Modal/Popup Box LWC starts here -->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_small">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box LWC header here -->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                size="small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{wizardtitle}
+                        </h2>
+                    </header>
+                    <!-- Modal/Popup Box LWC body starts here -->
+                    <div class="slds-modal__content slds-p-around_medium link-kb-popup-content" style="padding: 20px;max-height:800px"
+                        id="modal-content-id-123">
+                        <div style="flex-basis: 100%;">
+                            <template if:true={isDataAvailable}>
+                                <template if:true={isResponseWithSuccess}>
+                                    <template if:true={showLinkedKB}>
+                                        <lightning-formatted-rich-text value={articleReferenceMsg}>
+                                        </lightning-formatted-rich-text>
+                                        <div class="divcasecontainerborder">
+                                            <div style="flex-basis: 100%;">
+                                                <lightning-datatable hide-checkbox-column="true" key-field="Id"
+                                                    data={KBReferredArticleDatas} columns={kbcolumnswithselect} onrowaction={handleKBRowAction}>
+                                                </lightning-datatable>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template if:true={isWarningMsgAvaialble}>
+                                        <lightning-formatted-rich-text value={archivalMessage}>
+                                        </lightning-formatted-rich-text>
+                                    </template>
+                                </template>
+                                <template if:true={isResponseWithError}>
+                                    <div class="slds-p-bottom_large slds-p-left_large" style="color:red;">
+                                        <lightning-formatted-rich-text class='preview-field-value'
+                                            value={responseerror}>
+                                        </lightning-formatted-rich-text></br>
+                                    </div>
+                                </template>
+
+                            </template>
+                        </div>
+                    </div>
+                    <!-- Modal/Popup Box LWC footer starts here -->
+                    <footer class="slds-modal__footer">
+                        <template if:true={isWarningMsgAvaialble}>
+                            <div class="slds-align_absolute-center">
+                                <button class="slds-button slds-button_brand" onclick={handlearchivefrompopup}
+                                    title="Yes">Yes</button>
+                                <button class="slds-button slds-button_brand" onclick={closeModal}
+                                    title="No">No</button>
+                            </div>
+                        </template>
+                        <template if:false={isWarningMsgAvaialble}>
+                            <div class="slds-align_absolute-center">
+                                <button class="slds-button slds-button_brand" onclick={closeModal}
+                                    title="Close">Close</button>
+                            </div>
+                        </template>
+
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </lightning-card>
+</template>

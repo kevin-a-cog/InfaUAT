@@ -1,0 +1,34 @@
+<!--
+  @description       : 
+  @author            : SF Developer
+  @group             : 
+  @last modified on  : 12-10-2020
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   12-10-2020   SF Developer   Initial Version
+-->
+<template>
+    <lightning-quick-action-panel header="Swap Ownership">
+        <template if:true={showSpinner} class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+        </template>
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <div>
+                Current Owner : <b>{currentOwnerName}</b>
+            </div>
+            <br/>
+            <div>
+                <lightning-radio-group name="radioGroup" label="Select the new Owner from the following Co-owners"
+                    value={selectedCoOwnerId} options={coOwnerOptions} 
+                    onchange={handleChange} type="radio">
+                </lightning-radio-group>
+            </div>
+        </div>
+        <div slot="footer">
+            <lightning-button label="Cancel" title="Cancel" onclick={cancel}>Cancel</lightning-button>
+            <lightning-button label="Submit" title="Submit" variant="brand" onclick={submit}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+
+</template>

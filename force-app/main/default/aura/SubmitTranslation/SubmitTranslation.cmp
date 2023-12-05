@@ -1,0 +1,107 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickActionwithoutHeader,flexipage:availableForAllPageTypes" access="global" controller="KBLWCHandler">
+    
+    <aura:attribute name="validstate" type="Boolean" default="true"/>
+    <aura:attribute name="validchinsim" type="Boolean" default="true"/>
+    <aura:attribute name="validchintrade" type="Boolean" default="true"/>
+    <aura:attribute name="validjapan" type="Boolean" default="true"/>
+    <aura:attribute name="validgerman" type="Boolean" default="true"/>
+    <aura:attribute name="hidesubmit" type="Boolean" default="true"/>
+    <aura:attribute name="draftart" type="Boolean" default="false"/>
+    <aura:attribute name="notmaster" type="Boolean" default="false"/>
+    <aura:attribute name="translatedInAllLangs" type="Boolean" default="false"/>
+    
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'Japanese', 'value': 'ja'},
+    {'label': 'German', 'value': 'de'},
+    {'label': 'Chinese (Traditional)', 'value': 'zh_TW'},
+    {'label': 'Chinese (Simplified)', 'value': 'zh_CN'}                                                                          
+                
+    ]"/>
+    <aura:attribute name="value" type="List" default="option1"/>
+    <aura:attribute name="langlist" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        
+        }
+        p {
+        font-weight: 600;
+        font-size: 120%;
+        text-align: center;
+        }
+    </aura:html>    
+    
+    <!--section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" -->
+    <!-- div class="slds-modal__container" -->
+    <div class="slds-col modal-header slds-modal__header">
+        <h2 class="title slds-text-heading_medium">Submit for Translation</h2>
+    </div>
+        
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+    <div class="slds-var-p-around_medium">   
+        <aura:if isTrue="{!!v.validstate}">
+            <aura:if isTrue="{!v.notmaster}">             
+                    <p style="color:red">You can submit for translation ONLY an English article</p>
+            </aura:if>
+            <aura:if isTrue="{!v.draftart}">             
+                    <p style="color:red">You can submit for translation ONLY a Published article</p>
+            </aura:if>
+            <aura:if isTrue="{!v.translatedInAllLangs}">             
+                    <p style="color:red">The article is already submitted for translation in all available languages</p>
+            </aura:if>
+        </aura:if>
+    </div>
+
+    <aura:if isTrue="{!v.validstate}" > 
+        <div class="detail slds-text-align_center">
+            Select any or all of the following languages and assign the article to a person or a queue.
+        </div>
+
+        <div class="modal__content changeRecordTypeLeftRightContent">
+            <br/>
+            <legend class="slds-align_absolute-center">
+                <b>Select a Language </b>
+            </legend>
+            <br/>
+            <p></p>
+            <div class="slds-align_absolute-center">
+                <div class="slds-grid slds-grid_vertical">
+                    <div class="slds-col">
+                        <lightning:input type="checkbox"  onchange ="{!c.handleChange }" label="Japanese" name="ja" value="ja" checked="false" disabled="{!!v.validjapan}"/>
+                    </div>
+                    <div class="slds-col">                     
+                        <lightning:input type="checkbox"  onchange ="{!c.handleChange }" label="German" name="de" value="de" checked="false" disabled="{!!v.validgerman}"/>
+                    </div>
+                    <div class="slds-col">                        
+                        <lightning:input type="checkbox"  onchange ="{!c.handleChange }" label="Chinese (Traditional)" value="zh_TW" name="zh_TW" checked="false" disabled="{!!v.validchintrade}"/>
+                    </div>
+                    <div class="slds-col">                           
+                        <lightning:input type="checkbox"  onchange ="{!c.handleChange }" label="Chinese (Simplified)" value="zh_CN" name="zh_CN" checked="false" disabled="{!!v.validchinsim}"/>
+                    </div>
+                </div>
+            </div>
+            <!-- lightning:checkboxGroup name="Languages"
+                    label="Languages"
+                    options="{!v.options }"
+                    value="{!v.value }"
+                    onchange ="{!c.handleChange }" / -->
+            <br/>
+            <div class="slds-col modal-footer slds-modal__footer">
+                <lightning:button variant="Neutral" label="Cancel" onclick="{!c.CloseModal}" /> 
+                <lightning:button variant="brand" disabled="{!v.hidesubmit}" label="Submit" onclick="{!c.handlesubmit}" />  
+            </div> 
+        </div>
+    </aura:if>
+    <!--/section-->
+</aura:component>

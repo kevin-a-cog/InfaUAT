@@ -1,0 +1,101 @@
+<template>
+    <lightning-card title="New Project Location">
+        <template if:false={loaded}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <template if:true={isFirstPage}>
+            <div class = "slds-p-left_small slds-p-right_small slds-p-top_small slds-border_top">
+                <div class="slds-box slds-theme_shade">
+                        <div class="slds-p-left_small" style="font-size:15px;"><i>Select the Project Location from the below options:</i></div>
+                    <div class="slds-p-top_small slds-p-left_small">
+                        <lightning-radio-group name="radioGroup1"
+                                        label="Project Location"
+                                        options={options}
+                                        value={value}
+                                        onchange={onRadioOptionChanged}
+                                        required
+                                        type="radio"></lightning-radio-group>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template if:true={isSecondPage}>
+            <div class="slds-p-left_small slds-p-right_small slds-p-top_small slds-border_top">
+                <div style="font-size:15px;" class="slds-box slds-theme_shade slds-p-bottom_small slds-p-left_small">
+                    <i>Do you want to mark this location as Primary? </i>                
+                    <div class="slds-p-top_small slds-p-left_small">
+                        <lightning-radio-group name="radioGroup2"
+                                        label="Primary"
+                                        options={optionsPrimary}
+                                        value={valuePrimary}
+                                        onchange={onRadioPrimaryChanged}
+                                        required
+                                        type="radio"></lightning-radio-group>
+                    </div>
+                </div>
+            </div>
+            <template if:true={isUS}>
+                <div class="slds-p-top_small slds-p-left_small slds-p-right_small slds-p-bottom_small">                    
+                    <lightning-record-edit-form object-api-name="pse__Project_Location__c" onsuccess={handleSuccess} onsubmit ={handleSubmit} onerror={handleError}>
+                        <div class="slds-box slds-theme_shade">
+                            <div style="font-size:15px;"><i>Please select 'PSA MSA Code Mapping' for US Project Location:</i></div>
+                            <div class="slds-p-top_small">
+                                <lightning-input-field field-name='psa_pm_MSA_Code_Mapping__c' onchange={handleMSACodeSelect} required></lightning-input-field>
+                                <template if:true={displayMSACodeError}>
+                                    <div class="slds-text-color_destructive">{errorMessage}</div>
+                                </template> 
+                            </div>                           
+                        </div>
+                        <div class="slds-clearfix slds-p-top_small slds-p-bottom_small slds-p-right_small slds-float_right"> 
+                            <template if:true={showPrevButtonUS}>
+                                <lightning-button class="slds-p-left_xx-small" label="Previous" onclick={handlePrevious} disabled={disablePrev}></lightning-button>
+                            </template>
+                            <template if:true={showSaveButtonUS}>
+                                <lightning-button class="slds-p-left_xx-small" type="submit" variant="brand" label="Save"></lightning-button>
+                            </template>                            
+                        </div>
+                    </lightning-record-edit-form>  
+                </div>
+            </template>
+            <template if:true={isNonUS}>
+                <div class="slds-p-top_small slds-p-left_small slds-p-right_small">
+                    <div class="slds-box slds-theme_shade">
+                        <div style="font-size:15px;"><i>Please select the State, Country, and City for Non-US Project Location:</i></div> 
+                        <div class="combobox">
+                            <div class="slds-grid slds-wrap slds-form_horizontal slds-form slds-p-top_small">
+                                <div class="slds-col slds-size_1-of-2 slds-p-left_x-large slds-p-right_x-large">
+                                    <lightning-combobox required name="Country" label="Work Country" placeholder="--Select Country--" options={countryOptions}
+                                    onchange={handleCountryChange} value={country} read-only={disabledCountry} dropdown-alignment="auto"></lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-left_x-large  slds-p-right_x-large">
+                                    <lightning-combobox required name="State" label="Work State/Province" placeholder="--Select State--" options={stateOptions}
+                                    onchange={handleStateChange} value={state} read-only={disabledState} dropdown-alignment="auto"></lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-left_x-large slds-p-right_x-large">
+                                    <lightning-combobox required  name="City" label="Work City" placeholder="--Select City--" options={cityOptions}
+                                    onchange={handleCityChange} value={city} read-only={disabledCity} dropdown-alignment="auto"></lightning-combobox>
+                                </div>
+                            </div>
+                            <template if:true={displayNonUSValidationError}>
+                                <div class="slds-text-color_destructive">{errorMessage}</div>
+                            </template>
+                        </div> 
+                    </div>
+                </div>
+            </template>            
+        </template>
+        <template if:true={showButtons}>
+            <div class="slds-clearfix slds-p-top_small slds-p-bottom_small slds-p-right_small slds-float_right"> 
+                <template if:true={showPrevButton}>          
+                <lightning-button label="Previous" onclick={handlePrevious} disabled={disablePrev}></lightning-button>
+                </template>
+                <template if:true={showNextButton}>
+                <lightning-button class="slds-p-left_xx-small" label="Next" disabled={disableNext} variant="brand" onclick={handleNext}></lightning-button>
+                </template>
+                <template if:true={showSaveButton}>
+                <lightning-button class="slds-p-left_xx-small" label="Save" variant="brand" onclick={handleSave} disabled={disableSave}></lightning-button>
+                </template>
+            </div>
+        </template>    
+    </lightning-card>
+</template>

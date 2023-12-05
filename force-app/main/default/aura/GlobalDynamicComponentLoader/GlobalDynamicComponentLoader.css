@@ -1,0 +1,27 @@
+/*
+ * Name			:	GlobalDynamicComponentLoader
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	10/6/2022
+ * Description	:	This component loads Aura / LWC components, dynamically.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					                Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		10/6/2022		N/A				Initial version.			                N/A
+ Chetan Shetty          28-Feb-2023     I2RT-7541       Updated external link button                T01
+ */
+
+/* Pop Up container. */
+.THIS .popOutContainer {
+    background-color: white;
+    text-align: right;
+    /* CSS added for external link icon btn - T01 */
+    float: right;
+    position: relative;
+    z-index: 1;
+    padding: 10px;
+}
+.THIS .pointer {
+	cursor: pointer;
+}

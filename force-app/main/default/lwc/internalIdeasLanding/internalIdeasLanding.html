@@ -1,0 +1,103 @@
+<template>
+    <template if:true={data}>
+        <lightning-card title="All Ideas">
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="6" padding="around-small">
+
+                    <div class="help-internal-combobox">
+                        <lightning-combobox name="Status" label="Status" value={filtervalue}
+                            options={statusFilterOptions} onchange={handleFilterChange}>
+                        </lightning-combobox>
+
+                    </div>
+                </lightning-layout-item>
+
+
+                <lightning-layout-item size="6" padding="around-small">
+
+                    <div class="help-create-button">
+                        <lightning-button label="Create Idea" size="small" variant="brand" onclick={createIdea}
+                            icon-name="utility:light_bulb" icon-position="right"></lightning-button>
+
+                    </div>
+                </lightning-layout-item>
+
+
+                <lightning-layout-item size="12" padding="around-small">
+                    <div class="help-internal-datatable">
+                        <lightning-datatable key-field="ideaId" data={data} columns={columns} onsave={handleSave}
+                            draft-values={draftValues} hide-checkbox-column onrowaction={navigateToRecordViewPage}>
+                        </lightning-datatable>
+
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+
+
+            <!--Show Create Idea Popup-->
+            <template if:true={showEditModal}>
+                <section role="dialog" tabindex="0"
+                    class="slds-modal slds-fade-in-open slds-modal_large outerModalContent"
+                    aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                    <div class="slds-modal__container modalClasses outerModalContent">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={handleModalClose}>
+                                <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                    size="small">
+                                </lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 class="slds-modal__title slds-hyphenate">
+                                New Idea
+                            </h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium">
+
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-size_2-of-2">
+
+                                    <lightning-input label="Title" value={titleValue} onchange={handleTitle} required>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="slds-size_2-of-2">
+                                    <lightning-dual-listbox id="selectOptions" name="Select Options"
+                                        label="Category" source-label="Available Options"
+                                        selected-label="Selected Options" options={listOptions} 
+                                         onchange={handleChange} disable-reordering required>
+                                    </lightning-dual-listbox>
+                                </div>
+
+                                <div class="slds-size_2-of-2">
+                                    <lightning-combobox name="Status" label="Status" value={statusvalue}
+                                        placeholder="New" options={statusOptions} onchange={handleStatusChange}
+                                        disabled>
+                                    </lightning-combobox>
+                                </div>
+                                <div class="slds-size_2-of-2">
+                                    <!-- <lightning-input label="Description" value={Body} onchange={handleBody}>
+                                    </lightning-input> -->
+
+                                    <lightning-input-rich-text label="Description" variant="bottom-toolbar" value={Body}
+                                        onchange={handleBody} message-when-bad-input="This field is required."
+                                        valid={validity} required label-visible>
+                                    </lightning-input-rich-text>
+                                </div>
+                            </div>
+                        </div>
+
+                        <footer class="slds-modal__footer">
+                            <lightning-button class="saveButtonMargin" onclick={saveIdea} label="Save" variant="brand"
+                                title="Save"></lightning-button>
+                            <lightning-button onclick={handleModalClose} label="Cancel" title="Cancel">
+                            </lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+        </lightning-card>
+    </template>
+</template>

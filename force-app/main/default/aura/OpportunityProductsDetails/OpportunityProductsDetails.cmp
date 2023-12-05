@@ -1,0 +1,178 @@
+<!--Lightning component for Main custom related products list for the Hybrid deal management(opportunity)-->
+<aura:component controller="OpportunityProductsDetailsController"
+    implements="force:appHostable,force:hasRecordId,flexipage:availableForRecordHome,flexipage:availableForAllPageTypes"
+    access="global">
+
+    <!--to get the value of current record without server call-->
+	<force:recordData layoutType="FULL"
+	recordId="{!v.recordId}"
+	targetFields="{!v.oppRecord}"/>
+
+    <!-- <ltng:require styles="{!$Resource.globalCSS}" /> -->
+    <aura:attribute name="showNext" type="Boolean" default="false" />
+    <aura:attribute name="disabledNext" type="Boolean" />
+    <aura:attribute name="productFamily" type="List" />
+    <aura:attribute name="productForecast" type="List" />
+    <aura:attribute name="ForcastFamily" type="List" />
+    <aura:attribute name="ErrorMsgLst" type="string[]" />
+    <!-- <aura:attribute name="fieldarray" type="Object[]" /> -->
+    <!-- <aura:attribute name="fieldStrQry" type="String" /> -->
+    <aura:attribute name="deleteProduct" type="Boolean" default="false" />
+    <aura:attribute name="deletedItem" type="String" />
+    <aura:attribute name="ModalTitle" type="String" />
+    <aura:attribute name="OLIOperation" type="String" />
+    <aura:attribute name="oliContext" type="OpportunityLineItem" />
+    <aura:attribute name="retoppProdList" type="List" />
+    <aura:attribute name="opportunityObject" type="Opportunity" />
+    <aura:attribute name="transTypeOptions" type="String[]" />
+    <aura:attribute name="mobileDisplay" type="Boolean" default="false" />
+    <aura:attribute name="oppProdList" type="List" />
+    <aura:attribute name="lstOpportunityWithLineItems" type="OpportunityLineItem[]" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="aura:doneRendering" action="{!c.doneRendering}" />
+    <aura:handler name="OppDMLEvent" event="c:OppLineItemDMLEvent" action="{!c.handleOLIDML}" />
+    <aura:handler name="OppRefreshEvent" event="c:OppLineItemListRefreshEvent" action="{!c.handleOLIRefresh}" />
+    <aura:handler event="c:closeModalEvent" action="{!c.closeEditDeleteModal}" includeFacets="true" phase="bubble" />
+    <!--use boolean attribute for Store true/false value,make default to "false" so modal box are not display on the load of component.-->
+    <aura:attribute name="showPopup" type="boolean" default="false" />
+    <aura:attribute name="contractProductsFlag" type="Boolean" default="false" />    
+    <aura:attribute name="contractProductsLst" type="Object"/>
+    <aura:attribute name="contractProductsColumns" type="List"/>
+    <aura:attribute name="oppRecord" type="Object"/>
+
+    <!-- OPPORTUNITY PRODUCT WINDOW: LIST OF OPPORTUNITY LineItems -->
+    <!-- ================================================================================== -->
+
+    <div aura:id="completeMobilePage" style="overflow: auto !important">
+
+        <div class="slds-modal__header slds-theme_shade modal-overflow" aura:id="mobileHeader">
+
+            <header class="slds-media slds-media_center slds-has-flexi-truncate slds-float_left">
+                <span class="slds-media__figure ">
+                    <span class="slds-icon_container slds-icon-utility-announcement slds-icon slds-icon-text-default"
+                        style="background-color: #FBB55E" title="description of icon when needed">
+                        <img src="https://infa.my.salesforce.com/img/icon/t4v35/standard/product_120.png"
+                            class="icon " alt="" title="" />
+                    </span>
+                </span>
+                <span>
+                    <h2>
+                        <a href="javascript:void(0);" class="slds-card__header-link slds-truncate">
+                            <span class="slds-text-heading_small">Products</span><span class="slds-text-heading_small ">
+                                ({!v.oppProdList.length})</span>
+                        </a>
+                    </h2>
+                </span>
+            </header>
+
+            <aura:if isTrue="{!v.mobileDisplay}">
+                <!-- Case: Display Is Mobile  -->
+                <br />
+                <div class="" aura:id="mobileCardHide">
+                    <div aura:id="hideButtonsForMobile" class="slds-button-group slds-float_left slds-var-p-top_medium slds-var-p-left_xx-small" role="group">
+                        <button class="slds-button slds-button_neutral" onclick="{!c.navigateAddProduct}">Add
+                            Products</button>
+                        <button class="slds-button slds-button_neutral" onclick="{!c.navigateEditProduct}">Edit
+                            Products</button>
+                    </div>
+                    <div class="slds-button-group slds-float_left slds-var-p-top_xx-small" role="group">
+                        <button class="slds-button slds-button_neutral" onclick="{!c.syncQuote}">Sync Quote</button>
+                        <button class="slds-button slds-button_neutral" onclick="{!c.syncSOP}">Sync SOP</button>
+                    </div>
+
+                </div>
+                <aura:set attribute="else">
+                    <!-- Case: Display is Desktop  -->
+                    <span class="slds-float_right slds-clearfix" aura:id="mobileCardHide">
+                        <span aura:Id='hideButtons' class="slds-button-group slds-float_left" role="group">
+                            <button  class="slds-button slds-button_neutral" onclick="{!c.navigateAddProduct}">Add
+                                Products</button>
+                            <button  class="slds-button slds-button_neutral" onclick="{!c.navigateEditProduct}">Edit
+                                Products</button>
+                        </span>
+
+                        <span class="slds-button-group slds-var-p-left_x-small" role="group">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.syncQuote}">Sync Quote</button>
+                            <button class="slds-button slds-button_neutral" onclick="{!c.syncSOP}">Sync SOP</button>
+                        </span>
+
+                        <aura:if isTrue="{!v.opportunityObject.Type == 'Renewal'}">
+                        <span class="slds-button-group slds-var-p-left_x-small" role="group">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.showContractProducts}">Contract Products</button>
+                        </span>
+                        </aura:if>
+                    </span>
+                </aura:set>
+            </aura:if>
+        </div>
+
+        <ui:scrollerWrapper class="scrollerSize">
+            <div aura:id="mobileCardHide" style="overflow:auto">
+                <!-- <div class="table-overflow">  -->
+                <aura:if isTrue="{!v.oppProdList.length > 0}">
+                    <div aura:id="overflowSect">
+                        <table class="slds-table slds-table_cell-buffer slds-scrollable "
+                            style="min-width:700px;overflow:auto;" role="grid">
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col" role="gridcell">
+                                        <div class="slds-truncate" title="Products">Products</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Forecast Family">Forecast Family</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Product Family">Product Family</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-text-align_right" title="Sales Price">Sales Price</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Sales Price">Transaction Type</div>
+                                    </th>
+                                    <!--<th scope="col" >
+                                    <div class="slds-truncate" title="Parent Opportunity">
+                                      <!-Comment this Line-> <!- Primary -> 
+                                      Orderable In
+                                    </div>
+                                </th>-->
+                                </tr>
+                            </thead>
+                            <!-- <aura:if isTrue="{!v.oppProdList.length > 0}"> -->
+                            <tbody>
+                                <aura:iteration items="{!v.oppProdList}" var="oppProd">
+                                    <c:OpportunityProductRow oppLineItem="{!oppProd}" oppCurrency="{!v.oppRecord.CurrencyIsoCode}"/>
+                                </aura:iteration>
+                            </tbody>
+                            <!-- </aura:if> -->
+                        </table>
+                    </div>
+                    <!-- </div> -->
+
+                    <footer class="slds-modal__footer">
+                        <div class="">
+                            <a id="viewAllLinkId" title="Click to view all Opportunity Products"
+                                href="javascript:void(0);" onclick="{!c.viewAllOpportunity}">
+                                <span class="view-all-label">View All<span class="assistiveText"></span></span>
+                            </a>
+                        </div>
+                    </footer>
+                </aura:if>
+            </div>
+        </ui:scrollerWrapper>
+
+    </div>
+
+    <c:LIModalWindow title="{!v.ModalTitle}" aura:id="oliEditModal" onCancelClick="{!c.closeEditDeleteModal}">
+        <div>
+            <c:OppLineItemDMLForm oli="{!v.oliContext}" OLIOperation="{!v.OLIOperation}" oppId="{!v.recordId}"
+                OpportunityName="{!v.opportunityObject.Name}" transactionTypeOptions="{!v.transTypeOptions}" oppCurrency="{!v.oppRecord.CurrencyIsoCode}"/>
+        </div>
+    </c:LIModalWindow>
+
+    <!--To display the Prior Contract Products List-->
+    <aura:if isTrue="{!v.contractProductsFlag}">
+        <c:contractProductsOnOptyPage optyId="{!v.recordId}" optyName = "{!v.opportunityObject.Name}" onclosemodal="{!c.closeContractProductModal}"/>
+    </aura:if>
+
+</aura:component>

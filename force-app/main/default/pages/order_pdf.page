@@ -1,0 +1,314 @@
+<!--
+        Change History
+    ********************************************************************************************************************************************
+        ModifiedBy          Date        Requested By        Description                                                            Tag
+        
+     Chandana Gowda       3/20/2019     JLC              SALESRT-4086 Added the markup to display the Legal Entity name on         <T1>
+                                                         the order generated
+
+	 Anusha Akella        5/20/2022     Liz,Matthews	 SALESRT-13653 add reference fields ship to/ Bill to to order generate form	<T2>
+    ********************************************************************************************************************************************
+-->
+<apex:page standardController="Order" renderAs="pdf" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+    <html>
+        <head>
+            <style>  
+                @page {
+                size: A4;
+                margin: 15mm;
+                @bottom-center
+                    {
+                        content: "Page " counter(page) " of " counter(pages);
+                    }
+                }
+                .page-break {
+                    display:block;
+                    page-break-after:always;
+                }
+            
+                body {
+                    font-family: sans-serif;
+                    font-size: small;
+                }
+                .clearfix {
+                    overflow: auto;
+                }
+                .logo {
+                    float: left;
+                }
+                .orderDetails {
+                    float: right;
+                    border-style: solid;
+                    border-width: 1px;
+                    Padding : 10px;
+                    border-color : #002060 ;
+                }
+                .Container {
+                    float:center;
+                    Position:Relative;
+                }
+                .notices{
+                    float:Left;
+                }
+                .headcolWidth{
+                    width: 33%;
+                    border:1px solid black;
+                }
+                .colWidth1_1{
+                    width: 14%;
+                    border-style: solid;
+                    border-width: 1px 0px 0px 1px;
+                }
+                .colWidth1_2{
+                    width: 14%;
+                    border-style: solid;
+                    border-width: 0px 0px 0px 1px;
+                }
+                .colWidth1_3{
+                    width: 14%;
+                    border-style: solid;
+                    border-width: 0px 0px 1px 1px;
+                }
+                .colWidth2_1{
+                    width: 20%;
+                    border-style: solid;
+                    border-width: 1px 1px 0px 0px;
+                }
+                .colWidth2_2{
+                    width: 20%;
+                    border-style: solid;
+                    border-width: 0px 1px 0px 0px;
+                }
+                .colWidth2_3{
+                    width: 20%;
+                    border-style: solid;
+                    border-width: 0px 1px 1px 0px;
+                }
+                table {
+                    border-collapse: collapse;
+                }
+                table, th, td {
+                    border: 1px solid black;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="clearfix">
+                <img class="logo" src="{!$Resource.informatica}" width="40%"/>   
+                <div class="orderDetails">
+                    <div><span>Order #:&nbsp;</span> <apex:outputText value="{!Order.OrderNumber}"/></div>
+                    <div><span>Due Date:&nbsp;</span> <apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Order.EndDate}" /> </apex:outputText></div>    
+                    <div><span>Order Type:&nbsp;</span><apex:outputText value="{!Order.Type}"/></div>
+                    <div><span>Currency:&nbsp;</span> <apex:outputText value="{!Order.CurrencyIsoCode}"/></div>
+                    <div><span>Payment Term:&nbsp;</span> <apex:outputText value="{!Order.SBQQ__PaymentTerm__c}"/></div>
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div class="Container">
+                <table style="float:center" class="addressTable" cellpadding="5">
+                    <thead>
+                        <tr>
+                            <th class="headcolWidth" style="text-align:Center" colspan="2">Program Member</th>
+                            <th class="headcolWidth" style="text-align:Center" colspan="2">Shipping Address</th>
+                            <th class="headcolWidth" style="text-align:Center" colspan="2">Billing Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="colWidth1_1" valign="top">
+                                <div><span>Partner : </span></div>
+                            </td>
+                            <td class="colWidth2_1" valign="top">
+                                <div><apex:outputText value="{!Order.Account.Name}"/></div>
+                            </td>
+                            <td class="colWidth1_1" valign="top">
+                                <div><span>Client : </span></div>
+                            </td>
+                            <td class="colWidth2_1" valign="top">
+                                <div><apex:outputText value="{!Order.ShipToAccount__r.Name}"/></div>
+                            </td>
+                            <td class="colWidth1_1" valign="top">
+                                <div><span>Client : </span></div>
+                            </td>
+                            <td class="colWidth2_1" valign="top">
+                                <div><apex:outputText value="{!Order.BilltoAccount__r.Name}"/></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="colWidth1_2" valign="top">
+                                <div><span>Contact : </span></div>
+                            </td>
+                            <td class="colWidth2_2" valign="top">
+                                <div><apex:outputText value="{!Order.EndUserContact__r.Name}"/></div>
+                            </td>
+                            <td class="colWidth1_2" valign="top">
+                                <div><span>Contact : </span></div>
+                            </td>
+                            <td class="colWidth2_2" valign="top">
+                                <div><apex:outputText value="{!Order.ShipToContact.Name}"/></div>
+                            </td>
+                            <td class="colWidth1_2" valign="top">
+                                <div><span>Contact : </span></div>
+                            </td>
+                            <td class="colWidth2_2" valign="top">
+                                <div><apex:outputText value="{!Order.BillToContact.Name}"/></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="colWidth1_2" valign="top">
+                                <div><span>Address : </span></div>
+                            </td>
+                            <td class="colWidth2_2" valign="top">
+                                <div><apex:outputText value="{!Order.EndUserAddress__c}"/></div>
+                            </td>
+                            <td class="colWidth1_2" valign="top">
+                                <div><span>Address : </span></div>
+                            </td>
+                            <td class="colWidth2_2" valign="top">
+                                <div>
+                                    <!--<T2>-->
+                                    <apex:outputText rendered="{!Order.Ship_To_Additional_Reference_Info__c != null}">{!Order.Ship_To_Additional_Reference_Info__c}<br/></apex:outputText>
+                                    <apex:outputText value="{!Order.ShippingStreet} {!Order.ShippingCity} {!Order.ShippingState}"/>
+                                </div>
+                            </td>
+                            <td class="colWidth1_2" valign="top">
+                                <div><span>Address : </span></div>
+                            </td>
+                            <td class="colWidth2_2" valign="top">
+                                <div>
+                                    <!--<T2>-->
+                                    <apex:outputText rendered="{!Order.Bill_To_Additional_Reference_Info__c != null}">{!Order.Bill_To_Additional_Reference_Info__c}<br/></apex:outputText>
+                                    <apex:outputText value="{!Order.BillingStreet} {!Order.BillingCity} {!Order.BillingState}"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="colWidth1_2" valign="top">
+                                <div><span>Telephone : </span></div>
+                            </td>
+                            <td class="colWidth2_2" valign="top">
+                                <div><apex:outputText value="{!Order.EndUserContact__r.Phone}"/></div>
+                            </td>
+                            <td class="colWidth1_2" valign="top">
+                                <div><span>Telephone : </span></div>
+                            </td>
+                            <td class="colWidth2_2" valign="top">
+                                <div><apex:outputText value="{!Order.ShipToContact.Phone}"/></div>
+                            </td>
+                            <td class="colWidth1_2" valign="top">
+                                <div><span>Telephone : </span></div>
+                            </td>
+                            <td class="colWidth2_2" valign="top">
+                                <div><apex:outputText value="{!Order.BillToContact.Phone}"/></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="colWidth1_3" valign="top">
+                                <div><span></span></div>
+                            </td>
+                            <td class="colWidth2_3" valign="top">
+                                <div></div>
+                            </td>
+                            <td class="colWidth1_3" valign="top">
+                                <div><span>Email Address for Electronic Shipment : </span></div>
+                            </td>
+                            <td class="colWidth2_3" valign="top">
+                                <div><apex:outputText value="{!Order.Shipping_Email__c}"/></div>
+                            </td>
+                            <td class="colWidth1_3" valign="top">
+                                <div><span>Email Address for Electronic Billing :</span></div>
+                            </td>
+                            <td class="colWidth2_3" valign="top">
+                                <div><apex:outputText value="{!Order.Shipping_Email__c}"/></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br/>
+                <br/>
+                <table style="float:center;width:100%;" class="productsTable" cellpadding="3">
+                    <col width="80%"/>
+                    <col width="20%"/>
+                    <tr style="background-color:#E0E0E0;">
+                        <th style="border-width: 1px 0px 1px 1px;">Other</th>
+                        <th style="border-width: 1px 1px 1px 0px;"></th>
+                    </tr>
+                    <tr style="background-color:#002060; color:White;">
+                        <td>Product Name and Description</td>
+                        <td>Quantity</td>
+                    </tr>
+                    <apex:repeat var="ord" value="{!Order.OrderItems}">
+                        <tr>
+                            <td>{!ord.Product2.Name}</td>
+                            <td>{!ord.Quantity}</td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+                <br/>
+                <table style="float:Right;width:40%;" class="productsTable" cellpadding="3">
+                    <col width="50%"/>
+                    <col width="50%"/>
+                    <tr>
+                        <td align="right">Total   </td>
+                        <td><div><apex:outputText value="{!Order.TotalAmount}"/></div></td>
+                    </tr>
+                </table>
+                <div class="notices">
+                    <br/>
+                    <div class="noticePara1">
+                        <apex:outputText value="{!$Label.PRM_OrderPDF_Text_1}"/>&nbsp;<apex:outputText value="{!Order.Legal_Entity__r.Name}"/>&nbsp;<apex:outputText value="{!$Label.PRM_OrderPDF_Text_2}"/>&nbsp;<apex:outputText value=" {!Order.SBQQ__PaymentTerm__c}"/>&nbsp;<apex:outputText value="{!$Label.PRM_OrderPDF_Text_3}"/> 
+                    </div>
+                    <br/>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <table style="float:center;width:100%;border-width: 1px 1px 1px 1px;" cellpadding="10">
+                    <col width="50%"/>
+                    <col width="50%"/>
+                    <tr >
+                        <!--<T1>-->
+                        <!--the markup to display the legal entity name on the order generated-->
+                        <th style="border-width: 0px 0px 0px 0px;"><apex:outputText value=" {!Order.Legal_Entity__r.Name}"/> </th>
+                        <!--</T1>-->
+                        <th style="border-width: 0px 0px 0px 0px;">Partner : <apex:outputText value=" {!Order.Account.Name}"/></th>
+                    </tr>
+                    <tr>
+                        <td style="border-width: 0px 0px 0px 0px;">Signature </td>
+                        <td style="border-width: 0px 0px 0px 0px;">Signature </td>
+                    </tr>
+                    <tr>
+                        <td style="border-width: 0px 0px 0px 0px;">First Name </td>
+                        <td style="border-width: 0px 0px 0px 0px;">First Name </td>
+                    </tr>
+                    <tr>
+                        <td style="border-width: 0px 0px 0px 0px;">Title </td>
+                        <td style="border-width: 0px 0px 0px 0px;">Title </td>
+                    </tr>
+                    <tr>
+                        <td style="border-width: 0px 0px 0px 0px;">Date </td>
+                        <td style="border-width: 0px 0px 0px 0px;">Date </td>
+                    </tr>
+                </table>
+            </div>
+        </body>
+    </html>
+</apex:page>

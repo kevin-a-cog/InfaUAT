@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="numResults" type="String" label="Number Of Results" description="Number Of results items to show." default="{!$Label.EC_Coveo_NoofRecords}" />
+            <property name="searchBoxPlaceholderText" type="String" label="Search Box placeholder text" description="Default placeholder text to be shown on the search box." default="{!$Label.EC_Coveo_Placeholder}" />
+            <property name="requestActionLabel" type="String" label="Request action button label." description="Label to be shown on the request action button." default="{!$Label.EC_Coveo_RequestButton}" />
+            <property name="ecFilterData" type="String" label="Enterprise Catalog results filter." description="Enterprise Catalog results filter." default="{!$Label.EC_Coveo_Path}" />
+            <property name="engagementCategoryFacetLabel" type="String" label="Engagement Category Facet Label." description="Caption to be shown on the Engagement Category Facet." default="{!$Label.EC_Coveo_EngagementCategory}" />
+            <property name="engagementTypeFacetLabel" type="String" label="Engagement Type Facet Label." description="Caption to be shown on the Engagement Type Facet." default="{!$Label.EC_Coveo_EngagementType}" />
+            <property name="engagementStageFacetLabel" type="String" label="Engagement Stage Facet Label." description="Caption to be shown on the Engagement Stage Facet." default="{!$Label.EC_Coveo_Stage}" />
+            <property name="engagementProductsFacetLabel" type="String" label="Engagement Products Facet Label." description="Caption to be shown on the Engagement Products Facet." default="{!$Label.EC_Coveo_Products}" />
+            <property name="engagementFocusAreaFacetLabel" type="String" label="Engagement Focus Area Facet Label." description="Caption to be shown on the Engagement Focus Area Facet." default="{!$Label.EC_Coveo_FocusArea}" />
+            <property name="engagementUseCaseFacetLabel" type="String" label="Engagement Use Cases Facet Label." description="Caption to be shown on the Engagement Use Cases Facet Label." default="{!$Label.EC_Coveo_UseTags}" />
+        </targetConfig>
+    </targetConfigs>
+    
+</LightningComponentBundle>

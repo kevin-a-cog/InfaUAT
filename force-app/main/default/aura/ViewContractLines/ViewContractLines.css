@@ -1,0 +1,12 @@
+.THIS .slds-clearfix  {
+background-color: white;
+    padding-top:10px;
+}
+
+.THIS .slds-form-element__label  {
+    font-weight: bold;
+}
+
+.THIS .toggle {
+    display: none;
+}

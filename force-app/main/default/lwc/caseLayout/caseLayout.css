@@ -1,0 +1,22 @@
+.pad-left{
+    padding-left: 0.70rem;
+}
+.pad-right{
+    padding-right: 0.70rem;
+}
+.custom-align{
+    text-align: right;
+    margin-bottom: -1rem;
+}
+.custom-col-size-9{
+    width: 97%;
+}
+.custom-col-size-1{
+    width: 3%;
+}
+.pointer{
+    cursor: pointer;
+}
+.fill-color>svg{
+    fill: rgb(176,173,171);
+}

@@ -1,0 +1,144 @@
+<template>
+    <div class="container slds-top-m_small">
+        <div class="row" style="background: rgb(243, 242, 242);margin: -1rem;">
+            <div class="col-md-8 col-md-offset-2 col-xs-12" style="margin: 0.75rem;">
+                <ul class="timeline-v2 slds-scrollable_y" style="max-height:800px" onscroll={handleWheel}>
+                    <template for:each={commentList} for:item="notif">
+                        <li key={notif.date} data-date={notif.date} style="margin-right: .65rem;">
+                            <template for:each={notif.comments} for:item="comment">
+                                <!--<c-case-comment-timeline-item key={comment.Id} comment={comment} access={access}>
+                                </c-case-comment-timeline-item>-->
+                                <div key={comment.time}>
+                                    <div class="media">
+                                        <div class="slds-page-header" style="padding:5px;">
+                                            <div class="slds-page-header__row">
+                                                <div class="slds-page-header__col-title">
+                                                    <div class="slds-media">
+                                                        <div class="slds-media__figure">
+                                                            <span class="slds-icon_container">
+                                                                <div class="media-left">
+                                                                    <a href="javascript:void(0);">
+                                                                        <img class="image--cover"
+                                                                            src={comment.CreatedBy.FullPhotoUrl}
+                                                                            width="20px;">
+                                                                    </a>
+                                                                </div>
+                                                            </span>
+                                                        </div>
+                                                        <div class="slds-media__body">
+                                                            <div class="slds-float_right"
+                                                                if:false={comment.isSubmitted}>
+                                                                <lightning-button-icon icon-name="utility:edit"
+                                                                    variant="bare" name="edit" data-id={comment.Id}
+                                                                    onclick={handleClick}>
+                                                                </lightning-button-icon>
+                                                            </div>
+                                                            <div class="slds-page-header__name">
+                                                                <div class="slds-page-header__name-title">
+                                                                    <h1>
+                                                                        <span
+                                                                            class="slds-page-header__title slds-truncate"
+                                                                            title={comment.CreatedBy.Name}
+                                                                            style="font-size: 9pt;">{comment.CreatedBy.Name}</span>
+                                                                    </h1>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-page-header__name-meta"
+                                                                style="font-size: 7pt;">{comment.role}
+                                                                <span class='slds-m-left_x-small'
+                                                                    if:true={comment.isDraft}>
+                                                                    <img src={imageURL.draft_16} width="12px;">
+                                                                </span>
+                                                                <span class='slds-m-left_x-small'
+                                                                    if:true={comment.isScheduled}>
+                                                                    <img src={imageURL.calendar_16} width="12px;">
+                                                                </span>
+                                                                <span class='slds-m-left_x-small'
+                                                                    if:true={comment.isSubmitted}>
+                                                                    <img src={imageURL.submitted_16} width="12px;">
+                                                                </span>
+                                                                <span class="slds-float_right">
+                                                                    {comment.countdown}</span>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="media-body media-middle slds-m-top_xx-small "
+                                            data-time={comment.time}>
+                                            <lightning-formatted-rich-text value={comment.Comment__c}>
+                                            </lightning-formatted-rich-text>
+                                        </div>
+                                        <div class="slds-m-top_xx-small" if:true={comment.hasAttachments}>
+                                            <div class="slds-border_bottom">
+                                                <lightning-icon size="xx-small" icon-name="utility:attach">
+                                                </lightning-icon>&nbsp;Attachments ({comment.attachmentCount})
+                                            </div>
+
+                                            <lightning-pill-container items={comment.attachments}
+                                                class="timelineAttachments">
+                                            </lightning-pill-container>
+                                        </div>
+                                        <div class="slds-m-top_x-small" if:true={comment.canReply}>
+                                            <lightning-button-icon icon-name="utility:comments" variant="bare"
+                                                icon-class="fill_brand" class="fill_brand" name="reply"
+                                                data-id={comment.Id} onclick={handleClick}>
+                                            </lightning-button-icon>
+                                        </div>
+                                        <div if:true={comment.Case_Comments__r} class="slds-m-top_x-small">
+                                            <a if:false={comment.showReplies} href="javascript:void()"
+                                                onclick={handleClick} name="showReply" class="slds-m-bottom_x-small"
+                                                data-id={comment.Id}>View
+                                                Reply</a>
+                                            <template if:true={comment.showReplies}>
+                                                <a if:true={comment.showReplies} href="javascript:void()"
+                                                    onclick={handleClick} name="hideReply" class="slds-p-bottom_small"
+                                                    data-id={comment.Id}>Hide
+                                                    Reply</a>
+                                                <c-case-comment-timeline comment-list={comment.replies}>
+                                                </c-case-comment-timeline>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <template if:true={showModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open " aria-labelledby="modal-heading-01"
+            aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+
+
+                <header class="slds-modal__header slds-clearfix">
+                    <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                        onclick={handleClick} name="close" class="slds-float_right">
+                    </lightning-button-icon>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{modalHeader}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <template if:true={isEdit}>
+                        <c-case-comment-create onsave={handleSuccess} comment-record={caseCommentToEdit}
+                            record-id={caseRecordId} is-edit>
+                        </c-case-comment-create>
+                    </template>
+                    <template if:true={isReply}>
+                        <c-case-comment-create onsave={handleSuccess} parent-comment-id={parentCommentId}
+                            record-id={caseRecordId}>
+                        </c-case-comment-create>
+                    </template>
+
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

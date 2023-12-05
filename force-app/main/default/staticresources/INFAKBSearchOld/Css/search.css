@@ -1,0 +1,706 @@
+﻿h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: Roboto, Arial, sans-serif !important;
+}
+
+.anchorhelplink {
+    color: #fff !important;
+    font-size: 12px !important;
+    line-height: 23px;
+}
+
+#kbheader {
+    border-bottom: 1px solid #ff4d00;
+    height: 60px;
+    font-family: Roboto, Arial, sans-serif !important;
+    font-weight: 400;
+}
+
+a:focus, a:hover {
+    color: #264ea1;
+}
+
+.CoveoFacet, .CoveoFacetRange, .CoveoFacetSlider, .CoveoHierarchicalFacet {
+    background: #fff;
+}
+
+.CoveoSearchButton:hover {
+    background-color: #fff;
+    border-color: #fff;
+}
+
+.CoveoSearchButton {
+    background-color: #fff;
+}
+
+.CoveoSearchInterface label {
+    margin-bottom: 5px;
+    font-weight: normal;
+}
+
+.CoveoSearchInterface .coveo-main-section {
+    margin-top: 0px;
+}
+
+.CoveoResultLink, a.CoveoResultLink, .CoveoResult a.CoveoResultLink {
+    color: #264ea1 !important;
+    font-weight: 400;
+}
+
+.ms-WPBody a:visited {
+    color: #264ea1 !important;
+}
+
+.CoveoSearchInterface.coveo-small-tabs .coveo-dropdown-header-wrapper a, .CoveoSearchInterface.coveo-small-facets .coveo-dropdown-header-wrapper a, .CoveoSearchInterface.coveo-small-recommendation .coveo-dropdown-header-wrapper a {
+    margin-top: 50px;
+    margin-left: -10px;
+    position: absolute;
+}
+
+.coveo-list-layout.CoveoResult {
+    border-bottom: thin solid #bcc3ca;
+    padding: 16px 0 5px 16px;
+    font-size: 14px;
+}
+
+.coveo-settings-square {
+    width: 4px;
+    height: 4px;
+    display: inline-block;
+    vertical-align: top;
+    background-color: white;
+}
+
+.CoveoSearchInterface .coveo-search-section {
+    max-width: 1140px;
+    margin: 0px auto -87px;
+    padding: 23px 10px;
+    display: flex;
+    align-items: center;
+    background-color: #515252;
+}
+
+.data-custom-coveo-field-value-expanded {
+    height: auto;
+}
+
+.data-custom-coveo-field-name {
+    font-weight: bold;
+}
+
+.data-custom-coveo-field-value {
+    overflow: hidden;
+    min-height: 20px;
+    padding-top: 1px;
+}
+
+.data-custom-coveo-field-value-collapsed {
+    height: 20px;
+}
+
+/*Two Column Start*/
+
+.CustomCoveoFieldTableDetailsSection {
+    border: thin solid #bcc3ca;
+    border-radius: 2px;
+    width: 100%;
+    background-color: #f7f8f9;
+    padding-bottom: 10px;
+    position: relative;
+    word-break: break-word;
+    margin-top: 1px;
+    border-collapse: separate;
+    margin-bottom: 20px;
+}
+
+.CustomCoveoFieldTableDetailsSection th, .CustomCoveoFieldTableDetailsSection td {
+    font-size: 14px;
+    vertical-align: top;
+}
+
+.CustomCoveoFieldTableDetailsSection td {
+    width: 99%;
+    padding: 10px 20px 0 0;
+}
+
+.CustomCoveoFieldTableDetailsSection th {
+    text-align: left;
+    font-weight: normal;
+    white-space: nowrap;
+    padding: 10px 10px 0 20px;
+}
+
+/*Two Column End*/
+
+.CustomCoveoFieldTableShowMoreSection {
+    border: thin solid #bcc3ca;
+    border-radius: 2px;
+    width: 100%;
+    background-color: #f7f8f9;
+    padding-bottom: 10px;
+    position: relative;
+    word-break: break-word;
+    margin-top: 1px;
+    border-collapse: separate;
+    margin-bottom: 0px;
+}
+
+.CustomCoveoFieldTableShowMoreSection th, .CustomCoveoFieldTableShowMoreSection td {
+    font-size: 14px;
+    vertical-align: top;
+}
+
+.CustomCoveoFieldTableShowMoreSection td {
+    width: 99%;
+    padding: 10px 20px 0 0;
+}
+
+.CustomCoveoFieldTableShowMoreSection th {
+    text-align: left;
+    font-weight: normal;
+    white-space: nowrap;
+    padding: 10px 10px 0 20px;
+    font-weight: 600;
+}
+
+.CustomCoveoFieldTableShowMoreSection a {
+    color: #0072bc;
+    text-decoration: none;
+}
+
+.CustomCoveoFieldTableSingleLineSection {
+    border: thin solid #bcc3ca;
+    border-radius: 2px;
+    width: 100%;
+    background-color: #f7f8f9;
+    padding-bottom: 10px;
+    position: relative;
+    word-break: break-word;
+    margin-top: 1px;
+    border-collapse: separate;
+    margin-bottom: 0px;
+}
+
+.CustomCoveoFieldTableSingleLineSection th, .CustomCoveoFieldTableSingleLineSection td {
+    font-size: 14px;
+    vertical-align: top;
+}
+
+.CustomCoveoFieldTableSingleLineSection td {
+    width: 99%;
+    padding: 10px 20px 0 0;
+}
+
+.CustomCoveoFieldTableSingleLineSection th {
+    text-align: left;
+    font-weight: normal;
+    white-space: nowrap;
+    padding: 10px 10px 0 20px;
+    font-weight: 600;
+}
+
+.CoveoSearchInterface label {
+    font-weight: normal;
+}
+
+.CoveoSearchInterface {
+    min-height: 100%;
+    position: relative;
+    margin: 0;
+    font-family: Roboto, Arial, sans-serif !important;
+    font-size: 15px;
+    color: #313a45;
+    font-weight: 400;
+}
+
+.CoveoSearchInterface a:link {
+    font-family: Roboto, Arial, sans-serif !important;
+}
+
+/* CustomFacet Control Start*/
+
+.CustomCoveoFacet {
+    margin: 10px 0;
+    padding: 0;
+    border: thin solid #bcc3ca;
+    border-radius: 2px;
+    background: white;
+    position: relative;
+}
+
+.data-custom-coveo-facet-value-caption {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.data-custom-coveo-facet-value-label {
+    display: block;
+    white-space: nowrap;
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+.data-custom-coveo-facet-value-label .data-custom-coveo-facet-value-label-wrapper {
+    -webkit-box-ordinal-group: 1;
+    -moz-box-ordinal-group: 1;
+    box-ordinal-group: 1;
+    -webkit-order: 1;
+    -moz-order: 1;
+    order: 1;
+    -ms-flex-order: 1;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    min-width: 0;
+}
+
+.data-custom-coveo-facet-value.data-custom-coveo-with-hover:hover, .data-custom-coveo-facet-value.data-custom-coveo-with-hover.data-custom-coveo-focused {
+    background-color: #e6ecf0;
+}
+
+.data-custom-coveo-facet-value>* {
+    vertical-align: middle;
+}
+
+.data-custom-coveo-facet-value input[type='checkbox'] {
+    display: none;
+}
+
+.data-custom-coveo-facet-values {
+    list-style: none;
+    padding: 5px 0 0;
+    margin: 0;
+}
+
+.data-custom-coveo-facet-value {
+    padding: 0 20px;
+    margin: 0;
+    line-height: 22px;
+    position: relative;
+}
+
+.data-custom-coveo-facet-value .data-custom-coveo-facet-value-checkbox {
+    width: 18px;
+    height: 18px;
+    box-sizing: content-box;
+    border: thin solid #bcc3ca;
+    border-radius: 2px;
+    text-align: center;
+    vertical-align: middle;
+    margin-right: 15px;
+    background: white;
+    position: relative;
+    float: left;
+    top: 2px;
+}
+
+/* CustomFacet Control End*/
+
+/*Wizard Tool Tip
+         /* compliance-action-tooltip container */
+
+.personalization-wizard-tooltip {
+    position: relative;
+    display: inline-block;
+    /* border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* compliance-action-tooltip text */
+
+.personalization-wizard-tooltip .personalization-wizard-tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #fff;
+    color: #555;
+    text-align: center;
+    padding: 8px;
+    border-radius: 6px;
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 126%;
+    left: 10%;
+    margin-left: -204px;
+    /* Fade in compliance-action-tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+    font-family: 'FuturaStd-Medium' !important;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px 6px 0px 6px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+}
+
+/* compliance-action-tooltip arrow */
+
+.personalization-wizard-tooltip .personalization-wizard-tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 98%;
+    left: 96%;
+    margin-left: -1.3px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #fff #fff transparent transparent;
+}
+
+/* Show the compliance-action-tooltip text when you mouse over the compliance-action-tooltip container */
+
+.personalization-wizard-tooltip:hover .personalization-wizard-tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.personalization-wizard-tooltiptext-img {
+    height: 20px;
+    cursor: pointer;
+    float: left;
+}
+
+.personalization-wizard-tooltiptext-span {
+    height: 20px;
+    line-height: 20px;
+}
+
+.personalization-wizard-tooltiptext-div {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 95.4%;
+    margin-left: -1px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: #ccc #ccc transparent transparent;
+}
+
+.personalization-wizard-header-title {
+    line-height: 21px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: bold;
+    vertical-align: top;
+}
+
+.personalizationwizarddivheader {
+    padding-top: 10px;
+}
+
+/* The switch - the box around the slider */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 47px;
+    height: 18px;
+}
+
+/* Hide default HTML checkbox */
+
+.switch input {
+    display: none;
+}
+
+/* The slider */
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: rgb(255, 125, 0);
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px rgb(255, 125, 0);
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+#search.CoveoSearchInterface .CustomCoveoMainBadge {
+    display: inline-block;
+}
+
+#search.CoveoSearchInterface .CustomCoveoMainBadge .data-custom-coveo-main-badge {
+    padding: 2px 12px 2px 5px;
+    color: #fdfdfd;
+    font-size: 13px;
+    font-weight: 600;
+    min-width: auto;
+    display: inline-block;
+    border-radius: 0 15px 15px 0;
+    background-color: #8097AA;
+}
+
+#search.CoveoSearchInterface .CustomCoveoMainBadge .data-custom-coveo-main-badge:hover {
+    text-decoration: none;
+}
+
+#search.CoveoSearchInterface .CustomCoveoMainBadge .data-custom-coveo-main-badge.Discover {
+    background-color: transparent;
+    color: #ff0000;
+}
+
+#search.CoveoSearchInterface .CustomCoveoMainBadge .data-custom-coveo-main-badge.Learn {
+    background-color: #0D80EF;
+}
+
+#search.CoveoSearchInterface .CustomCoveoMainBadge .data-custom-coveo-main-badge.Collaborate {
+    background-color: transparent;
+    color: #F76900;
+    font-style: italic;
+}
+
+#search.CoveoSearchInterface .CustomCoveoMainBadge .data-custom-coveo-main-badge.Latest {
+    background-color: #00B251;
+}
+
+#search.CoveoSearchInterface .coveo-field-caption {
+    margin-right: 5px;
+    color: #1E253F;
+    font-weight: 600;
+    opacity: 0.5;
+}
+
+div#kbhelppopcontent>a {
+    font-size: 13px;
+    color: #67768b !important;
+}
+
+.btn-info {
+    background-repeat: repeat-x;
+    border-color: #ff4d16;
+    background-image: linear-gradient(to bottom, #ff4d07 0%, #ff4d00 100%);
+}
+
+.btn-info:hover, .btn-info:focus {
+    background-color: #ff4d00;
+    background-position: 0 -15px;
+}
+
+.btn-info:active, .btn-info.active {
+    background-color: #ff4d00;
+    border-color: #ff4d16;
+}
+
+.data-custom-coveo-facet-values {
+    list-style: none;
+    padding: 5px 0 0;
+    margin: 0;
+    overflow: auto;
+    height: 225px;
+}
+
+/*----------------NoResult----Start----------------*/
+
+.suggestions-options>div {
+    margin-bottom: 30px;
+}
+
+.CoveoCustomNoResults {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.CoveoSearchInterface.showing-custom-no-results .coveo-facet-column, .CoveoSearchInterface.showing-custom-no-results .coveo-results-header {
+    display: none;
+}
+
+/*----------------NoResult-----End---------------*/
+
+.search-kb-icon {
+    display: inline-block;
+    width: 35px;
+    height: 40px;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+}
+
+.search-kb-icon.coveo-small {
+    height: 20px;
+    width: 17px;
+    background-size: 100% auto;
+}
+
+.search-kb-icon.filetype.html, .search-kb-icon.filetype.document, .search-kb-icon.filetype.csdocument, .search-kb-icon.filetype.xml, .search-kb-icon.filetype[title="Unknown"] {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-document.png");
+}
+
+.search-kb-icon.filetype.xls {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-excel.png");
+}
+
+.search-kb-icon.filetype.pdf {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-pdf.png");
+}
+
+.search-kb-icon.filetype.velocity {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-velocity.png");
+}
+
+.search-kb-icon.filetype.html.SupportTV {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-video.png");
+}
+
+.search-kb-icon.filetype.html.Bugs {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/bugs.png");
+}
+
+.search-kb-icon.filetype.html.Cases {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/cases.png");
+}
+
+.search-kb-icon.filetype.html.Trainings {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/trainings.png");
+}
+
+.search-kb-icon.filetype.html.Hermes {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/hermes.png");
+}
+
+.search-kb-icon.filetype.html.Email {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-private-message.png");
+}
+
+.search-kb-icon.filetype.pdf.Email {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-private-message.png");
+}
+
+.search-kb-icon.filetype.html.SR {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/sr.png");
+}
+
+.search-kb-icon.filetype.html.Heilercases {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/hermes.png");
+}
+
+.search-kb-icon.filetype.zip {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-zip.png");
+}
+
+.search-kb-icon.filetype.txt {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-text.png");
+}
+
+.search-kb-icon.filetype.img {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-image.png");
+}
+
+.search-kb-icon.filetype.csblogpost {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-blog.png");
+}
+
+.search-kb-icon.filetype.csdiscussion, .search-kb-icon.filetype.discussion, .search-kb-icon.filetype.cscommunity {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-discussion.png");
+}
+
+.search-kb-icon.filetype.csdiscussion.answered, .search-kb-icon.filetype.answered {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-discussion-answered.png");
+}
+
+.search-kb-icon.filetype.csdiscussion.question, .search-kb-icon.filetype.question {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-discussion-question.png");
+}
+
+.search-kb-icon.filetype.csannouncement {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-event.png");
+}
+
+.search-kb-icon.filetype.cspoll {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-poll.png");
+}
+
+.search-kb-icon.filetype.csidea {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-idea.png");
+}
+
+.search-kb-icon.filetype.csmessage, .search-kb-icon.filetype.cscomment, .search-kb-icon.filetype.comment {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-private-message.png");
+}
+
+.search-kb-icon.filetype.csvideo.SupportVideo {
+    background-image: url("/_layouts/InformaticaKBMasterPage/Images/AthenaKBIcons/icons/kb-icons-35x40-video.png");
+}
+
+.CoveoIcon.filetype.txt .coveo-icon-caption-overlay, .CoveoIcon.filetype.html .coveo-icon-caption-overlay, .CoveoIcon.filetype.xls .coveo-icon-caption-overlay, .CoveoIcon.filetype.pdf .coveo-icon-caption-overlay, .CoveoIcon.filetype.csblogpost .coveo-icon-caption-overlay, .CoveoIcon.filetype.csdocument .coveo-icon-caption-overlay, .CoveoIcon.filetype.xml .coveo-icon-caption-overlay, .CoveoIcon.filetype.zip .coveo-icon-caption-overlay, .CoveoIcon.filetype.img .coveo-icon-caption-overlay, .CoveoIcon.filetype.csdiscussion .coveo-icon-caption-overlay, .CoveoIcon.filetype.csdiscussion.answered .coveo-icon-caption-overlay, .CoveoIcon.filetype.csdiscussion.question .coveo-icon-caption-overlay, .CoveoIcon.filetype.csannouncement .coveo-icon-caption-overlay, .CoveoIcon.filetype.cspoll .coveo-icon-caption-overlay, .CoveoIcon.filetype.csidea .coveo-icon-caption-overlay, .CoveoIcon.filetype.csmessage .coveo-icon-caption-overlay, .CoveoIcon.filetype.cscomment .coveo-icon-caption-overlay, .CoveoIcon.filetype[title="Unknown"] .coveo-icon-caption-overlay, .CoveoIcon.filetype.cscommunity .coveo-icon-caption-overlay, .CoveoIcon.filetype.csvideo .coveo-icon-caption-overlay {
+    display: none;
+}
+
+.CoveoResultLink:hover, a.CoveoResultLink:hover, .CoveoResult a.CoveoResultLink:hover {
+    text-decoration: underline;
+    color: #264ea1 !important;
+}
+
+.CoveoSettings {
+    margin: 0 0 0 36px;
+    border-radius: 50%;
+    border: thin solid #bcc3ca;
+    width: 40px;
+    height: 40px;
+    order: 1;
+    position: relative;
+    cursor: pointer;
+    float: right;
+}
+
+.CoveoFieldValue[data-field="@infadocid"]>span {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 2px 5px;
+    background-color: #ccc;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.ms-WPBody a:link>#kbhelppopcontent {
+    font-size: 12px;
+}
+
+.ms-WPBody {
+    font-family: Roboto, Arial, sans-serif !important;
+}
+
+.ms-WPBody td {
+    font-family: Roboto, Arial, sans-serif !important;
+}

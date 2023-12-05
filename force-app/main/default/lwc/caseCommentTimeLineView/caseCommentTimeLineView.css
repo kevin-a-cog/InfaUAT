@@ -1,0 +1,43 @@
+.styledPopIn svg {
+  fill: rgb(0, 95, 178);
+}
+
+.styledPopIn {
+  background: white;
+}
+/*Deva : start :ITRT 2636 Updated tab labels dynamically to display unread counter- */
+.tab1  { position:absolute;top:9px;left:25px }
+.tab2  { position:absolute;top:9px;left:100px}
+.tab3  { position:absolute;top:9px;left:225px }
+.tab4  { position:absolute;top:9px;left:295px }
+.tab5  {  position:absolute;top:9px;left:365px }
+.tab6  { position:absolute;top:9px;left:425px }
+.tab7  { position:absolute;top:9px;left:515px}
+.tab8  { position:absolute;top:9px;left:612px}
+/*Apply the color of icon to red*/
+.my-fallback-color {
+  --sds-c-icon-color-background: red;
+  font-weight: bold;
+}
+
+/*Hide the icons if the screen size shrinked*/
+/* For 765 Resolution */  
+@media only screen and (max-width: 765px) {
+  .fadeSmallCounterIcon {
+      display: none;
+  }
+}
+/* For 1024 Resolution */  
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+   .fadeMediumCounterIcon {
+      display: none;
+    }
+}
+/* For 1500 Resolution */ 
+@media only screen and (min-width: 1030px) and (max-width: 1500px){  
+  .fadeLargerCounterIcon {
+    display: none;
+  }
+} 
+
+/*Deva : End :ITRT 2636 Updated tab labels dynamically to display unread counter- */

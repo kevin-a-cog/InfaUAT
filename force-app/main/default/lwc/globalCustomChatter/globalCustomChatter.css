@@ -1,0 +1,12 @@
+/* Visibility. */
+div[data-visible=true] {
+	display: block;
+}
+div[data-visible=false] {
+	display: none;
+}
+
+/* Feed Comments. */
+.marginZero.bodyContainer p {
+	margin: 0;
+}

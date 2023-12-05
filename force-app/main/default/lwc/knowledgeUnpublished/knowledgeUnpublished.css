@@ -1,0 +1,21 @@
+.review-warning{
+    color: #ff4d00 !important;
+    vertical-align: top;
+    font-size:13px !important;
+
+}
+
+.preview-title{
+    font-size:20px;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 50%;
+    padding-left: 15px; 
+}
+
+.pendingTR {
+display : inline;
+}

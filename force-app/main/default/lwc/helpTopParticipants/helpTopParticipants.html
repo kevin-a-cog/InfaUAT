@@ -1,0 +1,44 @@
+<template>
+    <template if:true={showParticipants}>    
+        <div class="in-top-participants-container">
+            <template if:false={grouprecord}>
+            <h1 class="in-heading in-teal in-heading-bottom in-heading-top-participants">Top Contributors in this Community</h1>
+            <ul>
+                <template for:each={topParticipants} for:item="item">
+                    <li key={item} class="list-item d-flex">
+                        <div>
+                            <img src={item.PhotoURL} class="profile-icon">
+                        </div>
+                        <div class="pl-2 d-flex name-icon" style="justify-content: center;">
+                            <a href={item.URL} class="user-name">{item.Name}</a>
+                        </div>
+                        <div class="ml-auto pr-2 points-wrapper">
+                            <!--div class="points">{item.Points}</div> //Tag 2 - I2RT-9053 - Hide Points
+                            <div class="points-text">Points</div-->
+                        </div>
+                    </li>
+                </template>
+            </ul>
+            </template>
+            <template if:true={grouprecord}>
+                <h4 class="in-heading in-teal in-heading-bottom mb-0">Members</h4>
+                <ul>
+                    <template for:each={topParticipants} for:item="item">
+                        <li key={item} class="list-item d-flex">
+                            <div>
+                                <img src={item.PhotoURL} class="profile-icon">
+                            </div>
+                            <div class="pl-2 d-flex name-icon" style="justify-content: center;">
+                                <a href={item.URL} class="user-name">{item.Name}</a>
+                            </div>
+                            <div class="ml-auto pr-2 points-wrapper">
+                                <!--div class="points">{item.Points}</div> //Tag 2 - I2RT-9053 - Hide Points
+                                <div class="points-text">Points</div-->
+                            </div> 
+                        </li>
+                    </template>
+                </ul>
+            </template>
+        </div>
+    </template>
+</template>

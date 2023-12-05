@@ -1,0 +1,70 @@
+<template>
+    <div class="ui-widget">
+       
+        <header class="forceHighlightsPanel forceCommunityLwcRecordHeadline">
+           
+
+           <template if:true={dataWrapper}>
+           <a class="slds-p-left--medium hyperlink slds-text-heading--small" if:true={dataWrapper.recordHeader.showHeader} onclick={recordHeaderRedirectHandler}>
+            <lightning-icon icon-name="utility:back" class="headerIcon slds-p-bottom--medium" alternative-text="back" title="back" size="x-small"></lightning-icon>&nbsp;{dataWrapper.recordHeader.headerName}</a>  
+
+          
+            <div class="slds-grid primaryFieldRow slds-page-header slds-p-top--medium slds-theme--default slds-page-header forceHighlightsStencilDesktop forceRecordLayout headerbgm" 
+                 data-aura-rendered-by="26:778;a" >                
+                    
+                
+                <div class="slds-grid slds-col slds-has-flexi-truncate" >  
+                               
+                    <div class="profilePicWrapper slds-media" >
+                        
+                        
+                        
+                        <div  class="slds-media__figure slds-icon forceEntityIcon" >
+                            
+                            <lightning-icon icon-name={dataWrapper.objectIcon} alternative-text="icon" title="icon"></lightning-icon>
+                        </div>
+                    </div>
+                    <div class="slds-media__body slds-m-right--x-large" style="max-width: fit-content;">
+                       
+                            <div>{dataWrapper.objectName}</div>
+                            <div class="slds-text-heading_small slds-m-right--small slds-align-middle" >
+                                <span   >{dataWrapper.recordName}</span></div>
+                       
+                    </div>
+                    <lightning-layout class="slds-m-left--x-large">
+                        <template for:each={dataWrapper.fieldsList} for:item="field">
+                            <lightning-layout-item flexibility="auto" key={field.fieldValue}> 
+                                <div class="header-column">
+                                    <p class="field-title" title={field.fieldLabel}>{field.fieldLabel}</p>
+                                    <template if:true={field.isNumeric}>
+                                        <lightning-formatted-number value={field.fieldValue} maximum-fraction-digits="0"></lightning-formatted-number>
+                                    </template>
+                                    <template if:false={field.isNumeric}>
+                                        {field.fieldValue}
+                                    </template>
+                                    
+                                </div>
+                            </lightning-layout-item>
+                        </template>
+
+                    </lightning-layout>
+
+                </div>
+                <div role="group" class="slds-col slds-no-flex slds-grid actionsContainer" style="height: fit-content;">
+                    <!-- slot for rendering custom component from parent comp -->
+                    <c-ipue-initialize-agreement-e-s record-id={recordId}>
+
+                    </c-ipue-initialize-agreement-e-s>
+                    
+                    <lightning-button label={buttonLabel} title="Download action" icon-name={buttonIcon} 
+                                        class="slds-m-left_x-small" onclick={handleFollowButton}  onmouseenter={handleButtonHover}
+                                        onmouseleave={handleButtonHoverOut}
+                                        if:true={dataWrapper.showFollowButton} ></lightning-button>
+
+                </div>
+            </div>
+        </template>
+        </header>
+     </div>
+    
+</template>

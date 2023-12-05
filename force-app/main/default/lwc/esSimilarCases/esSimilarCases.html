@@ -1,0 +1,52 @@
+<!--
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 06-17-2021
+  @last modified by  : Sathish Rajalingam
+  Modifications Log 
+  Ver   Date         Author               Modification
+  1.0   06-02-2021   Sathish Rajalingam   Initial Version
+-->
+<template>
+  <template if:true={caserecords}>
+
+    <template if:true={showmessage}>
+      <p> &nbsp; {error}</p>
+    </template>
+    <ul>
+      <template for:each={caserecords} for:item="caserec">
+
+        <li key={caserec.syssfid} class="listOfItemsInternal">
+          <div class="es-case-info-horizontal__title">
+            <p>
+                <span class="es-case-info-horizontal__priority"><lightning-formatted-text value={caserec.sfpriority} ></lightning-formatted-text></span>
+                <span class="es-case-info-horizontal__number"><lightning-formatted-text value={caserec.sfcasenumber} ></lightning-formatted-text></span>
+            </p>
+            <span class="es-sidebar__tag">Similar Case</span>
+        </div>
+        <div class="es-case-info-horizontal__info">
+          <p class="es-case-info-horizontal__info-item">
+                    <span class="es-case-info-horizontal__label">Support Account:</span>
+                    <span class="es-case-info-horizontal__value"><lightning-formatted-text value={caserec.sfsupportaccountrname} ></lightning-formatted-text></span>
+          </p>
+          <p class="es-case-info-horizontal__info-item">
+            <span class="es-case-info-horizontal__label">Phase:</span>
+            <span class="es-case-info-horizontal__value"><lightning-formatted-text value={caserec.sfcasestatus} ></lightning-formatted-text></span>
+          </p>
+          <p class="es-case-info-horizontal__info-item">
+            <span class="es-case-info-horizontal__label">Last Updated on: </span>
+            <span class="es-case-info-horizontal__value">NA</span>
+          </p>
+          <p class="es-case-info-horizontal__info-item">
+            <span class="es-case-info-horizontal__label">Description:</span>
+            <span class="es-case-info-horizontal__value"><lightning-formatted-text value={caserec.syssfdescription} ></lightning-formatted-text></span>
+          </p>
+          
+        </div>
+        </li>
+
+      </template>
+    </ul>
+  </template>
+</template>

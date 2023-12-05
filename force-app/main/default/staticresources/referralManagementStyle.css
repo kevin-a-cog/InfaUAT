@@ -1,0 +1,18 @@
+.slds-modal__container{
+    width: 60% !important;
+    max-width: 80% !important;
+}
+
+.csm-height{
+    height: 250px; 
+    display: flex; 
+    align-items: center;
+}
+
+.csmMarginbottom{
+    margin-bottom: 20px;
+}
+
+.padding{
+    padding : 0px 5px 0px 5px;
+}

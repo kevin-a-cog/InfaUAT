@@ -1,0 +1,559 @@
+<apex:page language="en-US" standardController="Status_Report__c" renderAs="pdf" applyBodyTag="false" showHeader="false"
+   extensions="psaGenerateStatusReportPDFController">
+   <head>
+      <style type="text/css" media="print">
+         @page {
+         size: A3;
+         padding-top: 65px;
+         padding-bottom: 50px;
+         @top-center {
+         content: element(header);
+         }
+         @bottom-left {
+         content: element(footer);
+         }
+         }
+         div.header {
+         padding: 10px;
+         position: running(header);
+         width: 100%
+         }
+         div.footer {
+         display: block;
+         position: running(footer);
+         padding: 5px;
+         width: 100%
+         }
+         .pagenumber:before {
+         content: counter(page);
+         }
+         .pagecount:before {
+         content: counter(pages);
+         }
+         table {
+         -fs-table-paginate: paginate;
+         border-collapse: collapse;
+         } 
+         thead {
+         display: table-header-group;
+         }
+         .tableBorder {
+         border-collapse: collapse;
+         border: 1px solid black;
+         padding: 3px;                
+         }
+      </style>
+   </head>
+   <body>
+      <div class="header" name="header">
+         <apex:image value="{!$Resource.StatusReportHeaderLogo}" width="100%"/>
+      </div>
+      <div class="footer" name = "footer">
+         <div>Page <span class="pagenumber"/> of <span class="pagecount"/></div>
+         <!--apex:image value="{!$Resource.StatusReportFooterLogo}" width="50%"/-->
+      </div>
+      <apex:pageBlock >
+         <div style="padding-top:600px;padding-bottom:500px;">
+            <h1 style="text-align:right;font-size:50px">{!statsRec.PSA_PM_Project__r.pse__Account__r.Name}</h1>
+            <h1 style="text-align:right;font-size:50px">Project Status Report</h1>
+            <h3 style="text-align:right;">{!todaysDate}</h3>
+         </div>
+      </apex:pageBlock>
+      <div class="content">
+         <div style="text-align:center;">
+            <h2 style="font-family:serif;font-size: 20px;">{!Status_Report__c.Status_Report_Name__c}</h2>
+         </div>
+         <h3  style="color: #FF6A31;">Project Status Report</h3>
+         <table style="width:1000px;">
+            <tr>
+               <th class = "tableBorder" style="text-align: center; background-color:#04AEC4;">
+                  <span style="font-family:Verdana, sans-serif; color:white">INFA Project Manager</span>
+               </th>
+               <td class = "tableBorder" style="text-align: center;">
+                  <span style='font-family:system-ui;'>{!statsRec.PSA_PM_Project__r.pse__Project_Manager__r.Name}</span>
+               </td>
+            </tr>
+            <tr>
+               <th class = "tableBorder" style="text-align: center; background-color:#04AEC4;">
+                  <span style="font-family:Verdana, sans-serif; color:white">INFA Project Sponsor</span>
+               </th>
+               <td class = "tableBorder" style="text-align: center;">
+                  <span style='font-family:system-ui;'>{!statsRec.PSA_PM_Project__r.Owner.Name}</span>
+               </td>
+            </tr>
+            <tr>
+               <th class = "tableBorder" style="text-align: center; background-color:#04AEC4;">
+                  <span style="font-family:Verdana, sans-serif; color:white">Status Date</span>
+               </th>
+               <td class = "tableBorder" style="text-align: center;">
+                  <span style='font-family:system-ui;'>{!todaysDate}</span>
+               </td>
+            </tr>
+            <tr>
+               <th class = "tableBorder" style="text-align: center; background-color:#04AEC4;">
+                  <span style="font-family:Verdana, sans-serif; color:white">Project Name</span>
+               </th>
+               <td class = "tableBorder" style="text-align: center;">
+                  <span style='font-family:system-ui;'>{!statsRec.PSA_PM_Project__r.psa_Project_Name__c}</span>
+               </td>
+            </tr>
+         </table>
+         <h3 style="color: #FF6A31;">Overall Project Status</h3>
+         <table>
+            <tr>
+               <td>
+                  <apex:image id="checkmarkOPSGreen" value="{!If(statsRec.Project_Status__c == 'Green',greenTickImageURL,greenBoxImageURL)}" width="30px" height="30px" />
+               </td>
+               <td>
+                  GREEN
+               </td>
+               <td>
+                  <span style="font-family:system-ui;">(The project is active and on schedule)</span>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  <apex:image id="checkmarkOPSRed" value="{!If(statsRec.Project_Status__c == 'Yellow',yellowTickImageURL,yellowBoxImageURL)}" width="30px" height="30px" />
+               </td>
+               <td>
+                  YELLOW
+               </td>
+               <td>
+                  <span style="font-family:system-ui;">(The project is at risk, but is recoverable within current project parameters)</span>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  <apex:image id="checkmarkOPSYellow" value="{!If(statsRec.Project_Status__c == 'Red',redTickImageURL,redBoxImageURL)}" width="30px" height="30px" />
+               </td>
+               <td>
+                  RED
+               </td>
+               <td>
+                  <span style="font-family:system-ui">(The project is off track, and is not recoverable within current project parameters)</span>
+               </td>
+            </tr>
+         </table>
+         <apex:pageBlock >
+            <h3 style="color: #FF6A31;">At A Glance</h3>
+            <table style="width:100%;padding-top:10px">
+               <thead>
+                  <tr>
+                     <th class = "tableBorder" style="width:25%;text-align: center; background-color:#04AEC4;">
+                        <strong><span style="font-family:Verdana, sans-serif; color:white"></span></strong>
+                     </th>
+                     <th class = "tableBorder" style="width:25%;text-align: center; background-color:#04AEC4;">
+                        <strong><span style="font-family:Verdana, sans-serif; color:white">On Track</span></strong>
+                     </th>
+                     <th class = "tableBorder" style="width:25%;text-align: center; background-color:#04AEC4;">
+                        <strong><span style="font-family:Verdana, sans-serif; color:white">At Risk</span></strong>
+                     </th>
+                     <th class = "tableBorder" style="width:25%;text-align: center; background-color:#04AEC4;">
+                        <strong><span style="font-family:Verdana, sans-serif; color:white">Urgent</span></strong>
+                     </th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td class = "tableBorder" style="width:25%;">
+                        <span style="font-family:system-ui;">Finance</span>
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.Financial_Status__c, 
+                        'Green', 'Green', 
+                        'white')}">                               
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.Financial_Status__c, 
+                        'Yellow', 'Yellow', 
+                        'white')}">                               
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.Financial_Status__c, 
+                        'Red', 'Red', 
+                        'white')}">                               
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class = "tableBorder" style="width:25%;">
+                        <span style="font-family:system-ui;">Schedule</span>
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.PSA_PM_Schedule__c, 
+                        'Green', 'Green', 
+                        'white')}">                               
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.PSA_PM_Schedule__c, 
+                        'Yellow', 'Yellow', 
+                        'white')}">                               
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.PSA_PM_Schedule__c, 
+                        'Red', 'Red', 
+                        'white')}">                               
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class = "tableBorder" style="width:25%;">
+                        <span style="font-family:system-ui;">Scope</span>
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.PSA_PM_Scope__c, 
+                        'Green', 'Green', 
+                        'white')}">                               
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.PSA_PM_Scope__c, 
+                        'Yellow', 'Yellow', 
+                        'white')}">                               
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.PSA_PM_Scope__c, 
+                        'Red', 'Red', 
+                        'white')}">                               
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class = "tableBorder" style="width:25%;">
+                        <span style="font-family:system-ui;">Resources</span>
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.PSA_PM_Resources__c, 
+                        'Green', 'Green', 
+                        'white')}">                               
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.PSA_PM_Resources__c, 
+                        'Yellow', 'Yellow', 
+                        'white')}">                               
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.PSA_PM_Resources__c, 
+                        'Red', 'Red', 
+                        'white')}">                               
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class = "tableBorder" style="width:25%;">
+                        <span style="font-family:system-ui;">Technical Quality</span>
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.Technical_Quality_Status__c, 
+                        'Green', 'Green', 
+                        'white')}">                               
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.Technical_Quality_Status__c, 
+                        'Yellow', 'Yellow', 
+                        'white')}">                               
+                     </td>
+                     <td class = "tableBorder" style="width:25%; background-color: {!CASE(statsRec.Technical_Quality_Status__c, 
+                        'Red', 'Red', 
+                        'white')}">                               
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+            <div style="padding-top:10px">
+               <h3 style="color: #FF6A31;">Project Status Notes</h3>
+               <span>
+               {!statsRec.PSA_PM_Project__r.pse__Project_Status_Notes__c}
+               </span>  
+            </div>
+            <h3 style="padding-top:10px;color: #FF6A31;">Overall Project Trend</h3>
+            <table>
+               <tr>
+                  <td>
+                     <span style="font-family:system-ui;">Overall Status</span>
+                  </td>
+                  <td style="padding-left: 10px">
+                     <span style="font-family:system-ui;">
+                        <apex:image id="tickImageOSGreen" value="{!If(statsRec.Overall_Project_Status_Trend__c == 'Green',greenTickImageURL,greenBoxImageURL)}" width="30px" height="30px" />
+                     </span>
+                  </td>
+                  <td>
+                     GREEN
+                  </td>
+                  <td style="padding-left: 10px">
+                     <span style="font-family:system-ui;">
+                        <apex:image id="tickImageOSYellow" value="{!If(statsRec.Overall_Project_Status_Trend__c == 'Yellow',yellowTickImageURL,yellowBoxImageURL)}" width="30px" height="30px" />
+                     </span>
+                  </td>
+                  <td>
+                     YELLOW
+                  </td>
+                  <td style="padding-left: 10px">
+                     <span style="font-family:system-ui;">
+                        <apex:image id="tickImageOSRed" value="{!If(statsRec.Overall_Project_Status_Trend__c == 'Red',redTickImageURL,redBoxImageURL)}" width="30px" height="30px" />
+                     </span>
+                  </td>
+                  <td>
+                     RED
+                  </td>
+               </tr>
+            </table>
+         </apex:pageBlock>         
+         <apex:pageBlock rendered="{!hasAsgmt}">
+            <div class="row other-pages">
+               <h3 style="color: #FF6A31;font-size: 20px;">Budget (for T&#38;M projects only)</h3>
+               <table style="width:100%;margin-left:auto;margin-right:auto;margin-top:auto;">
+                  <thead>
+                     <tr>
+                        <th class = "tableBorder" style="width:40%;text-align:center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif;color:white">IPS Resource&nbsp;</span></strong>
+                        </th>
+                        <th class = "tableBorder" style="width:20%;text-align:center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif;color:white">Budgeted Hours&nbsp;</span></strong>
+                        </th>
+                        <th class = "tableBorder" style="width:20%;text-align:center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif;color:white">Hours Logged&nbsp;</span></strong>
+                        </th>
+                        <th class = "tableBorder" style="width:20%;text-align:center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif;color:white">Remaining Hours&nbsp;</span></strong>
+                        </th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <apex:repeat value="{!asgmtLst}" var="assgmt">
+                        <tr style="page-break-inside: avoid;page-break-after: auto;">
+                           <td class = "tableBorder" style="width:40%;padding-left:10px">
+                              <span style="font-family:system-ui;">{!assgmt.PSA_Assignment__r.pse__Resource__r.Name}</span>
+                           </td>
+                           <td class = "tableBorder" style="width:20%;padding-left:10px">
+                              <span style="font-family:system-ui;">{!assgmt.PSA_Assignment__r.pse__Planned_Hours__c}</span>
+                           </td>
+                           <td class = "tableBorder" style="width:20%;padding-left:10px">
+                              <span style="font-family:system-ui;">{!assgmt.PSA_Assignment__r.pse__Billable_Hours_Submitted__c}</span>
+                           </td>
+                           <td class = "tableBorder" style="width:20%;padding-left:10px">
+                              <span style="font-family:system-ui;">{!assgmt.PSA_Assignment__r.pse__Planned_Hours__c - assgmt.PSA_Assignment__r.pse__Billable_Hours_Submitted__c}</span>
+                           </td>
+                        </tr>
+                     </apex:repeat>
+                     <tr>
+                        <td class = "tableBorder" style="width:20%;background-color:#04AEC4;">
+                            <span style="font-family:system-ui;">Total</span>
+                        </td>
+                        <td class = "tableBorder" style="width:20%;background-color:#04AEC4;">
+                            <span style="font-family:system-ui;">{!totalPlannedHours}</span>
+                        </td>
+                        <td class = "tableBorder" style="width:20%;background-color:#04AEC4;">
+                            <span style="font-family:system-ui;">{!totalHoursLogged}</span>
+                        </td>
+                        <td class = "tableBorder" style="width:20%;background-color:#04AEC4;">
+                            <span style="font-family:system-ui;">{!totalRemainingHours}</span>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+         </apex:pageBlock>
+         <br/>
+         <apex:pageBlock rendered="{!hasProjActivity}">
+            <div class="row other-pages">
+               <h3 style="color: #FF6A31;font-size: 20px;">Project Activities</h3>
+               <apex:outputPanel rendered="{!hasAccTask}">
+                  <table style="width:100%;margin-left:auto;margin-right:auto;">
+                     <thead>
+                        <tr>
+                           <th class = "tableBorder" style="width:20%;text-align:center;background-color:#04AEC4;">
+                              <strong><span style="font-family:Verdana, sans-serif;color:white">Accomplished Task&nbsp;</span></strong>
+                           </th>
+                           <th class = "tableBorder" style="width:80%;text-align:center;background-color:#04AEC4;">
+                              <strong><span style="font-family:Verdana, sans-serif;color:white">Notes&nbsp;</span></strong>
+                           </th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <apex:repeat value="{!accTaskList}" var="accTask">
+                           <tr  style="page-break-inside: avoid;page-break-after: auto;">
+                              <td class = "tableBorder" style="width:20%;padding-left:10px">
+                                 <span style="font-family:system-ui;">{!accTask.subject}</span>
+                              </td>
+                              <td class = "tableBorder" style="width:80%;padding-left:10px">
+                                 <span style="font-family:system-ui;">{!accTask.psa_Status_Notes__c}</span>
+                              </td>
+                           </tr>
+                        </apex:repeat>
+                     </tbody>
+                  </table>
+                  <br/>
+               </apex:outputPanel>
+               <apex:outputPanel rendered="{!hasIncompleteTask}">
+                  <table style="width:100%;margin-left:auto;margin-right:auto;">
+                     <thead>
+                        <tr>
+                           <th class = "tableBorder" style="width:20%;text-align:center;background-color:#04AEC4;">
+                              <strong><span style="font-family:Verdana, sans-serif;color:white">Incomplete Task&nbsp;</span></strong>
+                           </th>
+                           <th class = "tableBorder" style="width:30%;text-align:center;background-color:#04AEC4;">
+                              <strong><span style="font-family:Verdana, sans-serif;color:white">Reason Note Complete&nbsp;</span></strong>
+                           </th>
+                           <th class = "tableBorder" style="width:50%;text-align:center;background-color:#04AEC4;">
+                              <strong><span style="font-family:Verdana, sans-serif;color:white">Action Plan&nbsp;</span></strong>
+                           </th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <apex:repeat value="{!incompTaskList}" var="incompTask">
+                           <tr  style="page-break-inside: avoid;page-break-after: auto;">
+                              <td class = "tableBorder" style="width:20%;padding-left:10px">
+                                 <span style="font-family:system-ui;">{!incompTask.subject}</span>
+                              </td>
+                              <td class = "tableBorder" style="width:30%;padding-left:10px">
+                                 <span style="font-family:system-ui;">{!incompTask.psa_Reason__c}</span>
+                              </td>
+                              <td class = "tableBorder" style="width:50%;padding-left:10px">
+                                 <span style="font-family:system-ui;">{!incompTask.psa_Action_Plan__c}</span>
+                              </td>
+                           </tr>
+                        </apex:repeat>
+                     </tbody>
+                  </table>
+                  <br/>
+               </apex:outputPanel>
+               <apex:outputPanel rendered="{!hasUpcomingTask}">
+                  <table style="width:100%;margin-left:auto;margin-right:auto;">
+                     <thead>
+                        <tr>
+                           <th class = "tableBorder" style="width:20%;text-align:center;background-color:#04AEC4;">
+                              <strong><span style="font-family:Verdana, sans-serif;color:white">Upcoming Task&nbsp;</span></strong>
+                           </th>
+                           <th class = "tableBorder" style="width:20%;text-align:center;background-color:#04AEC4;">
+                              <strong><span style="font-family:Verdana, sans-serif;color:white">Target Date&nbsp;</span></strong>
+                           </th>
+                           <th class = "tableBorder" style="width:15%;text-align:center;background-color:#04AEC4;">
+                              <strong><span style="font-family:Verdana, sans-serif;color:white">Critical Path?&nbsp;</span></strong>
+                           </th>
+                           <th class = "tableBorder" style="width:45%;text-align:center;background-color:#04AEC4;">
+                              <strong><span style="font-family:Verdana, sans-serif;color:white">Notes&nbsp;</span></strong>
+                           </th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <apex:repeat value="{!upcomTaskList}" var="upcomTask">
+                           <tr  style="page-break-inside: avoid;page-break-after: auto;">
+                              <td class = "tableBorder" style="width:20%;padding-left:10px">
+                                 <span style="font-family:system-ui;">{!upcomTask.subject}</span>
+                              </td>
+                              <td class = "tableBorder" style="width:20%;padding-left:10px">
+                                 <span style="font-family:system-ui;">
+                                    <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                       <apex:param value="{!upcomTask.psa_Target_Date__c}" />
+                                    </apex:outputText>
+                                 </span>
+                              </td>
+                              <td class = "tableBorder" style="width:10%;padding-left:10px">
+                                 <span style="font-family:system-ui;">{!upcomTask.psa_Critical_Path__c}</span>
+                              </td>
+                              <td class = "tableBorder" style="width:50%;padding-left:10px">
+                                 <span style="font-family:system-ui;">{!upcomTask.psa_Status_Notes__c}</span>
+                              </td>
+                           </tr>
+                        </apex:repeat>
+                     </tbody>
+                  </table>
+                  <br/>
+               </apex:outputPanel>
+            </div>
+         </apex:pageBlock>
+         <apex:pageBlock rendered="{!hasMilestones}">
+            <div class="row other-pages">
+               <h3 style="color: #FF6A31;font-size: 20px;">Project Milestones</h3>
+               <table style="width:100%;margin-left:auto;margin-right:auto;margin-top:auto;">
+                  <thead>
+                     <tr>
+                        <th class = "tableBorder" style="width:30%;text-align:center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif;color:white">Accomplished Task&nbsp;</span></strong>
+                        </th>
+                        <th class = "tableBorder" style="width:70%;text-align:center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif;color:white">Notes&nbsp;</span></strong>
+                        </th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <apex:repeat value="{!milestoneList}" var="mile">
+                        <tr style="page-break-inside: avoid;page-break-after: auto;">
+                           <td class = "tableBorder" style="width:30%;padding-left:10px">
+                              <span style="font-family:system-ui;">{!mile.PSA_Milestone__r.Name}</span>
+                           </td>
+                           <td class = "tableBorder" style="width:70%;padding-left:10px">
+                              <span style="font-family:system-ui;">{!mile.PSA_Milestone__r.psa_pm_Project_Manager_Notes__c}</span>
+                           </td>
+                        </tr>
+                     </apex:repeat>
+                  </tbody>
+               </table>
+            </div>
+            <br/>
+         </apex:pageBlock>
+         
+         <apex:pageBlock rendered="{!hasIssueandRisks}">  
+            <h3 style="color: #FF6A31;font-size: 20px;">Project Risk and Issues </h3>
+            <br/>
+            Reference RAID log for complete list of risks and issues.
+            <br/>
+         </apex:pageBlock>
+         <apex:pageBlock rendered="{!hasIssue}">           
+            <div class="row other-pages">
+               <h3 style="color: #FF6A31;font-size: 20px;">Issues</h3>
+               <table style="width:100%;margin-left:auto;margin-right:auto;">
+                  <thead>
+                     <tr>
+                        <th class = "tableBorder" style="width:15%;text-align: center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif; color:white">Opened Issues</span></strong>
+                        </th>
+                        <th class = "tableBorder" style="width:30%;text-align: center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif;color:white">Description</span></strong>
+                        </th>
+                        <th class = "tableBorder" style="width:40%;text-align: center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif;color:white">Action Plan</span></strong>
+                        </th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <apex:repeat value="{!issuesLst}" var="issue">
+                        <tr style="page-break-inside: avoid;page-break-after: auto;">
+                           <td class = "tableBorder" style="width:15%;padding-left:10px;">
+                              <span style="font-family:system-ui;">{!issue.PSA_Issue__r.pse__Issue_Name__c}</span>
+                           </td>
+                           <td class = "tableBorder" style="width:30%;padding-left:10px;">
+                              <span style="font-family:system-ui;">{!issue.PSA_Issue__r.pse__Issue_Description__c}</span>
+                           </td>
+                           <td class = "tableBorder" style="width:40%;text-align: center;">
+                              <span style="font-family:system-ui;">{!issue.PSA_Issue__r.pse__Action_Plan__c}</span>
+                           </td>
+                        </tr>
+                     </apex:repeat>
+                  </tbody>
+               </table>
+            </div>
+            <br/>
+         </apex:pageBlock>
+         
+         <apex:pageBlock rendered="{!hasRisk}">
+            <div class="row other-pages">
+               <h3 style="color: #FF6A31;font-size: 20px;">Risks</h3>
+               <table style="width:100%;margin-left:auto;margin-right:auto;">
+                  <thead>
+                     <tr>
+                        <th class = "tableBorder" style="width:15%;text-align:center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif;color:white">Opened Risks&nbsp;</span></strong>
+                        </th>
+                        <th class = "tableBorder" style="width:30%;text-align:center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif;color:white">Description</span></strong>
+                        </th>
+                        <th class = "tableBorder" style="width:40%;text-align:center;background-color:#04AEC4;">
+                           <strong><span style="font-family:Verdana, sans-serif;color:white">Action Plan</span></strong>
+                        </th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <apex:repeat value="{!risksLst}" var="risk">
+                        <tr  style="page-break-inside: avoid;page-break-after: auto;">
+                           <td class = "tableBorder" style="width:15%;padding-left:10px">
+                              <span style="font-family:system-ui;">{!risk.PSA_Risk__r.pse__Risk_Name__c}</span>
+                           </td>
+                           <td class = "tableBorder" style="width:30%;padding-left:10px">
+                              <span style="font-family:system-ui;">{!risk.PSA_Risk__r.pse__Risk_Description__c}</span>
+                           </td>
+                           <td class = "tableBorder" style="width:40%;padding-left:10px">
+                              <span style="font-family:system-ui;">{!risk.PSA_Risk__r.pse__Mitigation_Plan__c}</span>
+                           </td>
+                        </tr>
+                     </apex:repeat>
+                  </tbody>
+               </table>
+            </div>
+         </apex:pageBlock>
+         <br/>
+      </div>
+   </body>
+</apex:page>

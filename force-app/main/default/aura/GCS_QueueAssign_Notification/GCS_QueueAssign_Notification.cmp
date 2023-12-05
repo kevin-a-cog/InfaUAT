@@ -1,0 +1,13 @@
+<aura:component controller="consoleNotificationControllerLWC" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="hrefUrl" type="String" />
+    <aura:attribute name="userDetail" type="Object"/>
+    <aura:attribute name="showCustomNotif" type="Boolean" default="false"/>
+    <aura:attribute name="isDone" type="Boolean" default="false"/>
+    <lightning:utilityBarAPI aura:id="utilitybar"/>
+    
+    <lightning:workspaceAPI aura:id="workspace" />    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:if isTrue="{!v.isDone}">
+        <c:gcsQueueAssignNotification userDetail="{!v.userDetail}" onopencase="{!c.handleOpenCase}" onopensettings="{!c.openSettings}" onhighlight="{!c.handleUtilityHighlight}"></c:gcsQueueAssignNotification>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,37 @@
+.hideActionButton{
+    display: none;
+    /**border-top: 0.990px rgb(221, 219, 218) !important;**/    
+    /**visibility: hidden;**/    
+}
+
+.picklist-container{
+    width : 90%;
+    margin: 0 auto;
+}
+.error-font{
+    color: red;
+}
+.picklist-container .slds-dropdown{
+    position: relative !important;
+    z-index: 99 !important;
+    max-height: 120px;
+    overflow: scroll;
+	top:auto !important;
+}
+
+[lightning-combobox_combobox-host]{
+    margin-bottom: 17px;
+}
+
+.bgcolor-grey{
+    background-color: rgb(236, 235, 234);
+}
+/*
+th.slds-has-focus, td.slds-has-focus{
+    box-shadow: none !important;
+}
+
+.slds-table_edit thead th:first-child{
+    width: 60px;
+}
+*/

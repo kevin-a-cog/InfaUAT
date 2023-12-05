@@ -1,0 +1,38 @@
+<!--
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 15-11-2022
+  @last modified by  : Sathish Rajalingam
+  Modifications Log 
+  Ver   Date         Author               Modification
+  1.0   15-11-2022   Sathish Rajalingam   Initial Version
+-->
+<template>
+    <div class="">
+        <div if:true={spinnerload}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </div>
+        <div class="slds-box slds-theme_shade">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="standard:approval" style="background-color: rgb(220, 216, 97);"
+                        size="medium" variant="warning" alternative-text="Approved" title="Approved"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <span class="slds-var-p-right_x-small uiOutputText forceBreadCrumbItem"> Publishers Published
+                        Articles
+                    </span>
+
+                </div>
+            </header>
+            </br>
+            <div class="slds-truncate" style="font-size: x-medium;">{totalitems} items </div>
+        </div>
+        <lightning-datatable hide-checkbox-column="true" key-field="Id" data={rowData}
+                        columns={columns} sorted-by={sortBy}
+                        sorted-direction={sortDirection}
+                        onsort={handleSortdata}>
+                    </lightning-datatable>
+    </div>
+</template>

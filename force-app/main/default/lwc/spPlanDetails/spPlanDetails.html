@@ -1,0 +1,550 @@
+<template>
+    <!-- Spinner. -->
+    <template if:true={boolDisplaySpinner}>
+        <lightning-spinner variant="brand" size="medium"></lightning-spinner>
+    </template>
+    <div class="container-fluid sp-container-fluid--grey">
+        <div class="container">
+            <div class="sp-tabs-fixed">
+                <div class="container-fluid sp-plan-switcher__wrapper">
+                    <div class="container">
+                        <div class="sp-section-wrapper">
+                            <div class="sp-section-block sp-section-block--no-margin">
+                                <div class="row">
+                                    <div class="col-md-8 form-group es-lds-form-group d-flex m-0">
+                                        <template if:true={bShowPlanDropDown}>
+                                            <img class="sp-acc__logo" src={accountLogo} alt="account-logo" />
+                                            <!-- <span class="sp-plan__name">{sPlan_Name} </span> -->
+                                            <div class="sp-acc__details">
+                                                <template if:true={showMakeFavSpinner}>
+                                                    <lightning-spinner class="sp-pin-spinner" alternative-text="Loading" size="small"></lightning-spinner>
+                                                </template>
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <template if:true={isMultiplePlans}>
+                                                            <c-sp-custom-dropdown-with-fav-and-search options={supportAccounts}
+                                                                onchange={updatePlanHandler}
+                                                                onmyfav={onfavHandler}
+                                                                value={planvalue}
+                                                                options-all={allPlans}>                 
+                                                            </c-sp-custom-dropdown-with-fav-and-search>
+                                                        </template>
+                                                        <template if:false={isMultiplePlans}>
+                                                            <p class="sp-plan-name--single">{planToDisplay}</p>
+                                                        </template>
+                                                        <p class="sp-acc__name">{sPlan_AccountName}</p>  
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="col-md-4 d-flex align-items-center">
+                                        <!-- <template if:true={bShowSignOff}>
+                                            <template if:true={bhasSignOffAccess}>
+                                            <lightning-button label="Sign Off" class="es-button es-button--primary" onclick={openSignOffModal}></lightning-button>
+                                            </template>
+                                        </template> -->
+                                        <!-- <div class="ml-md-auto mt-2 mt-md-0"> -->
+                                            <!--<template if:true={bShowSignOff}>-->
+                                            <!-- <template if:true={bhasSignOffAccess}>
+                                                <template if:true={bShowSignOff}>
+                                                    <lightning-button label="Sign Off" class="es-button es-button--primary" onclick={openSignOffModal}></lightning-button>
+                                                </template>
+                                            </template> -->
+                                             <!--</template>-->
+                                            <!-- <lightning-button label="Create Risk" class="es-button es-button--primary" onclick={CreateRiskHelper}></lightning-button> -->
+                                        <!-- </div> -->
+                                        <div class="form-row ml-md-auto">
+                                            <div class="sp-primary-dropdown sp-lds-form-group">
+                                                <lightning-button-menu label="Contact Your CSM" alternative-text="Contact Your CSM" onselect={handleSelect} variant="border-filled">
+                                                    <lightning-menu-item value="Adoption Related Queries" label="Adoption Related Queries"></lightning-menu-item>
+                                                    <lightning-menu-item value="Discuss Current Project Challenges" label="Discuss Current Project Challenges"></lightning-menu-item>
+                                                    <lightning-menu-item value="Discuss New Initiatives" label="Discuss New Initiatives"></lightning-menu-item>
+                                                    <template if:true={bhasSignOffAccess}>
+                                                        <template if:true={bShowSignOff}>
+                                                            <lightning-menu-item value="Provide Success plan signoff" label="Provide Success plan signoff"></lightning-menu-item>
+                                                        </template>
+                                                    </template>
+                                                    <lightning-menu-item value="Request for Meeting" label="Request for Meeting"></lightning-menu-item>
+                                                    <lightning-menu-item value="NavigatetoEngagementCatalog" label={catalogbuttonLabel}></lightning-menu-item>
+                                                </lightning-button-menu>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+                <div class="container-fluid sp-jump-tabs__wrapper">
+                    <div class="container">
+                        <div class="sp-tabs__wrapper">
+                            <ul class="sp-tabs__items">
+                                <li class="sp-tabs__list-item"><lightning-button size="medium" class="sp-button-tab sp-button-tab--active" onclick={handleClick} data-target-id="overview" label="Overview"></lightning-button></li>
+                                <li class="sp-tabs__list-item"><lightning-button size="medium" class="sp-button-tab" onclick={handleClick} data-target-id="details" label="Details"></lightning-button></li>
+                                <li class="sp-tabs__list-item"><lightning-button size="medium" class="sp-button-tab" onclick={handleClick} data-target-id="current_objectives" label="Current Objectives"></lightning-button></li>
+                                <li class="sp-tabs__list-item"><lightning-button size="medium" class="sp-button-tab" onclick={handleClick} data-target-id="objectives_and_milestones" label="Objectives & Milestones"></lightning-button></li>
+                                <li class="sp-tabs__list-item"><lightning-button size="medium" class="sp-button-tab" onclick={handleClick} data-target-id="comments" label="Comments"></lightning-button></li>
+                                <li class="sp-tabs__list-item"><lightning-button size="medium" class="sp-button-tab" onclick={handleClick} data-target-id="files" label="Files"></lightning-button></li>
+                                <li class="sp-tabs__list-item"><lightning-button size="medium" class="sp-button-tab" onclick={handleClick} data-target-id="contacts" label="Contacts"></lightning-button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sp-tabs-scrollable">
+                <div class="sp-page-wrapper mb-3">
+                    <section data-id="overview">
+                        <div class="sp-section-block">
+                            <div class="sp-plan__header--with-fields">
+                                <h3 class="sp-plan__heading">
+                                    <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="overview"></lightning-button-icon>
+                                    Overview
+                                </h3>
+                            </div>
+                            <div class="sp-plan__content" data-section-id="overview">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="sp-chevron-wrapper">
+                                            <ul class="sp-chevron__items">
+                                                <li class={purchaseClass}>Plan</li>
+                                                <li class={implementClass}>Implement</li>
+                                                <li class={valueClass}>Value</li>
+                                                <li class={scaleClass}>Scale</li>
+                                            </ul>
+                                        </div>
+                                        <c-sp-overview record-id={recordId}></c-sp-overview>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section data-id="details">
+                        <div class="sp-section-block">
+                            <h3 class="sp-plan__heading">
+                                <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="details"></lightning-button-icon>
+                                Details
+                            </h3>
+                            <div class="sp-plan__content" data-section-id="details">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p class="sp-plan-info__label">Description</p>
+                                        <lightning-formatted-rich-text class="sp-plan-info__value" value={sPlan_Description}></lightning-formatted-rich-text>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p class="sp-plan-info__label">Created On</p>
+                                        <p class="sp-plan-info__value">    <lightning-formatted-date-time value={sPlan_CreatedDate} year="numeric" month="short" day="numeric" hour="2-digit"
+                                            minute="2-digit" time-zone-name="short" time-zone={strCurrentUserTimezone}  hour12="true"></lightning-formatted-date-time> </p>
+                                    </div>
+                               <!-- <div class="col-md-4">
+                                        <p class="sp-plan-info__label">Last Updated On</p>
+                                        <p class="sp-plan-info__value"><lightning-formatted-date-time value={sPlan_LastModifiedDate} year="numeric" month="short" day="numeric" hour="2-digit"
+                                            minute="2-digit" time-zone-name="short" time-zone={strCurrentUserTimezone} hour12="true"></lightning-formatted-date-time> </p>
+                                    </div> -->
+                                    <div class="col-md-4" if:true={sPlan_ClosureDate}>
+                                        <p class="sp-plan-info__label">Closure Date</p>
+                                        <p class="sp-plan-info__value"><lightning-formatted-date-time value={sPlan_ClosureDate} year="numeric" month="short" day="numeric" hour="2-digit"
+                                            minute="2-digit" time-zone-name="short" time-zone={strCurrentUserTimezone} hour12="true"></lightning-formatted-date-time> </p> 
+                                          
+                                    </div>
+                                </div>
+                            </div>       
+                        </div> 
+                    </section>
+                    <section data-id="current_objectives">
+                        <div class="sp-section-block">
+                           <div class="sp-plan__header--with-fields">
+                               <h3 class="sp-plan__heading">
+                                   <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="currentObjectives"></lightning-button-icon>
+                                  Current Objectives
+                               </h3>
+                           </div>
+                           <div class="sp-plan__content" data-section-id="currentObjectives">
+                               <div class="row">
+                                   <div class="col-md-12">
+                                       <template if:true={recordId}>
+                                            <c-sp-current-objective record-id={recordId}></c-sp-current-objective>
+                                       </template>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </section> 
+                    <section data-id="objectives_and_milestones">
+                         <div class="sp-section-block">
+                            <div class="sp-plan__header--with-fields">
+                                <h3 class="sp-plan__heading">
+                                    <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="objectivesMilestone"></lightning-button-icon>
+                                    Objectives & Milestones
+                                </h3>
+                            </div>
+                            <div class="sp-plan__content" data-section-id="objectivesMilestone">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <template if:true={recordId}>
+                                          <template if:true={bShowCsmObjectivesAndMilestones}>
+                                              <c-csm-objectives-and-milestones-viewer-container record-id={recordId} onpopout={popOut}></c-csm-objectives-and-milestones-viewer-container>
+                                          </template>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section> 
+                    <section data-id="comments">
+                        <div class="sp-section-block">
+                            <h3 class="sp-plan__heading">
+                                <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="comments"></lightning-button-icon>
+                                Comments
+                            </h3>
+                            <div class="sp-plan__content" data-section-id="comments">
+                                <c-sp-plan-comments plan-record-id={recordId}  onrefresh={fileDataRefresh} onsignoff={openSignOffComponent}></c-sp-plan-comments>
+                            </div>   
+                        </div> 
+                    </section>   
+                    <section data-id="files">
+                        <div class="sp-section-block">
+                            <h3 class="sp-plan__heading">
+                                <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="files"></lightning-button-icon>
+                                Files
+                            </h3>
+                            <div class="sp-plan__content" data-section-id="files">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <template if:true={bshowFileTable}>
+                                             <c-sp-file-data-table plan-record-id={recordId} ></c-sp-file-data-table>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section data-id="contacts">
+                        <div class="sp-section-block">
+                            <div class="sp-plan__header--with-fields">
+                                <h3 class="sp-plan__heading">
+                                    <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="contacts"></lightning-button-icon>
+                                    Contacts
+                                </h3>
+                            </div>
+                            <div class="sp-plan__content" data-section-id="contacts">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <template if:true={recordId}>
+                                            <c-sp-contact-data-table bhas-edit-access={bhasManageContactsAccess} plan-record-id={recordId} accountid={sPlan_AccountId}></c-sp-contact-data-table>
+                                        </template>                                    
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </section>               
+                    <template if:true={isSignOffModal}>
+                        <c-sp-modal-component
+                        show-modal={openSignoffModal}
+                        onclose={closeSignoffModal}
+                        modal-header="Success plan signoff">
+                        <div slot="modal-content">
+                            <template if:true={boolDisplaySpinner}>
+                                <lightning-spinner variant="brand" size="medium">
+                                </lightning-spinner>
+                            </template>
+							<c-global-data-table obj-parameters={objParameters} onaction={handleRowSelected}></c-global-data-table>
+							<div class="form-row">
+								<div class="form-group sp-form-group sp-lds-form-group">
+									<lightning-input-rich-text
+										data-name="commentBody"
+										name="strSuccessPlanSignOffCommentName"
+										value={strSuccessPlanSignOffComment}
+										disabled-categories="FORMAT_FONT"
+										onchange={valueChangeHandler}
+										placeholder="Comments here"
+										label="Additional comments"
+										label-visible
+										required>
+									</lightning-input-rich-text>
+								</div>
+							</div>
+							<div class="form-row">                                
+								<div class="form-group sp-form-group sp-lds-form-group col-md-6">
+									<div class="clearfix">
+										<lightning-icon class="sp-form__icon-with-upload" size="x-small" icon-name="utility:attach"></lightning-icon>
+										<lightning-file-upload label="Attach Files (Upload limit is 2GB per file)" name="fileUploader"  onuploadfinished={handleUploadAttachmentFinished} 
+												multiple></lightning-file-upload>  
+										<template for:each={lstUploadedFiles} for:item="objFile">
+											<lightning-pill class="sp-form__icon-with-upload" key={objFile.name} label={objFile.name} name={objFile.name} onremove={handleRemoveAttachment}></lightning-pill>         
+										</template>
+									</div>
+								</div>
+							</div>
+                            <div class="sp-case__note sp-case__note--info col-md-12 mt-1">
+								<p class="sp-case__note-main-text">By Proceeding, you are accepting the Privacy Policy.</p>
+								<p class="sp-case__note-sub-text">Do not upload any sensitive personal data, including but not limited to <span class="es-case__note-highlight">Personally Identifiable Information (PII)</span>, <span class="es-case__note-highlight">Protected Health Information (PHI)</span> or <span class="es-case__note-highlight">Protected Financial Information (PFI)</span> to this system. In the event sensitive data is mistakenly uploaded, notify Informatica immediately to ensure deletion from the system.</p>
+							</div> 
+                        </div>
+                        <div slot="modal-footer">
+                            <lightning-button label="Cancel" class="es-button es-button--secondary mr-2" onclick={closeSignoffModal} disabled={boolDisplaySpinner}></lightning-button>
+                            <template if:true={signoffBtn}>
+                                <lightning-button label="Sign Off" class="es-button es-button--primary" onclick={signOffPlanHandler} disabled={boolDisplaySpinner}></lightning-button>
+                            </template>
+                            <template if:false={signoffBtn}>
+                                <lightning-button label="Sign Off" class="es-button" disabled></lightning-button>
+                            </template>
+                        </div>
+                        </c-sp-modal-component>
+                    </template>
+                    <!--for create risk popup -->
+                    <template if:true={bShowCreateRiskModal}>
+                        <c-sp-modal-component
+                            show-modal={bShowCreateRiskModal}
+                            onclose={closeCreateRiskModal}
+                            modal-header="Discuss Current Project Challenges">
+                            <div slot="modal-content">
+                                <template if:false={isCreateRiskConfirmedModal}>
+                                    <div class="form-row">
+                                        <div class="form-group sp-form-group sp-lds-form-group sp-lds-check sp-lds-checkbox--horizontal col-md-12">
+                                            <lightning-checkbox-group 
+                                            name="riskReason"
+                                            label="Reason"
+                                            options={reasonPicklistData}
+                                            value={selectedReason}
+                                            onchange={handleReasonChange}>
+                                            </lightning-checkbox-group>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group sp-form-group sp-lds-form-group">
+                                            <lightning-input-rich-text data-id="createRiskComments" 
+                                            name="comments" 
+                                            label="Additional Comments" 
+                                            value={createRiskComments}
+                                            placeholder="Comments here" 
+                                            onchange={handleCreateRiskCommentChange} 
+                                            disabled-categories="FORMAT_FONT"
+                                            label-visible
+                                            required>
+                                            </lightning-input-rich-text>
+                                        </div>
+                                    </div>
+									<div class="form-row">                               
+										<div class="form-group sp-form-group sp-lds-form-group col-md-6">
+											<div class="clearfix">
+												<lightning-icon class="sp-form__icon-with-upload" size="x-small" icon-name="utility:attach"></lightning-icon>
+												<lightning-file-upload label="Attach Files (Upload limit is 2GB per file)" name="fileUploader"  onuploadfinished={handleUploadAttachmentFinished} 
+														multiple></lightning-file-upload>  
+												<template for:each={lstUploadedFiles} for:item="objFile">
+													<lightning-pill class="sp-form__icon-with-upload" key={objFile.name} label={objFile.name} name={objFile.name} onremove={handleRemoveAttachment}></lightning-pill>         
+												</template>
+											</div>
+										</div>
+                                        <div class="form-group sp-form-group sp-lds-form-group col-md-6">
+                                            <template if:true={bShowCaseLookupForCreateRisk}>
+                                                <c-custom-lookup-field
+                                                    label="Case"
+                                                    placeholder="Select a Case"
+                                                    onsearch={handleCombinedLookupSearch}
+                                                    onselectionchange={handleCombinedLookupSelectionChange}
+                                                    value={riskCreateCaseId}
+                                                    >
+                                                </c-custom-lookup-field>
+                                            </template>
+                                        </div>
+									</div>
+									
+									<div class="sp-case__note sp-case__note--info col-md-12 mt-1">
+										<p class="sp-case__note-main-text">By Proceeding, you are accepting the Privacy Policy.</p>
+										<p class="sp-case__note-sub-text">Do not upload any sensitive personal data, including but not limited to <span class="es-case__note-highlight">Personally Identifiable Information (PII)</span>, <span class="es-case__note-highlight">Protected Health Information (PHI)</span> or <span class="es-case__note-highlight">Protected Financial Information (PFI)</span> to this system. In the event sensitive data is mistakenly uploaded, notify Informatica immediately to ensure deletion from the system.</p>
+									</div> 
+                                </template>
+                                <template if:true={isCreateRiskConfirmedModal}>
+                                    <div class="es-modal__confirm-msg">
+                                        <h6>Success</h6>
+                                        <p>{bRiskConfimrationMsg}</p>
+                                    </div>
+                                </template>
+                            </div>
+                            <div slot="modal-footer">
+                                <template if:false={isCreateRiskConfirmedModal}>
+                                    <lightning-button label="Cancel" class="es-button es-button--secondary mr-2" onclick={closeCreateRiskModal}></lightning-button>                          
+                                    <lightning-button label="Confirm" class="es-button es-button--primary" onclick={createRiskConfirmBtn} disabled={boolDisplaySpinner}></lightning-button>                          
+                                </template>
+                                <template if:true={isCreateRiskConfirmedModal}>
+                                    <lightning-button label="Close" class="es-button es-button--secondary mr-2" onclick={closeCreateRiskModal}></lightning-button>                                        
+                                </template>
+                            </div>
+                        </c-sp-modal-component>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!---Contact CSM modals start-->
+    <template if:true={isAdoptionRelatedQueriesModal}>
+        <c-sp-modal-component
+        show-modal={openAdoptionRelatedQueriesModal}
+        onclose={closeAdoptionRelatedQueriesModal}
+        modal-header="Adoption Related Queries">
+        <div slot="modal-content">
+            <div class="form-row">
+                <div class="form-group sp-form-group sp-lds-form-group col-md-6">
+                    <lightning-combobox
+                        name="productAdoptionReason_Name"
+                        label="Reason"
+                        options={productAdoptionQueries}
+                        value={productAdoptionQueriesReasonValue}
+                        onchange={valueChangeHandler}
+                        required>
+                    </lightning-combobox>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group sp-form-group sp-lds-form-group">
+                    <!-- <label>Additional comments</label> -->
+                    <lightning-input-rich-text    
+                        name="productAdoptioncommentBody_Name"                
+                        data-name="commentBody"
+                        disabled-categories="FORMAT_FONT"
+                        placeholder="Comments here"
+                        label="Additional comments"
+                        onchange={valueChangeHandler}
+                        label-visible
+                        required>
+                    </lightning-input-rich-text>
+                </div>
+            </div>
+            <div class="form-row">                                
+                <div class="form-group sp-form-group sp-lds-form-group col-md-6">
+                    <div class="clearfix">
+                        <lightning-icon class="sp-form__icon-with-upload" size="x-small" icon-name="utility:attach"></lightning-icon>
+                        <lightning-file-upload label="Attach Files (Upload limit is 2GB per file)" name="fileUploader"  onuploadfinished={handleUploadAttachmentFinished} 
+                            	multiple></lightning-file-upload>  
+                        <template for:each={lstUploadedFiles} for:item="objFile">
+                            <lightning-pill class="sp-form__icon-with-upload" key={objFile.name} label={objFile.name} name={objFile.name} onremove={handleRemoveAttachment}></lightning-pill>         
+                        </template>
+                    </div>
+                </div>
+            </div>
+            <div class="sp-case__note sp-case__note--info col-md-12 mt-1">
+                <p class="sp-case__note-main-text">By Proceeding, you are accepting the Privacy Policy.</p>
+                <p class="sp-case__note-sub-text">Do not upload any sensitive personal data, including but not limited to <span class="es-case__note-highlight">Personally Identifiable Information (PII)</span>, <span class="es-case__note-highlight">Protected Health Information (PHI)</span> or <span class="es-case__note-highlight">Protected Financial Information (PFI)</span> to this system. In the event sensitive data is mistakenly uploaded, notify Informatica immediately to ensure deletion from the system.</p>
+            </div>     
+        </div>
+        <div slot="modal-footer">
+            <lightning-button label="Cancel" class="es-button es-button--secondary mr-2" onclick={closeAdoptionRelatedQueriesModal} disabled={boolDisplaySpinner}></lightning-button>
+            <lightning-button label="Submit" class="es-button es-button--primary" onclick={adoptionRelatedQueriesSubmit} disabled={boolDisplaySpinner}></lightning-button>
+        </div>
+        </c-sp-modal-component>
+    </template>
+
+    <template if:true={isDiscussNewInitiativesModal}>
+        <c-sp-modal-component
+        show-modal={openDiscussNewInitiativesModal}
+        onclose={closeDiscussNewInitiativesModal}
+        modal-header="Discuss New Initiatives">
+        <div slot="modal-content">
+            <div class="form-row">
+                <div class="form-group sp-form-group sp-lds-form-group col-md-6">
+                    <lightning-combobox
+                        name="discussNewInitiativesReasonName"
+                        label="Reason"
+                        options={discussNewInitiatives}
+                        onchange={valueChangeHandler}
+                        value={discussNewInitiativesReasonValue}
+                        required>
+                    </lightning-combobox>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group sp-form-group sp-lds-form-group">
+                    <lightning-input-rich-text
+                        data-name="commentBody"
+                        name="discussNewInitiativesCommentName"
+                        value={discussNewInitiativesComment}
+                        disabled-categories="FORMAT_FONT"
+                        onchange={valueChangeHandler}
+                        placeholder="Comments here"
+                        label="Additional comments"
+                        label-visible
+                        required>
+                    </lightning-input-rich-text>
+                </div>
+            </div>
+            <div class="form-row">                                
+                <div class="form-group sp-form-group sp-lds-form-group col-md-6">
+                    <div class="clearfix">
+                        <lightning-icon class="sp-form__icon-with-upload" size="x-small" icon-name="utility:attach"></lightning-icon>
+                        <lightning-file-upload label="Attach Files (Upload limit is 2GB per file)" name="fileUploader"  onuploadfinished={handleUploadAttachmentFinished} 
+                            	multiple></lightning-file-upload>  
+                        <template for:each={lstUploadedFiles} for:item="objFile">
+                            <lightning-pill class="sp-form__icon-with-upload" key={objFile.name} label={objFile.name} name={objFile.name} onremove={handleRemoveAttachment}></lightning-pill>         
+                        </template>
+                    </div>
+                </div>
+            </div>
+            <div class="sp-case__note sp-case__note--info col-md-12 mt-1">
+                <p class="sp-case__note-main-text">By Proceeding, you are accepting the Privacy Policy.</p>
+                <p class="sp-case__note-sub-text">Do not upload any sensitive personal data, including but not limited to <span class="es-case__note-highlight">Personally Identifiable Information (PII)</span>, <span class="es-case__note-highlight">Protected Health Information (PHI)</span> or <span class="es-case__note-highlight">Protected Financial Information (PFI)</span> to this system. In the event sensitive data is mistakenly uploaded, notify Informatica immediately to ensure deletion from the system.</p>
+            </div>    
+        </div>
+        <div slot="modal-footer">
+            <lightning-button label="Cancel" class="es-button es-button--secondary mr-2" onclick={closeDiscussNewInitiativesModal} disabled={boolDisplaySpinner}></lightning-button>
+            <lightning-button label="Submit" onclick={discussNewInitiativesSubmit} class="es-button es-button--primary" disabled={boolDisplaySpinner}></lightning-button>
+        </div>
+        </c-sp-modal-component>
+    </template>
+    <template if:true={isRequestBusinessReviewMeetingModal}>
+        <c-sp-modal-component
+        show-modal={openRequestBusinessReviewMeetingModal}
+        onclose={closeRequestBusinessReviewMeetingModal}
+        modal-header="Request for Meeting">
+        <div slot="modal-content">
+            <div class="form-row">
+                <div class="form-group sp-form-group sp-lds-form-group sp-datepicker col-md-8">
+                    <p class="slds-form-element__label">Enter Proposed date and time</p>
+                    <lightning-input class="RequestBusinessDatetimeNameClass" onchange={valueChangeHandler} type="datetime" value={RequestBusinessDatetimeValue} name="RequestBusinessDatetimeName" required></lightning-input>
+                </div>
+                <div class="form-group sp-form-group sp-lds-form-group sp-datepicker col-md-4" style="display: flex; align-items: end; margin-bottom: 20px;">
+					<lightning-combobox value={strCurrentUserTimezone} options={lstTimeZones} onchange={valueChangeHandler} name="RequestBusinessDatetimeTimezoneName"></lightning-combobox>
+				</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group sp-form-group sp-lds-form-group">
+                    <lightning-input-rich-text
+                        data-name="commentBody"
+                        name="RequestBusinessCommentName"
+                        disabled-categories="FORMAT_FONT"
+                        value={RequestBusinessComments}
+                        onchange={valueChangeHandler}
+                        placeholder="Comments here"
+                        label="Additional comments"
+                        label-visible
+                        required>
+                    </lightning-input-rich-text>
+                </div>
+            </div>
+            <div class="form-row">                                
+                <div class="form-group sp-form-group sp-lds-form-group col-md-6">
+                    <div class="clearfix">
+                        <lightning-icon class="sp-form__icon-with-upload" size="x-small" icon-name="utility:attach"></lightning-icon>
+                        <lightning-file-upload label="Attach Files (Upload limit is 2GB per file)" name="fileUploader"  onuploadfinished={handleUploadAttachmentFinished} 
+                            	multiple></lightning-file-upload>  
+                        <template for:each={lstUploadedFiles} for:item="objFile">
+                            <lightning-pill class="sp-form__icon-with-upload" key={objFile.name} label={objFile.name} name={objFile.name} onremove={handleRemoveAttachment}></lightning-pill>         
+                        </template>
+                    </div>
+                </div>
+            </div>
+            <div class="sp-case__note sp-case__note--info col-md-12 mt-1">
+                <p class="sp-case__note-main-text">By Proceeding, you are accepting the Privacy Policy.</p>
+                <p class="sp-case__note-sub-text">Do not upload any sensitive personal data, including but not limited to <span class="es-case__note-highlight">Personally Identifiable Information (PII)</span>, <span class="es-case__note-highlight">Protected Health Information (PHI)</span> or <span class="es-case__note-highlight">Protected Financial Information (PFI)</span> to this system. In the event sensitive data is mistakenly uploaded, notify Informatica immediately to ensure deletion from the system.</p>
+            </div>    
+        </div>
+        <div slot="modal-footer">
+            <lightning-button label="Cancel" class="es-button es-button--secondary mr-2" onclick={closeRequestBusinessReviewMeetingModal} disabled={boolDisplaySpinner}></lightning-button>
+            <lightning-button label="Submit" onclick={RequestBusinessReviewMeetingSubmit}  class="es-button es-button--primary" disabled={boolDisplaySpinner}></lightning-button>
+        </div>
+        </c-sp-modal-component>
+    </template>
+     <!---Contact CSM modals end-->
+</template>

@@ -1,0 +1,321 @@
+<!--
+/*
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description								 Tag
+ **********************************************************************************************************
+ NA		                NA		        UTOPIA			Initial version.						 NA
+ Vignesh Divakaran      31-Aug-2022     I2RT-6865       Added conditional visibility for fields  T01
+ Amit G                 22-oct-2022     I2RT-7296       Hide fields for case lite                T02
+ */
+-->
+<template>
+    <div class="container">
+        <h2 class="es-page__heading">
+            <lightning-button-icon variant="container" size="medium" icon-name="utility:chevronleft" title="Back"></lightning-button-icon>
+            Create a New Case
+        </h2>
+        <div class="row">
+            <div class="col-md-12">
+                <c-es-case-creation-filled filled-step="1" filled-label="Case Type" filled-value={caseType}>
+                    <span class="es-case__step"></span>
+                </c-es-case-creation-filled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <c-es-case-creation-filled filled-step="2" filled-label="Case Information" filled-value={caseInformation}>
+                    <span class="es-case__step"></span>
+                </c-es-case-creation-filled>
+            </div>
+        </div>
+        <template if:true={showAdditionalCaseInformation}>
+            <div class="row">
+                <div class="col-md-12">
+                    <c-es-case-creation-filled filled-step="3" filled-label="Additional Case Information" filled-value={fileSize}></c-es-case-creation-filled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <c-es-case-creation-filled filled-step="4" filled-label="Alternate Contacts" filled-value={alternateContact}></c-es-case-creation-filled>
+                </div>
+            </div>
+        </template>
+        <template if:false={showAdditionalCaseInformation}>
+            <div class="row">
+                <div class="col-md-12">
+                    <c-es-case-creation-filled filled-step="3" filled-label="Alternate Contacts" filled-value={alternateContact}></c-es-case-creation-filled>
+                </div>
+            </div>
+        </template>
+        <div class="row">
+            <div class="col-md-12">   
+                <div class="es-case-wrapper">              
+                    <h3 class="es-case__heading"> 
+                        <span class="es-case__step es-case__step--active">
+                            <template if:false={showAdditionalCaseInformation}>4</template>
+                            <template if:true={showAdditionalCaseInformation}>5</template>
+                        </span> 
+                        Case Summary
+                    </h3>
+                    <div class="es-case-section">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="es-case-info__label">Category</p>
+                                <p class="es-case-info__value">{caseInfo.category}</p>
+                            </div>
+                            <div class="col-md-4"  if:true={caseInfo.priority}> <!--<T02>-->
+                                <p class="es-case-info__label">Priority</p>
+                                <p class="es-case-info__value">{caseInfo.priority}</p>
+                            </div>
+                            <div class="col-md-4" if:true={caseInfo.supportAccount}> <!-- <T01> -->
+                                <p class="es-case-info__label">Support Account</p>
+                                <p class="es-case-info__value">{caseInfo.supportAccount}</p>
+                            </div>
+                             <!-- <T01> -->
+                            <div class="col-md-4" if:true={caseInfo.orgID}>
+                                <p class="es-case-info__label">Org ID</p>
+                                <p class="es-case-info__value">{caseInfo.orgID}</p>
+                            </div>
+                             <!-- </T01> -->
+                        </div>
+                        <div class="row">
+                            <template if:true={showProduct}>
+                                <div class="col-md-4">
+                                    <p class="es-case-info__label">Product</p>
+                                    <p class="es-case-info__value">{caseInfo.product}</p>
+                                </div>
+                            </template>
+                            <template if:true={showProblemArea}>
+                                <div class="col-md-4">
+                                    <p class="es-case-info__label">Problem Area</p>
+                                    <p class="es-case-info__value">{caseInfo.problemArea}</p>
+                                </div>
+                            </template>
+                            <div class="col-md-4" if:true={caseInfo.successOffering}> <!-- <T01> -->
+                                <p class="es-case-info__label">Success Offering</p>
+                                <p class="es-case-info__value"><img src={successOfferingIcon} alt="success offering icon" class="success-offering-img"/> {caseInfo.successOffering}</p>
+                            </div>
+                            <!-- <T01> -->
+                            <template if:true={caseInfo.orgID}>
+                                <div class="col-md-4">
+                                    <p class="es-case-info__label">Secure Agent</p>
+                                    <p class="es-case-info__value">{caseInfo.secureAgentCaseLite}</p>
+                                </div>
+                            </template>
+                            <!-- </T01> -->
+                                <template if:true={caseInfo.environment}>
+                                    <div class="col-md-4">
+                                        <p class="es-case-info__label">Environment</p>
+                                        <p class="es-case-info__value">{caseInfo.environment}</p>
+                                    </div>
+                                </template>
+                                <template if:true={showRelatedComponent}>
+                                    <div class="col-md-4">
+                                        <p class="es-case-info__label">Related Component </p>
+                                        <p class="es-case-info__value">{caseInfo.relatedComponent}</p>
+                                    </div>
+                                </template>
+                            <template if:false={caseInfo.environment}>
+                                <template if:true={caseInfo.orgId}>
+                                    <div class="col-md-4">
+                                        <p class="es-case-info__label">Org ID</p>
+                                        <p class="es-case-info__value">{caseInfo.orgUUID}</p>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                        <div class="row">
+                            <template if:true={caseInfo.environment}>
+                                <template if:true={caseInfo.orgId}>
+                                    <div class="col-md-4">
+                                        <p class="es-case-info__label">Org ID</p>
+                                        <p class="es-case-info__value">{caseInfo.orgUUID}</p>
+                                    </div>
+                                </template>
+                            </template>
+                            <template if:true={caseInfo.secureAgent}>
+                                <div class="col-md-4">
+                                    <p class="es-case-info__label">Secure Agent</p>
+                                    <p class="es-case-info__value">{caseInfo.secureAgent}</p>
+                                </div>
+                            </template>
+                            <template if:true={caseInfo.activity}>
+                                <div class="col-md-4">
+                                    <p class="es-case-info__label">Activity Type</p>
+                                    <p class="es-case-info__value">{caseInfo.activity}</p>
+                                </div>
+                            </template>
+                            <template if:true={caseInfo.environment}>
+                                <template if:false={caseInfo.orgId}>
+                                    <template if:true={caseInfo.serviceApointmentStart}>
+                                        <div class="col-md-4">
+                                            <p class="es-case-info__label">Service Appointment Start Date/Time</p>
+                                            <p class="es-case-info__value">{caseInfo.serviceApointmentStart}</p>
+                                        </div>
+                                    </template>
+                                </template>
+                            </template>
+                            <template if:true={caseInfo.environment}>
+                                <template if:false={caseInfo.secureAgent}>
+                                    <template if:true={caseInfo.serviceApointmentEnd}>
+                                        <div class="col-md-4">
+                                            <p class="es-case-info__label">Service Appointment End Date/Time</p>
+                                            <p class="es-case-info__value">{caseInfo.serviceApointmentEnd}</p>
+                                        </div>
+                                    </template>
+                                </template>
+                            </template>
+                        </div>
+                        <div class="row">
+                            <template if:true={caseInfo.environment}>
+                                <template if:true={caseInfo.orgId}>
+                                    <template if:true={caseInfo.serviceApointmentStart}>
+                                        <div class="col-md-4">
+                                            <p class="es-case-info__label">Service Appointment Start Date/Time</p>
+                                            <p class="es-case-info__value">{caseInfo.serviceApointmentStart}</p>
+                                        </div>
+                                    </template>
+                                </template>
+                            </template>
+                            <template if:true={caseInfo.environment}>
+                                <template if:true={caseInfo.secureAgent}>
+                                    <template if:true={caseInfo.serviceApointmentEnd}>
+                                        <div class="col-md-4">
+                                            <p class="es-case-info__label">Service Appointment End Date/Time</p>
+                                            <p class="es-case-info__value">{caseInfo.serviceApointmentEnd}</p>
+                                        </div>
+                                    </template>
+                                </template>
+                            </template>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="es-case-info__label">Subject</p>
+                                <p class="es-case-info__value">{caseInfo.subject}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="es-case-info__label">Description</p>
+                                <div class="es-case-info__value" style="word-break: break-word;">
+                                    <lightning-formatted-text value={caseInfo.description}></lightning-formatted-text>
+                                    <template if:true={showStrengthMeter}>
+                                        <div class="d-inline-flex mt-2">
+                                            <p class="es-case-info__label">Strength</p>
+                                            <ul class="es-case-info__strength-meter">
+                                                <span class="es-case-summary__strength-indicator es-case-summary__strength-indicator--filled"></span>
+                                                <span class="es-case-summary__strength-indicator es-case-summary__strength-indicator--filled"></span>
+                                                <span class="es-case-summary__strength-indicator es-case-summary__strength-indicator--filled"></span>
+                                                <span class="es-case-summary__strength-indicator"></span>
+                                                <span class="es-case-summary__strength-indicator"></span>
+                                                <span class="es-case-summary__strength-indicator"></span>
+                                            </ul>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        <template if:true={showStrangthBar}>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div data-id="strengthIndicator">
+                                        <div class="d-inline-flex mb-3" >
+                                            <p class="es-case-info__label">Strength</p>
+                                            <div class="es-strength-slider-width">
+                                                <div style={showPercentage} class="es-strength-variation" data-id="strengthBar"></div>
+                                            </div>
+                                            <p class="es-case-info__label">{descriptionQuality}</p>
+                                            <!-- <div data-id="score" class="es-case-summary__strength-indicator-percentage">{qualityScore}</div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="es-case-info__label">Attachments</p>
+                                <p class="es-case-info__value">
+                                    <!-- <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"></path>
+                                    </svg> -->
+                                    <lightning-button-icon variant="container" size="small" icon-name="utility:check"></lightning-button-icon>                                      
+                                    {caseInfo.attachments}
+                                </p>
+                            </div>
+                        </div>
+                        <p class="es-case-info__label">Your alternate contact details</p>
+                        <div class="table-responsive">
+                            <table class="table es-table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Email Address</th>
+                                    <th scope="col">Phone Number</th>
+                                    <th scope="col">&nbsp;</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={contacts} for:item="altContact">
+                                        <tr key={altContact.Id}>
+                                            <td class="es-table__case-details">{altContact.Contact.FirstName}</td>
+                                            <td>{altContact.Contact.LastName}</td>
+                                            <td>{altContact.Contact.Email}</td>
+                                            <td>{altContact.Contact.Phone}</td>
+                                            <td class="es-button--icon-in-table text-right"><lightning-button-icon variant="container" size="x-small" icon-name="utility:delete" title="delete" value={altContact.Id} onclick={openModal}></lightning-button-icon></td>
+                                        </tr>
+                                    </template>
+                                    <template if:true={notAvailableAltContact}>
+                                        <tr class="es-table--empty">
+                                            <td colspan="9">There are no Alternate Contacts available.</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table> 
+                            <template if:true={isModalOpen}>
+                                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                                    <div class="slds-modal__container">
+                                        <div class="es-modal__content">
+                                            <header class="slds-modal__header es-modal__header">
+                                                <button class="es-button--only-icon" title="Close" onclick={closeModal}>
+                                                    <lightning-icon icon-name="utility:close"
+                                                        alternative-text="close"
+                                                        size="xx-small" ></lightning-icon>
+                                                    <span class="slds-assistive-text">Close</span>
+                                                </button>
+                                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Confirm Contact Deletion</h2>
+                                            </header>
+                                            <div class="es-modal__faux-body">
+                                                <div class="es-modal__body" id="modal-content-id-1">
+                                                    <p>Are you sure you want to delete the contact?</p>
+                                                </div>
+                                            </div>
+                                            <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                                <lightning-button label="No" class="es-button es-button--secondary"  onclick={closeModal}></lightning-button>
+                                                <lightning-button label="Yes" class="es-button es-button--primary"  onclick={deleteContact}></lightning-button>		
+                                            </footer>
+                                        </div>
+                                    </div>
+                                </section>
+                                <div class="slds-backdrop slds-backdrop_open"></div>
+                            </template>
+                        </div>     
+                        <template if:true={showCaseResponseTime}>
+                            <div class="es-case-summary__note es-case-summary__note--success col-md-8">
+                                <p class="es-case-summary__note-text"> Please Note : An Informatica support engineer will contact you by <span class="font-weight-bold"> {caseResponseTime}
+                                    <lightning-formatted-date-time value={caseResponseTime} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit" hour12="false"></lightning-formatted-date-time>
+                                    </span><br/>The response time is based on the priority of the case and your level of support.</p>
+                            </div>
+                        </template>
+                    </div>               
+                    <div class="es-btn-grp d-md-flex d-sm-inline-flex justify-content-end">
+                        <lightning-button label="Cancel" class="es-button es-button--secondary" onclick={cancelProcess}></lightning-button>
+                        <lightning-button label="Go Back" class="es-button es-button--secondary" onclick={backToAlternateContact}></lightning-button></a>
+                        <lightning-button label="Confirm Case Creation" class="es-button es-button--primary" onclick={saveCase}></lightning-button></a>
+                    </div>                                      
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

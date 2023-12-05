@@ -1,0 +1,393 @@
+.CoveoDynamicFacet.disc-product,
+.CoveoDynamicFacet.disc-answered-type {    
+    position: relative;
+    background: white;
+    border: 1px solid #bcbcbc;
+    /* right: 315px;
+    max-width: 300px !important; 
+    box-shadow: 0 2px 3px 0 rgb(0 0 0 / 16%);*/
+    width: 100%; 
+    z-index: 1;
+    height: 32px;
+}
+.coveo-search-box-wrapper {
+    /* max-width: 600px;
+    margin: 54px auto 47px auto;
+    padding: 0 0 0 40px;
+    width: 25%;
+    display: inline-flex;
+    float: right; */
+    width: 240px;
+    display: inline-block;
+    flex: 0 0 240px;
+}
+.in-ask-question-search {
+    justify-content: flex-end;
+    align-items: center;
+}
+.in-take-me-cta:hover{
+    color: #ff4d00 !important;
+}
+.help-filter-bar {
+    background: #fff;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 12px 0;
+}
+.hr {
+    border: 1px solid rgba(151, 151, 151, 0.418405);
+    transform: matrix(1, 0, 0, -1, 0, 0);
+    margin: 0px -15px 10px -15px;
+}
+.view-more-btn{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+    background: #FF4D00;
+    padding: 10px 30px;
+    text-transform: uppercase;
+}
+.view-more-btn:hover {
+    background: #001aff;
+}
+.in-community-desc {
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 40px;
+    font-style: normal;
+    font-size: 13px;
+    line-height: 18px;
+    color: #373737;
+}
+.disc-landing-tab {
+    margin-left: auto;
+    margin-right: auto;
+    /* width: 1200px; */
+}
+.disc-sort-by {
+    margin-left: auto;
+    /* border-right: none;*/
+    float: right; 
+}
+
+.help-disc-tab-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-bottom: 1px solid #949494;
+    padding: 0 10px;
+    background-color: #fff;
+}
+
+.help-disc-tab-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.help-disc-filter-search-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+@media screen and (max-width : 568px) { 
+    .disc-sort-by {
+        float: none;
+    }
+}
+.tile-product {
+    display: inline-block;
+    padding:0;
+    margin-top: 5px;
+    color: #00A9BB;
+}
+.product-heading {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 36px;
+    line-height: 42px;
+    color: white;
+    padding: 4% 0 5% 0;
+}
+.heading-wrapper{
+    background-image: url('/resource/./informaticaNetwork/ideabg.png');
+    background-size: 100% 100%;
+}
+.help-disc-title {
+    /* font-size: 14px;
+    line-height: 21px; */
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 1.6em;
+    letter-spacing: 0.02em;
+    color: #373737 !important;
+    font-family: Roboto,sans-serif!important;
+}
+.help-disc-title:hover {
+    color: #001aff !important;
+}
+.coveo-dynamic-facet-value .coveo-checkbox-span-label {
+    white-space: normal;
+    word-break: break-word;
+}
+.createButton {
+    margin-right: 10px;
+    justify-content: flex-end;
+    /* display: flex;
+    margin-bottom: -42px;
+    margin-right: 23%; */
+    font-size: 14px;
+    vertical-align: top;
+}
+/* help discussion layout updated style */
+.discussion-content-row {
+    align-items: center;
+}    
+.help-discussion-main-content {
+    background: #fff;
+    margin-top: 20px;
+    max-width: 100%;
+}
+.help-discussion-main-content .coveo-no-results {
+    max-width: 100%;
+}
+.discussion-imgWrap {
+    max-width: 70px;
+}
+.help-disc-content{
+    width: 100%;
+}
+.help-disc-wrap .help-disc-count {
+    color: #747474;
+    vertical-align: middle;
+}
+.help-disc-wrap .help-disc-count:not(:last-child) {
+    margin-right: 10px;
+}
+.help-disc-wrap .help-disc-count img {
+    height: auto;
+    width: 22px;
+}
+.help-disc-info-wrap{
+    display: flex;
+}
+.help-disc-info span{
+    font-size: 13px;
+}
+.help-disc-info span.help-disc-item:not(:last-child):after {
+    content: "-";
+    margin: 0 5px;
+}
+
+
+
+@media screen and  (max-width: 768px) {
+    .createButton {
+        margin-left: 0;
+    }
+.help-disc-info-wrap {
+        display: block;
+    }
+    .help-disc-info {
+        display: flex;
+        flex: 0 0 calc(50%);
+        flex-wrap: wrap;
+        margin: 5px 0;
+    }
+    .discussion-content-row {
+        align-items: start;
+    }
+}
+
+@media screen and (max-width : 568px) { 
+    .coveo-search-box-wrapper {
+        flex-grow: 1;
+        margin-top: 6px;
+    }
+    .in-ask-question-search {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .help-disc-tab-wrapper {
+        justify-content: center;
+    }
+}
+
+.help-discussion-box {
+    margin-right: 0;
+}
+.help-discussion-box .CoveoSearchButton {
+    height: 35px;
+}
+.help-disc-name {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.help-disc-date {
+    /* margin-left: 5px; */
+}
+.help-disc-comment {
+    margin-right: 2px;
+}
+.help-disc-info {
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 21px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.02em;
+    font-family: Roboto,sans-serif!important;
+    color: #5E5A5A;
+    padding-left: 0;
+}
+.discussion-img{
+    height: auto;
+    width: 70px;
+    float: left;
+}
+.infa-discussion-landing-btn-dropdown {
+    background: #fff;
+    color: #666666;
+    line-height: 16px !important;
+    text-align: left;
+    width: 100%;
+    /* border: 1px solid #bcbcbc;
+    height: 32px; */
+    font-size: 13px;
+    border: 1px solid #949494;
+    height: 40px
+}
+.infa-discussion-landing-btn-dropdown:focus {
+    border-color: #001aff;
+    box-shadow: 0 0 0 3px rgba(0,26,255,0.25);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
+}
+.infa-discussion-landing-dropdown.dropdown .infa-discussion-landing-dropdown-menu {
+    padding-top: 0;
+    width: 100%;
+    border: 0 none !important;
+}
+.infa-discussion-landing-dropdown.dropdown .infa-discussion-landing-dropdown-icon svg {
+    float: right;
+    color: #949494;
+}
+
+.help-disc-filterbar-wrapper {
+    background-color: #fff;
+}
+
+.help-disc-filterbar-wrapper .in-disc-filter {
+    border: 0;
+    padding: 10px 10px 0 0;
+}
+
+.help-disc-filterbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;     
+}
+
+.help-disc-filterbar-wrapper.hidden {
+    display: none;
+}
+
+.help-disc-filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.help-disc-inputWrap {
+    width: 300px;
+    margin-right: 20px;
+}
+
+.help-disc-inputWrap:last-child {
+    margin-right: 0;
+}
+
+@media screen and (max-width: 1024px) {
+    .help-disc-inputWrap {
+        width: 230px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .infa-discussion-landing-dropdown.dropdown {
+        margin: 10px 0;
+    }
+
+    .coveo-search-box-wrapper {
+        width: 100%;
+        flex: 0 0 100%;
+    }
+
+    .help-disc-filter-search-wrapper{
+        width: 100%;
+        justify-content: center;
+    }
+
+    .filterButton,
+    .in-askButton {
+        margin: 10px 10px 10px 0;
+    }
+
+    .help-disc-tab-section {
+        padding-bottom: 10px;
+    }
+
+    .CoveoSortDropdown.disc-sort-dropdown {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .help-disc-inputWrap {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .help-disc-filter {
+        width: 100%;
+    }
+
+    .help-disc-sortWrap {
+        width: 100%;
+    }
+
+    .disc-sort-by {
+        float: none;
+    }
+}
+
+/* @media screen and (max-width : 568px) { 
+    .CoveoTab.coveo-accessible-button {
+        display: inline-block;
+        width: 40%;
+        float: left;
+    }
+} */
+
+
+.CoveoDynamicFacet.coveo-dynamic-facet-values.coveo-dynamic-facet-collapsed-values {
+    display: none !important;
+}
+.CoveoDynamicFacet .coveo-dynamic-facet-values .coveo-dynamic-facet-collapsed-values {
+    display: none !important;
+} 
+.coveo-dynamic-facet-collapsed .coveo-dynamic-facet-collapsed-values {
+    display: none !important;
+}
+.coveo-dynamic-facet-collapsed-values {
+    display: none !important;
+}

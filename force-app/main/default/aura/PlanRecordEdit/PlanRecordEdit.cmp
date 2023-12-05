@@ -1,0 +1,38 @@
+<aura:component implements="lightning:actionOverride,force:lightningQuickActionwithoutHeader,flexipage:availableForRecordHome,flexipage:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName,lightning:availableForFlowScreens" access="global"
+                controller="ManagePlanProductsController"> 
+    <aura:attribute name="showplanprod" type="Boolean" default="false"/>     
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />   
+    
+     <aura:html tag="style">
+        .slds-modal__container{        	
+            max-width: 100% !important;
+            width:90% !important;
+        }        
+    </aura:html>     
+    
+   
+                
+                
+    
+    <aura:if isTrue = "{!v.showplanprod}" >
+       <c:managePlanProducts fromeditpage = "true" recordId = "{!v.recordId}"/>
+        <!--c:AddPlanProduct2 recordId = "{!v.recordId}" calledfromplanedit="true" / -->
+ 
+                            <!-- div class="slds-p-around_medium">
+
+            
+                                <p style="color:red"> Please add atleast one Plan Product to edit the Plan  </p>
+        </div -->
+    </aura:if>
+                              
+     <!--aura:if isTrue = "{!!v.showeditform}">
+            <div class="slds-col modal-footer slds-modal__footer">
+                
+                <lightning:button variant="neutral" label="Cancel" onclick="{! c.CloseModal }"/>      
+            </div>
+        </aura:if -->
+     
+    
+   
+    
+</aura:component>

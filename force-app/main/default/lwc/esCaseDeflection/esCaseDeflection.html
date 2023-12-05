@@ -1,0 +1,99 @@
+<!--
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 09-30-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author               Modification
+  1.0   06-02-2021   Sathish Rajalingam   Initial Version
+  2.0   01-02-2023   Sathish Rajalingam   I2RT-7585 - Make the KB Search recommendation widget floatable on eSupport portal.
+-->
+<template>
+    <div class="divcustomcoveocasedefelctiontop">
+        <div class="divcustomcoveocasedefelctionmessage" style="display: block;"> <span>Describe your problem to view possible solutions</span></div>
+        <div class="divcustomcoveocasedefelction" style="display: none;">
+            <!-- Coveo START-->
+            <div class="CoveoSearchInterface" data-enable-history="false" data-design="new"
+                data-results-per-page="7" data-excerpt-length="150" data-always-open-in-new-window="true" data-allow-queries-without-keywords="true"  data-auto-trigger-query="true">        
+                <div class="CoveoAnalytics"></div>
+                <div class="CoveoSearchbox" data-enable-omnibox="true" data-enable-top-query-addon="true" data-enable-query-syntax="false"
+                data-trigger-query-on-clear="true" data-enable-query-suggest-addon="true">
+                </div>               
+                <div class="coveo-main-section" style="min-height: 115px;overflow-x: hidden;overflow-y: scroll;height:800px"> <!-- 2 -->
+                    <div class="coveo-results-column">
+                        <div class="CoveoErrorReport"></div>
+                        <div class="CoveoResultList" data-layout="list">
+                            <div class="coveo-show-if-no-results" style="margin-top:20px;">No information related to your case.</div>
+                        </div>
+                        <div class="CoveoPager">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Coveo END-->
+
+            <div class="KBCaseDeflectionTemplate" style="display:none;">
+                <div style="display:none">KBCaseDeflectionTemplate</div>
+                <div class="coveo-result-frame es-recommended-article">
+                    <div class="coveo-result-row">
+                        <div class="coveo-result-cell">
+                            <div class="CoveoMainBadge d-flex">
+                                <span class="CoveoFieldValue" data-field="@infadocid">
+                                </span>
+                                <span class="coveo-main-badge Learn" title="Content type" style="background: #00a9bb;
+                            padding: 2px 12px;
+                            border-radius: 0 5px 5px 0;
+                            font-size: 12px;
+                            color: #fff;">
+                                    Knowledge Base
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="coveo-result-row" >
+                        <div class="coveo-result-cell coveo-no-wrap">
+                            <a class="CoveoResultLink" target="_blank"  style="display: inline;"></a>
+                        </div>
+                    </div>
+                    <div class="coveo-result-row" style="min-height:2.5em;">
+                        <div class="coveo-result-cell">
+                            <span class="CoveoExcerpt"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="Default" style="display:none;">
+                <div style="display:none">Default</div>
+                <div class="coveo-result-frame es-recommended-article">
+                    <div class="coveo-result-row">
+                        <div class="coveo-result-cell">
+                            <div class="CoveoMainBadge d-md-flex">
+                                <span>
+                                </span>
+                                <span class="coveo-main-badge Learn" title="Content type" style="background: #00a9bb;
+                            padding: 2px 12px;
+                            border-radius: 0 5px 5px 0;
+                            font-size: 12px;
+                            color: #fff;">
+                            <span class="CoveoFieldValue" data-field="@athenatabname">
+                            </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="coveo-result-row">
+                        <div class="coveo-result-cell" style="vertical-align: top; font-size: 16px; text-align: left;">
+                            <a class="CoveoResultLink" target="_blank"></a>
+                        </div>
+                    </div>
+                    <div class="coveo-result-row" style="min-height:2.5em;">
+                        <div class="coveo-result-cell">
+                            <span class="CoveoExcerpt"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

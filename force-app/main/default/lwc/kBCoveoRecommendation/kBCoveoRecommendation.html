@@ -1,0 +1,30 @@
+<template>
+    <div class="divrevealrecommendation" style="display:none;">
+        <!-- Coveo START-->
+        <!-- Include the Coveo JavaScript Search Recommendation component where you want it to appear in your page -->
+        <div  class="CoveoRecommendation" data-design="new" data-results-per-page="5"
+            data-pipeline="Recommendation" hideifnoresults="true" data-hide-until-first-query="false"
+            style="font-family: 'FuturaStd-Medium' !important;">
+            <div class="CoveoAnalytics" data-search-hub="Recommendation" data-anonymous="true">
+            </div>
+            <div class="coveo-recommendation-header">
+                <div class="coveo-recommendation-title" style="font-size: 15px;text-align: center;padding-left: 0px;font-weight: bold;">People who viewed this also viewed</div>
+            </div>
+            <div class="coveo-recommendation-body">
+                <div class="CoveoResultList">
+                    
+                </div>
+            </div>
+        </div>
+        <!-- Coveo END-->
+    </div>
+    <div class="ArticleMetaDataCaseDefViewLikeHTML" style="display:none;">
+        <div class="ArticleMetaDataCaseDefViewLike" style="display:none;">
+            <div class="ArticleMetaDataCaseDefViewLikeIsComplete"></div>
+            <div class="ArticleMetaDataIsInternalUser"></div>
+            <div class="ArticleMetaDataLike">0</div>
+            <div class="ArticleMetaDataCaseDef">0</div>
+            <div class="ArticleMetaDataView">0</div>       
+        </div>     
+    </div>
+</template>

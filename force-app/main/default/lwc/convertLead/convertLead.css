@@ -1,0 +1,76 @@
+*{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  /* @sldsValidatorIgnore */
+  /* @sldsValidatorIgnore */
+  font-size: 12.99px;
+}
+
+:host{
+  --slds-c-accordion-summary-color-background : #f3f3f3;
+}
+
+.slds-accordion__section, .slds-accordion__summary-action{
+  background-color: #f3f3f3 !important;
+}
+
+.slds-checkbox .slds-checkbox__label .slds-form-element__label{
+  /* @sldsValidatorIgnore */
+  /* @sldsValidatorIgnore */
+  font-size: 14.99px !important;
+}
+
+.vertical-line{
+  width: 1.99px;
+  background-color: lightgrey;
+  height: 99%;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  top: 49%;
+}
+
+.contact{
+  background-color: #ffff;
+  border: lightgrey 0.99px solid;
+  border-radius: 4.99px;
+  height: fit-content !important;
+}
+
+.acc-input{
+  margin-top: -1.2rem;
+}
+
+.main-sec{
+  border: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgb(229, 229, 229)));
+  margin-bottom: 0.3rem;
+}
+
+.head-sec{
+  border-bottom: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgb(229, 229, 229)));
+  border-left: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgb(229, 229, 229)));
+  border-right: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgb(229, 229, 229)));
+  margin-bottom: 0.3rem;
+}
+
+.foot-sec{
+  border-top: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgb(229, 229, 229)));
+  border-left: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgb(229, 229, 229)));
+  border-right: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgb(229, 229, 229)));
+}
+.error-style{
+  color:#BA0517;
+  font-size: 9px;
+  align-content: center;
+}
+
+.clookup{
+  position: relative;
+}
+
+.slds-modal__container{
+  max-width: 100% !important;
+  width: 70% !important;
+}
+
+.slds-modal__content{
+  padding: 0 !important;
+}

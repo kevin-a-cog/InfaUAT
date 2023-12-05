@@ -1,0 +1,192 @@
+<template>
+    <lightning-record-edit-form object-api-name="Product2" record-id={recordId}>
+        <template if:true={isModalOpen}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <template if:true={showSpinner}>
+                    <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+                </template>
+                <div class="slds-modal__container" style="width: 80%;max-width: 100%;">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                size="small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h1 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                            {label.PRM_EngagmentProduct_Title}</h1>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium fixed" id="modal-content-id-1">
+                        <lightning-tabset active-tab-value={activeTab}>
+                            <lightning-tab label="Add Products" value="one" onactive={tabChange}>
+                                <template if:true={showAddProduct}>
+                                    <div class="slds-p-vertical_x-small slds-p-horizontal_large slds-theme_shade">
+                                        <p class="slds-m-top_x-small">{label.PRM_EngagmentProduct_Desc}</p>
+                                        <p class="slds-m-top_x-small">{label.PRM_EngagmentProduct_Desc1}</p>
+                                        <div>
+                                            <div class="slds-form-element">
+                                                <div
+                                                    class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                                                    <lightning-icon size="x-small"
+                                                        class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default"
+                                                        icon-name="utility:search"></lightning-icon>
+                                                    <input type="text" id="text-input-id-1"
+                                                        placeholder="Search Products" class="slds-input"
+                                                        value={searchValue} onkeypress={onSearchValue} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <template for:each={productList} for:item="prod" for:index="index">
+                                        <lightning-pill label={prod.prod.Name} key={prod} data-id={prod.prod.Id}
+                                            data-index={index} onremove={handlePillRemove}>
+                                            <lightning-icon icon-name="standard:account"
+                                                alternative-text="Account"></lightning-icon>
+                                        </lightning-pill>
+                                    </template>
+                                    <template if:true={showProducts}>
+                                        <div class="slds-grow scrollable">
+                                            <div class="slds-p-top--small scrollable">
+                                                <template if:true={productWrap}>
+                                                    <div class="table-overflow">
+                                                        <table
+                                                            class="slds-table slds-table_bordered slds-table_cell-buffer"
+                                                            role="grid">
+                                                            <thead>
+                                                                <tr class="slds-text-title_caps">
+                                                                    <th scope="col" role="gridcell"
+                                                                        class="slds-cell-shrink">
+                                                                        <div class="slds-truncate" title="button"></div>
+                                                                    </th>
+                                                                    <th scope="col" key={prod}>
+                                                                        <div class="slds-truncate" title={prod}>
+                                                                            Product Name
+                                                                        </div>
+                                                                    </th>
+                                                                    <th scope="col" key={prod}>
+                                                                        <div class="slds-truncate" title={prod}>
+                                                                            Product Family
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <template for:each={productWrap.productWrap}
+                                                                    for:item="prod">
+                                                                    <tr class="slds-border_bottom" key={prod.prod.Id}>
+                                                                        <td role="gridcell" class="slds-cell-shrink">
+                                                                            <template if:true={prod.isSelected}>
+                                                                                <lightning-icon
+                                                                                    icon-name="action:approval"
+                                                                                    size="x-small"
+                                                                                    class="slds-button slds-button_brand slds-button--icon-container slds-button--icon-border"
+                                                                                    alternative-text="Selected"></lightning-icon>
+                                                                            </template>
+                                                                            <template if:false={prod.isSelected}>
+                                                                                <button
+                                                                                    class="check_in_button slds-button slds-button--icon-container slds-button--icon-border"
+                                                                                    style="font-size:30px"
+                                                                                    data-contact-id={prod.prod.Id}
+                                                                                    onclick={handlePlusClick}>
+                                                                                    +</button>
+                                                                            </template>
+                                                                        </td>
+                                                                        <td
+                                                                            class="slds-text-body--regular slds-truncate">
+                                                                            {prod.prod.Name}
+                                                                        </td>
+                                                                        <td
+                                                                            class="slds-text-body--regular slds-truncate">
+                                                                            {prod.prod.Product_Family__c}
+                                                                        </td>
+                                                                    </tr>
+                                                                </template>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </template>
+                            </lightning-tab>
+                            <lightning-tab label="Edit Products" value="two" onactive={tabChange}>
+                                <div id="section1" class="slds-show">
+                                    <div class="slds-col modal-body scrollable slds-p-around--medium"
+                                        style="height: 100%; overflow-y: auto !important">
+                                        <div class="table-overflow slds-scrollable">
+                                            <table class="slds-table slds-table_bordered" role="grid">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{label.PRM_EngagmentProduct_Product}</th>
+                                                        <th>Renewing an Existing License</th>
+                                                        <th>Serial Number for Renewing License</th>
+                                                        <th>State Requirements or Product Version</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <template for:each={productList} for:item="product"
+                                                        for:index="index">
+                                                        <tr key={product.prod.Id}>
+                                                            <td>
+                                                                {product.prod.Name}
+                                                            </td>
+                                                            <td>
+                                                                <lightning-input variant="label-hidden" type="checkbox"
+                                                                    name="Renew_Existing_License__c"
+                                                                    label="Renewing an Existing License"
+                                                                    checked={product.renewLicense}
+                                                                    data-name="renewlicense" data-id={product.prod.Id}
+                                                                    onchange={handleValueChange}></lightning-input>
+                                                            </td>
+                                                            <td>
+                                                                <lightning-input variant="label-hidden" type="text"
+                                                                    name="Serial_No_For_Renewing_Licenses__c"
+                                                                    label="Serial Number for Renewing License"
+                                                                    data-name="serialnumber"
+                                                                    value={product.serialnumber}
+                                                                    data-id={product.prod.Id}
+                                                                    onchange={handleValueChange}
+                                                                    required={product.renewLicense}></lightning-input>
+                                                            </td>
+                                                            <td>
+                                                                <lightning-input variant="label-hidden" type="text"
+                                                                    name="Requirement_Or_Product_Version__c"
+                                                                    label="State Requirements or Product Version"
+                                                                    data-name="reqorproductversion"
+                                                                    value={product.reqorproductversion}
+                                                                    data-id={product.prod.Id}
+                                                                    onchange={handleValueChange}></lightning-input>
+                                                            </td>
+                                                            <td>
+                                                                <lightning-button-icon icon-name="utility:delete"
+                                                                    alternative-text="Delete"
+                                                                    class="slds-m-left_xx-small" title="Delete"
+                                                                    data-prodid={product.prod.Id} data-index={index}
+                                                                    onclick={handleProductRemoval}></lightning-button-icon>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </lightning-tab>
+                        </lightning-tabset>
+
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={closeModal}
+                            title="Cancel">Cancel</button>
+                        <button class="slds-button slds-button_brand" onclick={addProducts} title={nextButtonLabel}
+                            disabled={disableAddProducts}>{nextButtonLabel}</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open">
+            </div>
+        </template>
+    </lightning-record-edit-form>
+</template>

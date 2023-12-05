@@ -1,0 +1,203 @@
+<!--
+/*
+ * Name			:	esCaseCreationSummaryV2
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	10/25/2022
+ * Description	:	This LWC displays summary of case creation details. It is refactored based on esCaseCreationSummary LWC.
+
+ Change History
+ ****************************************************************************************************************
+ Modified By			Date			Jira No.		Description					                        Tag
+ ****************************************************************************************************************
+ Vignesh Divakaran      10/25/2022		I2RT-7256		Initial version.			                        N/A
+ */
+-->
+<template>
+    
+    <div class="container">
+        <h2 class="es-page__heading">
+            <lightning-button-icon variant="container" size="medium" icon-name="utility:chevronleft" title="Back"></lightning-button-icon>
+            Create a New Case
+        </h2>
+        <div class="row">
+            <div class="col-md-12">
+                <c-es-case-creation-filled filled-step="1" filled-label="Case Type" filled-value={objParameters.strCaseType}>
+                    <span class="es-case__step"></span>
+                </c-es-case-creation-filled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <c-es-case-creation-filled filled-step="2" filled-label="Case Information" filled-value={objParameters.strCaseInformation}>
+                    <span class="es-case__step"></span>
+                </c-es-case-creation-filled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <c-es-case-creation-filled filled-step="3" filled-label="Additional Case Information" filled-value={objParameters.strCaseAttachmentNumber}></c-es-case-creation-filled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <c-es-case-creation-filled filled-step="4" filled-label="Alternate Contacts" filled-value={objParameters.strContactsAddedMessage}></c-es-case-creation-filled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">   
+                <div class="es-case-wrapper">              
+                    <h3 class="es-case__heading"> 
+                        <span class="es-case__step es-case__step--active">5</span> 
+                        Case Summary
+                    </h3>
+                    <div class="es-case-section">
+                        <div class="row">
+                            <div class="col-md-4" if:true={objCase.strCategory}>
+                                <p class="es-case-info__label">Category</p>
+                                <p class="es-case-info__value">{objCase.strCategory}</p>
+                            </div>
+                            <div class="col-md-4" if:true={objCase.strOrgId}>
+                                <p class="es-case-info__label">Org ID</p>
+                                <p class="es-case-info__value">{objCase.strOrgId}</p>
+                            </div>
+                            <div class="col-md-4" if:true={objCase.strProduct}>
+                                <p class="es-case-info__label">Product</p>
+                                <p class="es-case-info__value">{objCase.strProduct}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4" if:true={objCase.strOrgId}>
+                                <p class="es-case-info__label">Secure Agent</p>
+                                <p class="es-case-info__value">{objCase.strSecureAgent}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="es-case-info__label">Subject</p>
+                                <p class="es-case-info__value">{objCase.strSubject}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="es-case-info__label">Description</p>
+                                <div class="es-case-info__value" style="word-break: break-word;">
+                                    <lightning-formatted-text value={objCase.strDescription}></lightning-formatted-text>
+                                    <!-- <template if:true={showStrengthMeter}>
+                                        <div class="d-inline-flex mt-2">
+                                            <p class="es-case-info__label">Strength</p>
+                                            <ul class="es-case-info__strength-meter">
+                                                <span class="es-case-summary__strength-indicator es-case-summary__strength-indicator--filled"></span>
+                                                <span class="es-case-summary__strength-indicator es-case-summary__strength-indicator--filled"></span>
+                                                <span class="es-case-summary__strength-indicator es-case-summary__strength-indicator--filled"></span>
+                                                <span class="es-case-summary__strength-indicator"></span>
+                                                <span class="es-case-summary__strength-indicator"></span>
+                                                <span class="es-case-summary__strength-indicator"></span>
+                                            </ul>
+                                        </div>
+                                    </template> -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <template if:true={showStrangthBar}>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div data-id="strengthIndicator">
+                                        <div class="d-inline-flex mb-3" >
+                                            <p class="es-case-info__label">Strength</p>
+                                            <div class="es-strength-slider-width">
+                                                <div style={showPercentage} class="es-strength-variation" data-id="strengthBar"></div>
+                                            </div>
+                                            <p class="es-case-info__label">{descriptionQuality}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template> -->
+
+                        <!-- Attachments -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="es-case-info__label">Attachments</p>
+                                <p class="es-case-info__value">
+                                    <lightning-button-icon variant="container" size="small" icon-name="utility:check"></lightning-button-icon>                                      
+                                    {objParameters.strCaseAttachmentNumber}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Alternate Contacts -->
+                        <p class="es-case-info__label">Your alternate contact details</p>
+                        <div class="table-responsive">
+                            <table class="table es-table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Email Address</th>
+                                    <th scope="col">Phone Number</th>
+                                    <th scope="col">&nbsp;</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <template if:true={showContacts}>
+                                        <template for:each={lstContacts} for:item="objContact">
+                                            <tr key={objContact.Id}>
+                                                <td class="es-table__case-details">{objContact.strFirstName}</td>
+                                                <td>{objContact.strLastName}</td>
+                                                <td>{objContact.strEmail}</td>
+                                                <td>{objContact.strPhone}</td>
+                                                <td class="es-button--icon-in-table text-right">
+                                                    <lightning-button-icon variant="container" size="x-small" icon-name="utility:delete" title="delete" value={objContact.strId} onclick={openConfirmation}></lightning-button-icon>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </template>
+                                    <template if:false={showContacts}>
+                                        <tr class="es-table--empty">
+                                            <td colspan="9">There are no Alternate Contacts available.</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                            
+                            <!-- Alternate Contact delete confirmation modal -->
+                            <template if:true={boolShowConfirmationModal}>
+                                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                                    <div class="slds-modal__container">
+                                        <div class="es-modal__content">
+                                            <header class="slds-modal__header es-modal__header">
+                                                <button class="es-button--only-icon" title="Close" onclick={closeConfirmation}>
+                                                    <lightning-icon icon-name="utility:close"
+                                                        alternative-text="close"
+                                                        size="xx-small" ></lightning-icon>
+                                                    <span class="slds-assistive-text">Close</span>
+                                                </button>
+                                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Confirm Contact Deletion</h2>
+                                            </header>
+                                            <div class="es-modal__faux-body">
+                                                <div class="es-modal__body" id="modal-content-id-1">
+                                                    <p>Are you sure you want to delete the contact?</p>
+                                                </div>
+                                            </div>
+                                            <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                                <lightning-button label="No" class="es-button es-button--secondary"  onclick={closeConfirmation}></lightning-button>
+                                                <lightning-button label="Yes" class="es-button es-button--primary"  onclick={deleteContact}></lightning-button>		
+                                            </footer>
+                                        </div>
+                                    </div>
+                                </section>
+                                <div class="slds-backdrop slds-backdrop_open"></div>
+                            </template>
+                        </div>
+                    </div>               
+                    <div class="es-btn-grp d-md-flex d-sm-inline-flex justify-content-end">
+                        <lightning-button label="Cancel" class="es-button es-button--secondary" onclick={cancelCaseCreation}></lightning-button>
+                        <lightning-button label="Go Back" class="es-button es-button--secondary" onclick={goToPreviousStep}></lightning-button></a>
+                        <lightning-button label="Confirm Case Creation" class="es-button es-button--primary" onclick={createCase}></lightning-button></a>
+                    </div>                                      
+                </div>
+            </div>
+        </div>
+    </div>
+
+</template>

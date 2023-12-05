@@ -1,0 +1,191 @@
+<!--
+  @description       : 
+  @author            : Balaji P
+  @group             : 
+  @last modified on  : 09-08-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  
+  Tag       |  Date           |  Modified by              |  Jira reference   |   ChangesMade
+    1       |  20-Jul-2020    |  Balaji P                 |                   |   Initial Version
+ 	2       |  29-Jan-2021    |  Ranjan kishore           |    I2RT-767       |   Added checkbox to capture the GDPR Compliance by Author by allowing the author to submit the article for review.
+
+
+-->
+
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="KBLWCHandler">
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="message" type="String" />
+    <aura:attribute name="comments" type="String" />
+    <aura:attribute name="disableSubmit" type="Boolean" default="true" /> <!-- Tag 2 -->
+    <aura:attribute name="showMessage" type="Boolean" default="false" />
+    <aura:attribute name="showComponent" type="Boolean" default="false" />
+    <aura:attribute name="showComplianceThumpsUp" type="Boolean" default="false" />
+    <aura:attribute name="showComplianceHtml" type="Boolean" default="false" />
+    <aura:attribute name="showMessageForDirectApprover" type="Boolean" default="false" />
+    <aura:attribute name="gdprHtml" type="String" />
+    <aura:attribute name="gdprFeedbackJSON" type="String" />
+    <aura:attribute name="gdprFeedbackJSONStringResponse" type="String" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:if isTrue="{!v.showComponent}">
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+
+        height:unset !important;
+        max-height:unset !important;
+
+        }
+
+        .slds-modal__content::-webkit-scrollbar-thumb:hover {
+        background: #555;
+        }
+
+        .slds-modal__content {
+        scrollbar-width: thin;
+        }
+
+        /* section of
+        /* width */
+
+        .slds-modal__content::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+        }
+
+        /* Track */
+
+        .slds-modal__content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        }
+
+        /* Handle */
+
+        .slds-modal__content::-webkit-scrollbar-thumb {
+        background: #C1C1C1;
+        }
+
+        .slds-modal__content p {
+        font-weight: 600;
+        font-size: 120%;
+        text-align: center;
+        }
+    </aura:html>
+    </aura:if>
+    <aura:if isTrue="{!v.showMessage}">
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+
+        height:unset !important;
+        max-height:unset !important;
+
+        }
+
+        .slds-modal__content::-webkit-scrollbar-thumb:hover {
+        background: #555;
+        }
+
+        .slds-modal__content {
+        scrollbar-width: thin;
+        }
+
+        /* section of
+        /* width */
+
+        .slds-modal__content::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+        }
+
+        /* Track */
+
+        .slds-modal__content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        }
+
+        /* Handle */
+
+        .slds-modal__content::-webkit-scrollbar-thumb {
+        background: #C1C1C1;
+        }
+
+        .slds-modal__content p {
+        font-weight: 600;
+        font-size: 120%;
+        text-align: center;
+        }
+    </aura:html>
+    </aura:if>
+    <aura:if isTrue="{!v.showComponent}">
+        <div class="slds-col modal-header slds-modal__header">
+            <h3 class="title slds-text-heading_medium">Submit for Review</h3>
+        </div>
+        <div class="slds-modal__content slds-var-p-around_medium knowledge-approval">
+            <aura:if isTrue="{!v.showComplianceHtml}">               
+                <div>
+                    <div style="padding:10px 2px 10px 2px;display:flex;" class="slds-scrollable knowledge-approval">
+                        <div style="flex-basis: 100%;">
+                            <lightning:formattedRichText value="{!v.gdprHtml}" />
+                        </div>
+                    </div>
+                </div>  
+                <div>
+                    <div style="line-height:25px;width: 100%;text-align: right; padding:15px 0px 0px 0px;font-style:italic;color: #ff0000;">
+                        <aura:if isTrue="{!v.showComplianceThumpsUp}">
+                            <div><span>To acknowledge the above as noise words, upvote by clicking <img
+                                        style="width: 22px;margin-left:2px;margin-right:2px;vertical-align: top;border: 1px solid #c1c1c1;background-color: #f7f3f5;padding: 2px;border-radius: 4px;"
+                                        src="{!$Resource.INFAKBResource + '/images/icon-thumpsup-darkgreen.png'}"></img></span></div>
+                            <aura:set attribute="else">
+                                <div><span>To acknowledge the above as noise words, upvote by clicking <img onclick="{!c.handleComplianceClick}"
+                                            style="width: 22px;margin-left:2px;margin-right:2px;vertical-align: top;border: 1px solid #c1c1c1;background-color: #f7f3f5;padding: 2px;border-radius: 4px;"
+                                            src="{!$Resource.INFAKBResource + '/images/icon-thumpsup-black.png'}"></img></span></div>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>             
+            </aura:if>
+            <aura:if isTrue="{!v.showMessageForDirectApprover}">                                
+                <div>
+                    <div style="line-height:25px;width: 100%;text-align: right; padding:15px 0px 0px 0px;font-style:italic;color: #ff0000;">
+                       <span>Clicking Submit will publish your article. Do you want to proceed?</span>
+                    </div>
+                </div>             
+            </aura:if>
+            <lightning:textarea placeholder="An article is submitted for review" value="{!v.comments}" label="Comments"
+                maxlength="255" />
+        </div>
+        <div class="slds-col modal-footer slds-modal__footer">
+            <lightning:button aura:id="btnCancel" variant="neutral" label="Cancel" onclick="{!c.doCancel}" />
+            <!-- Tag 2 -->
+            <lightning:button aura:id="btnSave" variant="brand" label="Submit" onclick="{!c.doSubmit}"
+                disabled="{!v.disableSubmit}"></lightning:button>
+        </div>
+    </aura:if>
+
+
+    <aura:if isTrue="{!v.showMessage}">
+        <div class="slds-col modal-header slds-modal__header">
+            <h3 class="title slds-text-heading_medium">Submit for Review</h3>
+        </div>
+
+        <div class="slds-col modal-footer slds-modal__footer">
+            <p>{!v.message}</p>
+            <lightning:button variant="brand" label="Ok" onclick="{!c.doCancel}" />
+        </div>
+    </aura:if>
+
+</aura:component>

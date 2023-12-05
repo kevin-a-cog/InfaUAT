@@ -1,0 +1,5 @@
+<apex:page standardController="SBQQ__Quote__c" extensions="GenerateDocWithoutTaxController" action="{!generateIPUEntitlements}">
+    <script>
+    	sforce.one.navigateToURL('{!URLFOR($Action.SBQQ__Quote__c.Conga_Composer_Generate_Document,SBQQ__Quote__c.Id)}');
+    </script>
+</apex:page>

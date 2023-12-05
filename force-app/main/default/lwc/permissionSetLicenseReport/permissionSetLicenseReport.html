@@ -1,0 +1,35 @@
+<template>
+
+    <div class="slds-box slds-p-around_none slds-m-top_x-small slds-m-bottom_medium slds-m-horizontal_none">
+        <lightning-layout multiple-rows>
+            <lightning-layout-item padding="around-small" size="12" small-device-size="6" medium-device-size="4"
+                large-device-size="6">
+                <lightning-card title="Permission Set License">
+                    <div class="slds-m-around_medium">
+                        <lightning-input type="search" onchange={handleKeyChange} class="slds-m-bottom_small"
+                            label="Search" value={searchKey}></lightning-input>
+                        <div style="height: 300px;">
+                            <lightning-datatable key-field="id" data={data} hide-checkbox-column columns={pslColumns}>
+                            </lightning-datatable>
+                        </div>
+                    </div>
+                </lightning-card>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size="12" small-device-size="6" medium-device-size="4"
+                large-device-size="6">
+                <lightning-card title="Managed Package License">
+                    <div class="slds-m-around_medium">
+
+                        <lightning-input type="search" onchange={handleKeyChange2} class="slds-m-bottom_small"
+                            label="Search" value={searchKey2}></lightning-input>
+                        <div style="height: 300px;">
+                            <lightning-datatable key-field="id" data={data2} hide-checkbox-column columns={mplColumns}>
+                            </lightning-datatable>
+                        </div>
+                    </div>
+                </lightning-card>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+
+</template>

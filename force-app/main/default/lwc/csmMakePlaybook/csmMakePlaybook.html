@@ -1,0 +1,96 @@
+<!--
+/*
+ * Name			:	CsmMakePlaybook
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	6/17/2021
+ * Description	:	Make Playbook HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		6/17/2021		N/A				Initial version.			N/A
+ Narpavi Prabu 			9/15/2022    	AR-2935			Error in Make template the onchnage method is not avaibale in the js and removed that in html <T01>
+ */
+-->
+<template>
+	<div class="slds-is-relative">
+
+		<!-- Spinner. -->
+		<div class="spinner">
+			<template if:true={boolDisplaySpinner}>
+				<lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+			</template>
+		</div>
+
+		<!-- Step: Plan selection. -->
+		<template if:true={boolIsPlanStep}>
+			<header class="slds-modal__header">
+				<h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{label.Make_Plan_As_PlayBook_Step}</h2>
+			</header>
+			<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+				<lightning-record-edit-form record-id={strRecordId} object-api-name="Plan__c">
+					<div class="slds-grid slds-wrap">
+						<template for:each={lstUpdateFields} for:item="objField">
+							<div key={objField.strField} class="slds-col slds-size_1-of-2">
+								<!--<T01>-->
+								<lightning-input-field value={objField.value} field-name={objField.strField} required={objField.boolIsRequired} class="filterField" 
+										data-name={objField.strField}></lightning-input-field>
+								<!--</T01>-->
+							</div>
+						</template>
+					</div>
+				</lightning-record-edit-form>
+			</div>
+
+			<!-- Footer. -->
+			<footer class="slds-modal__footer">
+				<button class="slds-button slds-button_brand" onclick={moveToOMMSelection}>{label.Next_Button}</button>
+			</footer>
+		</template>
+
+		<!-- Step: Objective, Milestone and Milestone Action selection. -->
+		<template if:true={boolIsOMMStep}>
+			<header class="slds-modal__header">
+				<h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">{label.Select_Records}</h2>
+			</header>
+
+			<!-- OMM selection. -->
+			<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col">
+						<c-global-nested-data-viewer class="nestedViewerOMM" obj-initial-parameters={objInitialParameters}></c-global-nested-data-viewer>
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer. -->
+			<footer class="slds-modal__footer slds-modal__footer_directional">
+				<button class="slds-button slds-button_neutral" onclick={moveBackToPlanSelection}>{label.Back_Button}</button>
+				<button class="slds-button slds-button_brand" onclick={moveToPlanConfirmation}>{label.Next_Button}</button>
+			</footer>
+		</template>
+
+		<!-- Step: Confirmation selection. -->
+		<template if:true={boolIsConfirmation}>
+			<header class="slds-modal__header">
+				<h2 id="modal-heading-03" class="slds-modal__title slds-hyphenate">{label.Make_Playbook}</h2>
+			</header>
+
+			<!-- Confirmaton. -->
+			<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col">
+						<c-global-nested-data-viewer class="nestedViewerConfirmation" obj-initial-parameters={objInitialParametersConfirm}></c-global-nested-data-viewer>
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer. -->
+			<footer class="slds-modal__footer slds-modal__footer_directional">
+				<button class="slds-button slds-button_neutral" onclick={moveBackToOMMSelection}>{label.Back_Button}</button>
+				<button class="slds-button slds-button_brand" onclick={saveAndCloseClickAction}>{label.Save_Button}</button>
+			</footer>
+		</template>
+	</div>
+</template>

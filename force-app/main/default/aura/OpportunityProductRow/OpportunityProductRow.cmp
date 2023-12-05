@@ -1,0 +1,40 @@
+<!--Lighting Component for the Child cmp inside OpportunityProductsDetails for the Hybrid deal management(opportunity)-->
+<aura:component >
+     <aura:RegisterEvent name="OppDMLEvent" type="c:OppLineItemDMLEvent"/>
+     <aura:attribute name="oppLineItem" type="OpportunityLineItem[]"/>
+     <aura:attribute name="oppCurrency" type="String" default="USD"/>
+
+	          <tr class="slds-border_bottom">
+                <th class="slds-text-body--regular slds-cell-wrap ">
+                    
+                    <div class="slds-truncate" title="Product Family">
+                    
+                    <a href="{!$Label.c.opportunityProdcutList_URL+'?source=aloha#/sObject/'+v.oppLineItem.Id+'/view'}" >{!v.oppLineItem.Product2.Name}</a>
+                 
+                  </div>
+                </th>
+                <td class="slds-text-body--regular slds-cell-wrap" >
+                     <span class="slds-truncate">{!v.oppLineItem.Product_Family__c}</span>
+                </td>
+                <td class="slds-text-body--regular slds-cell-wrap">
+                      <span class="slds-truncate">{!v.oppLineItem.Product2.Product_Family__c}</span>
+                </td>
+                <td class="slds-text-align_right">
+                  <lightning:formattedNumber value="{!v.oppLineItem.UnitPrice}" style="currency" currencyCode="{!v.oppCurrency}" currencyDisplayAs="code"/>
+                  <!--<ui:outputCurrency value="{!v.oppLineItem.UnitPrice}"/>-->
+                </td>
+                <td lass="slds-text-body--regular slds-cell-wrap">
+                  <ui:outputText value="{!v.oppLineItem.Transaction_Type__c}"/>
+                </td>
+                <!--<td class="slds-text-body-(add a hyphen here)regular slds-cell-wrap">
+                    
+                    <ui:outputText value="{!v.oppLineItem.Orderable__c}"/>
+                </td>-->
+                <td>
+                  <lightning:buttonMenu alternativeText="More options" onselect="{!c.handleMenuSelect}" iconSize="small" aura:id="editDelete">
+                      <lightning:menuItem label="Edit" value="{!v.oppLineItem}"/>
+                      <lightning:menuItem label="Delete" value="{!v.oppLineItem}"/>
+                  </lightning:buttonMenu>
+                </td>
+          </tr>
+</aura:component>

@@ -1,0 +1,31 @@
+<template>
+  <div if:true={isAlertOpen}>
+    <div class="alert alert-warning es-alert flex-row es-block" role="alert">
+      
+      <div class="d-flex justify-content-between">
+        <div>
+          <img class="inline-display" src={alertImage} />
+          <p class="es-alert__message inline-display margin-start">{alertMessage}</p>
+        </div>
+        <div>
+          <lightning-button-icon variant="container" size="medium" icon-name={icon_name} title={icon_title}
+            onclick={handleOutageDisplay}></lightning-button-icon>
+          <lightning-button-icon variant="container" size="medium" icon-name="utility:close" title="Close"
+            onclick={closeAlert}></lightning-button-icon>
+        </div>
+      </div>
+
+      <template for:each={serviceDetails} for:item="service">
+        <div key={service.id} class={service_pods}>
+          <div class="components-container d-flex justify-content-between">
+            <span class="es-alert__message">{service.name}</span>
+            <a class="pod-component-status" href="https://status.informatica.com/" target="_new">{service.status}</a>
+          </div>
+        </div>
+
+      </template>
+    </div>
+
+  </div>
+
+</template>

@@ -1,0 +1,9 @@
+.slds-modal__container{
+    width: 90% !important;
+    max-width: 90% !important;  
+}
+
+.customWidth{
+    width: 400px;
+    max-width: 400px;
+}

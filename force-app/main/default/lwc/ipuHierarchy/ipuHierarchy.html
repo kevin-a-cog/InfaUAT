@@ -1,0 +1,48 @@
+<!--
+/*
+ * Name			:	IpuHierarchyContainer
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	1/24/2023
+ * Description	:	This component allows users to see the IPU Hierarchy related to a Fulfillment record.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		1/24/2023		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	<div class="slds-is-relative slds-m-top_large slds-m-bottom_large">
+		<div class="customCSS" lwc:dom="manual"></div>
+
+		<!-- Spinner. -->
+		<div class="spinner slds-m-top_large slds-m-bottom_large">
+			<template if:true={boolDisplaySpinner}>
+				<lightning-spinner variant="brand" size="medium" class="slds-m-top_large slds-m-bottom_large"></lightning-spinner>
+			</template>
+		</div>
+
+		<!-- Header controls. -->
+		<lightning-card title={label.IPU_Hierarchy_Title} class="overflow" variant="Narrow">	
+			<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-left_xx-small" onclick={refreshCard} slot="actions"></lightning-button-icon>
+			<lightning-button-icon if:false={boolCollapseAll} icon-name="utility:expand_all" variant="border-filled" size="medium" class="slds-m-left_xx-small" onclick={toggleRows} 
+					slot="actions"></lightning-button-icon>
+			<lightning-button-icon if:true={boolCollapseAll} icon-name="utility:collapse_all" variant="border-filled" size="medium" class="slds-m-left_xx-small" onclick={toggleRows} 
+					slot="actions"></lightning-button-icon>
+			<template if:false={isPoppedOut}>
+				<lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+			</template>
+			<template if:true={isPoppedOut}>
+				<lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+			</template>
+
+			<!-- Only display once the spinner is done. -->
+			<template if:false={boolDisplaySpinner}>
+
+				<!-- Table section. -->
+				<c-global-data-table data-id="ipuHierarchy" bool-enhanced-collapse-system=true obj-parameters={objParameters} has-nested-childs=true onaction={executeAction}></c-global-data-table>
+			</template>
+		</lightning-card>
+	</div>
+</template>

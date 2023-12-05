@@ -1,0 +1,2719 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Coveo JavaScript Search Framework - Reference Documentation</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://use.typekit.net/bqa0xml.css"></link>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="assets/css/overrides.css">
+	<link rel="stylesheet" href="assets/css/coveo-connect-header.css">
+	<link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.10104/css/CoveoFullSearch.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script type="text/javascript" src="https://static.cloud.coveo.com/coveo.analytics.js/coveoua.js"></script>
+	<script src="assets/js/modernizr.js"></script>
+	<script class="coveo-script" src="https://static.cloud.coveo.com/searchui/v2.10104/js/CoveoJsSearch.min.js"></script>
+	<script src="assets/js/coveo-connect-header.js"></script>
+	<script src="assets/gen/js/playground.js"></script>
+	<script src="assets/js/searchUIrefDoc.js"></script>
+	<link href="assets/favicon.ico" rel="shortcut icon" type="image/x-icon">
+</head>
+<body>
+<header class="no-sticky">
+	<div class="content">
+		<div class="main-header">
+			<div class="logo">
+				<a class="logo-img-wrap" href="https://coveo.com">
+					<div class="logo-imgbg">
+						<svg width="124" height="32" viewBox="0 0 409 104" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<g clip-path="url(#clip0)">
+								<path d="M164.7 36.2L159.8 41.4C156.4 38.1 152.8 36.2 147.9 36.2C139.4 36.2 133 42.9 133 52.3C133 61.7 139.4 68.4 147.9 68.4C152.5 68.4 156.9 66.5 160.1 63.2L164.7 68.4C160.7 73 155 75.4 148.3 75.4C134.3 75.4 125.2 65.4 125.2 52.3C125.2 38.9 134.3 28.9 148.3 28.9C154.6 28.8 160.6 31.5 164.7 36.2Z" fill="white"/>
+									<path d="M219.4 52.3C219.4 65.4 209.4 75.4 196 75.4C182.3 75.4 172.3 65.4 172.3 52.3C172.3 38.9 182.3 28.9 196 28.9C209.4 28.9 219.4 38.9 219.4 52.3ZM180.2 52.3C180.2 61.7 186.9 68.4 196 68.4C204.8 68.4 211.5 61.7 211.5 52.3C211.5 42.9 204.8 36.2 196 36.2C186.9 36.2 180.2 42.9 180.2 52.3Z" fill="white"/>
+										<path d="M252.3 74.5H243.1L224.3 30.1H232.8L247.7 66.9L262.6 30.1H270.8L252.3 74.5Z" fill="white"/>
+											<path d="M318.8 52V55H283.8C284.7 64.1 291.1 68.7 298.7 68.7C303.8 68.8 308.8 66.9 312.7 63.5L316.7 68.7C311.2 73.9 305.1 75.5 298.4 75.5C285 75.5 275.6 66.4 275.6 52.4C275.6 38.7 285 29 297.8 29C310 28.9 318.8 38.6 318.8 52ZM283.9 48.6H311.3C310.4 41 305.2 35.8 297.9 35.8C290 35.9 285.1 41 283.9 48.6Z" fill="white"/>
+												<path d="M376 52.3C376 65.4 366 75.4 352.6 75.4C338.9 75.4 328.9 65.4 328.9 52.3C328.9 38.9 338.9 28.9 352.6 28.9C365.9 28.9 376 38.9 376 52.3ZM336.8 52.3C336.8 61.7 343.5 68.4 352.6 68.4C361.4 68.4 368.1 61.7 368.1 52.3C368.1 42.9 361.4 36.2 352.6 36.2C343.4 36.2 336.8 42.9 336.8 52.3Z" fill="white"/>
+													<path d="M88.1 14.9C79.5 6.4 68.3 1.2 56.2 0C55.3 0 54.6 0.8 54.6 1.8C54.6 2.2 54.7 2.5 55 2.8L73.8 21.3C73.8 21.6 73.8 21.6 73.5 21.6C68.3 17.8 62.2 15.5 55.9 14.9C55.3 14.8 54.8 15.2 54.7 15.8C54.7 16.1 54.8 16.4 55 16.7L67.8 29.5C67.8 29.5 67.8 29.8 67.5 29.5C64 27.3 60.1 25.9 55.9 25.5C55.3 25.5 55 26.1 55.3 26.7L76.9 48.3C77.5 48.9 78.4 48.3 78.1 47.7C77.8 43.6 76.4 39.6 74.1 36.1C73.8 36.1 74.1 35.8 74.1 36.1L86.6 48.3C87.2 48.9 88.4 48.3 88.4 47.4C87.7 41 85.4 34.8 81.7 29.5C81.4 29.5 81.7 29.2 81.7 29.5L100.6 48C101.1 48.6 101.9 48.7 102.5 48.3C103 48 103.2 47.4 103 46.8C101.9 34.7 96.6 23.4 88.1 14.9Z" fill="#00ADFF"/>
+														<path d="M14.9 14.9C23.6 6.5 34.8 1.2 46.8 0C47.7 0 48.4 0.6 48.5 1.5C48.5 1.9 48.4 2.4 48 2.7L29.5 21.3C29.2 21.6 29.5 21.6 29.5 21.6C34.8 17.8 41 15.5 47.4 14.9C48.3 14.9 48.9 16.1 48.3 16.7L35.6 29.5C35.3 29.5 35.6 29.8 35.6 29.5C39.1 27.3 43 26 47.2 25.5C47.8 25.5 48.4 26.1 47.8 26.7L26.1 48.3C25.5 48.9 24.9 48.3 24.9 47.7C25.3 43.6 26.8 39.6 29.2 36.1C29.2 36.1 28.9 35.8 28.9 36.1L16.7 48.3C15.8 48.9 14.6 48.3 14.9 47.4C15.5 40.9 17.8 34.7 21.6 29.5C21.6 29.5 21.3 29.2 21.3 29.5L2.7 48C1.5 49.2 0 48.3 0 46.8C1.2 34.8 6.5 23.6 14.9 14.9Z" fill="#F05245"/>
+															<path d="M14.9 88.8C23.4 97.4 34.7 102.7 46.8 103.7C47.6 103.8 48.3 103.3 48.4 102.5C48.5 102 48.3 101.6 48 101.2L29.5 82.4C29.2 82.4 29.5 82.1 29.5 82.4C34.8 86.2 41 88.5 47.4 89C48.3 89 48.9 87.8 48.3 87.2L35.6 74.5C35.3 74.2 35.6 74.2 35.6 74.2C39 76.5 43 78 47.1 78.4C47.7 78.4 48.3 77.5 47.7 77.2L26.1 55.6C25.5 55 24.9 55.3 24.9 56.2C25.3 60.3 26.8 64.3 29.2 67.8C29.2 67.8 28.9 68.1 28.9 67.8L16.7 55.6C15.8 55 14.6 55.3 14.9 56.5C15.5 62.9 17.8 69 21.6 74.1C21.6 74.3 21.5 74.4 21.3 74.4L2.7 55.6C2 55 0.9 55.2 0.4 55.9C0.2 56.2 0.1 56.5 0 56.9C1.1 68.9 6.4 80.2 14.9 88.8Z" fill="#1CEBCF"/>
+																<path d="M88.1 88.8C79.6 97.5 68.3 102.8 56.2 103.7C55 104 54.1 102.2 55 101.3L73.8 82.5C73.8 82.5 73.8 82.2 73.5 82.5C68.3 86.3 62.2 88.6 55.9 89.2C55.3 89.3 54.8 88.8 54.7 88.2C54.7 87.9 54.8 87.6 55 87.3L67.8 74.5C67.8 74.2 67.8 74.2 67.5 74.2C64.1 76.6 60.1 78.1 56 78.4C55.5 78.3 55.2 77.9 55.3 77.5C55.3 77.4 55.3 77.3 55.4 77.2L77 55.6C77.6 55 78.5 55.3 78.2 56.2C77.9 60.3 76.5 64.3 74.2 67.8C73.9 67.8 74.2 68.1 74.2 67.8L86.7 55.6C87.1 55.2 87.8 55.2 88.2 55.6C88.4 55.8 88.5 56.2 88.5 56.5C87.8 62.8 85.5 68.9 81.8 74.1C81.5 74.4 81.8 74.4 81.8 74.4L100.6 55.6C101.5 54.7 103.3 55.6 103 56.8C102 68.9 96.7 80.2 88.1 88.8Z" fill="#FFE300"/>
+																	<path opacity="0.87" d="M390.8 31.9V43H388.9V31.9H385.4V30.1H394.4V31.9H390.8Z" fill="white"/>
+																		<path opacity="0.87" d="M407.7 43V34.4L404.7 40.5999H403.3L400.3 34.4V43H398.3V30.2H400.3L404 38.2L407.7 30.2H409.6V43H407.7Z" fill="white"/>
+							</g>
+							<defs>
+								<clipPath id="clip0">
+									<rect width="409" height="104" fill="white"/>
+								</clipPath>
+							</defs>
+						</svg>
+					</div>
+				</a>
+				<a class="logo-text" href="https://docs.coveo.com">
+					<span class="logo-text-bar">|</span>
+					<span class="logo-text-custom">docs</span>
+				</a>
+			</div>
+			<div class="search">
+				<div id="coveoConnectHeaderStandaloneSearchbox" class="searchbox">
+					<div class="CoveoSearchbox" style="display: flex;" type="text" data-auto-focus="false" data-enable-omnibox="true"
+					data-inline="false" data-enable-wildcards="true" data-enable-search-as-you-type="false"
+					data-enable-reveal-query-suggest-addon="true" data-enable-query-syntax="true"
+				data-enable-field-addon="true" data-placeholder="Search"></div>
+				<div class="CoveoAnalytics"></div>
+			</div>
+		</div>
+		<nav class="subnav">
+			<ul>
+				<li><a href="https://connect.coveo.com/" target="_blank">Community</a></li>
+				<li><a href="https://coveo.co1.qualtrics.com/jfe/form/SV_0OFD8lvnckM3qtv?Q_JFE=qdg" target="_blank">Feedback</a></li>
+				<li><a href="https://docs.coveo.com/en/3378/">News</a></li>
+			</ul>
+		</nav>
+	</div>
+	</div>
+</header>
+<subHeader class="no-sticky">
+	<div class="content">
+		<nav class="navBar">
+			<ul>
+				<li><button class="dropdownButton">Guides<i class="fas fa-chevron-down"></i>
+						<ul class="dropdown">
+							<li><a href="https://docs.coveo.com/en/1724/">Searching With Coveo</a></li>
+							<li><a href="https://docs.coveo.com/en/2648/">Project Guide</a></li>
+							<li><a href="https://docs.coveo.com/en/1351/">Services</a></li>
+				</li>
+			</ul>
+			</button>
+			</li>
+			<li>
+				<button class="dropdownButton">API Reference<i class="fas fa-chevron-down"></i>
+					<ul class="dropdown">
+						<li><a href="https://coveo.github.io/search-ui/" target="_blank">JavaScript Search Framework</a></li>
+						<!-- <li><a href="#">Atomic</a></li> -->
+						<li><a href="https://docs.coveo.com/en/headless/latest/reference/">Headless</a></li>
+						<li><a href="https://docs.coveo.com/en/12/">Push API</a></li>
+						<li><a href="https://docs.coveo.com/en/8/">Field API</a></li>
+						<li><a href="https://docs.coveo.com/en/13/">Search API</a></li>
+						<li><a href="https://docs.coveo.com/en/18/">Usage Analytics API</a></li>
+						<li><a href="https://docs.coveo.com/en/4/">Other APIs</a></li>
+					</ul>
+				</button>
+			</li>
+			<li>
+				<button class="dropdownButton">Extensions<i class="fas fa-chevron-down"></i>
+					<ul class="dropdown">
+						<li><a href="https://docs.coveo.com/en/1499/">Coveo for Commerce</a></li>
+						<li><a href="https://docs.coveo.com/en/1243/">Coveo for Salesforce</a></li>
+						<li><a href="https://docs.coveo.com/en/1479/">Coveo for ServiceNow</a></li>
+						<li><a href="https://docs.coveo.com/en/2709/">Coveo for Sitecore</a></li>
+					</ul>
+				</button>
+			</li>
+			</ul>
+		</nav>
+	</div>
+</subHeader>
+<div class="container container-main">
+	<div class="row">
+		<div id="toc-column" class="col-1 col-menu menu-sticky-wrap menu-highlight">
+			<div id="filter-box-container">
+				<div id="filter-box-header">Filter</div>
+				<div id="filter-box-body">
+					<div class="container">
+						<div class="table-wrap">
+							<div class="table-cell" id="tsd-widgets">
+								<div id="tsd-filter">
+									<div class="ctr-box-filter">
+										<input type="checkbox" id="tsd-filter-inherited" checked />
+										<label class="tsd-widget" for="tsd-filter-inherited" title="Display inherited methods and properties">  Inherited</label><br>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="filter-box-footer"></div>
+			</div>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<a id="globals-toc-link" href=globals.html><b>Globals</b></a>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/advancedsearch.html" class="tsd-kind-icon">Advanced<wbr>Search</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/aggregate.html" class="tsd-kind-icon">Aggregate</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/analytics.html" class="tsd-kind-icon">Analytics</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/analyticssuggestions.html" class="tsd-kind-icon">Analytics<wbr>Suggestions</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/authenticationprovider.html" class="tsd-kind-icon">Authentication<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/backdrop.html" class="tsd-kind-icon">Backdrop</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/badge.html" class="tsd-kind-icon">Badge</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/breadcrumb.html" class="tsd-kind-icon">Breadcrumb</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/cardactionbar.html" class="tsd-kind-icon">Card<wbr>Action<wbr>Bar</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/cardoverlay.html" class="tsd-kind-icon">Card<wbr>Overlay</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/categoryfacet.html" class="tsd-kind-icon">Category<wbr>Facet</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/commercequery.html" class="tsd-kind-icon">Commerce<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/didyoumean.html" class="tsd-kind-icon">Did<wbr>You<wbr>Mean</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/distanceresources.html" class="tsd-kind-icon">Distance<wbr>Resources</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/dynamicfacet.html" class="tsd-kind-icon">Dynamic<wbr>Facet</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/dynamicfacetmanager.html" class="tsd-kind-icon">Dynamic<wbr>Facet<wbr>Manager</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/dynamicfacetrange.html" class="tsd-kind-icon">Dynamic<wbr>Facet<wbr>Range</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/dynamichierarchicalfacet.html" class="tsd-kind-icon">Dynamic<wbr>Hierarchical<wbr>Facet</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/errorreport.html" class="tsd-kind-icon">Error<wbr>Report</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/excerpt.html" class="tsd-kind-icon">Excerpt</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/exporttoexcel.html" class="tsd-kind-icon">Export<wbr>ToExcel</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/facet.html" class="tsd-kind-icon">Facet</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/facetrange.html" class="tsd-kind-icon">Facet<wbr>Range</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/facetslider.html" class="tsd-kind-icon">Facet<wbr>Slider</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/facetvaluesuggestions.html" class="tsd-kind-icon">Facet<wbr>Value<wbr>Suggestions</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/facetsmobilemode.html" class="tsd-kind-icon">Facets<wbr>Mobile<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/fieldsuggestions.html" class="tsd-kind-icon">Field<wbr>Suggestions</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/fieldtable.html" class="tsd-kind-icon">Field<wbr>Table</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/fieldvalue.html" class="tsd-kind-icon">Field<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/folding.html" class="tsd-kind-icon">Folding</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/followitem.html" class="tsd-kind-icon">Follow<wbr>Item</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/hiddenquery.html" class="tsd-kind-icon">Hidden<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/hierarchicalfacet.html" class="tsd-kind-icon">Hierarchical<wbr>Facet</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/icon.html" class="tsd-kind-icon">Icon</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/imagefieldvalue.html" class="tsd-kind-icon">Image<wbr>Field<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/logo.html" class="tsd-kind-icon">Logo</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/matrix.html" class="tsd-kind-icon">Matrix</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/missingterms.html" class="tsd-kind-icon">Missing<wbr>Terms</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/omnibox.html" class="tsd-kind-icon">Omnibox</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/omniboxresultlist.html" class="tsd-kind-icon">Omnibox<wbr>Result<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/pager.html" class="tsd-kind-icon">Pager</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/pipelinecontext.html" class="tsd-kind-icon">Pipeline<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/preferencespanel.html" class="tsd-kind-icon">Preferences<wbr>Panel</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/printableuri.html" class="tsd-kind-icon">Printable<wbr>Uri</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/promotedresultsbadge.html" class="tsd-kind-icon">Promoted<wbr>Results<wbr>Badge</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/queryduration.html" class="tsd-kind-icon">Query<wbr>Duration</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/querysuggestpreview.html" class="tsd-kind-icon">Query<wbr>Suggest<wbr>Preview</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/querysummary.html" class="tsd-kind-icon">Query<wbr>Summary</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/querybox.html" class="tsd-kind-icon">Querybox</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/quickview.html" class="tsd-kind-icon">Quickview</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/quickviewdocument.html" class="tsd-kind-icon">Quickview<wbr>Document</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/recommendation.html" class="tsd-kind-icon">Recommendation</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/resultactionsmenu.html" class="tsd-kind-icon">Result<wbr>Actions<wbr>Menu</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/resultattachments.html" class="tsd-kind-icon">Result<wbr>Attachments</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/resultfolding.html" class="tsd-kind-icon">Result<wbr>Folding</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/resultlayoutselector.html" class="tsd-kind-icon">Result<wbr>Layout<wbr>Selector</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/resultlink.html" class="tsd-kind-icon">Result<wbr>Link</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/resultlist.html" class="tsd-kind-icon">Result<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/resultrating.html" class="tsd-kind-icon">Result<wbr>Rating</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/resulttagging.html" class="tsd-kind-icon">Result<wbr>Tagging</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/resultsfilterspreferences.html" class="tsd-kind-icon">Results<wbr>Filters<wbr>Preferences</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/resultsperpage.html" class="tsd-kind-icon">Results<wbr>Per<wbr>Page</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/resultspreferences.html" class="tsd-kind-icon">Results<wbr>Preferences</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/searchalerts.html" class="tsd-kind-icon">Search<wbr>Alerts</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/searchalertsmessage.html" class="tsd-kind-icon">Search<wbr>Alerts<wbr>Message</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/searchbutton.html" class="tsd-kind-icon">Search<wbr>Button</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/searchinterface.html" class="tsd-kind-icon">Search<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/searchbox.html" class="tsd-kind-icon">Searchbox</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/settings.html" class="tsd-kind-icon">Settings</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/sharequery.html" class="tsd-kind-icon">Share<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/simplefilter.html" class="tsd-kind-icon">Simple<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/smartsnippet.html" class="tsd-kind-icon">Smart<wbr>Snippet</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/smartsnippetsuggestions.html" class="tsd-kind-icon">Smart<wbr>Snippet<wbr>Suggestions</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/sort.html" class="tsd-kind-icon">Sort</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/sortdropdown.html" class="tsd-kind-icon">Sort<wbr>Dropdown</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/starrating.html" class="tsd-kind-icon">Star<wbr>Rating</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/tab.html" class="tsd-kind-icon">Tab</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/templateloader.html" class="tsd-kind-icon">Template<wbr>Loader</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/text.html" class="tsd-kind-icon">Text</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/thumbnail.html" class="tsd-kind-icon">Thumbnail</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/timespanfacet.html" class="tsd-kind-icon">Timespan<wbr>Facet</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/triggers.html" class="tsd-kind-icon">Triggers</a>
+					</li>
+					<li class=" tsd-kind-coveo-component">
+						<a href="components/youtubethumbnail.html" class="tsd-kind-icon">You<wbr>Tube<wbr>Thumbnail</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/allowedvaluespatterntype.html" class="tsd-kind-icon">Allowed<wbr>Values<wbr>Pattern<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/dynamicfacetrangevalueformat.html" class="tsd-kind-icon">Dynamic<wbr>Facet<wbr>Range<wbr>Value<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/facetsearchtype.html" class="tsd-kind-icon">Facet<wbr>Search<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/facetsortcriteria.html" class="tsd-kind-icon">Facet<wbr>Sort<wbr>Criteria</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/facettype.html" class="tsd-kind-icon">Facet<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/facetvaluestate.html" class="tsd-kind-icon">Facet<wbr>Value<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/advancedsearchevents.html" class="tsd-kind-icon">Advanced<wbr>Search<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/analyticsevents.html" class="tsd-kind-icon">Analytics<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/basecomponent.html" class="tsd-kind-icon">Base<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/breadcrumbevents.html" class="tsd-kind-icon">Breadcrumb<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/cardoverlayevents.html" class="tsd-kind-icon">Card<wbr>Overlay<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/cell.html" class="tsd-kind-icon">Cell</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/checkbox.html" class="tsd-kind-icon">Checkbox</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/component.html" class="tsd-kind-icon">Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/componentevents.html" class="tsd-kind-icon">Component<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/componentoptions.html" class="tsd-kind-icon">Component<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/datepicker.html" class="tsd-kind-icon">Date<wbr>Picker</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/dateutils.html" class="tsd-kind-icon">Date<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/distanceevents.html" class="tsd-kind-icon">Distance<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/dom.html" class="tsd-kind-icon">Dom</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/dropdown.html" class="tsd-kind-icon">Dropdown</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/endpointcaller.html" class="tsd-kind-icon">Endpoint<wbr>Caller</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/executionplan.html" class="tsd-kind-icon">Execution<wbr>Plan</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/expressionbuilder.html" class="tsd-kind-icon">Expression<wbr>Builder</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/facetsearch.html" class="tsd-kind-icon">Facet<wbr>Search</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/facetsettings.html" class="tsd-kind-icon">Facet<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/facetvalue.html" class="tsd-kind-icon">Facet<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/facetsmobilemodeevents.html" class="tsd-kind-icon">Facets<wbr>Mobile<wbr>Mode<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/foldingforthread.html" class="tsd-kind-icon">Folding<wbr>For<wbr>Thread</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/formgroup.html" class="tsd-kind-icon">Form<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/googleapipositionprovider.html" class="tsd-kind-icon">Google<wbr>Api<wbr>Position<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/historycontroller.html" class="tsd-kind-icon">History<wbr>Controller</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/initialization.html" class="tsd-kind-icon">Initialization</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/initializationevents.html" class="tsd-kind-icon">Initialization<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/localstoragehistorycontroller.html" class="tsd-kind-icon">Local<wbr>Storage<wbr>History<wbr>Controller</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/model.html" class="tsd-kind-icon">Model</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/multiselect.html" class="tsd-kind-icon">Multi<wbr>Select</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/navigatorpositionprovider.html" class="tsd-kind-icon">Navigator<wbr>Position<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/numericspinner.html" class="tsd-kind-icon">Numeric<wbr>Spinner</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/omniboxevents.html" class="tsd-kind-icon">Omnibox<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/publicpathutils.html" class="tsd-kind-icon">Public<wbr>Path<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/querybuilder.html" class="tsd-kind-icon">Query<wbr>Builder</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/querycontroller.html" class="tsd-kind-icon">Query<wbr>Controller</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/queryevents.html" class="tsd-kind-icon">Query<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/querystatemodel.html" class="tsd-kind-icon">Query<wbr>State<wbr>Model</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/querysummaryevents.html" class="tsd-kind-icon">Query<wbr>Summary<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/quickviewevents.html" class="tsd-kind-icon">Quickview<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/radiobutton.html" class="tsd-kind-icon">Radio<wbr>Button</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/responsivecomponents.html" class="tsd-kind-icon">Responsive<wbr>Components</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/resultlistevents.html" class="tsd-kind-icon">Result<wbr>List<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/resultpreviewsmanagerevents.html" class="tsd-kind-icon">Result<wbr>Previews<wbr>Manager<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/searchendpoint.html" class="tsd-kind-icon">Search<wbr>Endpoint</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/standalonesearchinterfaceevents.html" class="tsd-kind-icon">Standalone<wbr>Search<wbr>Interface<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/staticpositionprovider.html" class="tsd-kind-icon">Static<wbr>Position<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/templatecache.html" class="tsd-kind-icon">Template<wbr>Cache</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/templatehelpers.html" class="tsd-kind-icon">Template<wbr>Helpers</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/textinput.html" class="tsd-kind-icon">Text<wbr>Input</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iadvancedsearchsection.html" class="tsd-kind-icon">IAdvanced<wbr>Search<wbr>Section</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ianalyticsactioncause.html" class="tsd-kind-icon">IAnalytics<wbr>Action<wbr>Cause</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ianalyticsclickquerysuggestpreviewmeta.html" class="tsd-kind-icon">IAnalytics<wbr>Click<wbr>Query<wbr>Suggest<wbr>Preview<wbr>Meta</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ianalyticsclient.html" class="tsd-kind-icon">IAnalytics<wbr>Client</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ianalyticsdocumentvieweventargs.html" class="tsd-kind-icon">IAnalytics<wbr>Document<wbr>View<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ianalyticsevent.html" class="tsd-kind-icon">IAnalytics<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ianalyticseventargs.html" class="tsd-kind-icon">IAnalytics<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ianalyticsfacetstate.html" class="tsd-kind-icon">IAnalytics<wbr>Facet<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ianchorutilsoptions.html" class="tsd-kind-icon">IAnchor<wbr>Utils<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ibadgecolors.html" class="tsd-kind-icon">IBadge<wbr>Colors</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ibeforeredirecteventargs.html" class="tsd-kind-icon">IBefore<wbr>Redirect<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ibreadcrumbitem.html" class="tsd-kind-icon">IBreadcrumb<wbr>Item</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ibuildingadvancedsearcheventargs.html" class="tsd-kind-icon">IBuilding<wbr>Advanced<wbr>Search<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ibuildingqueryeventargs.html" class="tsd-kind-icon">IBuilding<wbr>Query<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ichangeanalyticscustomdataeventargs.html" class="tsd-kind-icon">IChange<wbr>Analytics<wbr>Custom<wbr>Data<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ichangelayouteventargs.html" class="tsd-kind-icon">IChange<wbr>Layout<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ichangeableanalyticsdataobject.html" class="tsd-kind-icon">IChangeable<wbr>Analytics<wbr>Data<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ichangeableanalyticsmetaobject.html" class="tsd-kind-icon">IChangeable<wbr>Analytics<wbr>Meta<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iclickevent.html" class="tsd-kind-icon">IClick<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icommercerequest.html" class="tsd-kind-icon">ICommerce<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icomponentbindings.html" class="tsd-kind-icon">IComponent<wbr>Bindings</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icomponentdefinition.html" class="tsd-kind-icon">IComponent<wbr>Definition</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icomponentlocalizedstringoptionargs.html" class="tsd-kind-icon">IComponent<wbr>Localized<wbr>String<wbr>Option<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/icomponentoptions.html" class="tsd-kind-icon">IComponent<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icomponentoptionsfieldoption.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>Field<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icomponentoptionsfieldoptionargs.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>Field<wbr>Option<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icomponentoptionsfieldsoptionargs.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>Fields<wbr>Option<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icomponentoptionslistoptionargs.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>List<wbr>Option<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icomponentoptionsnumberoptionargs.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>Number<wbr>Option<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/icomponentoptionspostprocessing.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>Post<wbr>Processing</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icomputedfieldrequest.html" class="tsd-kind-icon">IComputed<wbr>Field<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icorehelpers.html" class="tsd-kind-icon">ICore<wbr>Helpers</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icurrencytostringoptions.html" class="tsd-kind-icon">ICurrency<wbr>ToString<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icustomevent.html" class="tsd-kind-icon">ICustom<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/idatetostringoptions.html" class="tsd-kind-icon">IDate<wbr>ToString<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/idisplayednewresulteventargs.html" class="tsd-kind-icon">IDisplayed<wbr>New<wbr>Result<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/idisplayednewresultseventargs.html" class="tsd-kind-icon">IDisplayed<wbr>New<wbr>Results<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/idonebuildingqueryeventargs.html" class="tsd-kind-icon">IDone<wbr>Building<wbr>Query<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iduringqueryeventargs.html" class="tsd-kind-icon">IDuring<wbr>Query<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iendpointcalloptions.html" class="tsd-kind-icon">IEndpoint<wbr>Call<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iendpointcallparameters.html" class="tsd-kind-icon">IEndpoint<wbr>Call<wbr>Parameters</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iendpointcalleroptions.html" class="tsd-kind-icon">IEndpoint<wbr>Caller<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ierrorresponse.html" class="tsd-kind-icon">IError<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iextension.html" class="tsd-kind-icon">IExtension</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iexternaladvancedsearchsection.html" class="tsd-kind-icon">IExternal<wbr>Advanced<wbr>Search<wbr>Section</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifacetoptions.html" class="tsd-kind-icon">IFacet<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifacetrequest.html" class="tsd-kind-icon">IFacet<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifacetrequestvalue.html" class="tsd-kind-icon">IFacet<wbr>Request<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifacetresponse.html" class="tsd-kind-icon">IFacet<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifacetresponsevalue.html" class="tsd-kind-icon">IFacet<wbr>Response<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifacetsearchrequest.html" class="tsd-kind-icon">IFacet<wbr>Search<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifacetsearchresponse.html" class="tsd-kind-icon">IFacet<wbr>Search<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifacetvaluesuggestionrow.html" class="tsd-kind-icon">IFacet<wbr>Value<wbr>Suggestion<wbr>Row</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifacetvaluesuggestionsprovider.html" class="tsd-kind-icon">IFacet<wbr>Value<wbr>Suggestions<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifacetvaluesuggestionsprovideroptions.html" class="tsd-kind-icon">IFacet<wbr>Value<wbr>Suggestions<wbr>Provider<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifetchmoresuccesseventargs.html" class="tsd-kind-icon">IFetch<wbr>More<wbr>Success<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifieldconditionoption.html" class="tsd-kind-icon">IField<wbr>Condition<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifielddescription.html" class="tsd-kind-icon">IField<wbr>Description</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ifieldoption.html" class="tsd-kind-icon">IField<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iformwidget.html" class="tsd-kind-icon">IForm<wbr>Widget</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/igeolocationposition.html" class="tsd-kind-icon">IGeolocation<wbr>Position</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/igeolocationpositionprovider.html" class="tsd-kind-icon">IGeolocation<wbr>Position<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/igetdocumentoptions.html" class="tsd-kind-icon">IGet<wbr>Document<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/igroupbyrequest.html" class="tsd-kind-icon">IGroup<wbr>ByRequest</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/igroupbyresult.html" class="tsd-kind-icon">IGroup<wbr>ByResult</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/igroupbyvalue.html" class="tsd-kind-icon">IGroup<wbr>ByValue</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ihighlight.html" class="tsd-kind-icon">IHighlight</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ihighlightphrase.html" class="tsd-kind-icon">IHighlight<wbr>Phrase</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ihighlightterm.html" class="tsd-kind-icon">IHighlight<wbr>Term</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iiconoptions.html" class="tsd-kind-icon">IIcon<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iimageutilsoptions.html" class="tsd-kind-icon">IImage<wbr>Utils<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iindexfieldvalue.html" class="tsd-kind-icon">IIndex<wbr>Field<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iinitializationeventargs.html" class="tsd-kind-icon">IInitialization<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iinitializationparameters.html" class="tsd-kind-icon">IInitialization<wbr>Parameters</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ilistfieldvaluesbatchrequest.html" class="tsd-kind-icon">IList<wbr>Field<wbr>Values<wbr>Batch<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ilistfieldvaluesrequest.html" class="tsd-kind-icon">IList<wbr>Field<wbr>Values<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/inewqueryeventargs.html" class="tsd-kind-icon">INew<wbr>Query<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/inoresultseventargs.html" class="tsd-kind-icon">INo<wbr>Results<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iomniboxdatarow.html" class="tsd-kind-icon">IOmnibox<wbr>Data<wbr>Row</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iopenquickvieweventargs.html" class="tsd-kind-icon">IOpen<wbr>Quickview<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iplanresponse.html" class="tsd-kind-icon">IPlan<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ipopulatebreadcrumbeventargs.html" class="tsd-kind-icon">IPopulate<wbr>Breadcrumb<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ipopulateomniboxobject.html" class="tsd-kind-icon">IPopulate<wbr>Omnibox<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ipopulateomniboxqueryexpression.html" class="tsd-kind-icon">IPopulate<wbr>Omnibox<wbr>Query<wbr>Expression</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ipopulateomniboxsuggestionseventargs.html" class="tsd-kind-icon">IPopulate<wbr>Omnibox<wbr>Suggestions<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ipopulatesearchresultpreviewseventargs.html" class="tsd-kind-icon">IPopulate<wbr>Search<wbr>Result<wbr>Previews<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ipositionresolvedeventargs.html" class="tsd-kind-icon">IPosition<wbr>Resolved<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ipreprocessmoreresultseventargs.html" class="tsd-kind-icon">IPreprocess<wbr>More<wbr>Results<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ipreprocessresultseventargs.html" class="tsd-kind-icon">IPreprocess<wbr>Results<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iquery.html" class="tsd-kind-icon">IQuery</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iquerybuilderexpression.html" class="tsd-kind-icon">IQuery<wbr>Builder<wbr>Expression</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iquerycorrection.html" class="tsd-kind-icon">IQuery<wbr>Correction</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iqueryerroreventargs.html" class="tsd-kind-icon">IQuery<wbr>Error<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iqueryexception.html" class="tsd-kind-icon">IQuery<wbr>Exception</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iqueryfunction.html" class="tsd-kind-icon">IQuery<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iqueryoptions.html" class="tsd-kind-icon">IQuery<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iqueryresult.html" class="tsd-kind-icon">IQuery<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iqueryresults.html" class="tsd-kind-icon">IQuery<wbr>Results</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iquerysuccesseventargs.html" class="tsd-kind-icon">IQuery<wbr>Success<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iquerysuggestcompletion.html" class="tsd-kind-icon">IQuery<wbr>Suggest<wbr>Completion</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iquerysuggestrequest.html" class="tsd-kind-icon">IQuery<wbr>Suggest<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iquerysuggestresponse.html" class="tsd-kind-icon">IQuery<wbr>Suggest<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iquerysuggestselection.html" class="tsd-kind-icon">IQuery<wbr>Suggest<wbr>Selection</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iquerysummarycancellastactionargs.html" class="tsd-kind-icon">IQuery<wbr>Summary<wbr>Cancel<wbr>Last<wbr>Action<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iquickviewloadedeventargs.html" class="tsd-kind-icon">IQuickview<wbr>Loaded<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/irangevalue.html" class="tsd-kind-icon">IRange<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/irankingexpression.html" class="tsd-kind-icon">IRanking<wbr>Expression</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/irankingfunction.html" class="tsd-kind-icon">IRanking<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iratingrequest.html" class="tsd-kind-icon">IRating<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/irequestinfo.html" class="tsd-kind-icon">IRequest<wbr>Info</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iresolvingpositioneventargs.html" class="tsd-kind-icon">IResolving<wbr>Position<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/iresponse.html" class="tsd-kind-icon">IResponse</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iresultscomponentbindings.html" class="tsd-kind-icon">IResults<wbr>Component<wbr>Bindings</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/isearchendpointoptions.html" class="tsd-kind-icon">ISearch<wbr>Endpoint<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/isearchevent.html" class="tsd-kind-icon">ISearch<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/isizeoptions.html" class="tsd-kind-icon">ISize<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/istreamhighlightoptions.html" class="tsd-kind-icon">IStream<wbr>Highlight<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/istringmap.html" class="tsd-kind-icon">IString<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/isubscription.html" class="tsd-kind-icon">ISubscription</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/isubscriptionitemrequest.html" class="tsd-kind-icon">ISubscription<wbr>Item<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/isubscriptionqueryrequest.html" class="tsd-kind-icon">ISubscription<wbr>Query<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/isubscriptionrequest.html" class="tsd-kind-icon">ISubscription<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/isubscriptionuser.html" class="tsd-kind-icon">ISubscription<wbr>User</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/isuccessresponse.html" class="tsd-kind-icon">ISuccess<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/itaggingrequest.html" class="tsd-kind-icon">ITagging<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/itemplatehelperfunction.html" class="tsd-kind-icon">ITemplate<wbr>Helper<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/itimespanutilsoptions.html" class="tsd-kind-icon">ITime<wbr>Span<wbr>Utils<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/itopqueries.html" class="tsd-kind-icon">ITop<wbr>Queries</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/itrigger.html" class="tsd-kind-icon">ITrigger</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/itriggerexecute.html" class="tsd-kind-icon">ITrigger<wbr>Execute</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/itriggernotify.html" class="tsd-kind-icon">ITrigger<wbr>Notify</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/itriggerquery.html" class="tsd-kind-icon">ITrigger<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/itriggerredirect.html" class="tsd-kind-icon">ITrigger<wbr>Redirect</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iupdateresultpreviewsmanageroptionseventargs.html" class="tsd-kind-icon">IUpdate<wbr>Result<wbr>Previews<wbr>Manager<wbr>Options<wbr>Event<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iuseractionsrequest.html" class="tsd-kind-icon">IUser<wbr>Actions<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iuseridentity.html" class="tsd-kind-icon">IUser<wbr>Identity</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iviewashtmloptions.html" class="tsd-kind-icon">IView<wbr>AsHtml<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#baseformtypes" class="tsd-kind-icon">Base<wbr>Form<wbr>Types</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#context" class="tsd-kind-icon">Context</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#ianalyticsdocumentviewmeta" class="tsd-kind-icon">IAnalytics<wbr>Document<wbr>View<wbr>Meta</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#iqueryexpression" class="tsd-kind-icon">IQuery<wbr>Expression</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#responseformat" class="tsd-kind-icon">Response<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#validlayout" class="tsd-kind-icon">Valid<wbr>Layout</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#validtooltipplacement" class="tsd-kind-icon">Valid<wbr>Tooltip<wbr>Placement</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#__" class="tsd-kind-icon">$$</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#addactioncausetolist" class="tsd-kind-icon">add<wbr>Action<wbr>Cause<wbr>ToList</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#clearlocaldata" class="tsd-kind-icon">clear<wbr>Local<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#configureresourceroot" class="tsd-kind-icon">configure<wbr>Resource<wbr>Root</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#disableanalytics" class="tsd-kind-icon">disable<wbr>Analytics</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#enableanalytics" class="tsd-kind-icon">enable<wbr>Analytics</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#executequery" class="tsd-kind-icon">execute<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#get" class="tsd-kind-icon">get</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#init" class="tsd-kind-icon">init</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#initrecommendation" class="tsd-kind-icon">init<wbr>Recommendation</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#initsearchbox" class="tsd-kind-icon">init<wbr>Searchbox</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#load" class="tsd-kind-icon">load</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#logclickevent" class="tsd-kind-icon">log<wbr>Click<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#logcustomevent" class="tsd-kind-icon">log<wbr>Custom<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#logsearchasyoutypeevent" class="tsd-kind-icon">log<wbr>Search<wbr>AsYou<wbr>Type<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#logsearchevent" class="tsd-kind-icon">log<wbr>Search<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#options" class="tsd-kind-icon">options</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#patch" class="tsd-kind-icon">patch</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-not-exported">
+						<a href="globals.html#racepromises" class="tsd-kind-icon">race<wbr>Promises</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#removeactioncausefromlist" class="tsd-kind-icon">remove<wbr>Action<wbr>Cause<wbr>From<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#state" class="tsd-kind-icon">state</a>
+					</li>
+					<li class=" tsd-kind-object-literal">
+						<a href="globals.html#responsivefacetoptions" class="tsd-kind-icon">Responsive<wbr>Facet<wbr>Options</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+		<div id="separator"></div>
+		<div class="col-2 col-content">
+			<div class="tsd-page-title">
+				<div class="container">
+					<ul class="tsd-breadcrumb">
+						<a id="home-menu-link" class="aui-nav-link" title="Go to the home page" href=.>
+							<i class="fa fa-home" aria-hidden="true"></i>
+						</a>
+						<li>
+							<a href="globals.html">Globals</a>
+						</li>
+					</ul>
+					<h1> Coveo JavaScript Search Framework - Reference Documentation</h1>
+				</div>
+			</div>
+			<div class="preview-container tsd-panel">
+				<div class="overlay"></div>
+			</div>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Coveo components</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-coveo-component"><a href="components/advancedsearch.html" class="tsd-kind-icon">Advanced<wbr>Search</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/aggregate.html" class="tsd-kind-icon">Aggregate</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/analytics.html" class="tsd-kind-icon">Analytics</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/analyticssuggestions.html" class="tsd-kind-icon">Analytics<wbr>Suggestions</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/authenticationprovider.html" class="tsd-kind-icon">Authentication<wbr>Provider</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/backdrop.html" class="tsd-kind-icon">Backdrop</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/badge.html" class="tsd-kind-icon">Badge</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/breadcrumb.html" class="tsd-kind-icon">Breadcrumb</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/cardactionbar.html" class="tsd-kind-icon">Card<wbr>Action<wbr>Bar</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/cardoverlay.html" class="tsd-kind-icon">Card<wbr>Overlay</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/categoryfacet.html" class="tsd-kind-icon">Category<wbr>Facet</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/commercequery.html" class="tsd-kind-icon">Commerce<wbr>Query</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/didyoumean.html" class="tsd-kind-icon">Did<wbr>You<wbr>Mean</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/distanceresources.html" class="tsd-kind-icon">Distance<wbr>Resources</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/dynamicfacet.html" class="tsd-kind-icon">Dynamic<wbr>Facet</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/dynamicfacetmanager.html" class="tsd-kind-icon">Dynamic<wbr>Facet<wbr>Manager</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/dynamicfacetrange.html" class="tsd-kind-icon">Dynamic<wbr>Facet<wbr>Range</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/dynamichierarchicalfacet.html" class="tsd-kind-icon">Dynamic<wbr>Hierarchical<wbr>Facet</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/errorreport.html" class="tsd-kind-icon">Error<wbr>Report</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/excerpt.html" class="tsd-kind-icon">Excerpt</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/exporttoexcel.html" class="tsd-kind-icon">Export<wbr>ToExcel</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/facet.html" class="tsd-kind-icon">Facet</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/facetrange.html" class="tsd-kind-icon">Facet<wbr>Range</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/facetslider.html" class="tsd-kind-icon">Facet<wbr>Slider</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/facetvaluesuggestions.html" class="tsd-kind-icon">Facet<wbr>Value<wbr>Suggestions</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/facetsmobilemode.html" class="tsd-kind-icon">Facets<wbr>Mobile<wbr>Mode</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/fieldsuggestions.html" class="tsd-kind-icon">Field<wbr>Suggestions</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/fieldtable.html" class="tsd-kind-icon">Field<wbr>Table</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/fieldvalue.html" class="tsd-kind-icon">Field<wbr>Value</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/folding.html" class="tsd-kind-icon">Folding</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/followitem.html" class="tsd-kind-icon">Follow<wbr>Item</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/hiddenquery.html" class="tsd-kind-icon">Hidden<wbr>Query</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/hierarchicalfacet.html" class="tsd-kind-icon">Hierarchical<wbr>Facet</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/icon.html" class="tsd-kind-icon">Icon</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/imagefieldvalue.html" class="tsd-kind-icon">Image<wbr>Field<wbr>Value</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/logo.html" class="tsd-kind-icon">Logo</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/matrix.html" class="tsd-kind-icon">Matrix</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/missingterms.html" class="tsd-kind-icon">Missing<wbr>Terms</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/omnibox.html" class="tsd-kind-icon">Omnibox</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/omniboxresultlist.html" class="tsd-kind-icon">Omnibox<wbr>Result<wbr>List</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/pager.html" class="tsd-kind-icon">Pager</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/pipelinecontext.html" class="tsd-kind-icon">Pipeline<wbr>Context</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/preferencespanel.html" class="tsd-kind-icon">Preferences<wbr>Panel</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/printableuri.html" class="tsd-kind-icon">Printable<wbr>Uri</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/promotedresultsbadge.html" class="tsd-kind-icon">Promoted<wbr>Results<wbr>Badge</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/queryduration.html" class="tsd-kind-icon">Query<wbr>Duration</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/querysuggestpreview.html" class="tsd-kind-icon">Query<wbr>Suggest<wbr>Preview</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/querysummary.html" class="tsd-kind-icon">Query<wbr>Summary</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/querybox.html" class="tsd-kind-icon">Querybox</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/quickview.html" class="tsd-kind-icon">Quickview</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/quickviewdocument.html" class="tsd-kind-icon">Quickview<wbr>Document</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/recommendation.html" class="tsd-kind-icon">Recommendation</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/resultactionsmenu.html" class="tsd-kind-icon">Result<wbr>Actions<wbr>Menu</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/resultattachments.html" class="tsd-kind-icon">Result<wbr>Attachments</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/resultfolding.html" class="tsd-kind-icon">Result<wbr>Folding</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/resultlayoutselector.html" class="tsd-kind-icon">Result<wbr>Layout<wbr>Selector</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/resultlink.html" class="tsd-kind-icon">Result<wbr>Link</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/resultlist.html" class="tsd-kind-icon">Result<wbr>List</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/resultrating.html" class="tsd-kind-icon">Result<wbr>Rating</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/resulttagging.html" class="tsd-kind-icon">Result<wbr>Tagging</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/resultsfilterspreferences.html" class="tsd-kind-icon">Results<wbr>Filters<wbr>Preferences</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/resultsperpage.html" class="tsd-kind-icon">Results<wbr>Per<wbr>Page</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/resultspreferences.html" class="tsd-kind-icon">Results<wbr>Preferences</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/searchalerts.html" class="tsd-kind-icon">Search<wbr>Alerts</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/searchalertsmessage.html" class="tsd-kind-icon">Search<wbr>Alerts<wbr>Message</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/searchbutton.html" class="tsd-kind-icon">Search<wbr>Button</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/searchinterface.html" class="tsd-kind-icon">Search<wbr>Interface</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/searchbox.html" class="tsd-kind-icon">Searchbox</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/settings.html" class="tsd-kind-icon">Settings</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/sharequery.html" class="tsd-kind-icon">Share<wbr>Query</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/simplefilter.html" class="tsd-kind-icon">Simple<wbr>Filter</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/smartsnippet.html" class="tsd-kind-icon">Smart<wbr>Snippet</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/smartsnippetsuggestions.html" class="tsd-kind-icon">Smart<wbr>Snippet<wbr>Suggestions</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/sort.html" class="tsd-kind-icon">Sort</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/sortdropdown.html" class="tsd-kind-icon">Sort<wbr>Dropdown</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/starrating.html" class="tsd-kind-icon">Star<wbr>Rating</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/tab.html" class="tsd-kind-icon">Tab</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/templateloader.html" class="tsd-kind-icon">Template<wbr>Loader</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/text.html" class="tsd-kind-icon">Text</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/thumbnail.html" class="tsd-kind-icon">Thumbnail</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/timespanfacet.html" class="tsd-kind-icon">Timespan<wbr>Facet</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/triggers.html" class="tsd-kind-icon">Triggers</a></li>
+								<li class="tsd-kind-coveo-component"><a href="components/youtubethumbnail.html" class="tsd-kind-icon">You<wbr>Tube<wbr>Thumbnail</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Modules</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-module"><a href="modules/magicbox.html" class="tsd-kind-icon">Magic<wbr>Box</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Enumerations</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-enum"><a href="enums/allowedvaluespatterntype.html" class="tsd-kind-icon">Allowed<wbr>Values<wbr>Pattern<wbr>Type</a></li>
+								<li class="tsd-kind-enum"><a href="enums/dynamicfacetrangevalueformat.html" class="tsd-kind-icon">Dynamic<wbr>Facet<wbr>Range<wbr>Value<wbr>Format</a></li>
+								<li class="tsd-kind-enum"><a href="enums/facetsearchtype.html" class="tsd-kind-icon">Facet<wbr>Search<wbr>Type</a></li>
+								<li class="tsd-kind-enum"><a href="enums/facetsortcriteria.html" class="tsd-kind-icon">Facet<wbr>Sort<wbr>Criteria</a></li>
+								<li class="tsd-kind-enum"><a href="enums/facettype.html" class="tsd-kind-icon">Facet<wbr>Type</a></li>
+								<li class="tsd-kind-enum"><a href="enums/facetvaluestate.html" class="tsd-kind-icon">Facet<wbr>Value<wbr>State</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Classes</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-class"><a href="classes/advancedsearchevents.html" class="tsd-kind-icon">Advanced<wbr>Search<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/analyticsevents.html" class="tsd-kind-icon">Analytics<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/basecomponent.html" class="tsd-kind-icon">Base<wbr>Component</a></li>
+								<li class="tsd-kind-class"><a href="classes/breadcrumbevents.html" class="tsd-kind-icon">Breadcrumb<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/cardoverlayevents.html" class="tsd-kind-icon">Card<wbr>Overlay<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/cell.html" class="tsd-kind-icon">Cell</a></li>
+								<li class="tsd-kind-class"><a href="classes/checkbox.html" class="tsd-kind-icon">Checkbox</a></li>
+								<li class="tsd-kind-class"><a href="classes/component.html" class="tsd-kind-icon">Component</a></li>
+								<li class="tsd-kind-class"><a href="classes/componentevents.html" class="tsd-kind-icon">Component<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/componentoptions.html" class="tsd-kind-icon">Component<wbr>Options</a></li>
+								<li class="tsd-kind-class"><a href="classes/datepicker.html" class="tsd-kind-icon">Date<wbr>Picker</a></li>
+								<li class="tsd-kind-class"><a href="classes/dateutils.html" class="tsd-kind-icon">Date<wbr>Utils</a></li>
+								<li class="tsd-kind-class"><a href="classes/distanceevents.html" class="tsd-kind-icon">Distance<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/dom.html" class="tsd-kind-icon">Dom</a></li>
+								<li class="tsd-kind-class"><a href="classes/dropdown.html" class="tsd-kind-icon">Dropdown</a></li>
+								<li class="tsd-kind-class"><a href="classes/endpointcaller.html" class="tsd-kind-icon">Endpoint<wbr>Caller</a></li>
+								<li class="tsd-kind-class"><a href="classes/executionplan.html" class="tsd-kind-icon">Execution<wbr>Plan</a></li>
+								<li class="tsd-kind-class"><a href="classes/expressionbuilder.html" class="tsd-kind-icon">Expression<wbr>Builder</a></li>
+								<li class="tsd-kind-class"><a href="classes/facetsearch.html" class="tsd-kind-icon">Facet<wbr>Search</a></li>
+								<li class="tsd-kind-class"><a href="classes/facetsettings.html" class="tsd-kind-icon">Facet<wbr>Settings</a></li>
+								<li class="tsd-kind-class"><a href="classes/facetvalue.html" class="tsd-kind-icon">Facet<wbr>Value</a></li>
+								<li class="tsd-kind-class"><a href="classes/facetsmobilemodeevents.html" class="tsd-kind-icon">Facets<wbr>Mobile<wbr>Mode<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/foldingforthread.html" class="tsd-kind-icon">Folding<wbr>For<wbr>Thread</a></li>
+								<li class="tsd-kind-class"><a href="classes/formgroup.html" class="tsd-kind-icon">Form<wbr>Group</a></li>
+								<li class="tsd-kind-class"><a href="classes/googleapipositionprovider.html" class="tsd-kind-icon">Google<wbr>Api<wbr>Position<wbr>Provider</a></li>
+								<li class="tsd-kind-class"><a href="classes/historycontroller.html" class="tsd-kind-icon">History<wbr>Controller</a></li>
+								<li class="tsd-kind-class"><a href="classes/initialization.html" class="tsd-kind-icon">Initialization</a></li>
+								<li class="tsd-kind-class"><a href="classes/initializationevents.html" class="tsd-kind-icon">Initialization<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/localstoragehistorycontroller.html" class="tsd-kind-icon">Local<wbr>Storage<wbr>History<wbr>Controller</a></li>
+								<li class="tsd-kind-class"><a href="classes/model.html" class="tsd-kind-icon">Model</a></li>
+								<li class="tsd-kind-class"><a href="classes/multiselect.html" class="tsd-kind-icon">Multi<wbr>Select</a></li>
+								<li class="tsd-kind-class"><a href="classes/navigatorpositionprovider.html" class="tsd-kind-icon">Navigator<wbr>Position<wbr>Provider</a></li>
+								<li class="tsd-kind-class"><a href="classes/numericspinner.html" class="tsd-kind-icon">Numeric<wbr>Spinner</a></li>
+								<li class="tsd-kind-class"><a href="classes/omniboxevents.html" class="tsd-kind-icon">Omnibox<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/publicpathutils.html" class="tsd-kind-icon">Public<wbr>Path<wbr>Utils</a></li>
+								<li class="tsd-kind-class"><a href="classes/querybuilder.html" class="tsd-kind-icon">Query<wbr>Builder</a></li>
+								<li class="tsd-kind-class"><a href="classes/querycontroller.html" class="tsd-kind-icon">Query<wbr>Controller</a></li>
+								<li class="tsd-kind-class"><a href="classes/queryevents.html" class="tsd-kind-icon">Query<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/querystatemodel.html" class="tsd-kind-icon">Query<wbr>State<wbr>Model</a></li>
+								<li class="tsd-kind-class"><a href="classes/querysummaryevents.html" class="tsd-kind-icon">Query<wbr>Summary<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/quickviewevents.html" class="tsd-kind-icon">Quickview<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/radiobutton.html" class="tsd-kind-icon">Radio<wbr>Button</a></li>
+								<li class="tsd-kind-class"><a href="classes/responsivecomponents.html" class="tsd-kind-icon">Responsive<wbr>Components</a></li>
+								<li class="tsd-kind-class"><a href="classes/resultlistevents.html" class="tsd-kind-icon">Result<wbr>List<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/resultpreviewsmanagerevents.html" class="tsd-kind-icon">Result<wbr>Previews<wbr>Manager<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/searchendpoint.html" class="tsd-kind-icon">Search<wbr>Endpoint</a></li>
+								<li class="tsd-kind-class"><a href="classes/standalonesearchinterfaceevents.html" class="tsd-kind-icon">Standalone<wbr>Search<wbr>Interface<wbr>Events</a></li>
+								<li class="tsd-kind-class"><a href="classes/staticpositionprovider.html" class="tsd-kind-icon">Static<wbr>Position<wbr>Provider</a></li>
+								<li class="tsd-kind-class"><a href="classes/templatecache.html" class="tsd-kind-icon">Template<wbr>Cache</a></li>
+								<li class="tsd-kind-class"><a href="classes/templatehelpers.html" class="tsd-kind-icon">Template<wbr>Helpers</a></li>
+								<li class="tsd-kind-class"><a href="classes/textinput.html" class="tsd-kind-icon">Text<wbr>Input</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface"><a href="interfaces/iadvancedsearchsection.html" class="tsd-kind-icon">IAdvanced<wbr>Search<wbr>Section</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ianalyticsactioncause.html" class="tsd-kind-icon">IAnalytics<wbr>Action<wbr>Cause</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ianalyticsclickquerysuggestpreviewmeta.html" class="tsd-kind-icon">IAnalytics<wbr>Click<wbr>Query<wbr>Suggest<wbr>Preview<wbr>Meta</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ianalyticsclient.html" class="tsd-kind-icon">IAnalytics<wbr>Client</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ianalyticsdocumentvieweventargs.html" class="tsd-kind-icon">IAnalytics<wbr>Document<wbr>View<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ianalyticsevent.html" class="tsd-kind-icon">IAnalytics<wbr>Event</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ianalyticseventargs.html" class="tsd-kind-icon">IAnalytics<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ianalyticsfacetstate.html" class="tsd-kind-icon">IAnalytics<wbr>Facet<wbr>State</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ianchorutilsoptions.html" class="tsd-kind-icon">IAnchor<wbr>Utils<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ibadgecolors.html" class="tsd-kind-icon">IBadge<wbr>Colors</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ibeforeredirecteventargs.html" class="tsd-kind-icon">IBefore<wbr>Redirect<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ibreadcrumbitem.html" class="tsd-kind-icon">IBreadcrumb<wbr>Item</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ibuildingadvancedsearcheventargs.html" class="tsd-kind-icon">IBuilding<wbr>Advanced<wbr>Search<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ibuildingqueryeventargs.html" class="tsd-kind-icon">IBuilding<wbr>Query<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ichangeanalyticscustomdataeventargs.html" class="tsd-kind-icon">IChange<wbr>Analytics<wbr>Custom<wbr>Data<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ichangelayouteventargs.html" class="tsd-kind-icon">IChange<wbr>Layout<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ichangeableanalyticsdataobject.html" class="tsd-kind-icon">IChangeable<wbr>Analytics<wbr>Data<wbr>Object</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ichangeableanalyticsmetaobject.html" class="tsd-kind-icon">IChangeable<wbr>Analytics<wbr>Meta<wbr>Object</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iclickevent.html" class="tsd-kind-icon">IClick<wbr>Event</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icommercerequest.html" class="tsd-kind-icon">ICommerce<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icomponentbindings.html" class="tsd-kind-icon">IComponent<wbr>Bindings</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icomponentdefinition.html" class="tsd-kind-icon">IComponent<wbr>Definition</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icomponentlocalizedstringoptionargs.html" class="tsd-kind-icon">IComponent<wbr>Localized<wbr>String<wbr>Option<wbr>Args</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/icomponentoptions.html" class="tsd-kind-icon">IComponent<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icomponentoptionsfieldoption.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>Field<wbr>Option</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icomponentoptionsfieldoptionargs.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>Field<wbr>Option<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icomponentoptionsfieldsoptionargs.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>Fields<wbr>Option<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icomponentoptionslistoptionargs.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>List<wbr>Option<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icomponentoptionsnumberoptionargs.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>Number<wbr>Option<wbr>Args</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/icomponentoptionspostprocessing.html" class="tsd-kind-icon">IComponent<wbr>Options<wbr>Post<wbr>Processing</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icomputedfieldrequest.html" class="tsd-kind-icon">IComputed<wbr>Field<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icorehelpers.html" class="tsd-kind-icon">ICore<wbr>Helpers</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icurrencytostringoptions.html" class="tsd-kind-icon">ICurrency<wbr>ToString<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/icustomevent.html" class="tsd-kind-icon">ICustom<wbr>Event</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/idatetostringoptions.html" class="tsd-kind-icon">IDate<wbr>ToString<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/idisplayednewresulteventargs.html" class="tsd-kind-icon">IDisplayed<wbr>New<wbr>Result<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/idisplayednewresultseventargs.html" class="tsd-kind-icon">IDisplayed<wbr>New<wbr>Results<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/idonebuildingqueryeventargs.html" class="tsd-kind-icon">IDone<wbr>Building<wbr>Query<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iduringqueryeventargs.html" class="tsd-kind-icon">IDuring<wbr>Query<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iendpointcalloptions.html" class="tsd-kind-icon">IEndpoint<wbr>Call<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iendpointcallparameters.html" class="tsd-kind-icon">IEndpoint<wbr>Call<wbr>Parameters</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iendpointcalleroptions.html" class="tsd-kind-icon">IEndpoint<wbr>Caller<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ierrorresponse.html" class="tsd-kind-icon">IError<wbr>Response</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iextension.html" class="tsd-kind-icon">IExtension</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iexternaladvancedsearchsection.html" class="tsd-kind-icon">IExternal<wbr>Advanced<wbr>Search<wbr>Section</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifacetoptions.html" class="tsd-kind-icon">IFacet<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifacetrequest.html" class="tsd-kind-icon">IFacet<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifacetrequestvalue.html" class="tsd-kind-icon">IFacet<wbr>Request<wbr>Value</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifacetresponse.html" class="tsd-kind-icon">IFacet<wbr>Response</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifacetresponsevalue.html" class="tsd-kind-icon">IFacet<wbr>Response<wbr>Value</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifacetsearchrequest.html" class="tsd-kind-icon">IFacet<wbr>Search<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifacetsearchresponse.html" class="tsd-kind-icon">IFacet<wbr>Search<wbr>Response</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifacetvaluesuggestionrow.html" class="tsd-kind-icon">IFacet<wbr>Value<wbr>Suggestion<wbr>Row</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifacetvaluesuggestionsprovider.html" class="tsd-kind-icon">IFacet<wbr>Value<wbr>Suggestions<wbr>Provider</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifacetvaluesuggestionsprovideroptions.html" class="tsd-kind-icon">IFacet<wbr>Value<wbr>Suggestions<wbr>Provider<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifetchmoresuccesseventargs.html" class="tsd-kind-icon">IFetch<wbr>More<wbr>Success<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifieldconditionoption.html" class="tsd-kind-icon">IField<wbr>Condition<wbr>Option</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifielddescription.html" class="tsd-kind-icon">IField<wbr>Description</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ifieldoption.html" class="tsd-kind-icon">IField<wbr>Option</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iformwidget.html" class="tsd-kind-icon">IForm<wbr>Widget</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/igeolocationposition.html" class="tsd-kind-icon">IGeolocation<wbr>Position</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/igeolocationpositionprovider.html" class="tsd-kind-icon">IGeolocation<wbr>Position<wbr>Provider</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/igetdocumentoptions.html" class="tsd-kind-icon">IGet<wbr>Document<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/igroupbyrequest.html" class="tsd-kind-icon">IGroup<wbr>ByRequest</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/igroupbyresult.html" class="tsd-kind-icon">IGroup<wbr>ByResult</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/igroupbyvalue.html" class="tsd-kind-icon">IGroup<wbr>ByValue</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ihighlight.html" class="tsd-kind-icon">IHighlight</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ihighlightphrase.html" class="tsd-kind-icon">IHighlight<wbr>Phrase</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ihighlightterm.html" class="tsd-kind-icon">IHighlight<wbr>Term</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iiconoptions.html" class="tsd-kind-icon">IIcon<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iimageutilsoptions.html" class="tsd-kind-icon">IImage<wbr>Utils<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iindexfieldvalue.html" class="tsd-kind-icon">IIndex<wbr>Field<wbr>Value</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iinitializationeventargs.html" class="tsd-kind-icon">IInitialization<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iinitializationparameters.html" class="tsd-kind-icon">IInitialization<wbr>Parameters</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ilistfieldvaluesbatchrequest.html" class="tsd-kind-icon">IList<wbr>Field<wbr>Values<wbr>Batch<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ilistfieldvaluesrequest.html" class="tsd-kind-icon">IList<wbr>Field<wbr>Values<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/inewqueryeventargs.html" class="tsd-kind-icon">INew<wbr>Query<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/inoresultseventargs.html" class="tsd-kind-icon">INo<wbr>Results<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iomniboxdatarow.html" class="tsd-kind-icon">IOmnibox<wbr>Data<wbr>Row</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iopenquickvieweventargs.html" class="tsd-kind-icon">IOpen<wbr>Quickview<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iplanresponse.html" class="tsd-kind-icon">IPlan<wbr>Response</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ipopulatebreadcrumbeventargs.html" class="tsd-kind-icon">IPopulate<wbr>Breadcrumb<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ipopulateomniboxobject.html" class="tsd-kind-icon">IPopulate<wbr>Omnibox<wbr>Object</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ipopulateomniboxqueryexpression.html" class="tsd-kind-icon">IPopulate<wbr>Omnibox<wbr>Query<wbr>Expression</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ipopulateomniboxsuggestionseventargs.html" class="tsd-kind-icon">IPopulate<wbr>Omnibox<wbr>Suggestions<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ipopulatesearchresultpreviewseventargs.html" class="tsd-kind-icon">IPopulate<wbr>Search<wbr>Result<wbr>Previews<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ipositionresolvedeventargs.html" class="tsd-kind-icon">IPosition<wbr>Resolved<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ipreprocessmoreresultseventargs.html" class="tsd-kind-icon">IPreprocess<wbr>More<wbr>Results<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ipreprocessresultseventargs.html" class="tsd-kind-icon">IPreprocess<wbr>Results<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iquery.html" class="tsd-kind-icon">IQuery</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iquerybuilderexpression.html" class="tsd-kind-icon">IQuery<wbr>Builder<wbr>Expression</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iquerycorrection.html" class="tsd-kind-icon">IQuery<wbr>Correction</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iqueryerroreventargs.html" class="tsd-kind-icon">IQuery<wbr>Error<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iqueryexception.html" class="tsd-kind-icon">IQuery<wbr>Exception</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iqueryfunction.html" class="tsd-kind-icon">IQuery<wbr>Function</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iqueryoptions.html" class="tsd-kind-icon">IQuery<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iqueryresult.html" class="tsd-kind-icon">IQuery<wbr>Result</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iqueryresults.html" class="tsd-kind-icon">IQuery<wbr>Results</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iquerysuccesseventargs.html" class="tsd-kind-icon">IQuery<wbr>Success<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iquerysuggestcompletion.html" class="tsd-kind-icon">IQuery<wbr>Suggest<wbr>Completion</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iquerysuggestrequest.html" class="tsd-kind-icon">IQuery<wbr>Suggest<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iquerysuggestresponse.html" class="tsd-kind-icon">IQuery<wbr>Suggest<wbr>Response</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iquerysuggestselection.html" class="tsd-kind-icon">IQuery<wbr>Suggest<wbr>Selection</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iquerysummarycancellastactionargs.html" class="tsd-kind-icon">IQuery<wbr>Summary<wbr>Cancel<wbr>Last<wbr>Action<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iquickviewloadedeventargs.html" class="tsd-kind-icon">IQuickview<wbr>Loaded<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/irangevalue.html" class="tsd-kind-icon">IRange<wbr>Value</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/irankingexpression.html" class="tsd-kind-icon">IRanking<wbr>Expression</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/irankingfunction.html" class="tsd-kind-icon">IRanking<wbr>Function</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iratingrequest.html" class="tsd-kind-icon">IRating<wbr>Request</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/irequestinfo.html" class="tsd-kind-icon">IRequest<wbr>Info</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iresolvingpositioneventargs.html" class="tsd-kind-icon">IResolving<wbr>Position<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/iresponse.html" class="tsd-kind-icon">IResponse</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iresultscomponentbindings.html" class="tsd-kind-icon">IResults<wbr>Component<wbr>Bindings</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/isearchendpointoptions.html" class="tsd-kind-icon">ISearch<wbr>Endpoint<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/isearchevent.html" class="tsd-kind-icon">ISearch<wbr>Event</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/isizeoptions.html" class="tsd-kind-icon">ISize<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/istreamhighlightoptions.html" class="tsd-kind-icon">IStream<wbr>Highlight<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/istringmap.html" class="tsd-kind-icon">IString<wbr>Map</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/isubscription.html" class="tsd-kind-icon">ISubscription</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/isubscriptionitemrequest.html" class="tsd-kind-icon">ISubscription<wbr>Item<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/isubscriptionqueryrequest.html" class="tsd-kind-icon">ISubscription<wbr>Query<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/isubscriptionrequest.html" class="tsd-kind-icon">ISubscription<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/isubscriptionuser.html" class="tsd-kind-icon">ISubscription<wbr>User</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/isuccessresponse.html" class="tsd-kind-icon">ISuccess<wbr>Response</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/itaggingrequest.html" class="tsd-kind-icon">ITagging<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/itemplatehelperfunction.html" class="tsd-kind-icon">ITemplate<wbr>Helper<wbr>Function</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/itimespanutilsoptions.html" class="tsd-kind-icon">ITime<wbr>Span<wbr>Utils<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/itopqueries.html" class="tsd-kind-icon">ITop<wbr>Queries</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/itrigger.html" class="tsd-kind-icon">ITrigger</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/itriggerexecute.html" class="tsd-kind-icon">ITrigger<wbr>Execute</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/itriggernotify.html" class="tsd-kind-icon">ITrigger<wbr>Notify</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/itriggerquery.html" class="tsd-kind-icon">ITrigger<wbr>Query</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/itriggerredirect.html" class="tsd-kind-icon">ITrigger<wbr>Redirect</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iupdateresultpreviewsmanageroptionseventargs.html" class="tsd-kind-icon">IUpdate<wbr>Result<wbr>Previews<wbr>Manager<wbr>Options<wbr>Event<wbr>Args</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iuseractionsrequest.html" class="tsd-kind-icon">IUser<wbr>Actions<wbr>Request</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iuseridentity.html" class="tsd-kind-icon">IUser<wbr>Identity</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/iviewashtmloptions.html" class="tsd-kind-icon">IView<wbr>AsHtml<wbr>Options</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias"><a href="globals.html#baseformtypes" class="tsd-kind-icon">Base<wbr>Form<wbr>Types</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#context" class="tsd-kind-icon">Context</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#ianalyticsdocumentviewmeta" class="tsd-kind-icon">IAnalytics<wbr>Document<wbr>View<wbr>Meta</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#iqueryexpression" class="tsd-kind-icon">IQuery<wbr>Expression</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#responseformat" class="tsd-kind-icon">Response<wbr>Format</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#validlayout" class="tsd-kind-icon">Valid<wbr>Layout</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#validtooltipplacement" class="tsd-kind-icon">Valid<wbr>Tooltip<wbr>Placement</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function"><a href="globals.html#__" class="tsd-kind-icon">$$</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#addactioncausetolist" class="tsd-kind-icon">add<wbr>Action<wbr>Cause<wbr>ToList</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#clearlocaldata" class="tsd-kind-icon">clear<wbr>Local<wbr>Data</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#configureresourceroot" class="tsd-kind-icon">configure<wbr>Resource<wbr>Root</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#disableanalytics" class="tsd-kind-icon">disable<wbr>Analytics</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#enableanalytics" class="tsd-kind-icon">enable<wbr>Analytics</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#executequery" class="tsd-kind-icon">execute<wbr>Query</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#get" class="tsd-kind-icon">get</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#init" class="tsd-kind-icon">init</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#initrecommendation" class="tsd-kind-icon">init<wbr>Recommendation</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#initsearchbox" class="tsd-kind-icon">init<wbr>Searchbox</a></li>
+								<li class="tsd-kind-function tsd-has-type-parameter"><a href="globals.html#load" class="tsd-kind-icon">load</a></li>
+								<li class="tsd-kind-function tsd-has-type-parameter"><a href="globals.html#logclickevent" class="tsd-kind-icon">log<wbr>Click<wbr>Event</a></li>
+								<li class="tsd-kind-function tsd-has-type-parameter"><a href="globals.html#logcustomevent" class="tsd-kind-icon">log<wbr>Custom<wbr>Event</a></li>
+								<li class="tsd-kind-function tsd-has-type-parameter"><a href="globals.html#logsearchasyoutypeevent" class="tsd-kind-icon">log<wbr>Search<wbr>AsYou<wbr>Type<wbr>Event</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#logsearchevent" class="tsd-kind-icon">log<wbr>Search<wbr>Event</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#options" class="tsd-kind-icon">options</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#patch" class="tsd-kind-icon">patch</a></li>
+								<li class="tsd-kind-function tsd-has-type-parameter tsd-is-not-exported"><a href="globals.html#racepromises" class="tsd-kind-icon">race<wbr>Promises</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#removeactioncausefromlist" class="tsd-kind-icon">remove<wbr>Action<wbr>Cause<wbr>From<wbr>List</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#state" class="tsd-kind-icon">state</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Object literals</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-object-literal"><a href="globals.html#responsivefacetoptions" class="tsd-kind-icon">Responsive<wbr>Facet<wbr>Options</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="baseformtypes" class="tsd-anchor"></a>
+					<h3>Base<wbr>Form<wbr>Types</h3>
+					<div class="tsd-signature tsd-kind-icon">Base<wbr>Form<wbr>Types<span class="tsd-signature-symbol">:</span> <a href="classes/numericspinner.html" class="tsd-signature-type">NumericSpinner</a><span class="tsd-signature-symbol"> | </span><a href="classes/datepicker.html" class="tsd-signature-type">DatePicker</a><span class="tsd-signature-symbol"> | </span><a href="classes/dropdown.html" class="tsd-signature-type">Dropdown</a><span class="tsd-signature-symbol"> | </span><a href="classes/textinput.html" class="tsd-signature-type">TextInput</a><span class="tsd-signature-symbol"> | </span><a href="classes/radiobutton.html" class="tsd-signature-type">RadioButton</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in
+								<a href="https://github.com/coveo/search-ui/tree/master/src/ui/AdvancedSearch/AdvancedSearchInput.ts#L11">ui/AdvancedSearch/AdvancedSearchInput.ts
+							:11</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The basic types of form available to build an advanced search section.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="context" class="tsd-anchor"></a>
+					<h3>Context</h3>
+					<div class="tsd-signature tsd-kind-icon">Context<span class="tsd-signature-symbol">:</span> <a href="interfaces/istringmap.html" class="tsd-signature-type">IStringMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string[]</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in
+								<a href="https://github.com/coveo/search-ui/tree/master/src/ui/PipelineContext/PipelineGlobalExports.ts#L6">ui/PipelineContext/PipelineGlobalExports.ts
+							:6</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A context, as returned by <a href="components/searchinterface.html#getquerycontext">SearchInterface.getQueryContext</a> or <a href="components/pipelinecontext.html#getcontext">PipelineContext.getContext</a></p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="ianalyticsdocumentviewmeta" class="tsd-anchor"></a>
+					<h3>IAnalytics<wbr>Document<wbr>View<wbr>Meta</h3>
+					<div class="tsd-signature tsd-kind-icon">IAnalytics<wbr>Document<wbr>View<wbr>Meta<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in
+								<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Analytics/AnalyticsActionListMeta.ts#L50">ui/Analytics/AnalyticsActionListMeta.ts
+							:50</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The <code>IAnalyticsDocumentViewMeta</code> interface describes the expected metadata when logging a click event / item view.</p>
+						</div>
+						<p>See also the <a href="components/analytics.html"><code>Analytics</code></a> component, and more specifically its
+						<a href="components/analytics.html#logclickevent"><code>logClickEvent</code></a> method.</p>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>author<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>The author of the clicked item.</p>
+									</div>
+								</div>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> document<wbr>Title<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>The title of the clicked item.</p>
+									</div>
+								</div>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> documentURL<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>The URL of the clicked item.</p>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="iqueryexpression" class="tsd-anchor"></a>
+					<h3>IQuery<wbr>Expression</h3>
+					<div class="tsd-signature tsd-kind-icon">IQuery<wbr>Expression<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in
+								<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/IComponentOptions.ts#L35">ui/Base/IComponentOptions.ts
+							:35</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The <code>IQueryExpression</code> type is a string type dedicated to query expressions.</p>
+						</div>
+						<p>This type is used to build a specific option for query expressions.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="responseformat" class="tsd-anchor"></a>
+					<h3>Response<wbr>Format</h3>
+					<div class="tsd-signature tsd-kind-icon">Response<wbr>Format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"json"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"opensearch-atom"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"opensearch-rss"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"xlsx"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in
+								<a href="https://github.com/coveo/search-ui/tree/master/src/rest/Query.ts#L11">rest/Query.ts
+							:11</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The format of a successful response.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="validlayout" class="tsd-anchor"></a>
+					<h3>Valid<wbr>Layout</h3>
+					<div class="tsd-signature tsd-kind-icon">Valid<wbr>Layout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"list"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"card"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"table"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in
+								<a href="https://github.com/coveo/search-ui/tree/master/src/ui/ResultLayoutSelector/ValidLayout.ts#L6">ui/ResultLayoutSelector/ValidLayout.ts
+							:6</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The possible valid and supported layouts.</p>
+						</div>
+						<p>See the <a href="https://docs.coveo.com/en/360/">Result Layouts</a> documentation.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="validtooltipplacement" class="tsd-anchor"></a>
+					<h3>Valid<wbr>Tooltip<wbr>Placement</h3>
+					<div class="tsd-signature tsd-kind-icon">Valid<wbr>Tooltip<wbr>Placement<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"auto-start"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"auto"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"auto-end"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"top-start"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"top"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"top-end"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"right-start"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"right"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"right-end"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"bottom-end"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"bottom"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"bottom-start"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"left-end"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"left"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"left-start"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in
+								<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Quickview/Quickview.ts#L32">ui/Quickview/Quickview.ts
+							:32</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The allowed <a href="components/quickview.html"><code>Quickview</code></a> <a href="components/quickview.html#options.tooltipplacement"><code>tooltipPlacement</code></a> option values. The <code>-start</code> and <code>-end</code> variations indicate relative alignement. Horizontally (<code>top</code>, <code>bottom</code>), <code>-start</code> means <em>left</em> and <code>-end</code> means <em>right</em>. Vertically (<code>left</code>, <code>right</code>), <code>-start</code> means <em>top</em> and <code>-end</code> means <em>bottom</em>. No variation means <em>center</em>.</p>
+						</div>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="__" class="tsd-anchor"></a>
+					<h3>$$</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">$$<span class="tsd-signature-symbol">(</span>dom<span class="tsd-signature-symbol">: </span><a href="classes/dom.html" class="tsd-signature-type">Dom</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="classes/dom.html" class="tsd-signature-type">Dom</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/utils/Dom.ts#L901">utils/Dom.ts
+									:901</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convenience wrapper for the <a href="classes/dom.html">Dom</a> class. Used to do $$(element).<br/>
+									If passed with an argument which is not an HTMLElement, it will call <a href="classes/dom.html#createelement">Dom.createElement</a>.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>dom: <a href="classes/dom.html" class="tsd-signature-type">Dom</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="classes/dom.html" class="tsd-signature-type">Dom</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="addactioncausetolist" class="tsd-anchor"></a>
+					<h3>add<wbr>Action<wbr>Cause<wbr>ToList</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Action<wbr>Cause<wbr>ToList<span class="tsd-signature-symbol">(</span>newActionCause<span class="tsd-signature-symbol">: </span><a href="interfaces/ianalyticsactioncause.html" class="tsd-signature-type">IAnalyticsActionCause</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L554">ui/Base/RegisteredNamedMethods.ts
+									:554</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Adds a new analytics action cause to the ActionCauseList.
+									Adding a new actionCause allows to specify a custom user-action when triggering a search event.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>newActionCause: <a href="interfaces/ianalyticsactioncause.html" class="tsd-signature-type">IAnalyticsActionCause</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>(e.g.,
+											{
+											Name: &quot;newActionCause&quot;,
+											Type: &quot;exampleType&quot;
+										},</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="clearlocaldata" class="tsd-anchor"></a>
+					<h3>clear<wbr>Local<wbr>Data</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Local<wbr>Data<span class="tsd-signature-symbol">(</span>searchRoot<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L506">ui/Base/RegisteredNamedMethods.ts
+									:506</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Removes all session information stored in the browser (e.g., analytics visitor cookies, action history, etc.)</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> searchRoot: <span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol"> =&nbsp;document.querySelector(Component.computeSelectorForType(SearchInterface.ID)) as HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The element to scan for an Analytics component.
+											This can be an element onto which a component instance is bound
+											(e.g., document.querySelector(&quot;.CoveoAnalytics&quot;),
+										or an ancestor of such an element (e.g., document.getElementById(&quot;search&quot;).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="configureresourceroot" class="tsd-anchor"></a>
+					<h3>configure<wbr>Resource<wbr>Root</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">configure<wbr>Resource<wbr>Root<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L466">ui/Base/RegisteredNamedMethods.ts
+									:466</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets the path from where the chunks used for lazy loading will be loaded. In some cases, in IE11, we cannot automatically detect it, use this instead.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>This should be the path of the Coveo script. It should also have a trailing slash.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="disableanalytics" class="tsd-anchor"></a>
+					<h3>disable<wbr>Analytics</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">disable<wbr>Analytics<span class="tsd-signature-symbol">(</span>searchRoot<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L530">ui/Base/RegisteredNamedMethods.ts
+									:530</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-deprecated">
+								</dl>
+								<div class="lead">
+									<p>Disables an <a href="components/analytics.html"><code>Analytics</code></a> component and clears local data.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>availablesince</dt>
+									<dd><p><a href="https://docs.coveo.com/en/3084/">October 2019 Release (v2.7219)</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> searchRoot: <span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol"> =&nbsp;document.querySelector(Component.computeSelectorForType(SearchInterface.ID)) as HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The element to scan for an Analytics component.
+											This can be an element onto which a component instance is bound
+											(e.g., document.querySelector(&quot;.CoveoAnalytics&quot;),
+										or an ancestor of such an element (e.g., document.getElementById(&quot;search&quot;).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="enableanalytics" class="tsd-anchor"></a>
+					<h3>enable<wbr>Analytics</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">enable<wbr>Analytics<span class="tsd-signature-symbol">(</span>searchRoot<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L484">ui/Base/RegisteredNamedMethods.ts
+									:484</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-deprecated">
+								</dl>
+								<div class="lead">
+									<p>Re-enables an <a href="components/analytics.html"><code>Analytics</code></a> component if it was previously disabled.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>availablesince</dt>
+									<dd><p><a href="https://docs.coveo.com/en/3084/">October 2019 Release (v2.7219)</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> searchRoot: <span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol"> =&nbsp;document.querySelector(Component.computeSelectorForType(SearchInterface.ID)) as HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The element to scan for an Analytics component.
+											This can be an element onto which a component instance is bound
+											(e.g., document.querySelector(&quot;.CoveoAnalytics&quot;),
+										or an ancestor of such an element (e.g., document.getElementById(&quot;search&quot;).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="executequery" class="tsd-anchor"></a>
+					<h3>execute<wbr>Query</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">execute<wbr>Query<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/iqueryresults.html" class="tsd-signature-type">IQueryResults</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L125">ui/Base/RegisteredNamedMethods.ts
+									:125</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Execute a standard query. Active component in the interface will react to events/ push data in the query / handle the query success or failure as needed.</p>
+								</div>
+								<p>It triggers a standard query flow for which the standard component will perform their expected behavior.</p>
+								<p>If you wish to only perform a query on the index to retrieve results (without the component reacting), look into <a href="components/searchinterface.html">SearchInterface</a> instead.</p>
+								<p>Calling this method is the same as calling <a href="classes/querycontroller.html#executequery">QueryController.executeQuery</a>.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The root of the interface to initialize.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/iqueryresults.html" class="tsd-signature-type">IQueryResults</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="get" class="tsd-anchor"></a>
+					<h3>get</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, componentClass<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, noThrow<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="classes/basecomponent.html" class="tsd-signature-type">BaseComponent</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L203">ui/Base/RegisteredNamedMethods.ts
+									:203</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the component bound on the given <code>HTMLElement</code>.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <code>HTMLElement</code> for which to get the component instance.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> componentClass: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>If multiple components are bound to a single <code>HTMLElement</code>, you need to specify which components you wish to get.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> noThrow: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>By default, the GET method will throw if there is no component bound, or if there are multiple component and no <code>componentClass</code> is specified. This deletes the error if set to true.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="classes/basecomponent.html" class="tsd-signature-type">BaseComponent</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="init" class="tsd-anchor"></a>
+					<h3>init</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">init<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L32">ui/Base/RegisteredNamedMethods.ts
+									:32</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Initialize the framework with a basic search interface. Calls <a href="classes/initialization.html#initsearchinterface">Initialization.initSearchInterface</a>.</p>
+								</div>
+								<p>If using the jQuery extension, this is called using <code>$('#root').coveo('init');</code>.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The root of the interface to initialize.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>JSON options for the framework (e.g.: <code>{Searchbox : {enableSearchAsYouType : true}}</code>).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<blockquote>
+								<p>}</p>
+							</blockquote>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="initrecommendation" class="tsd-anchor"></a>
+					<h3>init<wbr>Recommendation</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">init<wbr>Recommendation<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, mainSearchInterface<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">HTMLElement</span>, userContext<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L79">ui/Base/RegisteredNamedMethods.ts
+									:79</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Initialize the framework with a recommendation interface. Calls <a href="classes/initialization.html#initrecommendationinterface">Initialization.initRecommendationInterface</a>.</p>
+								</div>
+								<p>If using the jQuery extension, this is called using <code>$('#root').coveo('initRecommendation');</code>.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The root of the interface to initialize.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> mainSearchInterface: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The search interface to link with the recommendation interface (see <a href="components/recommendation.html">Recommendation</a>).</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> userContext: <span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The user context to pass with the query generated in the recommendation interface (see <a href="components/recommendation.html">Recommendation</a>).</p>
+									</div>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-index-signature">
+											<h5><span class="tsd-signature-symbol">[</span>name: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></h5>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>JSON options for the framework (e.g.: <code>{Searchbox : {enableSearchAsYouType: true}}</code>).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<blockquote>
+								<p>}</p>
+							</blockquote>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="initsearchbox" class="tsd-anchor"></a>
+					<h3>init<wbr>Searchbox</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">init<wbr>Searchbox<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, searchPageUri<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L51">ui/Base/RegisteredNamedMethods.ts
+									:51</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Initialize the framework with a standalone search box. Calls {@link Initialize.initStandaloneSearchInterface}.</p>
+								</div>
+								<p>If using the jQuery extension, this is called using <code>$('#root').coveo('initSearchbox');</code>.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The root of the interface to initialize.</p>
+									</div>
+								</li>
+								<li>
+									<h5>searchPageUri: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The search page on which to redirect when there is a query.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>JSON options for the framework (e.g.: <code>{Searchbox : {enableSearchAsYouType : true}}</code>).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<blockquote>
+								<p>}</p>
+							</blockquote>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+					<a name="load" class="tsd-anchor"></a>
+					<h3>load</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">load&lt;T&gt;<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L608">ui/Base/RegisteredNamedMethods.ts
+									:608</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Asynchronously loads a module, or chunk.</p>
+								</div>
+								<p>This is especially useful when you want to extend a base component, and make sure the lazy component loading process
+								recognizes it (see <a href="https://docs.coveo.com/en/295/">Lazy Versus Eager Component Loading</a>).</p>
+								<p><strong>Example:</strong></p>
+								<pre><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">lazyCustomFacet</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> Coveo.load&lt;Facet&gt;<span class="hljs-function">(<span class="hljs-params">'Facet'</span>).<span class="hljs-params">then</span>(<span class="hljs-params">(<span class="hljs-params">Facet</span>) =&gt; {
+    <span class="hljs-keyword">class</span> CustomFacet <span class="hljs-keyword">extends</span> Facet {
+      [ ... ]
+    };
+    Coveo.Initialization.registerAutoCreateComponent(<span class="hljs-params">CustomFacet</span>);
+    <span class="hljs-keyword">return</span> CustomFacet;
+  }</span>);
+};
+
+<span class="hljs-params">Coveo</span>.<span class="hljs-params">LazyInitialization</span>.<span class="hljs-params">registerLazyComponent</span>(<span class="hljs-params">'CustomFacet', lazyCustomFacet</span>);</span></code></pre>
+								<p>You can also use this function to assert a component is fully loaded in your page before executing any code relating
+								to it.</p>
+								<p><strong>Example:</strong></p>
+								<blockquote>
+									<p>You could do <code>Coveo.load(&#39;Searchbox&#39;).then((Searchbox) =&gt; {})</code> to load the <a href="components/searchbox.html"><code>Searchbox</code></a>
+									component, if it is not already loaded in your search page.</p>
+								</blockquote>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The identifier of the module you wish to load. In the case of components, this identifier is the component
+										name (e.g., <code>Facet</code>, <code>Searchbox</code>).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>A Promise of the module, or chunk.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+					<a name="logclickevent" class="tsd-anchor"></a>
+					<h3>log<wbr>Click<wbr>Event</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">log<wbr>Click<wbr>Event&lt;TMeta&gt;<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, clickEventCause<span class="tsd-signature-symbol">: </span><a href="interfaces/ianalyticsactioncause.html" class="tsd-signature-type">IAnalyticsActionCause</a>, metadata<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TMeta</span>, result<span class="tsd-signature-symbol">: </span><a href="interfaces/iqueryresult.html" class="tsd-signature-type">IQueryResult</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L367">ui/Base/RegisteredNamedMethods.ts
+									:367</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Finds the <a href="components/analytics.html"><code>Analytics</code></a> component instance, and uses it to log a <code>Click</code> usage analytics event.</p>
+								</div>
+								<p>A <code>Click</code> event corresponds to an item view (e.g., clicking on a <a href="components/resultlink.html">ResultLink</a> or opening a <a href="components/quickview.html">Quickview</a>).</p>
+								<p><code>Click</code> events are immediately sent to the Coveo Usage Analytics service.</p>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>TMeta<span class="tsd-signature-symbol">: </span><a href="interfaces/istringmap.html" class="tsd-signature-type">IStringMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The root of the search interface which contains the <a href="components/analytics.html"><code>Analytics</code></a> component.</p>
+									</div>
+								</li>
+								<li>
+									<h5>clickEventCause: <a href="interfaces/ianalyticsactioncause.html" class="tsd-signature-type">IAnalyticsActionCause</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The cause of the event.</p>
+									</div>
+								</li>
+								<li>
+									<h5>metadata: <span class="tsd-signature-type">TMeta</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The metadata you want to use to create custom dimensions. Metadata can contain as many key-value
+											pairs as you need. Each key must contain only alphanumeric characters and underscores. The Coveo Usage Analytics
+											service automatically converts white spaces to underscores, and uppercase characters to lowercase characters in key
+											names. Each value must be a simple string. If you do not need to log metadata, you can simply pass an empty JSON
+										( <code>{}</code> ).</p>
+									</div>
+								</li>
+								<li>
+									<h5>result: <a href="interfaces/iqueryresult.html" class="tsd-signature-type">IQueryResult</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The result that was clicked.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+					<a name="logcustomevent" class="tsd-anchor"></a>
+					<h3>log<wbr>Custom<wbr>Event</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">log<wbr>Custom<wbr>Event&lt;TMeta&gt;<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, customEventCause<span class="tsd-signature-symbol">: </span><a href="interfaces/ianalyticsactioncause.html" class="tsd-signature-type">IAnalyticsActionCause</a>, metadata<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TMeta</span>, result<span class="tsd-signature-symbol">?: </span><a href="interfaces/iqueryresult.html" class="tsd-signature-type">IQueryResult</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L262">ui/Base/RegisteredNamedMethods.ts
+									:262</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Finds the <a href="components/analytics.html"><code>Analytics</code></a> component instance, and uses it to log a <code>Custom</code> usage analytics event.</p>
+								</div>
+								<p>You can use <code>Custom</code> events to create custom reports, or to track events which are neither queries nor item
+								views.</p>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>TMeta<span class="tsd-signature-symbol">: </span><a href="interfaces/istringmap.html" class="tsd-signature-type">IStringMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The root of the search interface which contains the <a href="components/analytics.html"><code>Analytics</code></a> component.</p>
+									</div>
+								</li>
+								<li>
+									<h5>customEventCause: <a href="interfaces/ianalyticsactioncause.html" class="tsd-signature-type">IAnalyticsActionCause</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The cause of the event.</p>
+									</div>
+								</li>
+								<li>
+									<h5>metadata: <span class="tsd-signature-type">TMeta</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The metadata you want to use to create custom dimensions. Metadata can contain as many key-value
+											pairs as you need. Each key must contain only alphanumeric characters and underscores. The Coveo Usage Analytics
+											service automatically converts white spaces to underscores, and uppercase characters to lowercase characters in key
+											names. Each value must be a simple string. If you do not need to log metadata, you can simply pass an empty JSON
+										( <code>{}</code> ).</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> result: <a href="interfaces/iqueryresult.html" class="tsd-signature-type">IQueryResult</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The query result that relates to the custom event, if applicable.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+					<a name="logsearchasyoutypeevent" class="tsd-anchor"></a>
+					<h3>log<wbr>Search<wbr>AsYou<wbr>Type<wbr>Event</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">log<wbr>Search<wbr>AsYou<wbr>Type<wbr>Event&lt;TMeta&gt;<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, searchAsYouTypeEventCause<span class="tsd-signature-symbol">: </span><a href="interfaces/ianalyticsactioncause.html" class="tsd-signature-type">IAnalyticsActionCause</a>, metadata<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TMeta</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L333">ui/Base/RegisteredNamedMethods.ts
+									:333</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Finds the <a href="components/analytics.html"><code>Analytics</code></a> component instance, and uses it to log a <code>SearchAsYouType</code> usage analytics
+									event.</p>
+								</div>
+								<p>This function is very similar to the <code>logSearchEvent</code> function, except that <code>logSearchAsYouTypeEvent</code> should, by
+									definition, be called more frequently. Consequently, in order to avoid logging every single partial query, the
+									<code>PendingSearchAsYouTypeEvent</code> takes care of logging only the &quot;relevant&quot; last event: an event that occurs after 5
+									seconds have elapsed without any event being logged, or an event that occurs after another part of the interface
+								triggers a search event.</p>
+								<p>It is important to call this method <strong>before</strong> executing the query. Otherwise, no <code>SearchAsYouType</code> event will be
+									logged, and you will get a warning message in the console. See
+								<a href="https://docs.coveo.com/en/2726/#logging-your-own-search-events">Logging Your Own Search Events</a>.</p>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>TMeta<span class="tsd-signature-symbol">: </span><a href="interfaces/istringmap.html" class="tsd-signature-type">IStringMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The root of the search interface which contains the <a href="components/analytics.html"><code>Analytics</code></a> component.</p>
+									</div>
+								</li>
+								<li>
+									<h5>searchAsYouTypeEventCause: <a href="interfaces/ianalyticsactioncause.html" class="tsd-signature-type">IAnalyticsActionCause</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The cause of the event.</p>
+									</div>
+								</li>
+								<li>
+									<h5>metadata: <span class="tsd-signature-type">TMeta</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The metadata you want to use to create custom dimensions. Metadata can contain as many key-value
+											pairs as you need. Each key must contain only alphanumeric characters and underscores. The Coveo Usage Analytics
+											service automatically converts white spaces to underscores, and uppercase characters to lowercase characters in key
+											names. Each value must be a simple string. If you do not need to log metadata, you can simply pass an empty JSON
+										( <code>{}</code> ).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="logsearchevent" class="tsd-anchor"></a>
+					<h3>log<wbr>Search<wbr>Event</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">log<wbr>Search<wbr>Event<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, searchEventCause<span class="tsd-signature-symbol">: </span><a href="interfaces/ianalyticsactioncause.html" class="tsd-signature-type">IAnalyticsActionCause</a>, metadata<span class="tsd-signature-symbol">: </span><a href="interfaces/istringmap.html" class="tsd-signature-type">IStringMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L297">ui/Base/RegisteredNamedMethods.ts
+									:297</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Finds the <a href="components/analytics.html"><code>Analytics</code></a> component instance, and uses it to log a <code>Search</code> usage analytics event.</p>
+								</div>
+								<p>A <code>Search</code> event is actually sent to the Coveo Usage Analytics service only after the query successfully returns (not
+									immediately after calling this method). Therefore, it is important to call this method <strong>before</strong> executing the
+									query. Otherwise, the <code>Search</code> event will not be logged, and you will get a warning message in the console. See
+								<a href="https://docs.coveo.com/en/2726/#logging-your-own-search-events">Logging Your Own Search Events</a>.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The root of the search interface which contains the <a href="components/analytics.html"><code>Analytics</code></a> component.</p>
+									</div>
+								</li>
+								<li>
+									<h5>searchEventCause: <a href="interfaces/ianalyticsactioncause.html" class="tsd-signature-type">IAnalyticsActionCause</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The cause of the event.</p>
+									</div>
+								</li>
+								<li>
+									<h5>metadata: <a href="interfaces/istringmap.html" class="tsd-signature-type">IStringMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The metadata you want to use to create custom dimensions. Metadata can contain as many key-value
+											pairs as you need. Each key must contain only alphanumeric characters and underscores. The Coveo Usage Analytics
+											service automatically converts white spaces to underscores, and uppercase characters to lowercase characters in key
+											names. Each value must be a simple string. If you do not need to log metadata, you can simply pass an empty JSON
+										( <code>{}</code> ).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="options" class="tsd-anchor"></a>
+					<h3>options</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, optionsToSet<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L392">ui/Base/RegisteredNamedMethods.ts
+									:392</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Pass options to the framework, before it is initialized (<a href="globals.html#init">init</a>).<br/>
+									All the options passed with this calls will be merged together on initialization.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The root of the interface for which you wish to set options.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> optionsToSet: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>JSON options for the framework (e.g.: <code>{Searchbox : {enableSearchAsYouType: true}}</code>).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="patch" class="tsd-anchor"></a>
+					<h3>patch</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">patch<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, methodName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L406">ui/Base/RegisteredNamedMethods.ts
+									:406</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Patch the given <code>methodName</code> on an instance of a component bound to an <code>HTMLElement</code> with a new handler.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+								</li>
+								<li>
+									<h5>methodName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>handler: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-siganture">
+											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any[]</span></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter tsd-is-not-exported">
+					<a name="racepromises" class="tsd-anchor"></a>
+					<h3>race<wbr>Promises</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">race<wbr>Promises&lt;T&gt;<span class="tsd-signature-symbol">(</span>promises<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Thenable&lt;T&gt;[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/magicbox/QueryProcessor.ts#L22">magicbox/QueryProcessor.ts
+									:22</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>IE11 equivalent of Promise.race
+									Adapted from Promise.race(iterable) polyfill on <a href="https://www.promisejs.org/api/">https://www.promisejs.org/api/</a></p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>promises: <span class="tsd-signature-type">Thenable&lt;T&gt;[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="removeactioncausefromlist" class="tsd-anchor"></a>
+					<h3>remove<wbr>Action<wbr>Cause<wbr>From<wbr>List</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>Action<wbr>Cause<wbr>From<wbr>List<span class="tsd-signature-symbol">(</span>actionCauseToRemoveName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L566">ui/Base/RegisteredNamedMethods.ts
+									:566</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Removes an actionCause from the ActionCauseList.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>actionCauseToRemoveName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="state" class="tsd-anchor"></a>
+					<h3>state</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">state<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in
+										<a href="https://github.com/coveo/search-ui/tree/master/src/ui/Base/RegisteredNamedMethods.ts#L182">ui/Base/RegisteredNamedMethods.ts
+									:182</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Performs read and write operations on the <a href="classes/querystatemodel.html"><code>QueryStateModel</code></a> instance of the search
+									interface. See <a href="https://docs.coveo.com/en/344/">State</a>.</p>
+								</div>
+								<p>Can perform the following actions:</p>
+								<ul>
+									<li><p>Get the <code>QueryStateModel</code> instance:</p>
+										<pre><code class="language-javascript">Coveo.state(element);</code></pre>
+									</li>
+									<li><p>Get the value of a single state attribute from the <code>QueryStateModel</code> instance:</p>
+										<pre><code class="language-javascript"><span class="hljs-comment">// You can replace `q` with any registered state attribute.</span>
+Coveo.state(element, <span class="hljs-string">"q"</span>);</code></pre>
+									</li>
+									<li><p>Set the value of a single state attribute in the <code>QueryStateModel</code> instance:</p>
+										<pre><code class="language-javascript"><span class="hljs-comment">// You can replace `q` with any registered state attribute.</span>
+Coveo.state(element, <span class="hljs-string">"q"</span>, <span class="hljs-string">"my new value"</span>);</code></pre>
+									</li>
+									<li><p>Set multiple state attribute values in the <code>QueryStateModel</code> instance:</p>
+										<pre><code class="language-javascript"><span class="hljs-comment">// You can replace `q` and `sort` with any registered state attributes.</span>
+Coveo.state(element, {
+  <span class="hljs-string">"q"</span> : <span class="hljs-string">"my new value"</span>,
+  <span class="hljs-string">"sort"</span> : <span class="hljs-string">"relevancy"</span>
+});</code></pre>
+									</li>
+								</ul>
+								<p><strong>Note:</strong></p>
+								<blockquote>
+									<p>When setting one or several state attribute values with this function, you can pass an additional argument to set
+									the <code>silent</code> attribute to <code>true</code> in order to prevent the state change from triggering state change events.</p>
+									<p><strong>Example:</strong></p>
+									<pre><code class="language-javascript">Coveo.state(element, <span class="hljs-string">"q"</span>, <span class="hljs-string">"my new value"</span>, { <span class="hljs-string">"silent"</span> : <span class="hljs-literal">true</span> });</code></pre>
+								</blockquote>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The root of the interface whose <code>QueryStateModel</code> instance the function should interact with.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The arguments that determine the action to perform on the <code>QueryStateModel</code> instance.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+							<p>Depends on the action performed.</p>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Object literals</h2>
+				<section class="tsd-panel tsd-member tsd-kind-object-literal">
+					<a name="responsivefacetoptions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Responsive<wbr>Facet<wbr>Options</h3>
+					<div class="tsd-signature tsd-kind-icon">Responsive<wbr>Facet<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in
+								<a href="https://github.com/coveo/search-ui/tree/master/src/ui/ResponsiveComponents/ResponsiveFacetOptions.ts#L6">ui/ResponsiveComponents/ResponsiveFacetOptions.ts
+							:6</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>ResponsiveFacets options</p>
+						</div>
+					</div>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="responsivefacetoptions.dropdownheaderlabel" class="tsd-anchor"></a>
+						<h3>dropdown<wbr>Header<wbr>Label</h3>
+						<div class="tsd-signature tsd-kind-icon">dropdown<wbr>Header<wbr>Label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in
+									<a href="https://github.com/coveo/search-ui/tree/master/src/ui/ResponsiveComponents/ResponsiveFacetOptions.ts#L35">ui/ResponsiveComponents/ResponsiveFacetOptions.ts
+								:35</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>If the [<code>enableResponsiveMode</code>]{@link Facet.options.enableResponsiveMode} option is <code>true</code> for all facets and
+									{@link FacetSlider.options.enableResponsiveMode} is also <code>true</code> for all sliders, specifies the label of the
+								dropdown button that allows to display the facets when in responsive mode.</p>
+							</div>
+							<p>If more than one <code>Facet</code> or <a href="components/facetslider.html">FacetSlider</a> component in the search interface specifies a value for this
+							option, the framework uses the first occurrence of the option.</p>
+							<p>Default value is <code>Filters</code>.</p>
+						</div>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="responsivefacetoptions.enableresponsivemode" class="tsd-anchor"></a>
+						<h3>enable<wbr>Responsive<wbr>Mode</h3>
+						<div class="tsd-signature tsd-kind-icon">enable<wbr>Responsive<wbr>Mode<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in
+									<a href="https://github.com/coveo/search-ui/tree/master/src/ui/ResponsiveComponents/ResponsiveFacetOptions.ts#L20">ui/ResponsiveComponents/ResponsiveFacetOptions.ts
+								:20</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Specifies whether to enable <em>responsive mode</em> for facets. Setting this options to <code>false</code> on any <code>Facet</code>, or
+									<a href="components/facetslider.html"><code>FacetSlider</code></a> component in a search interface disables responsive mode for all other facets
+								in the search interface.</p>
+							</div>
+							<p>Responsive mode displays all facets under a single dropdown button whenever the width of the HTML element which
+								the search interface is bound to reaches or falls behind a certain threshold (see
+							<a href="components/searchinterface.html#responsivecomponents">SearchInterface.responsiveComponents</a>).</p>
+							<p>See also the [<code>dropdownHeaderLabel</code>]{@link Facet.options.dropdownHeaderLabel} option.</p>
+							<p>Default value is <code>true</code>.</p>
+						</div>
+					</section>
+				</section>
+			</section>
+			<footer class="with-border-bottom">
+				<div class="container">
+					<h2>Legend</h2>
+					<div class="tsd-legend-group">
+						<ul class="tsd-legend">
+							<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+							<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+							<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+							<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+							<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+							<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+							<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+						</ul>
+						<ul class="tsd-legend">
+							<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+							<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+							<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+							<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+						</ul>
+						<ul class="tsd-legend">
+							<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+							<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+							<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+							<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+							<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+							<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+						</ul>
+						<ul class="tsd-legend">
+							<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+							<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+							<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+							<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+							<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+						</ul>
+						<ul class="tsd-legend">
+							<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+							<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+						</ul>
+						<ul class="tsd-legend">
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+							<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+						</ul>
+						<ul class="tsd-legend">
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+							<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+						</ul>
+						<ul class="tsd-legend">
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+							<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+						</ul>
+					</div>
+				</div>
+		</footer>        </div>
+	</div>
+</div>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/generateMetaData.js"></script>
+</body>
+</html>

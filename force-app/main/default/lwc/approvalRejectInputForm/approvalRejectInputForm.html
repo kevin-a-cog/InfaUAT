@@ -1,0 +1,44 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template>
+    <div class="slds-var-m-around_large"> 
+        <template for:each={approveRejectArrayInnerObject} for:item="field" for:index="index">
+            <template lwc:if={field.isTextAreaField}>
+                <lightning-textarea 
+                    key={field.fieldAPIName}
+                    data-key={field.fieldAPIName}
+                    label={field.fieldLabel}
+                    onchange={handleChange}
+                    value=""
+                    required={field.isRequired}
+                    placeholder="type here..."></lightning-textarea>
+            </template>
+            <template lwc:elseif={field.isPicklistField}>
+                <lightning-combobox
+                            key={field.fieldAPIName}
+                            data-key={field.fieldAPIName}
+                            name={field.fieldAPIName}
+                            label={field.fieldLabel}
+                            onchange={handleChange}
+                            required={field.isRequired}
+                            options={field.picklistValues}>
+                </lightning-combobox>
+            </template>
+            <template lwc:else>
+                <lightning-input key={field.fieldAPIName}
+                                 data-key={field.fieldAPIName}
+                                 label={field.fieldLabel}
+                                 onchange={handleChange}
+                                 value=""
+                                 type={field.dataType}
+                                 required={field.isRequired}></lightning-input>
+            </template>                 
+        </template>
+    </div>
+    <div class="button-container">
+        <lightning-button label="Save" variant="brand" 
+                          onclick={handleSaveClick} class="slds-m-left_x-small"
+                          disabled={isValid} ></lightning-button>
+    </div>
+</template>

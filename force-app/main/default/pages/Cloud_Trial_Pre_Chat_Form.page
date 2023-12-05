@@ -1,0 +1,140 @@
+<!--
+Owner:  Mahesh Patil
+Description:  This is created for Cloud Trial Product pre chat for Marketting purpose    
+Date: 
+JIRA:  I2R-11062
+
+Change History
+***********************************************************************************************************************************************
+    ModifiedBy      JIRA #     Date            Requested By       Description                                                                Tag
+    Mahesh P        I2R-11062  3rd March 2021  Marketting team    Added a help link for OrgId
+***********************************************************************************************************************************************
+
+-->
+<apex:page title="Informatica Cloud Chat" docType="html-5.0" showHeader="false">
+<!-- This script takes the endpoint URL parameter passed from the deployment
+  page and makes it the action for the form -->
+
+ 
+
+<!-- button -->
+
+<script type="text/javascript">
+(function() {
+    function handlePageLoad() {
+        var endpointMatcher = new RegExp("[\\?\\&]endpoint=([^&#]*)");
+        document.getElementById('prechatForm').setAttribute('action',decodeURIComponent(endpointMatcher.exec(document.location.search)[1]));
+    }
+    if (window.addEventListener) {
+        window.addEventListener('load', handlePageLoad, false);
+    } else {
+        window.attachEvent('onload', handlePageLoad, false);
+    }
+})();
+
+
+
+</script>
+
+
+<style>
+
+    body{
+    overflow-x: hidden;
+    }
+
+    #prechatForm label{
+        width: 9em;
+        float: left;
+        text-align: left;
+        margin-right: 0.5em;
+        display: block;
+    }
+    #prechat_submit{
+        margin-left: 6em;
+    }
+    #prechat_title{
+        float: left;
+        width: 99%;
+        margin-left: 1%;
+        margin-bottom: 1.5%;
+    }
+    #prechat_header{
+        height: 99%;
+        width: 99%;
+        margin: 0;
+    }
+   form {
+    margin: 15px;
+    padding: 2px;
+}
+
+</style>
+
+<body>
+
+
+<div id="prechat_header">
+<apex:image url="{!$Resource.Prechat_header_image}"/>
+</div>
+
+<form method='post' id='prechatForm'>
+
+
+
+
+      <p><label>First Name* </label> <input id="firstName" type='text' name='liveagent.prechat:firstName' required='true' pattern=".*\S+.*" title="Enter valid name" maxlength="255"/><br />      </p>      
+      <p><label>Last Name* </label> <input id="lastName" type='text' name='liveagent.prechat:lastName' required='true' pattern=".*\S+.*" title="Enter valid name" maxlength="255" /><br />      </p>           
+      <p><label>Email* </label> <input id="contactEmail" type='email' name='liveagent.prechat:contactEmail' required='true'  maxlength="80" /><br />      </p>
+      <p><label>Org Id*</label> <input id="OrgId" type='orgId' name='liveagent.prechat:OrgId' required='true'  maxlength="80" />  
+      <a href="https://knowledge.informatica.com/s/article/524870?language=en_US" target="_blank" >   
+      <apex:image value="/img/func_icons/util/help16.png" style="vertical-align:middle" alt="What is my Org ID?"/> </a>       </p>
+
+    
+     
+<!--  <p><label> Cloud Trial Type</label>  <select id="CloudTrialType" name='liveagent.prechat:CloudTrialType'> <option>CDW</option> <option>AppMod</option>  </select><br />      </p>    -->
+      <p><label> Cloud Trial Type*</label> <input id="txtCloudTrialType" type='text' name='liveagent.prechat:txtCloudTrialType' required='true'  maxlength="80" /><br />      </p>
+      <p><input id="iAgree" type='checkbox' name='liveagent.prechat:iAgree' required='true'  maxlength="80"/>  I acknowledge that Informatica will use the data provided here in accordance with the <a href='https://www.informatica.com/privacy-policy.html' target='_blank'> Informatica Privacy Policy. </a>  <br />      </p>
+
+      <input type="hidden" name="liveagent.prechat.save:firstName" value="FirstName__c" /> 
+      <input type="hidden" name="liveagent.prechat.save:lastName" value="Lastname__c" />  
+      <input type="hidden" name="liveagent.prechat.save:contactEmail" value="Email__c" /> 
+      <input type="hidden" name="liveagent.prechat.save:OrgId" value="OrgId__c" /> 
+      <input type="hidden" name="liveagent.prechat.txtCloudTrialType" value="Cloud_Trial_Type__c" /> 
+      
+
+      <input type="hidden" name="liveagent.prechat.findorcreate.displayToAgent:Case" value="true"/>
+
+      <input type='submit' value='Request Chat' id='prechat_submit' />
+
+
+      <div>
+      <br /><br /><br />
+      Fields marked with * are mandatory.
+      </div>
+  </form>
+
+<style type="text/css">
+p {font-weight: bolder }
+</style>
+
+<script type='text/javascript' src='{!$Label.GCS_LiveAgent_Script_Include_URL}/deployment.js'></script>
+<script type='text/javascript' src='{!$Label.GCS_LiveAgent_Script_Include_URL}/prechat.js'></script>
+
+<script type="text/javascript">
+    console.log('onload javascript');
+            var detailCallback = function (details){
+        for (var i = 0; i < details.customDetails.length; i++) {
+            var label = details.customDetails[i].label;
+            var value = details.customDetails[i].value;
+            console.log(label+'='+value);
+            document.getElementById(label).value = value;
+        }
+    };
+ 
+
+    liveagent.details.preChatInit('{!$Label.GCS_LiveAgent_Chat_Init_URL}','detailCallback');
+</script>
+
+</body>
+</apex:page>

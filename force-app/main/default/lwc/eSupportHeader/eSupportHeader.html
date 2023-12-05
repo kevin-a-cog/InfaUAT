@@ -1,0 +1,105 @@
+<template>
+  <div class="container-fluid es-container-fluid--grey">
+    <template if:true={showSpinner}>
+      <lightning-spinner class="slds-is-fixed" alternative-text="Loading" size="large"></lightning-spinner>
+  </template>
+  </div>
+  <div class="es-header">
+    <div class="container-fluid navbar-bg">
+      <div class={stickyClass}>
+        <div class="row es-app-header-top-row">
+          <ul>
+            <li class="nav-item dropdown es-nav-username">
+              <a class="nav-link es-nav-link" href={profileUrl} target="_blank" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {firstName}
+              </a>
+            </li>
+            <div class ="es-separator"></div>
+            <li class="nav-item dropdown es-nav-logout">
+              <a class="nav-link es-nav-link" onclick={doLogout} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Logout
+              </a>
+            </li>
+            <li class="es-navbar-search-section">
+              <div class="es-navbar-search" id="es-navbar-search" style={getSearchIcon} onclick={handleSearchToggleClick}></div>
+                <div class={cssSearchClass}>
+                <div class="search-bar" onkeypress={eSupportSearch}>
+                    <lightning-input onchange={handleSearchInput} placeholder="Type to Search">
+                    </lightning-input>
+                    <span class="es-navbar-search-close" onclick={handleCloseToggleClick}>&times;</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+          <nav class="row navbar navbar-expand-lg navbar-light es-navbar">
+            <!-- <div class="row"> -->
+              <a class="navbar-brand" onclick={openDashboard}>
+                  <img src={appLogo} alt="Informatica E-Support Logo" class="es-navbar-logo"/>
+              </a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class={cssHamburgerClass} onclick={handleHamburgerClick}></span>
+              </button>
+              <div class={cssNavListClass} id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                  <li class="es-navbar-search-section-mobile">
+                    <div class="es-navbar-search-mobile"></div>
+                    <div class="es-navbar-search-form-wrapper">
+                      <div onkeypress={eSupportSearch}>
+                        <lightning-input onchange={handleSearchInput} placeholder="Type to Search">
+                        </lightning-input>
+                    </div>
+                      <span class="es-navbar-search-close">&times;</span>
+                    </div>
+                  </li>
+                  <li class="nav-item active">
+                    <a class="nav-link es-nav-link" onclick={openDashboard}>Dashboard</a>
+                  </li>
+                  <template for:each={navBarData} for:item="item">
+                      <li key={item.id} class="nav-item dropdown">
+                        <p class="nav-link es-nav-link dropdown-toggle"  role="button"  data-toggle="dropdown"  aria-expanded="false" data-target="#">
+                          {item.navBarItem} <img class="pl-1" src={download} alt="down"/>
+                        </p>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="row">
+                              <template for:each={item.level2} for:item="subItem">
+                                  <div key={subItem.link} class="col-md-4 es-navbar-level2-col-text" style={getDotsImage}>
+                                    <div class="es-inline-flex dropdown-item">
+                                      <a href={subItem.link} target={subItem.target} class="es-navbar-level2-text-heading">{subItem.title}</a>
+                                    </div>
+                                    <p class="es-navbar-level2-text-description no-desc-for-mobile">{subItem.description}</p>
+                                  </div>
+                              </template>
+                            </div>
+                          </div>
+                        </li>
+                  </template>
+                  <div class="es-nav-profile-mobile">
+                    <li class="nav-item dropdown es-nav-username">
+                      <a class="nav-link es-nav-link" href={profileUrl} target="_blank" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {firstName}
+                      </a>
+                    </li>
+                    <div class ="es-separator mobile"></div>
+                    <li class="nav-item dropdown es-nav-logout">
+                      <a class="nav-link es-nav-link" onclick={doLogout} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Logout
+                      </a>
+                    </li>
+                  </div>
+                  <!-- Conditionally Show Hide based on if the user is logged in or not -->
+                  <!-- <li class="nav-item dropdown es-navbar-profile">
+                    <img class="nav-link" src="./UserProfile.svg" />
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="#">Profile</a>
+                      <a class="dropdown-item" href="#">LogOut</a>
+                    </div>
+                  </li> -->
+                </ul>
+              </div>
+              <!-- </div> -->
+            </nav>
+      </div> 
+    </div>
+  </div>
+</template>

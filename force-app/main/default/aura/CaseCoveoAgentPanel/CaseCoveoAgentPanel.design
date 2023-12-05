@@ -1,0 +1,8 @@
+<design:component >    
+    <design:attribute name="recordId" label="Record ID" default="" description="Enter any one of this value : '{recordId}'"/>
+    <design:attribute name="title" label="Title" default="" description="Enter any one of this value : '{globalId}'"/>
+    <design:attribute name="name" label="Name" default="coveoLightningInsightPanel" description="Enter any one of this value : 'coveoLightningInsightPanel'"/>
+    <design:attribute name="searchHub" label="Search Hub" default="AthenaPanelForCases" description="Enter any one of this value : 'AthenaPanelForCases'"/>
+    <design:attribute name="recordFields" label="Record Fields" default="Case_Id" description="Enter any one of this value : 'Case_Subject, Case_Description,Case_Forecast_Product__c,Case_Error_Message__c,Case_Id'"/>    
+    <design:attribute name="fullSearchComponent" label="Full Search Component" default="c__INFAKBContentSearch" description="Enter any one of this value : 'c__INFAKBContentSearch'"/>    
+</design:component>

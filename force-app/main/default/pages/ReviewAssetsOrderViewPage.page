@@ -1,0 +1,18 @@
+<!--Page to Call Lighting Component for Review Asset from Order for the Assets & Entitlements Design-->
+<apex:page standardController="Order">
+    <apex:includeLightning />
+    <div id="lightning" />    
+    
+    <script>
+    var recordId = "{!$CurrentPage.parameters.id}";
+    // var recordId = "8010m0000008XsPAAU"; 
+
+    $Lightning.use("c:ReviewAssetsOrderApp", function() {
+        $Lightning.createComponent(
+            "c:ReviewAssetsOrder",
+            {"recordId" : recordId},
+            "lightning"
+        );
+    });
+    </script>
+</apex:page>

@@ -1,0 +1,189 @@
+<template>
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+    <template if:true={showSpinner}>
+        <lightning-spinner alternative-text="spinner" variant="brand"></lightning-spinner>
+    </template>
+
+    <div class="row">
+            <div class="col-md-12 sp-timeline__action-row d-flex">
+                <div class="d-md-flex sp-lds-form-group">
+                    <lightning-button 
+                        label="Add Comments/Files"
+                        onclick={openAddCommentsModal}
+                        name="addcommentsfiles"
+                        class="es-button es-button--primary slds-m-right_x-small slds-m-bottom_x-small slds-show_inline-block">
+                    </lightning-button>
+                    <template if:true={showComments}>
+                        <lightning-input name="comment-search" label="Find a comment" placeholder="Find a comment..." 
+                        variant="label-hidden" type="search" onchange={searchRecord}></lightning-input>
+                    </template>
+                </div>
+                <template if:true={showComments}>
+                    <div class="pl-2">
+                        {sortedBy} &nbsp; &nbsp;
+                        <lightning-button-menu icon-name="utility:sort" alternative-text="Show menu" menu-alignment="right" 
+                        onselect={handleCommentSort}>
+                            <template if:true={isSortedByEarliest}>
+                                <lightning-menu-item value="Latest" label="Sort by Latest" onselect={handleSelect}></lightning-menu-item>
+                            </template>
+                            <template if:false={isSortedByEarliest}>
+                                <lightning-menu-item value="Earliest" label="Sort by Earliest" onselect={handleSelect}></lightning-menu-item>
+                            </template>        
+                        </lightning-button-menu>
+                        <lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" alternative-text="refresh" class="slds-m-left_small slds-float_right" onclick={handlerefresh} ></lightning-button-icon>
+                    </div>
+                </template>
+            </div>
+        <template if:true={showComments}>
+			<template if:true={boolHasRecords}>
+				<div class="col-md-11 col-xs-12 sp-timeline-wrapper"> 
+					<ul class="sp-timeline-content">
+						<template for:each={dataPlanUpdates} for:item="item">
+							<span key={item.key} class="sp-timeline__date" >
+                                {item.key}
+								<!-- <lightning-formatted-date-time value= {item.key} year="numeric" month="short" day="2-digit" time-zone={userTimeZone}></lightning-formatted-date-time> -->
+							</span>
+							<div key={item.key} class="sp-timeline__content-datewise">
+								<template for:each={item.value} for:item="comment">
+									<div key={comment.key} class="sp-timeline__block" data-id={comment.recordId}>
+										<div class="sp-timeline__content">
+											<div class="sp-timeline__header">
+												<div class="slds-media">
+													<div class="slds-media__body">
+														<div class="sp-timeline__heading slds-float_left">
+															<div >
+																<span class="sp-timeline__icon sp-timeline__icon--regular"><lightning-icon icon-name="utility:comments" variant="bare" size="small" class="slds-icon_container"></lightning-icon></span>
+															</div>
+															<img class="sp-timeline__avatar" src={comment.userPhoto} alt="profile_pic" />
+															<lightning-icon class="slds-m-right_xx-small" size="xx-small" icon-name="utility:email" if:false={comment.boolIsPlanComment}></lightning-icon>
+															<span class="sp-timeline__user-name">{comment.sName}</span> 
+	
+														</div>
+														<span class="slds-float_right sp-timeline__time">
+															<span class="sp-timeline__time">
+																<lightning-formatted-date-time value={comment.CreatedDate} year="numeric" month="numeric" day="numeric" hour="2-digit"
+																							minute="2-digit" hour12="false" time-zone={userTimeZone}></lightning-formatted-date-time> <!-- <T01> -->
+															</span>
+														</span>
+													</div>
+												</div>
+											</div>
+											<div class="sp-timeline__body">
+												<div class="sp-timeline__body-text">
+													<template if:true={comment.boolIsAttentionRequest}>
+														{comment.objAttentionRequest.objCase.CaseNumber}
+														<br />
+													</template>
+													<lightning-formatted-rich-text value={comment.Comment}></lightning-formatted-rich-text>
+                                                    <template if:true={comment.hasSignOffRecords}><!--added as part of AR-2817-->
+													<template if:true={comment.hasSignOffAccess}><!--added as part of AR-2817-->
+                                                    <template if:true={comment.needToSignOff}><!--added as part of AR-2840-->
+                                                    <template if:true={comment.boolRequestSignOff}>
+														<p></p>
+														<a class="slds-text-link slds-m-top_medium" style="color: blue;" onclick={openSignOffComponent}>Provide Success plan signoff</a>
+													</template>
+                                                    </template>
+                                                    </template>
+                                                    </template>
+												</div>
+												<div class="slds-m-top_xx-small" if:true={comment.hasAttachments}>
+													<div class="slds-border_bottom">
+														<lightning-icon size="xx-small" icon-name="utility:attach">
+														</lightning-icon>&nbsp;Attachments ({comment.attachmentCount})
+													</div>
+		
+													<!-- Attachments without Remove icon. -->
+													<lightning-pill-container items={comment.attachments} data-id={planRecordId}
+														class="timelineAttachments csmPlanCommunicationTimeline-attachments">
+													</lightning-pill-container>
+												</div>
+											</div>
+										</div>
+									</div>
+								</template> 
+							</div>
+						</template>
+	
+						<!-- Paginator. -->
+						<div class="slds-grid">
+							<div class="slds-col">&nbsp;</div>
+						</div>
+						<template if:true={boolRenderPaginator}>
+							<c-global-paginator lst-records={lstOriginalRecords} int-total-records={lstOriginalRecords.length} onpaginatorchange={changeTablePage}></c-global-paginator>
+						</template>
+					</ul>
+				</div>
+			</template>
+			<template if:false={boolHasRecords}>
+				<div class="col-md-12">
+					<div class="sp-table--empty">	
+						<p>There are no comments available</p>
+					</div>
+				</div>
+			</template>
+        </template>
+        <template if:false={showComments}>
+            <div class="col-md-12">
+                <div class="sp-table--empty">	
+                    <p>There are no comments on the plan yet</p>
+                </div>
+            </div>
+        </template>
+        <template if:true={isAddCommentsModalOpen}>
+            <c-sp-modal-component
+            onclose={closeAddCommentsModal}
+            modal-header="Add Comments/Files">
+            <div slot="modal-content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="sp-form">
+                            <div class="form-row">
+                                <div class="form-group sp-form-group sp-lds-form-group col-md-12">
+                                    <lightning-input-rich-text
+                                        data-name="commentBody"
+                                        value={uploadComments}
+                                        onchange={handleCommentsChange}
+                                        disabled-categories="FORMAT_FONT"
+                                        placeholder="Comments here"
+                                        label="Comments"
+                                        label-visible
+                                        required>
+                                    </lightning-input-rich-text>
+                                </div>
+                            </div>
+                            <div class="form-row">                                
+                                <div class="form-group sp-form-group sp-lds-form-group col-md-6">
+                                    <div class="clearfix">
+                                        <lightning-icon class="sp-form__icon-with-upload" size="x-small" icon-name="utility:attach"></lightning-icon>
+                                        <lightning-file-upload
+                                            label="Attach Files (Upload limit is 2GB per file)"
+                                            name="fileUploader"
+                                            record-id={planRecordId}
+                                            onuploadfinished={handleUploadFinished} 
+                                            multiple>
+                                        </lightning-file-upload>  
+                                        <template for:each={uploadedFiles} for:item="file">
+                                            <lightning-pill class="sp-form__icon-with-upload" key={file.documentId} label={file.name} name={file.name} onremove={handleRemove}></lightning-pill>         
+                                        </template>
+                                    </div>
+                                </div>
+                            </div> 
+                        </form>
+                        <div class="sp-case__note sp-case__note--info col-md-12 mt-1">
+                            <p class="sp-case__note-main-text">By Proceeding, you are accepting the Privacy Policy.</p>
+                            <p class="sp-case__note-sub-text">Do not upload any sensitive personal data, including but not limited to <span class="es-case__note-highlight">Personally Identifiable Information (PII)</span>, <span class="es-case__note-highlight">Protected Health Information (PHI)</span> or <span class="es-case__note-highlight">Protected Financial Information (PFI)</span> to this system. In the event sensitive data is mistakenly uploaded, notify Informatica immediately to ensure deletion from the system.</p>
+                        </div>                                          
+                    </div>
+                </div>
+            </div>
+            <div slot="modal-footer">
+                <lightning-button label="Cancel" class="es-button es-button--secondary mr-2" onclick={closeAddCommentsModal}></lightning-button>
+                <lightning-button label="Confirm" class="es-button es-button--primary" onclick={updateFileDetails} disabled={boolConfirmButtonDisabled}></lightning-button>
+            </div>
+            </c-sp-modal-component>
+        </template>
+    </div>
+</template>

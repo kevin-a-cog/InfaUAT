@@ -1,0 +1,426 @@
+<!--
+@author : Ramya Ravi
+@date 	: 10/03/2021
+@purpose: I2C-1072 : Renew Subscription process for Opptys
+-->
+<aura:component controller="LinkToRenewalContractController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" >
+    <!--declare attributes--> 
+   <aura:attribute name="ErrorMessage" type="String" default=""/>    
+    <aura:attribute name="hasError" type="boolean" default="false"/>
+    <aura:attribute name="spinneract" type="boolean"/>
+     <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>     
+     <aura:attribute name="hasContract" type="boolean" default="false" /> 
+     <aura:attribute name="checkbox" type="Boolean" default="true"/>
+    <aura:attribute name="listOfSearchRecords1" type="List" description="Use,for store the list of search records which returns from apex class"/>     
+     <aura:attribute name="hasContract1" type="boolean" default="false" /> 
+     <aura:attribute name="checkbox1" type="Boolean" default="true"/>
+      <aura:attribute name="checkbox2" type="Boolean" default="true"/>
+    <aura:attribute name="hasContract2" type="boolean" default="false" />   
+     <aura:attribute name="listOfSearchRecords2" type="List" description="Use,for store the list of search records which returns from apex class"/>          
+     <aura:attribute name="isSelectAll" type="boolean" default="true"/>
+     
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+      <!-- Style -->
+     <aura:html tag="style">
+        .textInput {
+         color: #1c305f;
+  	 font-size: 9pt;  
+        }  
+          .slds-modal__container{
+        width: 80%;
+        max-width: 70rem;
+        }         
+             .myDiv{
+       font-size: 10pt;  
+         }
+         .myDivbind{
+          font-size: 14pt; 
+         display: inline-block;
+         }
+        .buttontopalign{
+    margin-top: 24px;
+} 
+         .colorcheck{
+           color: black;
+         }
+         
+  .div1{
+         background-color: #F5F5F5;
+         }
+    </aura:html>
+    
+    <div class="slds-col modal-header slds-modal__header"  style="width:100%;height:10%;">
+        <h4 class="slds-page-header__title slds-truncate">Link To Renewal Contract</h4>
+        
+    </div>
+    <!--*******************ACTIVE CONTRACTS *************************************
+       check if oppty has contract, display error if there is no contract to link 
+         Display UI if oppty has contract -->
+	<lightning:tabset selectedTabId="Active">
+	 <lightning:tab label="Co-termed Contracts" id="Active" onactive="{!c.searchHelper1}">
+     <div class="slds-text-title_bold div1 slds-border_top slds-border_right slds-border_bottom slds-border_left"   >
+                <div class="slds-align_absolute-center slds-p-top_xxx-small"  style="height:2rem">
+                    Co-termed Contracts 
+                </div>
+            </div>  
+        <br></br>
+         <aura:if isTrue="{!v.hasError}">
+             <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2" style="width:100%;height:90%;">
+                <p>
+                    {!v.ErrorMessage} <br/> <br/> <br/>
+                    <b>If the error message is understandable to resolve issue, please go back to Opportunity/Contract and make necessary changes. Else, please submit a ticket to <a href="mailto:gsd@informatica.com">Global Service Desk</a> with the screenshot of error and Opportunity details</b>
+                </p>
+            </div>
+    <aura:set attribute="else">
+        <aura:if isTrue="{!v.hasContract}">
+            <div class="myDiv"    style="width:100%;height:90%;">  
+                    
+                <h2>              
+                    Please confirm that the Contracts below should be linked to the current Opportunity :  
+                </h2>
+                <br></br> 
+                <div class="textInput">
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped slds-no-row-hover" role="grid" style="overflow:auto">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                                <th>           
+                                    <label class="slds-checkbox">
+                                        <ui:inputCheckbox value="{!v.isSelectAll}" change="{!c.handleSelectAllContact}" aura:id="selectAll"/>
+                                        <span class="slds-checkbox--faux" />
+                                        <span class="slds-form-element__label"></span>
+                                    </label>
+                                </th>
+                                <th class="slds-text-align_center" scope="col">
+                                    <div class="slds-truncate" title="Contract Number">Contract Number</div>
+                                </th>
+                                <th class="slds-text-align_center" scope="col">
+                                    <div class="slds-truncate" title="Start Date">Start Date</div>
+                                </th>
+                                <th class="slds-text-align_center" scope="col">
+                                    <div class="slds-truncate" title="End Date">End Date</div>
+                                </th>    
+                                <th class="slds-text-align_center" scope="col" >
+                                    <div class="slds-truncate" title="Annual_Recurring_Revenue1__c">ARR</div>
+                                </th>  
+                                <th class="slds-text-align_center" scope="col">
+                                    <div class="slds-truncate" title="SBQQ__RenewalOpportunity__r.New_Org_Opportunity_Number__c">Opportunity Number</div>
+                                </th>
+                                 <th class="slds-text-align_center" scope="col">
+                                    <div class="slds-truncate" title="SBQQ__RenewalOpportunity__r.StageName">Opportunity Stages</div>
+                                </th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration var="ContractLI" items="{!v.listOfSearchRecords}">
+                                <tr class="slds-border_bottom">
+                                    <td>
+                                        <label class="slds-checkbox">
+                                            <ui:inputCheckbox aura:id="checkContact" value="true" text="{!ContractLI.ContractNumber}"/>
+                                            <span class="slds-checkbox--faux" />
+                                            <span class="slds-form-element__label"></span>
+                                        </label>
+                                    </td>
+                                    <td data-label="Contract Number" scope="row" class="slds-text-align_center">
+                                        <div class="slds-truncate" >{!ContractLI.ContractNumber}</div>
+                                    </td>
+                                    <td data-label="StartDate" class="slds-text-align_center">
+                                        <div class="slds-truncate" >{!ContractLI.StartDate}</div>
+                                    </td>
+                                    <td data-label="EndDate" class="slds-text-align_center">
+                                        <div class="slds-truncate" >{!ContractLI.EndDate}</div>
+                                    </td> 
+                                    <td data-label="Annual_Recurring_Revenue1__c" class="slds-text-align_right">
+                                        <div class="slds-truncate" >
+                                        <lightning:formattedNumber value="{!ContractLI.Annual_Recurring_Revenue1__c}" style="currency" currencyCode="{!ContractLI.CurrencyIsoCode}" currencyDisplayAs="code" minimumFractionDigits="2" maximumFractionDigits="2"/>
+                                        </div>
+                                    </td>  
+                                     <td data-label="SBQQ__RenewalOpportunity__r.New_Org_Opportunity_Number__c" class="slds-text-align_center">
+                                        <div class="slds-truncate" >{!ContractLI.SBQQ__RenewalOpportunity__r.New_Org_Opportunity_Number__c}</div>
+                                    </td>  
+                                     <td data-label="SBQQ__RenewalOpportunity__r.StageName" class="slds-text-align_center">
+                                        <div class="slds-truncate" >{!ContractLI.SBQQ__RenewalOpportunity__r.StageName}</div>
+                                    </td>  
+                                    
+                                </tr>
+                            </aura:iteration> 
+                        </tbody>
+                    </table>  
+                    <br></br>
+                     <br></br>
+                    <lightning:input aura:id="Dcheckbox" type="checkbox"
+                        label="Mark Secondary Opportunities as Duplicates" 
+                        name="Dcheckbox"  onchange="{!c.handleCheck}" checked="true"   value="{!v.checkbox}" >
+                    </lightning:input>
+                </div>
+                <br></br> 
+            <div class="myDiv">
+                <h2>
+                    NOTE: If the above box is not checked, then the secondary opportunities will need to be marked as duplicates manually. <br/><br/>
+                </h2>
+                </div>    
+            </div>
+            
+        <div class="slds-col modal-footer slds-modal__footer  slds-border_right slds-border_bottom slds-border_left"  style="width:100%;height:10%;">                     
+            <lightning:button aura:id="saveBtn" label="Link" name="Save" variant="brand" onclick="{!c.saveRecord}"  />
+            
+        </div>  
+      
+              <aura:set attribute="else">
+                
+                    <div class="slds-text-title_bold"   >
+                  <div class="slds-text-color_error"     style="width:100%;height:90%;">    
+                      <lightning:icon iconName="utility:error" alternativeText="Error!" variant="error"/>
+                      <p>
+                          There are no additional contracts to link from the Renewal Quote. <br></br>
+                          Use the Search Contracts Tab to manually link additional co-termed Contracts
+                          </p>                                 
+                  </div>  </div>
+        </aura:set>
+        </aura:if>
+    </aura:set>
+    </aura:if>
+  </lightning:tab>
+    
+    <!--*******************CANCELED CONTRACTS *************************************
+       check if oppty has contract, display error if there is no contract to link 
+         Display UI if oppty has contract 
+    <lightning:tab label="Cancelled Contracts" id="Cancel" onactive="{!c.searchHelper2}">
+     <div class="slds-text-title_bold  div1 slds-border_top slds-border_right slds-border_bottom slds-border_left"   >
+                <div class="slds-align_absolute-center" style="height:2rem">
+                    Cancelled Contracts 
+                </div>
+            </div>    
+    <br></br>
+    <aura:if isTrue="{!v.hasError}">
+             <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2" style="width:100%;height:90%;">
+                <p>
+                    {!v.ErrorMessage} <br/> <br/> <br/>
+                    <b>If the error message is understandable to resolve issue, please go back to Opportunity/Contract and make necessary changes. Else, please submit a ticket to <a href="mailto:gsd@informatica.com">Global Service Desk</a> with the screenshot of error and Opportunity details</b>
+                </p>
+            </div>
+    <aura:set attribute="else">
+        <aura:if isTrue="{!v.hasContract1}">
+            <div class="myDiv"    style="width:100%;height:90%;">  
+                   
+                <h2>              
+                    Please confirm that the Contracts below should be linked to the current Opportunity :  
+                </h2>
+                <br></br> 
+                <div class="textInput">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered  slds-border_right slds-border_bottom slds-border_left">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Contract Number">Contract Number</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Start Date">Start Date</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="End Date">End Date</div>
+                                </th>    
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Annual_Recurring_Revenue1__c">ARR</div>
+                                </th>     
+                                 <th class="" scope="col">
+                                    <div class="slds-truncate" title="SBQQ__RenewalOpportunity__r.New_Org_Opportunity_Number__c">Opportunity Number</div>
+                                </th>
+                                 <th class="" scope="col">
+                                    <div class="slds-truncate" title="SBQQ__RenewalOpportunity__r.StageName">Opportunity Stages</div>
+                                </th>     
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration var="ContractLI" items="{!v.listOfSearchRecords1}">
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Contract Number" scope="row">
+                                        <div class="slds-truncate" >{!ContractLI.ContractNumber}</div>
+                                    </th>
+                                    <td data-label="StartDate">
+                                        <div class="slds-truncate" >{!ContractLI.StartDate}</div>
+                                    </td>
+                                    <td data-label="EndDate">
+                                        <div class="slds-truncate" >{!ContractLI.EndDate}</div>
+                                    </td> 
+                                       <td data-label="Annual_Recurring_Revenue1__c">
+                                        <div class="slds-truncate" >{!ContractLI.Annual_Recurring_Revenue1__c}</div>
+                                    </td> 
+									 <td data-label="SBQQ__RenewalOpportunity__r.New_Org_Opportunity_Number__c">
+                                        <div class="slds-truncate" >{!ContractLI.SBQQ__RenewalOpportunity__r.New_Org_Opportunity_Number__c}</div>
+                                    </td>  
+                                     <td data-label="SBQQ__RenewalOpportunity__r.StageName">
+                                        <div class="slds-truncate" >{!ContractLI.SBQQ__RenewalOpportunity__r.StageName}</div>
+                                    </td>  
+    
+                                </tr>
+                            </aura:iteration> 
+                        </tbody>
+                    </table>  
+                    <br></br>
+                    
+                    <lightning:input aura:id="Dcheckbox1" type="checkbox"
+                        label="Mark Secondary Opportunities as Duplicates" 
+                        name="Dcheckbox1" value="Dcheckbox1" checked="true"  onchange="{!c.handleCheck1}"  />
+                </div>
+                <br></br> 
+                <div class="myDiv">
+                <h2>
+                    NOTE : Some or all the lines of above contract are <b>Cancelled</b> under the Primary Quote of the Opportunity. So, they are displayed here to link the current Renewal Opportunity on the contract.<br/>
+                    If "Update Duplicate Opportunity" is checked, then existing renewal opportunity on the contracts will be marked as Duplicate with reason as Co-Term. Else, no changes will be made on existing renewal opportunity and should be taken care manually. <br/><br/>
+                </h2>
+                </div>    
+            
+            </div>
+            
+        <div class="slds-col modal-footer slds-modal__footer  slds-border_right slds-border_bottom slds-border_left"  style="width:100%;height:10%;">                     
+            <lightning:button aura:id="saveBtn" label="Link" name="Save" variant="brand" onclick="{!c.saveRecord1}"  />
+            
+        </div>  
+       
+         
+              <aura:set attribute="else">
+                
+                    <div class="slds-text-title_bold"   >
+                  <div class="slds-text-color_error"     style="width:100%;height:90%;">    
+                      <lightning:icon iconName="utility:error" alternativeText="Error!" variant="error"/>
+                      <p>
+                          There are no cancelled contracts to link to this Renewal Opportunity OR Opportunity has no Primary Quote OR it is already linked.  
+                          </p>                                 
+                  </div>  </div>
+        </aura:set>
+        </aura:if>
+    </aura:set>
+    </aura:if>
+	        </lightning:tab>
+-->
+       <!--*******************SEARCH CONTRACTS *************************************
+       check if oppty has contract, display error if there is no contract to link 
+         Display UI if oppty has contract -->
+    <lightning:tab label="Search Contracts" id="Search" onactive="{!c.searchHelper3}">
+     <div class="slds-text-title_bold  div1 slds-border_top slds-border_right slds-border_bottom slds-border_left"   >
+                <div class="slds-align_absolute-center" style="height:2rem">
+                    Search Contracts 
+                </div>
+            </div>   
+         <br/><br/>
+        <h2>
+         NOTE: Use only if contracts are not available in list of Co-termed Contracts.
+                    
+        </h2>
+    <div class="myDiv"    style="width:100%;height:90%;">  <br></br>
+       <lightning:layout >
+    <lightning:layoutItem size="6">
+            <lightning:input aura:id="Aform"   label = "Search for a Contract"
+                             name="inputtxt"/>    
+    </lightning:layoutItem>
+               <div class="buttontopalign">   
+    <lightning:layoutItem size="3">
+            <lightning:button label="Search" 
+                              variant="brand"                             
+                              onclick="{!c.searchhelper3}"/>  
+    </lightning:layoutItem> 
+           </div>
+</lightning:layout> 
+            <br></br>
+    <aura:if isTrue="{!v.hasError}">
+             <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2" style="width:100%;height:90%;">
+                <p>
+                    {!v.ErrorMessage} <br/> <br/> <br/>
+                    <b>If the error message is understandable to resolve issue, please go back to Opportunity/Contract and make necessary changes. Else, please submit a ticket to <a href="mailto:gsd@informatica.com">Global Service Desk</a> with the screenshot of error and Opportunity details</b>
+                </p>
+            </div>
+    <aura:set attribute="else">
+   <aura:if isTrue="{!not(empty(v.listOfSearchRecords2))}">      
+              <div class="textInput">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered  slds-border_right slds-border_bottom slds-border_left">
+                    <thead>
+                        <tr class="slds-line-height_reset">                            
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Contract Number">Contract Number</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Start Date">Start Date</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="End Date">End Date</div>
+                            </th>    
+                              <th class="" scope="col">
+                                <div class="slds-truncate" title="Annual_Recurring_Revenue1__c">ARR</div>
+                            </th>  
+                             <th class="" scope="col">
+                                    <div class="slds-truncate" title="SBQQ__RenewalOpportunity__r.New_Org_Opportunity_Number__c">Opportunity Number</div>
+                                </th>
+                                 <th class="" scope="col">
+                                    <div class="slds-truncate" title="SBQQ__RenewalOpportunity__r.StageName">Opportunity Stages</div>
+                                </th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration var="ContractLI" items="{!v.listOfSearchRecords2}">
+                            <tr class="slds-hint-parent">
+                                  
+                                <th data-label="Contract Number" scope="row">
+                                    <div class="slds-truncate" >{!ContractLI.ContractNumber}</div>
+                                </th>
+                                <td data-label="StartDate">
+                                    <div class="slds-truncate" >{!ContractLI.StartDate}</div>
+                                </td>
+                                <td data-label="EndDate">
+                                    <div class="slds-truncate" >{!ContractLI.EndDate}</div>
+                                </td> 
+                                  <td data-label="Annual_Recurring_Revenue1__c">
+                                    <div class="slds-truncate" >
+                                       <lightning:formattedNumber value="{!ContractLI.Annual_Recurring_Revenue1__c}" style="currency" currencyCode="{!ContractLI.CurrencyIsoCode}" currencyDisplayAs="code" minimumFractionDigits="2" maximumFractionDigits="10"/>
+                                      </div>
+                                </td>  
+                                 <td data-label="SBQQ__RenewalOpportunity__r.New_Org_Opportunity_Number__c">
+                                        <div class="slds-truncate" >{!ContractLI.SBQQ__RenewalOpportunity__r.New_Org_Opportunity_Number__c}</div>
+                                    </td>  
+                                     <td data-label="SBQQ__RenewalOpportunity__r.StageName">
+                                        <div class="slds-truncate" >{!ContractLI.SBQQ__RenewalOpportunity__r.StageName}</div>
+                                    </td>  
+                            </tr>
+                        </aura:iteration> 
+                    </tbody>
+                </table>  
+                <br></br>
+                   <br></br>
+                <lightning:input aura:id="Dcheckbox2" type="checkbox"
+					label="Mark Secondary Opportunities as Duplicates" 
+                    name="Dcheckbox2" value="Dcheckbox2" checked="true" onchange="{!c.handleCheck2}"  />
+                   <br></br> 
+                  <div class="myDiv colorcheck">
+            <h2>
+                  NOTE: If the above box is not checked, then the secondary opportunities will need to be marked as duplicates manually. <br/><br/>
+                      </h2>
+            </div>    
+        
+       </div>
+
+         <div class="slds-col modal-footer slds-modal__footer  slds-border_right slds-border_bottom slds-border_left"  style="width:100%;height:10%;">                     
+        <lightning:button aura:id="saveBtn" label="Link" name="Save" variant="brand" onclick="{!c.saveRecord2}" disabled="{!v.listOfSearchRecords2!=null ? false : true}" />
+           
+    </div>  
+        <aura:set attribute="else">  
+            <aura:if isTrue="{!v.hasContract2}">
+                                <div class="slds-text-title_bold"   >
+              <div class="slds-text-color_error"     style="width:100%;height:90%;">    
+                  <lightning:icon iconName="utility:error" alternativeText="Error!" variant="error"/>
+                  <p>
+                    No Contract found with the given contract number! Please try again. 
+                      </p>                                 
+              </div>  </div>
+            </aura:if>
+    </aura:set>
+    </aura:if>
+    </aura:set>
+    </aura:if>
+        </div>
+	</lightning:tab>
+    </lightning:tabset>
+     <aura:if isTrue="{!v.spinneract}">
+        <div class="slds-backdrop slds-backdrop_open">
+            <lightning:spinner variant="brand"  title="Processing......" alternativeText="Processing......"  size="medium"/>
+        </div>
+    </aura:if> 
+</aura:component>

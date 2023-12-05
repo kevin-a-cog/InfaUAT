@@ -1,0 +1,41 @@
+<!--
+  /*
+   @created by       : SathishR
+   @created on       : 20/07/2020
+   @Purpose          : Included Article CSS & JS
+   @Testclass        :
+   @JIRA             :
+
+
+   Change History
+ ****************************************************************************************************
+ |    Tag     |  Date             |  Modified by              |  Jira reference   |   ChangesMade
+ |    01      |  20-Jul-2020      |   Sathish R               |                   |   Initial Version
+ |    02      |  12-Sep-2023      |   Sathish R               |    I2RT-9005      |   Customer (KBC Bank) not able to do search in KB Search Page - getting security popup.
+ ****************************************************************************************************
+ */
+-->
+
+
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global">
+
+   <!--T02--><ltng:require scripts="{!$Resource.INFAKBResource +  '/js/Jquery/3.6.0/jquery-3.6.0.min.js,'+
+    $Resource.INFAKBResource + '/js/Analytics/Omniture_DTM.js,'+       
+    $Resource.INFAKBResource + '/js/Analytics/custom.js,'+
+    $Resource.INFAKBResource + '/js/KBSharepointSalesforceMigrationJs.js,'+
+    $Resource.INFAKBResource + '/js/redirect.js,'+
+    $Resource.INFAKBResource + '/js/InfaKBArticleView.js,'+
+    $Resource.INFAKBResource + '/js/footer.js,'+
+    $Resource.INFAKBResource + '/js/header.js,'+
+    $Resource.INFAKBResource + '/js/dummy.js'}" styles="{!$Resource.INFAKBResource + '/css/KBSharepointSalesforceMigration.css,'+    
+    $Resource.INFAKBResource + '/css/KBSharepointSalesforceMigrationCoreV4.css,'+
+    $Resource.INFAKBResource + '/css/font-awesome.min.css,'+
+    $Resource.INFAKBResource + '/css/footer.css,'+
+    $Resource.INFAKBResource + '/css/header.css,'+
+    $Resource.INFAKBResource + '/css/article.css,'+
+    $Resource.INFAKBResource + '/css/fonts.css'}" afterScriptsLoaded="{!c.myAction}" />
+
+
+    
+
+</aura:component>

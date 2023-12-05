@@ -1,0 +1,19 @@
+<template>
+    <template if:true={isData}>
+        <div class="in-wrapper-bg-fuild-grey border-fix">
+            <div class="container">
+                <div class="list-item d-flex">
+                    <div>
+                        <img src={userData.Member.FullPhotoUrl} class="profile-icon">
+                    </div>
+                    <div class="pl-3 d-flex name-icon" style="justify-content: center;">
+                        <div class="user-name">Hello, {userData.Member.CommunityNickname}</div>
+                        <div class="pr-2 points-wrapper">
+                            <div class="points">{userData.ReputationPoints} Points</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,121 @@
+<!--
+  @description       : 
+  @author            : SF Developer
+  @group             : 
+  @last modified on  : 01-17-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   01-08-2021   SF Developer   Initial Version
+ **************************************************************************************************************************
+ Modified By            Date            Jira No.            Description                                                 Tag
+ **************************************************************************************************************************
+  
+-->
+<template>
+    
+    <div class="slds-card">
+        <div class="slds-grid">
+            <div class="slds-col">
+
+                <header class="slds-card__header slds-text-heading_medium header-font-weight">Manage Case Contacts</header>
+
+            </div>
+            <div class="slds-col slds-text-align_right">
+
+                <header class="slds-card__header">
+                    <lightning-button-icon icon-name="action:refresh"  size="medium" alternative-text="Refresh" class="slds-m-left_xx-small" onclick={handleIconRefresh}></lightning-button-icon>
+                </header>
+
+            </div>
+        </div>
+
+        <div class="spinner">
+            <template if:true={isLoading}>
+                 <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                 </lightning-spinner>
+            </template>
+        </div>
+
+        <div class="border-bottom-shadow"></div>
+
+        <div class="container">
+            <span></span>
+            <span class="searchLookup"><lightning-input variant="label-hidden" placeholder="Search Contact" type="search" onchange={onChange}></lightning-input></span>
+            <template if:true={showButtons}>
+                <template if:true={disableActionBTNs}>
+                    <span class="align-center"><lightning-button label="New" variant="brand" onclick={createContactWithDefaultValues}></lightning-button></span>
+                </template>
+            </template>
+        </div> 
+
+        <lightning-tabset variant="default" active-tab-value={defaultTabOnInitialization}>
+            <template for:each={tabs} for:item="tabObj">
+                <lightning-tab label={tabObj.tab} value={tabObj.tab} key={tabObj.tab} onactive={handleActiveTab} title={tabObj.helpText}>
+
+                    <template if:true={showErrorMessage}>
+                        <div class="slds-col align-center error-message">
+                            {showErrorMessage}
+                        </div>
+                    </template>
+
+                    <template if:true={data}>
+
+                        <div class="slds-card">
+                            <div class="datatable-height">
+                                <lightning-datatable
+                                    columns={columns} 
+                                    data={data} 
+                                    key-field="Id" 
+                                    draft-values={draftValues} 
+                                    onrowselection={handleRowSelected}
+                                    oncellchange={handleCellChange} 
+                                    suppress-bottom-bar="true">
+                                </lightning-datatable>
+                            </div>
+
+                            <!--  DataTable action buttons -->
+                            <template if:true={disableActionBTNs}>
+                                <div class="slds-col slds-modal__footer">
+
+                                    <!-- Common buttons to be displayed on the tabs -->
+
+                                    <template if:true={displayDataTableFooter}>
+                                        
+                                    <template if:true={displaycancel}>
+                                      <lightning-button variant="Neutral" label="Cancel" title="Cancel" onclick={handleCancel} class="slds-var-m-left_x-small"></lightning-button>
+                                     </template>
+                                    
+                                    <!-- Display button only when active tab is Assigned Contacts -->
+                                    <template if:true={showButtons}>
+                                        <template if:true={displayRemoveBTN}>
+                                            <lightning-button variant="Brand" label="Remove" title="Remove" onclick={deleterec} class="slds-var-m-left_x-small"></lightning-button>
+                                            <!-- <lightning-button variant="Brand" label="Update Timezone" title="Update Timezone" onclick={handleupdate} class="slds-var-m-left_x-small"></lightning-button> -->
+                                        </template>
+                                    
+
+                                        <!-- Display button only when active tab is Unassigned Contacts -->
+                                        <template if:true={displayAddBTN}>
+                                            <lightning-button variant="Brand" label="Add" title="Add" onclick={createCaseContact} class="slds-var-m-left_x-small"></lightning-button>
+                                        </template>
+                                    </template>
+
+                                    
+                                      
+                                </template>    
+                                </div>
+                            </template>    
+                        </div>
+                    </template>
+
+                    <!-- Show No Products to display message when there are no records under the active tab -->
+                    <template if:true={NoDataAfterRendering}>
+                        <div class="datatable-height flex-align-center">
+                            No Contacts to display
+                        </div>
+                    </template>
+                </lightning-tab>
+            </template>
+        </lightning-tabset>
+    </div>
+</template>

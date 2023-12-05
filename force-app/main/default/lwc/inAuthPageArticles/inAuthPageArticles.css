@@ -1,0 +1,91 @@
+@media screen and (max-width: 768px) {
+    .infa-articles-data {
+        margin: 0 auto;
+        width: 93%;
+    }
+}
+
+.infa-articles-list {
+    background-color: #ffffff;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+}
+
+.infa-articles-container {
+    background-color: #fff;
+    padding-bottom: 30px;
+}
+
+.infa-articles-main-title {
+    color: #373737;
+    font-size: 33px;
+    font-weight: 300;
+    padding: 24px 0px;
+}
+@media screen and (max-width: 768px) {
+    .infa-articles-main-title {
+        font-size: 24px;
+        padding: 15px 0px;
+    }
+}
+.infa-article {
+    padding: 15px;
+    padding-bottom: 0;
+}
+
+.infa-article-type {
+    font-size: 12px;
+    color: #949494;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+}
+@media screen and (max-width: 768px) {
+    .infa-article-type {
+        font-size: 10px;
+    }
+}
+.infa-article-header {
+    font-size: 21px;
+    color: #373737;
+    line-height: 1;
+}
+.infa-article-header:hover {
+    color: #001aff;
+}
+@media screen and (max-width: 768px) {
+    .infa-article-header {
+        font-size: 18px;
+    }
+}
+.infa-article-description {
+    font-size: 14px;
+    color: #373737;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 15px;
+    width: 90%;
+}
+@media screen and (max-width: 768px) {
+    .infa-article-description {
+        font-size: 12px;
+        width: 100%;
+    }
+}
+
+.infa-article-product-items {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+.infa-article-product-item,
+.infa-article-product-version-item {
+    margin: 4px 5px 0px 0px;
+    display: inline-block;
+    font-size: 10px;
+    line-height: 14px;
+    text-align: center;
+    background-color: #00a9bb;
+    color: white;
+    white-space: nowrap;
+    padding: 2px 10px;
+    text-transform: uppercase;
+    font-weight: 400;
+}

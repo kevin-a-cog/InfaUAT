@@ -1,0 +1,96 @@
+<template>
+    <!-- <div class="container-fluid infa-container-fluid--grey">
+      <template if:true={showSpinner}>
+        <lightning-spinner class="slds-is-fixed" alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+    </div> -->
+    <div class="infa-header">
+      <div class="container-fluid navbar-bg infa-h-sticky">
+        <div class={stickyClass}>
+          <div class="row infa-header-top-row">
+            <ul>
+              <li class="nav-item dropdown infa-nav-username">
+                <a class="nav-link infa-nav-link" href="#" target="_blank" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  John
+                </a>
+              </li>
+              <div class ="infa-separator"></div>
+              <li class="nav-item dropdown infa-nav-logout">
+                <a class="nav-link infa-nav-link" onclick={doLogout} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Logout
+                </a>
+              </li>
+              <li class="infa-navbar-search-section">
+                <div class="infa-navbar-search" id="infa-navbar-search" style={getSearchIcon} onclick={handleSearchToggleClick}></div>
+                  <div class={cssSearchClass}>
+                  <div class="search-bar" onkeypress={eSupportSearch}>
+                      <lightning-input onchange={handleSearchInput} placeholder="Type to Search">
+                      </lightning-input>
+                      <span class="infa-navbar-search-close" onclick={handleCloseToggleClick}>&times;</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <nav class="row navbar navbar-expand-lg navbar-light infa-navbar">
+            <!-- <div class="row"> -->
+              <a class="navbar-brand" onclick={openDashboard}>
+                  <img src={appLogo} alt="Success Planner Logo" class="infa-navbar-logo"/>
+              </a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class={cssHamburgerClass} onclick={handleHamburgerClick}></span>
+              </button>
+              <div class={cssNavListClass} id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                  <li class="infa-navbar-search-section-mobile">
+                    <div class="infa-navbar-search-mobile"></div>
+                    <div class="infa-navbar-search-form-wrapper">
+                      <div onkeypress={eSupportSearch}>
+                        <lightning-input onchange={handleSearchInput} placeholder="Type to Search">
+                        </lightning-input>
+                    </div>
+                      <span class="infa-navbar-search-close">&times;</span>
+                    </div>
+                  </li>
+                  <li class="nav-item active">
+                    <a class="nav-link infa-nav-link" onclick={openDashboard}>Dashboard</a>
+                  </li>
+                  <template for:each={navBarData} for:item="item">
+                    <li key={item.id} class="nav-item dropdown">
+                      <p class="nav-link infa-nav-link dropdown-toggle"  role="button"  data-toggle="dropdown"  aria-expanded="false" data-target="#">
+                        {item.navBarItem} <img class="pl-1" src={download} alt="down"/>
+                      </p>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <div class="row">
+                            <template for:each={item.level2} for:item="subItem">
+                                <div key={subItem.link} class="col-md-4 infa-navbar-level2-col-text" style={getDotsImage} >
+                                  <div class="infa-inline-flex dropdown-item">
+                                    <a href={subItem.link} target={subItem.target} class="infa-navbar-level2-text-heading">{subItem.title}</a>
+                                  </div>
+                                  <p class="infa-navbar-level2-text-description infa-navbar-no-description-mobile">{subItem.description}</p>
+                                </div>
+                            </template>
+                          </div>
+                        </div>
+                      </li>
+                  </template>
+                  <div class="infa-nav-profile-mobile">
+                    <li class="nav-item dropdown infa-nav-username">
+                      <a class="nav-link infa-nav-link" href={profileUrl} target="_blank" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        John
+                      </a>
+                    </li>
+                    <div class ="infa-separator mobile"></div>
+                    <li class="nav-item dropdown infa-nav-logout">
+                      <a class="nav-link infa-nav-link" onclick={doLogout} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Logout
+                      </a>
+                    </li>
+                  </div>
+                </ul>
+              </div>
+            </nav>
+        </div> 
+      </div>
+    </div>
+  </template>

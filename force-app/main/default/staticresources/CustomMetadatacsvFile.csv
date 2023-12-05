@@ -1,0 +1,202 @@
+﻿DeveloperName,MasterLabel,License__c,Managed_Package_License__c,Permission_Set_License__c,Addon_License_Role__c,License_Management_Module__c
+IPS_Deal_Desk,IPS Deal Desk,PSE,pse,,FALSE,FALSE
+IPS_Enablement,IPS Enablement,PSE,pse,,FALSE,FALSE
+IPS_Intern,IPS Intern,PSE,pse,,FALSE,FALSE
+IPS_Resource_Management,IPS Resource Management,PSE,pse,,FALSE,FALSE
+Altify_Readonly_User,Altify Readonly User,Altify;CSM,ALTF;DMAPP_SAM,,TRUE,FALSE
+Finance_Revenue_Admin_User,Finance Revenue Admin User,,,,FALSE,FALSE
+KB_TR,KB TR,,,,FALSE,FALSE
+RO_Innovation_Application_Access,RO Innovation Application Access,,,,FALSE,FALSE
+Salesloft_User,Salesloft User,,,,FALSE,FALSE
+CPQ_Quote_Admin1,CPQ Quote Admin,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,TRUE,FALSE
+SalesforceCPQ_CPQAAPerm,Salesforce CPQ AA License,Salesforce CPQ AA License,,SalesforceCPQ_CPQAAPerm,FALSE,TRUE
+zAgile1,Jira/zAgile,Jira/zAgile,zsfjira,,TRUE,FALSE
+CPQ_Readonly,CPQ Readonly,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,TRUE,FALSE
+Finance_CMS_User,Finance CMS User,,,,FALSE,FALSE
+KB_Author1,KB Author,,,,FALSE,FALSE
+Renewals_Data_Analyst,Renewals - Data Analyst,,,,FALSE,FALSE
+Salesloft_User1,Salesloft User,,,,FALSE,FALSE
+IPS_SSC,IPS SSC,PSE,pse,,FALSE,FALSE
+RO_Innovation_Application_Access1,RO Innovation Application Access,,,,FALSE,FALSE
+SalesforceCPQ_CPQStandardPerm,Salesforce CPQ License,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,FALSE,TRUE
+Finance_Revenue1,Finance Revenue,,,,FALSE,FALSE
+PreSales1,PreSales,,,,FALSE,FALSE
+Customer_Success_Manager1,Customer Success Manager,Jira/zAgile;Altify;CSM,zsfjira;ALTF;DMAPP_SAM,,FALSE,FALSE
+IPS_Consultant,IPS Consultant,PSE,pse,,FALSE,FALSE
+Inbox1,Einstein Activity Capture/Inbox,,,,FALSE,FALSE
+Legal_LMS1,Legal LMS,,,,FALSE,FALSE
+DNBi_Credit_Check,DNBi Credit Check,,,,FALSE,FALSE
+IPS_Regional_Manager1,IPS Regional Manager,PSE,pse,,FALSE,FALSE
+Renewal_Rep,Renewal Rep,,,,FALSE,FALSE
+APXTConga4,Conga Composer,Conga Composer,APXTConga4,,FALSE,TRUE
+IPS_Administrator,IPS Administrator,PSE,pse,,FALSE,FALSE
+IPS_Practice_Manager1,IPS Practice Manager,PSE,pse,,FALSE,FALSE
+IPS_Resource_Management1,IPS Resource Management,PSE,pse,,FALSE,FALSE
+Altify_Normal_User,Altify Normal User,Altify;CSM,ALTF;DMAPP_SAM,,TRUE,FALSE
+IPS_Delivery_Manager,IPS Delivery Manager,PSE,pse,,FALSE,FALSE
+KB_CR1,KB CR,,,,FALSE,FALSE
+pse,PSE,PSE,pse,,FALSE,TRUE
+CPQ_Approvals1,CPQ Approvals,Salesforce CPQ License;Salesforce CPQ AA License,,SalesforceCPQ_CPQStandardPerm;SalesforceCPQ_CPQAAPerm,TRUE,FALSE
+CPQ_Billing3,CPQ Billing,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,FALSE,FALSE
+CPQ_Billing_Admin,CPQ Billing Admin,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,FALSE,FALSE
+IPS_Solution_Architect,IPS Solution Architect,PSE,pse,,FALSE,FALSE
+PSA_Project_Manager_Hybrid1,PSA Project Manager Hybrid,PSE,pse,,FALSE,FALSE
+Shipping_Provisioning_Fulfillment1,Shipping/Provisioning/Fulfillment,,,,FALSE,FALSE
+zAgile,Jira/zAgile,Jira/zAgile,zsfjira,,TRUE,FALSE
+PSA_User,PSA User,PSE,pse,,FALSE,FALSE
+zsfjira,Jira/zAgile,Jira/zAgile,zsfjira,,FALSE,TRUE
+APXT_Redlining,Conga Contracts,Conga Contracts,APXT_Redlining,,FALSE,TRUE
+IPS_Management,IPS Management,PSE,pse,,FALSE,FALSE
+IPS_Subcontractor1,IPS Subcontractor,PSE,pse,,FALSE,FALSE
+PSA_Deal_Desk,PSA Deal Desk,PSE,pse,,FALSE,FALSE
+Partner_Success_Managers1,Partner Success Managers,,,,FALSE,FALSE
+CPQ_Billing,CPQ Billing,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,FALSE,FALSE
+CPQ_Renewal_Rep1,CPQ Renewal Rep,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,FALSE,FALSE
+Conga_Composer,Conga Composer,Conga Composer,APXTConga4,,TRUE,FALSE
+Customer_Success_Operations,Customer Success Operations,Jira/zAgile;Altify;CSM,zsfjira;ALTF;DMAPP_SAM,,FALSE,FALSE
+Customer_Success_Technologist1,Customer Success Technologist,Jira/zAgile;Altify;CSM,zsfjira;ALTF;DMAPP_SAM,,FALSE,FALSE
+Finance_Booking_Super_User1,Finance Booking Super User,,,,FALSE,FALSE
+Application_Support,Application Support,Salesforce CPQ License;Salesforce CPQ AA License,,SalesforceCPQ_CPQStandardPerm;SalesforceCPQ_CPQAAPerm,FALSE,FALSE
+IPS_Consultant1,IPS Consultant,PSE,pse,,FALSE,FALSE
+DNBi_Credit_Check1,DNBi Credit Check,,,,FALSE,FALSE
+PSA_Resource_Manager1,PSA Resource Manager,PSE,pse,,FALSE,FALSE
+KB_CR,KB CR,,,,FALSE,FALSE
+Finance_Booking_Super_User,Finance Booking Super User,,,,FALSE,FALSE
+PreSales,PreSales,,,,FALSE,FALSE
+ALTF,Altify,Altify,ALTF;DMAPP_SAM,,FALSE,TRUE
+IPS_Portfolio_Owner1,IPS Portfolio Owner,PSE,pse,,FALSE,FALSE
+Legal_Agreement_Super_Users,Legal Agreement Super Users,,,,FALSE,FALSE
+PSA_Project_Manager,PSA Project Manager,PSE,pse,,FALSE,FALSE
+PSA_Sales1,PSA Sales,PSE,pse,,FALSE,FALSE
+SDOC,SDocs,SDocs,SDOC,,FALSE,TRUE
+Hero_Read_Only_User,Hero Read Only User,,,,FALSE,FALSE
+Informatica_Network_Admin_Moderators1,Informatica Network - Admin/Moderators,,,,FALSE,FALSE
+CSM_Read_Only1,CSM Read Only,,,,FALSE,FALSE
+Sdocs1,SDocs,Sdocs,SDOC,,TRUE,FALSE
+Customer_Success_Manager,Customer Success Manager,Jira/zAgile;Altify;CSM,zsfjira;ALTF;DMAPP_SAM,,FALSE,FALSE
+Deal_strategy_User,Deal strategy User,,,,FALSE,FALSE
+IPS_Associate_Consultant1,IPS Associate Consultant,PSE,pse,,FALSE,FALSE
+IPS_Senior_Principal_Consultant1,IPS Senior Principal Consultant,PSE,pse,,FALSE,FALSE
+Informatica_Network_Admin_Moderators,Informatica Network - Admin/Moderators,,,,FALSE,FALSE
+KB_PAM_EOL,KB PAM EOL,,,,FALSE,FALSE
+Marketer,Marketer,,,,FALSE,FALSE
+Altify_Readonly_User1,Altify Readonly User,Altify;CSM,ALTF;DMAPP_SAM,,TRUE,FALSE
+IPS_Regional_Director,IPS Regional Director,PSE,pse,,FALSE,FALSE
+Infogenie,Infogenie,,,,FALSE,FALSE
+Salesloft_Admin,Salesloft Admin,,,,FALSE,FALSE
+Sdocs,SDocs,Sdocs,SDOC,,TRUE,FALSE
+Product_and_Pricing1,Product and Pricing,,,,FALSE,FALSE
+Legal_LMS,Legal LMS,,,,FALSE,FALSE
+Partner_Success_Users1,Partner Success Users,,,,FALSE,FALSE
+Sales_Manager_Super_User1,Sales Manager Super User,,,,FALSE,FALSE
+GCS_Manager,GCS Manager,,,,FALSE,FALSE
+CPQ_Approvals_Admin_Renewals3,CPQ Approvals Admin,,,,FALSE,FALSE
+IPS_Principal_Consultant1,IPS Principal Consultant,PSE,pse,,FALSE,FALSE
+IPS_Regional_Manager,IPS Regional Manager,PSE,pse,,FALSE,FALSE
+All_Available_Licenses,All Available Licenses,0,Altify;Conga Composer;Conga Contracts;PSE;Jira/zAgile;SDocs;CSM,Salesforce CPQ AA License;Salesforce CPQ License,FALSE,TRUE
+PSA_Migration_User1,PSA Migration User,PSE,pse,,FALSE,FALSE
+Finance_Revenue_Admin_User1,Finance Revenue Admin User,,,,FALSE,FALSE
+CPQ_Quote1,CPQ Quote,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,TRUE,FALSE
+GCS_Admin,GCS Admin,,,,FALSE,FALSE
+IPS_Management1,IPS Management,PSE,pse,,FALSE,FALSE
+IPS_PS_Operations1,IPS PS Operations,PSE,pse,,FALSE,FALSE
+Conga_Composer1,Conga Composer,Conga Composer,APXTConga4,,TRUE,FALSE
+DocuSign1,DocuSign,,,,FALSE,FALSE
+GCS_Admin1,GCS Admin,,,,FALSE,FALSE
+PSA_Read_Only,PSA Restricted user,PSE,pse,,FALSE,FALSE
+DMAPP_SAM,CSM,CSM,DMAPP_SAM,,FALSE,TRUE
+Legal_Agreement_Super_Users1,Legal Agreement Super Users,,,,FALSE,FALSE
+PSA_Migration_User,PSA Migration User,PSE,pse,,FALSE,FALSE
+IPS_Principal_Consultant,IPS Principal Consultant,PSE,pse,,FALSE,FALSE
+IPS_Team_Manager1,IPS Team Manager,PSE,pse,,FALSE,FALSE
+CSM_Manager,CSM Manager,Jira/zAgile;Altify;CSM,zsfjira;ALTF;DMAPP_SAM,,FALSE,FALSE
+Conga_Contracts1,Conga Contracts,Conga Contracts,APXT_Redlining,,FALSE,FALSE
+KB_TR1,KB TR,,,,FALSE,FALSE
+Legal_Commercial1,Legal Commercial,Conga Contracts,APXT_Redlining,,FALSE,FALSE
+Renewals_Data_Analyst1,Renewals - Data Analyst,,,,FALSE,FALSE
+CPQ_Approvals,CPQ Approvals,Salesforce CPQ License;Salesforce CPQ AA License,,SalesforceCPQ_CPQStandardPerm;SalesforceCPQ_CPQAAPerm,TRUE,FALSE
+CSM_Read_Only,CSM Read Only,,,,FALSE,FALSE
+Conga_Contracts,Conga Contracts,Conga Contracts,APXT_Redlining,,FALSE,FALSE
+Legal_Agreement_Users,Legal Agreement Users,,,,FALSE,FALSE
+Salesloft_Admin1,Salesloft Admin,,,,FALSE,FALSE
+Shipping_Provisioning_Fulfillment,Shipping/Provisioning/Fulfillment,,,,FALSE,FALSE
+CPQ_Billing1,CPQ Billing,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,FALSE,FALSE
+Five91,Five9,,,,FALSE,FALSE
+GCS_User,GCS User,,,,FALSE,FALSE
+PSA_Subcontractor,PSA Subcontractor,PSE,pse,,FALSE,FALSE
+Sales_Manager_Super_User,Sales Manager Super User,,,,FALSE,FALSE
+GCS_User1,GCS User,,,,FALSE,FALSE
+Inbox,Einstein Activity Capture/Inbox,,,,FALSE,FALSE
+Legal_Commercial,Legal Commercial,Conga Contracts,APXT_Redlining,,FALSE,FALSE
+PSA_Deal_Desk1,PSA Deal Desk,PSE,pse,,FALSE,FALSE
+Partner_Fulfilment_Group,Partner Fulfilment Group,,,,FALSE,FALSE
+Finance_Revenue,Finance Revenue,,,,FALSE,FALSE
+IPS_Practice_Manager,IPS Practice Manager,PSE,pse,,FALSE,FALSE
+PSA_Project_Manager1,PSA Project Manager,PSE,pse,,FALSE,FALSE
+GCS_Manager1,GCS Manager,,,,FALSE,FALSE
+IPS_Administrator1,IPS Administrator,PSE,pse,,FALSE,FALSE
+IPS_SSC1,IPS SSC,PSE,pse,,FALSE,FALSE
+PSA_Read_Only1,PSA Restricted user,PSE,pse,,FALSE,FALSE
+Partner_Success_Users,Partner Success Users,,,,FALSE,FALSE
+Altify_Admin_User,Altify Admin User,Altify;CSM,ALTF;DMAPP_SAM,,TRUE,FALSE
+CSM_Manager1,CSM Manager,Jira/zAgile;Altify;CSM,zsfjira;ALTF;DMAPP_SAM,,FALSE,FALSE
+Finance_Account_Billing1,Finance Account & Billing,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,FALSE,FALSE
+PSA_Sales,PSA Sales,PSE,pse,,FALSE,FALSE
+Partner_Fulfilment_Group1,Partner Fulfilment Group,,,,FALSE,FALSE
+Sales_Super_User,Sales Super User,,,,FALSE,FALSE
+IPS_Senior_Principal_Consultant,IPS Senior Principal Consultant,PSE,pse,,FALSE,FALSE
+CPQ_Approvals_Admin,CPQ Approvals Admin,Salesforce CPQ License;Salesforce CPQ AA License,,SalesforceCPQ_CPQStandardPerm;SalesforceCPQ_CPQAAPerm,TRUE,FALSE
+IPS_Team_Manager,IPS Team Manager,PSE,pse,,FALSE,FALSE
+Five9,Five9,,,,FALSE,FALSE
+IPS_Subcontractor,IPS Subcontractor,PSE,pse,,FALSE,FALSE
+Partner_Success_Managers,Partner Success Managers,,,,FALSE,FALSE
+SFDC_Reporting,SFDC Reporting,,,,FALSE,FALSE
+CSM_Success_Internal_Users,Success - Internal Users,,,,FALSE,FALSE
+IPS_Senior_Consultant,IPS Senior Consultant,PSE,pse,,FALSE,FALSE
+CPQ_Readonly1,CPQ Readonly,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,TRUE,FALSE
+Renewal_Rep1,Renewal Rep,,,,FALSE,FALSE
+IPS_Deal_Desk1,IPS Deal Desk,PSE,pse,,FALSE,FALSE
+Infogenie1,Infogenie,,,,FALSE,FALSE
+CPQ_Quote_Admin,CPQ Quote Admin,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,TRUE,FALSE
+IPS_PS_Operations,IPS PS Operations,PSE,pse,,FALSE,FALSE
+IPS_Subcon_Retainer1,IPS Subcon-Retainer,PSE,pse,,FALSE,FALSE
+PSA_Subcontractor1,PSA Subcontractor,PSE,pse,,FALSE,FALSE
+IPS_Associate_Consultant,IPS Associate Consultant,PSE,pse,,FALSE,FALSE
+SOG1,SOG,,,,FALSE,FALSE
+CPQ_Approvals_Admin1,CPQ Approvals Admin,Salesforce CPQ License;Salesforce CPQ AA License,,SalesforceCPQ_CPQStandardPerm;SalesforceCPQ_CPQAAPerm,TRUE,FALSE
+CPQ_Billing_Admin1,CPQ Billing Admin,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,FALSE,FALSE
+DocuSign,DocuSign,,,,FALSE,FALSE
+IPS_Solution_Architect1,IPS Solution Architect,PSE,pse,,FALSE,FALSE
+Marketer1,Marketer,,,,FALSE,FALSE
+Product_and_Pricing,Product and Pricing,,,,FALSE,FALSE
+Sales_Super_User1,Sales Super User,,,,FALSE,FALSE
+Altify_Admin_User1,Altify Admin User,Altify;CSM,ALTF;DMAPP_SAM,,TRUE,FALSE
+IPS_Intern1,IPS Intern,PSE,pse,,FALSE,FALSE
+CPQ_Renewal_Rep,CPQ Renewal Rep,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,FALSE,FALSE
+Finance_Account_Billing,Finance Account & Billing,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,FALSE,FALSE
+Generic_Sales_User,Sales Rep/Manager,,,,FALSE,FALSE
+IPS_Senior_Consultant1,IPS Senior Consultant,PSE,pse,,FALSE,FALSE
+PSA_Operations,PSA Operations,PSE,pse,,FALSE,FALSE
+PSA_User1,PSA User,PSE,pse,,FALSE,FALSE
+Deal_strategy_User1,Deal strategy User,,,,FALSE,FALSE
+Altify_Normal_User1,Altify Normal User,Altify,ALTF,,TRUE,FALSE
+Finance_CMS_User1,Finance CMS User,,,,FALSE,FALSE
+Legal_Agreement_Users1,Legal Agreement Users,,,,FALSE,FALSE
+SOG,SOG,,,,FALSE,FALSE
+Customer_Success_Technologist,Customer Success Technologist,Jira/zAgile;Altify;CSM,zsfjira;ALTF;DMAPP_SAM,,FALSE,FALSE
+PSA_Resource_Manager,PSA Resource Manager,PSE,pse,,FALSE,FALSE
+IPS_Subcon_Retainer,IPS Subcon-Retainer,PSE,pse,,FALSE,FALSE
+CPQ_Approvals_Admin_Renewals2,CPQ Approvals Admin,,,,FALSE,FALSE
+IPS_Portfolio_Owner,IPS Portfolio Owner,PSE,pse,,FALSE,FALSE
+CPQ_Billing2,CPQ Billing,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,FALSE,FALSE
+Generic_Sales_BDM,Generic Sales BDM,,,,FALSE,FALSE
+IPS_Delivery_Manager1,IPS Delivery Manager,PSE,pse,,FALSE,FALSE
+KB_Author,KB Author,,,,FALSE,FALSE
+PSA_Operations1,PSA Operations,PSE,pse,,FALSE,FALSE
+CPQ_Approvals_Admin_Renewals,CPQ Approvals Admin,Salesforce CPQ License;Salesforce CPQ AA License,,SalesforceCPQ_CPQStandardPerm;SalesforceCPQ_CPQAAPerm,TRUE,FALSE
+CPQ_Quote,CPQ Quote,Salesforce CPQ License,,SalesforceCPQ_CPQStandardPerm,TRUE,FALSE
+Customer_Success_Operations1,Customer Success Operations,Jira/zAgile;Altify;CSM,zsfjira;ALTF;DMAPP_SAM,,FALSE,FALSE
+KB_PAM_EOL1,KB PAM EOL,,,,FALSE,FALSE
+IPS_Enablement1,IPS Enablement,PSE,pse,,FALSE,FALSE
+IPS_Regional_Director1,IPS Regional Director,PSE,pse,,FALSE,FALSE
+PSA_Project_Manager_Hybrid,PSA Project Manager Hybrid,PSE,pse,,FALSE,FALSE

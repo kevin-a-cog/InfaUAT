@@ -1,0 +1,20 @@
+.center-align{
+    margin-left: 34%;
+}
+
+.middle-space{
+    max-width: 40px;
+}
+
+@media only screen and (max-width: 420px) {
+
+    .swap-first-layout-button{
+        display:flex;
+        flex-direction: column;
+  }
+
+    .swap-second-layout-button{
+        display: flex;
+        flex-direction: column-reverse;
+     }
+}

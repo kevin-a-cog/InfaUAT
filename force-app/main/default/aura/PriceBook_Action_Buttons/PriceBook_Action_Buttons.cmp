@@ -1,0 +1,602 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" controller="PriceBook_controller" access="global">
+    
+    
+    <lightning:workspaceAPI aura:id="workspace" />
+    <lightning:navigation aura:id="navService"/>
+    <aura:attribute name="pricebookObjCurr" type="Pricebook2" default="{ 'sobjectType' : 'Pricebook2'}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onLoad}"/>
+    <aura:attribute name="showClonePricebookPage" type="Boolean" default="false"/>
+    <aura:attribute name="refreshPriceBook" type="Boolean" default="false"/>
+    <aura:attribute name="customPriceBook" type="Boolean" default="false"/>
+    <aura:attribute name="standardPriceBook" type="Boolean" default="false"/>
+    <aura:attribute name="syncStatus" type="Boolean" default="false"/>
+    <aura:attribute name="showAllPBWarning" type="Boolean" default="false"/>
+    <aura:attribute name="showPricebookUpliftCard" type="Boolean" default="false"/>
+    <aura:attribute name="showAllPB" type="Boolean" default="false"/>
+    <aura:attribute name="retmsg" type="String"/>
+    <aura:attribute name="actionType" type="String"/>
+    <aura:attribute name="showOnlyPricebookUpliftCard" type="Boolean" default="false"/>
+    <aura:attribute name="pricebookObj" type="Pricebook2" default="{ 'sobjectType' : 'Pricebook2'}"/>
+    <aura:attribute name="lstPricebookUplift" type="Pricebook_Uplift__c[]"/>
+    <aura:attribute name="allPriceBook" type="Pricebook2[]"/>
+    <aura:attribute name="selectedPB" type="List"/>
+    <aura:attribute name="clonedPriceBookName" type="String"/>
+    <aura:attribute name="Product_Family__c" type="List"/>
+    <aura:attribute name="Pricing_Business_Model__c" type="List"/>
+    <aura:attribute name="Processing_Engine__c" type="List"/>
+    <aura:attribute name="Delivery_Method__c" type="List"/>
+    <aura:attribute name="Family__c" type="List"/>
+    <aura:attribute name="Forecast_Product__c" type="List"/>
+    <aura:attribute name="isSelectAll" type="boolean" default="false"/>
+    <aura:attribute name="spinneract" type="Boolean" default="false"/>
+	<aura:attribute name="errMsg" type="Boolean" default="false"/>
+	<aura:attribute name="errorMessage" type="String"/>    
+    <aura:attribute name="startDate" type="Date" default=""/>
+    <aura:attribute name="endDate" type="Date" default=""/>
+    
+    <force:recordData aura:id="recordEditor"
+                      layoutType="FULL"
+                      recordId="{!v.recordId}"/>
+    
+    <div class="flexipageComponent">
+        <div class="container forceRelatedListSingleContainer">
+            <article class="slds-card slds-card_boundary forceRelatedListCardDesktop" aria-describedby="header"  >
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <div class="extraSmall forceEntityIcon">
+                                <span class="uiImage"  />
+                                <lightning:icon iconName="standard:action_list_component" size="small" ></lightning:icon>
+                            </div>
+                        </div>
+                        <div class="slds-media__body" >
+                            <h2 id="header">
+                                <span class="slds-text-heading--small slds-truncate slds-m-right--xx-small" >Quick Links</span>
+                            </h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__header slds-grid">
+					<lightning:layout verticalAlign="center" multipleRows="true">
+                       <aura:if isTrue="{!v.syncStatus}">
+                            <aura:if isTrue="{!v.customPriceBook}">
+                                <lightning:layoutItem flexibility="auto" size="12">
+                                    <lightning:button class="icon-btn-custom" iconName="utility:clone" variant="base" label="Clone New Pricebook" title="Clone New Pricebook" onclick="{! c.clonePricebook }"/>
+                                </lightning:layoutItem>
+                            </aura:if>
+                            <aura:if isTrue="{!v.refreshPriceBook}">
+                                <lightning:layoutItem flexibility="auto" size="12">
+                                    <lightning:button class="icon-btn-custom" iconName="utility:update" variant="base" label="Update/Refresh This Pricebook" title="Update This Pricebook" onclick="{! c.updatePricebookEntries }"/>
+                                </lightning:layoutItem>
+                            </aura:if>
+                            <aura:if isTrue="{!v.standardPriceBook}">
+                                <lightning:layoutItem flexibility="auto" size="12">
+                                    <lightning:button class="icon-btn-custom" iconName="utility:update" variant="base" label="Refresh All PriceBooks" title="Refresh All PriceBooks" onclick="{! c.showAllPBRefresh }"/>
+                                </lightning:layoutItem>
+                            </aura:if>
+                        </aura:if>
+                    </lightning:layout>
+                </div>
+            </article>
+        </div>
+    </div>
+    
+    <aura:if isTrue="{!v.showClonePricebookPage}">
+        <div>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-2">
+                <div class="slds-modal__container" style="height:88%;top:80px;">
+                    <header class="slds-modal__header">
+                        <button class="glc-button slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeTab}">
+                            <lightning:icon class="slds-button__icon slds-button__icon_large fillColor icn" iconName="utility:close" size="x-small" alternativeText="close" onclick="{!c.closeTab}"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">
+                            Clone Pricebook
+                        </h2>
+                    </header>
+                    
+                    
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-modal__content slds-grid slds-nowrap modal-overflow slds-scrollable" id="modal-content-id-2" style="position:relative;">
+                                <aura:if isTrue="{!v.spinneract}">
+                                        <div class="slds-backdrop slds-backdrop_open">
+                                            <lightning:spinner variant="brand"  title="Processing......" alternativeText="Processing......" size="large"/>
+                                        </div>
+                                    </aura:if> 
+                                <div class="slds-col slds-grid slds-grid_vertical slds-nowrap">
+                                    <div class=" slds-grow">
+                                        <div class="slds-p-around--small slds-align_absolute-center">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-grid slds-wrap slds-gutters">
+                                                        <div class="slds-col slds-size_1-of-1">
+                                                            <div class="slds-grid slds-wrap slds-gutters">
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <div class="slds-col slds-size_1-of-1 inputRestriction">
+                                                                        <lightning:input type="text" name="Price Book Name" label="Price Book Name" value="{!v.clonedPriceBookName}"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <div class="slds-col slds-size_1-of-1 inputRestriction">
+                                                                        <lightning:input type="checkbox" name="Active" label="Active" checked="{!v.pricebookObj.IsActive}"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <div class="slds-col slds-size_1-of-1 inputRestriction">
+                                                                        <lightning:input type="text" name="Description" label="Description" value="{!v.pricebookObj.Description}"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <div class="slds-col slds-size_1-of-1 inputRestriction">
+                                                                        Cloned From<br/>
+                                                                        <a onclick="{!c.navigateToPricebook}" href="javascript:void(0)">{!v.pricebookObj.Name} </a>
+
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <div class="slds-col slds-size_1-of-1 inputRestriction">
+                                                                        <ui:inputDate class="input-min-height" value="{!v.startDate}" displayDatePicker="true" label="Start Date"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <div class="slds-col slds-size_1-of-1 inputRestriction">
+                                                                        <ui:inputDate class="input-min-height" value="{!v.endDate}" displayDatePicker="true" label="End Date"/>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                       <!-- <div class="slds-section slds-is-open slds-m-top_small full-width">
+                                                            <h3 class="slds-section__title slds-theme_shade">
+                                                                <span class="slds-truncate slds-p-horizontal_small" title="Multi Currency Information">Multi Currency Information</span>
+                                                            </h3>
+                                                            <div aria-hidden="false" class="slds-section__content">
+                                                                <div class="slds-grid slds-wrap slds-gutters">
+                                                                    <div class="slds-col slds-size_1-of-1">
+                                                                        <div class="slds-col slds-size_1-of-1 inputRestriction">
+                                                                            <c:strike_lookup label="Multi Currency Master" 
+                                                                                             object="Multi_Currency_Master__c"
+                                                                                             searchField="Name"
+                                                                                             placeholder="Select an option"
+                                                                                             iconName="custom:custom50"
+                                                                                             order="Name"
+                                                                                             limit="5"
+                                                                                             value="{!v.pricebookObj.Multi_Currency_Master__c}"
+                                                                                             loadingMessage="Loading..."
+                                                                                             required="true"
+                                                                                             errorMessage="Invalid input"                                                                                             
+                                                                                             filter="Active__c = true AND End_Date__c >= today"
+                                                                                             aura:id="multiCurrencyTree"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            
+                            
+                        </div>
+                    </div>
+                    
+                    <footer class="slds-modal__footer">
+                        <div class="slds-button slds-float--left">
+                            <lightning:button label="Cancel" name="Cancel" onclick="{!c.closeTab}"  />
+                        </div>
+                        <div class="slds-button slds-float--right">
+                            <lightning:button label="Next" onclick="{!c.addPricebookUplift}"/>
+                            <!-- <lightning:button label="Save &amp; New Case Reason" variant="brand"  onclick="{!c.saveAndNew}"/>
+                            <lightning:button label="Add Products" variant="brand" onclick="{!c.showAssociatedProducts}"  />-->
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    
+    
+     <aura:if isTrue="{!v.showAllPBWarning}">
+    	<div>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-2">
+                <div class="slds-modal__container" style="height:50%;top:80px;">
+                    <header class="slds-modal__header">
+                        <button class="glc-button slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeTab}">
+                            <lightning:icon class="slds-button__icon slds-button__icon_large fillColor icn" iconName="utility:close" size="x-small" alternativeText="close" onclick="{!c.closeTab}"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">
+                          <lightning:icon iconName="utility:warning" size="medium" variant="warning"/>  Warning 
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-grid slds-nowrap modal-overflow slds-scrollable_x" id="modal-content-id-2">
+                        <div class="slds-col slds-grid slds-grid_vertical slds-nowrap slds-scrollable">
+                            <div class="slds-grow">                                
+                                <div class="slds-p-top--small slds-scrollable">
+                                    <p font-size = "x-large">
+                                        <ul class="slds-list_dotted">
+                                    <li>You will see list of PriceBooks which are available for refresh in next screen.</li>
+                                    <li>You will not see current uplift on the PriceBook or apply new uplift when request for all PriceBook refresh.</li>
+                                    <li>Please make sure that currency added under each Custom PriceBook is already added on Standard PriceBook.</li>
+                                   <li> Please make sure that the priority is set appropriate for the uplifts. </li>
+                                   <li> Please make sure that there are appropriate Uplifts and Currency Conversion Rates under each PriceBook before submitting the mass update request.</li>
+                                   <li> After submitting the request, status of the PriceBook will be updated to "Update In Progress".</li>
+                                    </ul>
+                                    </p>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+       <footer class="slds-modal__footer">
+                        <div class="slds-float--left">
+                            
+                                <lightning:button label="Cancel" name="Cancel" onclick="{!c.cancelFlow}" />
+                        </div>
+                        <div class="slds-float--right">
+                            <div class="slds-button">
+                               	<lightning:button label="Next" name="Next" onclick="{!c.getUpdateallPriceBooks}" />
+                                
+                            </div>
+                        </div>
+                    </footer>
+          
+                </div>
+            </section>
+           
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+        	
+    </aura:if>
+    
+    
+    
+     <aura:if isTrue="{!v.errMsg}">
+    	<div>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-2">
+                <div class="slds-modal__container" style="height:50%;top:80px;">
+                    <header class="slds-modal__header">
+                        <button class="glc-button slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeTab}">
+                            <lightning:icon class="slds-button__icon slds-button__icon_large fillColor icn" iconName="utility:close" size="x-small" alternativeText="close" onclick="{!c.closeTab}"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">ERROR</h2>
+                         <lightning:icon iconName="utility:error" alternativeText="Error!" variant="error" title="error variant" />
+                          <p class="slds-m-top_x-small">The Action is not complete.</p>
+                    </header>
+                    		<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                                            <p>
+                                                {!v.errorMessage} <br/> <br/> <br/>
+                                                <b>If the error message is understandable to resolve issue, please go back to PriceBook and make necessary changes. Else, please submit a ticket to <a href="mailto:gsd@informatica.com">Global Service Desk</a> with the screenshot of error and PriceBook details</b>
+                                            </p>
+                                              </div>
+      					 <footer class="slds-modal__footer">
+                                      	<div class="slds-float--right">
+                                            <div class="slds-button">
+                                                <lightning:button label="Cancel" name="Cancel" onclick="{!c.cancelFlow}" />
+                                            </div>
+                                        </div>
+                                	</footer>
+          
+                </div>
+            </section>
+           
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+        	
+    </aura:if>
+    
+        
+    <aura:if isTrue="{!v.showAllPB}">
+    	<div>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-2">
+                <div class="slds-modal__container" style="height:88%;top:80px;">
+                    <header class="slds-modal__header">
+                        <button class="glc-button slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeTab}">
+                            <lightning:icon class="slds-button__icon slds-button__icon_large fillColor icn" iconName="utility:close" size="x-small" alternativeText="close" onclick="{!c.closeTab}"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">
+                            Refresh All PriceBooks
+                        </h2>
+                    </header>
+                   
+                                    
+                    <div class="slds-modal__content slds-grid slds-nowrap modal-overflow slds-scrollable_x" id="modal-content-id-2">
+                        <div class="slds-col slds-grid slds-grid_vertical slds-nowrap slds-scrollable">
+                            <div class=" slds-grow">                                
+                                <div class="slds-p-top--small slds-scrollable">
+                                    <lightning:spinner size="medium" aura:id="lx-spinner1" class="slds-show"/>
+                                    
+                                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped slds-no-row-hover" role="grid">
+                                        <thead>
+                                            <tr class="slds-text-title_caps">
+                                                <th>
+                                                    <label class="slds-checkbox">
+                           								 <ui:inputCheckbox value="{!v.isSelectAll}" change="{!c.handleSelectAllPB}" aura:id="selectAll"/>
+                           								 <span class="slds-checkbox--faux" />
+                           								 <span class="slds-form-element__label"></span>
+                        							</label>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="PriceBook Name">PriceBook Name</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Start Date">Start Date</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="End Date">End Date</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Active">Active</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Primary">Primary</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Version">Version</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Status">Status</div>
+                                                </th>
+                                                
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Last Run Summary">Last Run Summary</div>
+                                                </th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <aura:iteration items="{!v.allPriceBook}" var="allPBList" indexVar="indexPB">
+                                                <tr class="slds-border_bottom">
+                                                	<td>
+                                                        <label class="slds-checkbox">
+                                						<ui:inputCheckbox aura:id="checkPB" value="" text="{!allPBList.Id}"/>
+                               							 <span class="slds-checkbox--faux" />
+                                						<span class="slds-form-element__label"></span>
+                           								 </label>
+                                                    </td>
+                                                    <td>
+                                                    	<div class="slds-truncate" title="{!allPBList.Name}">{!allPBList.Name}</div>
+                                                    </td>
+                                                     <td>
+                                                    	<div class="slds-truncate" title="{!allPBList.Start_Date__c}">{!allPBList.Start_Date__c}</div>
+                                                    </td>
+                                                     <td>
+                                                    	<div class="slds-truncate" title="{!allPBList.End_Date__c}">{!allPBList.End_Date__c}</div>
+                                                    </td>
+                                                     <td>
+                                                    	  <lightning:icon iconName="action:approval" size="xx-small" alternativeText="Active PriceBook"/>
+                                                    </td>
+                                                    <td>
+                                                    	<lightning:icon iconName="action:approval" size="xx-small" alternativeText="Primary PriceBook"/>
+                                                    </td>
+                                                     <td>
+                                                    	<div class="slds-truncate" title="{!allPBList.Version__c}">{!allPBList.Version__c}</div>
+                                                    </td>
+                                                    <td>
+                                                    	<div class="slds-truncate" title="{!allPBList.Sync_Status__c}">{!allPBList.Sync_Status__c}</div>
+                                                    </td>
+                                                     <td>
+                                                    	<div class="slds-truncate" title="{!allPBList.Last_Run_Summary__c}">{!allPBList.Last_Run_Summary__c}</div>
+                                                    </td>
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <footer class="slds-modal__footer">
+                        <div class="slds-float--left">
+                            
+                                <lightning:button label="Cancel" name="Cancel" onclick="{!c.cancelFlow}" />
+                        </div>
+                        <div class="slds-float--right">
+                            <div class="slds-button">
+                               	<lightning:button label="Submit" name="Submit" onclick="{!c.updateAllPBController}" />
+                                
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+           
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+        	
+    </aura:if>
+    
+    
+    
+    <aura:if isTrue="{!v.showPricebookUpliftCard}">
+    	<div>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-2">
+                <div class="slds-modal__container" style="height:88%;top:80px;">
+                    <header class="slds-modal__header">
+                        <button class="glc-button slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeTab}">
+                            <lightning:icon class="slds-button__icon slds-button__icon_large fillColor icn" iconName="utility:close" size="x-small" alternativeText="close" onclick="{!c.closeTab}"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">
+                            Add Pricebook Uplift
+                        </h2>
+                    </header>
+                   
+                                    
+                    <div class="slds-modal__content slds-grid slds-nowrap modal-overflow slds-scrollable_x" id="modal-content-id-2">
+                        <div class="slds-col slds-grid slds-grid_vertical slds-nowrap slds-scrollable">
+                            <div class=" slds-grow">                                
+                                <div class="slds-p-top--small slds-scrollable">
+                                    <lightning:spinner size="medium" aura:id="lx-spinner1" class="slds-show"/>
+                                    <aura:if isTrue="{!v.spinneract}">
+                                        <div class="slds-backdrop slds-backdrop_open">
+                                            <lightning:spinner variant="brand"  title="Processing......" alternativeText="Processing......" size="large"/>
+                                        </div>
+                                    </aura:if> 
+                                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped slds-no-row-hover" role="grid">
+                                        <thead>
+                                            <tr class="slds-text-title_caps">
+                                                <th>
+                                                    <div class="slds-truncate" title="Product Family">Forecast Family</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate" title="Pricing/Business Model">Forecast Product</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate" title="Product Family">Product Family</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate" title="Pricing/Business Model">Pricing/Business Model</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate" title="Processing Engine">Processing Engine</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate" title="Delivery Method">Delivery Method</div>
+                                                </th>  
+                                                <th>
+                                                    <div class="slds-truncate" title="+- %">+ / - %</div>
+                                                </th>
+                                              <!--  <th>
+                                                    <div class="slds-truncate" title="Round-up To">Round-up To</div>
+                                                </th>-->
+                                                <th>
+                                                    <div class="slds-truncate" title="Priority">Priority</div>
+                                                </th>
+                                                
+                                                <th>
+                                                    <div class="slds-truncate" title="redIcon"/>
+                                                </th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <aura:iteration items="{!v.lstPricebookUplift}" var="pbUList" indexVar="indexPBU">
+                                                <tr class="slds-border_bottom">
+                                                    <!-- Forecast Family -->
+                                                    <td class="slds-text-body--regular slds-truncate">
+                                                        <lightning:select class="noLabel" variant="label-hidden"  value="{!pbUList.Family__c}" >
+                                                            <aura:iteration items="{!v.Family__c}" var="item">
+                                                                <option text="{!item.label}" value="{!item.value}"/>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </td>
+                                                    <!-- End Forecase Family -->
+                                                    <!-- Forecase Product -->
+                                                    <td class="slds-text-body--regular slds-truncate">
+                                                        <lightning:select class="noLabel" variant="label-hidden"  value="{!pbUList.Forecast_Product__c}" >
+                                                            <aura:iteration items="{!v.Forecast_Product__c}" var="item">
+                                                                <option text="{!item.label}" value="{!item.value}"/>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </td>
+                                                    <!-- End Forecast Product -->
+                                                    <!-- Product Family -->
+                                                    <td class="slds-text-body--regular slds-truncate">
+                                                        <lightning:select class="noLabel" variant="label-hidden"  value="{!pbUList.Product_Family__c}" >
+                                                            <aura:iteration items="{!v.Product_Family__c}" var="item">
+                                                                <option text="{!item.label}" value="{!item.value}"/>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </td>
+                                                    <!-- End Product Family -->
+                                                    <!-- Pricing Business Model -->
+                                                    <td class="slds-text-body--regular slds-truncate">
+                                                        <lightning:select class="noLabel" variant="label-hidden"  value="{!pbUList.Pricing_Business_Model__c}" >
+                                                            <aura:iteration items="{!v.Pricing_Business_Model__c}" var="item">
+                                                                <option text="{!item.label}" value="{!item.value}"/>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </td>
+                                                    <!-- End Pricing Business Model -->
+                                                    <!-- Processing Engine -->
+                                                    <td class="slds-text-body--regular slds-truncate">
+                                                        <lightning:select class="noLabel" variant="label-hidden" value="{!pbUList.Processing_Engine__c}">
+                                                            <aura:iteration items="{!v.Processing_Engine__c}" var="item">
+                                                                <option text="{!item.label}" value="{!item.value}"/>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </td>
+                                                    <!-- End Processing Engine -->
+                                                    <!-- Delivery Method -->
+                                                    <td class="slds-text-body--regular slds-truncate">
+                                                        <lightning:select class="noLabel" variant="label-hidden" value="{!pbUList.Delivery_Method__c}">
+                                                            <aura:iteration items="{!v.Delivery_Method__c}" var="item">
+                                                                <option text="{!item.label}" value="{!item.value}"/>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </td>
+                                                    <!-- End Delivery Method -->
+                                                    <!-- Percentage -->
+                                                    <td class="slds-text-body--regular slds-truncate">
+                                                        <lightning:input class="noLabel" variant="label-hidden" value="{!pbUList.Percentage__c}" required="True"/>
+                                                    </td>
+                                                    <!-- End Percentage -->
+                                                    <!-- Round up to -->
+                                                       <!-- <lightning:input class="noLabel" variant="label-hidden" value="{!pbUList.Round_up_To__c}" required="True"/>-->
+                                                    <!-- End Round up to -->
+                                                     <!-- Priority -->
+                                                    <td class="slds-text-body--regular slds-truncate">
+                                                        <lightning:input class="noLabel" variant="label-hidden" value="{!pbUList.Priority__c}" required="True"/>
+                                                    </td>
+                                                    <!-- End Priority -->
+                                                    <td>
+                                                        <aura:if isTrue="{!indexPBU != 0}">
+                                                            <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon" onclick="{!c.removeRow}" tabindex="{!indexPBU}"/>
+                                                            <span class="slds-assistive-text">Delete Icon</span>
+                                                        </aura:if>
+                                                    </td>
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <footer class="slds-modal__footer">
+                        <div class="slds-float--left">
+                                <lightning:button label="Back" name="Back" onclick="{!c.backtoEdit}" />
+                                <lightning:button label="Cancel" name="Cancel" onclick="{!c.cancelFlow}" />
+                        </div>
+                        <div class="slds-float--right">
+                            <div class="slds-button">
+                               
+                                <lightning:button label="Add More Pricebook Uplift" name="AddRow" onclick="{!c.AddRow}" />
+                                <aura:if isTrue="{!v.showOnlyPricebookUpliftCard}">
+                                	<lightning:button label="Save" name="Save" onclick="{!c.savePricebookUpliftController}" />
+                                	
+                                    <aura:set attribute="else">
+                                        <lightning:button label="Save" name="Save" onclick="{!c.savePricebook}" />
+                                    </aura:set>
+                                    
+                                </aura:if>
+                                
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+        	
+    </aura:if>
+</aura:component>

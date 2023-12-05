@@ -1,0 +1,17 @@
+<template> 
+    <div class="slds-p-top_x-small" style={tableHeight}>
+            <c-ipue-review-contact-data-table
+                key-field="contactId" 
+                selected-rows={selectedRecs}
+                data={collaborators} 
+                columns={columns}
+                default-sort-direction={defaultSortDirection}
+                sorted-direction={sortDirection}
+                sorted-by={sortedBy}
+                onsort={onHandleSort}
+                onsave={handleSave}
+                onpicklistchanged={picklistChanged}
+                onrowselection={handleRowSelection}>
+            </c-ipue-review-contact-data-table>
+        </div>    
+</template>

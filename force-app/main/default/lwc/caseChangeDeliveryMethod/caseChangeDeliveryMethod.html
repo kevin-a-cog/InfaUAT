@@ -1,0 +1,129 @@
+<!--
+/*
+ * Name			:	caseChangeDeliveryMethod
+ * Author		:	Balaji P
+ * Created Date	: 	6/17/2022
+ * Description	:	This LWC is used to change product, its related fields and override delivery method.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description							    Tag
+ **********************************************************************************************************
+ Balaji P		        6/17/2022		I2RT-6222		Initial version.					    N/A
+ Vignesh D		        3/31/2023		I2RT-7852		Show product and its related fields     T01
+                                                        along with override delivery method.
+ Vignesh D		        8/18/2023		I2RT-8847		Mandate override delivery method always T02                                                       
+ */
+-->
+<template>
+
+    <!-- Id for Quick Action. -->
+    <div style="display: none;">{recordId}</div>
+    
+    <!-- Lightning Spinner -->
+    <lightning-spinner alternative-text="Loading" size="large" lwc:if={showSpinner}></lightning-spinner>
+    
+    <!--Quick Action-->
+    <lightning-quick-action-panel header="Change Product / Override Delivery Method">
+
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-2 slds-p-around_x-small" lwc:if={productOBJ.show}>
+                <lightning-combobox name="product" label="Product" value={strSelectedProduct} options={lstProducts}
+                    onchange={inputChange} required dropdown-alignment="auto" message-when-value-missing={requiredFieldErrMsg}>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_x-small" lwc:if={versionOBJ.show}>
+                <lightning-combobox name="version" label="Version" value={strSelectedVersion} options={lstVersions}
+                    onchange={inputChange} dropdown-alignment="auto" read-only={disableVersion} required>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_x-small" lwc:if={componentOBJ.show}>
+                <lightning-combobox name="component" label="Component" value={strSelectedComponent} options={lstComponents}
+                    onchange={inputChange} dropdown-alignment="auto" read-only={disableComponent}>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_x-small" lwc:if={subCompOBJ.show}>
+                <lightning-combobox name="subcomponent" label="Sub Component" value={strSelectedSubcomponent}
+                    options={lstSubcomponents} onchange={inputChange} read-only={disableSubcomponent}>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_x-small" lwc:if={problemTypeOBJ.show}>
+                <lightning-combobox name="problemtype" label="Problem Type" value={strSelectedProblemType}
+                    options={lstProblemTypes} onchange={inputChange} dropdown-alignment="auto">
+                </lightning-combobox>
+            </div>
+        </div>
+        
+        <template lwc:if={isEPAvailable}>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                    <lightning-combobox label="Original Delivery Method" name="originaldeliveryMethod"
+                        value={origDeliveryMethod} options={lstOriginalDeliveryMethods} read-only>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                    <lightning-combobox label="Override Delivery Method as" name="deliveryMethod"
+                        placeholder="Select Delivery Method" value={deliveryMethod} options={deliveryMethodOptions}
+                        onchange={inputChange} required message-when-value-missing={requiredFieldErrMsg}
+                        dropdown-alignment="auto"> <!-- <T02> -->
+                    </lightning-combobox>
+                </div>
+            </div>
+    
+            <template if:true={showOrg}>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-input type="checkbox" label="Add Org Id Manually" name="orgCheckbox"
+                            checked={manualOrgFlag} onchange={inputChange}></lightning-input>
+                        <template if:false={manualOrgFlag}>
+                            <lightning-combobox label="Org Id" placeholder="Select Org ID" name="orgId" value={orgId}
+                                options={orgIdOptions} onchange={inputChange} required={isOrgIdRequired}
+                                message-when-value-missing={requiredFieldErrMsg} dropdown-alignment="auto">
+                            </lightning-combobox>
+                            <template if:false={orgsAvailable}>
+                                <label class="custom-slds-error">There are no Orgs to display.</label>
+                            </template>
+                        </template>
+                        <template if:true={manualOrgFlag}>
+                            <lightning-input type="text" label="Org Id" name="orgManual" placeholder="Enter Org Id"
+                                value={orgManual} onchange={inputChange} required={isOrgIdRequired}
+                                message-when-value-missing={requiredFieldErrMsg}>
+                            </lightning-input>
+                        </template>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-input type="checkbox" label="Add Org Id Manually" name="orgCheckbox"
+                            checked={manualOrgFlag} onchange={inputChange} class="hide"></lightning-input>
+                        <lightning-input type="text" label="Secure Agent" placeholder="" name="secureAgent"
+                            value={secureAgent} onchange={inputChange}>
+                        </lightning-input>
+                    </div>
+                </div>
+            </template>
+    
+            <template if:true={showEnvironment}>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-combobox label="Environment" name="environment" placeholder="Select Environment"
+                            value={environment} options={environmentOptions} dropdown-alignment="auto"
+                            onchange={inputChange} required message-when-value-missing={requiredFieldErrMsg}>
+                        </lightning-combobox>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-combobox label="Activity Type" name="activityType" placeholder="Select Activity Type"
+                            value={activityType} options={activityTypeOptions} dropdown-alignment="auto"
+                            onchange={inputChange} required message-when-value-missing={requiredFieldErrMsg}>
+                        </lightning-combobox>
+                    </div>
+                </div>
+            </template>
+        </template>
+        
+        <!-- Footer Buttons -->
+        <div slot="footer">
+            <lightning-button variant="neutral" label="Cancel" onclick={cancel}></lightning-button>
+            <lightning-button variant="brand" label="Save" onclick={save} class="slds-m-left_x-small"></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+    
+</template>

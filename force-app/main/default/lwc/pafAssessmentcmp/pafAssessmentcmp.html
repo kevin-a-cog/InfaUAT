@@ -1,0 +1,56 @@
+<!-- sldsValidatorIgnore -->
+<template>
+<div class="spinner slds-m-top_large slds-m-bottom_large">
+    <template if:true={boolDisplaySpinner}>
+        <lightning-spinner variant="brand" size="medium" class="slds-m-top_large slds-m-bottom_large"></lightning-spinner>
+    </template>
+</div>
+<template if:true={showModal}>
+    <header class="slds-modal__header">
+        <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">Readiness Assessment</h2>
+    </header>
+    <div class="slds-card">
+        <lightning-card variant="Narrow">
+            <!-- Buttons to handle Expand /Collapse All [T1 START]-->
+            <template if:true={boolshowCopyBtn}>
+                <template if:true={boolclonedisplay}>
+                    <lightning-button variant="brand" class="slds-m-top_small" onclick={copyAllValues} name="cloneAll" label="Copy Prior" slot="actions"></lightning-button>
+                </template>
+            </template>
+            <template if:false={boolclonedisplay}>
+                <lightning-button-icon icon-name="utility:close" alternative-text="close"  name="close" class="slds-m-left_xx-small" onclick={handleenableClose} if:true={boolEnableEditing} slot="actions"></lightning-button-icon>
+                <template if:false={viewMode}>
+                    <lightning-button-icon icon-name="utility:edit" alternative-text="edit" name="edit" class="slds-m-left_xx-small" onclick={handleenableEdit} if:false={boolEnableEditing} slot="actions"> </lightning-button-icon>
+                </template>
+            </template>
+            <lightning-button-icon icon-name="utility:expand_all" alternative-text="Expand" onclick={handletoggleCollapse} name="expandAll" class="slds-m-left_small" title="Expand All" if:false={boolExpandAll} slot="actions" > </lightning-button-icon>					
+            <lightning-button-icon icon-name="utility:collapse_all" alternative-text="Collapse" onclick={handletoggleCollapse} name="collapseAll" class="slds-m-left_small"
+                title="Collapse All" if:true={boolExpandAll} slot="actions" ></lightning-button-icon>
+                
+
+        </lightning-card>
+    </div>          
+    <div class="slds-card">
+        <!-- Only display once the spinner is done.-->
+        <template if:false={boolDisplaySpinner}>
+            <!-- Table section. -->
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-1" style="width:100%; margin-left: auto; margin-right: auto;">
+                    <template if:true={boolshowDT}>
+                            <template if:true={boolisPageLoad}>
+                                <div class="slds-scrollable_x"><c-global-data-table class={objParameters.strTableClass} obj-parameters={objParameters} onaction={executeAction} load-in-line-buttons bool-excluded-scenario onpreviewcontent={prevRecData} displayvalue={fieldAPINameValue} enable-editing={boolEnableEditing} bool-enable-edit-frm-parent={boolEnableEditFrmParent} slider-min-range="1" slider-max-range="3" slider-step-range="1" booldisplaycopy={booldisplaycopy} bool-show-preview-icon={boolShowPreviewIcon} has-nested-childs view-mode={viewMode}></c-global-data-table></div>
+                            </template>
+                            <template if:false={boolisPageLoad}>
+                                <div class="slds-scrollable_x"><c-global-data-table class={objParameters.strTableClass} obj-parameters={objParameters} onaction={executeAction} load-in-line-buttons bool-excluded-scenario onpreviewcontent={prevRecData} displayvalue={fieldAPINameValue} enable-editing={boolEnableEditing} bool-enable-edit-frm-parent={boolEnableEditFrmParent} slider-min-range="1" slider-max-range="3" slider-step-range="1" booldisplaycopy={booldisplaycopy} bool-show-preview-icon={boolShowPreviewIcon} has-nested-childs view-mode={viewMode}></c-global-data-table></div>
+                            </template>
+                    </template>
+                    <!-- Adoption factor View Copy Prior Button-->
+                    <template if:false={boolshowDT}>
+                        <div class="slds-scrollable_x"></div><c-global-data-table class={copyObjParameters.strTableClass} obj-parameters={copyObjParameters} onaction={executeAction} load-in-line-buttons bool-excluded-scenario onpreviewcontent={prevRecData} displayvalue={fieldAPINameValue} enable-editing={boolEnableEditing} bool-enable-edit-frm-parent={boolEnableEditFrmParent} slider-min-range="1" slider-max-range="3" slider-step-range="1" booldisplaycopy={booldisplaycopy} bool-show-preview-icon={boolShowPreviewIcon} has-nested-childs view-mode={viewMode}></c-global-data-table></div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>       
+</template>
+</template>

@@ -1,0 +1,125 @@
+<!-- Tejasvi Royal -> I2RT-2682: Weekend/Holiday Support & case Monitoring/Hand-off
+    Last Modified Date: 20 August 2021 (Earlier: 8 July 2021)
+    Last Modified By: Tejasvi Royal -->
+<template>
+    <lightning-combobox data-id="handoffType" name="handoffType" label="Handoff/Monitoring Type" required
+        placeholder="Select the type of Handoff" options={handoffTypeOptions} onchange={handleHandoffTypeChange}
+        field-level-help={handoffTypeHelp}>
+    </lightning-combobox>
+    <br />
+    <template if:true={isDirectHandoff}>
+        <c-custom-lookup-field label="Support Engineer or Support Queue"
+            placeholder="Select the Engineer or Queue for Direct Handoff" onsearch={handleCombinedLookupSearch}
+            onselectionchange={handleCombinedLookupSelectionChange} required>
+        </c-custom-lookup-field>
+        <br />
+    </template>
+    <!-- <template if:true={isHandoffToUser}>
+        <c-custom-lookup-field label="Support Engineer" placeholder="Select the Engineer for Handoff" required
+            onsearch={handleUserLookupSearch} onselectionchange={handleUserLookupSelectionChange}>
+        </c-custom-lookup-field>
+        <br />
+    </template>
+    <template if:true={isHandoffToQueue}>
+        <c-custom-lookup-field label="Support Queue" placeholder="Select the Queue for Handoff" required
+            onsearch={handleQueueLookupSearch} onselectionchange={handleQueueLookupSelectionChange}>
+        </c-custom-lookup-field>
+        <br />
+    </template> -->
+    <template if:true={isFollowTheSunModel}>
+        <!--<template if:true={handoffQueuePickListValues.data}>
+                <lightning-combobox data-id="handoffQueue" name="handoffQueue" label="Monitoring Queue" required
+                    placeholder="Select the Queue for Handoff on Inbound Activity" options={handoffQueuePickListValues.data.values}
+                    onchange={handleHandoffQueueChange}>
+                </lightning-combobox>
+                <br />
+            </template>-->
+        <c-custom-lookup-field label="Monitoring Queue" placeholder="Select the Queue for Monitoring" required
+            onsearch={handleQueueLookupSearch} onselectionchange={handleQueueLookupSelectionChange}>
+        </c-custom-lookup-field>
+        <br />
+    </template>
+    <template if:true={isWeekendHolidayMonitoring}>
+        <lightning-input label="Handoff Start Date/Time" type="datetime" data-name="handoffstartdatetime"
+            field-level-help="Click 'Custom Handoff Date/Time' Button to enable custom Handoff Start Date/Time."
+            value={supportStartDateTime} onchange={handleHandoffStartDTChange} disabled={isWHDateTimeNotCustom}
+            required={isWHDateTimeCustom}>
+        </lightning-input>
+        <br />
+        <lightning-input label="Handoff End Date/Time" type="datetime" data-name="handoffenddatetime"
+            field-level-help="Click 'Custom Handoff Date/Time' Button to enable custom Handoff End Date/Time."
+            value={supportEndDateTime} onchange={handleHandoffEndDTChange} disabled={isWHDateTimeNotCustom}
+            required={isWHDateTimeCustom}>
+        </lightning-input>
+        <br />
+        <p class="slds-form-element__label slds-form-element__legend">
+            Days for Handoff
+        </p>
+        <lightning-button-group>
+            <lightning-button label="1" variant="brand" onclick={handleDaysToSupportChange}
+                disabled={isWHDateTimeCustom}>
+            </lightning-button>
+            <lightning-button label="2" variant="neutral" onclick={handleDaysToSupportChange}
+                disabled={isWHDateTimeCustom}>
+            </lightning-button>
+            <lightning-button label="3" variant="neutral" onclick={handleDaysToSupportChange}
+                disabled={isWHDateTimeCustom}>
+            </lightning-button>
+            <lightning-button label="4" variant="neutral" onclick={handleDaysToSupportChange}
+                disabled={isWHDateTimeCustom}>
+            </lightning-button>
+            <lightning-button label="5" variant="neutral" onclick={handleDaysToSupportChange}
+                disabled={isWHDateTimeCustom}>
+            </lightning-button>
+            <lightning-button label="6" variant="neutral" onclick={handleDaysToSupportChange}
+                disabled={isWHDateTimeCustom}>
+            </lightning-button>
+            <lightning-button label="7" variant="neutral" onclick={handleDaysToSupportChange}
+                disabled={isWHDateTimeCustom}>
+            </lightning-button>
+            <lightning-button label="8" variant="neutral" onclick={handleDaysToSupportChange}
+                disabled={isWHDateTimeCustom}>
+            </lightning-button>
+            <lightning-button label="9" variant="neutral" onclick={handleDaysToSupportChange}
+                disabled={isWHDateTimeCustom}>
+            </lightning-button>
+            <lightning-button label="10" variant="neutral" onclick={handleDaysToSupportChange}
+                disabled={isWHDateTimeCustom}>
+            </lightning-button>
+        </lightning-button-group>
+        &nbsp; &nbsp;
+        <lightning-button label="Custom Handoff Date/Time" variant="brand" onclick={handleWHDateTimeCustomize}
+            disabled={isWHDateTimeCustom}>
+        </lightning-button>
+        <br /><br />
+    </template>
+    <!-- <template if:true={isHolidayMonitoring}>
+        <lightning-input type="datetime" data-name="holidaystartdatetime" label="Holiday Start Date/Time" value={holidayStartDateTime} 
+        field-level-help="Select Holiday Start Date/Time" onchange={holidayStartDTChange} required>
+        </lightning-input>
+        <br />
+        <lightning-input type="datetime" data-name="holidayenddatetime" label="Holiday End Date/Time" value={holidayEndDateTime} 
+        field-level-help="Select Holiday End Date/Time" onchange={holidayEndDTChange} required>
+        </lightning-input>
+        <br />  
+    </template>
+    <template if:true={isWeekendMonitoring}>
+        <lightning-input type="datetime" data-name="weekendstartdatetime" label="Weekend Start Date/Time" value={weekendStartDateTime} 
+        field-level-help="Upcoming Weekend Start Date/Time" disabled>
+        </lightning-input>
+        <br />
+        <lightning-input type="datetime" data-name="weekendenddatetime" label="Weekend End Date/Time" value={weekendEndDateTime} 
+        field-level-help="Upcoming Weekend End Date/Time" disabled>
+        </lightning-input>
+        <br />
+    </template> -->
+    <label><span style="color:red;font-size:px;">* </span>Comments</label>
+    <lightning-input-rich-text style="width:100%" data-id="handoffComments" name="handoffComments" label="Comments" class={classname} required
+        placeholder="Enter your comments" onchange={handleHandoffCommentsChange} >
+    </lightning-input-rich-text>
+    <br />
+    <label><span style="color:red;font-size:px;">* </span>Steps Taken</label>
+    <lightning-input-rich-text style="width:100%" data-id="handoffStepsTaken" name="handoffStepsTaken" label="Steps Taken" class={classnamesteps} required
+        placeholder="Enter the steps taken" onchange={handleHandoffStepsTakenChange}>
+    </lightning-input-rich-text>
+</template>

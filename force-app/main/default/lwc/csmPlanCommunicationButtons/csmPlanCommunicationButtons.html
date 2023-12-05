@@ -1,0 +1,45 @@
+<!--
+/*
+ * Name			:	CsmPlanCommunicationButtons
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	2/10/2021
+ * Description	:	CsmPlanCommunicationButtons HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		2/10/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Buttons.-->
+	<div class="slds-clearfix slds-m-top_large">
+		<div class="slds-align_absolute-center"> 
+			<template for:each={lstButtons} for:item="objButton">                 
+					<lightning-button key={objButton.keyValue} variant={objButton.variant} label={objButton.label} title={objButton.title} name={objButton.name} onclick={handleClick}
+							icon-name={objButton.iconName} icon-position={objButton.iconPosition} class={objButton.styleClass} if:true={objButton.showButton}>
+					</lightning-button>                
+			</template>
+		</div>
+	</div>
+
+   <!-- Scheduler modal.-->
+   <template if:true={boolOpenScheduler}>
+	   <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+		   <div class="slds-modal__container schedulerModal">
+			   <header class="slds-modal__header" style="padding-top: 0px; padding-bottom: 0px;">
+				   <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeModal}>
+					   <lightning-icon icon-name="utility:close" variant="inverse" size="small"></lightning-icon>
+				   </button>
+			   </header>
+			   <div class="slds-modal__content slds-p-around_medium schedulerModal">
+				   <c-global-scheduler-container record-id={recordId} bool-send-back-response="true" bool-is-send-schedule={boolIsSendSchedule} bool-is-create-invite={boolIsCreateInvite} 
+						   onschedulermessage={shareLink} onpopout={popOut}></c-global-scheduler-container>
+			   </div>
+		   </div>
+	   </section>
+	   <div class="slds-backdrop slds-backdrop_open"></div>
+   </template>
+</template>

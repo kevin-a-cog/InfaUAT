@@ -1,0 +1,68 @@
+<!--
+/*
+ * Name			:	CsmManageRiskOpportunity
+ * Author		:	Karthi Gurusamy
+ * Created Date	: 	22/09/2023
+ * Description	:	This LWC exposes the Manage Risk related Opportunities functionality.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			    Date			Jira No.		    Description					Tag
+ **********************************************************************************************************
+ Karthi Gurusamy		22/09/2023		    AR-3444				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Clipboard field. -->
+	<input class="clipboard" style="position:fixed;top:-5rem;height:1px;width:10px;"></input>
+
+	<!-- Header controls. -->
+	<div class="slds-card">
+		<lightning-card variant="Narrow" title={objConfiguration.strCardTitle} icon-name={objConfiguration.strIconName}>
+			<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" alternative-text={label.Refresh_Button} class="slds-m-left_xx-small" onclick={refreshCard} 
+					slot="actions"></lightning-button-icon>
+			<template if:false={isPoppedOut}>
+				<lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+			</template>
+			<template if:true={isPoppedOut}>
+				<lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+			</template>
+		</lightning-card>
+	</div>
+
+	<!-- Card body. -->
+	<div class="slds-card">
+
+		<!-- Search field. -->
+		<div>
+			<lightning-input class="searchField" variant="label-hidden" placeholder={objConfiguration.strSearchPlaceholder} type="search" onchange={searchRecord}></lightning-input>
+		</div>
+
+		<!-- Tabs. -->
+		<lightning-tabset variant="default" active-tab-value={strDefaultTab}>
+
+			<!-- We iterate over the Tabs configuration. -->
+			<template for:each={objConfiguration.lstTabs} for:item="objTab">
+
+				<!-- Tab definition. -->
+				<lightning-tab key={objTab.strTabValue} label={objTab.strLabel} value={objTab.strTabValue} onactive={refreshCard} title={objTab.strTitle}>
+
+					<!-- Only display once the spinner is done. -->
+					<template if:false={boolDisplaySpinner}>
+
+						<!-- Table section. -->
+						<c-global-data-table class={objTab.strTableClass} obj-parameters={objTab.objParameters} onaction={executeAction}></c-global-data-table>
+					</template>
+				</lightning-tab>
+			</template>
+		</lightning-tabset>
+	</div>
+
+	<!-- Spinner. -->
+	<div class="spinner">
+		<template if:true={boolDisplaySpinner}>
+			<lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+		</template>
+	</div>
+</template>

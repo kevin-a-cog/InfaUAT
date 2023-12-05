@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Global Datatable Flow</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+   <targetConfigs>
+       <targetConfig targets="lightning__FlowScreen">
+            <propertyType name="T" extends="SObject" label="Select an SObject" description="Please select an SObject" /> 
+            <property name="recordId" type="String" label="Record Id"/>
+            <property name="strObjectAPIName" type="String" label="Enter Object API Name" description="Please enter the Object API name."/>
+            <property name="strFieldsetAPIName" type="String" label="Enter FieldSet API Name" description="Please enter the FieldSet API name."/>
+            <property name="strQueryFilters" type="String" label="Enter SOQL Filter Conditions" description="Please enter SOQL WHERE filter conditions."/>
+            <property name="strNoRecordsMessage" type="String" label="Enter the message" description="Please enter the message to show when there are no records to display."/>
+            <property name="lstSelectedRecords" type="{T[]}" label="List of Selected records" role="outputOnly"/>
+       </targetConfig>
+   </targetConfigs>
+</LightningComponentBundle>

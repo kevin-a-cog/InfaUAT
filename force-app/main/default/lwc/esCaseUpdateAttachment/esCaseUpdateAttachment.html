@@ -1,0 +1,81 @@
+<template>
+    <div class="container-fluid p-0">
+        <div class="es-breadcrumb-container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="es-breadcrumb-wrapper">
+                            <lightning-breadcrumbs>
+                                <lightning-breadcrumb
+                                    label="Home"
+                                    href="path/to/place/1"
+                                    onclick={handleNavigateToCustomPage1}>
+                                </lightning-breadcrumb>
+                                <lightning-breadcrumb
+                                    label="Cases"
+                                    href="path/to/place/2"
+                                    onclick={handleNavigateToCustomPage2}>
+                                </lightning-breadcrumb>
+                                <lightning-breadcrumb
+                                    label="Case 12345663"
+                                    href="path/to/place/3"
+                                    onclick={handleNavigateToCustomPage3}>
+                                </lightning-breadcrumb>
+                            </lightning-breadcrumbs>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="es-container-fluid--grey">
+        <div class="container">
+            <h2 class="es-page__heading">
+                <lightning-button-icon variant="container" size="medium" icon-name="utility:chevronleft" title="Back"></lightning-button-icon>
+                Add Update / Attachment
+            </h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="es-case-wrapper">
+                        <div class="es-case__note es-case__note--info es-case__note--big col-md-7">
+                            <p class="es-case__note-main-text">By Proceeding, you are accepting the Privacy Policy</p>
+                            <p class="es-case__note-sub-text">Do not upload any senstive personal data, including but not limited to <span class="es-case__note-highlight">Personal Identifiable Information (PII)</span>, <span class="es-case__note-highlight">Protected Health Information (PHI)</span> or <span class="es-case__note-highlight">Protected Financial Information (PFI)</span> to this system. In the event sensitive data is mistakenly uploaded, notify Informatica immediately to ensure deletion from the system.</p>
+                        </div>
+                        <form class="es-form">
+                            <div class="form-row">
+                                <div class="form-group es-form-group es-lds-form-group es-lds-file-select col-md-7">
+                                    <lightning-input-rich-text
+                                        value={myVal}
+                                        disabled-categories="FORMAT_FONT">
+                                    </lightning-input-rich-text>
+                                </div>
+                            </div>
+                            <div class="form-row">                                
+                                <div class="form-group es-form-group es-lds-form-group es-lds-file-select">
+                                    <div class="clearfix">
+                                        <lightning-icon class="es-form__icon-with-upload" size="x-small" icon-name="utility:attach"></lightning-icon>
+                                        <lightning-file-upload
+                                            label="Attach Files (Upload limit is 2GB)"
+                                            name="fileUploader"
+                                            accept={acceptedFormats}
+                                            record-id={myRecordId}
+                                            file-field-name="Guest_Record_fileupload__c"
+                                            onuploadfinished={handleUploadFinished}
+                                            multiple>
+                                        </lightning-file-upload>
+                                    </div>
+                                    <p><span class="es-case-addnl-info__icon">+</span>Add Files</p>
+                                </div>
+                                <div class="p-1"><a href="#">Try Attaching Files via TSFTP if size > 2GB</a></div>
+                            </div>
+                        </form>
+                        <div class="es-btn-grp d-flex justify-content-end">
+                            <lightning-button label="Discard" class="es-button es-button--secondary"></lightning-button>
+                            <lightning-button label="Add Update" class="es-button es-button--primary"></lightning-button>		
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

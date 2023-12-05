@@ -1,0 +1,110 @@
+/*** Modal ***/
+.sp-modal__content {
+    position: relative;
+    border-radius: 2px; 
+    background: #F5F5F5;
+    -webkit-box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.25);
+    box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.25);
+}
+.sp-modal__header {
+    padding: 12px 20px;
+    background: #fff;
+    position: relative;
+    text-align: left;
+}
+.sp-modal__header .slds-text-heading_medium {
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+.sp-modal__faux-body {
+    background: #F5F5F5;
+}
+.sp-modal__body {
+    font-size: 12px;
+    margin: 8px 20px;
+    padding: 10px 20px;
+    background: #fff;
+    font-weight: 300;
+    -webkit-box-shadow: 1px 1px 6px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: 1px 1px 6px 0px rgba(0,0,0,0.25);
+    box-shadow: 1px 1px 6px 0px rgba(0,0,0,0.25);
+}
+.sp-modal__body--fix-height {
+    max-height: 440px;
+    overflow-y: scroll;
+}
+.sp-modal__body .sp-form-group {
+    margin-bottom: 10px;
+}
+.sp-modal__body .form-row:last-child .sp-form-group {
+    margin-bottom: 0;
+}
+.sp-modal__text {
+   padding-bottom: 20px;
+   line-height: 16px;
+}
+.sp-modal__text:last-child {
+    font-size: 14px;
+    padding-bottom: 0;
+ }
+.sp-modal__title {
+    font-size: 14px;
+}
+.sp-modal__footer {
+    padding: 0 20px 15px 20px;
+    border-top: 0 none;
+    background: #F5F5F5;
+}
+/*** Datatable ***/
+.sp-datatable .slds-table_bordered:not(.slds-no-row-hover) tbody tr:hover>td:not(.slds-has-focus),
+.sp-datatable .slds-table_bordered:not(.slds-no-row-hover) tbody tr:hover>th:not(.slds-has-focus) {
+    box-shadow: none;
+}
+.sp-datatable .slds-table th,.sp-datatable .slds-table td {
+    font-size: 14px;
+}
+.sp-datatable .sp-datatable__body {
+    border: 1px solid #dfdfdf;
+}
+.sp-datatable .slds-table tr:nth-child(5n) {
+    border-bottom: 0 none!important;
+}
+@media screen and (max-width: 420px) {
+    .sp-datatable .slds-table_bordered tbody td, .slds-table_bordered tbody th {
+        border-top: none !important;
+    }
+    .slds-align_absolute-center, .slds-align--absolute-center {
+        justify-content: flex-start;
+    }
+    .slds-table_header-fixed_container{
+        padding-top: 0px;
+    }
+}
+.sp-table--empty, .sp-content--empty {
+    min-height: 90px;
+    border-width: 1px 0 1px 0;
+    border-color: #dadada;
+    border-style: solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+}
+.sp-content--empty {
+    width: 100%;
+}
+/*** Tooltip ***/
+.sp-tooltip .slds-form-element__icon {
+    margin: -3px 0 0 6px;
+}
+/*** Pills for file attachment ***/
+@media screen and (max-width : 420px){
+    .timelineAttachments .slds-pill__label {
+        word-wrap: break-word;
+        word-break: break-all;
+        width: 180px;
+        display: inline-block;
+    }
+}

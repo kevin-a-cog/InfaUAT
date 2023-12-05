@@ -1,0 +1,32 @@
+<!--
+/*
+ * Name			:	CsmManageRiskOpportunityContainer
+ * Author		:	Karthi Gurusamy
+ * Created Date	: 	22/09/2023
+ * Description	:	This LWC exposes the Manage Risk related Opportunities functionality.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			    Date			Jira No.		    Description					Tag
+ **********************************************************************************************************
+ Karthi Gurusamy		22/09/2023		    AR-3444				Initial version.			N/A
+ */
+-->
+<template>
+	
+	<!-- If the component is Popped Out. -->
+    <template if:true={isPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-manage-plan-partners" aria-modal="true" aria-describedby="modal-content-id-manage-plan-partners" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-manage-plan-partners" style="min-height: 100vh;">
+                    <c-csm-manage-risk-opportunity record-id={recordId} bool-display-actions={boolDisplayActions} onpopout={popOut} is-popped-out></c-csm-manage-risk-opportunity >
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+    <template if:false={isPoppedOut}>
+        <c-csm-manage-risk-opportunity record-id={recordId} bool-display-actions={boolDisplayActions} onhidebuttons={handleHide} onselect={handleSelectedRecords} onpopout={popOut}></c-csm-manage-risk-opportunity >
+    </template>
+</template>

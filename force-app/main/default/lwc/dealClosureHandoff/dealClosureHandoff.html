@@ -1,0 +1,209 @@
+<template>
+
+    <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+
+
+    <template if:true={bNewRecord}>
+      <div class="slds-modal__header">
+          <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">New Engagement - Deal Closure Handoff</h1>
+        </div> 
+
+      <lightning-record-edit-form object-api-name="Engagement__c" record-type-id={engReordTypeId} onsubmit={onSubmitFormHandler} onsuccess={onsubmitsuccess} onerror={onsubmiterror}>
+          <lightning-messages> </lightning-messages>
+  
+  <div class="slds-section slds-is-open">
+      <h3 class="slds-section__title slds-theme_shade">
+          <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Technical/Business</span>
+      </h3>
+        <div aria-hidden="false" class="slds-section__content">
+          <lightning-layout multiple-rows>
+              <lightning-layout-item size="6" padding="around-small">
+                  <lightning-input-field field-name="Name"  value={oppName}> </lightning-input-field>
+              </lightning-layout-item>
+              
+                 
+              <lightning-layout-item size="6" padding="around-small">
+                  <lightning-output-field field-name="Status__c" > </lightning-output-field>
+              </lightning-layout-item>
+  
+              <!--<lightning-layout-item size="6" padding="around-small">
+                  <lightning-output-field field-name="RecordTypeId"> </lightning-output-field>
+              </lightning-layout-item>-->
+           </lightning-layout>              
+  
+  
+           <lightning-layout multiple-rows>
+              <lightning-layout-item size="6" padding="around-small">
+                  <lightning-input-field field-name="Opportunity__c" value={recordId} disabled="true"> </lightning-input-field>
+              </lightning-layout-item>
+           
+              <lightning-layout-item size="6" padding="around-small">
+                  <lightning-input-field field-name="Account__c" value={currentOpp.AccountId} disabled="true"> </lightning-input-field>
+              </lightning-layout-item>
+
+              <lightning-layout-item size="6" padding="around-small">
+                  <lightning-input-field field-name="Engagement_Journey__c" value={currentOpp.Sales_Journey__c}  onchange={onjourneychange}> </lightning-input-field>
+                  <template if:true={dealClosure}><lightning-input-field  class="slds-hide" field-name="RecType__c" value={dealClosurePickList} variant="label-stacked" disabled>
+                </lightning-input-field></template>
+              </lightning-layout-item>
+              
+  
+           </lightning-layout>    
+  
+              
+           
+           <lightning-layout multiple-rows>
+              
+              <lightning-layout-item size="12" padding="around-small">
+                  <lightning-input-field field-name="Business_Problem_s__c" value={currentOpp.BANT_Qualification__c} > </lightning-input-field>
+              </lightning-layout-item>
+              
+              <!--<lightning-layout-item size="12" padding="around-small">
+                  <lightning-input-field field-name="Strategic_Goals_Use_Case__c" value={currentOpp.BANT_Qualification__c} > </lightning-input-field>
+              </lightning-layout-item>-->
+           </lightning-layout>   
+           
+           
+           <lightning-layout multiple-rows>
+               <!--
+              <lightning-layout-item size="12" padding="around-small">
+                  <lightning-input-field field-name="Adoption_Plan_Critical_Milestones__c" > </lightning-input-field>
+              </lightning-layout-item>
+              -->
+              <lightning-layout-item size="12" padding="around-small">
+                  <lightning-input-field field-name="Implementation_milestones_go_live_plan__c" value={currentOpp.Competitors__c} > </lightning-input-field>
+              </lightning-layout-item>
+           </lightning-layout> 
+           
+            
+           <lightning-layout multiple-rows>
+              <lightning-layout-item size="12" padding="around-small">
+                  <label class="slds-form-element__label" for="form-element-03">
+                 <!-- <abbr class="slds-required" title="required">* --></abbr>Decision maker / End user of Solution</label>
+                  <lightning-input-field variant="label-hidden" field-name="Decision_Maker__c"  value={decisionMakerValue}> </lightning-input-field>
+              </lightning-layout-item>
+              
+              <lightning-layout-item size="12" padding="around-small">
+                  <lightning-input-field field-name="Partners_Involved_How__c"  value={currentOpp.Delivery__c}> </lightning-input-field>
+              </lightning-layout-item>
+           </lightning-layout> 
+  
+           
+           <lightning-layout multiple-rows>
+               <!--
+              <lightning-layout-item size="12" padding="around-small">
+                  <lightning-input-field field-name="Details_of_POC_if_done__c"  value={currentOpp.Red_Flags__c}> </lightning-input-field>
+              </lightning-layout-item>
+              -->
+              <lightning-layout-item size="12" padding="around-small" if:true={bShowSource_and_Target_Connectors}>
+                  <lightning-input-field field-name="Source_and_Target_Connectors__c" > </lightning-input-field>
+              </lightning-layout-item>
+           
+              <lightning-layout-item size="12" padding="around-small" if:true={bShowData_Volume_processing_needs}>
+                  <lightning-input-field field-name="Data_Volume_processing_needs__c" > </lightning-input-field>
+              </lightning-layout-item>
+  
+          <!--    <lightning-layout-item size="12" padding="around-small" if:true={bShowIPU_calculator}>
+                  <lightning-input-field field-name="IPU_calculator__c" > </lightning-input-field>
+              </lightning-layout-item>
+        -->
+              <lightning-layout-item size="12" padding="around-small" if:true={bShowScanners_needed}>
+                  <lightning-input-field field-name="Scanners_needed__c" > </lightning-input-field>
+              </lightning-layout-item>
+              
+              <lightning-layout-item size="12" padding="around-small">
+                  <label class="slds-form-element__label" for="form-element-03">Engage with Account CSM?</label> 
+                  <lightning-input-field field-name="Engage_with_CSM__c" variant="label-hidden" value={EngagewithCSMVal}> </lightning-input-field>
+              </lightning-layout-item>     
+              
+               <lightning-layout-item padding="around-small" size="12" medium-device-size="12" large-device-size="12">
+                            <lightning-input label="File Upload" name="file uploader"
+                                             onchange={handleFileChange} type="file" multiple >
+                            </lightning-input>
+                            <template if:true={filesData}>
+                                <template for:each={filesData} for:item="item" for:index="index">
+                                    <lightning-pill label={item.fileName} onremove={removeReceiptImage} 
+                                    key={item.id} name={item.fileName}>
+                                    </lightning-pill>
+                                </template>
+                            </template>
+                </lightning-layout-item>
+              
+           </lightning-layout>                   
+       </div>
+   </div>
+  
+  
+  <!--<div class="slds-section slds-is-open">
+      <h3 class="slds-section__title slds-theme_shade">
+          <span class="slds-truncate slds-p-horizontal_small" title="CSM Plan Details">CSM Plan Details</span>
+      </h3>
+      <div aria-hidden="false" class="slds-section__content">
+          
+          <lightning-layout multiple-rows>
+              <lightning-layout-item size="6" padding="around-small">
+                  <label class="slds-form-element__label" for="form-element-03">
+                      <abbr class="slds-required" title="required">* </abbr>CSM Plan</label>
+                  <lightning-input-field variant="label-hidden" field-name="Plan__c" required="true"> </lightning-input-field>
+              </lightning-layout-item>
+  
+              <lightning-layout-item size="6" padding="around-small">
+                  <lightning-input-field field-name="Engaged_CSM__c" required="true"> </lightning-input-field>
+              </lightning-layout-item>
+          </lightning-layout>
+  
+  
+          <lightning-layout multiple-rows>
+              <lightning-layout-item size="6" padding="around-small">
+                  <lightning-input-field field-name="Engagement_Helpful__c"> </lightning-input-field>
+              </lightning-layout-item>
+  
+              <lightning-layout-item size="6" padding="around-small">
+                  <label class="slds-form-element__label" for="form-element-03">
+                      <abbr class="slds-required" title="required">* </abbr>Feedback</label>
+                  <lightning-input-field variant="label-hidden" field-name="CSM_Summary__c" required="false"> </lightning-input-field>
+              </lightning-layout-item>
+          </lightning-layout>   
+          
+                     
+      </div>
+      </div>
+  -->
+  <!-- AA changes new changes to display risk assessment for all the forms. -->
+  <lightning-layout multiple-rows>
+      <lightning-layout-item size="12" padding="around-small" if:false={displayChildComp}>                                      
+          <div class="slds-modal__footer">
+              <lightning-button variant="neutral" onclick={doCancel} class="slds-m-top_small"  label="Cancel"></lightning-button> &nbsp;&nbsp;
+              <lightning-button variant="brand" class="slds-m-top_small" type="submit" label="Save"></lightning-button>
+            </div>                  
+      </lightning-layout-item>
+  </lightning-layout> 
+  <!--AA-->
+  <lightning-button variant="brand" class="slds-m-top_small submitpaf" style="display:none;" type="submit" label="Save"></lightning-button>
+
+  </lightning-record-edit-form>
+
+          <lightning-layout-item size="12" padding="around-small" >
+              <template if:true={loadchildComp}>
+                  <template if:true={displayChildComp}>
+                    <c-paf-assessmentcmp ondealsubmit={onPafSubmitEvent} journey={currectJourneyValue} boolprimary-estimator={DGlineExist} bool-enable-editing loadnewform onviewcompfiredevent={displayComp}></c-paf-assessmentcmp>
+                  </template>
+              </template>
+              <template if:false={loadchildComp}>
+                  <template if:true={displayChildComp}>
+                    <c-paf-assessmentcmp ondealsubmit={onPafSubmitEvent} journey={currectJourneyValue} boolprimary-estimator={DGlineExist} bool-enable-editing loadnewform onviewcompfiredevent={displayComp}></c-paf-assessmentcmp>
+                  </template>
+              </template>
+          </lightning-layout-item>
+
+    </template>
+  
+  
+
+  
+    <template if:false={bNewRecord}> 
+        <c-deal-closure-handoff-edit oncancel={doCancel} record-id={sEditEngId}></c-deal-closure-handoff-edit>          
+    </template>
+
+
+</template>

@@ -1,0 +1,15 @@
+<template>
+    <div class="slds-form-element">
+        <label class="slds-form-element__label" for="slider-id-01">
+          <span class="slds-slider-label">
+            <span class="slds-slider-label__label">{sliderLabel}</span>
+            <span class="slds-slider-label__range">{sliderRange}</span>
+          </span>
+        </label>
+        <div class="slds-form-element__control">
+          <div class="slds-slider">
+            <input type="range" id="slider-id-01" class="slds-slider__range" value={defaultValue} min={minRange} max={maxRange} step={stepRange} onchange={hangleOnChange} disabled={boolDisableSlider}/>
+          </div>
+        </div>
+      </div>
+</template>

@@ -1,0 +1,116 @@
+<template>
+    <div class="slds-align_absolute-center  slds-p-top_small slds-p-bottom_small ">
+        <h1  class=" slds-text-heading_medium">Generate Status Report</h1>
+    </div>
+    <div  class="slds-p-left_small slds-p-right_small slds-p-top_small slds-p-bottom_small ">
+        <div class="slds-box slds-theme_default">
+            <lightning-accordion 
+                    allow-multiple-sections-open
+                    onsectiontoggle={handleToggleSection}
+                    active-section-name={activeSectionName}>
+                <div class="slds-theme_shade">
+                    <lightning-accordion-section  name="issue" label="Issues">
+                        <template lwc:if={hasRecords}>
+                        <lightning-datatable   
+                            key-field="Id" 
+                            data={issueWrapperData} 
+                            columns={issueColumns}
+                            onrowselection={getSelectedIssues}>
+                        </lightning-datatable>
+                        </template>
+                    <template lwc:if={noIssueRecords}>
+                        <lightning-formatted-rich-text class="slds-text-align_center"
+                            value={noIssueRecordsMessage}></lightning-formatted-rich-text>
+                    </template>
+                    </lightning-accordion-section>
+                </div>
+                <div class="slds-border_bottom"></div>
+                <div  class="slds-theme_shade">
+                    <lightning-accordion-section  name="risk" label="Risks">
+                        <template lwc:if={hasRecords}>
+                            <lightning-datatable 
+                            key-field="Id" 
+                            data={riskWrapperData} 
+                            columns={riskColumns}
+                            onrowselection={getSelectedRisks}>
+                        </lightning-datatable>
+                        </template>
+                        <template lwc:if={noRiskRecords}>
+                            <lightning-formatted-rich-text class="slds-text-align_center"
+                                value={noRisKRecordMessage}></lightning-formatted-rich-text>
+                        </template>
+                    </lightning-accordion-section>
+                </div>
+                <div class="slds-border_bottom"></div>
+                <div class="slds-theme_shade">
+                    <lightning-accordion-section name="assignment" label="Assignments">
+                        <template lwc:if={hasRecords}>
+                            <lightning-datatable 
+                                key-field="Id" 
+                                data={asgmntWrapperData} 
+                                columns={asgmntColumns}
+                                onrowselection={getSelectedAssignments}>
+                            </lightning-datatable>
+                        </template>
+                        <template lwc:if={noAsgmntRecords}>
+                            <lightning-formatted-rich-text class="slds-text-align_center"
+                                value={noAsgmntRecordMessage}></lightning-formatted-rich-text>
+                        </template>
+                    </lightning-accordion-section>
+                </div>
+                <div class="slds-border_bottom"></div>
+                <div class="slds-theme_shade">
+                    <lightning-accordion-section name="project activities" label="Project Activities">
+                        <template lwc:if={hasRecords}>
+                            <lightning-datatable
+                                key-field="Id" 
+                                data={prjActWrapperData}
+                                columns={projActColumns}
+                                onrowselection={getSelectedProjectActivites}>
+                            </lightning-datatable>
+                        </template>
+                        <template lwc:if={noPrjActRecords}>
+                            <lightning-formatted-rich-text class="slds-text-align_center"
+                                value={noPrjActRecordMessage}></lightning-formatted-rich-text>
+                        </template>
+                    </lightning-accordion-section>
+                </div>
+                <div class="slds-border_bottom"></div>
+                <div class="slds-theme_shade">
+                    <lightning-accordion-section name="milestone" label="Milestones">
+                        <template lwc:if={hasRecords}>
+                            <lightning-datatable 
+                                key-field="Id" 
+                                data={milestoneWrapperData} 
+                                columns={milestoneColumns}
+                                onrowselection={getSelectedMilestones}>
+                            </lightning-datatable>
+                        </template>
+                        <template lwc:if={noMilestoneRecord}>
+                            <lightning-formatted-rich-text class="slds-text-align_center"
+                                value={noMilestoneRecordMessage}></lightning-formatted-rich-text>
+                        </template>
+                    </lightning-accordion-section>
+                </div>
+            </lightning-accordion>
+        </div>
+    </div>
+
+    
+        
+    
+    <lightning-card>
+        <div slot="footer" class="slds-grid">
+            <div class="slds-col slds-text-align_right">
+                <lightning-button variant="brand" label="Generate" class="slds-m-right_medium" onclick={handleInsert}
+                    disabled={disableButton}> </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+   
+    
+    <template if:true={loaded}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+
+</template>

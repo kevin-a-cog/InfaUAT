@@ -1,0 +1,48 @@
+.heading-wrapper{
+    background-image: url('/resource/./informaticaNetwork/ideabg.png');
+    background-size: 100% 100%;
+}
+
+.row-padding{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1%;
+    margin-bottom: -25px;
+}
+@media screen and (max-width: 768px) {
+    .row-padding {
+        display: block;
+        margin: 0 auto;
+        width: 90%;
+        padding: 20px 0px;
+    }
+}
+
+.createButton{
+    margin-top: 19px;
+    margin-right: 14px;
+    margin-left: 8px;
+}
+@media screen and  (max-width: 768px) {
+    .createButton {
+        margin-left: 0;
+    }
+}
+
+.slds-status2{
+    width:88px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+    background-color: #FF4D00;
+    color: white;
+    white-space:nowrap;
+}
+
+/* new CSS added */
+.in-communities-wrapper {
+    position: relative;
+}

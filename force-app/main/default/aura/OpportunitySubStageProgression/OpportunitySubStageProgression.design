@@ -1,0 +1,3 @@
+<design:component>
+	<design:attribute label="Allow auto Refresh" name="substagesToHide" description="Yes to allow auto refresh component upon substage changes." />
+</design:component>

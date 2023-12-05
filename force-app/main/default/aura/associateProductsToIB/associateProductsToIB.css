@@ -1,0 +1,14 @@
+.THIS .slds-float_right {
+       padding:1%;
+}
+.THIS .slds-text-heading_large {
+    padding:1%;
+    font-weight:bold;
+}
+.THIS .slds-text-heading_small {
+    padding:0.5%;
+   font-weight:bold;
+}
+.THIS .slds-col {
+    margin: 10px;
+}

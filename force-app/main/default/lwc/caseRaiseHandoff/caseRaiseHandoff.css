@@ -1,0 +1,6 @@
+.forceStyle .required{
+	border: 2px solid red !important;
+}
+.required{
+	border: 1.5px solid red !important;
+}

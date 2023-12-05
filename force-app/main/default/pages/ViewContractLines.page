@@ -1,0 +1,17 @@
+<!--Page to Call Lighting Component for View Contract Lines from Renewal Quote Design-->
+<apex:page standardController="SBQQ__Quote__c">
+    <apex:includeLightning />
+    <div id="lightning" />    
+    
+    <script>
+    var recordId = "{!$CurrentPage.parameters.id}";
+
+    $Lightning.use("c:ViewContracstLinePriorOriginal", function() {
+        $Lightning.createComponent(
+            "c:ViewContractLines",
+            {"recordId" : recordId},
+            "lightning"
+        );
+    });
+    </script>
+</apex:page>

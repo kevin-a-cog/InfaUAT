@@ -1,0 +1,67 @@
+<!--
+/*
+ * Name			:	EventAttendeesInfo
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	10/02/2022
+ * Description	:	This LWC is used to display to informartion about event attendees.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description							Tag
+ **********************************************************************************************************
+ Vignesh Divakaran		10/02/2022		I2RT-5251		Initial version.					N/A
+ */
+-->
+<template>
+
+     <!-- Show spinner when the component is loading -->
+     <template if:true={isLoading}>
+        <div class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+    </template>
+
+    <!-- Show data when the component has finished loading-->
+    <template if:false={isLoading}>
+        <div class="container in-event-attendees-container">
+            <div class="event-attendees-info slds-grid">
+                <div class="slds-col">
+                    <div class="flexbox-container">
+                        <div class="flexbox-item count">
+                            {objEventAttendees.ACCEPTED.count}
+                        </div>
+                        <div class="flexbox-item label">
+                            Attending
+                        </div>
+                    </div>
+                </div>
+                <span class="divider"></span>
+                <div class="slds-col">
+                    <div class="flexbox-container">
+                        <div class="flexbox-item count">
+                            {objEventAttendees.DECLINED.count}
+                        </div>
+                        <div class="flexbox-item label">
+                            Declined
+                        </div>
+                    </div>
+                </div>
+                <span class="divider"></span>
+                <!-- <div class="slds-col">
+                    <div class="flexbox-container">
+                        <div class="flexbox-item count">
+                            {objEventAttendees.TENTATIVE.count}
+                        </div>
+                        <div class="flexbox-item label">
+                            Tentative
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <!-- <div class="awaiting-responses slds-align_absolute-center">
+                Awaiting Responses from {objEventAttendees.NORESPONSE.count} members
+            </div> -->
+        </div>
+    </template>
+
+</template>

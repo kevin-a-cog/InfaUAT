@@ -1,0 +1,136 @@
+body {
+    font-family: Roboto;
+}
+
+a {
+    color: #373737;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #011aff;
+}
+
+@media screen and (min-width: 1400px) {
+    .container {
+        max-width: 1300px !important;
+    }
+}
+
+.infa-join-community-container {
+    background-color: #4dc2cf;
+    padding: 20px 0px;
+}
+@media screen and (max-width: 768px) {
+    .infa-join-community-container {
+        padding: 25px;
+    }
+}
+
+.infa-join-community-main-title {
+    font-size: 33px;
+    color: #ffffff;
+    font-weight: 300;
+}
+@media screen and (max-width: 768px) {
+    .infa-join-community-main-title {
+        font-size: 24px;
+    }
+}
+.infa-join-community {
+    padding: 5px;
+    background-color: #ffffff;
+    box-shadow: 5px 5px 18px rgba(0, 0, 0, 0.12);
+    margin-bottom: 25px;
+}
+.infacom-join-community-tiles {
+    margin-top: 20px;
+}
+.infa-join-community-icon img {
+    width: 81px;
+}
+@media screen and (max-width: 768px) {
+    .infa-join-community-icon {
+        max-width: 20%;
+    }
+    .infa-join-community-icon img {
+        width: 55px;
+    } 
+    .infa-join-community-names {
+        max-width: 60%;
+    }
+    .infa-join-community-join {
+        max-width: 20%;
+    }  
+}
+.infa-join-community-type {
+    font-size: 16px;
+    color: #949494;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+}
+@media screen and (max-width: 768px) {
+    .infa-join-community-type {
+        font-size: 14px;
+    }
+}
+.infa-join-community-header {
+    font-size: 19px;
+    color: #373737;
+    font-weight: 300;
+}
+@media screen and (max-width: 768px) {
+    .infa-join-community-header {
+        font-size: 18px;
+    }
+}
+.infa-join-community-description {
+    font-size: 14px;
+    color: #373737;
+}
+@media screen and (max-width: 768px) {
+    .infa-join-community-description {
+        font-size: 12px;
+    }
+}
+.infa-join-community-join {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+.infa-join-community-add {
+    height: 30px;
+    position: relative;
+}
+.infa-join-community-add img {
+    position: absolute;
+    top: 6px;
+    left: 7px;
+}
+.infa-join-community-names {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.infa-join-community-background {
+    height: 30px;
+    width: 30px;
+    position: relative;
+    background: rgba(0, 26, 255, 0.6);
+    opacity: 0.15;
+    top: 0;
+}
+.infa-join-community-parent {
+    font-size: 12px;
+    color: #001aff;
+}
+.infa-join-tile {
+    margin: 0;
+}
+.right-chev {
+    --sds-c-icon-color-foreground-default: #FFFFFF;
+}
+
+.left-space{
+    padding-left: 50px;
+}

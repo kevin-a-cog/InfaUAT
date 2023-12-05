@@ -1,0 +1,119 @@
+<aura:component implements="flexipage:availableForAllPageTypes" controller="iNotifyController">
+    <aura:attribute name="ApplicationName" type="String" default="" />
+    <aura:attribute name="alertON" type="Boolean" default="false"/>
+    <aura:attribute name="showAlert" type="Boolean" default="false"/>
+    <aura:attribute name="currentTabValue" type="String" default="Alerts"/>
+    <aura:attribute name="alertsTabLabl" type="String" default="Alerts"/>
+    <aura:attribute name="alerts" type="List" />
+    <aura:attribute name="alertOffSet" type="Integer" default="0"/>
+    <aura:attribute name="alertsUnread" type="Integer" default="0"/>
+    <aura:attribute name="inspireMessages" type="List" />
+    <aura:attribute name="inspireOffSet" type="Integer" default="0"/>
+    <aura:attribute name="loadSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="showLoadBtn" type="Boolean" default="false"/>
+    <aura:attribute name="NoDataAfterRendering" type="Boolean" default="false"/>
+    <aura:attribute name="NoDataAfterRenderingIM" type="Boolean" default="false"/>
+   
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:utilityBarAPI aura:id="utilitybar"/>  
+
+    <div onclick="{!c.handleClick}">
+        <lightning:tabset selectedTabId="{!v.currentTabValue}">
+            <lightning:tab label="Alerts" id="Alerts" onactive="{! c.handleAlertsTab }">
+
+                <aura:if isTrue="{!v.NoDataAfterRendering}">
+                        <div class="flex-align-center">
+                            No Alerts to display!
+                        </div>
+                    <aura:set attribute="else">
+                        <aura:iteration items="{!v.alerts}" var="alert">
+
+                            <aura:if isTrue="{!alert.RecordType.DeveloperName == 'Announcement'}">
+                                <div class="grid-container">
+                                    <div class="grid-wrapper announcement">
+                                        <div class="announcement-icon">
+                                            <lightning:icon class="announcement" iconName="utility:announcement" alternativeText="Announcement" size="small" title="Announcement"></lightning:icon>
+                                        </div>
+                                        <div class="announcement-body">
+                                            <p>{!alert.Name}</p>
+                                            <p class="content">{!alert.Description__c}</p>
+                                            <span class="arrow-container">
+                                                <span class="text-center double-arrow" onclick="{! c.displayContent }">&raquo;</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!alert.RecordType.DeveloperName == 'Alert'}">
+                                <div class="grid-container">
+                                    <div class="grid-wrapper">
+                                        <div class="alert-icon">
+                                            <lightning:icon class="alert" iconName="utility:alert" alternativeText="Alert" size="small" title="Alert"></lightning:icon>
+                                        </div>
+                                        <div class="alert-body">
+                                            <p>{!alert.Name}</p>
+                                            <p class="content">{!alert.Description__c}</p>
+                                            <span class="arrow-container">
+                                                <span class="text-center double-arrow" onclick="{! c.displayContent }">&raquo;</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aura:if>
+
+                        </aura:iteration>
+                    </aura:set>
+                </aura:if>
+
+            </lightning:tab>
+
+            <lightning:tab label="Inspire" id="Inspire" onactive="{! c.handleInspireTab }">
+
+                <aura:if isTrue="{!v.NoDataAfterRenderingIM}">
+                    <div class="flex-align-center">
+                        Nothing to display!
+                    </div>
+
+                    <aura:set attribute="else">
+                        <aura:iteration items="{!v.inspireMessages}" var="inspireMessage">
+                            <div class="inspire-container">
+                                <div class="inspire-wrapper tooltip">
+                                    <div class="inspire-body tooltip-left" onclick="{! c.displayInspireContent }">
+                                        <p>{!inspireMessage.Name}</p>
+                                        <p class="content">{!inspireMessage.Description__c}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:iteration>
+                    </aura:set>
+                </aura:if>
+                
+            </lightning:tab>
+
+            <aura:if isTrue="{!v.loadSpinner}">
+                <div class="grid" aura:id="main-container">
+                    <img src="{!$Resource.loader}"/>
+                </div>
+            </aura:if>
+
+            <aura:if isTrue="{!v.showLoadBtn}">
+                <div class="loadMore" style="text-align:center;margin-bottom:10px">
+                    <lightning:button label="Load More" onclick="{! c.loadMore }"/>
+                </div>
+            </aura:if>
+
+        </lightning:tabset>
+    </div>
+    
+    <!--
+        LWC to subscribe to PuchTopic on Initialize and unSubscribe when browser tab is closed.
+         <c:alertStreamingApi channelName="/topic/NewInspire" onpushAlert="{!c.pushEventInspire}"></c:alertStreamingApi>
+    -->
+    <c:alertStreamingApi channelName="/topic/NewAlerts" onpushAlert="{!c.pushEvent}"></c:alertStreamingApi>
+    <aura:if isTrue="{!v.currentTabValue == 'Inspire'}">
+        <c:alertStreamingApi channelName="/topic/NewInspire" onpushAlert="{!c.pushEventInspire}"></c:alertStreamingApi>
+    </aura:if>
+   
+</aura:component>

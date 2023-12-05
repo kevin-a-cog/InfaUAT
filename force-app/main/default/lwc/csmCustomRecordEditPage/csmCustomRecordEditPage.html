@@ -1,0 +1,64 @@
+<template>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+        aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{modalTitle}</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <lightning-spinner variant="brand" alternative-text={label.Loading}  if:true={showSpinner}></lightning-spinner>
+                <!--<lightning-accordion allow-multiple-sections-open="true" active-section-name={activeSectionNames}>-->
+                    <lightning-record-edit-form
+                      record-id={recordId}
+                      object-api-name={sobjectApiName}
+                      onsuccess={handleSuccess}
+                      onerror={handleError}
+                      onload={handleLoad}
+                      onsubmit={handleSubmit}
+                      >
+                      <lightning-messages></lightning-messages>                
+                      <template if:true={uiRecordEdit}>
+                        <lightning-layout multiple-rows="true">
+                          <lightning-layout-item size="12">
+                            <template for:each={uiRecordEdit.sections} for:item="section">
+                              <!--<lightning-accordion-section key={section.id} name={section.id} label={section.heading}>-->
+                                <h3 key={section.id}  class="slds-section__title slds-theme_shade">{section.heading}</h3>
+                                <lightning-layout multiple-rows="true" key={section.id} >
+                                  <template for:each={section.layoutRows} for:item="layoutRow">
+                                    <template for:each={layoutRow.layoutItems} for:item="layoutItem">
+                                      <template for:each={layoutItem.layoutComponents} for:item="layoutComponent">
+                                        <lightning-layout-item key={layoutComponent.apiName} size="6" padding="horizontal-small">
+                                          <template if:true={layoutItem.editableForUpdate}>
+                                            <lightning-input-field
+                                              field-name={layoutComponent.apiName}
+                                              required={layoutItem.required} data-id={layoutComponent.apiName}>
+                                            </lightning-input-field>
+                                          </template>
+                                          <template if:false={layoutItem.editableForUpdate}>
+                                            <lightning-output-field
+                                              field-name={layoutComponent.apiName}
+                                              required={layoutItem.required} disabled="true">
+                                            </lightning-output-field>
+                                          </template>
+                                        </lightning-layout-item>
+                                      </template>
+                                    </template>
+                                  </template>
+                                </lightning-layout>
+                              <!--</lightning-accordion-section>-->
+                            </template>
+                          </lightning-layout-item>
+                        </lightning-layout>
+                      </template>
+                      <lightning-button class="slds-hide" type="submit" name="Save" label="Save Record" data-name="recordFormSubmitButton"></lightning-button>
+                    </lightning-record-edit-form>
+                 <!-- </lightning-accordion>-->
+            </div>
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" data-name="cancel" onclick={handleClick}>Cancel</button>
+                <button class="slds-button slds-button_brand" data-name="save" onclick={handleClick}>Save</button>
+            </footer>
+        </div>
+    </section>
+<div class="slds-backdrop slds-backdrop_open"></div>
+</template>

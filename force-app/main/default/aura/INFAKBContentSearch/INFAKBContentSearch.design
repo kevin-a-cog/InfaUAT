@@ -1,0 +1,3 @@
+<design:component >
+    <design:attribute name="PlacedIn" default="contentsearch" description="Enter any one of this value : 'contentsearch','esupportsearch','kbsearch'"/>
+</design:component>

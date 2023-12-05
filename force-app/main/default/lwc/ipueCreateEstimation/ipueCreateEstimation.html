@@ -1,0 +1,47 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <!-- sldsValidatorIgnoreNextLine -->
+    <lightning-quick-action-panel header={title}>
+        <article class="slds-card" style="position:relative;">
+            <template if:true={isNotVisible}>
+                <div class="slds-p-bottom_x-small">
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                        <b>{labels.inactiveIPUErrorMessage}</b>
+                    </div>
+                </div>
+            </template>
+            <lightning-record-edit-form object-api-name="Estimation_Summary__c" onsuccess={handleSuccess}
+                onerror={handleError}>
+                <div class="slds-m-around_medium">
+                    <lightning-input-field field-name='Name' value={estimationName} required
+                        onchange={handleNameChange}></lightning-input-field>
+                    <lightning-input-field field-name='Primary__c'></lightning-input-field>
+                    <lightning-input-field field-name='Form__c' value={formId} required disabled={isClone}
+                        onchange={handleFormChange}></lightning-input-field>
+                    <lightning-input-field field-name='Account__c' value={accountId}
+                        style="display:none;"></lightning-input-field>
+                    <lightning-input-field field-name='Opportunity__c' required value={oppId}></lightning-input-field>
+                    <!--<lightning-input-field field-name='Quote__c' value={quoteId}></lightning-input-field> -->
+                </div>
+            </lightning-record-edit-form>
+
+            <template if:true={databaseProcessing}>
+                <div class="slds-align_absolute-center" style="min-height: 10vh;">
+                    <lightning-spinner class="formLoadingSpinner" variant="brand" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:true={isClone}>
+                <lightning-input class="slds-p-left_large" type="checkbox" label="Clone Collaborators"
+                    checked={cloneCollaborator} onchange={handleCheckboxChange}></lightning-input>
+            </template>
+        </article>
+
+        <div slot="footer">
+            <lightning-button variant="brand" name="save" type="submit" label="Save" disabled={disableButtons}
+                onclick={handleSave} class="slds-var-m-left_x-small"></lightning-button>
+            <lightning-button variant="neutral" label="Close" disabled={disableButtons}
+                onclick={closeModal}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

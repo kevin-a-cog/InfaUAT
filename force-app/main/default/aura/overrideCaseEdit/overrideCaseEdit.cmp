@@ -1,0 +1,8 @@
+<aura:component implements="force:hasRecordId,lightning:actionOverride">
+    <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+        <span class="slds-assistive-text">error</span>
+        <h2>
+            Sorry, you are not allowed to access this page.
+        </h2>
+    </div>
+</aura:component>

@@ -1,0 +1,1511 @@
+<!--
+  @description       : 
+  @author            : SF Developer
+  @group             : 
+  @last modified on  : 12-10-2020
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   12-04-2020   SF Developer   Initial Version
+
+Change History
+****************************************************************************************************
+ModifiedBy      Date        Jira No.    Tag     Description
+****************************************************************************************************
+balajip         11/22/2021  I2RT-4953   T01     added I am On/Off it functionalities
+balajip	        01/12/2023  I2RT-7673   T02     To show spinner and disable the Save Button (Feedback Popup) on clicking
+Chetan Shetty   01/24/2023  I2RT-7664   T03     Style update
+Sandeep Duggi   Oct 17 '23  I2RT-9219   T04     P0 Flag - SALT enhancements
+
+-->
+<template>
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+    <div style="background-color:white;padding:8px;" >
+    	<div>   
+      <!-- <T03> -->
+          <div class="slds-page-header">        
+        <lightning-layout class="slds-grid--align-spread">
+          <lightning-layout-item size="2">   
+            <c-custom-lookup-lwc icon-name="standard:user" class="slds-grid" s-label="User" s-object-api-name="User"
+              onlookupupdate={handelLookupRecordUpdate} s-lookup-placeholder="Search User"></c-custom-lookup-lwc>
+         </lightning-layout-item>
+        
+        <template if:true={showviewas}>
+            <lightning-layout-item class="slds-align_absolute-center">
+             <lightning-layout-item>
+                You are Vieweing as {sSelectedUserName}
+            </lightning-layout-item>
+            </lightning-layout-item>
+          </template>
+          
+          <lightning-layout-item class="slds-is-relative">
+            <lightning-layout class="slds-grid_align-end slds-grid_vertical-align-center">
+
+				<!-- Autorefresh. -->
+				<template if:true={boolIsAutorefreshActive}>
+                <lightning-layout-item>
+                  <lightning-input type="toggle" label={strAutorefreshCounterLabel} name="autorefresh"
+                    class="autorefreshToggle slds-float_right" checked={boolIsAutorefreshActive}
+								onchange={activateDeactivateAutorefresh}></lightning-input>
+					</lightning-layout-item>	
+                <lightning-layout-item>
+                  <lightning-combobox value={strSelectedTimeframe} options={lstTimeframeOptions}
+                    onchange={changeTimeframe} class="timeframePicklist slds-p-left_small"></lightning-combobox>
+					</lightning-layout-item>
+				</template>
+				<template if:false={boolIsAutorefreshActive}>
+                <lightning-layout-item>
+                  <lightning-input type="toggle" label={strAutorefreshCounterLabel} name="autorefresh"
+                    class="autorefreshToggle slds-float_right" checked={boolIsAutorefreshActive}
+								onchange={activateDeactivateAutorefresh}></lightning-input>
+					</lightning-layout-item>
+				</template>
+              <lightning-layout-item>
+
+					<!-- Refresh Icon for table. -->
+                <lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium"
+                  class="slds-m-left_xx-small slds-float_right" onclick={refreshTable} data-name="all">
+                </lightning-button-icon>
+				</lightning-layout-item>
+              <lightning-layout-item>
+					<lightning-button-group>
+						<lightning-button label="Queues" onclick={handledashboardclick} name="queues"
+							variant={stateVariant.queueVariant}>
+						</lightning-button>
+						<lightning-button label="All" onclick={handledashboardclick} name="all"
+							variant={stateVariant.allVariant}>
+						</lightning-button>
+                  <lightning-button label="Salt View" onclick={handledashboardclick} name="saltview"
+							variant={stateVariant.teamsVariant}>
+						</lightning-button>
+                  <lightning-button style="display: none; margin-left:10px;" label="Dashboard"
+                    onclick={handledashboardclick} name="dashboard" variant={stateVariant.dashboardVariant}>
+						</lightning-button>
+					</lightning-button-group>
+				</lightning-layout-item>
+			</lightning-layout>
+        </lightning-layout-item>
+        </lightning-layout>
+      
+    </div>
+      <!-- </T03> -->
+  <!--</template>-->
+    <!--</template>-->
+    <lightning-layout>
+      
+      <lightning-layout-item  padding="around-small">
+        
+        
+              <div style="display:block;height: 100%;" class="queueView">
+                  <div style="height: 100%;"  class="min-Width-r-Style splitViewCls1 slds-split-view_container slds-is-open">
+                    <button class="splitViewCls2 slds-button slds-button_icon slds-button_icon slds-split-view__toggle-button slds-is-open"
+                            aria-controls="split-view-id2"
+                            aria-expanded="true" 
+                            title="Close Split View"
+							onmousedown={draggableButton}>
+                      <lightning-icon icon-name={caseNotificationToggleIcon} size="x-small" alternative-text="case notification toggle icon"></lightning-icon>            
+                  </button>
+  
+                 
+                    <article aria-hidden="false" id="split-view-id2" class="slds-split-view slds-grid slds-grid_vertical slds-grow">
+                      <lightning-card >
+                        <h3 slot="title">
+                          <lightning-icon icon-name="standard:case_comment" size="small"></lightning-icon>
+                          &nbsp;&nbsp; Queue
+                      </h3>
+                     
+                      <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                        
+						<template if:true={boolDisplayAttentionRequestSection}>
+							<lightning-accordion-section name="C" label="Attention Request">
+								<section class={objAttentionModalProperties.strClassesSection}>
+									<div class={objAttentionModalProperties.strClassesContainer} style={objAttentionModalProperties.strStyleContainer}>
+										<div style={objAttentionModalProperties.strStyleContent}>
+											<div class={objAttentionModalProperties.strClassesBody}>
+												<div class="slds-page-header" style="padding: 8px;">
+													<div class="slds-page-header__row">
+													  <div class="slds-page-header__col-title">
+														<div class="slds-media">
+														  <div class="slds-media__figure">
+															<lightning-icon icon-name="standard:case_comment" alternative-text="case_comment" size="x-small"></lightning-icon>
+														  </div>
+														  <div class="slds-media__body">
+															<div class="slds-page-header__name">
+															  <div class="slds-page-header__name-title">
+																<div>
+																  <span class="slds-page-header__title slds-truncate">Attention Request </span>
+																</div>
+											  
+															  </div>
+															</div>
+															<div class="slds-float_right">
+					
+																<!-- Refresh Icon for table. -->
+																<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="small" class="slds-m-left_xx-small" onclick={refreshTable} 
+																		data-name="Attention"></lightning-button-icon>
+						
+																<!-- Pop out. -->
+																<template if:false={boolIsAttentionRequestPoppedOut}>
+																	<lightning-button-icon icon-name="utility:new_window" class="slds-m-left_xx-small" size="small" 
+																			data-component="Attention" onclick={popOut}></lightning-button-icon>
+																</template>
+																<template if:true={boolIsAttentionRequestPoppedOut}>
+																	<lightning-button-icon icon-name="utility:pop_in" class="slds-m-left_xx-small" size="small" 
+																			data-component="Attention" onclick={popOut}></lightning-button-icon>
+																</template>
+																&nbsp;<span class="slds-badge slds-badge_lightest">Count : {lstAttentionRecords.length}</span> &nbsp;
+															</div>
+														  </div>
+														</div>
+													  </div>
+													</div>
+												  </div>
+												 <div class="CC_Table minHeightDivTable sideBarTable slds-is-relative" style={strTableDivStyle}>
+							
+													<!-- Spinner. -->
+													<template if:true={boolDisplayAttentionSpinner}>
+														<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+													</template>
+					
+													<!--Attention request table.-->
+													<template if:false={boolDisplayAttentionSpinner}>
+														<lightning-datatable key-field="Name" data={lstAttentionRecords} columns={lstAttentionRequestColumns} data-name="Attention" onsort={executeSorting} 
+																sorted-by={objTableConfigurationAttention.strSortBy} sorted-direction={objTableConfigurationAttention.strSortDirection} 
+																hide-checkbox-column="true"></lightning-datatable>
+													</template>
+												  </div>
+											</div>
+										</div>
+									</div>
+								</section>
+                          </lightning-accordion-section>
+						</template>
+                        
+						<lightning-accordion-section name="A" label="Cases">
+                           <!--CONSOLIDATE Case list view start-->
+                      
+							<section class={objCaseModalProperties.strClassesSection}>
+								<div class={objCaseModalProperties.strClassesContainer} style={objCaseModalProperties.strStyleContainer}>
+									<div style={objCaseModalProperties.strStyleContent}>
+										<div class={objCaseModalProperties.strClassesBody}>
+											<div>
+												<div class="slds-page-header" style="padding: 8px;">
+												<div class="slds-page-header__row">
+													<div class="slds-page-header__col-title">
+													<div class="slds-media">
+														<div class="slds-media__figure">
+														<lightning-icon icon-name="standard:case" alternative-text="Case" size="x-small"></lightning-icon>
+														</div>
+						
+													
+														<div class="slds-media__body">
+														<div class="slds-page-header__name">
+															<div class="slds-page-header__name-title">
+															<h1>
+																<span class="slds-page-header__title slds-truncate">Case </span>
+															</h1>
+															</div>
+														</div>
+														<div class="slds-float_right">  
+														
+														<!-- Refresh Icon for table. -->
+														<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="small" class="slds-m-left_xx-small" onclick={refreshTable} 
+															data-name="Case"></lightning-button-icon>
+						
+															<!-- Pop out. -->
+															<template if:false={boolIsCasePoppedOut}>
+																<lightning-button-icon icon-name="utility:new_window" class="slds-m-left_xx-small" size="small" 
+																		data-component="Cases" onclick={popOut}></lightning-button-icon>
+															</template>
+															<template if:true={boolIsCasePoppedOut}>
+																<lightning-button-icon icon-name="utility:pop_in" class="slds-m-left_xx-small" size="small" 
+																		data-component="Cases" onclick={popOut}></lightning-button-icon>
+															</template>
+													<lightning-button-icon size="small" 
+													icon-name="utility:settings"
+													name="showmenu"
+													onclick={handleMenuSelect}
+													alternative-text="Show menu"
+													title="Show Menu"></lightning-button-icon>            
+												<span class="slds-badge slds-badge_lightest">Count : {objParameters.lstRecords.length} </span>&nbsp;                                  
+															
+															<lightning-button-icon size="small" 
+																				icon-name="utility:adduser"
+																				name="addcaseuser"
+																				onclick={acceptCase}
+																				alternative-text="Add user"
+																				title="Accept Case(s)"></lightning-button-icon>
+
+                              <!--T01-->
+                              <lightning-button-icon size="small" 
+																				icon-name="utility:touch_action"
+																				name="iAmOnItButton"
+																				onclick={iamOnIt}
+																				alternative-text="Accept Proxy"
+																				title="Accept Proxy"
+                                        disabled={disableIamOnItButton} ></lightning-button-icon>
+
+                              <lightning-button-icon size="small" 
+																				icon-name="utility:unlinked"
+																				name="iAmOffItButton"
+																				onclick={iamOffIt}
+																				alternative-text="Remove Proxy"
+																				title="Remove Proxy"
+                                        disabled={disableIamOnItButton} ></lightning-button-icon>
+														  <!--/T01-->
+														</div>
+														</div>
+													</div>
+													</div>
+												</div>
+												</div>
+												<div>
+												<lightning-combobox class="slds-m-around_small " variant="label-hidden" name="caseListView" label="Cases" value={value}
+												placeholder="List View" options={options} onchange={handleChange} style="display:inline-block; width:85%;">
+												</lightning-combobox>
+												<lightning-button-icon size="small" 
+														icon-name="utility:pin"
+														name="Pin"
+														onclick={pintheview}
+														variant={strPinVariant}
+														alternative-text="Pin"
+														title="Pin"></lightning-button-icon>
+												</div>
+											
+											<div class="CS_Table minHeightDivTable sideBarTable slds-is-relative" style={strTableDivStyle}>
+								
+												<!-- Spinner. -->
+												<template if:true={boolDisplayCaseSpinner}>
+													<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+												</template>
+						
+												<!--Cases table.-->
+												<template if:false={boolDisplayCaseSpinner}>
+													<c-global-data-table obj-parameters={objParameters} onaction={executeAction}></c-global-data-table>				
+												</template>
+											</div>
+										</div>
+										</div>
+									</div>
+								</div>
+							</section>
+                      <!--CONSOLIDATE Case list view end -->
+                      	</lightning-accordion-section>
+
+					  <!-- Collaboration tables. -->
+					  <div class="slds-is-relative">
+		
+						<!-- Spinner. -->
+						<template if:true={boolDisplayCollaborateSpinner}>
+							<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+						</template>
+
+						<!-- Tables. -->
+						<template if:false={boolDisplayCollaborateSpinner}>
+							<template for:each={lstCollaborations} for:item="objType">
+								<lightning-accordion-section key={objType.strType} name={objType.strType} label={objType.strLabel}>
+									<section class={objType.objModalProperties.strClassesSection}>
+										<div class={objType.objModalProperties.strClassesContainer} style={objType.objModalProperties.strStyleContainer}>
+											<div style={objType.objModalProperties.strStyleContent}>
+												<div class="slds-page-header" style="padding: 8px;">
+													<div class="slds-page-header__row">
+													  <div class="slds-page-header__col-title">
+														<div class="slds-media">
+														  <div class="slds-media__figure">
+															<lightning-icon icon-name="standard:messaging_user" alternative-text="messaging_user" size="x-small"></lightning-icon>
+														  </div>
+														  <div class="slds-media__body">
+															<div class="slds-page-header__name">
+															  <div class="slds-page-header__name-title">
+																<div>
+																  <span class="slds-page-header__title slds-truncate">{objType.strLabel}</span>
+																</div>
+						  
+															  </div>
+															</div>
+															<div class="slds-float_right">
+					 
+															 <!-- Refresh Icon for table. -->
+															 <lightning-button-icon icon-name="action:refresh" variant="border-filled" size="small" class="slds-m-left_xx-small" onclick={refreshTable} 
+																	 data-name="Collaboration" data-type={objType.strType}></lightning-button-icon>
+									 
+															 <!-- Pop out. -->
+															 <template if:false={objType.boolIsPoppedOut}>
+																 <lightning-button-icon icon-name="utility:new_window" class="slds-m-left_xx-small" size="small" 
+																		 data-component="Collaboration" data-type={objType.strType} onclick={popOut}></lightning-button-icon>
+															 </template>
+															 <template if:true={objType.boolIsPoppedOut}>
+																 <lightning-button-icon icon-name="utility:pop_in" class="slds-m-left_xx-small" size="small" 
+																		 data-component="Collaboration" data-type={objType.strType} onclick={popOut}></lightning-button-icon>
+															 </template>
+			 
+															  <span class="slds-badge slds-badge_lightest">Count : {objType.lstRecords.length}</span> &nbsp;
+											 <template if:false={objType.isgethelp}>
+											   <lightning-button-icon size="small" 
+														   icon-name="utility:adduser"
+														   name='add raise hand user'
+														   onclick={acceptRaiseHandCase}
+														   alternative-text="Add user"
+														   data-table={objType.strType}
+														   title="Accept Collaborate Case(s)"></lightning-button-icon>
+											 </template>
+															</div>
+														  </div>
+														</div> 
+													  </div>
+													</div>
+												  </div>
+												<div class="RH_Table minHeightDivTable sideBarTable slds-is-relative" style={strTableDivStyle}>
+					 
+												 <!-- Spinner. -->
+												 <template if:true={objType.boolDisplaySpinner}>
+													 <lightning-spinner variant="brand" size="medium"></lightning-spinner>
+												 </template>
+						 
+												 <!--Collaborate table.-->
+												 <template if:false={objType.boolDisplaySpinner}>
+													 <lightning-datatable key-field={objType.keyField} data={objType.lstRecords} columns={lstCollaborateColumns} data-name={objType.strType} onsort={executeSorting}
+															 sorted-by={objType.objTableConfiguration.strSortBy} sorted-direction={objType.objTableConfiguration.strSortDirection}
+															 onrowselection={onRHSelection} hide-checkbox-column={objType.isgethelp}>
+													 </lightning-datatable>
+												 </template>
+					 
+													</div>
+											</div>
+										</div>
+									</section>
+								   
+									 <!--CONSOLIDATE Collaborate end-->
+								 </lightning-accordion-section>
+							  </template>
+						</template>
+					  </div>
+                   </lightning-accordion>
+                          <!--New custom lightning accordion removed-->
+                        
+                      </lightning-card>
+  
+                    </article>
+                  </div>
+                </div>
+        
+      </lightning-layout-item>   
+      <!--size={saltViewSize}-->
+					<div class="saltView" style="width:100%">
+						<lightning-layout-item flexibility="grow"  padding="around-small">
+	  <section class={objSaltViewModalProperties.strClassesSection}>
+		<div class={objSaltViewModalProperties.strClassesContainer} style={objSaltViewModalProperties.strStyleContainer}>
+			<div class="styleContentSaltView" style={objSaltViewModalProperties.strStyleContent}>
+				<div class={objSaltViewModalProperties.strClassesBody}>
+
+							<!-- Legend. -->
+							<section class="popoverLegend slds-hide slds-popover slds-nubbin_right-top slds-popover_large" role="dialog" 
+									style="position: absolute; right: 5%; margin-top: -10px;z-index: 9999999999; width: 450px;">
+								<lightning-button-icon icon-name="utility:new_window" class="slds-m-left_xx-small slds-float_right slds-popover__close" 
+										data-component="Legend" onclick={popOut}></lightning-button-icon>
+								<div id="popover-body-id" class="slds-popover__body">
+									<div class="legendHTML" lwc:dom="manual"></div>
+								</div>
+							</section>
+						
+							<!-- Buttons. -->
+							<div class="slds-clearfix">
+								<div class="slds-float_right">
+
+									<!-- Legend. -->
+									<lightning-button-icon icon-name="utility:info" variant={strLegendButtonVariant} class="slds-m-left_xx-small" onclick={displayLegend}></lightning-button-icon>
+
+									<!-- Pop out. -->
+									<template if:false={boolIsSaltViewPoppedOut}>
+										<lightning-button-icon icon-name="utility:new_window" class="slds-m-left_xx-small" 
+												data-component="Salt" onclick={popOut}></lightning-button-icon>
+									</template>
+									<template if:true={boolIsSaltViewPoppedOut}>
+										<lightning-button-icon icon-name="utility:pop_in" class="slds-m-left_xx-small" 
+												data-component="Salt" onclick={popOut}></lightning-button-icon>
+									</template>
+								</div>
+							</div>
+						  <lightning-accordion allow-multiple-sections-open active-section-name="OwnedCases" class="accordianClass">
+							  <lightning-accordion-section name="OwnedCases" label="Owned Cases">
+								<template if:true={boolDisplaySaltViewWarningMessage}>
+								  <div class="slds-notify_container slds-is-relative">
+									  <div class="slds-notify slds-notify_toast slds-theme_warning" role="status">
+										<span class="slds-icon_container slds-icon-utility-warning slds-m-right_small slds-no-flex slds-align-top" title="Warning">
+											<lightning-icon icon-name="utility:warning" size="small" alternative-text="warning"></lightning-icon>
+										</span>
+										<div class="slds-notify__content">
+										  <h2 class="slds-text-heading_small ">{errorMessage}</h2>
+										</div>
+									  </div>
+								  </div>
+								   
+							  </template>
+						  
+							  
+							  
+						  
+						  
+								  <div style="width:101%; display: none; margin-top: -10px;margin-left: -7px;">
+									
+						  
+									  <template for:each={oWrapperData.egList} for:item="eg">
+										   <span key={eg.idx} style={eg.egStyle1} title={eg.title}></span> <!--Green-->
+										   <span key={eg.idx} style={eg.egStyle2}></span>
+									  </template>
+									  <span style={oWrapperData.wrapperStyle1} title={oWrapperData.lastGradientTitle}></span> <!--Dark Red-->
+								  </div>
+						  
+						  
+								  <div class="slds-scope slds-is-relative" style={oWrapperData.hasCasesStyle}>
+									  
+									  <!-- Spinner. -->
+									  <template if:true={boolDisplaySaltViewSpinner}>
+										  <lightning-spinner variant="brand" size="medium"></lightning-spinner>
+									  </template>
+				  
+									  <!-- Salt view.-->
+									  <template for:each={oWrapperData.caseWrapper} for:item="cw">
+						  
+										   <!-- All Case Card -->
+										  
+										   <article key={cw.cs.Id} class="slds-card sticky" style={cw.technicalBlockStyle} if:true={cw.hasOwnedCase}>
+											<!-- |{cw.cs.OwnerId}|-->
+											  <div style="width:101%; height: 100%; display: flex; position: absolute; z-index: -1;">
+												  <template for:each={cw.egList} for:item="eg">
+													  <span key={eg.egIdx} style={eg.csEgStyle1} title={eg.title}></span>
+													  <span key={eg.egIdx} style={eg.csEgStyle2}></span> 
+												  </template>
+												  <span style={cw.technicalCWStyle1} title={cw.lastGradientTitle}></span>
+											  </div>
+											  <div class="slds-card__header slds-grid">
+												  <header class="slds-media slds-media_center slds-has-flexi-truncate">
+													  <div class="slds-media__figure">
+														<template if:true={cw.isTechnicalCase}>
+														  <span class="slds-icon_container slds-icon-standard-case" title="Technical Case">
+															  <lightning-icon icon-name="standard:case" alternative-text="case" size="small"></lightning-icon>                                    
+														  </span>
+														</template>
+														  <template if:true={cw.isAdministrativeCase}>
+															<span class="slds-icon_container" title="Administrative Case">
+															  <lightning-icon icon-name="standard:user_role" alternative-text="Administrative Case Icon" size="small"></lightning-icon>                                      
+															</span>
+														  </template>
+					
+														  <template if:true={cw.isOperationsCase}>
+															<span class="slds-icon_container" title="Operations Case">
+															  <lightning-icon icon-name="standard:settings" alternative-text="Operations Case Icon" size="small"></lightning-icon>                                      
+															</span>
+														  </template>
+					
+														  <template if:true={cw.isShipping_RequestCase}>
+															<span class="slds-icon_container" title="Shipping Request Case">
+															  <lightning-icon icon-name="standard:shipment" alternative-text="Shipping Request Case Icon" size="small"></lightning-icon>                                      
+															</span>
+														  </template>
+				  
+														  <template if:true={cw.isaae}>
+															<span class="slds-icon_container" title="Ask An Expert Case">
+															  <image src={ResourceAskAnExpert}  style="width: 25px"/>
+															</span>
+														  </template>
+														 
+														   
+				  
+													  </div>
+													  
+													  <div class="slds-media__body">
+														  <h2 class="slds-card__header-title">
+															  <a href="javascript:void(0);" class="slds-card__header-link slds-truncate" 
+															  title={cw.cs.CaseNumber} style="color: black;"
+															  >
+																  <!-- #WIP onclick="openPrimaryRecordTab('{!cw.cs.Id}', '{!cw.cs.CaseNumber}', '{!cw.position}')"-->
+																  <span  onclick={openPrimaryRecordTab}
+																   style="font-weight:900; font-size:0.8rem; color:black;" 
+																   data-navid={cw.cs.Id} data-tab="Case">
+																   {cw.cs.CaseNumber}
+																  </span>
+															  </a>
+                                <!-- T08 start-->
+                                <template if:true={cw.P0Enabled}>
+                                  <template if:true={cw.isTechnicalCase}>
+                                  <div style="margin-right: 10px;"></div>
+                                  <img src={resourceEngineerWorkspaceIconP0} title="Flagged as P0" alt="Flagged as P0" width="25" height="18" />
+                                  </template>
+                                </template>
+                                 <!-- T08 end-->
+														  </h2>
+														 
+														<div if:true={cw.cs.Account} class="slds-truncate" title={cw.cs.Account.Name} style="font-size:0.8rem;">
+															<!-- #WIP onclick="openPrimaryRecordTab('{!cw.cs.Accountid}', '{!cw.AccountName}', '{!cw.position}')"-->
+														  <a href="javascript:void(0);" onclick={openPrimaryRecordTab} 
+														  data-navid={cw.cs.AccountId}
+														   tabindex="-1" data-tab="Account"
+															style="color: black;">{cw.AccountName}</a>
+														</div>
+														
+														<div if:false={cw.cs.Account} class="slds-truncate" title="" style="font-size:0.8rem;">&nbsp;</div>
+				  
+													   <template if:true={cw.cs.Case_Timezone__r}>
+														  <div class="slds-truncate" title={cw.cs.Case_Timezone__r.Name} style="font-size: x-small;">
+														   {cw.Timezone} &nbsp;
+														  </div>
+													  </template>
+													  <template if:false={cw.cs.Case_Timezone__r}>
+														<div class="slds-truncate" title="" style="font-size: x-small;">&nbsp;</div>
+													  </template>
+													  </div>
+													  <span style="position: relative;">
+													  <!-- @developer <apex:outputPanel >
+													  </apex:outputPanel> -->
+													  </span><br/><br/>
+												  </header>
+											  </div>
+											  <div class="slds-card__body slds-card__body_inner" style="margin-bottom :0px;overflow: hidden;">
+												  
+												  <span style="color: #3e3e3c; font-weight:900; font-size:0.90rem;overflow: hidden;max-height: 40px;min-height: 40px;display:inline-block" title={cw.cs.Subject}>&nbsp;{cw.Subject}</span>
+												  <table class="slds-table slds-table_cell-buffer slds-table_header-hidden" style="background-color: transparent;">
+														<tbody>      
+														  <template if:true={cw.isTechnicalCWMileStoneTrueStyleNone}>
+															<tr class="slds-hint-parent" style="display:contents; padding: 0px" ><th style="display:block; padding: 0px;font-weight:bold" scope="row"><div style="min-height:20px">&nbsp;</div></th></tr>
+														  </template>
+					
+														  <tr class="slds-hint-parent" style={cw.technicalCWMileStoneTrueStyle}>
+															<th data-label="Milestone Time Remaining" scope="row" style={cw.technicalCWmilestoneViolatedTrueStyle}>
+															  <div class="slds-truncate" title={cw.MilestoneTimeRemainingTitle} style="font-weight: bold;">
+																  <image src={ResourceYellowCircle} title="Milestone Time Remaining" style="height:20px"/>
+																  &nbsp;{cw.milestoneMessage } 
+															   </div>
+															</th>
+															<th data-label="Milestone Time Remaining" scope="row" style={cw.technicalCWmilestoneViolatedFalseStyle}>
+															  <div class="slds-truncate" title="Milestone Violated" style="font-weight: bold;">
+																  <image src={ResourceRedCircle} title="Milestone violated" style="height:20px"/>  
+																   &nbsp;{cw.milestoneMessage }  
+															  </div>
+																<!--red circle-->   
+															</th>
+														  </tr>
+														  <tr class="slds-hint-parent" style={cw.technicalCWMileStoneFalseStyle}>
+															<th data-label="Milestone Time Remaining" scope="row" style="display: block; padding: 0px;">
+																<div class="slds-truncate" title="No Active Milestones" style="font-weight: bold;">
+																   <!-- No Active Milestones <image src="{!URLFOR($Resource.GreenCircle)}" title="Milestone violated" style="height:20px"/>!-->
+																	<br></br></div>
+															</th>
+														  </tr>
+														  <tr>
+															
+															<th data-label="Timezone" scope="row" style={cw.technicalAlertColorStyle}>
+															  <div class="slds-truncate" title={cw.technicalLastActivityDateTimeTitle} >Last Activity: {cw.LastActivityDateTime}</div>
+															</th>
+						  
+														  </tr>
+														</tbody>
+													  </table>
+													  <span>
+						  
+												  <span class="slds-pill slds-pill_link" style="font-size:0.60rem; position: relative; bottom:0; background-color: transparent;" title={cw.technicalNextActionTitle}>
+						  
+													  <image style={cw.techincalNextActionForCaseOwnerStyle} src={ResourceCase_Owner} alt="Next Action: Case Owner" width="25" height="25"/>
+													  <image style={cw.techincalNextActionForCustomerStyle} src={ResourceCustomer} alt="Next Action: Customer" width="25" height="25"/>
+													  <image style={cw.techincalNextActionForINFARDStyle} src={ResourceCaseTeam} alt="Next Action: INFA RnD" width="25" height="30"/>
+													  <image style={cw.techincalNextActionForCaseTeamStyle} src={ResourceCaseTeam} alt="Next Action: Case Team" width="25" height="30"/>
+													  <image style={cw.techincalNextActionForConsultantStyle} src={ResourceCaseTeam} alt="Next Action: Consultant" width="25" height="30"/>
+													  <image style={cw.techincalNextActionForReviewerStyle} src={ResourceCaseTeam} alt="Next Action: Reviewer" width="25" height="30"/>
+													  <image style={cw.techincalNextActionForCaseOwnerThirdPartyStyle} src={ResourceCaseTeam} alt="Next Action: Third Party" width="25" height="30"/>
+				  
+													  <image style={cw.techincalNextActionForCREStyle} src={resourceEngineerWorkspaceIconCRE} alt="Next Action: Operations Team" width="25" height="30"/>
+													  <image style={cw.techincalNextActionForPSStyle} src={resourceEngineerWorkspaceIconPS} alt="Next Action: PS Team" width="25" height="30"/>
+													  <image style={cw.techincalNextActionForMPStyle} src={resourceEngineerWorkspaceIconMP} alt="Next Action: Multi Team" width="25" height="30"/>
+													  <image style={cw.techincalNextActionForCOStyle} src={resourceEngineerWorkspaceIconCO} alt="Next Action: Collaborator" width="25" height="30"/>
+				  
+													  <image style={cw.TargetCloseDateStyle} src={ResourceTargetIcon} alt="Target Close Date" title="Target Close Date" width="25" height="30"/>
+													  <div class="slds-truncate" style="font-size:0.60rem; position:relative; padding: 0px; font-family: 'Salesforce Sans',Arial,sans-serif;" title={cw.TargetCloseDate}><b>{cw.TargetCloseDate}</b></div>
+				  
+				  
+												  </span>
+												  <span style="float: right">
+													<image style={cw.techincalisInactiveStyle} src={ResourceInactive_Case} alt="Inactive Case" title="Inactive Case" width="20" height="20"/>
+													<image src={ResourceRatingIcon} title="Rate this case position" style="height:20px" onclick={overlayOn} data-caseid={cw.cs.Id}/> <!--onclick="overlayOn('{!cw.cs.Id}','{!cw.cs.CaseNumber}','{!cw.cs.Case_Weightage__c}', '{!cw.cs.Case_Weightage__r.Weightage__c}')"/>-->
+													<image src={ResourcePreviewIcon} title="Preview case" style="height:20px" onclick={openPreviewModal} data-caseid={cw.cs.Id}/><!-- onclick="openModal('{!cw.cs.Id}','{!caseIds}')"/>-->
+												  </span>
+												  </span>
+											  </div>
+										  </article>
+									   
+										   <!-- all Case Card End -->
+									  </template>
+						  
+						  
+								  </div>
+					
+							  </lightning-accordion-section>
+						  </lightning-accordion>
+						  
+					
+						  <lightning-accordion allow-multiple-sections-open active-section-name="CaseTeam" class="accordianClass1">
+							<lightning-accordion-section name="CaseTeam" label="Case Team">
+								 
+							  <template for:each={caseTeamListWrapper} for:item="CT">
+						  
+								<lightning-accordion key={CT.sRole} allow-multiple-sections-open active-section-name={activeSectionCaseTeam}>
+								  <lightning-accordion-section name={CT.sRole} label={CT.sRole}>
+									<div class="slds-scope" style="display:flex;flex-wrap: wrap; margin-top: -10px;margin-left: 10px"  >
+									<template for:each={CT.groupedTeamCaseList} for:item="cw"> 
+									<!-- Technical Case Card -->
+								<article key={cw.cs.Id} class="slds-card sticky" style={cw.technicalBlockStyle} >
+								 <!-- |{cw.cs.OwnerId}|-->
+								   <div style="width:101%; height: 100%; display: flex; position: absolute; z-index: -1;">
+									   <template for:each={cw.egList} for:item="eg">
+										   <span key={eg.egIdx} style={eg.csEgStyle1} title={eg.title}></span>
+										   <span key={eg.egIdx} style={eg.csEgStyle2}></span> 
+									   </template>
+									   <span style={cw.technicalCWStyle1} title={cw.lastGradientTitle}></span>
+								   </div>
+								   <div class="slds-card__header slds-grid">
+									   <header class="slds-media slds-media_center slds-has-flexi-truncate">
+										   <div class="slds-media__figure">
+											  
+											<template if:true={cw.isTechnicalCase}>
+											  <span class="slds-icon_container slds-icon-standard-case" title="Technical Case">
+												  <lightning-icon icon-name="standard:case" alternative-text="case" size="small"></lightning-icon>                                    
+											  </span>
+											</template>
+											  <template if:true={cw.isAdministrativeCase}>
+												<span class="slds-icon_container" title="Administrative Case">
+												  <lightning-icon icon-name="standard:user_role" alternative-text="Administrative Case Icon" size="small"></lightning-icon>                                      
+												</span>
+											  </template>
+					
+											  <template if:true={cw.isOperationsCase}>
+												<span class="slds-icon_container" title="Operations Case">
+												  <lightning-icon icon-name="standard:settings" alternative-text="Operations Case Icon" size="small"></lightning-icon>                                      
+												</span>
+											  </template>
+					
+											  <template if:true={cw.isShipping_RequestCase}>
+												<span class="slds-icon_container" title="Shipping Request Case">
+												  <lightning-icon icon-name="standard:shipment" alternative-text="Shipping Request Case Icon" size="small"></lightning-icon>                                      
+												</span>
+											  </template>
+										   </div>
+										   
+										   <div class="slds-media__body">
+											   <h2 class="slds-card__header-title">
+												   <a href="javascript:void(0);" class="slds-card__header-link slds-truncate" 
+												   title={cw.cs.CaseNumber} style="color: black;"
+												   >
+													   <!-- #WIP onclick="openPrimaryRecordTab('{!cw.cs.Id}', '{!cw.cs.CaseNumber}', '{!cw.position}')"-->
+													   <span  onclick={openPrimaryRecordTab}
+														style="font-weight:900; font-size:0.8rem; color:black;" 
+														data-navid={cw.cs.Id} data-tab="Case">
+														&nbsp; {cw.cs.CaseNumber}
+													   </span>
+												   </a>
+												   
+											   </h2>
+					
+											   <div if:true={cw.cs.Account} class="slds-truncate" title={cw.cs.Account.Name} style="font-size:0.8rem;margin-left:0.7rem;">
+												<!-- #WIP onclick="openPrimaryRecordTab('{!cw.cs.Accountid}', '{!cw.AccountName}', '{!cw.position}')"-->
+											  <a href="javascript:void(0);" onclick={openPrimaryRecordTab} 
+											  data-navid={cw.cs.AccountId}
+											   tabindex="-1" data-tab="Account"
+												style="color: black;">&nbsp;{cw.AccountName}</a>
+											</div>
+											<div if:false={cw.cs.Account} class="slds-truncate" title="" style="font-size:0.8rem;">&nbsp;</div>
+											   <template if:true={cw.cs.Case_Timezone__r}>
+											   <div class="slds-truncate" title={cw.cs.Case_Timezone__r.Name} style="font-size: x-small;">&nbsp;{cw.Timezone }</div>
+										   </template>
+										   <template if:false={cw.cs.Case_Timezone__r}>
+											<div class="slds-truncate" title="" style="font-size: x-small;">&nbsp;</div>
+										  </template>
+										   </div>
+										   <span style="position: relative;">
+										   <!-- @developer <apex:outputPanel >
+										   </apex:outputPanel> -->
+										   </span><br/><br/>
+									   </header>
+								   </div>
+								   <div class="slds-card__body slds-card__body_inner" style="margin-bottom :0px">
+									   
+									   <span style="color: #3e3e3c; font-weight:900; font-size:0.90rem;overflow: hidden;max-height: 40px;min-height: 40px;display:inline-block" title={cw.cs.Subject}>&nbsp;{cw.Subject}</span>
+									   <table class="slds-table slds-table_cell-buffer slds-table_header-hidden" style="background-color: transparent;">
+											 <tbody>
+											  <template if:true={cw.isTechnicalCWMileStoneTrueStyleNone}>
+												<tr class="slds-hint-parent" style="display:contents; padding: 0px" ><th style="display:block; padding: 0px;font-weight:bold" scope="row"><div style="min-height:20px">&nbsp;</div></th></tr>
+											  </template>
+					
+											   <tr class="slds-hint-parent" style={cw.technicalCWMileStoneTrueStyle}>
+												 <th data-label="Milestone Time Remaining" scope="row" style={cw.technicalCWmilestoneViolatedTrueStyle}>
+												   <div class="slds-truncate" title={cw.MilestoneTimeRemainingTitle} style="font-weight: bold;">
+													   <image src={ResourceYellowCircle} title="Milestone Time Remaining" style="height:20px"/>
+													   &nbsp; {cw.milestoneMessage } 
+													</div>
+												 </th>
+												 <th data-label="Milestone Time Remaining" scope="row" style={cw.technicalCWmilestoneViolatedFalseStyle}>
+												   <div class="slds-truncate" title="Milestone Violated" style="font-weight: bold;">
+													   <image src={ResourceRedCircle} title="Milestone violated" style="height:20px"/>  
+													   &nbsp; {cw.milestoneMessage }  
+												   </div>
+													 <!--red circle- -!-->   
+												 </th>
+											   </tr>
+											   <tr class="slds-hint-parent" style={cw.technicalCWMileStoneFalseStyle}>
+												 <th data-label="Milestone Time Remaining" scope="row" style="display: block; padding: 0px;">
+													 <div class="slds-truncate" title="No Active Milestones" style="font-weight: bold;">
+														<!-- No Active Milestones <image src="{!URLFOR($Resource.GreenCircle)}" title="Milestone violated" style="height:20px"/>!-->
+														 <br></br></div>
+												 </th>
+											   </tr>
+											   <tr>
+												 
+												 <th data-label="Timezone" scope="row" style={cw.technicalAlertColorStyle}>
+												 
+												   <div class="slds-truncate" title={cw.technicalLastActivityDateTimeTitle} >Last Activity: {cw.LastActivityDateTime}</div>
+												 </th>
+					
+											   </tr>
+											 </tbody>
+										   </table>
+										   <span>
+					
+									   <span class="slds-pill slds-pill_link" style="font-size:0.60rem; position: relative; bottom:0; background-color: transparent;" title={cw.technicalNextActionTitle}>
+					
+										   <image style={cw.techincalNextActionForCaseOwnerStyle} src={ResourceCase_Owner} alt="Next Action: Case Owner" width="25" height="25"/>
+										   <image style={cw.techincalNextActionForCustomerStyle} src={ResourceCustomer} alt="Next Action: Customer" width="25" height="25"/>
+										   <image style={cw.techincalNextActionForINFARDStyle} src={ResourceCaseTeam} alt="Next Action: INFA RnD" width="25" height="30"/>
+										   <image style={cw.techincalNextActionForCaseTeamStyle} src={ResourceCaseTeam} alt="Next Action: Case Team" width="25" height="30"/>
+										   <image style={cw.techincalNextActionForConsultantStyle} src={ResourceCaseTeam} alt="Next Action: Consultant" width="25" height="30"/>
+										   <image style={cw.techincalNextActionForReviewerStyle} src={ResourceCaseTeam} alt="Next Action: Reviewer" width="25" height="30"/>
+										   <image style={cw.techincalNextActionForCaseOwnerThirdPartyStyle} src={ResourceCaseTeam} alt="Next Action: Third Party" width="25" height="30"/>
+										   <image style={cw.techincalNextActionForCREStyle} src={resourceEngineerWorkspaceIconCRE} alt="Next Action: Operations Team" width="25" height="30"/>
+											<image style={cw.techincalNextActionForPSStyle} src={resourceEngineerWorkspaceIconPS} alt="Next Action: PS Team" width="25" height="30"/>
+											<image style={cw.techincalNextActionForMPStyle} src={resourceEngineerWorkspaceIconMP} alt="Next Action: Multi Team" width="25" height="30"/>
+											<image style={cw.techincalNextActionForCOStyle} src={resourceEngineerWorkspaceIconCO} alt="Next Action: Collaborator" width="25" height="30"/>
+											&nbsp;&nbsp;
+										   <image style={cw.TargetCloseDateStyle} src={ResourceTargetIcon} alt="Target Close Date" title="Target Close Date" width="25" height="30"/>
+				  
+										   <div class="slds-truncate" style="font-size:0.60rem; position:relative; padding: 0px; font-family: 'Salesforce Sans',Arial,sans-serif;" title={cw.TargetCloseDate}><b>{cw.TargetCloseDate}</b></div>
+										   
+									   </span>
+									   <span style="float: right">
+										 <image style={cw.techincalisInactiveStyle} src={ResourceInactive_Case} alt="Inactive Case" title="Inactive Case" width="20" height="20"/>
+										 <image src={ResourceRatingIcon} title="Rate this case position" style="height:20px" onclick={overlayOn} data-caseid={cw.cs.Id}/> <!--onclick="overlayOn('{!cw.cs.Id}','{!cw.cs.CaseNumber}','{!cw.cs.Case_Weightage__c}', '{!cw.cs.Case_Weightage__r.Weightage__c}')"/>-->
+										 <image src={ResourcePreviewIcon} data-caseid={cw.cs.Id} title="Preview case" style="height:20px" onclick={openPreviewModal}/><!-- onclick="openModal('{!cw.cs.Id}','{!caseIds}')"/>-->
+									   </span>
+									   </span>
+								   </div>
+							   </article>
+							   </template>
+							  </div>
+							  </lightning-accordion-section>
+							</lightning-accordion>
+							
+						   </template>
+						  
+					
+					
+							</lightning-accordion-section>
+							
+						  </lightning-accordion>
+						  <lightning-accordion  allow-multiple-sections-open active-section-name="EngineerDashboard" class="dashboard" style="display:none;">
+							<lightning-accordion-section name="Engineer Dashboard" label="Engineer Dashboard">
+							  <div class="slds-p-around_small">
+								  <lightning-layout horizontal-align="spread">
+										  <lightning-layout-item size="12" class="slds-p-left_small">
+											
+											  <iframe frameborder="0" title="data visualization" 
+												  marginheight="0" marginwidth="0" 
+												  style="display: block; width: 100%; height: 550px; visibility: visible;" 
+												  src={metadataRecordURL} 
+												  ></iframe>
+										  </lightning-layout-item>
+								  </lightning-layout>
+							  </div>
+						  </lightning-accordion-section>
+						  </lightning-accordion>
+				</div>
+			</div>
+		</div>
+	</section>
+</lightning-layout-item> 
+</div>
+  </lightning-layout>
+  </div>
+  
+  
+  
+  <!--Rating OverLay-->
+  <template if:true={bRatingOverlay}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+             class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container">
+      <header class="slds-modal__header">
+      <button onclick={cancelReview} class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" >
+          <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close" ></lightning-icon>
+      </button>
+      <h1  class="slds-modal__title">Feedback</h1>
+      </header>
+      <div class="slds-modal__content slds-p-around_medium" style="min-height:60%">
+        <!-- T02 -->
+        <template if:true={bDisableSaveReviewBtn}>
+          <lightning-spinner></lightning-spinner>
+        </template>
+    
+        <div style="margin-left: 128px;margin-right: 125px;">
+        <h2> Please rate the position of Case # <span ><strong> {ratingCaseObj.cs.CaseNumber} </strong></span> in your view:</h2><br/>
+        <image  src={ResourceThumbs_Down_Icon} title="Vote Down" style={voteDownRating}  onclick={updateUserRating}/><!--onclick="updateUserRating('Down')"-->
+        <image  src={ResourceThumbs_Up_Icon} title="Vote Up" style={voteUpRating} onclick={updateUserRating}/><br/><br/><!--onclick="updateUserRating('Up')"-->
+        <!--<textarea  rows="4" cols="45" placeholder="Comments...." style="margin-left: 15px;" onclick={getComments}></textarea><br/>-->
+        <lightning-textarea name="input1"
+                            label="Enter some text"
+                            variant="label-hidden"
+                            placeholder="Comments...."
+                            style="margin-left: 15px;" 
+                            onchange={getComments}>
+        </lightning-textarea>
+        <!-- <button style="margin-left:150px;" onclick={saveReview}>Save</button> 
+        <button style="margin-left:20px;" onclick={cancelReview} >Cancel</button>-->
+        <a onclick={showFAQ}>Have a question, check <b>FAQ</b></a>
+      </div>
+      </div>
+      <footer class="slds-modal__footer">
+        <lightning-button label="Cancel" onclick={cancelReview}></lightning-button>    
+        &nbsp;&nbsp;            
+        <!-- T02 added disabled attribute-->
+        <lightning-button variant="brand" label="Save" onclick={saveReview} disabled={bDisableSaveReviewBtn}></lightning-button>
+      </footer>
+  
+      </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!--Rating OverLay-->
+  <template if:true={bFAQoverlay}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+             class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container">
+      <header class="slds-modal__header">
+      <button onclick={closeFAQoverlay} class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" >
+          <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close" ></lightning-icon>
+      </button>
+        <h1  class="slds-modal__title">SALT FAQ</h1>
+      </header>
+      <div class="slds-modal__content slds-p-around_medium" style="min-height:60%">
+        <div>
+      <ul class="ulclass">
+              <li  class="liclassQ" >
+                      <ul >
+                             Why SALT and why are we doing this change? 
+                          <li class="liclassA">
+                              Across the support industry, people are moving away from simple priority based model to entity driven severity model. As you saw in prior slides, we have several entities affecting a case and the list is growing with the growing demand for subscription model. Be assured that we are going in the right direction.
+                          </li>
+                      </ul>
+              </li>
+      </ul>
+          <br/>
+           <ul class="ulclass">
+              <li  class="liclassQ" >
+                      <ul >
+                               When should I be using this card view?
+                          <li class="liclassA">
+                              Instead of using the case list view, you should use this card view to work on the day-to-day cases.
+                          </li>
+                      </ul>
+              </li>
+      </ul>
+          <br/>
+           <ul class="ulclass">
+              <li  class="liclassQ" >
+                      <ul >
+                             Is the case list view getting removed from salesforce?
+                          <li class="liclassA">
+                             No, it is not removed, but it is not recommended to use any more.
+                          </li>
+                      </ul>
+              </li>
+      </ul>
+          <br/>
+           <ul class="ulclass">
+              <li  class="liclassQ" >
+                      <ul >
+                            How is the system calculating the case severity?
+                          <li class="liclassA">
+                             System uses multiple factors to assign a case weightage numbers. Factors in this project phase includes the key elements such as customer escalation, predictive escalation, CSM escalation, priority, BCSP, strategic, inactive, SLA, case next action etc.
+                          </li>
+                      </ul>
+              </li>
+      </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                      Where can I see this case weightage?
+                      <li class="liclassA">
+                          Case weightage is an implicit system field that is not available in salesforce. Note that it is going to be an evolving field that is going to get revised based on feedback from YOU.
+                      </li>
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                         <span style="color:red">
+                          Why can’t the P2 or P3 priority be added to the view?    
+                      </span>
+                      <li class="liclassA">
+                          Priority field intentionally skipped so that case priority is no longer a factor to work on a case. Internal case weightage should accommodate the priority intrinsically. Statistically speaking, escalations and critical cases are on P2 and P3, as they are on P1s too. Hence, it is not recommended differentiate the GCS engagement based on the priorities, though we are bound by SLAs. The SLAs would be reflected in the card so that we can still cater to our commitments.
+                      </li>
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                      How can I pick the cases from the view? What is the expectation?
+                      <li class="liclassA">
+                      You can start working on the first to last cases in the card view (left to right, top to bottom)
+                      </li>
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                         <span style="color:red">
+                             Does that mean the engineer has to always work on the first case?  
+                      </span>
+                      <li class="liclassA">
+                          No. There could be cases in the top few of your list which may not need your immediate attention. For example, there could be a business critical P3 case which is listed higher than a P1 case. What this indicates is that, the P3 case is highly critical and system would want you to keep a tab on it all the time, though it may be waiting on the customer. You can potentially follow-up or escalate internally to ensure that the customer’s objective is met, keeping the customer’s success as priority. As long as you are sure that there’s nothing you need to do in the first case, you can obviously skip and move on further down the list.
+                      </li>
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                      How can I add more fields in the card view?
+                      <li class="liclassA">
+                          You cannot add more fields in the card view as the system is built to incorporate the necessary fields of concern to the severity factor. Of course, you can give your feedback to @Salt team if you want to enhance the card view.
+                      </li>
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                       What if a case is showing up in lower end but it is supposed to be on top?
+                      <li class="liclassA">
+                         The weightage of the case not only depends on the priority alone. It includes multiple factors like escalations on the account or project levels, other P1’s raised for the account, CSM or Sales level escalations, inactivity, next actions, success offerings etc., If your case is listed on the top, then one or more of the above factors would have played a role in increasing the weightage of the case. And through a business standpoint, engineers need to work on the cases that are listed in the top and proceed further. 
+                      </li>
+                       <li class="liclassA">
+                         If you still need clarifications, every card has a feedback (thumbs up button) option to share your comments. We will review them and get back you promptly.
+                      </li>
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                      How will you measure the success of this project?
+                      <li class="liclassA">
+                          Direct feedback from engineer
+                      </li>
+                      <li class="liclassA">
+                          Average case rank that is clicked by the engineers. We expect top rank cases to be touched more often by the engineers
+                      </li>
+                      <li class="liclassA">
+                          Of course, QoS metrics
+                      </li>
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                      How often is this severity re-calculated and how often is this view refreshed?
+                      <li class="liclassA">
+                          Every 30 seconds (yes you read it correct, t-h-i-r-t-y seconds)
+                      </li>
+                      
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                        Can I take any action directly from the card view?
+                      <li class="liclassA">
+                          Engineers can do a quick case preview which shows the last 3 case updates and they can navigate to the previous/next case preview as well directly.
+                      </li>
+                      
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                        What about the severity of collaboration cases?
+                      <li class="liclassA">
+                         Collab cases will have same severity as the parent case, though, in rare cases, we do agree that it may not be accurate.
+                      </li>
+                      
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                       What about the severity of Ask-An-Expert cases?
+                      <li class="liclassA">
+                         AAE cases will have severity based on the AAE date. More severity will be given once the AAE date moves closer.
+                      </li>
+                      
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                      What are the known issues identified so far?
+                      <li class="liclassA">
+                          Collab Cases follow the same weightage as parent case, instead of following its own severity calculation
+                      </li>
+                      
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+           <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                      What are the metrics that are being collected as part of SALT?
+                      <li class="liclassA">
+                         Average position of the salt card, which engineer clicks. We expect this number to be less than 5, considering a 15-20 case load. That is, we expect engineers to work mostly in the top 5 cases if the system is calculating the weightage correctly. So far, the average card position is 5. Once the known issues such as live handoff, predictive escalations are resolved, this number should improve further.
+                      </li>
+                      <li class="liclassA">
+                        Number of salt cards clicked by each engineer, per day. This gives us an idea of user adoption. We expect a consistent number of clicks per day, considering the average number of cases handled by each engineer. Managers would reach out to engineers as and when needed to get their feedback, if this view is not being used, to address concern and improve the SALT project.
+                      </li>
+                      <li class="liclassA">
+                        QoS metrics before and after SALT such as inactivity, SLA, IR/OGR timelines, CSAT etc.,
+                      </li>
+                  </ul>
+              </li>
+          </ul>
+          <br/>
+          <ul class="ulclass">
+              <li  class="liclassQ" >
+                  <ul >
+                      How is the inactivity calculated in SALT?
+                      <li class="liclassA">
+                         Inactive cases in SALT changes color one day prior to the actual inactivity is set. This is to indicate the engineers to take appropriate measures proactively. For example, for a P3 case, SALT card will show inactive on the 4th business day, which is one day before the 5th day on which the case will be marked inactive. The inactivity is calculated on business days only.
+                      </li>
+                  </ul>
+              </li>
+          </ul>
+          
+  </div>
+      </div>
+      <footer class="slds-modal__footer">
+        <lightning-button label="Cancel" onclick={closeFAQoverlay}></lightning-button>                    
+      </footer>
+  
+      </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+  
+             <!--case detail preview window-->
+             <!-- <template if:true={bShowCasePreview}>
+              <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+                       class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                <button onclick={cancelPreview} class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" >
+                    <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close" ></lightning-icon>
+                </button>
+                <h1  class="slds-modal__title">Case Detail</h1>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" style="min-height:60%">
+                  <template if:true={isCaseLoading}>
+                    <lightning-spinner></lightning-spinner>
+                 </template>
+                  <lightning-record-view-form
+                              record-id={currentPreviewId}
+                              object-api-name="Case">
+                  <div class="slds-box">
+                    <lightning-layout multiple-rows>
+                      <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="CaseNumber"></lightning-output-field></lightning-layout-item>
+                      <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Priority"></lightning-output-field></lightning-layout-item>
+                      <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Subject"></lightning-output-field></lightning-layout-item>
+                      <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Status"></lightning-output-field></lightning-layout-item>
+                      <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="CreatedDate"></lightning-output-field></lightning-layout-item>
+                      <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Resolution_Target_DateTime__c"></lightning-output-field></lightning-layout-item>
+                      <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Escalated_Date__c"></lightning-output-field></lightning-layout-item>
+                    
+                      <lightning-layout-item size="6" padding="around-small">
+                       <lightning-record-view-form
+                        record-id={currentPreviewCase.cs.AccountId}
+                        object-api-name="Account">
+                     <lightning-output-field field-name="Name"></lightning-output-field>
+                     </lightning-record-view-form>
+                      </lightning-layout-item>
+  
+                      <lightning-layout-item size="6" padding="around-small">
+                        <lightning-output-field field-name="Next_Action__c"></lightning-output-field>
+                      </lightning-layout-item>
+                   
+                   
+  
+                    <template if:true={currentPreviewCase.cs.ContactId}>
+                      <lightning-record-view-form record-id={currentPreviewCase.cs.ContactId} object-api-name="Contact">
+                        <lightning-layout multiple-rows>
+                        <lightning-layout-item size="6" padding="around-small">
+                      <lightning-output-field field-name="Name"></lightning-output-field>
+                      </lightning-layout-item>
+                      <lightning-layout-item size="6" padding="around-small">
+                      <lightning-output-field field-name="Email"></lightning-output-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small">
+                      <lightning-output-field field-name="Phone"></lightning-output-field>
+                    </lightning-layout-item>
+                    </lightning-layout>
+                     </lightning-record-view-form>
+                    </template>
+                    <template if:true={currentPreviewCase.cs.Case_Timezone__c}>
+                      <lightning-record-view-form record-id={currentPreviewCase.cs.Case_Timezone__c}
+                      object-api-name="TimeZone__c">
+                      <lightning-layout-item size="6" padding="around-small">
+                      <lightning-output-field field-name="Name"></lightning-output-field>
+                    </lightning-layout-item>
+                      </lightning-record-view-form>
+                    </template>
+                  </lightning-layout>
+                       
+                  </div>
+                  </lightning-record-view-form>
+  
+  
+  
+                  <ul class="slds-timeline" style="margin-top:20px">
+                    <template for:each={lstCaseTimeLine.data1} for:item="tlItem">
+                      <div key={tlItem.redId}>
+                    <li>
+                      <div class="slds-timeline__item_expandable slds-timeline__item_task slds-is-open">
+                        <span class="slds-assistive-text">task</span>
+                        <div class="slds-media">
+                          
+                      <div class="slds-media__figure">
+                           
+                            <div class="slds-icon_container slds-icon-standard-task slds-timeline__icon" title="task">
+                              <lightning-icon icon-name="standard:task" size="small" alternative-text="task" title="task"></lightning-icon>
+                            </div>
+                          </div>
+                      
+                          <div class="slds-media__body">
+                            <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+                              <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
+                                <h3 class="slds-truncate">
+                                   <template if:true={tlItem.bIsFeedActivity}>
+                                    <strong><h2>Feed Activity</h2></strong>
+                                  </template>
+  
+                                  <template if:true={tlItem.bIsCaseComment}>
+                                    <strong><h2>Comment</h2></strong>
+                                  </template>
+  
+                                </h3>
+                              </div>
+                              <div class="slds-timeline__actions slds-timeline__actions_inline">
+                                <p class="slds-timeline__date">{tlItem.formattedDate}</p>
+                              </div>
+                            </div>
+                            
+                            <article class="slds-box slds-timeline__item_details slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small" aria-hidden="true">
+                              <ul class="slds-list_horizontal slds-wrap">
+                                <li class="slds-grid slds-grid_vertical slds-p-bottom_small">
+                                  <span class="slds-text-body_medium ">
+                                    <template if:true={tlItem.bIsFeedActivity}>  
+                                    <c-unescape-html-lwc text={tlItem.feed.Body}></c-unescape-html-lwc>
+                                    </template>
+  
+                                    <template if:true={tlItem.bIsCaseComment}>  
+                                      <c-unescape-html-lwc text={tlItem.commentBody}></c-unescape-html-lwc>   
+                                    </template>
+                                  </span>
+                                </li>
+                              </ul>
+                            </article>
+                          </div>
+  
+  
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                </template>
+                    </ul>
+  
+                  
+  
+  
+                </div>
+                <footer class="slds-modal__footer">
+                  <div class="slds-clearfix">
+                    <div class="slds-float_right">
+                      <lightning-button label="Next Case" disabled={bDisableNextCaseBtn} variant="brand" onclick={showNextCase}></lightning-button>
+                    </div>
+                    <div class="slds-float_left">
+                      <lightning-button  disabled={bDisablePreviousCaseBtn} label="Previous Case" variant="brand" onclick={showPreviousCase}></lightning-button>
+                    </div>
+                  </div>
+  
+                  
+                  
+                </footer>
+                </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template> -->
+
+            <template if:true={bShowCasePreview}>
+              <c-case-preview case-id={currentPreviewId} show-case-preview={bShowCasePreview} show-btn={bShowCasePreview} disable-next-case={bDisableNextCaseBtn} disable-previous-case={bDisablePreviousCaseBtn} onhidepreview={cancelPreview} onnextcase={showNextCase} onpreviouscase={showPreviousCase}></c-case-preview>
+            </template>
+  
+  
+  
+                     <!--single case detail preview window-->
+                     <template if:true={bShowSingleCasePreview}>
+                      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+                               class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                        <button onclick={cancelPreview} class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" >
+                            <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close" ></lightning-icon>
+                        </button>
+                        <h1  class="slds-modal__title">Case Detail</h1>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" style="min-height:60%">
+                          <template if:true={isCaseLoading}>
+                            <lightning-spinner></lightning-spinner>
+                         </template>
+                          <lightning-record-view-form
+                                      record-id={currentPreviewId}
+                                      object-api-name="Case">
+                          <div class="slds-box">
+                            <lightning-layout multiple-rows>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="CaseNumber"></lightning-output-field></lightning-layout-item>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Priority"></lightning-output-field></lightning-layout-item>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Subject"></lightning-output-field></lightning-layout-item>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Status"></lightning-output-field></lightning-layout-item>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="CreatedDate"></lightning-output-field></lightning-layout-item>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Resolution_Target_DateTime__c"></lightning-output-field></lightning-layout-item>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Escalated_Date__c"></lightning-output-field></lightning-layout-item>
+                            
+                              <lightning-layout-item size="6" padding="around-small">
+                               <lightning-record-view-form
+                                record-id={currentPreviewCase.AccountId}
+                                object-api-name="Account">
+                             <lightning-output-field field-name="Name"></lightning-output-field>
+                             </lightning-record-view-form>
+                              </lightning-layout-item>
+          
+                              <lightning-layout-item size="6" padding="around-small">
+                                <lightning-output-field field-name="Next_Action__c"></lightning-output-field>
+                              </lightning-layout-item>
+                           
+                           
+          
+                            <template if:true={currentPreviewCase.ContactId}>
+                              <lightning-record-view-form record-id={currentPreviewCase.ContactId} object-api-name="Contact">
+                                <lightning-layout multiple-rows>
+                                <lightning-layout-item size="6" padding="around-small">
+                              <lightning-output-field field-name="Name"></lightning-output-field>
+                              </lightning-layout-item>
+                              <lightning-layout-item size="6" padding="around-small">
+                              <lightning-output-field field-name="Email"></lightning-output-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                              <lightning-output-field field-name="Phone"></lightning-output-field>
+                            </lightning-layout-item>
+                            </lightning-layout>
+                             </lightning-record-view-form>
+                            </template>
+                            <template if:true={currentPreviewCase.Case_Timezone__c}>
+                              <lightning-record-view-form record-id={currentPreviewCase.Case_Timezone__c}
+                              object-api-name="TimeZone__c">
+                              <lightning-layout-item size="6" padding="around-small">
+                              <lightning-output-field field-name="Name"></lightning-output-field>
+                            </lightning-layout-item>
+                              </lightning-record-view-form>
+                            </template>
+                          </lightning-layout>
+                               
+                          </div>
+                          </lightning-record-view-form>
+  
+                          <ul class="slds-timeline" style="margin-top:20px">
+                            <template for:each={lstCaseTimeLine.data1} for:item="tlItem">
+                              <div key={tlItem.redId}>
+                            <li>
+                              <div class="slds-timeline__item_expandable slds-timeline__item_task slds-is-open">
+                                <span class="slds-assistive-text">task</span>
+                                <div class="slds-media">
+                                  
+                              <div class="slds-media__figure">
+                                   <!-- <button class="slds-button slds-button_icon" title="toggle" aria-controls="task-item-base">
+                                     <lightning-icon icon-name="utility:switch" size="x-small" alternative-text="switch!" title="switch"></lightning-icon>
+                                    </button>-->
+                                    <div class="slds-icon_container slds-icon-standard-task slds-timeline__icon" title="task">
+                                      <lightning-icon icon-name="standard:task" size="small" alternative-text="task" title="task"></lightning-icon>
+                                    </div>
+                                  </div>
+                              
+                                  <div class="slds-media__body">
+                                    <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+                                      <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
+                                        <h3 class="slds-truncate">
+                                           <template if:true={tlItem.bIsFeedActivity}>
+                                            <strong><h2>Feed Activity</h2></strong>
+                                          </template>
+          
+                                          <template if:true={tlItem.bIsCaseComment}>
+                                            <strong><h2>Comment</h2></strong>
+                                          </template>
+          
+                                        </h3>
+                                      </div>
+                                      <div class="slds-timeline__actions slds-timeline__actions_inline">
+                                        <p class="slds-timeline__date">{tlItem.formattedDate}</p>
+                                      </div>
+                                    </div>
+                                    <!--<p class="slds-m-horizontal_xx-small">
+                                      <a href="javascript:void(0);">You</a> created a task with
+                                      <a href="javascript:void(0);">Charlie Gomez</a>
+                                    </p>-->
+                                    <article class="slds-box slds-timeline__item_details slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small" aria-hidden="true">
+                                      <ul class="slds-list_horizontal slds-wrap">
+                                        <li class="slds-grid slds-grid_vertical slds-p-bottom_small">
+                                          <span class="slds-text-body_medium ">
+                                            <template if:true={tlItem.bIsFeedActivity}>     
+                                              <c-unescape-html-lwc text={tlItem.feed.Body}></c-unescape-html-lwc>
+                                              
+                                            </template>
+          
+                                            <template if:true={tlItem.bIsCaseComment}>  
+                                              <c-unescape-html-lwc text={tlItem.commentBody}></c-unescape-html-lwc>  
+                                            </template>
+                                          </span>
+                                        </li>
+                                      </ul>
+                                    </article>
+                                  </div>
+          
+          
+                                </div>
+                              </div>
+                            </li>
+                          </div>
+                        </template>
+                            </ul>
+  
+                        </div>
+                        </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+  
+  
+                     <!--single RH detail preview window-->
+                     <template if:true={bShowSingleRhPreview}>
+                      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+                               class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                        <button onclick={cancelPreview} class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" >
+                            <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close" ></lightning-icon>
+                        </button>
+                        <h1  class="slds-modal__title">Collaborate Detail</h1>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" style="min-height:60%">
+                          <lightning-record-view-form
+                                      record-id={currentPreviewRHId}
+                                      object-api-name="Raise_Hand__c">
+                          <div class="slds-box">
+                            <lightning-layout multiple-rows>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Name"></lightning-output-field></lightning-layout-item>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Product__c"></lightning-output-field></lightning-layout-item>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Question__c"></lightning-output-field></lightning-layout-item>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Reason__c"></lightning-output-field></lightning-layout-item>
+                              <lightning-layout-item size="6" padding="around-small"><lightning-output-field field-name="Type__c"></lightning-output-field></lightning-layout-item>                            
+                          </lightning-layout>
+                               
+                          </div>
+                          </lightning-record-view-form>
+                        </div>
+                        </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+  
+                    <template if:true={showModal}>
+                      <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small"
+                          aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                          <div class="slds-modal__container" style="width: 25% !important;">
+                              <header class="slds-modal__header">
+                                  <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Select List Views</h2>
+                              </header>
+                              <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                  <div class="slds-align_absolute-center1">
+                                      <lightning-dual-listbox  name="View" label="Select List Views"
+                                          source-label="Available" selected-label="Selected" value={selectedListViews}
+                                          options={optionstoSelect} onchange={handleChangeToSavePreferences}>
+                                      </lightning-dual-listbox>
+              
+                                  </div>
+                              </div>
+                              <footer class="slds-modal__footer">
+                                  <button class="slds-button slds-button_neutral" onclick={handleClick} name="cancel">Cancel</button>
+                                  <button class="slds-button slds-button_brand" onclick={handleClick} name="save">Save</button>
+                              </footer>
+                          </div>
+                      </section>
+                      <div class="slds-backdrop slds-backdrop_open"></div>
+                  </template>
+
+                  <!--T01-->
+                  <template if:true={showConfirmation}>
+                    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small"
+                        aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-2">
+                        <div class="slds-modal__container" style="width: 25% !important;">
+                            <header class="slds-modal__header">
+                                <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">{confirmationModalTitle}</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                                {confirmationModalContent}
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_neutral" onclick={cancelConfirmation} name="CancelConfirmation">Cancel</button>
+                                <button if:true={showConfirmationContinue} class="slds-button slds-button_brand" onclick={continueConfirmation} name="ContinueConfirmation">Continue</button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                  </template>
+                  <!--/T01-->
+  </div>
+  </template>

@@ -1,0 +1,9 @@
+<aura:component implements="force:hasRecordId,force:lightningQuickAction" controller="collabController">
+   
+    <div class="slds-align_absolute-center" style="height:5rem">Do you want to be part of Case Team ?</div>
+
+    <div class="slds-align_absolute-center" >
+    <lightning:button variant="brand" label="Yes" title="Yes" onclick="{! c.handleClick }" /> 
+    <lightning:button variant="brand" label="No" title="No" onclick="{! c.handleClick }" />
+</div>
+</aura:component>

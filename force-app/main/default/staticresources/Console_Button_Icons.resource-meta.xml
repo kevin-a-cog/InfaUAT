@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
+    <cacheControl>Private</cacheControl>
+    <contentType>application/x-zip-compressed</contentType>
+    <description>Tetris - new success offering Icons Added  By Hardev - 17-July-2018
+Custom Console Components button ICONS for Assignment, Escalation and Inactivity</description>
+</StaticResource>

@@ -1,0 +1,21 @@
+/* This hides the empty header of the modal. */
+.THIS.forceModal .slds-modal__header {
+	border-bottom-width: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+/* This increases the modal width to the 90% of the screen. */
+.THIS.forceModal .slds-modal__container {
+	min-width: 70vw;
+}
+
+/* This ensures the modal is in front of all the other components. */
+.THIS.forceModal {
+	z-index: 99999999 !important;
+}
+
+/* This sets the border radious of the content. */
+.THIS.forceModal .slds-modal__content {
+	border-radius: var(--lwc-borderRadiusMedium,0.25rem);
+}

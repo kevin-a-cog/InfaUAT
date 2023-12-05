@@ -1,0 +1,4 @@
+.comments-icn svg{
+    --sds-c-icon-color-foreground-default: red;
+    fill : red;
+}

@@ -1,0 +1,494 @@
+.infa-header {
+  height: 100px;
+}
+.infa-header .navbar-bg {
+  background-color: white;
+  box-shadow: 0 8px 6px -7px rgb(0 0 0 / 15%);
+  border-bottom: 2px solid #F1F1F1;
+}
+.infa-h-sticky {
+  position: fixed;
+  z-index: 5;
+  background: white;
+  height: 100px;
+  -webkit-animation: infacomSmoothScrollHeader 1s;
+  animation: infacomSmoothScrollHeader 1s;
+}
+.infa-header-bg {
+  background-color: white;
+  box-shadow: 0 8px 6px -7px rgb(0 0 0 / 15%);
+}
+.infa-separator {
+  border-left: 2px solid #d3d3d3;
+  height: 19px;
+  top: 12px;
+  position: relative;
+}
+.infa-navbar {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+  top: -12px;
+}
+.infa-navbar-logo {
+  width: 180px;
+}
+.infa-navbar-search-section {
+  height: 40px;
+  position: relative;
+}
+.infa-navbar-search-section-mobile {
+  display: none;
+}
+.infa-navbar-search,
+.infa-navbar-search-mobile {
+  cursor: pointer;
+  border: none;
+  color: transparent;
+  background-repeat: no-repeat;
+  border-radius: 5%;
+  position: relative;
+  display: inline-block;
+  height: 29px;
+  width: 15px;
+  top: 13px;
+  margin-right: 15px;
+}
+/*** Sticky header ***/
+.infa-sticky-header .dropdown {
+  position: static;
+}
+.infa-sticky-header .dropdown-menu {
+  border: none;
+  margin-top: 0px;
+  width: 100%;
+  box-shadow: 15px 15px 34px 0 rgb(0 0 0 / 15%);
+  top: 80%;
+}
+.infa-sticky-header .dropdown.infa-navbar-profile {
+  position: relative;
+}
+.infa-navbar-level2-text-heading {
+  display: block;
+  font-family: Roboto;
+  font-size: 18px;
+  margin-top: 14px;
+  margin-bottom: 12px;
+  color: #112128;
+  font-weight: 300;
+  line-height: 1.39;
+}
+.infa-navbar-level2-text-heading:hover {
+  color: #001aff;
+  text-decoration: none;
+}
+.infa-navbar-level2-text-description {
+  font-size: 16px;
+  line-height: 26px;
+  color: #112128;
+  font-weight: 300;
+  cursor: pointer;
+}
+.infa-sticky-header .row .infa-navbar-level2-col-text {
+  padding: 38px 21px 49px 44px;
+  background-repeat: no-repeat;
+}
+.infa-navbar-level2-col-text:first-of-type {
+  background: none !important;
+}
+.infa-navbar .nav-link.infa-nav-link {
+  font-size: 18px;
+  line-height: 26px;
+  color: #112128;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  margin: 0;
+  padding: 1px 0 12px 2rem;
+}
+.infa-navbar .nav-link.infa-nav-link:hover,
+.infa-header-top-row .nav-item a:hover {
+  color: #001aff;
+}
+.infa-navbar .nav-link.infa-nav-link.infa-nav-login-link {
+  padding: 10px 1em 0px 1em;
+}
+.infa-navbar-profile {
+  position: relative;
+  top: 19px;
+  height: 46px;
+}
+.infa-justify-image {
+  margin-right: 10px;
+}
+.infa-inline-flex {
+  display: inline-flex;
+}
+.infa-navbar-profile .dropdown-menu {
+  width: auto;
+  position: absolute;
+  max-width: 10rem;
+  min-width: 7rem;
+  left: -68px;
+}
+.infa-navbar-header-login .dropdown-menu {
+  left: -38px;
+  top: 42px;
+}
+.infa-navbar-profile .dropdown-menu .dropdown-item {
+  padding-left: 10px;
+  padding-top: 0px;
+  background-color: transparent;
+  font-weight: 300;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.infa-navbar-profile .dropdown-menu a.dropdown-item {
+  color: #001aff;
+}
+.infa-navbar-profile .dropdown-menu a.dropdown-item:hover {
+  color: #ff4d00;
+}
+.infa-arrow-right {
+  font-style: normal;
+  font-size: 16px;
+  margin-left: 10px;
+  display: inline-block;
+  transition: transform 0.5s ease-in;
+  color: #001aff;
+}
+a:hover .infa-arrow-right {
+  color: #ff4d00;
+  transform: translateX(50%);
+  -ms-transform: translateX(50%);
+  transition: all 0.5s ease-out;
+}
+
+.infa-navbar-search-form-wrapper,
+.infa-navbar-search-form-wrapper input[type="submit"] {
+  display: none;
+}
+.infa-navbar-search-form-wrapper input[type="text"] {
+  border: none;
+  border-bottom: 1px solid black;
+}
+.infa-navbar-search-form-wrapper form {
+  display: inline-block;
+}
+.infa-navbar-search-close {
+  cursor: pointer;
+  font-size: 24px;
+  position: absolute;
+  margin-top: -54px;
+  right: 10px;
+  z-index: 3;
+  color: #979797;
+}
+.infa-navbar-search-form-wrapper {
+  position: absolute;
+}
+.infa-block {
+  display: block !important;
+  top: 0px;
+  right: 0px;
+}
+.infa-hide {
+  display: none !important;
+}
+.infa-header-top-row {
+  float: right;
+}
+.infa-header-top-row ul {
+  display: flex;
+  margin-bottom: 0;
+}
+.infa-header-top-row .nav-item a {
+  font-size: 12px;
+  line-height: 26px;
+  color: #112128;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+}
+.infa-sticky-header .nav-item.infa-nav-username a {
+  padding-right: 6px;
+}
+.infa-sticky-header .nav-item.infa-nav-logout a {
+  padding-left: 6px;
+}
+.infa-nav-profile-mobile {
+  display: none;
+}
+/* @media screen and (min-width: 1300px) {
+  .infa-navbar-search-close {
+    margin-left: 15px;
+  }
+} */
+.navbar .nav-item:hover .dropdown-menu {
+  display: block;
+}
+.nav-item .dropdown-menu .dropdown-item {
+  padding: 0;
+}
+.nav-item .dropdown-menu .dropdown-item:hover {
+  background: none;
+}
+.nav-link.infa-nav-link.dropdown-toggle:hover {
+  color: #112128 !important;
+  cursor: default;
+}
+.dropdown-toggle::after {
+  display: none;
+}
+@-webkit-keyframes infacomSmoothScrollHeader {
+  0% {
+    -webkit-transform: translateY(-102px);
+    transform: translateY(-102px);
+  }
+
+  to {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes infacomSmoothScrollHeader {
+  0% {
+    -webkit-transform: translateY(-102px);
+    transform: translateY(-102px);
+  }
+
+  to {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+.btnIconOverlay {
+  position: absolute;
+  z-index: 1;
+  margin: 0.5% 0 0 92%;
+} 
+@media all and (min-width: 992px) {
+  .navbar .nav-item:hover .dropdown-menu {
+    display: block;
+  }
+}
+@media screen and (max-width: 992px) {
+  .infa-header {
+    height: 64px;
+  }
+  .infa-h-sticky {
+    height: 64px;
+  }
+  .infa-sticky-header .navbar-collapse {
+    margin-top: 20px;
+  }
+  .infa-sticky-header .nav-item .dropdown-menu {
+    display: none;
+  }
+  .navbar .nav-link.infa-nav-link,
+  .navbar .nav-link.infa-nav-link.infa-nav-login-link {
+    font-size: 14px;
+    padding: 10px 10px 10px 0px;
+  }
+  .infa-sticky-header .navbar-light .navbar-toggler {
+    border: none;
+    float: right;
+    top: 10px;
+    position: relative;
+    padding-right: 0;
+  }
+  .infa-navbar-search-section {
+    display: none;
+  }
+  .infa-navbar-profile {
+    top: -3px;
+  }
+  .infa-navbar-search-section-mobile {
+    display: block;
+    margin-bottom: 10px;
+  }
+  .infa-navbar-search-mobile {
+    margin-left: 0px;
+    height: 16px;
+    top: 11px;
+    margin-bottom: 15px;
+  }
+  .infa-navbar-search-form-wrapper {
+    display: inline;
+    top: -10px;
+    left: 20px;
+  }
+  .infa-navbar-search-close {
+    display: none;
+  }
+  .infa-navbar-search-form-wrapper input[type="text"] {
+    border: none;
+    position: absolute;
+    top: 5px;
+  }
+  .infa-nav-login-link {
+    display: none;
+  }
+  .infa-sticky-header .infa-navbar-header-login .dropdown-menu {
+    display: block;
+    left: auto;
+    top: auto;
+    box-shadow: none;
+  }
+  .infa-navbar-header-login .dropdown-menu .dropdown-item {
+    color: #112128;
+    padding-left: 0px;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .infa-navbar-header-login .dropdown-menu .dropdown-item .infa-arrow-right {
+    display: none;
+  }
+  .infa-navbar-profile {
+    height: 103px;
+  }
+  .infa-sticky-header .navbar-collapse {
+    position: absolute;
+    background: white;
+    width: 120%;
+    left: -30px;
+    top: 44px;
+    padding-left: 20px;
+    z-index: 2;
+    box-shadow: 7px 8px 10px 0 rgb(0 0 0 / 8%);
+  }
+  .infa-header-top-row {
+    display: none;
+  }
+  .infa-navbar {
+    top: 0;
+    display: block;
+    height: 63px;
+  }
+  .infa-navbar .row {
+    display: block;
+    margin-right: 0;
+    margin-left: 0;
+  }
+  .infa-header,
+  .infa-sticky-header {
+    height: 64px;
+  }
+  .infa-nav-profile-mobile {
+    display: flex;
+  }
+  .infa-separator {
+    top: 13px;
+  }
+  .infa-navbar-logo {
+    margin-right: 0;
+  }
+}
+/*** Code for navbar icon and close icon for mobile starts ***/
+@media screen and (max-width: 768px) {
+  .navbar-toggler {
+    position: absolute;
+    text-indent: 100%;
+    white-space: nowrap;
+    z-index: 2;
+    cursor: pointer;
+    -moz-user-select: none;
+    user-select: none;
+    top: 0 !important;
+    right: -25px;
+    width: 60px;
+    height: 60px;
+    background-color: transparent;
+  }
+  .hamburgermenu {
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background: #001aff;
+    top: 50%;
+    margin-top: -1px;
+    left: 50%;
+    margin-left: -15px;
+    -webkit-transition: background 0.3s;
+  }
+  .hamburgermenu::after {
+    background: #001aff;
+    width: 65%;
+    transition: transform 0.3s, background 0s, -webkit-transform 0.3s;
+    top: 8px;
+    height: 100%;
+    right: 1px;
+    content: "";
+    position: absolute;
+  }
+  .hamburgermenu::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 71px;
+    background: #001aff;
+    width: 65%;
+    transition: transform 0.3s, background 0s, -webkit-transform 0.3s;
+    top: -7px;
+    height: 100%;
+  }
+  .infa-navbar-close-icon {
+    background-image: none !important;
+    position: absolute;
+    right: 0.8em;
+    top: 1em;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    opacity: 1;
+  }
+  .infa-navbar-close-icon::before {
+    position: absolute;
+    left: 15px;
+    content: " ";
+    height: 23px;
+    width: 2px;
+    background-color: #001aff;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  .infa-navbar-close-icon::after {
+    position: absolute;
+    left: 15px;
+    content: " ";
+    height: 23px;
+    width: 2px;
+    background-color: #001aff;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
+  .nav-item .dropdown-menu {
+    padding: 0;
+  }
+  .nav-item .dropdown-menu .dropdown-item {
+    padding: 0;
+  }
+  /*** Dropdown css ***/
+  .infa-navbar-no-description-mobile {
+    display: none;
+  }
+  .infa-navbar-level2-col-text {
+    background: none !important;
+  }
+  .infa-sticky-header .row .infa-navbar-level2-col-text {
+    padding: 0;
+    margin-left: 10px;
+  }
+  .infa-sticky-header .dropdown-menu {
+    box-shadow: none;
+  }
+  .infa-navbar-level2-text-heading {
+    font-size: 12px;
+  }
+  .navbar-collapse {
+    z-index: 10 !important;
+  }
+}

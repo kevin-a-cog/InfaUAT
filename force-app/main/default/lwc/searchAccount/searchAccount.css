@@ -1,0 +1,24 @@
+.modalBody {
+    position: relative;
+    overflow-y: hidden;
+}
+
+.fix-height {
+    height: 100%;
+}
+
+.custom-radio-group {
+    --sds-c-button-line-height: 1.5rem;
+}
+
+.custom-spinner {
+    padding: 50%;
+}
+
+.save-custom-spinner {
+    padding: 30%;
+}
+
+.custom-padding{
+    padding-bottom: 50px;
+}

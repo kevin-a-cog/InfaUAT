@@ -1,0 +1,19 @@
+<template>
+    
+    <lightning-button-stateful
+        label-when-off="Subscribe"
+        label-when-on="Subscribed"
+        label-when-hover="Unsubscribe"
+        icon-name-when-off="utility:add"
+        icon-name-when-on="utility:check"
+        icon-name-when-hover="utility:close"
+        selected={isSelected}
+        onclick={handleClick}
+        variant={buttonVariant}>
+    </lightning-button-stateful>
+
+    <div if:true={showInProgress}>
+        <lightning-spinner alternative-text="processing..."></lightning-spinner>
+    </div>
+    
+</template>

@@ -1,0 +1,577 @@
+<!--
+/*
+ * Name			:	globalScheduler
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	7/22/2021
+ * Description	:	This LWC creates Appointment Requests and blocks calendars.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		7/22/2021		N/A				Initial version.						 N/A
+ Vignesh D              11/24/2021      I2RT-4414       Include email only case contacts    	 T01
+ Vignesh D				12/06/2021		I2RT-5110		Select Primary Case Contact by default   T02
+ Vignesh D				04/27/2021		I2RT-5749		Added logic for expired token/unexpected T03
+ 														error when generating zoom meeting.
+ */
+-->
+<template>
+	
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+	<template if:false={boolSendBackResponse}>
+		<template if:true={boolIsPoppedOut}>
+			<div class="customQuickActionCSS" lwc:dom="manual"></div>
+		</template>
+	</template>
+	<template if:true={boolSendBackResponse}>
+		<div class="customInlineCSS" lwc:dom="manual"></div>
+	</template>
+
+	<!-- Id for Quick Action. -->
+	<div style="display: none;">{recordId}</div>
+
+	<!-- Internal. -->
+	<template if:false={boolIsReadOnly}>
+
+		<!-- Card body. -->
+		<lightning-card>
+
+			<!-- Header. -->
+			<h2 class="slds-modal__title slds-hyphenate" slot="title">
+				<template if:true={boolIsCreateInvite}>{label.Insert_Meeting}</template>
+				<template if:true={boolIsSendSchedule}>{label.Insert_Availability}</template>
+			</h2>
+
+			<!-- Action buttons. -->
+			<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-left_xx-small" onclick={initializeComponent} slot="actions"></lightning-button-icon>
+			<template if:false={boolIsPoppedOut}>
+				<lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+			</template>
+			<template if:true={boolIsPoppedOut}>
+				<lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+			</template>
+
+			<!-- Spinner. -->
+			<template if:true={boolDisplaySpinner}>
+				<div class="slds-is-relative spinnerProperties">
+					<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+				</div>
+			</template>
+
+			<!-- Scheduler. -->
+			<template if:false={boolDisplaySpinner}>
+
+				<!-- Community link. -->
+				<template if:true={boolIsInQuickAction}>
+					<template if:true={boolHasCommunityLink}>
+						<input class="clipboard" style="position:fixed;top:-5rem;height:1px;width:10px;"></input>
+						<div class="slds-grid">
+							<div class="slds-col slds-size_1-of-12">&nbsp;</div>
+							<div class="slds-col slds-size_10-of-12 slds-text-align_center">
+								<lightning-formatted-url value={strCommunityLink} target="_blank"></lightning-formatted-url>
+								&nbsp;&nbsp;&nbsp;
+								<lightning-button-icon icon-name="utility:copy_to_clipboard" onclick={copyToClipboard}></lightning-button-icon>
+							</div>
+							<div class="slds-col slds-size_1-of-12">&nbsp;</div>
+						</div>
+						<div class="slds-grid">
+							<div class="slds-col slds-size_12-of-12">&nbsp;</div>
+						</div>
+					</template>
+				</template>
+
+				<!-- Modal Body. -->
+				<div class={strBodyClasses}>
+					<div class="slds-grid">
+
+						<!-- Left panel. -->
+						<div class="slds-col slds-size_8-of-12 slds-p-right_x-small">
+							<div class="slds-page-header">
+								<div class="slds-page-header__row">
+
+									<!-- Date range. -->
+									<div class="slds-page-header__col-title slds-m-top_x-small">
+										<span class="slds-page-header__title slds-truncate">{strStart} - {strStop}</span>
+									</div>
+
+									<!-- Calendar controls. -->
+									<div class="slds-grid slds-float_right">
+										<div class="slds-page-header__control slds-m-right_xx-small">
+											<ul class="slds-button-group-list">
+												<li>
+													<lightning-button-icon icon-name="utility:chevronleft" variant="border-filled" size="large" onclick={moveBackwards}></lightning-button-icon>
+												</li>
+												<li>
+													<lightning-button-icon icon-name="utility:chevronright" variant="border-filled" size="large" onclick={moveForward}></lightning-button-icon>
+												</li>
+											</ul>
+										</div>
+										<div class="slds-page-header__control slds-m-right_x-small">
+											<lightning-input type="date" class="calendarButton" onchange={setSpecificDate}></lightning-input>
+										</div>
+										<div class="slds-page-header__control">
+											<lightning-button label={label.Scheduler_Control_Today} onclick={setToday}></lightning-button>
+										</div>
+										<div class="slds-page-header__control">
+											<ul class="slds-button-group-list">
+												<li>
+													<lightning-input type="toggle" class="unavailableToggle" onchange={toggleUnavailable}></lightning-input>
+												</li>
+												<li>
+													<lightning-helptext content={label.Unavailable_Slots}></lightning-helptext>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="slds-page-header__row">
+
+									<!-- Time zone picker. -->
+									<div class="slds-page-header__col-title slds-size_9-of-12 slds-m-top_x-small">
+										<lightning-combobox value={strSelectedTimeZone} placeholder={label.Scheduler_Control_Time_Zone} options={lstTimeZones} onchange={updateTimeZone}></lightning-combobox>
+									</div>
+
+									<!-- Duration. -->
+									<div class="slds-page-header__col-title slds-size_3-of-12 slds-m-top_x-small">
+										<lightning-combobox value={intDefaultDurationMinutes} placeholder="Duration" options={lstDurations} onchange={updateDuration}></lightning-combobox>
+									</div>
+								</div>
+							</div>
+
+							<!-- Slots headers. -->
+							<div class="slds-grid slds-grid_align-space slds-has-divider_bottom slds-p-vertical_small" aria-hidden="true">
+
+								<!-- Day. -->
+								<template for:each={lstAvailableSlots} for:item="objDay">
+									<div key={objDay.strHeader} class="slds-col slds-medium-size_1-of-6 slds-large-size_1-of-6 slds-text-align_center">
+										<h3 class="slds-text-body_regular">{objDay.strHeader}</h3>
+									</div>
+								</template>
+							</div>
+
+							<!-- Slots body. -->
+							<div class="slds-grid">
+								<template for:each={lstAvailableSlots} for:item="objDay">
+
+									<!-- Slots availabel. -->
+									<template if:true={objDay.boolHasSlots}>
+										<div key={objDay} class="slds-col">
+											<div class="slds-grid slds-grid_vertical slds-grid_vertical-align-center">
+												<div class="slds-p-top_x-small slds-text-body_small">
+													<template for:each={objDay.lstSlots} for:item="objSlot">
+														<template if:true={objSlot.boolIsAvailable}>
+															<div key={objSlot.strSlotLabel} class="slds-grid parentSlots">
+																<div class="slds-col">
+																	<lightning-button-stateful label-when-off={objSlot.strSlotLabel} label-when-on={objSlot.strSlotLabel} variant={objSlot.strState} 
+																			data-id={objSlot.strId} data-start-time={objSlot.datTStart} onclick={clickSlot} class="slots"></lightning-button-stateful>
+																</div>
+															</div>
+														</template>
+														<template if:false={objSlot.boolIsAvailable}>
+															<div key={objSlot.strSlotLabel} class="slds-grid parentSlots unavailable slds-hide">
+																<div class="slds-col">
+																	<lightning-button-stateful label-when-off={objSlot.strSlotLabel} label-when-on={objSlot.strSlotLabel} variant={objSlot.strState} 
+																			data-id={objSlot.strId} data-start-time={objSlot.datTStart} onclick={clickSlot} class="slots"></lightning-button-stateful>
+																</div>
+															</div>
+														</template>
+													</template>
+													<lightning-button-stateful label-when-off="00:00 - 00:00 am" label-when-on="00:00 - 00:00 am" disabled="true" style="visibility: hidden;" 
+															class="slots"></lightning-button-stateful>
+												</div>
+											</div>
+										</div>
+									</template>
+
+									<!-- Empty day. -->
+									<template if:false={objDay.boolHasSlots}>
+										<div key={objDay} class="slds-col emptySlotContainer">
+											<div class="emptySlotParent">
+												<div class="slds-p-top_x-small slds-text-body_small">
+													<lightning-button-stateful label-when-off="00:00 - 00:00 am" label-when-on="00:00 - 00:00 am" disabled="true" style="visibility: hidden;" 
+															class="slots"></lightning-button-stateful>
+												</div>
+											</div>
+										</div>
+									</template>
+								</template>
+							</div>
+						</div>
+
+						<!-- Right panel. -->
+						<div class="slds-col slds-size_4-of-12 slds-border_left">
+							<div class="slds-col slds-p-bottom_x-small slds-border_bottom">
+								<h3 class="slds-m-left_small slds-text-heading_small">{label.Scheduler_Title_Users}</h3>
+							</div>
+		
+							<!-- User lookup. -->
+							<div class="slds-col slds-m-top_small slds-p-left_x-small">
+								<lightning-record-edit-form object-api-name="Attendee__c">
+									<lightning-input-field field-name="User__c" variant="label-hidden" class="searchPeople" onchange={addLookupUser}></lightning-input-field>
+								</lightning-record-edit-form>
+							</div>
+		
+							<!-- Team members. -->
+							<template if:true={boolHasTeamMembers}>
+								<div class="slds-col slds-m-top_small slds-p-bottom_x-small slds-border_bottom">
+									<h3 class="slds-m-left_small slds-text-heading_small">{label.Scheduler_Title_Team_Member}</h3>
+								</div>
+								<template for:each={lstTeamMembers} for:item="objTeamMember">
+									<div key={objTeamMember.strId} class="slds-col slds-m-top_small slds-p-left_x-small">
+										<div class="slds-grid slds-grid_vertical-align-center">
+											<div class="slds-col slds-size_12-of-12 slds-p-left_x-small">
+												<lightning-input type="toggle" label={objTeamMember.strName} name={objTeamMember.strId} class="teamMember"
+														onchange={toggleTeamMember} checked={objTeamMember.boolIsActive}></lightning-input>
+											</div>
+										</div>
+									</div>
+								</template>
+							</template>
+		
+							<!-- Contacts. -->
+							<template if:true={boolDisplayContactsSection}>
+								<template if:true={boolHasContacts}>
+
+									<!-- Record Contacts. -->
+									<div class="slds-col slds-m-top_small slds-p-bottom_x-small slds-border_bottom">
+										<template if:true={boolIsCaseContact}>
+											<h3 class="slds-m-left_small slds-text-heading_small">{label.Scheduler_Title_Case_Contacts}</h3>
+										</template>
+										<template if:true={boolIsPlanContact}>
+											<h3 class="slds-m-left_small slds-text-heading_small">{label.Scheduler_Title_Plan_Contacts}</h3>
+										</template>
+									</div>
+									<template for:each={lstRecordContacts} for:item="objContact">
+										<template if:false={objContact.boolIsSupportAccountContact}>
+											<div key={objContact.strId} class="slds-col slds-m-top_small slds-p-left_x-small">
+												<div class="slds-grid slds-grid_vertical-align-center">
+													<div class="slds-col slds-size_12-of-12 slds-p-left_x-small">
+														<lightning-input type="toggle" label={objContact.strName} name={objContact.strId} class="caseContact"
+																onchange={toggleCaseContact} checked={objContact.boolIsActive} disabled={objContact.boolDisableRemove}></lightning-input>
+													</div>
+												</div>
+											</div>
+										</template>
+									</template>
+										<!-- <T01> -->
+										<!-- Email Only Case Contacts. -->
+										<template if:true={boolShowEmailOnlyCaseContacts}>
+											<template if:true={boolHasEmailOnlyCaseContacts}>
+												<template for:each={lstEmailOnlyCaseContacts} for:item="objContact">
+													<template if:true={objContact.isCaseContact}>
+													<div key={objContact.strId} class="slds-col slds-m-top_small slds-p-left_x-small">
+														<div class="slds-grid slds-grid_vertical-align-center">
+															<div class="slds-col slds-size_12-of-12 slds-p-left_x-small">
+																<lightning-input type="toggle" label={objContact.strName} name={objContact.strId} class="caseContact"
+																	onchange={toggleEmailOnlyCaseContact} checked={objContact.boolIsActive}></lightning-input>
+															</div>
+														</div>
+													</div>
+													</template>
+												</template>
+											</template>
+										</template>
+									<!-- <T01> -->
+								</template>
+							</template>
+
+							<!-- Selected attendes. -->
+							<div class="slds-col slds-m-top_small slds-p-bottom_x-small slds-border_bottom">
+								<h3 class="slds-m-left_small slds-text-heading_small">{label.Scheduler_Title_Attendees}</h3>
+							</div>
+							<template for:each={lstUsers} for:item="objUser">
+								<div key={objUser.strId} class="slds-col slds-m-top_small slds-p-left_x-small">
+									<div class="slds-box slds-box_x-small">
+										<div class="slds-grid slds-grid_vertical-align-center">
+											<div class="slds-col slds-size_2-of-12 slds-p-left_x-small">
+												<lightning-avatar size="medium" fallback-icon-name="standard:user" variant="circle"></lightning-avatar>
+											</div>
+											<div class="slds-col slds-size_5-of-12 slds-p-left_x-small">
+												<p class="slds-truncate" title={objUser.strName}>{objUser.strName}</p>
+											</div>
+											<div class="slds-col slds-size_5-of-12 slds-p-left_x-small">
+												<lightning-button label={label.Remove} disabled={boolDisableRemove} onclick={removeUser} data-id={objUser.strId}></lightning-button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</template>
+						</div>
+					</div>
+				</div>
+
+				<!-- Save button. -->
+				<div class="slds-modal__footer slds-m-top_x-small">
+
+					<!-- If we need to send the template back to the parent. -->
+					<template if:true={boolSendBackResponse}>
+						<template if:true={boolIsSendSchedule}>
+							<div class="slds-grid">
+								<div class="slds-col">
+									<lightning-input type="toggle" label="Share as Public" class="shareAsPublic" onchange={toggleShareAsPublic} checked={boolShareAsPublic}></lightning-input>
+								</div>
+								<div class="slds-col">
+									<lightning-button variant="brand" label={label.Send_Schedule} onclick={sendSchedule}></lightning-button>
+								</div>
+							</div>
+						</template>
+						<template if:true={boolIsCreateInvite}>
+							<lightning-button variant="brand" label={label.Create_Meeting} onclick={scheduleEvent}></lightning-button>
+						</template>
+					</template>
+
+					<!-- Normal process. -->
+					<template if:false={boolSendBackResponse}>
+						<lightning-button variant="brand" label={label.Create_Meeting} onclick={scheduleEvent}></lightning-button>
+					</template>
+				</div>
+			</template>
+		</lightning-card>
+	</template>
+
+	<!-- Community. -->
+	<template if:true={boolIsReadOnly}>
+
+		<!-- Spinner. -->
+		<template if:true={boolDisplaySpinner}>
+			<div class="slds-is-relative spinnerProperties">
+				<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+			</div>
+		</template>
+		
+		<!-- Scheduler. -->
+		<template if:false={boolDisplaySpinner}>
+			<div class={strExternalCSSBody}>
+				<div class="slds-grid">
+
+					<!-- Valid link. -->
+					<template if:false={boolHasErrorMessage}>
+
+						<!-- Left panel. -->
+						<div class="slds-col slds-size_9-of-12 slds-p-right_x-small">
+							<div class="slds-page-header">
+								<div class="slds-page-header__row">
+
+									<!-- Date range. -->
+									<div class="slds-page-header__col-title slds-m-top_x-small">
+										<span class="slds-page-header__title slds-truncate">{strStart} - {strStop}
+
+											<!-- If we are in an external site. -->
+											<template if:true={boolIsExternalSite}>
+
+												<!-- If we are in Cosmos. -->
+												<template if:true={boolIsPlanContact}>&nbsp;&nbsp;&nbsp;{strBrowserTimezoneLabel}</template>
+											</template>
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<!-- Slots headers. -->
+							<div class="slds-grid slds-grid_align-space slds-has-divider_bottom  slds-p-vertical_small" aria-hidden="true">
+
+								<!-- Day. -->
+								<template for:each={lstAvailableSlots} for:item="objDay">
+									<div key={objDay.strHeader} class="slds-col slds-medium-size_1-of-6 slds-large-size_1-of-6 slds-text-align_center">
+										<h3 class="slds-text-body_regular">{objDay.strHeader}</h3>
+									</div>
+								</template>
+							</div>
+
+							<!-- Slots body. -->
+							<div class="slds-grid">
+								<template for:each={lstAvailableSlots} for:item="objDay">
+
+									<!-- Slots availabel. -->
+									<template if:true={objDay.boolHasSlots}>
+										<div key={objDay} class="slds-col">
+											<div class="slds-grid slds-grid_vertical slds-grid_vertical-align-center">
+												<div class="slds-p-top_x-small slds-text-body_small">
+													<template for:each={objDay.lstSlots} for:item="objSlot">
+														<div key={objSlot.strSlotLabel} class="slds-grid parentSlots">
+															<div class="slds-col">
+																<lightning-button-stateful label-when-off={objSlot.strSlotLabel} label-when-on={objSlot.strSlotLabel} variant={objSlot.strState} 
+																		data-id={objSlot.strId} data-start-time={objSlot.datTStart} onclick={clickSlot} class="slots"></lightning-button-stateful>
+															</div>
+														</div>
+													</template>
+												</div>
+											</div>
+										</div>
+									</template>
+
+									<!-- Empty day. -->
+									<template if:false={objDay.boolHasSlots}>
+										<div key={objDay} class="slds-col emptySlotContainer">
+											<div class="emptySlotParent">
+												<div class="slds-p-top_x-small slds-text-body_small">
+													<lightning-button-stateful label-when-off="00:00 - 00:00 am" label-when-on="00:00 - 00:00 am" disabled="true" style="visibility: hidden;" 
+															class="slots"></lightning-button-stateful>
+												</div>
+											</div>
+										</div>
+									</template>
+								</template>
+							</div>
+						</div>
+
+						<!-- Right panel. -->
+						<div class="slds-col slds-size_3-of-12 slds-border_left">
+		
+							<!-- Contacts. -->
+							<template if:true={boolDisplayContactsSection}>
+								<template if:true={boolHasContacts}>
+
+									<!-- Force.com Site fields. -->
+									<template if:true={boolIsExternalSite}>
+										<div class="slds-col slds-m-top_small slds-p-bottom_x-small slds-border_bottom">
+											<h3 class="slds-m-left_small slds-text-heading_small">{label.Force_com_User_Name}</h3>
+										</div>
+										<div class="slds-col slds-m-top_small slds-p-left_x-small">
+											<div class="slds-grid slds-grid_vertical-align-center">
+												<div class="slds-col slds-size_12-of-12 slds-p-left_x-small">
+													<lightning-input type="text" class="fullName"></lightning-input>
+												</div>
+											</div>
+										</div>
+										<div class="slds-col slds-m-top_small slds-p-bottom_x-small slds-border_bottom">
+											<h3 class="slds-m-left_small slds-text-heading_small">{label.Force_com_User_Email}</h3>
+										</div>
+										<div class="slds-col slds-m-top_small slds-p-left_x-small">
+											<div class="slds-grid slds-grid_vertical-align-center">
+												<div class="slds-col slds-size_12-of-12 slds-p-left_x-small">
+													<lightning-input type="text" class="fullEmail"></lightning-input>
+												</div>
+											</div>
+										</div>
+									</template>
+
+									<!-- Record Contacts. -->
+									<div class="slds-col slds-m-top_small slds-p-bottom_x-small slds-border_bottom">
+										<template if:true={boolIsCaseContact}>
+											<h3 class="slds-m-left_small slds-text-heading_small">{label.Scheduler_Title_Case_Contacts}</h3>
+										</template>
+										<template if:true={boolIsPlanContact}>
+											<h3 class="slds-m-left_small slds-text-heading_small">{label.Scheduler_Title_Plan_Contacts}</h3>
+											<template if:true={boolIsExternalSite}>
+												<h4 class="slds-m-left_small">{label.Name_And_Participants}</h4>
+											</template>
+										</template>
+									</div>
+									<template for:each={lstRecordContacts} for:item="objContact">
+										<template if:false={objContact.boolIsSupportAccountContact}>
+											<div key={objContact.strId} class="slds-col slds-m-top_small slds-p-left_x-small">
+												<div class="slds-grid slds-grid_vertical-align-center">
+													<div class="slds-col slds-size_12-of-12 slds-p-left_x-small">
+														<lightning-input type="toggle" label={objContact.strName} name={objContact.strId} class="caseContact"
+																onchange={toggleCaseContact} checked={objContact.boolIsActive}></lightning-input>
+													</div>
+												</div>
+											</div>
+										</template>
+									</template>
+
+									<!-- Support Account Contacts - I2RT-4337 -->
+									<div class="slds-col slds-m-top_small slds-p-bottom_x-small slds-border_bottom">
+										<h3 class="slds-m-left_small slds-text-heading_small">{label.Scheduler_Title_Other_Contacts}</h3>
+									</div>
+									<template for:each={lstRecordContacts} for:item="objContact">
+										<template if:true={objContact.boolIsSupportAccountContact}>
+											<div key={objContact.strId} class="slds-col slds-m-top_small slds-p-left_x-small">
+												<div class="slds-grid slds-grid_vertical-align-center">
+													<div class="slds-col slds-size_12-of-12 slds-p-left_x-small">
+														<lightning-input type="toggle" label={objContact.strName} name={objContact.strId} class="caseContact"
+																onchange={toggleCaseContact} checked={objContact.boolIsActive}></lightning-input>
+													</div>
+												</div>
+											</div>
+										</template>
+									</template>
+								</template>
+							</template>
+
+							<!-- Selected attendes. -->
+							<div class="slds-col slds-m-top_small slds-p-bottom_x-small slds-border_bottom">
+								<h3 class="slds-m-left_small slds-text-heading_small">{label.Scheduler_Title_Attendees}</h3>
+							</div>
+							<template for:each={lstUsers} for:item="objUser">
+								<div key={objUser.strId} class="slds-col slds-m-top_small slds-p-left_x-small">
+									<div class="slds-box slds-box_x-small">
+										<div class="slds-grid slds-grid_vertical-align-center">
+											<div class="slds-col slds-size_3-of-12 slds-p-left_x-small">
+												<lightning-avatar size="medium" fallback-icon-name="standard:user" variant="circle"></lightning-avatar>
+											</div>
+											<div class="slds-col slds-size_9-of-12 slds-p-left_x-small">
+												<p class="slds-truncate" title={objUser.strName}>{objUser.strName}</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</template>
+						</div>
+					</template>
+
+					<!-- Expired link. -->
+					<template if:true={boolHasErrorMessage}>
+						<div class="slds-col slds-size_12-of-12">
+							<template if:true={boolIsLinkExpired}>
+								<div class="slds-illustration slds-illustration_large" aria-hidden="true">
+									<img src="/img/chatter/OpenRoad.svg" class="slds-illustration__svg" alt=""/>
+									<div class="slds-text-color_weak">
+										<h3 class="slds-text-heading_medium">{strErrorMessage}</h3>
+									</div>
+								</div>
+							</template>
+							<template if:true={boolEventAlreadyCreated}>
+								<div class="slds-align_absolute-center slds-text-color_weak" >
+									<h3 class="slds-text-heading_medium"><lightning-formatted-rich-text value={strErrorMessage} ></lightning-formatted-rich-text></h3>
+								</div>
+							</template>
+							<template if:false={boolHasAccess}>
+								<div class="slds-illustration slds-illustration_large" aria-hidden="true">
+									<img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt=""/>
+									<div class="slds-text-color_weak">
+										<h3 class="slds-text-heading_medium">{strErrorMessage}</h3>
+									</div>
+								</div>
+							</template>
+						</div>
+					</template>
+				</div>
+			</div>
+
+			<!-- Save button. -->
+			<template if:false={boolHasErrorMessage}>
+				<div class="slds-modal__footer slds-m-top_x-small slds-m-bottom_x-small">
+					<lightning-button variant="brand" label={label.Create_Meeting} onclick={scheduleEvent} disabled={boolMeetingScheduled}></lightning-button>
+				</div>
+			</template>
+		</template>
+	</template>
+
+	<!-- <T03> -->
+	<!-- Reauthenticate modal -->
+	<template if:true={boolDisplayReauthentication}>
+		<section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+			<div class="slds-modal__container reauthenticateModal">
+				<header class="slds-modal__header" style="padding-top: 0px; padding-bottom: 0px;">
+					<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+						onclick={closeReauthenticationModal}>
+						<lightning-icon icon-name="utility:close" variant="inverse" size="small"></lightning-icon>
+					</button>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium slds-text-heading_small reauthenticateModalContent">
+					{label.Scheduler_Expired_Token_Message}
+				</div>
+				<div class="slds-modal__footer">
+					<lightning-button variant="brand" label="Go to Meeting Account" onclick={redirectToMeetingAccount}></lightning-button>
+				</div>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</template>
+	<!-- <T03> -->
+
+</template>

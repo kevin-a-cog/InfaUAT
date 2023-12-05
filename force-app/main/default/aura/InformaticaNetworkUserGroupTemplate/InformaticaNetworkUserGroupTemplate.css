@@ -1,0 +1,54 @@
+.THIS, .THIS h1, .THIS h2, .THIS h3, .THIS h4, .THIS h5, .THIS h6 {
+	font-family: Roboto, sans-serif !important; 
+}
+
+.THIS .infa-h-sticky {
+    max-width: var(--maxWidth);
+}
+            
+.THIS .mainContentArea {
+	min-height: calc(100vh - 280px);
+}
+            
+.THIS .notifications {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform:translate(-50%,-50%);
+    
+}
+
+.THIS .notificationContainer {             
+    position: fixed;
+    top: 0;
+    left: 75vw;
+    height: 100px;
+    z-index: 10;
+}
+
+@media screen and (max-width: 1950px) {
+    .THIS .notificationContainer {             
+        left: 74vw;
+    }
+}
+
+@media screen and (max-width: 1750px) {
+    .THIS .notificationContainer {             
+        left: 76vw;
+    }
+}
+@media screen and (max-width: 1630px) {
+    .THIS .notificationContainer {             
+        left: 78vw;
+    }
+}
+@media screen and (max-width: 1550px) {
+    .THIS .notificationContainer {             
+        left: 80vw;
+    }
+}
+@media screen and (max-width: 1500px) {
+    .THIS .notificationContainer {             
+        left: 82vw;
+    }
+}

@@ -1,0 +1,26 @@
+.card-border {
+    display: block;
+    box-shadow: 1px 1px 15px var(--box-shadow-color);
+}
+
+.card-border:hover {
+    /*border: 2px solid #0198fa;*/
+    --box-shadow-color: hsl(207, 94%, 50%);
+}
+
+.icon-approval{
+    padding: 0.1rem;
+}
+
+.wrapped-content{
+    overflow-wrap: break-word;
+}
+
+img {
+    border-radius: 50%;
+    width: 55px;
+}
+
+.custom-font {
+    font-weight: var(--lwc-fontWeightBold,300);
+}

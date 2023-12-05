@@ -1,0 +1,65 @@
+<template>
+
+	<!-- Spinner. -->
+	<template if:true={boolDisplaySpinner}>
+		<div class="slds-is-relative">
+			<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+		</div>
+	</template>
+
+	<!-- Table. -->
+	<template if:false={boolDisplaySpinner}>
+		<div class="sp-datatable">
+			<!-- <c-sp-data-table-component-with-options hide-check-box=true columns={columns} records={data}></c-sp-data-table-component-with-options> -->
+			<template if:true={showTable}>
+				<c-sp-datatable-utility
+				records={allRecords} 
+				total-records={allRecords.length} 
+				columns ={columns}
+				key-field="Id"
+				show-search-box="true" 
+				hide-check-box="true"           
+				max-row-selection={allRecords.length}
+				onpaginatorchange={handlePaginatorChange}
+				onsetselectedrecords={handleAllSelectedRows}
+				onhandleeditdelete={handleRowActions}>
+				</c-sp-datatable-utility>  
+			</template>  
+			<template if:false={showTable}>
+				<div class="sp-table--empty">	
+					<p>There are no files on the plan yet</p>
+				</div>
+			</template>
+		</div>
+	</template>
+
+    <!---Edit File modal-->
+	<template if:true={boolIsEditModalOpen}>
+		<c-sp-modal-component show-modal={boolIsEditModalOpen} onclose={closeEditModal} modal-header="Edit File">
+			<div slot="modal-content">
+				<div class="form-row">                                
+					<div class="form-group es-form-group es-lds-form-group es-lds-file-select col-md-6">
+						<div class="clearfix">
+							<lightning-icon class="sp-form__icon-with-upload" size="x-small" icon-name="utility:attach"></lightning-icon>
+							<lightning-file-upload label="Attach Files (Upload limit is 2GB per file)" name="fileUploader" record-id={planRecordId} accept={acceptedFormats} 
+									onuploadfinished={handleUploadFinished}>
+							</lightning-file-upload>  
+							<template for:each={uploadedFiles} for:item="file">
+								<lightning-pill class="sp-form__icon-with-upload" key={file.documentId} label={file.name} name={file.name} onremove={handleRemove}></lightning-pill>         
+							</template>
+						</div>
+					</div>
+				</div> 
+				<div class="form-row">
+					<div class="form-group sp-form-group sp-lds-form-group" style="width: 100%;">
+						<lightning-textarea name="description" label="Description" onchange={valueChangeHandler} label-visible required></lightning-textarea>
+					</div>
+				</div>
+			</div>
+			<div slot="modal-footer">
+				<lightning-button label="Cancel" class="es-button es-button--secondary mr-2" onclick={closeEditModal} disabled={boolDisableButtons}></lightning-button>
+				<lightning-button label="Save" class="es-button es-button--primary" onclick={saveNewFileAndDeleteExistingOne} disabled={boolDisableButtons}></lightning-button>
+			</div>
+		</c-sp-modal-component>
+	</template>
+</template>

@@ -1,0 +1,79 @@
+<!--/*
+ * Name			    :	CsmPlanCommunicationTimeLibeViewer
+ * Author		    :	Deva M
+ * Created Date		: 	22/10/2021
+ * Description		:	CSM Plan Communicatio Timeline viewer of html.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			    Jira No.		Description					Tag
+ **********************************************************************************************************
+ Deva M		            22/10/2021		    N/A				Initial version.			N/A
+ */
+-->
+<template>
+     <!-- Spinner. -->
+     <div class="spinner">
+        <template if:true={boolDisplaySpinner}>
+            <lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+        </template>
+    </div>
+    <div class="slds-m-bottom_large">      
+        <lightning-layout>
+            <!--List view to sort the Plan comments-->
+            <lightning-layout-item flexibility="auto" padding="around-small">
+                <lightning-button-menu alternative-text="SORT BY" label={selectedSortLabel} onselect={handleClick} name="list-view-action" variant="bare">
+                    <lightning-menu-subheader label="SORT BY"></lightning-menu-subheader>
+                    <template for:each={objConfiguration.listViewFilters} for:item="listview">
+                        <lightning-menu-item key={listview.value} checked={listview.isSelected} value={listview.value} label={listview.label}>
+
+                        </lightning-menu-item>
+                    </template>
+                </lightning-button-menu>
+            </lightning-layout-item>
+            <!--Search Comments-->
+            <lightning-layout-item flexibility="auto" padding="around-small">    
+                <lightning-input variant="label-hidden" placeholder={objConfiguration.strSearchPlaceholder} type="search" onchange={handleSearchComments}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item flexibility="auto" padding="around-small">         
+                <lightning-button-icon icon-name="utility:expand_all" alternative-text="Expand"
+                    onclick={handleClick} name="expandAll" class="slds-m-left_small slds-float_right" title="Expand all replies"
+                    if:false={isExpanded}>
+                </lightning-button-icon>
+                <lightning-button-icon icon-name="utility:collapse_all" alternative-text="Collapse"
+                    onclick={handleClick} name="collapseAll" class="slds-m-left_small slds-float_right"
+                    title="Collapse all replies" if:true={isExpanded}>
+                </lightning-button-icon> 
+                <lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" alternative-text={label.Refresh_Button} class="slds-m-left_small slds-float_right" onclick={refreshCard} 
+                    ></lightning-button-icon>
+
+                <template if:false={isPoppedOut}>
+                    <lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+                </template>
+                <template if:true={isPoppedOut}>
+                    <lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+                </template>
+            </lightning-layout-item>
+        </lightning-layout>       
+    </div> 
+
+    <template if:true={boolNoCommentsFound}>  
+        <!--Actual comments-->
+        <template if:true={commentList}> 
+            <c-csm-plan-communication-timeline record-id={recordId} onclose={loadRecords} comment-list={commentList} showbutton={showButtons} onshowreply={handleShowReply} 
+                onhidereply={handleHideReply}></c-csm-plan-communication-timeline>
+        </template>
+    </template>
+    <template if:false={boolNoCommentsFound}>        
+        <div class="slds-col slds-size_12-of-12">
+            <div class="slds-illustration slds-illustration_small" aria-hidden="true">
+                <img src="/img/chatter/OpenRoad.svg" class="slds-illustration__svg" alt="No Comments to Found"/>
+                <div class="slds-text-color_weak">
+                    <h3 class="slds-text-heading_medium">Collaborate here!</h3>
+                    <p class="slds-text-body_regular slds-p-top_small slds-m-bottom_none">Here's where you start talking with your colleagues about this record.</p>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

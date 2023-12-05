@@ -1,0 +1,50 @@
+<template>
+    <div class="infa-articles-container">
+        <div class="container infa-articles-data">
+            <div class="d-flex align-items-center">
+                <a href={searchPage} class="in-section-link-header">
+                    <div class="in-section-heading">
+                        Articles
+                    </div>
+                    <lightning-icon class="chevron-down right-chev"
+                        icon-name="utility:chevronright" size="x-small">
+                    </lightning-icon>
+                </a>
+            </div>
+            <template if:true={showNoresult}>
+                <ul class="infa-articles-list">
+                    <template for:each={articles} for:item="article">
+                        <li key={article.infapublicurl} class="infa-article-details">
+                            <div class="infa-article">
+                                <div class="infa-article-type">{article.infadocumenttype}</div>
+                                <a href={article.infapublicurl}>
+                                    <div class="infa-article-header">{article.coveoTitle}</div>
+                                </a>
+                                <div class="infa-article-product">
+                                    <ul class="infa-article-product-items">
+                                        <template if:true={article.infaprimaryproduct}>
+                                            <li class="infa-article-product-item">
+                                                <div class="infa-article-product-list">{article.infaprimaryproduct}
+                                                </div>
+                                            </li>
+                                        </template>
+                                        <template for:each={article.athenaproductversion} for:item="productversions">
+                                            <li key={productversions} class="infa-article-product-version-item">
+                                                <div class="infa-article-productversion-list">{productversions}
+                                                </div>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                                <div class="infa-article-description">{article.coveoExcerpt}</div>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template if:false={showNoresult}>
+                <div> Oops! Looks like no relevant Articles...</div>
+            </template>
+        </div>
+    </div>
+</template>

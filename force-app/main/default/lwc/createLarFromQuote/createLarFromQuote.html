@@ -1,0 +1,107 @@
+<template>
+
+    <lightning-quick-action-panel header="New Legal Agreement: License and Cloud Agreements">
+
+        <template if:true={showSpinner}>        
+            <lightning-spinner variant="brand" alternative-text="creating LAR" size="medium"></lightning-spinner>
+        </template>       
+
+        <template lwc:if={larCreateable}>
+            <template lwc:if={quoteOrdered}>
+                <template lwc:if={quoteExhALar}>
+                    <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                        <h2>LAR is already existing for this Quote</h2>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <lightning-record-edit-form object-api-name="Legal_Agreement__c" record-type-id={larRecType}  
+                    onsuccess={handleSuccess} 
+                    onerror={handleError} 
+                    onsubmit={handleSubmit}>
+    
+                        <lightning-messages> </lightning-messages>
+                        <div class="slds-section slds-is-open">
+                            <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Information</span>
+                            </h3>
+                        </div>
+    
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Account__c" value={accountName} required>
+                                </lightning-input-field>
+                                <lightning-input-field field-name="Opportunity__c" value={opptyName}>
+                                </lightning-input-field>
+                                <lightning-input-field field-name="Quote_Number__c" value={quoteName}>
+                                </lightning-input-field>
+                                <lightning-input-field field-name="Contract_Group__c" value={contractGroup} required>
+                                </lightning-input-field>
+                                <lightning-input-field field-name="Contract_Term_Type__c" required> </lightning-input-field>
+                                <lightning-input-field field-name="Start_Date__c" required> </lightning-input-field>
+                                <lightning-input-field field-name="Expiration_Date__c"> </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Status__c"> </lightning-input-field>
+                                <lightning-input-field field-name="Legal_Entity__c" value={legalEntity} onchange={handleLegalEntityChange}> </lightning-input-field>
+                                <template lwc:if={legalEntityMatchError}><div class="slds-text-color_error">Legal Entity is different on Quote and LAR</div></template>
+                                <lightning-input-field field-name="Contract_Type__c" value={contractType} required>
+                                </lightning-input-field>
+                                <lightning-input-field field-name="Agreement_Type__c" value={agreementType}>
+                                </lightning-input-field>
+                                <lightning-input-field field-name="Contract_Purpose__c" required> </lightning-input-field>
+                                <lightning-input-field field-name="Use_Third_Party_Paper__c"> </lightning-input-field>
+                                <lightning-input-field field-name="Contract_Number__c"> </lightning-input-field>
+                            </div>
+                        </div>
+    
+                        <div class="slds-section slds-is-open">
+                            <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Financial Info</span>
+                            </h3>
+                        </div>
+    
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Net_Amount__c"> </lightning-input-field>
+                                <lightning-input-field field-name="Payment_Terms__c"> </lightning-input-field>
+                                <lightning-input-field field-name="Payment_Schedule__c"> </lightning-input-field>
+                                <lightning-input-field field-name="Product_Price_Holds__c"> </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Billing_Frequency__c"> </lightning-input-field>
+                                <lightning-input-field field-name="Override_Billing_Frequency__c"> </lightning-input-field>
+                                <lightning-input-field field-name="CurrencyIsoCode"> </lightning-input-field>
+                                <lightning-input-field field-name="Subscription_Uplift__c"> </lightning-input-field>
+                                <lightning-input-field field-name="Support_Uplift__c"> </lightning-input-field>
+                            </div>
+                        </div>                    
+    
+                        <div class="slds-m-top_x-small slds-clearfix slds-theme_shade">
+                            <div class="slds-p-vertical_small slds-float_right">
+                                <lightning-button class="slds-p-right_x-small" label="Cancel"
+                                    onclick={handleCancel}></lightning-button>
+                                <lightning-button label="Save" variant="brand" type="submit"></lightning-button>
+                            </div>
+                        </div>
+                    </lightning-record-edit-form>
+
+                </template>
+
+            </template>
+
+            <template lwc:else>
+                <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                    <h2>LAR cannot be generated before Quote is Ordered</h2>
+                </div>
+            </template>
+        </template>
+
+        <template lwc:else>
+            <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                <h2>Please reach out to SOG's or Legal team to create LAR</h2>
+            </div>
+        </template>
+
+    </lightning-quick-action-panel>
+
+</template>

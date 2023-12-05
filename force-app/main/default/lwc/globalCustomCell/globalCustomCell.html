@@ -1,0 +1,556 @@
+<!--
+/*
+ * Name			:	linkCell
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	8/4/2021
+ * Description	:	This LWC serves as a template for the Link Cell Custom Type.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		8/4/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+	<!-- Inline CSS. -->
+	<div class="customInlineCSS" lwc:dom="manual"></div>
+
+	<!-- HTML cell. -->
+	<div class="htmlContainer" lwc:dom="manual"></div>
+
+	<!-- Global container. -->
+	<template if:true={boolRenderAll}>
+
+		<!-- New Record behavior. -->
+		<template if:true={boolBehaveAsNewRecord}>
+	
+			<!-- Standard field. -->
+			<template if:true={boolIsStandardField}>
+				<lightning-record-edit-form object-api-name={strRecordParentObjectAPIName}>
+					<lightning-input-field field-name={strRecordFieldAPIName} variant="label-hidden" value={strValue} required={boolIsRequired} disabled={boolIsDisabled} class="newRecord validate" 
+							onkeydown={keyDown} onchange={changed} data-has-error={boolHasError}></lightning-input-field>
+				</lightning-record-edit-form>
+			</template>
+	
+			<!-- Picklist field. -->
+			<template if:true={boolIsPicklist}>
+				<lightning-combobox value={strSelectedValue} options={lstPicklistOptions} required={boolIsRequired} class="newRecord validate" onchange={changed} 
+						data-has-error={boolHasError}></lightning-combobox>
+			</template>
+		</template>
+	
+		<!-- Default. -->
+		<template if:false={boolBehaveAsNewRecord}>
+	
+			<!-- Boolean cell. -->
+			<template if:true={boolIsBoolean}>
+	
+				<!-- If the cell is editable. -->
+				<template if:true={boolIsEditableLocal}>
+					<span class="slds-grid slds-grid_align-spread" onmouseenter={mouseOverEdit} onmouseleave={mouseOutEdit}>
+	
+						<!-- If the user is editing the field. -->
+						<template if:true={boolEditingInProgress}>
+							<lightning-record-edit-form object-api-name={strRecordParentObjectAPIName}>
+								<lightning-input-field field-name={strRecordFieldAPIName} disabled={boolIsDisabled} onchange={stopEditing} onkeydown={keyDown} variant="label-hidden" value={strValue} 
+										class="editableCheckbox inlineUpdatedRecord validate"></lightning-input-field>
+							</lightning-record-edit-form>
+						</template>
+	
+						<!-- If the user is editing the field. -->
+						<template if:false={boolEditingInProgress}>
+							<template if:true={strValue}>
+								<lightning-icon icon-name="utility:check" size="x-small"></lightning-icon>
+							</template>
+							<template if:false={strValue}>
+								<lightning-input type="checkbox" disabled="true"></lightning-input>
+							</template>
+							<template if:true={boolDisplayEditIcon}>
+								<button class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small editButton" onclick={startEditing}>
+									<lightning-icon icon-name="utility:edit" size="xx-small" style="opacity: 0.5"></lightning-icon>
+								</button>
+							</template>
+						</template>
+					</span>
+				</template>
+	
+				<!-- If the cell is not editable. -->
+				<template if:false={boolIsEditableLocal}>
+					<template if:true={strValue}>
+						<lightning-icon icon-name="utility:check" size="x-small"></lightning-icon>
+					</template>
+					<template if:false={strValue}>
+						<lightning-input type="checkbox" disabled="true"></lightning-input>
+					</template>
+				</template>
+			</template>
+	
+			<!-- Link cell. -->
+			<template if:true={boolIsLink}>
+	
+				<!-- If the cell is editable. -->
+				<template if:true={boolIsEditableLocal}>
+					<span class="slds-grid slds-grid_align-spread" onmouseenter={mouseOverEdit} onmouseleave={mouseOutEdit}>
+	
+						<!-- If the user is editing the field. -->
+						<template if:true={boolEditingInProgress}>
+	
+							<!-- Original Field name. -->
+							<template if:true={boolIsEditableFieldNameEmpty}>
+								<lightning-record-edit-form object-api-name={strRecordParentObjectAPIName}>
+									<lightning-input-field if:true={boolIsEditableFieldNameEmpty} disabled={boolIsDisabled} field-name={strRecordFieldAPIName} onchange={stopEditing} onkeydown={keyDown} 
+											variant="label-hidden" value={strValueEditable} class="inlineUpdatedRecord validate"></lightning-input-field>
+								</lightning-record-edit-form>
+							</template>
+		
+							<!-- Custom API Field name. -->
+							<template if:false={boolIsEditableFieldNameEmpty}>
+	
+								<!-- Standard field. -->
+								<template if:true={boolEditableFieldIsStandard}>
+									<lightning-record-edit-form object-api-name={strRecordParentObjectAPIName}>
+										<lightning-input-field field-name={objAdditionalAttributes.strEditableFieldName} disabled={boolIsDisabled} onchange={stopEditing} onkeydown={keyDown} 
+												variant="label-hidden" value={strValueEditable} class="inlineUpdatedRecord validate"></lightning-input-field>
+									</lightning-record-edit-form>
+								</template>
+	
+								<!-- Picklist field. -->
+								<lightning-combobox if:true={boolEditableFieldIsPicklist} onchange={stopEditing} value={strSelectedValue} options={lstPicklistOptions} required={boolIsRequired} 
+										class="inlineUpdatedRecord validate" data-has-error={boolHasError}></lightning-combobox>
+							</template>
+						</template>
+	
+						<!-- If the user is editing the field. -->
+						<template if:false={boolEditingInProgress}>
+							<div class="slds-truncate">
+								<a if:false={boolIsRecordLabelEmpty} href="#" onclick={openRecord} onmouseover={mouseOver} onmouseout={mouseOut}>{strRecordLabelEditable}</a>
+								<a if:true={boolIsRecordLabelEmpty} href="#" onclick={openRecord} onmouseover={mouseOver} onmouseout={mouseOut}>&nbsp;</a>
+							</div>
+							<template if:true={boolDisplayEditIcon}>
+								<button class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small editButton" onclick={startEditing}>
+									<lightning-icon icon-name="utility:edit" size="xx-small" style="opacity: 0.5"></lightning-icon>
+								</button>
+							</template>
+						</template>
+					</span>
+				</template>
+	
+				<!-- If the cell is not editable. -->
+				<template if:false={boolIsEditableLocal}>
+					<a href="#" onclick={openRecord} onmouseover={mouseOver} onmouseout={mouseOut}>{strRecordLabelEditable}</a>
+				</template>
+			</template>
+	
+			<!-- Picklist cell. -->
+			<template if:true={boolIsPicklist}>
+	
+				<!-- If the cell is editable. -->
+				<template if:true={boolIsEditableLocal}>
+					<span class="slds-grid slds-grid_align-spread" onmouseenter={mouseOverEdit} onmouseleave={mouseOutEdit}>
+	
+						<!-- If the user is editing the field. -->
+						<template if:true={boolEditingInProgress}>
+	
+							<!-- Original Field name. -->
+							<template if:true={boolIsEditableFieldNameEmpty}>
+								<lightning-record-edit-form object-api-name={strRecordParentObjectAPIName}>
+									<lightning-input-field if:true={boolIsEditableFieldNameEmpty} field-name={strRecordFieldAPIName} onchange={stopEditing} onkeydown={keyDown} variant="label-hidden" 
+											value={strValueEditable} class="inlineUpdatedRecord validate" data-has-error={boolHasError}></lightning-input-field>
+								</lightning-record-edit-form>
+							</template>
+		
+							<!-- Custom API Field name. -->
+							<template if:false={boolIsEditableFieldNameEmpty}>
+	
+								<!-- Standard field. -->
+								<template if:true={boolEditableFieldIsStandard}>
+									<lightning-record-edit-form object-api-name={strRecordParentObjectAPIName}>
+										<lightning-input-field field-name={objAdditionalAttributes.strEditableFieldName} disabled={boolIsDisabled} onchange={stopEditing} onkeydown={keyDown} 
+												variant="label-hidden" value={strValueEditable} class="inlineUpdatedRecord validate" data-has-error={boolHasError}></lightning-input-field>
+									</lightning-record-edit-form>
+								</template>
+	
+								<!-- Picklist field. -->
+								<lightning-combobox if:true={boolEditableFieldIsPicklist} onchange={stopEditing} value={strSelectedValue} options={lstPicklistOptions} required={boolIsRequired} 
+										class="inlineUpdatedRecord validate" data-has-error={boolHasError}></lightning-combobox>
+							</template>
+						</template>
+	
+						<!-- If the user is editing the field. -->
+						<template if:false={boolEditingInProgress}>
+							<template if:true={boolIsUndefined}>
+								<div class="slds-truncate">&nbsp;</div>
+							</template>
+							<template if:false={boolIsUndefined}>
+								<div class="slds-truncate" data-unique-id={strUniqueId}>{strValueEditable}</div>
+							</template>
+							<template if:true={boolDisplayEditIcon}>
+								<button class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small editButton" onclick={startEditing}>
+									<lightning-icon icon-name="utility:edit" size="xx-small" style="opacity: 0.5"></lightning-icon>
+								</button>
+							</template>
+						</template>
+					</span>
+				</template>
+	
+				<!-- If the cell is not editable. -->
+				<template if:false={boolIsEditableLocal}>{strValueEditable}</template>
+			</template>
+	
+			<!-- customTextArea cell. AA Changes-->
+			<template if:true={boolIsText}>
+				<!-- <div style="width:10rem"> -->
+				<!-- If the cell is editable. -->
+				<template if:true={boolIsEditableLocal}>
+						<span class="slds-grid slds-grid_align-spread" onmouseenter={mouseOverEdit} onmouseleave={mouseOutEdit}>
+	
+						<!-- If the user is editing the field. --> 
+						<template if:true={boolEditingInProgress}>
+							<lightning-record-edit-form object-api-name={strRecordParentObjectAPIName}>
+								<!-- <lightning-input-field field-name={strRecordFieldAPIName} onchange={stopEditing} variant="label-hidden" value={strValueEditable}></lightning-input-field> -->
+								<div style="width: 400px;">
+									<lightning-input-field field-name={strRecordFieldAPIName} disabled={boolIsDisabled} onchange={stopEditing} onkeydown={keyDown} variant="label-hidden" 
+											value={strValueEditable} class="inlineUpdatedRecord validate"></lightning-input-field>
+								</div>
+							</lightning-record-edit-form>
+						</template>
+	
+						<!-- If the user is editing the field. -->
+						<template if:false={boolEditingInProgress}>
+							<template if:true={boolIsUndefined}>
+								<div class="slds-truncate">&nbsp;</div>
+							</template>
+							<template if:false={boolIsUndefined}>
+								<!-- <lightning-textarea value="" disabled="true"></lightning-textarea> -->
+								<div style="width: 400px;">{strValueEditable}</div>
+							</template>
+							<template if:true={boolDisplayEditIcon}>
+								<button class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small editButton" onclick={startEditing}>
+									<lightning-icon icon-name="utility:edit" size="xx-small" style="opacity: 0.5"></lightning-icon>
+								</button>
+							</template>
+						</template>
+					</span>
+				</template>
+				
+				<!-- </div> -->
+	
+				<!-- If the cell is not editable. -->
+				<template if:false={boolIsEditableLocal}>
+					<div style="width: 400px;">
+						{strValueEditable}
+					</div></template>
+			</template>
+	
+			<!-- customSlider cell. AA Changes-->
+			<template if:true={boolIsSlider}>
+				<!-- If the cell is editable. -->
+				<template if:true={boolIsEditableLocal}>
+					<span class="slds-grid slds-grid_align-spread" onmouseenter={mouseOverEdit} onmouseleave={mouseOutEdit}>
+						<!-- If the user is editing the field. -->
+						<template if:true={boolEditingInProgress}>
+							<!-- <lightning-layout-item size="12"> -->
+								<div>
+									<div class="slds-grid slds-wrap">
+										<template if:true={displaySliderIcons}>
+											<div class="slds-col slds-size_1_of_1">                                                                             
+												<div class="slds-grid">
+													<div class="slds-col slds-float_left">
+														<lightning-icon icon-name="utility:like" variant="success" alternative-text="Good" title="Good" size="x-small" class="actionButton"></lightning-icon>
+													</div>
+													<div class="slds-col slds-align_absolute-center" style="padding-left:35px;">
+														<lightning-icon icon-name="utility:like" variant="warning" alternative-text="Average" title="Average" size="x-small" class="actionButton rotate-like-icon"></lightning-icon>
+													</div>
+													<div class="slds-col" style="padding-left:35px;"> 
+														<lightning-icon icon-name="utility:dislike" variant="error" alternative-text="Poor" title="Poor" size="x-small" class="actionButton slds-float_right"></lightning-icon>
+													</div>
+												</div>
+											</div>
+										</template>
+	
+										<div class="slds-col slds-size_1_of_1">                            
+											<!-- <lightning-slider min="1" max="3" step="2" data-id=" " value={value} onchange={stopEditing}></lightning-slider> -->
+											<lightning-slider min={minRange} max={maxRange} step={stepRange} size="x-small" value={strValue} variant="label-hidden" onchange={stopEditing}></lightning-slider>
+										</div>
+									</div>
+								</div>
+							<!-- </lightning-layout-item> -->
+						</template>
+						<!-- If the user is editing the field. -->
+						<template if:false={boolEditingInProgress}>
+							<template if:true={boolIsUndefined}>
+								<div class="slds-truncate">&nbsp;</div>
+							</template>
+							<template if:false={boolIsUndefined}>
+								<!-- <lightning-textarea value="" disabled="true"></lightning-textarea> -->
+								<div class="slds-truncate"><lightning-icon icon-name={sliderValueIcon} variant={sliderVariantType} size="x-small" class={sliderClassType}></lightning-icon></div>
+							</template>
+							<template if:true={boolDisplayEditIcon}>
+								<button class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small editButton" onclick={startEditing}>
+									<lightning-icon icon-name="utility:edit" size="xx-small" style="opacity: 0.5"></lightning-icon>
+								</button>
+							</template>
+						</template>
+					</span>
+				</template>
+	
+				<!-- If the cell is not editable. -->
+				<template if:false={boolIsEditableLocal}>{strValueEditable}</template>
+				
+			</template>
+	
+			<!--customCopyText cell AA Changes-->
+			<template if:true={boolIsCopyText}>
+				<!-- Clipboard field. -->
+				<textarea class="clipboard" style="position:fixed;top:-5rem;height:1px;width:10px;"></textarea> 
+				<!-- <template if:true={boolShowPreviewIcon}>
+					<template if:true={boolHighlightIcon}>
+						<lightning-icon icon-name="utility:preview" data-name="previewSummary" size="x-small" class="actionIcon"
+						onclick={previewContent} data-id="previewSummary" alternative-text="View Previous Comment" title="View Previous Text">
+						</lightning-icon> 
+					</template>
+					<template if:false={boolHighlightIcon}>
+						<lightning-icon icon-name="utility:preview" data-name="previewSummary" size="x-small" class="actionIcon previewSummary"
+						onclick={previewContent} data-id="previewSummary" alternative-text="View Previous Comment" title="View Previous Text">
+						</lightning-icon> 
+					</template>
+				</template>    -->
+				
+				<template if:true={boolIsDataAvail}>
+					<section tabindex="-1" class="slds-popover slds-popover_prompt_top-right slds-nubbin_left" role="dialog">
+						<button class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close" title="Close dialog">
+							<lightning-icon icon-name="utility:close" onclick={closeAction} size="x-small"></lightning-icon>
+							
+							<span class="slds-assistive-text">Close dialog</span>
+							</button>
+						<div class="slds-popover__body slds-popover__body_small">    
+							<div class="slds-text-longform">   
+								<!-- <template if:true={boolField1}>  -->
+								<div class="slds-align_absolute-center slds-form-element slds-p-left_xx-small slds-p-bottom_xx-small">
+									<b><label class="slds-form-element__label" for="previouscomment">Previous text {previousStrFld1TextLabel}</label> </b>
+								</div>        
+									<p><lightning-formatted-text value={previousStrFld1TextValue}></lightning-formatted-text>
+									<span>
+										<lightning-button-icon icon-name="utility:copy" data-name="copyfield1" class="slds-m-left_x-small"  title="Copy Previous Text" alternative-text="Copy Previous Comment" onclick={copyContent}></lightning-button-icon>
+									</span>
+								</p>
+							</div>
+							<!-- second field value -->
+							<!-- <div class="slds-text-longform">   
+								<div class="slds-align_absolute-center slds-form-element slds-p-left_xx-small slds-p-bottom_xx-small">
+									<b><label class="slds-form-element__label" for="previousaction">Previous text {previousStrFld2TextLabel}</label> </b>
+								</div>        
+									<p><lightning-formatted-text value={previousStrFld2TextValue}></lightning-formatted-text>
+									<span>
+										<lightning-button-icon icon-name="utility:copy" data-name="copyfield2" class="slds-m-left_x-small"  title="Copy Previous Text" alternative-text="Copy Previous Comment" onclick={copyContent}></lightning-button-icon>
+									</span>
+								</p>
+							</div> -->
+						</div>
+					</section>
+				</template>
+			</template>
+			<!-- Fire Event cell. -->
+			<template if:true={boolIsFireEventLink}>
+				<a href="#" onclick={fireEvent}>{strValueEditable}</a>
+			</template>
+	
+			<!-- Plain cell. -->
+			<template if:true={boolIsPlain}>
+	
+				<!-- The value is a URL. -->
+				<template if:true={boolIsURL}>
+					<a href={strValueEditable} target="_blank"></a>
+				</template>
+	
+				<!-- The value is not a URL. -->
+				<template if:false={boolIsURL}>
+	
+					<!-- If the cell is editable. -->
+					<template if:true={boolIsEditableLocal}>
+						<span class="slds-grid slds-grid_align-spread" onmouseenter={mouseOverEdit} onmouseleave={mouseOutEdit}>
+	
+							<!-- If the user is editing the field. -->
+							<template if:true={boolEditingInProgress}>
+		
+								<!-- Original Field name. -->
+								<template if:true={boolIsEditableFieldNameEmpty}>
+									<lightning-record-edit-form object-api-name={strRecordParentObjectAPIName}>
+										<lightning-input-field if:true={boolIsEditableFieldNameEmpty} field-name={strRecordFieldAPIName} disabled={boolIsDisabled} onchange={stopEditing} 
+												onkeydown={keyDown} variant="label-hidden" value={strSelectedValue} class="inlineUpdatedRecord validate" 
+												data-has-error={boolHasError}></lightning-input-field>
+									</lightning-record-edit-form>
+								</template>
+			
+								<!-- Custom API Field name. -->
+								<template if:false={boolIsEditableFieldNameEmpty}>
+		
+									<!-- Standard field. -->
+									<template if:true={boolEditableFieldIsStandard}>
+										<lightning-record-edit-form object-api-name={strRecordParentObjectAPIName}>
+											<lightning-input-field field-name={objAdditionalAttributes.strEditableFieldName} disabled={boolIsDisabled} onchange={stopEditing} onkeydown={keyDown} 
+													variant="label-hidden" value={strSelectedValue} class="inlineUpdatedRecord validate" data-has-error={boolHasError}></lightning-input-field>
+										</lightning-record-edit-form>
+									</template>
+		
+									<!-- Picklist field. -->
+									<lightning-combobox if:true={boolEditableFieldIsPicklist} onchange={stopEditing} value={strSelectedValue} options={lstPicklistOptions} required={boolIsRequired} 
+											class="inlineUpdatedRecord validate" data-has-error={boolHasError}></lightning-combobox>
+								</template>
+							</template>
+	
+							<!-- If the user is editing the field. -->
+							<template if:false={boolEditingInProgress}>
+								<template if:true={boolIsUndefined}>
+									<div class="slds-truncate">&nbsp;</div>
+								</template>
+								<template if:false={boolIsUndefined}>
+									<div class="slds-truncate" data-unique-id={strUniqueId}>{strValueEditable}</div>
+								</template>
+								<template if:true={boolDisplayEditIcon}>
+									<button class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small editButton" onclick={startEditing}>
+										<lightning-icon icon-name="utility:edit" size="xx-small" style="opacity: 0.5"></lightning-icon>
+									</button>
+								</template>
+							</template>
+						</span>
+					</template>
+	
+					<!-- If the cell is not editable. -->
+					<template if:false={boolIsEditableLocal}>{strValueEditable}</template>
+				</template>
+			</template>
+	
+			<!-- Expandable cell. -->
+			<template if:true={boolIsExpandable}>
+	
+				<!-- If the row is expanded. -->
+				<template if:true={boolIsExpanded}>
+					<template if:true={boolnestedParent}>
+						<lightning-icon icon-name="utility:chevrondown" size="x-small" onclick={toggleParentRow} class="slds-text-link_reset" style="padding-left:10px;"></lightning-icon>
+					</template>
+					<template if:false={boolnestedParent}>
+						<lightning-icon icon-name="utility:chevrondown" size="x-small" onclick={toggleParentRow} class="slds-text-link_reset"></lightning-icon>
+					</template>
+				</template>
+	
+				<!-- If the row is collapsed. -->
+				<template if:false={boolIsExpanded}>
+					<template if:true={boolnestedParent}>
+						<lightning-icon icon-name="utility:chevronright" size="x-small" onclick={toggleParentRow} class="slds-text-link_reset" style="padding-left:10px;"></lightning-icon>
+					</template>
+					<template if:false={boolnestedParent}>
+						<lightning-icon icon-name="utility:chevronright" size="x-small" onclick={toggleParentRow} class="slds-text-link_reset"></lightning-icon>
+					</template>
+				</template>
+			</template>
+	
+			<!-- Checkbox (row selection) cell. -->
+			<template if:true={boolIsCheckboxRowSelection}>
+				<lightning-input type="checkbox" class="checkboxRowSelection" onchange={changeRowSelection}></lightning-input>
+			</template>
+		</template>
+			
+		<!-- Badges. -->
+		<template if:true={boolIsBadges}>
+			<template for:each={lstBadges} for:item="objBadge">
+				<lightning-badge key={objBadge.strValue} label={objBadge.strValue} style={objBadge.strStyle} class={objBadge.strClasses}></lightning-badge>&nbsp;
+			</template>
+			<!-- "More" icon. -->
+			<template if:true={boolDisplayMoreIcon}>
+				<lightning-icon class="slds-p-left_small slds-text-link_reset" icon-name="utility:threedots" size="xx-small" 
+						onclick={sendEventToParent} data-record-id={strRowId} data-action={intGlobalAction}></lightning-icon>
+			</template>
+		</template>
+	
+		<!-- Icons. -->
+		<template if:true={boolIsIcons}>
+			<template for:each={lstIcons} for:item="objIcon">
+	
+				<!-- Only icon. -->
+				<template if:false={objIcon.boolHasSubactions}>
+	
+					<!-- If the icon is an LWC item. -->
+					<template if:false={objIcon.boolIsStaticResource}>
+						<span key={objIcon} class="lightningIcon text">{objIcon.strLabel}</span>
+						
+						<lightning-icon key={objIcon} class="slds-p-left_small slds-text-link_reset lightningIcon icon" icon-name={objIcon.strDisplayedIcon} size="xx-small" 
+								onclick={sendEventToParent} data-record-id={strRowId} data-action={objIcon.intAction} data-index={objIcon.intIndex} data-has-text={objIcon.boolHasLabel}
+								data-current-value={objIcon.strDisplayedIcon} alternative-text={objIcon.strHelpText} title={objIcon.strHelpText}></lightning-icon>
+								
+					</template>
+	
+					<!-- If the icon is an Static Resource. -->
+					<template if:true={objIcon.boolIsStaticResource}>
+						<img key={objIcon} src={objIcon.strDisplayedURL} width={objIcon.intWidth} onclick={sendEventToParent} data-record-id={strRowId} data-action={objIcon.intAction}
+								data-index={objIcon.intIndex} data-current-value={objIcon.strDisplayedURL} title={objIcon.strTitle}></img>
+							<template if:true={booldisplaycopy}>
+								<textarea key={objIcon} class="clipboard" style="position:fixed;top:-5rem;height:1px;width:10px;"></textarea>    
+								<template if:true={boolShowPreviewIcon}>
+									<!-- <template if:true={boolHighlightIcon}> -->
+										<lightning-icon key={objIcon} icon-name="utility:copy_to_clipboard" data-name="previewSummary" size="x-small" class="actionIcon slds-m-left_large"
+										onclick={previewContent} data-id="previewSummary" alternative-text="View Previous Comment" title="View Previous Text">
+										</lightning-icon> 
+									<!-- </template> -->
+								</template>
+								<!-- <template if:false={boolHighlightIcon}>
+									<lightning-icon key={objIcon} icon-name="utility:preview" data-name="previewSummary" size="x-small" class="actionIcon previewSummary slds-m-left_large"
+									onclick={previewContent} data-id="previewSummary" alternative-text="View Previous Comment" title="View Previous Text">
+									</lightning-icon> 
+								</template> -->
+							</template>	
+							
+							
+							<template if:true={boolIsDataAvail}>
+								<section key={objIcon} tabindex="-1" class="slds-popover slds-popover_prompt_top-right slds-nubbin_bottom" role="dialog">
+									<button class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close" title="Close dialog">
+										<lightning-icon icon-name="utility:close" onclick={closeAction} size="x-small"></lightning-icon>
+										
+										<span class="slds-assistive-text">Close dialog</span>
+										</button>
+									<div class="slds-popover__body slds-popover__body_small">    
+										<div class="slds-text-longform">   
+											<!-- <template if:true={boolField1}>  -->
+											<div class="slds-align_absolute-center slds-form-element slds-p-left_xx-small slds-p-bottom_xx-small">
+												<b><label class="slds-form-element__label" for="previouscomment">Previous text {previousStrFld1TextLabel}</label> </b>
+											</div>        
+												<p><lightning-formatted-text value={previousStrFld1TextValue}></lightning-formatted-text>
+												<span>
+													<lightning-button-icon icon-name="utility:copy" data-name="copyfield1" class="slds-m-left_x-small"  title="Copy Previous Text" alternative-text="Copy Previous Comment" onclick={copyContent}></lightning-button-icon>
+												</span>
+											</p>
+										</div>
+										<!-- second field value -->
+										<!-- <div class="slds-text-longform">   
+											<div class="slds-align_absolute-center slds-form-element slds-p-left_xx-small slds-p-bottom_xx-small">
+												<b><label class="slds-form-element__label" for="previousaction">Previous text {previousStrFld2TextLabel}</label> </b>
+											</div>        
+												<p><lightning-formatted-text value={previousStrFld2TextValue}></lightning-formatted-text>
+												<span>
+													<lightning-button-icon icon-name="utility:copy" data-name="copyfield2" class="slds-m-left_x-small"  title="Copy Previous Text" alternative-text="Copy Previous Comment" onclick={copyContent}></lightning-button-icon>
+												</span>
+											</p>
+										</div> -->
+									</div>
+								</section>
+							</template>
+						<template if:true={objIcon.boolAddSpace}>&nbsp;</template>
+					</template>
+				</template>
+	
+				<!-- Subactions. -->
+				<template if:true={objIcon.boolHasSubactions}>
+					<lightning-button-menu key={objIcon} icon-name={objIcon.strIcon} variant="bare" onselect={sendEventToParent} data-record-id={strRowId} data-action={objIcon.intAction}>
+						<template for:each={objIcon.lstSubactions} for:item="objItem">
+							<lightning-menu-item key={objItem.strLabel} value={objItem.intAction} label={objItem.strLabel}></lightning-menu-item>
+						</template>
+					</lightning-button-menu>
+				</template>
+			</template>
+		</template>
+	</template>
+</template>

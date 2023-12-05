@@ -1,0 +1,59 @@
+<!--
+/*
+ * Name			:	CsmPlanActivities
+ * Author		:	Deva M
+ * Created Date	: 	05-April-2022
+ * Description	:	Manage Plan activity HTML
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Deva M         		05-April-2022		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	<lightning-card>
+		<div class="slds-p-horizontal_small">
+
+			<!-- Header controls. -->
+			<div class="slds-card">
+				<lightning-card variant="Narrow" title={objConfiguration.strCardTitle} icon-name={objConfiguration.strIconName}>					
+					<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" alternative-text={label.Refresh_Button} class="slds-m-left_xx-small" onclick={refreshCard} 
+							slot="actions"></lightning-button-icon>
+					<template if:false={isPoppedOut}>
+						<lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+					</template>
+					<template if:true={isPoppedOut}>
+						<lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+					</template>
+				</lightning-card>
+			</div>
+
+			<!-- Card body. -->
+			<div class="slds-card">
+				
+				<!-- Search field. -->
+				<div>
+					<lightning-input class="searchField" variant="label-hidden" placeholder={objConfiguration.strSearchPlaceholder} type="search" onchange={searchRecord}></lightning-input>
+				</div>
+				<div class="slds-grid slds-gutters">					
+					<div class="slds-col">&nbsp;</div>
+				</div>
+
+				<!-- Only display once the spinner is done. -->
+				<template if:false={boolDisplaySpinner}>
+					<!-- Table section. -->
+					<c-global-data-table class={objConfiguration.strTableClass} obj-parameters={objConfiguration} onaction={executeAction}></c-global-data-table>
+				</template>
+			</div>
+
+			<!-- Spinner. -->
+			<div class="spinner">
+				<template if:true={boolDisplaySpinner}>
+					<lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+				</template>
+			</div>
+		</div>
+	</lightning-card>
+</template>

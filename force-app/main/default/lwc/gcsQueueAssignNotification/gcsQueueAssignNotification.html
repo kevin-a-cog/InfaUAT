@@ -1,0 +1,204 @@
+<!--
+/*
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description								 Tag
+ **********************************************************************************************************
+ NA		                NA		        UTOPIA			Initial version.						 NA
+ Vignesh Divakaran      29-Jun-2022     I2RT-6153       Show Hypercare icon                      T01  
+ Shashikanth            23-Aug-2023     I2RT-8959       Preferred icon to be added in queue      T02
+                                                        assignment widget 
+ */
+-->
+<template>
+    <div class="notif-header">
+        <h1 class="notif-h1">Queue Assignments <span>({counter})</span></h1>
+        <a href="#" style="background-color: #1d1d1d;float:right;vertical-align: middle;" data-role="button"
+            onclick={handleRefresh} role="button">
+            <img src={refreshIcon} style="height:20px; width:20px;">
+        </a>
+        <template if:true={isMuted}>
+            <a href="#" class="muted"
+                style="margin-right: 3%; background-color: rgb(29, 29, 29);float:right;vertical-align: middle;"
+                data-role="button" role="button" onclick={unmute}>
+                <img src={muteIcon} style="height:20px; width:20px;">
+            </a>
+        </template>
+        <template if:false={isMuted}>
+            <a href="#" class="unmuted"
+                style="margin-right: 3%; background-color: rgb(29, 29, 29);float:right;vertical-align: middle;"
+                data-role="button" role="button" onclick={mute}>
+                <img src={unmuteIcon} style="height:20px; width:20px;">
+            </a>
+        </template>
+        <template if:true={showSettings}>
+            <a href="#" style="margin-right: 3%; background-color: #1d1d1d;float:right;vertical-align: middle;"
+                data-role="button" role="button" onclick={openSettings}>
+                <img src={settingIcon} style="height:20px; width:20px;">
+            </a>
+        </template>
+    </div>
+    <template if:true={isDone}>
+        <template for:each={customNotifs} for:item="item" for:index="index">
+            <ul key={item.caseId} class="ui-listview ui-listview-inset ui-corner-all ui-shadow ui-group-theme-a">
+                <div class="slds-var-m-around_medium notif-element">
+                    <div class="flip">
+                        <img class="dropdown-icon" onclick={slideIt} data-id={item.caseId} border="0" width="15"
+                            height="15" src={collapseIcon}>
+                        <template if:true={item.isAAE}>
+                            <img style="margin:5px;vertical-align:middle;" border="0" width="30" height="30"
+                                title="Ask An Expert" src={aaeIcon}>
+                        </template>
+                        <template if:false={item.isAAE}>
+                            <template if:true={item.isP1}>
+                                <img style="margin:5px;vertical-align:middle;" border="0" width="30" height="30"
+                                    title="Priority" src={p1Icon}>
+                            </template>
+                            <template if:true={item.isP2}>
+                                <img style="margin:5px;vertical-align:middle;" border="0" width="30" height="30"
+                                    title="Priority" src={p2Icon}>
+                            </template>
+                            <template if:true={item.isP3}>
+                                <img style="margin:5px;vertical-align:middle;" border="0" width="30" height="30"
+                                    title="Priority" src={p3Icon}>
+                            </template>
+                        </template>
+                        <span class="case-number" style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                            <a style="text-decoration: none;" data-id={item.caseId} onclick={openCase}
+                                href="#">{item.caseNumber}</a>
+                            <template if:true={item.isEscalated}>
+                                <img style="vertical-align:middle;padding-bottom:5px;" border="0" width="11" height="11"
+                                    title="Escalated" src="/img/func_icons/util/escalation12.gif" />
+                            </template>
+                        </span>
+                        <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                            <span style="margin-left:5px;">
+                                <img style="margin-left:5px;vertical-align:middle;" border="0" width="17" height="17"
+                                    title={item.timezone} src={timezoneIcon}>
+                            </span>
+                        </span>
+                        <template if:true={item.isStandardIcon}>
+                            <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                <span style="margin-left:5px;">
+                                    <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                        width="17" height="17" title="Standard" src={standardIcon}>
+                                </span>
+                            </span>
+                        </template>
+                        <template if:true={item.isEnterpriseIcon}>
+                            <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                <span style="margin-left:5px;">
+                                    <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                        width="17" height="17" title="Enterprise" src={enterpriseIcon}>
+                                </span>
+                            </span>
+                        </template>
+                        <template if:true={item.isMissionCriticalIcon}>
+                            <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                <span style="margin-left:5px;">
+                                    <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                        width="17" height="17" title="Mission Critical" src={missionCriticalIcon}>
+                                </span>
+                            </span>
+                        </template>
+                        <template if:true={item.isPremierIcon}>
+                            <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                <span style="margin-left:5px;">
+                                    <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                        width="17" height="17" title="Premier" src={premierIcon}>
+                                </span>
+                            </span>
+                        </template>
+                        <template if:true={item.isBasicSuccessIcon}>
+                            <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                <span style="margin-left:5px;">
+                                    <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                        width="17" height="17" title="Basic Success" src={basicSuccessIcon}>
+                                </span>
+                            </span>
+                        </template>
+                        <template if:true={item.isPremiumSuccessIcon}>
+                            <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                <span style="margin-left:5px;">
+                                    <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                        width="17" height="17" title="Premium Success" src={premiumSuccessIcon}>
+                                </span>
+                            </span>
+                        </template>
+                        <template if:true={item.isSignatureSuccessIcon}>
+                            <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                <span style="margin-left:5px;">
+                                    <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                        width="17" height="17" title="Signature Success" src={signatureSuccessIcon}>
+                                </span>
+                            </span>
+                        </template>
+                        <template if:true={item.isBCSPCase}>
+                            <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                <span style="margin-left:5px;">
+                                    <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                        width="27" height="17" title="BCSP" src={bcspIcon}>
+                                </span>
+                            </span>
+                        </template>
+                        <!-- <T01> -->
+                        <template if:true={item.isHypercare}>
+                            <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                <span style="margin-left:5px;">
+                                    <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                        width="17" height="17" title="Hypercare" src={hypercareIcon}>
+                                </span>
+                            </span>
+                        </template>
+                        <!-- </T01> -->
+                        <template if:true={item.isStrategic}>
+                            <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                <span style="margin-left:5px;">
+                                    <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                        width="17" height="17" title="Strategic" src={strategicIcon}>
+                                </span>
+                            </span>
+                        </template>
+                        <!-- <T02> -->
+                            <template if:true={item.isPreferred}>
+                                <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                    <span style="margin-left:5px;">
+                                        <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                            width="17" height="17" title="Preferred" src={preferredIcon}>
+                                    </span>
+                                </span>
+                            </template>
+                            <!-- </T02> -->
+                        <template if:true={item.isCritical}>
+                            <span style="margin-left:5px;vertical-align:middle;font-size:15px;">
+                                <span style="margin-left:5px;">
+                                    <img style="margin-left:5px;vertical-align:middle;height:17px;" border="0"
+                                        width="17" height="17" title="Critical" src={criticalIcon}>
+                                </span>
+                            </span>
+                        </template>
+                        <template if:false={item.isAAE}>
+                            <template if:true={item.isIRTargetTime}>
+                                <span style="font-size: 13px;padding-left: 10px;"><span
+                                        style="color:red;font-weight: bold;">{item.iRTargetTime}</span></span>
+                                <span style="padding-left:5px;"><img style="padding-left:5px;vertical-align:middle;"
+                                        border="0" width="17" height="17" title={item.iRTargetTime}
+                                        src="/img/icon/flag24.png" /></span>
+                            </template>
+                        </template>
+
+
+                        <div style="float:right;vertical-align:middle;margin-right:10px;margin-top:5px;" onclick={handleTakeOwnerShip} data-owner={item.caseOwnerName} data-id={item.caseId}>
+                            <a href="#">
+                                <img border="0" width="25" height="25" title="Take Ownership" src={takeOwnershipIcon}>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="panel" data-pid={item.caseId}>
+                        <c-gcs-queue-notification-card case={item}></c-gcs-queue-notification-card>
+                    </div>
+                </div>
+            </ul>
+        </template>
+    </template>
+</template>

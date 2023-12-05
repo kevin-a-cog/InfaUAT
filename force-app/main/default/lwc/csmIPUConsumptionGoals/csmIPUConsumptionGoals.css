@@ -1,0 +1,14 @@
+.minHeigth[data-popped-out=false] {
+	min-height: 500px;
+}
+.overflow {
+	overflow-x: auto;
+}
+.slds-modal__container[data-popped-out=true] {
+	min-width: 100%; 
+	margin: 0;
+	padding: 0px;
+}
+.slds-modal__container[data-popped-out=true] .slds-modal__content {
+	flex: 1;
+}

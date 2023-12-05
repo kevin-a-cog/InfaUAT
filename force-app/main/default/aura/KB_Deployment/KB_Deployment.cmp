@@ -1,0 +1,224 @@
+<!--
+  @File Name          : KB_Deployment.cmp
+  @Description        : 
+  @Author             : Sathish Rajalingam
+  @Group              : 
+  @Last Modified By   : Sathish Rajalingam
+  @Last Modified On   : 10-24-2020
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    2/29/2020   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<aura:component controller="KnowledgeArticleDeploymentController"
+    implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global">
+
+    <aura:attribute name="message" type="String" />
+    <aura:attribute name="countno" type="String" />
+    <aura:attribute name="recordId" type="String" />
+
+    <aura:attribute name="messageselective" type="String" />
+    <aura:attribute name="countnoselective" type="String" />
+    <aura:attribute name="recordIdselective" type="String" />
+    <aura:attribute name="isModalOpen" type="boolean" default="false" />
+    <aura:attribute name="hdnKBLanguage" type="String" default="{!$Label.c.KB_Language}" />
+    <aura:attribute name="languageOptions" type="List" default="[]"/>
+
+    <div class="slds-m-around_xx-large">
+         <!--Use aura:if tag to display/hide popup based on isModalOpen value-->
+         <aura:if isTrue="{!v.isModalOpen}">
+
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close" onclick="{! c.closeModel }"
+                            alternativeText="close" variant="bare-inverse" class="slds-modal__close" />
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Please select the language</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_x-large" style="min-height:400px" id="modal-content-id-1">
+                        <p><lightning:combobox aura:id="selectLanguage" name="language" label="Language"
+                            placeholder="Choose Language"
+                            value="none"                            
+                            options="{!v.languageOptions}"/>
+                        </p>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{! c.closeModel }" />
+                        <lightning:button variant="brand" label="OK" title="OK" onclick="{!c.submitDetails}" />
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>       
+    </div>
+
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+            <div class="slds-align_absolute-center slds-align--absolute-center">
+                <div class="slds-card slds-box--x-small slds-m-left--xx-small  slds-var-m-right_xx-small">
+                    <div class="slds-text-heading_large slds-p-vertical--small">
+                        <p class="slds-text-heading--medium">
+                            <lightning:formattedText title="LDS" value="Lightining Data Service" />
+                        </p>
+                    </div>
+                    <div class="slds-text-heading_large slds-p-vertical--small">
+                        <p class="slds-text-heading--medium">
+                            <lightning:formattedText title="All" value="All" />
+                        </p>
+                    </div>
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:formattedText title="Message On the Progress" value="{!v.message}" />
+                        </p>
+                    </div>
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:formattedText title="Message On the Progress" value="{!v.countno}" />
+                        </p>
+                    </div>
+
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="PublishAllApprovedArticleDML"
+                                onclick="{!c.publishAllApprovedArticleByDMLClient }" />
+                        </p>
+                    </div>
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="ArchiveAllPublishedArticleDML"
+                                onclick="{!c.archiveAllPublishedArticleByDMLClient }" />
+                        </p>
+                    </div>
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="DeleteAllArchivedArticleDML"
+                                onclick="{!c.deleteAllArchivedArticleByDMLClient }" />
+                        </p>
+                    </div>
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="PublishAllDraftArticleDML"
+                                onclick="{!c.publishAllDraftArticleByDMLClient }" />
+                        </p>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="slds-col">
+            <div class="slds-align_absolute-center slds-align--absolute-center">
+                <div class="slds-card slds-box--x-small slds-m-left--xx-small  slds-var-m-right_xx-small">
+
+                    <div class="slds-text-heading_large slds-p-vertical--small">
+                        <p class="slds-text-heading--medium">
+                            <lightning:formattedText title="LDS" value="Lightining Data Service" />
+                        </p>
+                    </div>
+                    <div class="slds-text-heading_large slds-p-vertical--small">
+                        <p class="slds-text-heading--medium">
+                            <lightning:formattedText title="Selective" value="Selective" />
+                        </p>
+                    </div>
+                    <div class="slds-text-heading_large slds-p-vertical--small">
+                        <p class="slds-text-heading--medium">
+                            <lightning:formattedText title="Selective ID"
+                                value="Selective ID - Article ID count should be less than 100, only for edit" />
+                        </p>
+                    </div>
+                    <div class="slds-text-heading_large slds-p-vertical--small">
+                        <p class="slds-text-heading--medium">
+                            <lightning:textarea aura:id="selectiveArticleId" title="Selective ID" value="" />
+                        </p>
+                    </div>
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:formattedText title="Message On the Progress" value="{!v.messageselective}" />
+                        </p>
+                    </div>
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:formattedText title="Message On the Progress" value="{!v.countnoselective}" />
+                        </p>
+                    </div>
+
+
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="PublishSelectiveApprovedArticleDML" title="kavId;"
+                                onclick="{!c.publishSelectiveApprovedArticleByDMLClient }" />
+                        </p>
+                    </div>
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="ArchiveSelectivePublishedArticleDML" title="kavId;"
+                                onclick="{!c.archiveSelectivePublishedArticleByDMLClient }" />
+                        </p>
+                    </div>
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="DeleteSelectiveArchivedArticleDML" title="kavId;"
+                                onclick="{!c.deleteSelectiveArchivedArticleByDMLClient }" />
+                        </p>
+                    </div>
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="PublishSelectiveDraftArticleDML" title="kavId;"
+                                onclick="{!c.publishSelectiveDraftArticleByDMLClient }" />
+                        </p>
+                    </div>
+
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="EditSelectivePublishedArticleDML" title="kavId;"
+                                onclick="{!c.editSelectivePublishedArticleByDMLClient }" />
+                        </p>
+                    </div>
+
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="EditSelectiveArchivedArticleDML" title="kavId;"
+                                onclick="{!c.editSelectiveArchivedArticleByDMLClient }" />
+                        </p>
+                    </div>
+
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="CreateNewKnowledgeBaseArticleFromCaseDML" title="CaseId;"
+                                onclick="{!c.createNewKnowledgeBaseArticleFromCaseByDMLClient }" />
+                        </p>
+                    </div>  
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="ReassignKnowledgeBaseArticleDML" title="kavId#UserId;"
+                                onclick="{!c.reassignKnowledgeBaseArticleByDMLClient }" />
+                        </p>
+                    </div>     
+                    <div class="slds-p-vertical--small">
+                        <p class="slds-text-heading--small">
+                            <lightning:button variant="brand" label="RejectKnowledgeBaseArticleDML" title="kavId;"
+                                onclick="{!c.rejectKnowledgeBaseArticleByDMLClient }" />
+                        </p>
+                    </div>              
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+</aura:component>

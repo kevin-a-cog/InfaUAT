@@ -1,0 +1,30 @@
+.es-strength-variation {
+    padding-bottom: 6px;
+    width: 0px;
+    background-color: red;
+}
+
+.es-strength-slider-width {
+    width: 120px;
+    background-color: #ddd;
+    margin-left: 5px;
+    height: 6px;
+    margin-top: 6px;
+    margin-right: 5px;
+}
+
+.es-case-summary__strength-indicator--red {
+    background-color: red !important;
+}
+
+.es-case-summary__strength-indicator--amber {
+    background-color: orange !important;
+}
+
+.es-case-summary__strength-indicator--green {
+    background-color: green !important;
+}
+.success-offering-img{
+    width: 20px;
+    height: 20px;
+}

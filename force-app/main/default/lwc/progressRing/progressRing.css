@@ -1,0 +1,15 @@
+/* .THIS .slds-progress-ring__path{
+    fill: yellow;
+} */
+
+.ring-color {
+    fill:#FF7D00;
+    box-shadow: 0px 0px 5px #C1C1C1;
+}
+
+
+
+.font {
+    font-size: x-small;
+    font-weight: 600;
+}

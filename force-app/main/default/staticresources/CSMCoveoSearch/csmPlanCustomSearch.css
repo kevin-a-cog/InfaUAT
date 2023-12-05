@@ -1,0 +1,29 @@
+.coveo-dropdown-background-active {
+    position: absolute;
+}
+.coveo-list-layout.CoveoResult {
+    border-bottom: thin solid #bcc3ca;
+    padding: 16px 0 16px 0px;
+}
+.coveo-facet-column .coveo-facet-dropdown-modal-content .coveo-dropdown-content {
+    top: 55px;
+    right: 0!important;
+    width: 52%;
+    padding: 2px;
+    left: auto;
+}
+.CoveoSearchInterface.coveo-small-facets .coveo-facet-column.coveo-facet-dropdown-content .CoveoFacet {
+    margin: 10px 0;
+    padding: 0;
+    border: thin solid #7e8c9a;
+    border-radius: 2px;
+    background: #fff;
+    position: relative;
+}
+.CoveoSearchInterface .coveo-search-section {
+    max-width: 800px;
+    margin: 54px auto 7px;
+}
+.coveo-card-layout-container {
+    margin-right: 0px;
+}

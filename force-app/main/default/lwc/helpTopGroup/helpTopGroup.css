@@ -1,0 +1,16 @@
+.product-heading{
+    font-style: normal;
+    font-weight: 300;
+    font-size: 36px;
+    padding: 5% 0 4% 0;
+	background-size: 100% 100%;
+    -webkit-filter: invert(1);
+    filter: invert(1);  
+    -moz-background-clip: text;
+    -webkit-background-clip: text;
+}
+
+.heading-wrapper{
+    background-size: 100% 100%;
+	color: transparent;
+}

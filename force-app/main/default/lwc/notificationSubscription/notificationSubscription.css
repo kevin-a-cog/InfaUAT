@@ -1,0 +1,39 @@
+.hideIcon {
+    display: none;
+}
+.gcs-card-wrapper {
+    padding: 20px;
+}
+.slds-modal__container {
+    max-width: 60rem !important;
+    width: 60% !important;
+} 
+.gcs-filter-wrapper {
+    position: relative;
+}
+.gcs-filter-tooltip {
+    position: absolute;
+    top: 10px;
+    left: 9.5%;
+}
+
+.gcs-team-tooltip {
+    position: absolute;
+    top: 10px;
+    left: 11.5%;
+}
+.gcs-offset {
+    padding-left: 36px;
+}
+/**
+.slds-modal__content{ 
+    height : 65vh !important; 
+    max-height: 65vh !important; 
+  }
+**/
+.gcs-align-button{
+    margin-top: 15px;
+}
+.gcs-align-fields{
+    padding-left: 5px;
+}

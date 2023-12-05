@@ -1,0 +1,22 @@
+<!--
+/*
+ * Name			:	gcsEmailReplyAll
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	10/05/2021
+ * Description	:	This LWC allows users to send emails, on Reply All mode.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		10/05/2021		N/A				Initial version.			N/A
+ */
+-->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,lightning:isUrlAddressable,force:hasRecordId" access="global">
+
+	<!-- Variables. -->
+	<aura:attribute name="recordId" type="String" />
+
+    <!-- LWC. -->
+    <c:globalEmailComposer recordId="{!v.recordId}" boolIsReplyAll="true" onexecuteaction="{!c.executeAction}" />
+</aura:component>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+        <!-- <target>lightning__HomePage</target> -->
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="title" type="String" description="Enter Title" label="Title" placeholder="Enter Title" default="Heading" />
+            <property name="headingClass" type="String" datasource="in-heading in-orange, in-heading in-teal" description="Select Theme" label="Select Theme" placeholder="Select Theme" />
+            <property name="objectType" type="String" datasource="Communities, Groups, Events,Blogs, Highlights" description="Select Object" label="Select Object" placeholder="Select Object" />
+            <property name="recordId" type="String" label="Record Id" description="Automatically bind the page's record id to the component variable" default="{!recordId}" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

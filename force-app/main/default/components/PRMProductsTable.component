@@ -1,0 +1,22 @@
+<apex:component controller="PRMProductTableController" access="global">
+    
+    <apex:attribute name="AcctId" type="Id" description="Id of the account" assignTo="{!engagementId}"/>
+    <apex:attribute name="showStatus" type="Boolean" description="Show Status" assignTo="{!showStatusVf}"/>
+    
+    <apex:outputPanel rendered="{!(products.size > 0)}">
+        <table border = "2" cellspacing = "5">
+            <tr>
+                <td>Product Request Id</td>
+                <td>Product Name</td>
+                <td style="display: {!IF(showStatus,'revert','none')};">Product Status</td>
+            </tr>
+            <apex:repeat value="{!products}" var="o">
+            <tr>
+                <td>{!o.Name}</td>
+                <td>{!o.Product__r.Name}</td>   
+                <td style="display: {!IF(showStatus,'revert','none')};">{!o.Status__c}</td>             
+            </tr>
+            </apex:repeat>       
+        </table>
+    </apex:outputPanel>
+</apex:component>

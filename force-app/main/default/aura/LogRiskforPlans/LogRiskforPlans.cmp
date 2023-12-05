@@ -1,0 +1,135 @@
+<aura:component controller="LogRiskController" implements= "force:lightningQuickActionWithoutHeader,force:hasRecordId">
+
+    <aura:attribute name="riskTypeMap" type="Map" />
+    <aura:attribute name="riskRecTypeId" type="String" />
+    <aura:attribute name="selectedRiskType" type="String" />
+    <aura:attribute name="buttonlabel" type="String" />
+    <aura:attribute name="blShowPicklist" type="Boolean" default="true" />
+    <aura:attribute name="blShowRecordEditForm" type="Boolean" default="false" />
+    <aura:attribute name="blManageRisks" type="Boolean" default="false" />
+    <aura:attribute name="blHasPlanProducts" type="Boolean" default="false" />
+    <aura:attribute name="blShowOrHideAll" type="Boolean" default="true" />
+    <aura:attribute name="isAdoption" type="Boolean" default="false" />
+    <aura:attribute name="isRenewal" type="Boolean" default="false" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="riskRecDetails" type="string" default="" />
+    <aura:attribute name="levelOfRisk" type="string" default="" />
+    <aura:attribute name="disableSave" type="Boolean" default="false" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+
+    <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 100% !important;
+        width:60% !important;
+        }
+    </aura:html>
+
+    <aura:if isTrue="{!v.blShowOrHideAll}">
+        <aura:if isTrue="{!v.blShowPicklist}">
+            <lightning:select name="RiskType" label="Risk Type" aura:id="riskType" onchange="{!c.riskTypeOnChange}">
+                <option value="None">--None--</option>
+                <aura:iteration var="riskType" items="{! v.riskTypeMap }" indexVar="key">
+                    <option value="{!riskType.key }">{! riskType.value }</option>
+                </aura:iteration>
+            </lightning:select>
+            <!--
+            <div class="slds-align_absolute-center " style="height:5rem">
+            <lightning:button class="slds-m-top_small" variant="neutral" name="Cancel" label="Cancel"
+                onclick="{!c.handleCancel}" />
+            </div>-->
+        </aura:if>
+
+        <aura:if isTrue="{!v.blShowRecordEditForm}">
+            <lightning:recordEditForm aura:id="createRiskForm" objectApiName="Risk_Issue__c" onsubmit="{!c.handleNext}"
+                onsuccess="{!c.handleSuccess}" recordTypeId = "{!v.riskRecTypeId}">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Name" required="true" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="OwnerId"  />
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Type__c" value="{!v.selectedRiskType}"  disabled="true" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Plan__c" value="{!v.recordId}" disabled="true" />
+                    </div>
+             
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Risk_Reason__c"   required="true" />
+                    </div>
+                    <aura:if isTrue="{!v.isRenewal}">
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Related_Risk__c"  />
+                    </div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isAdoption}">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning:inputField fieldName="Level_of_Risk__c"  required="true" value="{!v.levelOfRisk}"/>
+                        </div>
+                    </aura:if>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Risk_Reason_Secondary__c" />
+                    </div>
+                   
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Risk_Stage__c"  required="true" value="Open" />
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Due_Date__c" />
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Status__c"  disabled="true"/>
+                    </div>
+                   
+                    <div class="slds-col slds-size_1-of-1">
+                        <lightning:inputField fieldName="Comments__c"  required="true" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Next_Action_BU__c" value="CSM" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Awaiting_Customer__c" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Next_Action_Owner__c" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Next_Action_Due_Date__c" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-1">
+                        <lightning:inputField fieldName="Next_Action_Summary__c" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Risk_Source__c"   value ="CSM Created" disabled="true" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Deal_Grade_Class__c" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Deal_Grade_Reasons__c" />
+                    </div>
+                   
+                </div>
+                <div class="slds-align_absolute-center" style="height:5rem">
+                    <lightning:button class="slds-m-top_small" variant="neutral" name="Cancel" label="Cancel"
+                        onclick="{!c.handleCancel}" />
+                    <lightning:button class="slds-m-top_small" variant="brand" name="{!v.buttonlabel}"
+                        label="{!v.buttonlabel}" type="submit" disabled="{!v.disableSave}"/>
+                </div>
+            </lightning:recordEditForm>
+            <!-- <lightning:button class="slds-m-top_small" type="button" label="Next" onclick ="{!c.handleManageRiskProducts}">-->
+        </aura:if>
+    </aura:if>
+    <aura:if isTrue="{!v.blManageRisks}">
+        <c:manageRiskProducts fromcreatepage="true" planidpassed="{!v.recordId}" risksobject="{!v.riskRecDetails}">
+        </c:manageRiskProducts>
+    </aura:if>
+
+
+</aura:component>

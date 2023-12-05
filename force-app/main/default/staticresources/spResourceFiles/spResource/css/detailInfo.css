@@ -1,0 +1,55 @@
+/** Detail page module ***/
+.sp-section-block {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+.sp-section-block--no-margin {
+    padding-bottom: 0;
+}
+.sp-plan__heading {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 0;
+}
+.sp-plan-name--single {
+    font-size: 14px;
+}
+.sp-acc__details {
+    margin: 12px 0 0 12px;
+    width: 70%;
+}
+.sp-acc__logo {
+    width: 40px;
+}
+.sp-acc__name {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    font-weight: lighter;
+}
+.sp-plan__header--with-fields {
+    display: flex;
+    justify-content: space-between;
+}
+.sp-plan__heading--with-border {
+    border-bottom: 1px solid #BBB;
+}
+.sp-plan__content {
+    padding-left: 30px;
+}
+/*** Display info label/value ***/
+.sp-plan-info__label {
+    color: #808080;
+    font-size: 12px;
+    font-weight: 300;
+}
+.sp-plan-info__value {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    margin-bottom: 18px;
+}
+@media screen and (max-width: 420px) {
+    .sp-acc__details {
+        width: 100%;
+    }
+}

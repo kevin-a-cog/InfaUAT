@@ -1,0 +1,9 @@
+<!--
+        @Author: Conga Services
+        @Created Date: 8/10/2018
+        @Description: Provides a lightning friendly Sync Status widget component for Legal Agreement
+-->
+
+<apex:page standardController="Legal_Agreement__c" showHeader="false" sidebar="false" docType="html-5.0">
+  <APXT_Redlining:SyncStatus recordId="{!Legal_Agreement__c.Id}" />
+</apex:page>

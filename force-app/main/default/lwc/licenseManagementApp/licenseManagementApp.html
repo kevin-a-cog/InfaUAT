@@ -1,0 +1,186 @@
+<template>
+	<div class="slds-page-header branding-setup onesetupSetupHeader">
+		<div class="overflow uiBlock">
+			<div class="slds-grid slds-wrap slds-gutters_small">
+				<div class="slds-col slds-size_4-of-12">
+					<div class="setup-header-element slds-show_inline-block slds-m-right_small">
+						<span class="setup-icon slds-icon_container slds-icon-standard-home branding-primary-background">
+                            <div style="background-color:transparent" class="slds-icon slds-page-header__icon forceEntityIcon">
+                                <lightning-button-icon icon-name="utility:user"   variant="brand" alternative-text="User License Management" class="slds-m-left_xx-small slds-float_left" title="User License Management"></lightning-button-icon>
+                            </div>
+					    </span>
+				    </div>
+                    <div class="setup-header-element slds-show_inline-block">
+                        <div class="onesetupBreadcrumbs">
+                            <div>
+                                <span dir="ltr" title="" class="breadcrumb uiOutputURL onesetupBreadcrumb">User</span>
+                            </div>
+                            <div>
+                                <h1>
+                                    <strong class="breadcrumbDetail uiOutputText slds-text-heading_small">License Management</strong>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+			    </div>
+                <div class="slds-col slds-size_8-of-12">
+                    <div class="slds-grid slds-wrap slds-gutters_small">
+                        <div class="slds-col slds-size_5-of-12">
+                            <template lwc:if={notApprover}>
+                                <br/>
+                                <span style="color:#BA0517">
+                                    You do not have required access to Assign/Remove licenses.
+                                </span>
+                            </template>
+                            <template lwc:else>
+                                <lightning-radio-group name="TypeofAction" variant="label-hidden" label="User License" options={actionOptions}
+                                    value={selectedAction} type="radio" onchange={handleActionChange}>
+                                </lightning-radio-group>
+                            </template>
+                        </div>
+                        <div class="slds-col slds-size_7-of-12">
+                            <template lwc:if={isLicenseRemoval}>
+                                <lightning-combobox name="filter" label="Licenses" value={selectedLicense} disabled={isLicenseRemovalReview}
+                                    options={licenseOptions} onchange={handleLicenseChange} placeholder="Select a License">
+                                </lightning-combobox>
+                            </template>
+                            <template lwc:if={isLicenseAssignment}>
+                                <lightning-combobox name="filter" label="Licenses" value={selectedRole}
+                                    options={roleOptions} onchange={handleRoleChange} placeholder="Select a License" disabled={isLicenseAssignmentReview}>
+                                </lightning-combobox>
+                            </template>
+                        </div>
+                    </div>
+			    </div>
+		    </div>
+		
+	    </div>
+	</div>
+	<lightning-card>
+		<div style="width:100%; padding:0;">
+			<template if:true={isUserSelectionVisible}>
+                <article class="slds-card">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title slds-p-left_medium">
+                            <span class="slds-truncate" title={gridTitle}>
+                                <span>{gridTitle}</span>
+                            </span>
+                            </h2>
+                        </div>
+                    </header>
+                    <div class="slds-card__body slds-card__body_inner">
+                        <div class="slds-grid slds-wrap slds-gutters_small">
+                            <div class="slds-col slds-size_6-of-12">
+                                <template lwc:if={isSearchVisible}>
+                                    <lightning-layout multiple-rows style="width: calc(100% - 26px);">
+                                       <lightning-layout-item size="12">
+                                            <lightning-input type="search" label="Search" onchange={handleUserSearch}>
+                                            </lightning-input>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </template>
+                            </div>
+                            <div class="slds-col slds-size_6-of-12">
+
+                            </div>
+                            <div class="slds-col slds-size_12-of-12 slds-p-around_medium">
+                                <template lwc:if={isLicenseRemoval}>
+                                    <template lwc:if={isLicenseRemovalSelection}>
+                                        <lightning-datatable data={userData} columns={userColumns} onrowselection={handleUserSelection}
+                                            key-field="Id" selected-rows={selectedUserIds} default-sort-direction={defaultSortDirection}
+                                            sorted-direction={sortDirection} sorted-by={sortedBy} onsort={onHandleSort}>
+                                        </lightning-datatable>
+                                        <template lwc:if={totalPages}>
+                                            <div class="slds-col slds-p-bottom_xx-small slds-p-top_x-small slds-align_absolute-center">
+                                                <span>
+                                                <lightning-button-icon icon-name="utility:chevronleft" size="small" alternative-text="Previous" onclick={previousPage} disabled={disablePrevious}></lightning-button-icon>
+                                            </span>
+                                                <label class="slds-text-color_weak slds-p-horizontal_x-small">Showing</label>
+                                                <span>{currentPage}</span>
+                                                <span>&nbsp;of&nbsp;<label>{totalPages}</label></span>
+                                                <span>&nbsp;&nbsp;Page(s)</span>
+                                                <span>
+                                                <lightning-button-icon icon-name="utility:chevronright" size="small" alternative-text="Next" onclick={nextPage} class="slds-p-horizontal_x-small" disabled={disableNext}></lightning-button-icon>
+                                            </span>
+                                            </div>
+                                        </template>
+                                     </template>
+                                     <template lwc:if={isLicenseRemovalReview}>
+                                        <div class="slds-grid slds-wrap slds-gutters_small">
+                                            <template for:each={removeLicenseAvailability} for:item="eachLicense">
+                                                <div class="slds-col slds-size_3-of-12" key={eachLicense.AllowedLicenses}>
+                                                    <b>License name:</b> {eachLicense.License}<br/>
+                                                    <b>Total no of allowed licenses:</b> {eachLicense.AllowedLicenses}<br/>
+                                                    <b>Total no of used licenses:</b> {eachLicense.UsedLicenses}<br/><br/>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <p class="slds-m-bottom_medium slds-m-bottom_top"><b>Total no of selected users:</b> {selectedRemovalUsersCount}</p>
+                                       <lightning-datatable data={removalReviewData} columns={userColumns} 
+                                        key-field="Id" hide-checkbox-column default-sort-direction={defaultSortDirection}
+                                            sorted-direction={sortDirection} sorted-by={reviewsortedBy} onsort={onHandleReviewSort}>
+                                        </lightning-datatable>
+                                    </template>
+                                    <footer class="slds-modal__footer slds-m-top_small">
+                                        <lightning-button variant="brand" lwc:if={isLicenseRemovalReview} label="Back"
+                                            title="Back" onclick={handleRemovalBackClick} class="slds-m-left_x-small">
+                                        </lightning-button>
+                                        <lightning-button variant="brand" lwc:if={isLicenseRemovalSelection} label="Next"
+                                            title="Next" onclick={handleRemovalNextClick} class="slds-m-left_x-small">
+                                        </lightning-button>
+                                        <lightning-button variant="brand" label="Remove" title="Remove" lwc:if={isLicenseRemovalReview}
+                                            onclick={handleLicenseRemove} class="slds-m-left_x-small"></lightning-button>
+                                    </footer>
+                                </template>
+                                <template lwc:elseif={isLicenseAssignment}>
+                                    <template lwc:if={isLicenseAssignmentSelection}>
+                                        
+                                        <lightning-dual-listbox name="users" label="Select Users" variant="label-hidden"
+                                            source-label="Available" selected-label="Selected" options={userOptions}
+                                            value={selectedAssignmentUserIds} onchange={handleAssignmentUserChange}>
+                                        </lightning-dual-listbox>
+                                    </template>
+                                    <template lwc:if={isLicenseAssignmentReview}>
+                                        <div class="slds-grid slds-wrap slds-gutters_small">
+                                            <template for:each={assignLicenseAvailability} for:item="eachAssignLicense">
+                                                <div class="slds-col slds-size_3-of-12" key={eachAssignLicense.AllowedLicenses}>
+                                                    <b>License name:</b> {eachAssignLicense.License}<br/>
+                                                    <b>Total no of allowed licenses:</b> {eachAssignLicense.AllowedLicenses}<br/>
+                                                    <b>Total no of used licenses:</b> {eachAssignLicense.UsedLicenses}<br/><br/>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <p class="slds-m-bottom_medium slds-m-bottom_top"><b>Total no of selected users:</b> {selectedAssignmentUserIds.length}</p>
+                                        <c-license-request-review-grid user-ids={allSelectedUserIds}
+                                        business-role={selectedRole}
+                                        ongetassignmentuserids = {getAssignmentUserIds}>
+                                        </c-license-request-review-grid>
+                                    </template>
+
+                                    <footer class="slds-modal__footer slds-m-top_small">
+                                        <lightning-button variant="brand" lwc:if={isLicenseAssignmentReview} label="Back"
+                                            title="Back" onclick={handleAssignmentBackClick} class="slds-m-left_x-small">
+                                        </lightning-button>
+                                        <lightning-button variant="brand" lwc:if={isLicenseAssignmentSelection} label="Next"
+                                            title="Next" onclick={handleAssignmentNextClick} class="slds-m-left_x-small">
+                                        </lightning-button>
+                                        <lightning-button variant="brand" lwc:if={isLicenseAssignmentReview} label="Assign"
+                                            title="Assign" onclick={handleLicenseAssignmentClick} class="slds-m-left_x-small">
+                                        </lightning-button>
+                                    </footer>
+                                </template>
+                            </div>
+                        </div>
+                 </div>
+                </article>
+			</template>
+
+
+			<template if:true={noUserList}>
+				<div style="width:100%; padding:1rem;"> No users are assigned to the selected license.</div>
+			</template>
+
+		</div>
+	</lightning-card>
+</template>

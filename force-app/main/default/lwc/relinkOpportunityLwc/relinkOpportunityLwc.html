@@ -1,0 +1,16 @@
+<template>
+    <div class="slds-text-body_regular" style="text-align: center;text-align: center;font-weight: 700;">
+        Please search with opportunity name or number and select from the list below to re-link.</div>
+    <div style="text-align: center;padding-top: 1rem;" class="slds-align_absolute-center">
+        <c-lookup-lwc   
+            unique-key={recordId} 
+            value-id={opportunityId} 
+            obj-name="Opportunity" 
+            icon-name="standard:opportunity" 
+            label-name="Opportunity" 
+            onvalueselect={handleSelection}
+            create-record={createRecord}
+            filter={filter}>
+        </c-lookup-lwc>
+    </div>
+</template>

@@ -1,0 +1,53 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="OutlookEmailController" access="global">
+    <aura:attribute name="messageBody" type="String" default="test email body" /> 
+    <aura:attribute name="messagesubject" type="String" /> 
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="interlocktype" type="String" />
+    <aura:attribute name="downloaded" type="Boolean" default="false"/>
+    <aura:attribute name= "errMessage" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>
+    
+    <aura:if isTrue= "{! (v.errMessage != null)}">
+        <div class = "slds-modal__content slds-p-around_medium slds-align_absolute-center ">
+            <p> {!v.errMessage} </p>
+        </div>   
+        
+        <aura:set attribute="else">
+            
+            <div class="modal-header slds-modal__header slds-size_1-of-1" >
+                <h4 class="title slds-text-heading--medium" >Preview Email</h4>
+            </div>
+            
+            <div class="slds-modal__content slds-p-around_medium slds-align_absolute-center slds-size_1-of-1 slds-is-relative" aura:id="modalbody" id="modalbody">
+                
+                <p> Do you want to preview the e-mail before sending?</p>
+                
+            </div>   
+            
+            <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+                <div class="forceChangeRecordTypeFooter">
+                    
+                    <lightning:button variant="neutral" label="Notify" onclick="{! c.sendEmail }" /> 
+                    
+                    <lightning:button variant="neutral" label="Yes, I would like to preview the e-mail" onclick="{!c.clickAdd}" />
+                    <lightning:button variant="neutral" label="Cancel" onclick="{!c.closeModal}" />
+                </div>
+            </div>
+            <a download="message.eml" id="downloadlink2" style="display: none">Download</a>
+        </aura:set>
+    </aura:if>
+</aura:component>

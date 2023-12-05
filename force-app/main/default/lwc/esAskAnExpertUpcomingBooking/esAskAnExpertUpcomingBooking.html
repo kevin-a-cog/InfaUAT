@@ -1,0 +1,19 @@
+<template>
+    <div class="es-case-wrapper">
+        <h3 class="es-case__heading es-case__heading--with-border mt-3">Upcoming Bookings ({data.length})</h3>
+        <template if:true={upcomingBooking}>
+            <div class="es-datatable">
+                <lightning-datatable 
+                    columns={columns} 
+                    data={data} 
+                    key-field="Id">
+                </lightning-datatable>
+            </div>  
+        </template>  
+        <template if:false={upcomingBooking}>
+            <div class="d-flex align-items-center justify-content-center es-upcomingbooking--empty">
+                <p>There is no upcoming booking. </p>
+            </div>
+        </template>
+    </div>  
+</template>

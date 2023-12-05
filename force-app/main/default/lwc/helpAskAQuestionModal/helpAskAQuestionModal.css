@@ -1,0 +1,65 @@
+.popup-alert__msg {
+    color: red;
+    margin-bottom: 10px;
+}
+
+/* I2RT-6018- Styles for Modal popup . Added by Utkarsh Jain */
+
+.help-text-icon {
+    position: absolute;
+    margin-left: 5.5%;
+}
+
+
+@media screen and (max-width: 1550px) {
+    .help-text-icon {
+        margin-left: 6.8%;
+    }
+}
+
+@media screen and (max-width: 1300px) {
+    .help-text-icon {
+        margin-left: 7.8%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .help-text-icon {
+        margin-left: 32%;
+    }
+}
+
+/* I2RT-6020- Styles for Modal popup . Added by Chetan Shetty */
+.in-modal-wrapper .slds-modal__container {
+    width: 80%;
+    max-width: 80%;
+}
+
+.slds-modal {
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    margin-top: 15px;
+}
+
+.in-modal__faux-body {
+    margin: 20px;
+}
+
+.in-modal__body {
+    margin: 0;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.in-modal__footer {
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+    background: #fff;
+}
+
+.in-button--only-icon {
+    top: 8px;
+}
+
+/* ends here */

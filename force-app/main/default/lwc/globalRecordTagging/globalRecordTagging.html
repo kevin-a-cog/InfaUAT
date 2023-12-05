@@ -1,0 +1,28 @@
+<!--
+/*
+ * Name			:	globalRecordTagging
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	2/16/2023
+ * Description	:	This LWC displays the related tags based on the Record Tagging rule engine.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		2/16/2023		N/A				Initial version.						 N/A
+ */
+-->
+<template>
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+	<!-- Tags. -->
+	<lightning-card if:true={boolTagsFound} variant="Narrow" data-id={intId} data-blink={boolBlink}>
+		<div class="container" data-id={intId}>
+			<template for:each={lstRecords} for:item="objRecord">
+				<span key={objRecord.Id} data-id={objRecord.Id} class="tag" onclick={openRecord}>{objRecord.Name}</span>
+			</template>
+		</div>
+	</lightning-card>
+</template>

@@ -1,0 +1,45 @@
+<template>
+    <div class="container-fluid banner-container-fluid">
+        <template if:true={bannerOutage.isOutage}>
+            <div class="container">
+               <c-es-alert class="es-outage-banner" alert-message={bannerOutage.message} service-details={bannerOutage.podsData}></c-es-alert>
+
+            </div>
+        </template>
+        
+        <div class="container banner-container">
+            <div class="banner-wrapper">
+                <template if:true={bShowAllCTA}>
+                    <ul class="link-option-wrapper">
+                        <li class="link-option__item">
+                            <a href={newCaseUrl} onclick={checkUserAccessForCase}>
+                                <span class="link-option__text">Create a New Case</span>
+                                <i class="infacom-arrow-right-white">→</i>
+                            </a>
+                        </li>
+                        <template if:true={bShowAAEOption}>
+                            <li class="link-option__item">
+                                <a href={aaeUrl} onclick={checkUserAccessForExpert}>
+                                    <span class="link-option__text">Ask an Expert</span>
+                                    <i class="infacom-arrow-right-white">→</i>
+                                </a>
+                            </li>
+                        </template> 
+                        <li class="link-option__item">
+                            <a href={hotfix}>
+                                <span class="link-option__text">Hotfix Downloads</span>
+                                <i class="infacom-arrow-right-white">→</i>
+                            </a>
+                        </li>
+                        <li class="link-option__item">
+                            <a href={askOurCommunity} target="_blank" onclick={openAskOurCommunity}>
+                                <span class="link-option__text">Ask Our Community</span>
+                                <i class="infacom-arrow-right-white">→</i>
+                            </a>
+                        </li>
+                    </ul>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>

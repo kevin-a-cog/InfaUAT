@@ -1,0 +1,25 @@
+<template>
+    	<!-- Header controls. -->
+	<div class="slds-card">
+		<lightning-card variant="Narrow" title="Altify People Page" icon-name="standard:contact">		
+			<template if:false={isPoppedOut}>
+				<lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+			</template>
+			<template if:true={isPoppedOut}>
+				<lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+			</template>
+		</lightning-card>
+	</div>
+    	<!-- Card body. -->
+	<div class="slds-card">
+        <div class="slds-box slds-theme--default" if:true={planAccountId}>
+            <iframe frameborder="0" marginheight="0" marginwidth="0" src={siteURL} if:false={boolDisplaySpinner} data-id="altify_iframe" class={className}></iframe>
+        </div>
+        <!-- Spinner. -->
+        <div class="spinner">
+            <template if:true={boolDisplaySpinner}>
+                <lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+            </template>
+        </div>
+    </div>
+</template>

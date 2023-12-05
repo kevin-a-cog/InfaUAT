@@ -1,0 +1,50 @@
+.es-organisation-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 22px 0;
+}   
+.es-organisation__name {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    /* background: url(/sfsites/c/resource/1606214644000/eSupportRrc/support_account.svg) no-repeat left center; 
+    padding-left: 55px;
+    line-height: 40px;*/
+    color: initial;
+}
+.es-org-name-link{
+    color: initial;
+    margin-left: 10px;
+}
+@media only screen and ( max-width: 420px ){
+    .es-organisation__name {
+        margin-bottom: 15px;
+    }
+}
+.icn {
+    border: 1px solid #d4d4d4;
+    height: 24px;
+    border-radius: 2px;
+    padding: 4px;
+    margin-left: 3px;
+   }
+.es-disable-scroll{
+    overflow: hidden;
+}
+.es-pin-inline{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.es-item-width{
+    width: 300px;
+}
+.es-pin-spinner{
+    position: absolute;
+    z-index: 3;
+}
+a:hover{
+    text-decoration: none;
+    color: #ff8200;
+}

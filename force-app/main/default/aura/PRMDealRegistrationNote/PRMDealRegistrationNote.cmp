@@ -1,0 +1,35 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="DealRegistrationAddProductsHandler">
+    
+    <!-- attributes -->
+    <aura:attribute name="renderText" type="Boolean" default="False"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="fontSize" type="String" description="Add the size of the Text to display" />
+    <aura:attribute name="textColor" type="String" description="Add the color of the Text to display" />    
+    <aura:attribute name="fontStyle" type="String" description="If the text needs to be bold, italic or Underline" default="true"/>
+    <aura:attribute name="note" type="String" description="Add the Text to display" />
+    <!-- attributes -->
+    
+    <!--component-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!--Component Body -->
+    <aura:if isTrue= "{!v.renderText}">
+        <div aura:id="compBody" style="overflow:auto; background-color:white;" >
+            <!--<div class="slds-border_top slds-border_left slds-border_right slds-border_bottom" >-->
+                <!--<lightning:layout class="logo-and-content" horizontalAlign="spread">
+                <div class= "slds-grid slds-wrap">-->
+                    <!--<lightning:layoutItem>-->
+                    <div aura:id="textNoteSection" id="textNoteSection" style=" padding-top:10px;">
+                        <p style="{!'color: ' + v.textColor + '; font-family:unset; font-size: ' + v.fontSize+ 'pt; font-weight: ' + v.fontStyle + ';' }">
+                            {!v.note}
+                        </p>
+                        
+                    </div>
+                    <!--</lightning:layoutItem>                    
+                </div>-->
+            <!--</div>-->            
+        </div>
+    </aura:if>
+    <!--Component Body -->
+    
+</aura:component>

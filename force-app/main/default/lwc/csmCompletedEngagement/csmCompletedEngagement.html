@@ -1,0 +1,70 @@
+<template>
+
+
+    <div class="slds-modal__header">
+        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Complete Engagement</h1>
+    </div>
+
+
+    <lightning-layout multiple-rows>
+        <lightning-layout-item size="12" padding="around-small">
+            <template if:true={bshowlookup}>
+            <c-custom-lookup-field
+                data-id="Plan__c"
+                label="Plan"
+                placeholder="Select a Plan"
+                onsearch={handleLookupSearch}
+                onselectionchange={handleLookupSelectionChange}
+                selection={initialSelection}
+                required={bPlanRequired}
+          >
+          </c-custom-lookup-field>
+        </template>
+        </lightning-layout-item>
+
+        <lightning-layout-item size="12" padding="around-small">
+            <lightning-combobox
+              name="engagementHelpful"
+              label="Was It Helpful?"
+              value={WasItHelpfulvalue}
+              placeholder="Select Progress"
+              options={options}
+              onchange={onchangeHandler} >
+          </lightning-combobox>
+
+          <!--<lightning-input type="checkbox" name="engagementHelpful" onchange={onchangeHandler} label="Was It Helpful?"></lightning-input>-->
+
+        </lightning-layout-item>
+
+       
+
+        <lightning-layout-item size="12" padding="around-small">
+            <label class="slds-form-element__label" for="form-element-03">
+                <abbr if:true={bFeedbackRequired} class="slds-required" title="required">* </abbr> Feedback</label>
+            <lightning-textarea variant="label-hidden" name="CSMSummary" onchange={onchangeHandler} label="CSM Summary" required={bFeedbackRequired} ></lightning-textarea>
+        </lightning-layout-item>
+    </lightning-layout>
+
+     
+
+    <div class="slds-modal__footer">
+        <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={cancelHandler}>Cancel</button>
+        <button class="slds-button slds-button_brand" onclick={saveHandler}>Save</button>
+    </div>    
+
+ <!--   On click of Completed => Display a modal with 3 fields. 
+
+    Engagement Helpful = Checkbox
+    Plan__c = Drop down/ Custom lookup to Account Plans {engagement.Opportunity.Account. From Account get the Plans related}
+    CSM_Summary__c = Long text area.
+
+
+
+    Based on Engagement helpful => plan and summary fields will be mandated.
+    
+    Modal will have Save and Cancel Button.
+    Save will Set the status to Completed.
+    Chatter posts will be triggered to the Creator the record.
+-->
+
+</template>

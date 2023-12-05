@@ -1,0 +1,63 @@
+<template>
+    <lightning-card>
+		<div class="slds-p-horizontal_small">
+
+			<!-- Header controls. -->
+			<div class="slds-card">
+				<lightning-card variant="Narrow" title={objConfiguration.strCardTitle} icon-name={objConfiguration.strIconName}>
+					<!--AR-3141   -->
+					<lightning-button if:true={showForecastButton} class="slds-m-right_xx-small" label={label.Churn_Forecast_Label} variant="brand" onclick={forecastChurn} slot="actions"></lightning-button>
+					
+					<lightning-button if:true={showButtons} label={label.New_Button} variant="brand" onclick={newRecord} slot="actions"></lightning-button>
+					<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" alternative-text={label.Refresh_Button} class="slds-m-left_xx-small" onclick={refreshCard} 
+							slot="actions"></lightning-button-icon>
+					<template if:false={isPoppedOut}>
+						<lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+					</template>
+					<template if:true={isPoppedOut}>
+						<lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+					</template>
+				</lightning-card>
+			</div>
+
+			<!-- Card body. -->
+			<div class="slds-card">
+
+				<!-- Search field. -->
+				<div>
+					<lightning-input class="searchField" variant="label-hidden" placeholder={objConfiguration.strSearchPlaceholder} type="search" onchange={searchRecord}></lightning-input>
+				</div>
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col">&nbsp;</div>
+				</div>
+
+				<!-- Only display once the spinner is done. -->
+				<template if:false={boolDisplaySpinner}>
+
+					<!-- Table section. -->
+					<c-global-data-table class={objConfiguration.objParameters.strTableClass} obj-parameters={objConfiguration.objParameters} onaction={executeAction}></c-global-data-table>
+				</template>
+			</div>
+
+			<!-- Spinner. -->
+			<div class="spinner">
+				<template if:true={boolDisplaySpinner}>
+					<lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+				</template>
+			</div>
+		</div>
+	</lightning-card>
+
+	<!--Create New Interlock-->
+	<template if:true={openInterlockModal}>
+		<c-csm-create-new-interlock onclosemodal={handleCloseModal} record-id={recordId}></c-csm-create-new-interlock>
+	</template>
+	<!--Churn Forecast __ AR-3141-->
+	<template if:true={openForecastmodal}>
+		<c-csm-churn-forecast onclosemodal={handleCloseModal} record-id={recordId}></c-csm-churn-forecast>
+	</template>
+	 <!--Risk Screen-->
+	 <template if:true={boolShowRiskScreen}>
+        <c-csm-generate-risk-from-p-a-f record-id={recordId} onclose={handleCloseRisk}></c-csm-generate-risk-from-p-a-f>
+    </template>
+</template>

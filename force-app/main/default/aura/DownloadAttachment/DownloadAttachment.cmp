@@ -1,0 +1,27 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global"
+                controller="OutlookEmailController">
+      <aura:attribute name="downloaded" type="Boolean" default="false"/>
+    <aura:attribute name="Parsed" type="List" />
+	<aura:handler name="init" value="{!this}" action="{!c.clickAdd}" />
+    
+    
+    
+     <aura:if isTrue = "{!v.downloaded}">
+            <div class="slds-text-body_regular">
+                <p> Please click on the Attachments to download it. </p>                    
+            </div>
+        </aura:if>
+    
+    
+    <aura:iteration items="{!v.Parsed}" var="ind" >
+                                        <div>
+                                            <lightning:icon iconName="doctype:csv" />
+                                            <lightning:formattedUrl value="{!'/sfc/servlet.shepherd/version/download/'+ind.Id}" label="{!ind.Title}" aura:id="url" /><br/><br/>
+                                           <!-- <a href="{!'/sfc/servlet.shepherd/version/download/'+ind.Id}" />!-->
+                                        </div>
+                                    </aura:iteration>
+    
+    
+    
+ 
+</aura:component>

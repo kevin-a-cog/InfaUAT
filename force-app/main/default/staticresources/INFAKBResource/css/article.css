@@ -1,0 +1,216 @@
+/*
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 01-06-2021
+  @last modified by  : Sathish Rajalingam
+  Modifications Log 
+  Tag       |  Date             |  Modified by              |  Jira reference   |   ChangesMade  
+   1        |  24-Dec-2020      |  Sathish Rajalingamm      |    I2RT-550       |   CSS added to remove unnecessary white spaces in article view page
+   2        |  16-Jun-2023      |  Sathish Rajalingamm      |    I2RT-8399      |   PROD - Mobile Devices - KB Article Details - Tooltip icon is getting display in all the KB fields
+
+*/
+
+/* Article Page */
+
+.selfServiceArticleLayout .forcePageBlockSectionView.full .test-id__field-label, .selfServiceArticleLayout .forcePageBlockSectionView.full .test-id__grouped-field-label-icon {
+    text-transform: capitalize !important;
+    font-weight: 400 !important;
+    display: inline-block;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    font-size: 1.125rem !important;
+}
+
+.forcePageBlockSection .slds-form-element .slds-form-element__control, .forcePageBlockSection .slds-form-element:not([class*="slds-size"]) {
+    padding-bottom: 10px;
+}
+
+.selfServiceArticleLayout.zoom .article-head {
+    font-weight: 500 !important;
+}
+
+@media screen and (min-width: 769px) {
+    .forceRelatedListSingleContainer {
+        padding-right: 0px !important;
+        padding-left: 0px !important;
+    }
+}
+
+/* Article Preview Page */
+
+.slds-form-element__label {
+    color: #333;
+    font-size: 1.125rem;
+    font-weight: 400;
+    padding-right: .5rem;
+    /* padding-top: 10px; */
+    /* padding-bottom: 15px; */
+    margin-bottom: 0px;
+}
+
+.slds-form-element__control[lightning-outputfield_outputfield] {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #c1c0c0;
+}
+
+.preview-title[c-knowledgeUnpublished_knowledgeUnpublished] {
+    background-color: #fff !important;
+    padding-top: 0px !important;
+    margin-bottom: 0px !important;
+    font-weight: 500 !important;
+    font-size: 1.4em !important;
+}
+
+h4[c-knowledgeUnpublished_knowledgeUnpublished] {
+    color: #ff4d00 !important;
+}
+
+/*Article Sharing Bar*/
+
+.article-sharing-bar span {
+    padding-left: 2%;
+}
+
+.article-sharing-bar img {
+    background-color: #6e6e70;
+    padding: 5px;
+    border-radius: 50%;
+    height: auto;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+/* Related Articles */
+
+community_article-similar-articles-item .slds-text-body_small, .slds-text-body--small {
+    font-size: 14px;
+    color: #009DDC;
+    font-weight: 400;
+}
+
+.selfServiceSimilarArticles42 li:nth-child(odd) {
+    background: #F7F8F9;
+}
+
+.selfServiceSimilarArticles42 li>.comm-related-articles__item>a {
+    word-break: break-word !important;
+    font-size: 14px;
+    padding: 20px 17px;
+}
+
+community_article-similar-articles-list h2 {
+    text-align: center;
+    border: 1px solid #d4d4d4;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 1rem !important;
+    line-height: 1.25 !important;
+    font-weight: 300 !important;
+    text-transform: capitalize !important;
+    margin-bottom: 0px;
+    margin-right: 0px !important;
+}
+
+community_article-similar-articles-item a {
+    padding-left: 10px;
+    padding-right: 10px;
+    word-break: break-word;
+    font-size: 14px;
+}
+
+community_article-similar-articles-list ul {
+    border: 1px solid #d4d4d4;
+    border-top: none;
+}
+
+.selfServiceSimilarArticles42 li .slds-grid>div {
+    padding-right: 8px;
+}
+
+/*Preview Article*/
+
+span.preview-field-label[c-knowledgeunpublished_knowledgeunpublished] {
+    font-size: 1rem;
+    font-weight: 500;
+    display: inline-block;
+    padding-bottom: 0px;
+}
+
+lightning-formatted-rich-text.preview-field-value.slds-rich-text-editor__output[c-knowledgeunpublished_knowledgeunpublished] {
+    padding-bottom: 10px;
+    width: 100%;
+    border-bottom: 1px solid #c1c0c0;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+/*Article Feedback*/
+
+c-k-b-feedback-external abbr[data-id='descripstar'] {
+    text-decoration: none !important;
+}
+
+/* hide tooltip */
+
+.uiTooltip.tooltip-trigger {
+    display: none !important;
+    position: relative;
+}
+
+/*<1>*/ 
+.slds-spinner_container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: var(--lwc-zIndexSpinner, 9050);
+    background-color: white;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity .2s ease, visibility 0s;
+    transition-delay: 0s, .3s;
+}
+
+.slds-spinner {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    z-index: 9051;
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.selfServiceArticleLayout .forcePageBlockSectionRow.full {
+    padding: 0px 0 !important;
+}
+
+.selfServiceArticleLayout .forcePageBlockItem.full, .selfServiceArticleLayout .forcePageBlockItem.full:last-child {
+    padding: 0;
+    border-left: 0;
+    border-bottom: 0;
+    padding: 0px 2px 0px 0px !important;
+}
+
+.slds-section {
+    margin-top: 0px;
+    margin-bottom: 4px;
+}
+/*</1>*/
+
+.forceChatterNewMessageButton
+{
+    display:none;
+}
+/*<2>*/
+.selfServiceArticleLayout .meta {
+    color: var(--lwc-colorTextWeak,#696969);
+    font-size: var(--lwc-ssFontSizeSmall,0.75rem) !important;
+}
+
+.forcePageBlockItemView.has-tooltip .tooltipIcon
+{
+    display:none;
+}
+/*</2>*/

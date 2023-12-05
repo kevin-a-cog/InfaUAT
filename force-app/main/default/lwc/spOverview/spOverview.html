@@ -1,0 +1,53 @@
+<template>
+	<div class="slds-is-relative">
+		
+		<!-- Spinner. -->
+		<template if:true={boolDisplaySpinner}>
+			<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+		</template>
+
+		<!-- Table. -->
+		<div class="sp-plan-statistics-wrapper row">
+			<div class="d-flex flex-wrap flex-md-nowrap justify-content-between col-md-8">
+				<li class="sp-plan__statistics-item">
+					<img class="sp-plan__statistics-img-value" src={planHealthScore} alt="Plan Health" onload={loaded} data-element="1">
+					<p class="sp-plan__statistics-label">Plan Health</p>
+				</li>
+				<li class="sp-plan__statistics-item">
+					<img class="sp-plan__statistics-img-value" src={productHealthScore} alt="Product Health" onload={loaded} data-element="2">
+					<p class="sp-plan__statistics-label">Product Health</p>
+				</li>
+				<li class="sp-plan__statistics-item sp-plan__statistics-item--last-meter">
+					<img class={guageMeterDisplay} src={activeEngagementScore} alt="Active Engagement" onload={loaded} data-element="3">	
+					<p class="sp-plan__statistics-label">Recent Communications</p>
+				</li>
+			</div>
+			<div class="col-md-1"><span class="sp-plan__border d-none d-md-block"></span></div>
+			<!-- <li class="sp-plan__statistics-item sp-plan__statistics-item--numeric">
+				<p class="sp-plan__statistics-value">{overviewData.iOpenEngagementCount}</p>
+				<p class="sp-plan__statistics-label">Active escalations</p>
+			</li> -->
+			<div class="col-md-3">
+				<li class="sp-plan__statistics-item sp-plan__csm-details">
+					<p class="sp-plan__csm-header">Your CSM</p>
+					<img class="sp-plan__csm-img" src={csmProfilePicture} alt="csm profile pic" />
+					<div class="sp-plan__csm-info">
+						<p>{overviewData.sPlanOwnerName}
+							<!-- <span><lightning-helptext class="sp-tooltip" content={overviewData.sPlanOwnerAboutMe}></lightning-helptext></span> -->
+						</p>
+						<template if:true={overviewData.sPlanOwnerEmail}>
+							<a href={overviewData.sPlanOwnerEmailTo} ><img class="mr-1" src={mailIcon} alt="mail" />{overviewData.sPlanOwnerEmail}
+							</a>
+						</template>
+						<template if:true={showKnowAboutMeLink}>
+							<p>
+								More about me
+								<lightning-helptext class="sp-tooltip mt-1" icon-name="utility:light_bulb" content={overviewData.sPlanOwnerAboutMe}></lightning-helptext>
+							</p>
+						</template>
+					</div>
+				</li>
+			</div>
+		</div>
+	</div>
+</template>

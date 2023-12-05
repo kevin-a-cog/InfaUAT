@@ -1,0 +1,32 @@
+<apex:page standardController="Order" extensions="DisplayUpgradeOrder" showHeader="false" sidebar="false">
+  <apex:pagemessages />
+  <apex:form >   
+       <b>{!DisplayMessage}</b>
+ 
+          <apex:pageBlock >   
+              <apex:repeat value="{!MapToDisplay}" var="var" >
+                   <!-- <apex:pageBlockTable value="{!1}" var="v" columns="10" border="True" styleClass="style">
+                       <apex:column headerValue="Previous Order" colspan="5"/>
+                       <apex:column headerValue="Upgraded To" colspan="5"/>
+                   </apex:pageBlockTable> -->
+                   <apex:pageBlockSection columns="1">
+                   <apex:pageBlockTable value="{!MapToDisplay[var]}" var="v" rendered="{!MapToDisplay[var]!=null}"  >
+                          <apex:column headerValue="Order Number" value="{!v.OrderName}"/>
+                          <apex:column headerValue="Line Num" value="{!v.OrderLineNum}"/>
+                          <apex:column headerValue="Extended Price" value="{!v.ExtPrice}"/>
+                          <apex:column headerValue="Quantity" value="{!v.Qty}"/>
+                          <apex:column headerValue="Old Product" value="{!v.OldProductName}"/>
+                          <apex:column headerValue="Upgrade Line" value="{!v.ProposalUpgradeOrderLine}"/>
+                          <apex:column headerValue="Product" value="{!v.ProposalProduct}"/>
+                          <apex:column headerValue="Upgraded Qty" value="{!v.UpgradeQty}"/>
+                          <apex:column headerValue="Upgraded %" value="{!v.UpgradePercent}"/>
+                    </apex:pageBlockTable> 
+                    </apex:pageBlockSection>                    
+                    <br></br>
+             </apex:repeat>        
+      </apex:pageBlock>
+     <!-- <br></br><br></br><br></br>
+      <apex:commandButton value="Back to Order" onclick="/{!Order}"/> 
+      <br></br> -->
+</apex:form>
+</apex:page>

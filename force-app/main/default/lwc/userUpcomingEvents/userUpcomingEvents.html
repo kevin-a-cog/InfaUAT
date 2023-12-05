@@ -1,0 +1,39 @@
+<!--   
+Change History
+****************************************************************************************************
+ModifiedBy      Date        Jira No.    Tag     Description
+****************************************************************************************************
+Isha Bansal     03/29/2023  I2RT-6727   T02     Added condition userupcomingevent
+-->
+<template>
+    <lightning-accordion class="example-accordion"
+    allow-multiple-sections-open
+    active-section-name={section}>
+    <template lwc:if={booluserupcomingevent}>
+    <lightning-accordion-section name="WeekendSupport" label="Upcoming Weekend Support" > 
+        <template if:true={weekendSupportEvents}>
+            <lightning-datatable class="upcoming-FTO" column-widths-mode="auto" columns={EVENT_COLUMNS}  data={weekendSupportEvents} key-field="Id" hide-checkbox-column ="true" ></lightning-datatable>
+        </template>
+        <template if:false={weekendSupportEvents}>
+            <p>No upcoming weekend support</p>
+        </template>
+    </lightning-accordion-section>
+    <lightning-accordion-section name="HolidaySupport" label="Upcoming Holiday Support" > 
+        <template if:true={holidaySupportEvents}>
+            <lightning-datatable class="upcoming-FTO" column-widths-mode="auto" columns={EVENT_COLUMNS}  data={holidaySupportEvents} key-field="Id"  hide-checkbox-column ="true"  ></lightning-datatable>
+        </template>
+        <template if:false={holidaySupportEvents}>
+            <p>No upcoming holiday support</p>
+        </template>
+    </lightning-accordion-section>
+</template>
+    <lightning-accordion-section name="fto" label="Upcoming FTO" > 
+        <template if:true={ftoEvents}>
+            <lightning-datatable class="upcoming-FTO" column-widths-mode="auto" columns={EVENT_FTO_COLUMNS}  data={ftoEvents} key-field="Id" hide-checkbox-column ="true" ></lightning-datatable>
+        </template>
+        <template if:false={ftoEvents}>
+            <p class="empty-events">No upcoming FTO</p>
+        </template>
+    </lightning-accordion-section>
+    </lightning-accordion>
+</template>

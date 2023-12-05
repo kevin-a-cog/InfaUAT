@@ -1,0 +1,92 @@
+<template>
+    <div class="heading-wrapper">
+        <div class="in-banner__content">
+            <div class="container">
+                <div class="in-banner-heading">Ideas</div>
+            </div>
+        </div>
+    </div> 
+    <div>
+        <div class="in-wrapper-bg-fuild-grey">
+            <div class="container">
+                <div class="pt-3">
+                    <div class="in-wrapper-bg-fuild-white in-communities-wrapper">
+
+                        <div class="filter-search-wrapper">                       
+                            <template if:false={isGuestUser}>
+                                <lightning-button variant="brand" label="CREATE IDEA" onclick={handleCreateIdea}
+                                    class="in-groupButton"></lightning-button>
+                            </template>
+                        
+                            <template if:true={showIdeaModal}>
+                                <c-help-create-idea-modal onclosemodal={closeIdeaModal}> </c-help-create-idea-modal>
+                            </template>
+                            
+                            <div class="filterButton">
+                                <button variant="brand" class="slds-button slds-button_brand" onclick={handleShowFilters}>
+                                    <img class="in-btn-icon" src="/resource/./informaticaNetwork3/Filter-Icon.svg" />
+                                    <span class="slds-p-left_x-small">
+                                        Filters
+                                    </span>
+                                </button>
+                            </div>
+                            <lightning-input type="search" variant="label-hidden" placeholder="Search Ideas" name="Search Ideas"
+                                class="searchBox" value={searchval} onchange={searchIdeas}>
+                            </lightning-input>
+                        </div>
+
+                        <lightning-tabset active-tab-value={selectedTab} class="in-communities-tab__section">
+                            <template if:false={isGuestUser}>
+                                <lightning-tab label="My Ideas" title="My Ideas" value="1" onactive={handleActive}>
+                                    <c-help-ideas-landing result-set={manipulatedArr} first-filter={firstFilterlist}
+                                        second-filter={categoriesFilter} firstplaceholder="Select Status" show-filters={showFilters}
+                                        secondplaceholder="Select Product" onfirstfilterchange={handleFirstFilter}
+                                        onsecondfilterchange={handleSecondFilterChange}
+                                        selectedfilters={selectedFilters} onclearall={handleClearAll}
+                                        onclearselectfilter={handleclearselectfilter} nosearchresult={noSearchResult}
+                                        product-list={options} selected-product={selectedSortFilter}
+                                        onsortbyfilterchange={handlesortfilter}>
+                                    </c-help-ideas-landing>
+
+                                </lightning-tab>
+                            </template>
+
+                            <lightning-tab label="All Ideas" value="2" onactive={handleActive}>
+                                <c-help-ideas-landing result-set={manipulatedArr} first-filter={firstFilterNoDraft}
+                                    second-filter={categoriesFilter} firstplaceholder="Select Status" show-filters={showFilters}
+                                    secondplaceholder="Select Product" onfirstfilterchange={handleFirstFilter}
+                                    onsecondfilterchange={handleSecondFilterChange} nosearchresult={noSearchResult}
+                                    selectedfilters={selectedFilters} onclearall={handleClearAll}
+                                    onclearselectfilter={handleclearselectfilter} product-list={options}
+                                    selected-product={selectedSortFilter} onsortbyfilterchange={handlesortfilter}>
+
+                                </c-help-ideas-landing>
+                            </lightning-tab>
+
+                            <template if:false={isGuestUser}>
+                                <lightning-tab label="Recommended Ideas" value="3" onactive={handleActive}>
+                                    <c-help-ideas-landing result-set={manipulatedArr} first-filter={firstFilterNoDraft}
+                                        second-filter={categoriesFilter} firstplaceholder="Select Status" show-filters={showFilters}
+                                        secondplaceholder="Select Product" onfirstfilterchange={handleFirstFilter}
+                                        onsecondfilterchange={handleSecondFilterChange} nosearchresult={noSearchResult}
+                                        selectedfilters={selectedFilters} onclearall={handleClearAll}
+                                        onclearselectfilter={handleclearselectfilter} product-list={options}
+                                        selected-product={selectedSortFilter} onsortbyfilterchange={handlesortfilter}>
+
+                                    </c-help-ideas-landing>
+                                </lightning-tab>
+                            </template>
+                        </lightning-tabset>
+                    </div>
+                </div>
+                <template lwc:if={showPagination}>
+                    <c-help-pagination
+                                current-page={currentPage}
+                                total-pages={totalPages}
+                                onsendcurrentpage={onPageRequest}>
+                    </c-help-pagination>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>

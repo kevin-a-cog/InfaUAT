@@ -1,0 +1,56 @@
+<template>
+    <div>
+        <template if:true={getHasFileCheck}>
+            <lightning-card variant="narrow" class="slds-text-title_bold" icon-name="standard:file" title={getFilesLength}>                  
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">                                                   
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Name">File Name</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Tyoe">File Type</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="CreatedBy">Created By</div>
+                            </th>                                                                                 
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="CreatedDate">Created Date</div>
+                            </th>
+                        </tr>
+                    </thead>           
+                    <tbody>
+                        <template if:true={relatedFilesList}>
+                            <template for:each={relatedFilesList} for:item="fileRec">
+                                <tr key={fileRec.conDoc.Id} data-item={fileRec.conDoc.Id}>                        
+                                    <th scope="col">
+                                        <div data-item={fileRec.conDoc.Id} >                                
+                                            <a href={fileRec.conURL}>
+                                                <p data-item={fileRec.conDoc.Id}>{fileRec.conDoc.Title}</p>
+                                            </a>                                                                 
+                                        </div>                                     
+                                    </th>
+                                    <th scope="col">
+                                        <div data-item={fileRec.conDoc.FileType} >
+                                            {fileRec.conDoc.FileType}                                                                                                                                       
+                                        </div>                                     
+                                    </th>
+                                    <th scope="col">
+                                        <div data-item={fileRec.conDoc.CreatedBy.Name} >
+                                            {fileRec.conDoc.CreatedBy.Name}                                                                                                                                      
+                                        </div>                                     
+                                    </th>
+                                    <th scope="col">
+                                        <div data-item={fileRec.conDoc.CreatedDate} >
+                                            <lightning-formatted-date-time value={fileRec.conDoc.CreatedDate} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time>                                                                                                                                                                                  
+                                        </div>                                     
+                                    </th>                            
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>            
+                </table>
+            </lightning-card>
+        </template>
+    </div>
+</template>

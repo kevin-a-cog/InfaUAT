@@ -1,0 +1,62 @@
+<template>
+    <template if:true={isContentViewable}>
+        <template if:false={isDataAvailableOnLoad}>
+            <div class=" slds-card">
+                <div class="slds-align_absolute-center" style="height:5rem">
+                    <lightning-spinner alternative-text="Loading..." variant="brand" size="small"
+                        style="margin: 1px; top:35px;">
+                    </lightning-spinner>
+                </div>
+            </div>
+        </template>
+        <template if:true={isDataAvailableOnLoad}>
+            <template if:true={isCommunityUser}>
+                <div class="kb-community-tile pt-0">
+                    <div class="row m-0 pt-2 flex-nowrap">
+                        <img style="width:71px; height:71px; margin-left: -15px;"
+                            src={communityLogo}>
+                        <div class="kb-title-follow">
+                            <div class="kb-community-name">
+                                Ask the Community
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="kb-community-desc">
+                        Connect with product experts worldwide in Informatica communities.
+                    </div>
+                    <div>
+                        <a onclick={handleAskQuestionExternal} class="row kb-take-me-cta change-pointer">
+                            <div>TAKE ME THERE</div>
+                            <i class="kb-take-me-cta-arrow"><span>&#8594;</span></i>
+                        </a>
+                    </div>
+                </div>
+            </template>  
+            <template if:false={isCommunityUser}>
+                <div class="kb-community-tile pt-0">
+                    <div class="row m-0 pt-2 flex-nowrap">
+                        <img style="width:66px; height:66px; margin-left: -14px;"
+                            src={communityLogo}>
+                        <div class="kb-title-follow">
+                            <div class="kb-community-name">
+                                Engage the Community
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="kb-community-desc">
+                        <template if:true={isProductTopicAvailable}>Connect with the community to answer unanswered questions. Your expertise can make a real difference.</template>
+                        <template if:false={isProductTopicAvailable}>Connect with customers in Informatica Communities. Your responses can make a difference.</template>
+                    </div>
+                    <div>
+                        <a onclick={handleAskQuestionInternal} class="row kb-take-me-cta change-pointer">
+                            <div>TAKE ME THERE</div>
+                            <i class="kb-take-me-cta-arrow"><span>&#8594;</span></i>
+                        </a>
+                    </div>
+                </div>
+            </template>            
+        </template>
+    </template>
+</template>

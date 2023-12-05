@@ -1,0 +1,74 @@
+<!--
+/*
+ * Name			:	csmIPUConsumptionGoalsLauncher
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	3/15/2023
+ * Description	:	This LWC launches the IPU Consumption Goals component.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		3/15/2023		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	
+	<!-- If the component is Popped Out. -->
+    <template if:true={boolIsPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-ipu-consumption-goals" aria-modal="true" aria-describedby="modal-content-id-ipu-consumption-goals" 
+				class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%; margin: 0; padding: 0px">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-ipu-consumption-goals" style="flex: 1;">
+
+					<!-- Refresh and Pop In buttons. -->
+					<div class="slds-clearfix">
+						<div class="slds-float_right">
+							<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-right_medium" onclick={refreshTable}></lightning-button-icon>
+							<lightning-button-icon icon-name="utility:pop_in" class="slds-m-right_medium" onclick={popInPopOut}></lightning-button-icon>
+							<template if:true={displayICGOptions}>
+								<template if:true={boolHasRecords}>
+									<lightning-button label={label.EditIPUConsumptionGoals} variant="brand" class="slds-var-m-right_medium" 
+											onclick={displayIPUConsumptionGoalsModal}></lightning-button>
+									<lightning-button label={label.Consumption_Goals_History} variant="brand" onclick={displayConsumptionGoalsHistory}></lightning-button>
+								</template>
+							</template>
+						</div>
+					</div>
+
+					<!-- Read Only mode. -->
+					<c-csm-i-p-u-consumption-goals class="readonly" record-id={recordId} bool-is-read-only=true object-api-name={objectApiName}></c-csm-i-p-u-consumption-goals>
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+	<template if:false={boolIsPoppedOut}>
+
+		<!-- Refresh and Pop Out buttons. -->
+		<div class="slds-clearfix">
+			<div class="slds-float_right">
+				<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-right_medium" onclick={refreshTable}></lightning-button-icon>
+				<lightning-button-icon icon-name="utility:new_window" class="slds-m-right_medium" onclick={popInPopOut}></lightning-button-icon>
+				<template if:true={displayICGOptions}>
+					<template if:true={boolHasRecords}>
+						<lightning-button label={label.EditIPUConsumptionGoals} variant="brand" class="slds-var-m-right_medium" 
+								onclick={displayIPUConsumptionGoalsModal}></lightning-button>
+						<lightning-button label={label.Consumption_Goals_History} variant="brand" onclick={displayConsumptionGoalsHistory}></lightning-button>
+					</template>
+				</template>
+			</div>
+		</div>
+	
+		<!-- Read Only mode. -->
+		<c-csm-i-p-u-consumption-goals class="readonly" record-id={recordId} object-api-name={objectApiName} bool-is-read-only=true></c-csm-i-p-u-consumption-goals>
+	</template>
+
+	<!-- Modal - IPU Consumption Goals. -->
+	<c-csm-i-p-u-consumption-goals if:true={boolDisplayIPUConsumptionGoalsModal} record-id={recordId} object-api-name={objectApiName} bool-is-read-only=false onclose={hideIPUConsumptionGoalsModal} 
+			onrefresh={refreshTable}></c-csm-i-p-u-consumption-goals>
+	
+	<!-- Modal - Generate Risk. -->
+	<c-csm-generate-risk-from-p-a-f if:true={boolDisplayGenerateRiskModal} record-id={recordId} onclose={hideGenerateRiskModal}></c-csm-generate-risk-from-p-a-f>
+</template>

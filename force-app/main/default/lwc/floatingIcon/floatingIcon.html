@@ -1,0 +1,25 @@
+<template>
+    <template if:true={action}>
+        <!--div class="widget"-->
+            <div class="menu">
+                <div class="toggle" onclick={handleClick} data-name="fab"><i></i><i></i></div>
+                <ul class="list">
+                    <template for:each={action} for:item="actionItem">
+                        <li class="slds-align_absolute-center" key={actionItem.name}>
+                            <lightning-button-icon icon-name={actionItem.iconName} class={actionItem.className}
+                                variant="bare" size="large" alternative-text={actionItem.title} title={actionItem.title}
+                                data-name="fab-action" data-action={actionItem.name} onclick={handleClick}>
+                            </lightning-button-icon>
+                        </li>
+                        <!--<li class="slds-align_absolute-center">utility:quick_text
+                            <lightning-button-icon icon-name="utility:record_update" class="icon-fill-white"
+                                variant="bare" alternative-text="Quick Update" title="Quick Update" name="quickUpdate"
+                                onclick={handleClick}>
+                            </lightning-button-icon>
+                        </li>-->
+                    </template>
+                </ul>
+            </div>
+        <!--/div-->
+    </template>
+</template>

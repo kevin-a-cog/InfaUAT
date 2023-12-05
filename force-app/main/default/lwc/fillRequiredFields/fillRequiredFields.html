@@ -1,0 +1,66 @@
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium modalPosition"
+        aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container" style="margin-left: 20.5%;width: 100%;max-width: 95rem;">
+            <header class="slds-modal__header modalWidth">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" data-name="closeModal" onclick={handleClose}>
+                    <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" data-name="closeModal"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">SubStage Required Fields</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium slds-is-relative modalHeight modalWidth"
+                id="modal-content-id-1">
+                <template lwc:if={showSpinner}>
+                    <div class="exampleHolder">
+                        <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+                    </div>
+                </template>
+                <template lwc:if={showMultiSelectSection}>
+                    <lightning-dual-listbox name="languages"
+                                label="Select Languages"
+                                source-label="Available"
+                                selected-label="Selected"
+                                field-level-help=""
+                                options={winlossReasons}
+                                value={selectedValues}
+                                onchange={handleChange}>
+                    </lightning-dual-listbox> 
+                    <div style="color:#ba0517;">{requiredSelectionMsg}</div>
+                    <lightning-layout vertical-align="start" class="slds-grid slds-wrap">
+                        <lightning-layout-item size="5" class="slds-col slds-size_5-of-12" padding="around-small"></lightning-layout-item>
+                        <lightning-layout-item size="1" class="slds-col slds-size_2-of-12" padding="around-small">
+                            <lightning-button variant="brand" type="submit" label="Save" class="slds-size_1-of-10 slds-p-top_medium slds-align_absolute-center" 
+                                disabled={disableSave} onclick={handleDataSave}>
+                            </lightning-button>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" class="slds-col slds-size_5-of-12" padding="around-small"></lightning-layout-item>                            
+                    </lightning-layout>
+                </template>
+                <template lwc:else>
+                    <lightning-record-edit-form object-api-name={objectApiName} record-id={recordId} onsubmit={hanldeSubmission} onsuccess={handleSucess} onerror={handleError} >
+                    <!--<lightning-record-edit-form object-api-name={objectApiName} record-id={recordId} onsuccess={handleSucess} onerror={handleError} >-->
+                        <lightning-input-field field-name={fieldAPI} required="true" onchange={handleChangeIP}> </lightning-input-field>
+                        <div style="color:#ba0517;">{requiredSelectionMsg}</div>
+                        <lightning-layout vertical-align="start" class="slds-grid slds-wrap">
+                            <lightning-layout-item size="5" class="slds-col slds-size_5-of-12" padding="around-small"></lightning-layout-item>
+                            <lightning-layout-item size="1" class="slds-col slds-size_1-of-12" padding="around-small">
+                                <div class="slds-var-m-top_medium">
+                                    <lightning-button variant="brand" type="submit" label="Save" class="slds-p-left_large slds-var-m-left_x-small slds-size_1-of-10 slds-align_absolute-center"
+                                        disabled={disableSave} onclick={hanldeSubmission}>
+                                    </lightning-button>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" class="slds-col slds-size_6-of-12" padding="around-small"></lightning-layout-item>                            
+                        </lightning-layout>
+                    </lightning-record-edit-form>
+                </template>
+            </div>
+        </div>
+    </section>
+    <footer class="slds-modal__footer slds-modal__footer_directional"></footer>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

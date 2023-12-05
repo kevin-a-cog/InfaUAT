@@ -1,0 +1,36 @@
+<template >
+    <template lwc:if={displayDialog}>
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate"> Cancel Referral</h2>
+    </header>
+    <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="small"></lightning-spinner>
+        <lightning-record-edit-form object-api-name="iCare_Referral__c" onsubmit={handleSubmit}>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <lightning-layout multiple-rows>                    
+
+                    <lightning-layout-item size="12" class="slds-p-left_x-small">
+                        <lightning-input-field field-name="Cancellation_Reason__c" onchange={handleFieldChange} variant="label-stacked" required>
+                        </lightning-input-field>
+                    </lightning-layout-item>      
+                    
+                    <lightning-layout-item size="12" if:true={showOtherReason} class="slds-p-left_x-small">
+                        <lightning-input-field field-name="Other_Cancellation_Reason__c" variant="label-stacked" onchange={handleFieldChange} required>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" class="slds-p-left_x-small">
+                        <lightning-input-field field-name="Referral_Dispositioning_Information__c" variant="label-stacked" onchange={handleFieldChange} required={isFieldRequired}>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+            </div>
+
+            <footer class="slds-modal__footer">          
+                <button class="slds-button slds-button_neutral slds-float_left" onclick={closeModal}>Cancel</button>    
+                <button class="slds-button slds-button_brand" type="submit">Save</button>
+            </footer>
+        </lightning-record-edit-form>
+    <!--/div-->
+</template>
+</template>

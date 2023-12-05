@@ -1,0 +1,33 @@
+<!--
+/*
+ * Name			:	globalManageContactsContainer
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	8/19/2021
+ * Description	:	Global Manage Contacts Container HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		8/19/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	
+	<!-- If the component is Popped Out. -->
+    <template if:true={isPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-global-manage-contacts" aria-modal="true" aria-describedby="modal-content-id-global-manage-contacts" 
+				class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-global-manage-contacts" style="min-height: 100vh;">
+                    <c-global-manage-contacts record-id={recordId} onpopout={popOut} is-popped-out></c-global-manage-contacts>
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+    <template if:false={isPoppedOut}>
+        <c-global-manage-contacts record-id={recordId} onpopout={popOut}></c-global-manage-contacts>
+    </template>
+</template>

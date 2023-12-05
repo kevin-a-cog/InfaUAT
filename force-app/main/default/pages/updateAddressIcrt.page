@@ -1,0 +1,13 @@
+<!--
+*  @VF Page: UpdateAddressIcrt
+*  @Author: Jiju
+*  @Date: 6 Dec 2022
+*  @Description:
+-->
+<apex:page id="pageId" controller="addressICRTControllerExtension">
+    <apex:slds />
+    <!--Displaying the ICRT Guide-->
+    <apex:PageBlock id="icrt" rendered="true">
+        <icrt:AeSalesGuides alwaysNewGuide="true" guideName="{!GuideName}" objectType="{!objectName}" objectId="{!objectId}" height="600px"/>      
+    </apex:PageBlock>
+</apex:page>

@@ -1,0 +1,95 @@
+.sp-plan-statistics-wrapper {
+    align-items: flex-end;
+    justify-content: space-between;
+}
+.sp-plan__statistics-item {
+    list-style: none;
+    text-align: center;
+    /* margin-right: 45px; */
+}
+/* .sp-plan__statistics-item--last-meter {
+    border-right: 1px solid #D8D8D8;
+} */
+.sp-plan__statistics-item--numeric > .sp-plan__statistics-value {
+    margin-bottom: 40px;
+}
+.sp-plan__statistics-img-value {
+    padding-bottom: 14px;
+}
+.sp-plan__statistics-value {
+    color: #FF4D00;
+    font-size: 40px;
+    position: relative;
+}
+.sp-plan__border {
+    border-right: 1px solid #ccc;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+    min-height: 120px;
+}
+/* .sp-plan__statistics-value:before {
+    content: attr(data-before-content);
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background: red;
+    top: 0;
+    right: 0;
+    position: absolute;
+    border-radius: 2px;
+    font-size: 12px;
+    color: #fff;
+    text-align: center;
+}
+.sp-plan__statistics-item--no-badge > .sp-plan__statistics-value:before {
+    content: '';
+    display: none;
+} */
+.sp-plan__statistics-label {
+    color: #333;
+    font-weight: 500;
+    text-align: center;
+    font-size: 14px;
+}
+.sp-plan__csm-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+.sp-plan__csm-img {
+    border-radius: 50%;
+}
+.sp-plan__csm-info {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.sp-plan__csm-info p {
+    margin-top:10px;
+}
+.sp-plan__csm-details {
+    list-style: none;
+    text-align: center;
+}
+@media screen and (max-width : 420px){
+    .sp-plan__statistics-item {
+        /* width: 40%;
+        margin-right: 20px; */
+        margin: 0 auto;
+    }
+    .sp-plan__statistics-item--last-meter {
+        border-right: 0 none;
+        padding-right: 0;
+    }
+    .sp-plan__statistics-item--numeric > .sp-plan__statistics-value {
+        margin-bottom: 6px;
+        text-align: center;
+    }
+    .sp-plan__statistics-img-value {
+        padding-bottom: 6px
+    }
+    .sp-plan__csm-details {
+        margin-top: 30px;
+        width: 100%;
+    }
+}

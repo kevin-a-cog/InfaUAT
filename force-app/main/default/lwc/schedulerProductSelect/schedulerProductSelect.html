@@ -1,0 +1,30 @@
+<!--
+/*
+ * Name			:	schedulerProductSelect
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	9/12/2023
+ * Description	:	This LWC shows Ask An Expert products available for selection.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					                Tag
+ **********************************************************************************************************
+ Vignesh Divakaran	    9/12/2023		I2RT-9063		Initial version.			                N/A
+ */
+-->
+<template>
+
+    <template lwc:if={showProducts}>
+
+        <!-- Heading -->
+        <h2 class="slds-text-align_center slds-m-vertical_small slds-text-color_default slds-text-heading_large">
+            Select Product
+        </h2>
+
+        <!-- AAE Products -->
+        <div class="slds-m-top_large slds-scrollable slds-align_absolute-center">
+            <c-global-visual-picker-text lst-options={lstProducts} str-preselected-key={strSelectedKey} onselect={select}></c-global-visual-picker-text>
+        </div>
+    </template>
+    
+</template>

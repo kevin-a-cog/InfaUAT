@@ -1,0 +1,31 @@
+<!--
+        Page:          SubmitQuote
+        @Author:        
+        @Created Date:  
+        @Description:   
+
+Change History
+**************************************************************************************************************************************
+ModifiedBy      JIRA #      Date            Requested By       Description                                                         Tag
+**************************************************************************************************************************************
+Kiran G      SALESRT-3964 27 Dec 2018        Liz M             Added the button to Return to Quote                     T01
+
+-->
+
+<apex:page standardController="SBQQ__Quote__c" extensions="QuoteExtController"  action="{!onSubmit}" >
+<!-- ------------------------------T01------------------------------------------>
+<apex:stylesheet value="{!URLFOR($Resource.sbaa__sb)}"/>
+<style>
+        body .pbBody {
+            background-color: #FFFFFF;
+        }
+</style>
+<apex:pageMessages />
+<apex:form > 
+ 
+    <div align="right">               
+        <apex:commandButton styleClass="sbBtn" style="margin-right: 20px" value="Return To Quote" action="{!onReturn}" />        
+    </div>
+<!-- ------------------------------T01------------------------------------------>
+</apex:form>
+</apex:page>

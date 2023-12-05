@@ -1,0 +1,18 @@
+.knowledge-follow-btn {
+    position: relative;
+    left: 79%;
+}
+.knowledge-follow-btn.slds-is-pressed {
+    left: 74%;
+    color: #fff;
+}
+
+.knowledge-follow-btn.slds-is-pressed:focus {
+    left: 74%;
+    color: #fff;
+}
+
+.knowledge-follow-btn.slds-is-pressed {
+    left: 74%;
+    color: #fff;
+}

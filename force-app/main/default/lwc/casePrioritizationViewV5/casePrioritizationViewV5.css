@@ -1,0 +1,77 @@
+:host {
+    background-color: #efefef;
+    }
+
+
+    .sticky{
+        position : sticky !important;
+    }
+
+
+    .left75rem{
+        left: -.75rem;
+    }
+
+    .left19rem{
+        left: 19.25rem;
+    }
+
+    .min-Width-r-Style{
+        min-width: 353px;
+    }
+
+    .max-Width-r-Style{
+        max-width: 353px;
+    }
+
+
+
+    .float{
+        position:fixed;
+        width:60px;
+        height:60px;
+        bottom:40px;
+        right:40px;
+        background-color:#0C9;
+        color:#FFF;
+        border-radius:50px;
+        text-align:center;
+        box-shadow: 2px 2px 3px #999;
+    }
+    
+    .my-float{
+        margin-top:22px;
+    }
+
+    .mtTop{
+        margin-top: 5px;
+    }
+
+
+    ul.ulclass{
+     list-style-type: square;
+     padding: 0 0 4px 23px;
+     font-size:1.1em;
+    } 
+                
+        
+    .liclassQ::before{
+       list-style-type: circle;
+       padding: 0 0 4px 73px;         
+    }
+    
+    .liclassA::before{
+        content: "\29BF";                 
+        font-size: 100%; 
+        vertical-align: middle;
+    }
+    .saltView{
+        width:100%
+    }
+    .CS_Table tr td, .CS_Table tr th{
+        width:95px !important;
+    }
+
+.minHeightDivTable {
+	min-height: 60px;
+}

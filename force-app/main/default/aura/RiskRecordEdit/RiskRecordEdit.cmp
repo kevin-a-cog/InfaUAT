@@ -1,0 +1,17 @@
+<aura:component implements="lightning:actionOverride,force:lightningQuickActionwithoutHeader,flexipage:availableForRecordHome,flexipage:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName,lightning:availableForFlowScreens" access="global"
+                controller="ManageRiskProductsController">
+    
+    <aura:attribute name="showRiskProd" type="Boolean" default="false"/>     
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />   
+    
+    <aura:html tag="style">
+        .slds-modal__container{        	
+        max-width: 100% !important;
+        width:90% !important;
+        }        
+    </aura:html>     
+    
+    <aura:if isTrue = "{!v.showRiskProd}" >
+        <c:manageRiskProducts fromeditpage = "true" recordId = "{!v.recordId}"  />
+    </aura:if> 
+</aura:component>

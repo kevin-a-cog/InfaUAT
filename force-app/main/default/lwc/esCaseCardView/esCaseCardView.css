@@ -1,0 +1,113 @@
+.in-wrapper-bg-fuild-grey {
+    background: #eaeaea; 
+}
+.in-wrapper-bg-fuild-white {
+    background: #ffffff;
+}
+.case-view-wrapper{
+    padding-bottom: 20px;
+}
+.card-detail-wrapper{
+    padding: 10px;
+}
+.case-num-wrap{
+    display: inline-block;
+}
+.card-detail-wrapper ul {
+    padding: 0;
+    margin: 0;
+}
+.card-detail-wrapper ul li {
+    display: inline-block;
+    list-style-type: none;
+    width: calc((100% - 30px) / 3);
+    margin-right: 10px;
+}
+.case-org-id{
+    min-width: 60%;
+    position: relative;
+}
+.case-org-id:hover .custom-toolTip {
+    opacity: 1;
+    z-index: 1;
+    visibility: visible;
+}
+.case-product{
+    position: relative;
+}
+.case-product:hover .custom-toolTip {
+    opacity: 1;
+    z-index: 1;
+    visibility: visible;
+}
+.case-num {
+    color: #2373E4;
+    font-size: 20px;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.case-value, .case-detail {
+    color: #373737;
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.case-label {
+    font-size: 13px;
+    color: #5E5A5A;
+    font-weight: 300;
+}
+.case-detail-wrapper{
+    position: relative;
+}
+.case-detail-wrapper:hover .custom-toolTip {
+    opacity: 1;
+    z-index: 1;
+    visibility: visible;
+}
+.custom-toolTip {
+    position: absolute;
+    bottom: 50px;
+    background: #032d60;
+    border-radius: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    word-break: break-all;
+    color: #fff;
+    transition: 0.5s ease-in;
+    opacity: 0;
+    z-index: -1;
+    visibility: hidden;
+}
+.custom-toolTip:after {
+    top: 100%;
+    margin-top: -0.5rem;
+    width: 1rem;
+    height: 1rem;
+    position: absolute;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    content: "";
+    background-color: inherit;
+    left: 50%;
+    bottom: -0.5rem;
+    margin-left: -0.5rem;
+}
+
+@media only screen and (max-width: 768px) {
+    .case-wrapper ul{
+        flex-wrap: wrap;
+    }
+    .case-wrapper ul li{
+        flex: 0 0 130px;
+        margin: 5px 0;
+    }
+
+}
+.in-wrapper-bg-fuild-grey {
+    background: #eaeaea; 
+}
+.in-wrapper-bg-fuild-white {
+    background: #ffffff;
+}

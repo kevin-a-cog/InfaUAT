@@ -1,0 +1,39 @@
+<!--
+/*
+ * Name			:	CancelZoomMeeting
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	11/2/2021
+ * Description	:	This LWC cancels a Zoom invite.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		11/2/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+	<!-- Id for Quick Action. -->
+	<div style="display: none;">{recordId}</div>
+
+	<!-- Spinner. -->
+	<template if:true={boolDisplaySpinner}>
+		<div class="slds-is-relative slds-m-top_xx-large">
+			<lightning-spinner variant="brand" size="small"></lightning-spinner>
+		</div>
+	</template>
+
+	<!-- Body. -->
+	<template if:false={boolDisplaySpinner}>
+		<div class="slds-p-around_small slds-m-top_small slds-m-bottom_small">{label.Zoom_Cancel_Meeting_Message}</div>
+
+		<!-- Footer-->
+		<footer class="slds-float_right">
+			<lightning-button variant="brand" label={label.Zoom_Cancel_Meeting_Button} onclick={confirmOperation} class="slds-p-around_x-small"></lightning-button>
+		</footer>
+	</template>
+</template>

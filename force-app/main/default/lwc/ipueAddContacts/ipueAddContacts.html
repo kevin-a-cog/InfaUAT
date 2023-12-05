@@ -1,0 +1,67 @@
+<template>
+
+    <div class="slds-grid slds-gutters">
+        <!--Search bar for contacts-->
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input  type="search" class="slds-m-bottom_small" label="Search Contacts" onchange={handleSearchContacts} value={contactSearchKey}></lightning-input>
+        </div>
+        <!--Search source picklist-->
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-combobox
+                name="searchSource"
+                label="Search Source"
+                options={searchSourceOptions}
+                value={searchSource}
+                onchange={handleSearchSourceChange}>
+            </lightning-combobox>
+        </div>
+    </div>
+    
+    <template if:true={contactRecs}>
+        <!--Datatable, displays records based on serach term and search source-->
+        <template if:true={contactRecs.length}>
+            <div style="height:270px">
+                <lightning-datatable
+                    key-field="Id"
+                    selected-rows={selectedContacts}
+                    data={contactRecs} 
+                    columns={columns}
+                    default-sort-direction={defaultSortDirection}
+                    sorted-direction={sortDirection}
+                    sorted-by={sortedBy}
+                    onsort={onHandleSort}
+                    is-loading={loadingTable}
+                    enable-infinite-loading
+                    onloadmore={loadMoreContacts}
+                    onrowselection={handleRowSelection}>
+                </lightning-datatable>
+            </div>
+            <span>{loadMoreStatus}</span>
+        </template>
+
+        <!--If no records are fected display the custom message-->
+        <template if:false={contactRecs.length}>        
+            <c-ipue-illustration
+                title="No Records Found"
+                message="No Records Available for the above search criteria. Please change your search criteria">
+            </c-ipue-illustration>
+        </template>
+    </template>
+
+    <!--Footer the displays button-->
+    <div class="slds-m-top_x-small slds-clearfix slds-theme_shade">
+        <div class="slds-p-vertical_small slds-float_right">
+            <lightning-button label="Cancel" onclick={handleCancel} class="slds-m-right_x-small"></lightning-button>
+            <!--Show new contact only if the Account is populated on the summary record-->
+            <template if:true={accountId}>
+                <lightning-button variant="brand-outline" label="New Contact" onclick={handleNewContact} class="slds-m-right_x-small"></lightning-button>
+            </template>
+            <lightning-button variant="brand" label="Next" onclick={handleNext} class="slds-m-right_x-small"></lightning-button>
+        </div>
+    </div>
+
+    <!--When New contact screen is clicked, display the custom form for creating contact-->
+    <template if:true={showCreateContact}>
+        <c-ipue-create-contact account-id={accountId} onsuccess={handleContactSuccess}></c-ipue-create-contact>
+    </template>    
+</template>

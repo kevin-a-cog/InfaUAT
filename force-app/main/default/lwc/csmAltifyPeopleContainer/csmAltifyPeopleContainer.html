@@ -1,0 +1,26 @@
+<template>
+    <template if:true={isAltifyVisible}>
+    <!-- If the component is Popped Out. -->
+    <template if:true={isPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-manage-plan-partners" aria-modal="true" aria-describedby="modal-content-id-manage-plan-partners" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-manage-plan-partners" style="min-height: 100vh;">               
+                    <c-csm-altify-people-page record-id={recordId} onpopout={popOut} is-popped-out></c-csm-altify-people-page>                   
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- If the component is not Popped Out. -->
+    <template if:false={isPoppedOut}>
+        <c-csm-altify-people-page  record-id={recordId} onpopout={popOut}></c-csm-altify-people-page>
+    </template>
+    </template>
+    <template if:false={isAltifyVisible}>
+        <lightning-card>
+        <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+            <b style="text-align: center;color:red;background-color: #FFFF00;">You Don't Have Altify Licence.</b>
+        </div>
+        </lightning-card>
+    </template>
+    </template>

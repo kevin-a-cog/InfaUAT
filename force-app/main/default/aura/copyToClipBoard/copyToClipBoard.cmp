@@ -1,0 +1,4 @@
+<aura:component implements="force:hasRecordId,force:lightningQuickAction" 
+                access="global" controller="copyToClipBoardCtrl">
+	<aura:handler name="init" value="{!this}" action="{!c.handleGetSite}"/>
+</aura:component>

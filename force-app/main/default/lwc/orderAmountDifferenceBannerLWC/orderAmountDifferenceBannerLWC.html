@@ -1,0 +1,18 @@
+<template> 
+    <template if:true={loadUI}>
+        <template for:each={orderObj} for:item="order">
+            <div key={order.key}>
+                <template  if:true={order.display}>
+                    <div class = "slds-p-bottom_x-small">
+                        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                            <span class="slds-assistive-text">error</span>
+                            <h2>
+                                <b>{order.label}</b>
+                            </h2>
+                        </div>
+                    </div>
+                </template>        
+            </div>
+        </template> 
+    </template>    
+</template>

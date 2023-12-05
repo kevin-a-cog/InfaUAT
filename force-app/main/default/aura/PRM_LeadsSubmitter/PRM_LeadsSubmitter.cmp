@@ -1,0 +1,90 @@
+<aura:component controller="DealRegistrationAddProductsHandler" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+	<aura:attribute name="record" type="Object" />
+	<aura:attribute name="simpleRecord" type="Object" />
+	<aura:attribute name="recordError" type="String" />
+	
+	<aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+	<aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+	<aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+	<div class="slds-col modal-header slds-modal__header">
+    	<h3 id="modal-heading-01" class="slds-text-heading_small slds-hyphenate">{!$Label.c.PRM_DealRegistration_Terms_Conditions_Title}</h3>
+    </div>
+    
+    <div class="slds-col modal-body scrollable slds-p-around--medium" style="height: 350px; max-height: 450px; overflow-y: auto !important">              
+		<div class="slds-grow">
+			<div class="slds-p-top--small">
+					<p align="justify">
+						{!$Label.c.PRM_DealRegistration_Terms_Conditions_1} 
+					</p><BR/><BR/>
+					<p align="justify">
+					<ol>
+						<li type="1"><b>
+							{!$Label.c.PRM_DealRegistration_Terms_Conditions_2}
+						</b></li><BR/>
+  
+						<li type="1"><b>
+							{!$Label.c.PRM_DealRegistration_Terms_Conditions_3}
+						</b></li><BR/>
+  
+						<li type="1"><b>
+							{!$Label.c.PRM_DealRegistration_Terms_Conditions_4}
+						</b></li><BR/>
+  
+						<li type="1">
+						<b>{!$Label.c.PRM_DealRegistration_Terms_Conditions_5}</b><BR/><BR/>
+						<p align="left">
+						<ol>
+							<li type="a">{!$Label.c.PRM_DealRegistration_Terms_Conditions_6}</li><BR/>
+							<li type="a">{!$Label.c.PRM_DealRegistration_Terms_Conditions_7}
+							</li><BR/>
+							<li type="a">{!$Label.c.PRM_DealRegistration_Terms_Conditions_8}
+							</li><BR/>
+							<li type="a">{!$Label.c.PRM_DealRegistration_Terms_Conditions_9}
+							</li><BR/>
+							<li type="a">{!$Label.c.PRM_DealRegistration_Terms_Conditions_10}
+							</li><BR/>
+							<li type="a">{!$Label.c.PRM_DealRegistration_Terms_Conditions_11}&nbsp;{!$Label.c.PRM_DealRegistration_Terms_Conditions_11_1}
+							</li>
+						</ol>
+						</p>
+						</li><BR/>
+  
+						<li type="1">
+						<b>{!$Label.c.PRM_DealRegistration_Terms_Conditions_12}</b><BR/><BR/>
+						<p align="left">
+						<ol>
+							<li type="a">{!$Label.c.PRM_DealRegistration_Terms_Conditions_13}</li><BR/>
+		
+							<li type="a">{!$Label.c.PRM_DealRegistration_Terms_Conditions_14}
+							</li><BR/>
+		
+							<li type="a">{!$Label.c.PRM_DealRegistration_Terms_Conditions_15}
+							</li>
+						</ol>
+						</p>
+						</li>
+					</ol>
+					</p><BR/><BR/>
+				<!-- SPINNER SECTION STARTS -->           
+				<aura:if isTrue="{!v.Spinner}">
+					<div aura:id="spinnerId" class="slds-spinner_container">
+						<div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+							<span class="slds-assistive-text">Loading</span>
+							<div class="slds-spinner__dot-a"></div>
+							<div class="slds-spinner__dot-b"></div>
+						</div>
+					</div>
+				</aura:if>
+			</div>
+		</div>
+	</div>
+
+	<div class="slds-col modal-footer slds-modal__footer">
+		
+			<lightning:button label="Cancel" name="Cancel" onclick="{!c.CloseModalOne}" />                           
+			<lightning:button label="Submit" name="Submit" variant="brand" onclick="{!c.submitDR}"/>                     
+		
+    </div>
+</aura:component>

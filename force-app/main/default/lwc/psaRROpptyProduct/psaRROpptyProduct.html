@@ -1,0 +1,39 @@
+<template>
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Select an Opportunity Product</h2>
+    </header>
+
+    <div class="slds-modal__content">
+
+        <div if:true={showNoDataMsg} class="lwcbody">
+            <div class="slds-align_absolute-center slds-text-heading_medium slds-text-color_error">
+                No Opportunity Products found!
+            </div>
+        </div>
+
+        <div if:true={showDatatable} class="lwcbody">
+            <lightning-input type="search" label="" placeholder="filter" onchange={updateSearch}></lightning-input>
+
+            <div style="height: 225px;">
+                <lightning-datatable
+                        key-field="id"
+                        max-row-selection=1
+                        data={opptyProducts}
+                        columns={columns}
+                        selected-rows={selectedOpptyProduct}
+                        onrowselection={handleSelect}>
+                </lightning-datatable>
+            </div>
+        </div>
+    </div>
+
+    
+    <footer if:true={showDatatable} class="slds-modal__footer">
+        <div if:true={saveInProgress} class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+        </div>
+        <lightning-button name="cancel" label="Cancel" onclick={cancel}></lightning-button>
+        <lightning-button variant="brand" name="save" label="Save" onclick={saveSelection}> </lightning-button>
+    </footer>
+
+</template>

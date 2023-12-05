@@ -1,0 +1,30 @@
+.rowData{
+    padding-left:45px;
+    padding-right:45px;
+}
+.caseTable th{
+    border: 1px solid #fff;
+    padding: 6px;
+}
+.caseTable th, .caseTable td{
+    text-align: center;
+}
+.caseTable{
+    margin-top:5px;
+    border:1px solid #fff;
+}
+.noCharts{
+    display: block;
+    font-size: 19px;
+    border: 3px solid #eee;
+    padding: 22px;
+    width: 100%;
+    text-align: center;
+    margin: 10px auto;
+}
+.showClass{
+    display:block;
+}
+.hideClass{
+    display:none;
+}

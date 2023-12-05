@@ -1,0 +1,61 @@
+<template>
+    <template if:true={carouselSlide}>
+        <div class="border-fix">
+            <div class="container in-anon-videos-container">
+                <div class="d-flex align-items-center in-anon-videos-title-container">
+                    <a href={searchPage} class="in-section-link-header">
+                        <div class="in-section-heading pb-0">Videos</div>
+                        <lightning-icon class="align-items-center right-chev"
+                            icon-name="utility:chevronright" size="x-small" >
+                        </lightning-icon>
+                    </a>
+                </div>
+                <div class="row body">
+                    <template for:each={carouselSlide} for:item="urlitem">
+                        <div key={urlitem.rowId} class=" col-md-6">
+                            <div class="parent" data-id={urlitem.rowId} onclick={displayVideo}>
+                                <img class="in-anonymous-videos-play-btn" src={playicon}>
+                            </div>
+                            <img class="help-anonymous-video" src={urlitem.htmlImage} />
+                            <div>
+                                <a href={urlitem.clickUri} target="_blank" class="in-take-me-cta" data-value={urlitem.title} onclick={handleOnClick} >
+                                    <div class="in-community-tile">
+                                        <div class="row m-0">
+                                            <div class="in-title-follow">
+                                                <div class="in-community-name">
+                                                    {urlitem.title}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <template if:true={displaymodal}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open outerModalContent">
+                    <div class="slds-modal__container in-anon-videos-outerModalContent">
+                        <header class="in-anon-videos-popup-header slds-modal__header">
+                            <button
+                                class="in-anon-videos-close-button slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={closeModal}>
+                                <lightning-icon icon-name="utility:close" variant="inverse"
+                                    size="x-small"></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                        </header>
+                        <div class="slds-modal__content in-anon-videos-popup">
+                            <iframe class="in-video-modal-iframe" src={embeddedhtmlmodal} frameborder="0" allowfullscreen
+                                allow="autoplay; encrypted-media"></iframe>
+                        </div>
+                    </div>
+                </section>
+            </template>
+        </div>
+
+    </template>
+</template>

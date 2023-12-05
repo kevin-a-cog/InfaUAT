@@ -1,0 +1,21 @@
+<!--
+/*
+ * Name			:	GlobalZoomAuthorization
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	7/9/2021
+ * Description	:	This Visualforce Page recevies the Authorization response from Zoom, and updates the corresponding record.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		6/14/2021		N/A				Initial version.			N/A
+ */
+-->
+<apex:page controller="GlobalZoomController" action="{!processAuthorizationResponse}">
+
+	<!-- We close the browser tab right away. -->
+	<script>
+		window.close();
+	</script>
+</apex:page>

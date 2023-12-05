@@ -1,0 +1,5 @@
+<aura:event type="APPLICATION" description="Event template" >
+    <aura:attribute name="toastMessage" type="string"/>
+    <aura:attribute name="title" type="string"/>
+    <aura:attribute name="type" type="string"/>
+</aura:event>

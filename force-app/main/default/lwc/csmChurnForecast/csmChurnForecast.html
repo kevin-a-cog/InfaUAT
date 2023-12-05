@@ -1,0 +1,102 @@
+<template>
+    <div class="customGeneralCSS" lwc:dom="manual"></div>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close closeIcon slds-button_icon-bare slds-button_icon-inverse" title="Close" onclick={handleCancel}>
+                    <lightning-icon icon-name="utility:close" class="my-icon" alternative-text="Close" title="close" ></lightning-icon>
+                </button>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Forecast Churn</h2>
+            </header>
+            <template if:true={showSpinner}>
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </template>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+                <lightning-accordion allow-multiple-sections-open active-section-name={activeSection}>
+                    <template for:each={optydata} for:item="opp">
+                        <lightning-accordion-section key={opp.Id} name={opp.Id} label={opp.Name}>
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12">
+                                    <template if:true={opp.showMultiplePlanBanner}>
+                                        <p class="slds-p-around_x-small slds-notify slds-notify_alert slds-alert_warning">There are one or more Plans associated with this Opportunity. </p>
+                                    </template>         
+                                </lightning-layout-item>                       
+                                <lightning-layout-item size="6" class="slds-is-relative slds-p-around_x-small">
+                                    <p class="slds-form-element__label">Opportunity Number  </p>
+                                    <p>                     
+                                        <lightning-formatted-url data-id={opp.Id} value={opp.optyURL} onmouseover={handlemouseover} onmouseout={handlemouseout} label={opp.New_Org_Opportunity_Number__c} ></lightning-formatted-url> 
+                                    </p>   
+                                        <template if:true={opp.displayPopover}>
+                                            <section tabindex="-1" class="popover slds-is-absolute slds-popover slds-nubbin_top-left" role="dialog">
+                                                <div class="slds-popover__body">
+                                                    <lightning-record-form record-id={opp.Id} object-api-name='Opportunity' layout-type="Compact" mode="readonly" density="density"></lightning-record-form>
+                                                </div>
+                                            </section>
+                                        </template>
+                                </lightning-layout-item>    
+                                <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                    <p class="slds-form-element__label">Last Modified By </p>
+                                    <p>
+                                        <lightning-formatted-text value={opp.lastModifiedby}></lightning-formatted-text>,
+                                        <lightning-formatted-text class="slds-p-left_xx-small" value={opp.lastModifieddate}></lightning-formatted-text> 
+                                     </p>                                
+                                </lightning-layout-item>     
+                                <template if:true={opp.displayCloud}>     
+                                    <lightning-layout-item size="12" class="slds-p-around_x-small">
+                                        <p class="slds-form-element__label">Cloud OARR</p>
+                                        <p>
+                                            <lightning-formatted-text value={opp.cloudOARR_format}></lightning-formatted-text>
+                                        </p> 
+                                    </lightning-layout-item>  
+                                    <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                        <lightning-input type="number" max=100 min=0 data-id={opp.Id} message-when-range-overflow={rangeMsg} message-when-range-underflow={rangeMsg} data-field="Cloud_Churn_Forecast_Percent__c" field-level-help={label.CloudChurnHelpText} name="cloudChurnPercent" onblur={handleChange} label="Cloud Churn Forecast Percent" value={opp.Cloud_Churn_Forecast_Percent__c} formatter="percent-fixed" step="0.01"></lightning-input>
+                                    </lightning-layout-item>                                
+                                    <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                        <lightning-input type="text" data-id={opp.Id} data-field="Cloud_Churn_Forecast__c" name="cloudChurnDollar" label="Cloud Churn Forecast Amount" value={opp.cloudChurn_format}  disabled></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                        <lightning-input type="number" max=100 min=0 data-id={opp.Id} message-when-range-overflow={rangeMsg} message-when-range-underflow={rangeMsg} data-field="Cloud_Swing_Forecast_Percent__c" field-level-help={label.CloudSwingHelpText} name="cloudSwingPercent" required={opp.cloudSwingrequired} onblur={handleChange} label="Cloud Swing Forecast Percent" value={opp.Cloud_Swing_Forecast_Percent__c} formatter="percent-fixed" step="0.01"></lightning-input>
+                                    </lightning-layout-item>                
+                                    <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                        <lightning-input type="text" data-id={opp.Id} data-field="Cloud_Swing_Forecast__c" name="cloudSwingDollar" label="Cloud Swing Forecast Amount" value={opp.cloudSwing_format} disabled></lightning-input>                                    
+                                    </lightning-layout-item>   
+                                </template>
+                                <template if:true={opp.displayonPrem}>
+                                    <lightning-layout-item size="12" class="slds-p-around_x-small">
+                                        <p class="slds-form-element__label">On-Prem OARR</p>
+                                        <p>
+                                            <lightning-formatted-text value={opp.onPremOARR_format}></lightning-formatted-text>
+                                        </p> 
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                        <lightning-input type="number" max=100 min=0 message-when-range-overflow={rangeMsg} message-when-range-underflow={rangeMsg} data-id={opp.Id} data-field="On_Prem_Churn_Forecast_Percent__c" field-level-help={label.OnPremChurnHelpText} name="opChurnPercent" onblur={handleChange} label="On-Prem Churn Forecast Percent" value={opp.On_Prem_Churn_Forecast_Percent__c} formatter="percent-fixed" step="0.01"></lightning-input>
+                                    </lightning-layout-item>                                
+                                    <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                        <lightning-input type="text" data-id={opp.Id} data-field="On_Premise_Churn_Forecast__c" name="opChurnDollar" label="On-Prem Churn Forecast Amount" value={opp.onPremChurn_format} step="0.01" disabled></lightning-input>                                   
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                        <lightning-input type="number" max=100 min=0 message-when-range-overflow={rangeMsg} message-when-range-underflow={rangeMsg} data-id={opp.Id} data-field="On_Prem_Swing_Forecast_Percent__c" field-level-help={label.OnPremSwingHelpText} name="opSwingPercent" onblur={handleChange} label="On-Prem Swing Forecast Percent" value={opp.On_Prem_Swing_Forecast_Percent__c} required={opp.opSwingrequired} formatter="percent-fixed" step="0.01"></lightning-input>
+                                    </lightning-layout-item>                                
+                                    <lightning-layout-item size="6" class="slds-p-left_x-small">
+                                        <lightning-input type="text" data-id={opp.Id} data-field="On_Premise_Swing_Forecast__c" name="opSwingDollar" label="On-Prem Swing Forecast Amount" value={opp.onPremSwing_format} disabled></lightning-input>                                    
+                                    </lightning-layout-item>
+                                </template>                                                               
+                                <lightning-layout-item size="12" class="slds-p-left_x-small">
+                                    <lightning-textarea data-id={opp.Id} data-field="CSM_Comments__c" required={opp.commentrequired} name="comments" label="Churn Forecast Comments" onblur={handleChange} value={opp.CSM_Comments__c}></lightning-textarea>                                    
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-accordion-section>
+                       
+                    </template>
+                </lightning-accordion>            
+            </div>
+            <footer class="slds-modal__footer">
+                <button type="reset" class="slds-button slds-button_neutral" onclick={handleCancel}>Cancel</button>               
+                <button class="slds-button slds-button_brand" onclick={handleSave}>Save</button>
+            </footer>
+
+        </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div> 
+      
+</template>

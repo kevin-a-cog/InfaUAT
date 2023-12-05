@@ -1,0 +1,1518 @@
+<!--
+/*
+ Change History
+ ****************************************************************************************************************************
+ Modified By			Date			Jira No.		Description								                        Tag
+ ****************************************************************************************************************************
+ NA		                NA		        UTOPIA			Initial version.						                        NA
+ Vignesh Divakaran      05-May-2022     I2RT-5733       Replace Org_ID__c with Org_Formula_Id__c                        T01 
+ Sandeep duggi          22- May-2022     I2RT-6183      eSupport- Basic Support customers to not have ability to        T02
+                                                        Escalate or Raise AR
+ Vignesh Divakaran      22-Jul-2022     I2RT-6593       Show Business Impact and Estimated date for Milestone fields    T03
+  Sandeep D              19-Aug- 2022    I2RT-6869      PayGo: eSupport - My Lite Cases & Case Details page             T04
+ Amit Garg             10-Oct- 2022     I2RT-7210       Show and hide buttons based on the ecommerce account            T06
+ Vignesh Divakaran      25-Oct-2022     I2RT-7256       Updated href to get the URL from getter method				    T07
+ Vignesh Divakaran      29-Oct-2022     I2RT-7210       Updated object reference to getter method   				    T08
+ Shashikanth            22-May-2023     I2RT-8140       Attention Requests and Escalations: Avoid multiple requests.    T09
+ Shashikanth            16-Oct-2023     I2RT-8987       Removed 'isEscalateCaseActionVisible' variable  binding         T10
+  */
+-->
+<template>
+    
+    <!--Show Spinner when page is loaded initially-->
+    <template if:true={boolDisplaySpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+
+    <!--Hide Spinner after page is loaded successfully-->
+    <template if:false={boolDisplaySpinner}>
+
+        <!--Show page content when user has access-->
+        <template if:true={boolHasAccess}>
+            <div class="container-fluid es-container-fluid--grey">
+                <template if:true={showSpinner}>
+                    <lightning-spinner class="slds-is-fixed" alternative-text="Loading" size="large"></lightning-spinner>
+                </template>
+                <template if:true={showDetails}>
+                <div class="container">
+                    <h2 class="es-page__heading d-md-flex justify-content-between">
+                        <span>Case {caseDetail.CaseNumber}</span>
+                        <div class="es-btn-grp">
+                        
+                            <template if:true={showCaseActionBTNs}>
+                                <template if:true={aaeTask}> 
+                                    <template if:true={isCasePrimaryContact}>
+                                    <template if:false={isCanceled}>
+                                    <lightning-button label="Cancel Appointment" class="es-button es-button--primary" onclick={CancelAppointmentClick}></lightning-button>
+                                    <lightning-button label="Reschedule Appointment" class="es-button es-button--primary" onclick={RescheduleAppointmentClick}></lightning-button>
+                                </template>
+                                </template>
+                            </template>
+                            </template>
+
+                        <template if:true={showCaseActionBTNs}>
+                                <template if:true={showSessionActionBTN}> 
+                                    <lightning-button label="Reschedule Session" class="es-button es-button--primary" onclick={showSessionActionClick}></lightning-button>
+                                </template>
+                        </template>
+
+                            <template if:true={isInSolutionState}>
+                                <template if:true={showCaseActionBTNs}>
+                                    <template if:true={showSolutionBTNS}>
+                                        <lightning-button label="Accept Solution" class="es-button es-button--primary" onclick={handleAcceptSolutionClick}></lightning-button>
+                                        <lightning-button label="Decline Solution" class="es-button es-button--primary" onclick={handleDeclineSolutionClick}></lightning-button>
+                                        <lightning-button label="Need More Time" class="es-button es-button--primary" onclick={handleNeedMoreTimeClick}></lightning-button>
+                                    </template>
+                                </template>
+                            </template>
+                            <template if:false={isClosed}>
+                                <lightning-button label="Add Updates/Files" class="es-button es-button--primary" onclick={handleAddAttachmentClick} if:true={showCaseActionBTNs}></lightning-button>
+                            <template if:false={aaeTask}>  
+                                <template if:false={isInSolutionState}>
+                                    <template if:false={disableEscalationAndAR}> <!-- <T02> -->
+                                        <template if:false={disableOptionsForCaseLite}> <!-- T04 -->
+                                           <lightning-button label="Call Back from Engineer" class="es-button es-button--primary" onclick={openCallBackModal} if:true={showCaseActionBTNs}></lightning-button>
+                                        </template>                      <!-- T04 -->
+                                    </template>                             <!-- <T02> -->
+                                </template>
+
+                                <template if:true={showPriorityButton}>
+                                  <template if:false={disableEscalationAndAR}> <!-- <T02> -->
+                                    <template if:false={disableOptionsForCaseLite}> <!-- T04 -->
+                                       <lightning-button label="Revise Priority" class="es-button es-button--primary" onclick={openRevisePriorityModal} if:true={showCaseActionBTNs}></lightning-button>
+                                    </template>                      <!-- T04 -->
+                                   </template>                             <!-- <T02> -->
+                                </template>
+
+                                <template if:false={isInSolutionState}>
+                                    <template if:false={disableEscalationAndAR}> <!-- <T02> -->
+                                        <template if:false={disableOptionsForCaseLite}> <!-- T04 -->
+                                            <lightning-button label="Escalate Case" class="es-button es-button--primary" onclick={openEscalateCaseModal} if:true={showCaseActionBTNs}></lightning-button>
+                                       </template>                      <!-- T04 -->
+                                    </template>                             <!-- <T02> -->
+                                    <template if:true={isLiveAssistanceEnabled}>
+                                        <template if:false={disableOptionsForCaseLite}> <!-- T04 -->
+                                        <lightning-button label="Live Assistance" class="es-button es-button--primary" onclick={openLiveAssistanceModal}></lightning-button>
+                                        </template>                      <!-- T04 -->
+                                    </template>
+                                    <template if:false={isLiveAssistanceEnabled}>
+                                        <lightning-button label="Close Case" class="es-button es-button--primary" onclick={openCloseCaseModal} if:true={showCaseActionBTNs}></lightning-button>
+                                    </template>
+                                </template>
+                            </template>
+                            </template> 
+                            <template if:true={isClosed}>
+                                <template if:false={disableOptionsForCaseLite}> <!-- T04 -->
+                                <lightning-button label="Reopen Case" class={buttonCss} onclick={openReopenCaseModal} disabled={disableReOpen} if:true={showReOpenCase}></lightning-button>
+                            </template>                      <!-- T04 -->
+                            </template>
+                            <template if:true={isLiveAssistanceEnabled}>
+                                <span class="slds-p-horizontal_small es-dropdown es-dropdown--without-arrow">
+                                    <lightning-button-menu icon-name="utility:threedots_vertical" alternative-text="Show menu" menu-alignment="right" icon-size="large" variant="container">              
+                                        <lightning-menu-item value="MenuItemOne" label="Close Case" onclick={openCloseCaseModal} if:true={showCaseActionBTNs}>
+                                        </lightning-menu-item>    
+                                    </lightning-button-menu>
+                                </span>
+                            </template>
+                            <template if:true={isInSolutionState}>
+                                <template if:true={showCaseActionBTNs}>
+                                    <span class="slds-p-horizontal_small es-dropdown es-dropdown--without-arrow es-dropdown--big">
+                                        <lightning-button-menu icon-name="utility:threedots_vertical" alternative-text="Show menu" menu-alignment="right" icon-size="large" variant="container">              
+                                            <template if:false={disableOptionsForCaseLite}>
+                                                <lightning-menu-item value="MenuItemOne" label="Call Back from Engineer" onclick={openCallBackModal}></lightning-menu-item>    
+                                                <lightning-menu-item value="MenuItemTwo" label="Escalate Case" onclick={openEscalateCaseModal}></lightning-menu-item>    
+                                            </template>
+                                            <lightning-menu-item value="MenuItemThree" label="Close Case" onclick={openCloseCaseModal}></lightning-menu-item>    
+                                        </lightning-button-menu>
+                                    </span>
+                                </template>
+                            </template>
+
+                        </div> 
+                    </h2>
+                    <!-- <lightning-button variant="brand"
+                        label="Reopen Case"
+                        onclick={openModal}>
+                    </lightning-button>  -->
+                    <template if:true={isAddUpdateAttachment}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                        <header class="slds-modal__header es-modal__header">
+                                            <button class="es-button--only-icon" title="Close" onclick={closeAddModal}>
+                                                <lightning-icon icon-name="utility:close"
+                                                    alternative-text="close"
+                                                    size="xx-small" ></lightning-icon>
+                                                <span class="slds-assistive-text">Close</span>
+                                            </button>
+                                            <h2 class="slds-text-heading_medium slds-hyphenate">Add Updates/Files</h2>
+                                        </header>    
+                                        <div class="es-modal__faux-body">
+                                            <div class="es-modal__body es-modal__body--fix-height">
+                                                <div class="row">
+                                                        <div class="col-md-12">
+                                                            <form class="es-form">
+                                                                <div class="form-row">
+                                                                    <div class="form-group es-form-group es-lds-form-group col-md-12">
+                                                                        <!-- //Amarender - I2RT-3151 - Modified as part of eSupport Demo -->
+                                                                        <lightning-input-rich-text
+                                                                            data-name="commentBody"
+                                                                            value={uploadComments}
+                                                                            onchange={handleCommentsChange}
+                                                                            disabled-categories="FORMAT_FONT"
+                                                                            placeholder="Comments here"
+                                                                            label="Comments"
+                                                                            required>
+                                                                        </lightning-input-rich-text>
+                            
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-row">                                
+                                                                    <div class="form-group es-form-group es-lds-form-group es-lds-file-select col-md-6">
+                                                                        <div class="clearfix">
+                                                                            <lightning-icon class="es-form__icon-with-upload" size="x-small" icon-name="utility:attach"></lightning-icon>
+                                                                            <lightning-file-upload
+                                                                                label="Attach Files (Upload limit is 2GB per file)"
+                                                                                name="fileUploader"
+                                                                                accept={acceptedFormats}
+                                                                                record-id={caseDetail.Id}
+                                                                                onuploadfinished={handleUploadFinished} 
+                                                                                multiple>
+                                                                            </lightning-file-upload>  
+                                                                            <template for:each={uploadedFiles} for:item="file">
+                                                                                <template if:true={file}>
+                                                                                    <lightning-pill key={file.documentId} label={file.name} name={file.documentId} onremove={handleRemove}></lightning-pill>
+                                                                                </template>
+                                                                            </template>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group es-form-group col-md-6 pt-1">To attach files > 2GB <a href={tsftpLocationUrl} target="_blank"> &nbsp;click here</a></div>
+                                                                </div>
+                                                            </form>    
+                                                            <div class="es-case__note es-case__note--info es-case__note--big col-md-12 mt-1">
+                                                                <p class="es-case__note-main-text">By Proceeding, you are accepting the Privacy Policy.</p>
+                                                                <p class="es-case__note-sub-text">Do not upload any sensitive personal data, including but not limited to <span class="es-case__note-highlight">Personally Identifiable Information (PII)</span>, <span class="es-case__note-highlight">Protected Health Information (PHI)</span> or <span class="es-case__note-highlight">Protected Financial Information (PFI)</span> to this system. In the event sensitive data is mistakenly uploaded, notify Informatica immediately to ensure deletion from the system.</p>
+                                                            </div>                                        
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                            <lightning-button label="Discard" class="es-button es-button--secondary" name="addupdateAttachment" onclick={closeAddAttachment}></lightning-button>
+                                            <lightning-button label="Update" class="es-button es-button--primary" onclick={updateFileDetails}></lightning-button>		
+                                        </footer>  
+        
+                                    
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+
+                <!--  @piyush -->
+                    <template if:true={bShowCancelReason}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                        <header class="slds-modal__header es-modal__header">
+                                            <button class="es-button--only-icon" title="Close" onclick={closeAddModalCancelReason}>
+                                                <lightning-icon icon-name="utility:close"
+                                                    alternative-text="close"
+                                                    size="xx-small" ></lightning-icon>
+                                                <span class="slds-assistive-text">Close</span>
+                                            </button>
+                                            <h2 class="slds-text-heading_medium slds-hyphenate">Cancel Reason</h2>
+                                        </header>    
+                                        <div class="es-modal__faux-body">
+                                            <div class="es-modal__body es-modal__body--fix-height">
+                                                <div class="row">
+                                                        <div class="col-md-12">
+                                                            <form class="es-form">
+                                                                <div class="form-row">
+                                                                    <div class="form-group es-form-group es-lds-form-group col-md-12 ">
+                                                                        <!-- //Amarender - I2RT-3151 - Modified as part of eSupport Demo -->
+                                                                        <lightning-textarea
+                                                                            value={uploadComments}
+                                                                            onchange={handleCommentsChange}
+                                                                            disabled-categories="FORMAT_FONT"
+                                                                            placeholder="Comments here"
+                                                                            label="Comments"
+                                                                            required>
+                                                                        </lightning-textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </form>    
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                            
+                                            <lightning-button label="Discard" class="es-button es-button--secondary" name="addupdateAttachment" onclick={closeAddModalCancelReason}></lightning-button>
+
+                                            <lightning-button if:true={bCanceledEvent} label="Submit" class="es-button es-button--primary" onclick={CancelHandler}></lightning-button>		
+
+                                            <lightning-button if:false={bCanceledEvent} label="Submit & Reschedule" class="es-button es-button--primary" onclick={RescheduleAppointmentHandler}></lightning-button>		
+                                        </footer>  
+        
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+
+
+                    <template if:true={showDiscardConfirmation}> 
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                        <header class="slds-modal__header es-modal__header">
+                            <button class="es-button--only-icon" title="Close" onclick={closeConfirmationDialog}>
+                                <lightning-icon icon-name="utility:close"
+                                    alternative-text="close"
+                                    size="xx-small" ></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 class="slds-text-heading_medium slds-hyphenate">{discardModalTitle}</h2>
+                        </header>
+
+                        <div class="es-modal__faux-body">
+                            <div class="es-modal__body">
+                                <div class="row">
+                                    <p>
+                                        Are you sure you want to discard the changes.
+                                    </p>
+                                </div>
+                            </div>
+                        </div> 
+                        <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                            <lightning-button label="Cancel" class="es-button es-button--secondary" onclick={closeConfirmationDialog}></lightning-button>
+                            <lightning-button label="Discard" class="es-button es-button--primary" onclick={discardAddAttachment}></lightning-button>
+                        </footer>  
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+
+                    <template if:true={isEscalateCaseModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeEscalateCaseModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Escalate Case</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body">
+                                        <div class="es-modal__body">
+                                            <template if:true={isEscalateOptionModal}>
+                                                <p>The contact number that we have on the record is  <b><lightning-formatted-phone value={callBackUpdatedPhone}></lightning-formatted-phone></b>. <!-- If you wish to update them, please <label onclick={showEscalateContactForm} style="color:blue;">click here</label> --></p>
+                                                <div class="form-row">
+                                                    <div class="form-group es-form-group es-lds-form-group col-md-6">
+                                                        <lightning-input name="alternateNumber" type="text" label="Enter alternate number" placeholder="Enter alternate number" value={alternateNumber} onchange={handleAlternateNumberChange}></lightning-input>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group es-form-group es-lds-form-group es-lds-radio es-lds-radio--multicolumn col-md-12">
+                                                        <lightning-radio-group name="radioGroup"
+                                                            label="Escalation Reason"
+                                                            options={optionsEscalate}
+                                                            value={selectedEscalateReason}
+                                                            onchange={handleEscalateReasonOptionChange}
+                                                            type="radio"
+                                                            message-when-value-missing="This field is required." 
+                                                            required>
+                                                        </lightning-radio-group>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+
+                                                    <div class="form-group es-form-group es-lds-form-group es-lds-form-group--small col-md-12">  
+                                                        <label><span style="color:red;font-size:px;">* </span>Tell us more about your concern</label>
+                                                        <lightning-input-rich-text style="width:100%" data-id="handoffComments" name="description" label="Tell us more about your concern" value={escalateReason}
+                                                           class={richClass} placeholder="Share your experience with us" onchange={handleEscalateReasonChange} >
+                                                        </lightning-input-rich-text>
+                                                        
+                                                       <!--
+                                                           <lightning-textarea name="description" label="Tell us more about your concern" placeholder="Share your experience with us" value={escalateReason} onchange={handleEscalateReasonChange} message-when-value-missing="This field is required." required></lightning-textarea>
+                                                       -->
+                                                    </div>
+                                                    <div style="color:red;font-size:px;">{requiredMessage}</div>
+                                                </div>
+                                            </template>
+                                            <template if:true={showContactEditForm}>
+                                                <lightning-record-edit-form class="es-lds-record-form-wrapper" record-id={caseDetail.Contact.Id} object-api-name="Contact" onsuccess={backToEscalateModal} >                        
+                                                    <lightning-messages></lightning-messages>                          
+                                                    <div class="slds-grid slds-grid_vertical">
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input name="contactName" type="text" label="Name" value={caseDetail.Contact.Name} disabled="true"></lightning-input>
+                                                        </div> 
+                                                        <!-- <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="AccountId" required="true"></lightning-input-field>
+                                                        </div> -->
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="Email" disabled="true"></lightning-input-field>
+                                                        </div>
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="Phone" required="true" onchange={handleCallbackPhoneOnChange}></lightning-input-field>
+                                                        </div>
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="Language__c" disabled="true"></lightning-input-field>
+                                                        </div>
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="Timezone__c"  disabled="true"></lightning-input-field>
+                                                        </div>
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="Access_Level__c"  disabled="true"></lightning-input-field>
+                                                        </div>
+                                                    </div>
+                                                    <lightning-button
+                                                        class="escalateEngineerContact slds-hide"
+                                                        variant="brand"
+                                                        type="submit"
+                                                        name="update"
+                                                        label="Update">
+                                                    </lightning-button>
+                                                </lightning-record-edit-form>
+                                            </template>
+                                            <template if:true={isEscalateConfirmedModal}>
+                                                <div class="es-modal__confirm-msg">
+                                                    <h6>Your case has been escalated.</h6>
+                                                    <p> An Informatica Support Manager will reach out to you by&nbsp;
+                                                        <b>
+                                                            <lightning-formatted-date-time value={responseDateTime} year="numeric" month="short" hour12="true" day="2-digit" hour="numeric" minute="2-digit">
+                                                            </lightning-formatted-date-time>
+                                                        </b>
+                                                    </p>
+                                                    <p>For anything urgent, please call the Support helpline as mentioned <a href="https://www.informatica.com/ca/services-and-training/customer-success-services/contact-us.html" target="_blank">here.</a></p> 
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>            	
+                                    <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                        <template if:true={isEscalateOptionModal}>
+                                            <lightning-button label="Confirm" class="es-button es-button--primary"  onclick={confirmEscalateCaseModal}></lightning-button>
+                                        </template>
+                                        <template if:true={isEscalateConfirmedModal}>
+                                            <lightning-button label="Close" class="es-button es-button--primary"  onclick={closeEscalateCaseModal}></lightning-button>
+                                        </template>
+                                        <template if:true={showContactEditForm}>
+                                            <lightning-button label="Update" class="es-button es-button--primary" onclick={escalateCaseUpdate}></lightning-button>
+                                        </template>
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+                    <template if:true={isRevisePriorityModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeRevisePriorityModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Revise Priority</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body">
+                                        <div class="es-modal__body">
+                                            <template if:true={isReviseOptionModal}>
+                                                <div class="form-row">
+                                                    <div class="form-group es-form-group es-lds-form-group es-lds-radio col-md-12">
+                                                        <!-- <lightning-radio-group name="radioGroup"
+                                                            label="Priority"
+                                                            options={optionsPriority}
+                                                            value={value}
+                                                            type="radio">
+                                                        </lightning-radio-group> -->
+                                                        <label class="es-form-label">Please follow the Priority Guidelines while selecting the new priority</label>
+                                                        <template if:true={showP1Priority}>
+                                                            <div class="es-radio d-flex">
+                                                                <input type="radio" id="prioritype1" name="gender" value="P1" onclick={priorityChange} />
+                                                                <label for="prioritype1" >
+                                                                    <p class="es-radio__label">Priority P1 </p>
+                                                                    <p class="es-radio__label-desc">Emergency, no workaround. Production system critically impacted or when development is at a crucial stage and an issue prevents moving into production.</p>
+                                                                </label>
+                                                            </div>
+                                                        </template>
+                                                        <template if:true={showP2Priority}>
+                                                            <div class="es-radio d-flex">
+                                                                <input type="radio" id="prioritype2" name="gender" value="P2" onclick={priorityChange} />
+                                                                <label for="prioritype2">
+                                                                    <p class="es-radio__label">Priority P2</p>
+                                                                    <p class="es-radio__label-desc">Non-emergency, urgent situation with workaround.
+                                                                    </p>
+                                                                </label>
+                                                            </div>
+                                                        </template> 
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group es-form-group es-lds-form-group es-lds-form-group--small col-md-12">  
+                                                        <lightning-textarea name="description" label="Reason for Priority Revision" placeholder="Enter reason for Priority Revision" value={reasonForChangePriority} onchange={handleReasonForPriorityRevison} class={errorRevisePriorityClass} message-when-value-missing="This field is required." required></lightning-textarea>
+                                                        <template if:true={showRevisePriorityError}>
+                                                            <label style="color:rgb(194, 57, 52)">Complete this field.</label>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                                <!--//I2RT-4421-->
+                                                <template if:true={showMoreFields}>
+                                                    <div class="form-row">
+                                                        <div class="form-group es-form-group es-lds-form-group col-md-6">
+                                                            <lightning-combobox
+                                                                name="businessImpact"
+                                                                label="Business Impact"
+                                                                placeholder="Select Business Impact"
+                                                                value={selectedImpact}
+                                                                options={optionsTemp}
+                                                                onchange={handleImpactChange}
+                                                                required
+                                                                disabled={disableFields}
+                                                                data-id="businessImpact">
+                                                            </lightning-combobox>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <lightning-input class='milestone-checkbox' label="This may impact an upcoming milestone" type="checkbox" onchange={handleTick} checked={impactCheckbox} disabled={disableFields}>
+                                                        </lightning-input>
+                                                    </div>
+                                                    <template if:true={doesImpactMilestone}>
+                                                        <div class="form-row">
+                                                            <div class="form-group es-form-group es-lds-form-group col-md-5">
+                                                                <lightning-input type="date" name="estimatedMilestoneDate" label="Estimated Date for the Milestone" value={selectedEstimateDate} onchange={handleDateChange} disabled={disableFields}
+                                                                min={todayDate}  message-when-bad-input="Please enter a valid time in future"
+                                                                 message-when-range-underflow="Please enter a valid time in future"></lightning-input>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </template><!--I2RT-4421-->
+                                            </template>
+                                            <template if:true={isReviseConfirmedModal}>
+                                                <div class="es-modal__confirm-msg">
+                                                    <h6>Your Priority Change request has been shared with the concerned team.</h6>
+                                                    <p>Please Note : An Informatica support engineer will contact you by&nbsp;
+                                                    <b><lightning-formatted-date-time value={responseDateTime} year="numeric" month="short" hour12="true" day="2-digit" hour="numeric" minute="2-digit"
+                                                        ></lightning-formatted-date-time>
+                                                    </b></p>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>            	
+                                    <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                        <template if:true={isReviseOptionModal}>
+                                            <lightning-button label="Confirm" class="es-button es-button--primary"  onclick={updateCasePriority}></lightning-button>
+                                        </template>
+                                        <template if:true={isReviseConfirmedModal}>
+                                            <lightning-button label="Close" class="es-button es-button--primary"  onclick={closeRevisePriorityModal}></lightning-button>
+                                        </template>
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+                    <template if:true={isCallBackModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeCallBackModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Call Back From Engineer</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body">
+                                        <div class="es-modal__body">
+                                            <template if:true={isCallBackOptionModal}>
+                                                <!-- <p>Call back from Engineer is available during local business hours only. For out of hours support, please call your support center. <a href={supportContactURL} target="_blank">Click here</a> for your local support contact numbers.</p><br/> -->
+                                                <p>The contact number that we have on the record is  <b><lightning-formatted-phone value={callBackUpdatedPhone}></lightning-formatted-phone></b>. If you wish to update, please <label onclick={showContactSection} style="color:blue;">click here</label></p>
+                                                <div class="form-row">
+                                                    <div class="form-group es-form-group es-lds-form-group col-md-6">
+                                                        <lightning-input name="alternateNumber" type="tel" label="Enter alternate number" pattern="^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"  message-when-pattern-mismatch="Your entry should match the allowed pattern for ex: +1 XXXXXXXXXX" placeholder="Enter alternate number" value={alternateNumber} onchange={handleAlternateNumberChange}></lightning-input>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group es-form-group es-lds-form-group es-lds-form-group--small col-md-12">  
+                                                        <lightning-textarea name="description" label="Reason for Call Back Request" placeholder="Enter reason for Call Back Request" value={callBackReason} onchange={handleCallBackReasonChange} message-when-value-missing="This field is required." required></lightning-textarea>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:true={showContactEditForm}>
+                                                <lightning-record-edit-form class="es-lds-record-form-wrapper " record-id={caseDetail.Contact.Id} object-api-name="Contact" onsuccess={handleCallBackCaseUpdate} >                        
+                                                    <lightning-messages></lightning-messages>                          
+                                                    <div class="slds-grid slds-grid_vertical">
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input name="contactName" type="text" label="Name" value={caseDetail.Contact.Name} disabled="true"></lightning-input>
+                                                        </div>
+                                                        <!-- <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="AccountId" required="true"></lightning-input-field>
+                                                        </div> -->
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="Email" disabled="true"></lightning-input-field>
+                                                        </div>
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="Phone" required="true" onchange={handleCallbackPhoneOnChange}></lightning-input-field>
+                                                        </div>
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="Language__c" disabled="true"></lightning-input-field>
+                                                        </div>
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="Timezone__c"  disabled="true"></lightning-input-field>
+                                                        </div>
+                                                        <div class="slds-col slds-size_8-of-12 es-lds-record-form">
+                                                            <lightning-input-field field-name="Access_Level__c"  disabled="true"></lightning-input-field>
+                                                        </div>
+                                                    </div>
+                                                    <lightning-button
+                                                        class="callBackEngineerContact slds-hide"
+                                                        variant="brand"
+                                                        type="submit"
+                                                        name="update"
+                                                        label="Update">
+                                                    </lightning-button>
+                                                </lightning-record-edit-form>
+                                            </template>
+                                            <template if:true={isCallBackConfirmedModal}>
+                                                <div class="es-modal__confirm-msg">
+                                                    <h6>Thank you!</h6> 
+                                                    <p>An Informatica support engineer will call you back by&nbsp;
+                                                    <b><lightning-formatted-date-time value={responseDateTime} year="numeric" month="short" hour12="true" day="2-digit" hour="numeric" minute="2-digit"
+                                                            ></lightning-formatted-date-time></b>.
+                                                    </p>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>            	
+                                    <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                        <template if:true={isCallBackOptionModal}>
+                                            <lightning-button label="Confirm" class="es-button es-button--primary"  onclick={confirmCallBackCaseModal}></lightning-button>
+                                        </template>
+                                        <template if:true={isCallBackConfirmedModal}>
+                                            <lightning-button label="Close" class="es-button es-button--primary"  onclick={closeCallBackModal}></lightning-button>	
+                                        </template>
+                                        <template if:true={showContactEditForm}>
+                                            <lightning-button label="Update" class="es-button es-button--primary" onclick={updateCallBackContact}></lightning-button>	
+                                        </template>
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+                    <template if:true={isReopenCaseModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeReopenCaseModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Reopen Case</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body">
+                                        <div class="es-modal__body">
+                                            <template if:true={isReopenOptionModal}>
+                                                <div class="form-group es-form-group es-lds-form-group es-lds-form-group--small">  
+                                                    <lightning-textarea name="description"  required="true" label="Reason for case reopen request" placeholder="Enter reason for case reopen request" value={reasonForReOpenCase} onchange={handleReOpenReasonChange} ></lightning-textarea>
+                                                </div>
+                                            </template>
+                                            <template if:true={isReopenConfirmedModal}>
+                                                <div class="form-group es-form-group es-lds-form-group es-lds-form-group--small">  
+                                                    New Case Number <b>{caseNumber}</b> is created.
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>            	
+                                    <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                        <template if:true={isReopenOptionModal}>
+                                            <lightning-button label="Confirm" class="es-button es-button--primary"  onclick={reOpenCase}></lightning-button>		
+                                        </template>
+                                        <template if:true={isReopenConfirmedModal}>
+                                            <lightning-button label="Ok" class="es-button es-button--primary"  onclick={reDirectToReOpenedCase}></lightning-button>		
+                                        </template>
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>  
+                    <template if:true={isCloseCaseModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeCloseCaseModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Close Case</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body">
+                                        <div class="es-modal__body">
+                                            <template if:true={isCloseOptionModal}>
+                                                <div class="form-group es-form-group es-lds-form-group es-lds-form-group--small">  
+                                                    <lightning-textarea name="description" label="Reason for case close request" placeholder="Enter reason for case close request" value={reasonForClosingCase} onchange={handleCloseCaseReasonChange} message-when-value-missing="This field is required." required>
+                                                    </lightning-textarea>
+                                                </div>
+                                            </template>
+                                            <template if:true={isCloseConfirmedModal}>
+                                                <div class="es-modal__confirm-msg">
+                                                    <h6>Thank you for requesting to close the case.</h6>
+                                                    <p>The support engineer working on this case will be notified and will reach out to you only if they require any further clarifications.</p>
+                                                    <p>There is no further action required from you at this point.</p> 
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>            	
+                                    <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                        <template if:true={isCloseOptionModal}>
+                                            <lightning-button label="Confirm" class="es-button es-button--primary"  onclick={createCloseCaseRequest}></lightning-button>
+                                        </template>
+                                        <template if:true={isCloseConfirmedModal}>
+                                            <lightning-button label="Close" class="es-button es-button--primary" onclick={closeCloseCaseModal}></lightning-button>	
+                                        </template>
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template> 
+                    <!-- TEJASVI -> I2RT-1966: Live Assistance Request -->
+                    <template if:true={isLiveAssistanceModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeLiveAssistanceModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Live Assistance</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body">
+                                        <div class="es-modal__body">
+                                            <div class="form-group es-form-group es-lds-form-group es-lds-form-group--small">  
+                                                <lightning-textarea name="description" label="Reason for Live Assistance request" 
+                                                max-length="10000" message-when-too-long="Max 10000 characters allowed."
+                                                placeholder="Enter reason for Live Assistance request..." 
+                                                onchange={handleLiveAssistReasonChange}>
+                                                </lightning-textarea>
+                                            </div>
+                                        </div>
+                                    </div>            	
+                                    <footer class="es-modal__footer es-btn-grp d-flex justify-content-end"> 
+                                        <lightning-button label="Cancel" class="es-button es-button--secondary" onclick={closeLiveAssistanceModal}>
+                                        </lightning-button>
+                                        <lightning-button label="Confirm" class={liveAssistConfirmButtonCSS} onclick={confirmLiveAssistanceReason} 
+                                        disabled={disableLiveAssistConfirmButton}>
+                                        </lightning-button>		
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>  
+                    <template if:true={isDeclineSolutionModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeDeclineSolutionModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Decline Solution</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body">
+                                        <div class="es-modal__body">
+                                            <div class="form-group es-form-group es-lds-form-group es-lds-form-group--small"> 
+                                                <lightning-textarea  required="true" name="description" label="Reason for Decline" max-length="10000" onchange={handleDeclineSolutionReasonChange} placeholder="Enter reason for Decline">
+                                                </lightning-textarea>
+                                            </div>
+                                        </div>
+                                    </div>            	
+                                    <footer class="es-modal__footer es-btn-grp d-flex justify-content-end"> 
+                                        <lightning-button label="Confirm" class={buttonCss} onclick={confirmDeclineSolutionReason} disabled={disableConfirmButton}>
+                                        </lightning-button>		
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>   
+                    <template if:true={isNeedMoreTimeModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeNeedMoreTimeModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Need More Time</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body">
+                                        <div class="es-modal__body">
+                                            <div class="form-group es-form-group es-lds-form-group es-lds-form-group--small"> 
+                                                <lightning-input type="date" name="ExpectedDate" label="Expected Date" value={expectedDate} onchange={handleExpectedDateChange}></lightning-input> 
+                                                <template if:true={isSelectedPastDate}>
+                                                    <span style="color: red">
+                                                        Please select today's date or future date.
+                                                    </span>
+                                                </template>
+                                                <lightning-textarea name="description" label="Reason for Delay" max-length="10000" onchange={handleNeedMoreTimeReasonChange} placeholder="Enter reason for Delay">
+                                                </lightning-textarea>
+                                            </div>
+                                        </div>
+                                    </div>            	
+                                    <footer class="es-modal__footer es-btn-grp d-flex justify-content-end"> 
+                                        <lightning-button label="Confirm" class={buttonCss} onclick={confirmNeedMoreTimeReason} disabled={disableConfirmButton}>
+                                        </lightning-button>		
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+                    <template if:true={openAcceptmodal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeAcceptModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Confirmation</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body" id="modal-content-id-3">
+                                        <div class="es-modal__body">
+                                            <p>{acceptSolutionMessage}
+                                            </p> 
+                                        </div>                               
+                                    </div>
+                                    <footer class="es-modal__footer es-btn-grp d-flex justify-content-end"> 
+                                        <lightning-button label="Ok" class="es-button es-button--primary" onclick={confirmAccept}>
+                                        </lightning-button>
+                                    </footer>      	                            
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+                    <template if:true={caseclosedmodal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closecaseModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Close Case</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body" id="modal-content-id-1">
+                                        <div class="es-modal__body">
+                                            <p> This Case is already closed
+                                            </p> 
+                                        </div>                               
+                                    </div>        	                            
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>  
+                    <template if:true={isAlternateContactModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeAlternateContactModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate"> Add Alternate Contact</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body">
+                                        <div class="es-modal__body es-modal__body--fix-height">
+                                            <!--<T05>-->
+                                            <c-es-case-alternate-contacts org-id={caseDetail.Org__c} caserec-id={caseDetail.Id} supp-acc-id={caseDetail.Support_Account__c} onaddalternatecontact={handleAlternateContacts}></c-es-case-alternate-contacts>
+                                        </div>
+                                    </div>            	
+                                    <!-- <footer class="es-modal__footer d-flex">
+                                        <p>Please Note : You will be contacted by Informatica Support Executive as per your Contact Time Zone.</p>
+                                        <lightning-button label="Confirm" class="es-button es-button--primary" onclick={closeAlternateContactModal}></lightning-button>		
+                                    </footer> -->
+                                </div> 
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+                    <!--Vignesh D: Operations Cancel/Reschedule session -->
+                    <template if:true={showSessionActionModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeShowSessionActionModal}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                size="xx-small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Reschedule Session</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body">
+                                        <div class="es-modal__body">
+                                            <div class="form-row">
+                                                <div class="form-group es-form-group es-lds-form-group col-md-5">
+                                                    <label class="es-form-label">Time Zone: {userTimeZone}</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group es-form-group es-lds-form-group col-md-6">       
+                                                    <lightning-combobox
+                                                        name="SessionDate"
+                                                        label="Select a date"
+                                                        placeholder="Please select a date"
+                                                        options={availableDates}
+                                                        value={selectedDate}
+                                                        onchange={handleDateSelect}
+                                                        required>
+                                                    </lightning-combobox>
+                                                </div>
+                                                <div class="form-group es-form-group es-lds-form-group col-md-6">
+                                                    <lightning-combobox
+                                                        name="availableSlots"
+                                                        label="Available Slots"
+                                                        placeholder="Select a slot"
+                                                        options={availableSlots}
+                                                        value={selectedSlot}
+                                                        onchange={handleSlotSelect}
+                                                        required>
+                                                    </lightning-combobox>
+                                                </div>
+                                            </div>                                    
+                                        </div>
+                                    </div>            	
+                                    <footer class="es-modal__footer es-btn-grp d-flex justify-content-end"> 
+                                        <lightning-button label="Submit" class="es-button es-button--primary" onclick={rescheduleSession}>
+                                        </lightning-button>		
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+                    <!-- TEJASVI -> eSupport Feedback -->
+                    <!-- Amarender - I2RT-3151 - Below Code is commented to implement changes as per Internal eSupport Demo -->
+                    <!-- <template if:true={isAddCaseCommentModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                            <div class="slds-modal__container">
+                                <div class="es-modal__content">
+                                    <header class="slds-modal__header es-modal__header">
+                                        <button class="es-button--only-icon" title="Close" onclick={closeAddCaseCommentModal}>
+                                            <lightning-icon icon-name="utility:close" alternative-text="close" size="xx-small">
+                                            </lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="slds-text-heading_medium slds-hyphenate">Add Updates/Files</h2>
+                                    </header>
+                                    <div class="es-modal__faux-body">
+                                        <div class="es-modal__body">
+                                            <div class="form-group es-form-group es-lds-form-group es-lds-form-group--small">
+                                                <lightning-textarea name="Description" value="" placeholder="Enter Description" 
+                                                label="Description" maxlength="32000" message-when-too-long="Max 32000 characters allowed."
+                                                onchange={handleCaseCommentChange} required>
+                                                </lightning-textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                        <lightning-button label="Discard" class="es-button es-button--secondary" onclick={closeAddCaseCommentModal}>
+                                        </lightning-button>
+                                        <lightning-button label="Add Update" class={addCommentModalButtonCSS} onclick={addCaseComment}
+                                        disabled={disableAddCommentModalButton}>
+                                        </lightning-button>
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template> -->
+                    <div class="row">
+                        <div class="col-md-12">   
+                            <div class="es-case-wrapper">
+                                <h3 class="es-case__heading es-case__heading--with-border">
+                                    <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="status"></lightning-button-icon>
+                                    Status
+                                </h3>
+                                
+                                <div data-id="status">
+                                    <template if:false={aaeTask}>
+                                        <div class="es-chevron-wrapper">
+                                            <ul class="es-chevron__items">
+                                                <li class={newClass}>New</li>
+                                                <li class={assessClass}>Assess</li>
+                                                <li class={researchClass}>Research</li>
+                                                <li class={solutionClass}>Solution</li>
+                                                <li class={closedClass}>Closed</li>
+                                            </ul>
+                                        </div>
+                                    </template>
+                                    <template if:true={aaeTask}>
+                                        <div class="es-chevron-wrapper es-chevron-wrapper--aae">
+
+                                            <ul if:true={showAaeCancelStatus} class="es-chevron__items">
+                                                <li class={BookedClassAAE}>Booked</li>
+                                                <li class={scheduleClassAAE}>Scheduled</li>
+                                                <li class={CancelledClassAAE}>Cancelled (Closed)</li>
+                                            </ul>
+                                            
+                                            <ul if:false={showAaeCancelStatus} class="es-chevron__items">
+                                                <li class={BookedClassAAE}>Booked</li>
+                                                <li class={scheduleClassAAE}>Scheduled</li>
+                                                <li class={DeliveredClassAAE}>Delivered</li>
+                                            </ul>
+
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <h3 class="es-case__heading es-case__heading--with-border mt-3">
+                                    <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="caseDetails"></lightning-button-icon>
+                                    Case Details
+                                </h3>
+                                <div data-id="caseDetails">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="es-case-info__label">Subject</p>
+                                            <p class="es-case-info__value">{caseDetail.Subject}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="es-case-info__label">Description</p>
+                                            <div class="es-case-info__value" style="word-break: break-word;" >
+                                                <lightning-formatted-text value={caseDetail.Description} linkify ></lightning-formatted-text>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <template if:false={isEcommContact}><!--T06-->
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Priority</p>
+                                                <p class="es-case-info__value">{caseDetail.Priority}</p>
+                                            </div>
+                                        </template><!--T06-->
+                                        <div class="col-md-4">
+                                            <p class="es-case-info__label">Next Action</p>
+                                            <p class="es-case-info__value">{nextAction}</p>
+                                        </div>
+                                        <template if:false={isAdminCase}>
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Product</p>
+                                                <p class="es-case-info__value">{caseDetail.Forecast_Product__c}</p>
+                                            </div>
+                                            
+                                        </template>
+                                        <div class="col-md-4">
+                                            <p class="es-case-info__label">Created on</p>
+                                            <p class="es-case-info__value">
+                                                <lightning-formatted-date-time value={caseDetail.CreatedDate} year="numeric" month="short" day="numeric" hour="2-digit"
+                                                minute="2-digit" time-zone-name="short" hour12="true"></lightning-formatted-date-time>
+                                            </p>
+                                        </div>
+                                        <template if:false={isEcommContact}><!--T06-->
+                                            <template if:false={isAdminCase}>
+                                                <template if:false={aaeTask}> 
+                                                <div class="col-md-4">
+                                                    <p class="es-case-info__label">Version</p>
+                                                    <p class="es-case-info__value">{caseDetail.Version__c}</p>
+                                                </div>  
+                                            </template>
+                                        </template><!--T06-->
+                                        </template>
+                                        <div class="col-md-4">
+                                            <p class="es-case-info__label">Last Updated on</p>
+                                            <p  class="es-case-info__value">
+                                                <lightning-formatted-date-time value={caseDetail.LastModifiedDate} year="numeric" month="short" day="numeric" hour="2-digit"
+                                                minute="2-digit" time-zone-name="short" hour12="true"></lightning-formatted-date-time>
+                                            </p>
+                                        </div>
+                                        <template if:false={disableOptionsForCaseLite}> <!-- T04 -->
+                                        <div class="col-md-4">
+                                            <p class="es-case-info__label">Support Account Name</p>
+                                            <p class="es-case-info__value es-case-info__value--with-icon">                                        
+                                                <a href="supportaccountdetails" target="_blank">
+                                                    {caseDetail.Support_Account__r.Name}
+                                                <img src={maximize} alt="maximize"/>
+                                            </a>
+                                        </p>
+                                        </div>
+                                        </template>   
+                                        <div class="col-md-4">
+                                            <p class="es-case-info__label">Case Type</p>
+                                            <p class="es-case-info__value">{recordTypeName}</p> <!-- <T08> -->
+                                        </div>
+
+                                        <template if:true={caseDetail.Old_Case_Number__c}>
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Legacy case number</p>
+                                                <p class="es-case-info__value">{caseDetail.Old_Case_Number__c}</p>
+                                            </div>
+                                        </template>
+
+                                        <template if:true={caseDetail.CreatedBy.Name}>
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Case Created By</p>
+                                                <p class="es-case-info__value es-case-info__value--with-icon">
+                                                        {createdByName}
+                                                </p>
+                                            </div>
+                                        </template>
+
+                                        <template if:true={aaeTask}>   
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Session Time</p>
+                                                <p class="es-case-info__value">{caseDetail.GCS_AAE_Session_Time__c}</p>
+                                            </div>
+                                        </template>
+
+
+                                        <template if:true={caseDetail.Escalated_Date__c}>
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Case Escalation Date</p>
+                                                <p class="es-case-info__value es-case-info__value--with-icon">
+                                                    <svg viewBox="0 0 16 16">
+                                                        <use xlink:href="#flag"></use>
+                                                    </svg>
+                                                    {caseDetail.Escalated_Date__c}
+                                                </p>
+                                            </div>
+                                        </template>
+
+                                        <template if:true={caseDetail.Org_Formula_Id__c}> <!-- <T01> -->
+                                            <template if:false={disableOptionsForCaseLite}> <!-- T04 -->
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Org ID</p>
+                                                <p class="es-case-info__value">{caseDetail.Org_Formula_Id__c}</p> <!-- <T01> -->
+                                            </div>
+                                            </template>  
+                                            <template if:true={disableOptionsForCaseLite}> <!-- T04 -->
+                                                <div class="col-md-4">
+                                                    <p class="es-case-info__label">Org ID</p>
+                                                    <p class="es-case-info__value es-case-info__value--with-icon">                                        
+                                                        <a href={orgDetailsURL} target="_blank"> <!-- <T07> -->
+                                                            {caseDetail.Org_Formula_Id__c}
+                                                        <img src={maximize} alt="maximize"/>
+                                                    </a>
+                                                </p>
+                                                </div>
+                                            </template> 
+                                            
+                                        </template>
+
+                                        <template if:true={caseDetail.Secure_Agent__c}>
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Secure Agent</p>
+                                                <p class="es-case-info__value">{caseDetail.Secure_Agent__c}</p>
+                                            </div>
+                                        </template>
+                                        <template if:true={caseDetail.Activity_Type__c}>
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Activity Type</p>
+                                                <p class="es-case-info__value">{caseDetail.Activity_Type__c}</p>
+                                            </div>
+                                        </template>
+                                        <template if:true={caseDetail.Environment__c}>
+                                            <div class="col-md-4">
+                                                <p class="es-case-info__label">Environment</p>
+                                                <p class="es-case-info__value">{caseDetail.Environment__c}</p>
+                                            </div>
+                                        </template>
+                                        <!-- <T03> -->
+                                        <template if:true={isTechnicalOrOperations}>
+                                            <template if:true={caseDetail.Business_Impact__c}>
+                                                <div class="col-md-4">
+                                                    <p class="es-case-info__label">Business Impact</p>
+                                                    <p class="es-case-info__value">{caseDetail.Business_Impact__c}</p>
+                                                </div>
+                                            </template>
+                                            <template if:true={caseDetail.Estimated_Date_for_Milestone__c}>
+                                                <div class="col-md-4">
+                                                    <p class="es-case-info__label">Estimated Date for Milestone</p>
+                                                    <p class="es-case-info__value">{caseDetail.Estimated_Date_for_Milestone__c}</p>
+                                                </div>
+                                            </template>
+                                        </template>
+                                        <!-- </T03> -->
+
+                                        <template if:true={operationalTask}>
+                                            <template if:true={serviceAppointment.SchedStartTime}>
+                                                <div class="col-md-4">
+                                                    <p class="es-case-info__label">Service Appointment Start Date/Time</p>
+                                                    <p  class="es-case-info__value">
+                                                        <lightning-formatted-date-time value={serviceAppointment.SchedStartTime} year="numeric" month="short" day="numeric" hour="2-digit"
+                                                        minute="2-digit" time-zone-name="short" hour12="true"></lightning-formatted-date-time>
+                                                    </p>
+                                                </div>
+                                            </template>
+                                            <template if:true={serviceAppointment.SchedEndTime}>
+                                                <div class="col-md-4">
+                                                    <p class="es-case-info__label">Service Appointment End Date/Time</p>
+                                                    <p  class="es-case-info__value">
+                                                        <lightning-formatted-date-time value={serviceAppointment.SchedEndTime} year="numeric" month="short" day="numeric" hour="2-digit"
+                                                        minute="2-digit" time-zone-name="short" hour12="true"></lightning-formatted-date-time>
+                                                    </p>
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </div>
+                                    
+                                <div class="d-md-flex justify-content-between align-items-center">
+                                    <h3 class="es-case__heading mt-3">
+                                        <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="caseContacts"></lightning-button-icon>
+                                        Case Contacts
+                                    </h3>
+                                    <div class="es-btn-grp">
+                                        <template if:true={showCaseActionBTNs}>
+                                            <lightning-button label="Add Alternate Contacts" class="es-button es-button--primary"  onclick={openAlternateContactModal} if:true={showAddAlternateContactBTN}></lightning-button>
+                                            <lightning-button label="Create New Contact" class="es-button es-button--primary" onclick={openCreateContactModal} if:true={showCreateNewContactBTN}></lightning-button>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div data-id="caseContacts">
+                                    <div class="table-responsive">
+                                        <table class="table es-table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" style="width: 120px;">First Name</th>
+                                                    <th scope="col">Last Name</th>
+                                                    <th scope="col">Email Address</th>
+                                                    <th scope="col">Phone Number</th>
+                                                    <th scope="col">Privileges</th>
+                                                    <th scope="col">Contact Time Zone</th>
+                                                    <th scope="col">Language</th>
+                                                    <template if:true={showCaseActionBTNs}>
+                                                        <th scope="col">&nbsp;</th>
+                                                    </template>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={contacts} for:item="caseContact">
+                                                    <tr key={caseContact.Id}>
+                                                        <template if:true={caseContact.Contact__r}>
+                                                            <td class="es-table__case-details">{caseContact.Contact__r.FirstName} <span class="es-table__case-contact-type" if:true={caseContact.Primary__c}>Primary</span></td>
+                                                            <td>{caseContact.Contact__r.LastName}</td>
+                                                            <td>{caseContact.Email_Formula__c}</td>
+                                                            <td>{caseContact.Contact__r.Phone}</td>
+                                                            <td>{caseContact.AccessLevel}</td>
+                                                            <template if:true={caseContact.Contact__r.TimeZone_Lookup__c}>
+                                                                <td>{caseContact.Contact__r.TimeZone_Lookup__r.Name}</td>
+                                                            </template>
+                                                            <template if:false={caseContact.Contact__r.TimeZone_Lookup__c}>
+                                                                <td></td>
+                                                            </template>
+                                                            <td>{caseContact.Contact__r.INFA_Language__c}</td>
+                                                        </template>
+                                                        <template if:false={caseContact.Contact__r}>
+                                                            <td class="es-table__case-details"><span class="es-table__case-contact-type" if:true={caseContact.Primary__c}>Primary</span></td>
+                                                            <td></td>
+                                                            <td>{caseContact.Email_Formula__c}</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </template>
+                                                        <template if:true={showCaseActionBTNs}>
+                                                                <td class="es-button--icon-in-table text-right"><lightning-button-icon if:true={caseContact.canBeDeleted} variant="container" size="x-small" icon-name="utility:delete" title="delete" value={caseContact.Id} onclick={deleteContact}></lightning-button-icon></td>
+                                                        </template>
+                                                    </tr>
+                                                </template>
+                                                <template if:true={notAvailableAltContact}>	
+                                                    <tr class="es-table--empty">	
+                                                        <td colspan="9">There are no Alternate Contacts available.</td>	
+                                                    </tr>	
+                                                </template>
+                                            </tbody>
+                                        </table> 
+                                    </div> 
+                                </div>
+                                <h3 class="es-case__heading mt-3">
+                                    <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="attachments"></lightning-button-icon>
+                                    Files
+                                    
+                                </h3>
+                                <div data-id="attachments">
+                                    <div class="table-responsive">
+                                        <table class="table es-table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Content Type</th>
+                                                <th scope="col">Last Modified Date</th>
+                                                <!-- <th scope="col">Created By</th> -->
+                                                <template if:true={showCaseActionBTNs}>
+                                                    <th scope="col">&nbsp;</th>
+                                                </template>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={caseAttachments} for:item="attachments">
+                                                    <tr key={attachments.Id}>                                
+                                                        <td><a href="#" data-id={attachments.ContentDocumentId} onclick={downloadDoc}>{attachments.ContentDocument.Title}</a></td>
+                                                        <td>{attachments.ContentDocument.Description}</td>
+                                                        <td>{attachments.ContentDocument.FileType}</td>
+                                                        <td><lightning-formatted-date-time value={attachments.ContentDocument.LastModifiedDate} year="numeric" month="short" day="numeric" hour="2-digit"
+                                                            minute="2-digit" time-zone-name="short" hour12="true"></lightning-formatted-date-time></td>
+                                                        <!-- <td>{attachments.ContentDocument.CreatedBy.Name}</td> -->
+                                                        <template if:true={showCaseActionBTNs}>
+                                                            <td class="es-button--icon-in-table text-right">
+                                                                <lightning-button-icon if:true={attachments.canBeEdited} variant="container" size="x-small" icon-name="utility:edit" title="edit" class="mr-3" value={attachments} onclick={openEditModal}></lightning-button-icon>
+                                                                <lightning-button-icon if:true={attachments.canBeDeleted} variant="container" size="x-small" icon-name="utility:delete" title="delete" value={attachments.ContentDocumentId} onclick={removeAttachmentDetails}></lightning-button-icon>
+                                                            </td>
+                                                        </template>
+                                                    </tr>	
+                                                </template>	
+                                                <template if:true={notAvailableCaseAttachments}>	
+                                                    <tr class="es-table--empty">	
+                                                        <td colspan="9">There are no files attached.</td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table> 
+                                    </div> 
+                                </div>
+                                <h3 class="es-case__heading es-case__heading--with-border mt-3">
+                                    <lightning-button-icon variant="container" size="medium" icon-name={iconName} onclick={handleToggle} data-target-id="caseUpdates"></lightning-button-icon>
+                                    Case Updates
+                                </h3>
+                                <div data-id="caseUpdates">
+                                    <!-- TEJASVI -> eSupport Feedback -->
+                                    <!-- Amarender - I2RT-3151 - Add comment Update replaced with Add/Update Files -->
+                                    <c-case-comment-timeline-v1 show-add-comment={showAddCommentBTN} case-updates={caseCommentByDate} is-sorted-by-earliest={isCommentSortedByEarliest}
+                                    onaddfiles={handleAddAttachmentClick} oncommentsortselection={handleCaseCommentSortBy} 
+                                    oncommentsearchchange={handleCaseCommentSearchBy}>
+                                    </c-case-comment-timeline-v1> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <svg class="d-none">
+                    <symbol class="icon icons-8" id="flag">
+                        ><path d="M13 8.4c0 .08-.731 1.2-2.762 1.2-.894 0-1.707-.24-2.52-.64-1.38-.56-2.762-.88-4.306-.8-.812.08-1.624.16-2.437.4v7.04c.081.4-.325.4-.487.4C.325 16 0 16 0 15.52V.88C1.3.32 2.681 0 4.063 0c1.38.08 2.68.32 3.9.88.73.32 1.543.56 2.356.56 1.056.08 2.112-.4 2.681-1.28V8.4zm-1.056-6.32c-.488.24-1.057.4-1.625.32-.894 0-1.788-.24-2.682-.64C6.582 1.2 5.444.88 4.226.88c-1.137 0-2.194.16-3.25.48v6.08c.813-.24 1.706-.4 2.6-.4 1.625 0 3.169.32 4.631 1.04.65.32 1.382.48 2.113.48.568 0 1.137-.16 1.543-.48.082-.4.082-6 .082-6z"></path>
+                    </symbol>
+                </svg>
+                <template if:true={isCreateContactModal}>
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                        <div class="slds-modal__container">
+                            <div class="es-modal__content">
+                                <header class="slds-modal__header es-modal__header">
+                                    <button class="es-button--only-icon" title="Close" onclick={closeCreateContactModal}>
+                                        <lightning-icon icon-name="utility:close"
+                                            alternative-text="close"
+                                            size="xx-small" ></lightning-icon>
+                                        <span class="slds-assistive-text">Close</span>
+                                    </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create New Contact</h2>
+                                </header>
+                                <div class="es-modal__faux-body">
+                                    <c-es-create-contact-record-edit-form caserec-id={caseDetail.Id} supp-acc-id={caseDetail.Support_Account__c} onaddnewcontact={handleNewContacts}></c-es-create-contact-record-edit-form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+                <template if:true={isDeleteModal}>
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                        <div class="slds-modal__container">
+                            <div class="es-modal__content">
+                                <header class="slds-modal__header es-modal__header">
+                                    <button class="es-button--only-icon" title="Close" onclick={cancelFileRemoveDetail}>
+                                        <lightning-icon icon-name="utility:close"
+                                            alternative-text="close"
+                                            size="xx-small" ></lightning-icon>
+                                        <span class="slds-assistive-text">Close</span>
+                                    </button>
+                                    <h2 class="slds-text-heading_medium slds-hyphenate">Confirm Delete</h2>
+                                </header>
+                                <!-- <div class="es-modal__faux-body">
+                                    <div class="es-modal__body">
+                                        <p>Are you sure you want to delete this document?</p>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-12" style="padding-top: 10px;padding-bottom:10px;">
+                                    <div class="es-modal__faux-body">
+                                        <!-- Changes made by Amarender as part of I2RT-4018 - Start -->
+                                        <!-- <lightning-textarea 
+                                            name="deletionReason" 
+                                            label="Reason for deletion" 
+                                            variant="label-hidden"
+                                            onchange={handleDescriptionChange}
+                                            value={description}
+                                            placeholder="Why do you want to delete ?" >
+                                        </lightning-textarea> -->
+                                        <div class="es-modal__body">
+                                            <p>Are you sure you want to delete this file?</p>
+                                        </div>
+                                        <!-- Changes made by Amarender as part of I2RT-4018 - End -->
+                                    </div>
+                                </div>
+
+                                <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                    <lightning-button label="No" class="es-button es-button--secondary"  onclick={cancelFileRemoveDetail}></lightning-button>
+                                    <lightning-button label="Yes" class="es-button es-button--primary"  onclick={confirmFileRemoveDetail}></lightning-button>		
+                                </footer>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+                <template if:true={isDeleteContactModal}>
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                        <div class="slds-modal__container">
+                            <div class="es-modal__content">
+                                <header class="slds-modal__header es-modal__header">
+                                    <button class="es-button--only-icon" title="Close" onclick={closeDeleteContactModal}>
+                                        <lightning-icon icon-name="utility:close"
+                                            alternative-text="close"
+                                            size="xx-small" ></lightning-icon>
+                                        <span class="slds-assistive-text">Close</span>
+                                    </button>
+                                    <h2 class="slds-text-heading_medium slds-hyphenate">Confirm Delete</h2>
+                                </header>
+                                <div class="es-modal__faux-body">
+                                    <div class="es-modal__body">
+                                        <p>Are you sure you want to delete this Contact?</p>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-12" style="padding-top: 10px;padding-bottom:10px;">
+                                    <div class="es-modal__faux-body">
+                                        <lightning-textarea 
+                                            name="deletionReason" 
+                                            label="Reason for deletion" 
+                                            variant="label-hidden"
+                                            onchange={handleDescriptionChange}
+                                            value={description}
+                                            placeholder="Why do you want to delete ?">
+                                        </lightning-textarea>
+                                    </div>
+                                </div> -->
+
+                                <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                    <lightning-button label="No" class="es-button es-button--secondary"  onclick={closeDeleteContactModal}></lightning-button>
+                                    <lightning-button label="Yes" class="es-button es-button--primary"  onclick={confirmDeleteContact}></lightning-button>		
+                                </footer>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+                <template if:true={isEditModal}>
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                        <div class="slds-modal__container">
+                            <div class="es-modal__content">
+                                <header class="slds-modal__header es-modal__header">
+                                    <button class="es-button--only-icon" title="Close" onclick={closeEditModal}>
+                                        <lightning-icon icon-name="utility:close"
+                                            alternative-text="close"
+                                            size="xx-small" ></lightning-icon>
+                                        <span class="slds-assistive-text">Close</span>
+                                    </button>
+                                    <h2 class="slds-text-heading_medium slds-hyphenate">Edit Files</h2>
+                                </header>
+                                <div class="es-modal__faux-body">
+                                    <div class="es-modal__body">
+                                        <div class="form-row">                                
+                                            <lightning-file-upload
+                                                label="Upload Files (Upload limit is 2GB)"
+                                                name="fileUploader"
+                                                accept={acceptedFormats}
+                                                record-id={caseDetail.Id}
+                                                onuploadfinished={handleUploadFinished}
+                                                multiple="false">
+                                            </lightning-file-upload>
+                                            <template for:each={uploadedFiles} for:item="file">
+                                                <lightning-pill key={file.documentId} label={file.name} name={file.documentId} onremove={handleRemove}></lightning-pill>
+                                            </template>
+                                            
+                                        </div>
+                                        <div class="form-row">                             
+                                            <div class="form-group es-form-group es-lds-form-group es-lds-form-group--small col-md-12">  
+                                                <lightning-textarea name="description" label="Description" placeholder="Enter file description." value={docDescription} onchange={handleDocDescriptionChange} required="true">
+        
+                                                </lightning-textarea>
+                                            </div>
+                                        </div> 
+                                        <!-- <div class="form-row">                                
+                                            <div class="form-group es-form-group es-lds-form-group col-md-8">
+                                                <lightning-input type="text" name="createdBy" label="Created By" placeholder="Enter Created By"></lightning-input>
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                    <lightning-button label="No" class="es-button es-button--secondary" name="editFiles"  onclick={handleNoClick}></lightning-button>
+                                    <lightning-button label="Yes" class="es-button es-button--primary"  onclick={updateDoc}></lightning-button>		
+                                </footer>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+            </template>
+            </div>
+        </template>
+
+        <!--Show Error message when user doesn't have access or error while fetching data-->
+        <template if:false={boolHasAccess}>
+            <div class="container-fluid es-container-fluid--grey">
+                <div class="container">
+                    <div class="slds-col slds-size_12-of-12 slds-var-p-around_xx-large">
+                        <div class="slds-illustration slds-illustration_large" aria-hidden="true">
+                            <div class="slds-text-color_weak">
+                                <h3 class="slds-text-heading_medium">{strMessage}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
+</template>

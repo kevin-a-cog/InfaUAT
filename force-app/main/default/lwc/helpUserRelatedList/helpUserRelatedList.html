@@ -1,0 +1,32 @@
+<template>
+    <template if:true={showComp}>
+        <div class="in-user-related-list-container">
+            <h1 class="in-heading in-teal in-heading-bottom">{title}</h1>
+            <ul>
+                <template for:each={userResult} for:item="item">
+                    <li key={item} class="list-item list-primary">
+                        <template if:false={isHighlights}>
+                            <a href={item.url} target={target} class="in-user-list-item"
+                                >{item.title}</a>
+                        </template>
+                        <template if:true={isHighlights}>
+                            <div class="in-user-list-item">{item.title}</div>
+                            <a href={item.link} target={target} class="in-user-list-item cta-link">
+                                {item.linkText}
+                                <i class="view-more-arrow"><span>&#8594;</span></i>
+                            </a>
+                        </template>
+                    </li>
+                </template>
+                <template if:false={isHighlights}>
+                    <li class="list-item">
+                        <a href={viewmore} target = "_blank" class="in-user-list-item view-more">
+                            View More
+                            <i class="view-more-arrow"><span>&#8594;</span></i>
+                        </a>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </template>
+</template>

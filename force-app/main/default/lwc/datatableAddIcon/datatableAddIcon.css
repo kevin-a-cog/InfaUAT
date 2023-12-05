@@ -1,0 +1,6 @@
+.brand-orange{
+    --sds-c-button-brand-color-background: #FFBF00;
+    --sds-c-button-brand-color-border: #FFBF00;
+    --sds-c-button-brand-color-background-hover: #FFAC1C;
+    --sds-c-button-brand-color-border-hover: #FFAC1C;
+}

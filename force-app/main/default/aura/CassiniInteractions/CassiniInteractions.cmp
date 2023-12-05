@@ -1,0 +1,8 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    
+     <div class="slds-page-header fontSize">
+         <h1 class="test-id__section-header-title slds-truncate ">Cassini Top Interactions</h1>
+        </div> 
+    
+    <force:canvasApp developerName="Cassini_Interactions" width="Infinite"/>
+</aura:component>

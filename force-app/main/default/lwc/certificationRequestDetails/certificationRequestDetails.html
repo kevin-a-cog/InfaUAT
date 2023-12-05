@@ -1,0 +1,108 @@
+<!--
+/*
+ * Name			:	certificationRequestDetails
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	26/05/2022
+ * Description	:	This LWC diplays details of Certification Request.
+
+ Change History
+ *************************************************************************************************************************
+ Modified By			Date			Jira No.		Description							                        Tag
+ *************************************************************************************************************************
+ Vignesh Divakaran		26/05/2022		I2RT-6149		Initial version.					                        N/A
+ Vignesh Divakaran		26/07/2023		I2RT-8640		Updated template to show active certification request info	T01
+                                                        for all active segmentation types.
+ */
+-->
+<template>
+    
+    <template if:true={showDetails}>
+        <div class="slds-section slds-is-open" id="section">
+    
+            <!-- Section Header -->
+            <h3 class="slds-section__title" onclick={toggleSection}>
+                <div class="slds-button slds-section__title-action">
+                    <lightning-icon icon-name={chevronIcon} alternative-text="button icon" size="x-small" class="slds-section__title-action-icon slds-button__icon_left">
+                    </lightning-icon>
+                    <span class="slds-truncate" title="Hosted">{strSectionName}</span>
+                </div>
+            </h3>
+    
+            <!-- Section Body -->
+            <div class={className}>
+                <template if:true={lstRecords} for:each={lstRecords} for:item="objRecord">
+                    <div key={objRecord.Id}>
+                        <!-- Sub section header -->
+                        <h3 class="slds-section__title"> <!-- <T01> -->
+                            <div class="slds-button slds-section__title-action">
+                                <span class="slds-truncate" title="Hosted">{objRecord.strSectionName}</span>
+                            </div>
+                        </h3>
+    
+                        <!-- Sub section body -->
+                        <div class="slds-grid slds-wrap">
+                            <template for:each={objRecord.lstFields} for:item="objField"> <!-- <T01> -->
+    
+                                <!-- Two column layout -->
+                                <template if:true={objField.isTwoColumn}>
+                                    <div class="slds-col slds-size_1-of-2 slds-p-left_small slds-p-right_small" key={objField.label}>
+                                        <div class="slds-form">
+                                            <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+    
+                                                <!-- Field Label -->
+                                                <span class="slds-form-element__label">{objField.label}</span>
+    
+                                                <div class="slds-form-element__control slds-p-bottom_medium">
+    
+                                                    <!-- Display text field -->
+                                                    <template if:true={objField.type.isTypeText}>
+                                                        <div class="slds-form-element__static">{objField.fieldValue}</div>
+                                                    </template>
+    
+                                                    <!-- Display reference field -->
+                                                    <template if:true={objField.type.isTypeReference}>
+                                                        <a href={objField.fieldReference}>{objField.fieldValue}</a>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+    
+                                <!-- One column layout -->
+                                <template if:false={objField.isTwoColumn}>
+                                    <div class="slds-col slds-size_1-of-1 slds-p-left_small slds-p-right_small" key={objField.label}>
+                                        <div class="slds-form">
+                                            <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+    
+                                                <!-- Field Label -->
+                                                <span class="slds-form-element__label">{objField.label}</span>
+    
+                                                <div class="slds-form-element__control slds-p-bottom_medium">
+    
+                                                    <!-- Display text field -->
+                                                    <template if:true={objField.type.isTypeText}>
+                                                        <div class="slds-form-element__static">{objField.fieldValue}</div>
+                                                    </template>
+    
+                                                    <!-- Display reference field -->
+                                                    <template if:true={objField.type.isTypeReference}>
+                                                        <div class="slds-form-element__static">
+                                                          <a href={objField.fieldReference}>{objField.fieldValue}</a>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+    
+        </div>
+    </template>
+
+</template>

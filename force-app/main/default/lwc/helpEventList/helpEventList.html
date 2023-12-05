@@ -1,0 +1,220 @@
+<template>
+    <template if:true={showFilters}>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="in-communities-bar">
+                    <div class="in-communities-filter">
+                        <c-help-multi-pick-list if:true={firstFilter} options={firstFilter}
+                            onvaluechange={handlefirstChange} selectedfilters={selectedfilters} label="FILTER BY"
+                            placeholder={firstplaceholder} class="filter-combo" data-id="in-first-filter">
+                        </c-help-multi-pick-list>
+                        <c-help-multi-pick-list if:true={secondFilter} options={secondFilter}
+                            onvaluechange={handlesecondChange} selectedfilters={selectedfilters} label=""
+                            placeholder={secondplaceholder} class="filter-combo" data-id="in-second-filter">
+                        </c-help-multi-pick-list>
+                        <c-help-multi-pick-list if:true={thirdFilter} options={thirdFilter}
+                            onvaluechange={handlethirdChange} selectedfilters={selectedfilters} label=""
+                            placeholder={thirdplaceholder} class="filter-combo" data-id="in-third-filter">
+                        </c-help-multi-pick-list>
+                        <!-- <div class="more-filters">More Filters</div> -->
+                    </div>
+                    <div class="in-communities-sortview">
+                        <div class="in-communities-sort">
+                            <lightning-combobox label="SORT BY" placeholder="Select" value={selectedProduct}
+                                options={sortByOption} onchange={handleSortBy}>
+                            </lightning-combobox>
+                        </div>
+                        <div class="in-communities-view">
+                            <template if:true={isTileView}>
+                                <img class="tile-icon change-pointer" src={color_tile}>
+
+                                <img onclick={toggleListView} class="list-icon change-pointer" src={list}>
+                            </template>
+
+                            <template if:false={isTileView}>
+                                <img onclick={toggleTileView} class="tile-icon change-pointer" src={tile}>
+
+                                <img class="list-icon change-pointer" src={color_list}>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <template if:true={isCloudReleaseEvent}>
+                    <div class="in-communities-filter in-communities-CloudReleaseEvent">
+                        <lightning-combobox label="Month" data-id="in-month-filter" placeholder="Select Month"
+                            value={selectedMonth} options={months} onchange={handleMonthSelection}
+                            class="filter-combo">
+                        </lightning-combobox>
+
+                        <lightning-combobox label="Year" data-id="in-year-filter" placeholder="Select Year"
+                            value={selectedYear} options={years} onchange={handleYearSelection}
+                            class="filter-combo">
+                        </lightning-combobox>
+                    </div>
+                </template>
+                
+            </div>
+        </div>
+
+        <div class="container p-0">
+            <template if:true={selectedfilters}>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="search-filter-items">
+                            <template for:each={selectedfilters} for:item="filter">
+                                <div key={filter}>
+                                    <div class="in-search-cta search-filter">
+                                        {filter}
+                                        <lightning-icon class="ml-3 change-pointer" icon-name="utility:close"
+                                            onclick={handleFilterOption} size="xx-small" alternative-text="close"
+                                            title="close" data-id={filter}></lightning-icon>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <div class="pl-2 change-pointer clear-filter" onclick={handleClearAll}>
+                                Clear All Filters
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+    </template>
+    <div class="row in-wrapper-bg-fuild-grey">
+        <template if:true={isTileView}>
+            <template for:each={resultSet} for:item="item">
+                <div key={item.Id} class="col-md-6 col-lg-4 mt-3">
+                    <div class="in-community-card pt-0">
+                        <div class="in-cardimage m-0">
+                            <img src={eventtilepic} />
+                        </div>
+                        <div class="in-event-tile-desc">
+
+                            <div class="in-community-desc">
+                                <div class="in-community-name">
+                                    {item.Subject}
+                                </div>
+                                <div class="demo-only demo-only--sizing slds-grid slds-wrap slds-status2">
+                                    {item.Type}
+                                </div>
+
+                                <div class="in-events-tile-desc">
+                                    <div class="in-events-tile-row">
+                                        <div class="in-event-col">
+                                            <lightning-icon class="iconcolor in-events-tile-icon"
+                                                icon-name="utility:event" alternative-text="event" size="small">
+                                            </lightning-icon>
+                                            {item.ActivityDate}
+                                        </div>
+                                        <div class="in-event-col">
+                                            <lightning-icon class="iconcolor in-events-tile-icon"
+                                                icon-name="utility:clock" alternative-text="clock" size="small">
+                                            </lightning-icon>
+                                            {item.ActivityTime}
+                                        </div>
+                                        <div class="in-event-col in-events-tile-location">
+                                            <lightning-icon class="iconcolor in-events-tile-icon"
+                                                icon-name="utility:checkin" alternative-text="checkin" size="small">
+                                            </lightning-icon>
+                                            {item.Location}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex in-events-list-cta-container in-card-action">
+                                    <div>
+                                        <lightning-button data-id={item.Id} data-value={item.Subject}
+                                            variant="brand-outline" label="JOIN EVENT" onclick={joinEvent}
+                                            disabled={item.disablebutton}></lightning-button>
+                                    </div>
+                                    <div class="in-events-learn-more">
+                                        <a href={item.Link} class="row in-take-me-cta change-pointer m-0 ml-auto p-2"
+                                            data-value={item.Subject} onclick={handleOnClick}>
+                                            Learn More
+                                            <i class="in-take-me-arrow"><span>&#8594;</span></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+
+    <template if:false={isTileView}>
+        <div class="in-wrapper-bg-fuild-grey">
+            <template for:each={resultSet} for:item="item">
+                <div key={item.Id} class="row row-list">
+                    <div class="col-12 mt-4">
+                        <div class="in-community-tile">
+                            <div class="in-event-list-detail">
+                                <div class="in-community-desc mr-2">
+                                    <div class="in-community-name">
+                                        <a href={item.Link} class="hover-eventName" data-value={item.Subject}
+                                            onclick={handleOnClick}>
+                                            {item.Subject}
+                                        </a>
+                                    </div>
+                                    <div class="demo-only demo-only--sizing slds-grid slds-wrap slds-status2 in-tags">
+                                        {item.Type}
+                                    </div>
+                                    <template if:true={item.UserGroupData}>
+                                        <div
+                                            class="demo-only demo-only--sizing slds-grid slds-wrap slds-status2 slds-m-left_x-small in-tags">
+                                            {item.UserGroupData}
+                                        </div>
+                                    </template>
+                                    <div>
+                                        <ul class="slds-list_horizontal slds-ul">
+                                            <li class="slds-item slds-m-right_medium ">
+                                                <lightning-icon class="iconcolor in-events-tile-icon"
+                                                    icon-name="utility:event" alternative-text="event" size="small">
+                                                </lightning-icon>
+                                                {item.ActivityDate}
+                                            </li>
+                                            <li class="slds-item slds-m-right_medium ">
+                                                <lightning-icon class="iconcolor in-events-tile-icon"
+                                                    icon-name="utility:clock" alternative-text="clock" size="small">
+                                                </lightning-icon>
+                                                {item.ActivityTime}
+                                            </li>
+                                            <li class="slds-item slds-m-right_medium">
+                                                <lightning-icon class="iconcolor in-events-tile-icon"
+                                                    icon-name="utility:checkin" alternative-text="checkin" size="small">
+                                                </lightning-icon>
+                                                {item.Location}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="in-events-list-cta-container">
+
+                                <div>
+                                    <lightning-button data-id={item.Id} data-value={item.Subject}
+                                        variant="brand-outline" label="JOIN EVENT" onclick={joinEvent}
+                                        disabled={item.disablebutton}></lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </template>
+
+
+    <template if:true={nosearchresult}>
+        <div class="row d-flex justify-content-center pt-3 pb-3 in-wrapper-bg-fuild-grey">
+            No result found
+        </div>
+    </template>
+</template>

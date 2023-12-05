@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuraDefinitionBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>42.0</apiVersion>
+    <description>A2R : Dynamic Lookup Component to be called from Account LOB and Plan</description>
+</AuraDefinitionBundle>

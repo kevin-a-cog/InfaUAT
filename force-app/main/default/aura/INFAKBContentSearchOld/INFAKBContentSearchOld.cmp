@@ -1,0 +1,1310 @@
+<!--
+  /*
+   @created by       : SathishR
+   @created on       : 13/04/2021
+   @Purpose          : KB and IN Search Component Used by Customers
+   @Testclass        :
+   @JIRA             :
+
+
+   Change History
+ ****************************************************************************************************
+ |    Tag     |  Date             |  Modified by              |  Jira reference   |   ChangesMade
+ |     1      |  13-Apr-2021      |   Sathish R               |                   |   Initial Version
+ |     2      |  25-Apr-2022      |   Ankit Saxena            |                   |   IN Community Changes
+ |     3      |  29-Mar-2023      |   Sathish R               |                   |   SmartSnippet Changes
+ |     4      |  05-May-2023      |   Sathish R               |    I2RT-8601      |   Tech Debt : Coveo JS UI version upgrade in eSupport Case Creation page, Global Search Bar and KB Internal Search.
+ |     5      |  03-Sep-2023      |   Sathish R               |    I2RT-9005      |   Customer not able to do search in KB Search Page.
+ |     6      |  10-Nov-2023      |   Sathish R               |    I2RT-9499      |   Customer facing "Something went wrong" issue every few hours in search
+ ****************************************************************************************************
+ */
+-->
+<aura:component controller="KBContentSearch"
+    implements="lightning:isUrlAddressable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+    access="global">
+    <!--T04--><!--T05--><ltng:require scripts="{!$Resource.CoveoJsFrameworkJsMinNew + '/CoveoJsFrameworkJsMin/CoveoJsSearch.js,'+        
+    $Resource.INFAKBSearchOld + '/Js/InfaKBCommonUtility.js,'+        
+    $Resource.INFAKBSearchOld + '/Js/CustomCoveoTemplateFramework.js,'+
+    $Resource.INFAKBSearchOld + '/Js/InfaKBSearchTemplateUtility.js,'+
+    $Resource.INFAKBSearchOld + '/Js/InfaKBContentVisitedFeature.js,'+
+    $Resource.INFAKBSearchOld + '/Js/scode.js,'+
+    $Resource.INFAKBSearchOld + '/Js/Woopra_Old.js,'+
+    $Resource.INFAKBSearchOld + '/Js/Omniture_Old.js,'+
+    $Resource.INFAKBSearchOld + '/Js/Omniture_DTM.js,'+
+    $Resource.INFAKBSearchOld + '/Js/InfaKBSearchOld.min.js'}" styles="{!$Resource.CoveoJsFrameworkOthersNew + '/CoveoJsFrameworkOthers/css/CoveoFullSearch.css,'+       
+    $Resource.INFAKBSearchOld + '/Css/AthenaKBSearchCSS.css,'+
+    $Resource.INFAKBSearchOld + '/Css/wrapper.css,'+
+    $Resource.INFAKBSearchOld + '/Css/clientlibs.css,'+
+    $Resource.INFAKBSearchOld + '/Css/INFAKBContentSearchOld.css,'+
+    $Resource.INFAKBSearchOld + '/Css/font-awesome.min.css'}" afterScriptsLoaded="{!c.onScriptLoaded}" />
+    <aura:attribute name="currentUserFedId" type="User" default="" />
+    <force:recordData aura:id="recordLoader" recordId="{!$SObjectType.CurrentUser.Id}"
+        fields="FirstName,FederationIdentifier" targetFields="{!v.currentUserFedId}" />
+    <aura:handler name="init" value="this" action="{!c.doInit}" />
+    <lightning:workspaceAPI aura:id="workspace" />
+    <aura:attribute name="hdnCurrentSessionId" type="String" default="" />
+    <aura:attribute name="hdnUserFilter" type="String" default="" />
+    <aura:attribute name="hdnSFDCKBExternalHost" type="String" default="{!$Label.c.KB_External_Host}" />
+    <aura:attribute name="hdnSFDCKBInternalHost" type="String" default="{!$Label.c.KB_Internal_Host}" />
+    <aura:attribute name="hdnKBCommunityNameInURL" type="String" default="{!$Label.c.KB_Community_Name_In_URL}" />
+    <aura:attribute name="hdneSupportCommunityNameInURL" type="String"
+        default="{!$Label.c.eSupport_Community_Name_In_URL}" />
+    <aura:attribute name="hdnKBNetworkSignUpURL" type="String" default="{!$Label.c.CustomerSupportSignupURL}" />
+    <aura:attribute name="hdnKBNetworkLoginURL" type="String" default="{!$Label.c.CustomerSupportLoginURL}" />
+    <aura:attribute name="hdnKBSearchTokenValidity" type="String" required="true" default="{!$Label.c.KB_Search_Token_Validity}" /><!-- <T06>  -->
+    <aura:attribute name="PlacedIn" type="String" required="true" default="contentsearch" />
+
+
+    <div class="CustomCoveoAnimation"
+        style="float: right; z-index: 1569; background-color: white; position: absolute; width: 100%;  height: 100%; display: block;top:30px;left:0px;">
+        <div style="width: 100%;margin: 0;position: fixed;padding: 0;text-align: center;top: 45%;">
+            <lightning:spinner alternativeText="Loading" size="medium" />
+        </div>
+    </div>
+    <div class="slds-card" style="display: none;">
+        <div id="searchinfakbcs" class="CoveoSearchInterface" data-enable-history="false" data-design="new"
+            data-excerpt-length="250" data-always-open-in-new-window="true">
+            <div class="CoveoAnalytics"></div>
+            <!-- <T05>  -->
+            <div class="CoveoFoldingForThread" data-field="@foldfoldingfield" data-parent="@foldchildfield"
+                data-child="@foldparentfield" data-maximum-expanded-results="4" data-range="1" data-tab="All,Blog">
+            </div>
+            <!-- </T05>  -->
+            <!-- <T05>  -->
+            <div class="CoveoFoldingForThread" data-field="@foldfoldingfield" data-parent="@foldchildfield"
+                data-child="@foldparentfield" data-maximum-expanded-results="4" data-range="0"
+                data-tab="ProdDocs,HowTo">
+            </div>
+            <!-- </T05>  -->
+            <!-- <T06>  -->
+            <div class="CoveoFoldingForThread" data-field="@foldfoldingfield" data-parent="@foldchildfield"
+                data-child="@foldparentfield" data-maximum-expanded-results="100" data-range="10" data-tab="Trainings">
+            </div>
+            <!-- </T06>  -->
+            <div class="coveo-search-section">
+                <div class="container" style="display:flex;">
+                    <div class="CoveoSettings"></div>
+                    <div class="input-group">
+                        <div class="input-group-addon search-label">
+                            <span>Results for:</span>
+                        </div>
+                        <div class="coveo-search-box-wrapper">
+                            <div class="CoveoSearchbox" type="text" title="Enter the terms you wish to search for."
+                                placeholder="Search the knowledge base..." data-inline="false"
+                                data-add-search-button="true" data-enable-wildcards="true" data-enable-omnibox="true"
+                                data-enable-simple-addon="false" data-enable-field-addon="false"
+                                data-enable-top-query-addon="true" data-enable-reveal-query-suggest-addon="true"
+                                data-enable-query-extension-addon="false" data-trigger-query-on-clear="true"></div>
+                        </div>
+                        <!-- <div class="input-group-btn">
+                            <button type="button" class="btn btn-default btn-search CoveoSearchButton">Search</button>
+                        </div> -->
+                    </div>
+                    <div class="CoveoShareQuery"></div>
+                    <div class="CoveoExportToExcel"></div>
+                    <div class="CoveoPreferencesPanel">
+                        <div class="CoveoResultsPreferences"></div>
+                        <div class="CoveoResultsFiltersPreferences"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-section-parent">
+                <div class="coveo-tab-section internal container">
+                    <a class="CoveoTab" data-id="All" data-caption="AllContent"> </a>
+                    <a class="CoveoTab" data-id="KB" data-caption="Knowledge Base"
+                        data-expression="@infadocumenttype==(KB,IPSKB)"> </a>
+                    <a class="CoveoTab" data-id="ProdDocs" data-caption="Product Docs"
+                        data-expression="@athenatabname==&quot;Product Docs&quot;"> </a>
+                    <!-- <T07>  -->
+                    <a class="CoveoTab" data-id="HowTo" data-caption="How-to Library"
+                        data-expression="@athenatabname==&quot;How-to Library&quot;"> </a>
+                    <!-- </T07>  -->
+                    <!-- <a class="CoveoTab" data-id="Blog" data-caption="Discussions &amp; Blogs" data-expression="@connectortype==JiveCrawler"> </a>  -->
+                    <a class="CoveoTab" data-id="Blog" data-caption="Discussions &amp; Blogs"
+                        data-expression="@infadocumenttype==(Jive,UserFeed,CollaborationGroupFeed,CollaborationGroup,Idea,FeedComment,Event,Blog,INSupportFlash)">
+                    </a>
+                    <a class="CoveoTab" data-id="Trainings" data-caption="Informatica University"
+                        data-expression="@infadocumenttype==Trainings"> </a>
+                    <!-- <a class="CoveoTab" data-id="SupportTV" data-caption="Support Video" data-expression="@infadocumenttype==SupportTV"> </a> -->
+                    <a class="CoveoTab" data-id="SupportVideo" data-caption="Support Video"
+                        data-expression="@infadocumenttype==(insupportvideos,SupportVideo)"> </a>
+                    <a class="CoveoTab" data-id="SuccessAccelerators" data-caption="Success Accelerators"
+                        data-expression="@infadocumenttype==SuccessAccelerators"> </a>
+                    <a class="CoveoTab" data-id="Expert" data-caption="Learning Path"
+                        data-expression="@infadocumenttype==(LearningPath,ExpertAssistant)"> </a>
+                    <a class="CoveoTab" data-id="PAM" data-caption="PAM &amp; EoL"
+                        data-expression="@infadocumenttype==PAMEOL" data-popover="false" data-html="false"
+                        data-original-title="" data-custom-title="Login to view Content"></a>
+                    <a class="CoveoTab" data-id="CR" data-caption="Change Request"
+                        data-expression="@infadocumenttype==(ChangeRequest,CR)" data-popover="false" data-html="false"
+                        data-original-title="" data-custom-title="Login to view Content"></a>
+                    <a class="CoveoTab" data-id="Velocity" data-caption="Velocity"
+                        data-expression="@athenatabname==&quot;Velocity&quot;" data-popover="false" data-html="false"
+                        data-original-title="" data-custom-title="Login to view Content"></a>
+                </div>
+            </div>
+            <div class="coveo-main-section" data-mode="search">
+                <div class="container">
+                    <div class="coveo-facet-column">
+                        <!-- *******************************INTERNAL******START******************************************** -->
+                        <div class="KBContentSearchInternalFacet"></div>
+                        <!-- *******************************INTERNAL******START******************************************** -->
+                        <!-- *******************************EXTERNAL******START********************************************** -->
+                        <div class="KBContentSearchExternalFacet">
+                            <div class="CoveoFacet" data-title="Source" data-field="@athenatabname" data-tab="All"
+                                data-is-multi-value-field="true" data-enable-settings-facet-state="true"></div>
+                            <!-- <T06>  -->
+                            <div class="CoveoHierarchicalFacet" data-title="Content Type" data-field="@infacontenttype"
+                                data-is-multi-value-field="true" data-id="ContentType" data-delimiting-character="|"
+                                data-level-start="0" data-level-end="10" data-tab="Expert"></div>
+                            <!-- </T06>  -->
+                            <!-- <T04>  -->
+                            <!-- <T05>  -->
+                            <div class="CoveoFacet" data-title="Engagement Category" data-field="@engagementcategory"
+                                data-is-multi-value-field="true" data-tab="SuccessAccelerators">
+                            </div>
+                            <div class="CoveoFacet" data-title="Product" data-field="@athenaproduct"
+                                data-is-multi-value-field="true"
+                                data-tab="All, KB, PAM, HowTo, Blog, Expert, SupportVideo,CR,ProdDocs,Trainings,Velocity,SuccessAccelerators">
+                            </div>
+                            <div class="CoveoFacet" data-title="Engagement Type" data-field="@engagementtype"
+                                data-is-multi-value-field="true" data-tab="SuccessAccelerators">
+                            </div>
+                            <div class="CoveoFacet" data-title="Adoption Stage" data-field="@engagementadoptionstage"
+                                data-is-multi-value-field="true" data-tab="SuccessAccelerators">
+                            </div>
+                            <div class="CoveoFacet" data-title="Focus Area" data-field="@engagementfocusarea"
+                                data-is-multi-value-field="true" data-tab="SuccessAccelerators">
+                            </div>
+                            <div class="CoveoFacet" data-title="Use Cases &amp; Tags"
+                                data-field="@engagementusecasetags" data-is-multi-value-field="true"
+                                data-tab="SuccessAccelerators">
+                            </div>
+                            <!-- </T04>  -->
+                            <!-- </T05>  -->
+                            <div class="CoveoFacet" data-title="Content" data-field="@csitemtype"
+                                data-is-multi-value-field="true" data-tab="Blog"></div>
+                            <div class="CoveoFacet" data-title="Status" data-field="@jivestatus"
+                                data-auto-collapse-facet="true" data-tab="Blog "></div>
+                            <div class="CoveoFacet" data-title="Group" data-field="@group"
+                                data-auto-collapse-facet="true" data-tab="Blog"></div>
+                            <div class="CoveoFacet" data-title="Content Type" data-field="@incontenttype"
+                                data-is-multi-value-field="true" data-enable-settings-facet-state="true"
+                                data-tab="Blog"></div>
+                            <div class="CoveoFacet" data-title="Group" data-field="@ingroups"
+                                data-auto-collapse-facet="true" data-tab="Blog, SupportVideo"></div>
+                            <div class="CoveoFacet" data-title="Categories" data-field="@jivecategories"
+                                data-tab="Blog, SupportVideo"></div>
+                            <div class="CoveoFacet" data-title="Author" data-field="@author"
+                                data-auto-collapse-facet="true" data-tab="Blog"></div>
+                            <!-- <T05>  -->
+                            <div class="CoveoFacet" data-title="Category" data-field="@booktitle"
+                                data-is-multi-value-field="true" data-tab="ProdDocs,HowTo"></div>
+                            <div class="CoveoFacet" data-title="Product Version" data-field="@athenaproductversion"
+                                data-is-multi-value-field="true" data-tab="KB, PAM, ProdDocs,SupportVideo"></div>
+                            <div class="CoveoFacet" data-title="Hotfix Version" data-field="@athenahotfix"
+                                data-auto-collapse-facet="true" data-is-multi-value-field="true"
+                                data-tab="ProdDocs, PAM"></div>
+                            <div class="CoveoFacet" data-title="Category" data-field="@athenacategory"
+                                data-auto-collapse-facet="false" data-is-multi-value-field="true"
+                                data-tab="PAM, Velocity"></div>
+                            <div class="CoveoFacet" data-title="Tag" data-field="@infatagname"
+                                data-is-multi-value-field="true" data-tab="Velocity"> </div>
+                            <!-- </T05>  -->
+                            <div class="CoveoFacet" data-title="Keywords" data-field="@infakeywords"
+                                data-is-multi-value-field="true" data-tab="KB"></div>
+                            <div class="CoveoFacet" data-title="Template" data-field="@athenatemplate"
+                                data-auto-collapse-facet="true" data-tab="KB"></div>
+                            <div class="CoveoFacet" data-title="Industry" data-field="@infaindustry"
+                                data-auto-collapse-facet="true" data-tab="KB"></div>
+                            <!-- </T08>  -->
+                            <div class="CoveoFacet" data-title="Language" data-field="@athenalanguage"
+                                data-auto-collapse-facet="true" data-tab="KB"> </div>
+                            <!-- </T08>  -->                           
+                            <div class="CoveoFacet" data-title="Training Method" data-field="@trainingmethod"
+                                data-tab="Trainings"> </div>
+                            <!-- <T04>  -->
+                            <div class="CoveoFacet" data-title="Training Roles" data-field="@trainingroles"
+                                data-is-multi-value-field="true" data-tab="Trainings"> </div>
+                            <!-- </T04>  -->
+                             <!-- <T05>  -->
+                                <div class="CoveoFacet" data-title="Language" data-field="@productlanguage"
+                                data-auto-collapse-facet="true" data-tab="ProdDocs"> </div>
+                            <div class="CoveoFacetSlider" data-title="Published Date" data-field="@sysdate" data-graph-steps="14"
+                                data-range-slider="true" data-date-field="true"
+                                
+                                data-tab="All, KB, ProdDocs, Blog, Expert, HowTo, PAM, SupportVideo, Velocity,Trainings,CR,SuccessAccelerators">
+                            </div>
+                            <!-- </T05>  -->
+                            <div class="CoveoFacet" data-title="Status" data-field="@jivestage" data-tab="CR"></div>
+                            <div class="CoveoFacet" data-title="Status" data-field="@sfstatus" data-tab="CR"></div>
+                        </div>
+                        <!-- *******************************EXTERNAL******END********************************************** -->
+                        <!-- *******************************EXTERNAL*ESUPPORT******START********************************************** -->
+                        <div class="KBContentSearchExternalForeSupportFacet"></div>
+                        <!-- *******************************EXTERNAL*ESUPPORT******END********************************************** -->
+                    </div>
+                    <div class="coveo-results-column">
+                        <div class="CoveoBreadcrumb"></div>
+                        <div class="CoveoTriggers"></div>
+
+                        <div class="coveo-results-header">
+                            <div class="coveo-summary-section">
+                                <span class="CoveoQuerySummary" data-enable-search-tips="false"></span>
+                                <span style="padding-left: 4px" class="CoveoQueryDuration"></span>
+                            </div>
+                            <div class="coveo-sort-section">
+                                <span class="CoveoSort" data-sort-criteria="relevancy" data-caption="Relevance"></span>
+                                <span class="CoveoSort" data-sort-criteria="date descending,date ascending"
+                                    data-caption="Date"></span>
+                            </div>
+                        </div>
+                        <div class="CoveoHiddenQuery"></div>
+                        <div class="CoveoDidYouMean"></div>
+                        <div class="CoveoErrorReport" data-pop-up="false"></div>
+                        <div class="CustomCoveoSmartSnippetParentNode" style="position: relative;">
+                            <div class="CustomCoveoSmartSnippetAnimation"
+                                style="float: right;z-index: 567;background-color: white;position: absolute;width: 100%;height: 100%;display: none;flex-direction: column;border: 2px solid #dee1e4;border-radius: 4px;padding: 16px;">
+                                <div
+                                    style="width: 100%;margin: 0;position: absolute;padding: 0;text-align: center;top: 45%;">
+                                    <lightning:spinner alternativeText="Loading" size="small" />
+                                </div>
+                            </div>
+                            <div class="CoveoSmartSnippet" data-use-i-frame="false" data-title-field='@infadocid'></div>
+                            <div class="CoveoSmartSnippetSuggestions" data-use-i-frame="false"
+                                data-title-field='@infadocid'></div>
+                        </div>
+                        <div class="CoveoResultList" data-wait-animation="fade"
+                            data-auto-select-fields-to-include="false">
+                        </div>
+                        <div class="CoveoPager">
+                        </div>
+                        <div class="CoveoResultsPerPage"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- *******************************INTERNAL******START******************************************** -->
+    <div class="KBContentSearchInternalTemplate" style="display: none;"></div>
+    <!-- *******************************INTERNAL******END************************************************ -->
+    <!-- *******************************EXTERNAL******START********************************************** -->
+    <div class="KBContentSearchExternalTemplate" style="display: none;">
+        <div data-custom-content-type="external" class="ChangeRequest" style="display:none">
+            <div data-custom-content-type="external" style="display:none">ChangeRequest</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+                        <!-- <span class="fa fa-cogs" style="color:#254ea2; font-size: 32px;"></span> -->
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview" style="font-size:12px;">
+                            <div class="custom-coveo-icon-for-quickview"></div>
+                            <div class="custom-coveo-quickview-text">Quick View</div>
+                        </div>
+                    </div>
+                    <div class="coveo-result-cell">
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <span class="CoveoFieldValue" data-field="@infadocid"
+                                    style="padding-right: 10px;"></span>
+                                <a class="CoveoResultLink" target="_blank"></a>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sflastmodifieddate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <!-- <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <span class="CoveoExcerpt" data-html-value="true"></span>
+                                
+                            </div>
+                        </div> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <span class="CoveoFieldValue" data-field="@sfbody" style="padding-right: 10px;"
+                                    data-html-value="true"></span>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+                        <!-- <T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                        <!-- </T02> -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="SuccessAccelerators" style="display:none">
+            <div data-custom-content-type="external" style="display:none">SuccessAccelerators</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview"></div>
+
+                    </div>
+                    <div class="coveo-result-cell">
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <!-- <T03>  -->
+                                <a class="CoveoResultLink" target="_blank"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateIndexGetHtml"
+                                    data-result-type="[[=raw.infadocumenttype]]"></a>
+                                <!-- </T03>  -->
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row">                            
+                            <div class="coveo-result-cell"> <span class="CoveoExcerpt"></span> </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                            </div>
+                        </div>
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="LearningPath" style="display:none">
+            <div data-custom-content-type="external" style="display:none">LearningPath</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview"></div>
+
+                    </div>
+                    <div class="coveo-result-cell">
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <!-- <T03>  -->
+                                <a class="CoveoResultLink" target="_blank"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateIndexGetHtml"
+                                    data-result-type="[[=raw.infadocumenttype]]"></a>
+                                <!-- </T03>  -->
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row">                            
+                            <div class="coveo-result-cell"> <span class="CoveoExcerpt"></span> </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                            </div>
+                        </div>
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="Expert" style="display:none">
+            <div data-custom-content-type="external" style="display:none">Expert</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview"></div>
+
+                    </div>
+                    <div class="coveo-result-cell">
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <!-- <T03>  -->
+                                <a class="CoveoResultLink" target="_blank"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateIndexGetHtml"
+                                    data-result-type="[[=raw.infadocumenttype]]"></a>
+                                <!-- </T03>  -->
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row">                            
+                            <div class="coveo-result-cell"> <span class="CoveoExcerpt"></span> </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                            </div>
+                        </div>
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="Velocity" style="display:none">
+            <div data-custom-content-type="external" style="display:none">Velocity</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview"></div>
+                    </div>
+                    <div class="coveo-result-cell">
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <span class="CoveoFieldValue" data-field="@infadocid"
+                                    style="padding-right: 10px;"></span>
+                                <a class="CoveoResultLink" target="_blank"></a>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row"
+                            data-custom-coveo-condition-field-not-equal-raw-infasolutiontype="undefined"
+                            style="display:none;" data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"
+                            data-custom-coveo-function-type="self-display">
+                            <div class="coveo-result-cell"
+                                style="font-size:16px; color: #264ea1 !important; font-weight: 400;">
+                                <span>[[=raw.infasolutiontype]]</span>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"> <span class="CoveoExcerpt"></span> </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+                        <!-- <T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                        <!-- </T02> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="SupportVideo" style="display:none">
+            <div data-custom-content-type="external" style="display:none">SupportVideo</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+                        <div class="CoveoYouTubeThumbnail" data-width='80' data-height='50'
+                            style="margin-right: 10px;margin-top: 10px;"></div>
+                        <!-- <span class="CoveoIcon search-kb-icon"></span> -->
+                        <div class="CoveoQuickview"></div>
+
+                    </div>
+                    <div class="coveo-result-cell">
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <a class="CoveoResultLink" target="_blank"></a>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"> <span class="CoveoExcerpt"></span> </div>
+                        </div>
+                        <!-- <T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                        <!-- </T02> -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="ProdDocs" style="display:none">
+            <div data-custom-content-type="external" style="display:none">ProdDocs</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview"></div>
+
+                    </div>
+                    <div class="coveo-result-cell">
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <span class="CoveoFieldValue" data-field="@infadocid"
+                                    style="padding-right: 10px;"></span>
+                                <a class="CoveoResultLink" target="_blank"></a>
+                            </div>
+
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"> <span class="CoveoExcerpt"></span> </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+                        <!-- <T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                        <!-- </T02> -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="DocPortal" style="display:none">
+            <div data-custom-content-type="external" style="display:none">DocPortal</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview"></div>
+
+                    </div>
+                    <div class="coveo-result-cell">
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px;"
+                                data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag">
+                                <a class='CoveoResultLink' href="[[=raw.clickableuri]]" target="_blank"
+                                    data-result-position="[[=index]]" data-result-type="[[=raw.infadocumenttype]]">
+                                    <span>[[=raw.booktitle]]</span>
+                                </a>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <a href="[[=raw.clickableuri]]" target="_blank"
+                                    data-custom-coveo-class="data-custom-coveo-html-value"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateDocPortalAnchorLinkGetHtml">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="coveo-result-row" style="display: none;"
+                            data-custom-coveo-function="fnCustomCoveoEvaluvateOnChildResultNotPresentGetHtml">                            
+                            <div class="coveo-result-cell">
+                                <span class="CoveoExcerpt"></span>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px"></div>
+                        </div>
+                        <div class="coveo-result-row" style="display: none;"
+                            data-custom-coveo-function="fnCustomCoveoEvaluvateOnChildResultNotPresentGetHtml">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row" style="display: none;"
+                            data-custom-coveo-function="fnCustomCoveoEvaluvateOnChildResultPresentGetHtml">
+                            <div class="coveo-result-cell" style="font-size:13px">
+                                <span class="CoveoResultFolding" data-result-template-id="ProductDocChildResult"
+                                    data-one-result-caption="Displaying the only result"
+                                    data-normal-caption="Most Relevant" data-expanded-caption="All Content"
+                                    data-more-caption="Show More" data-less-caption="Show Only Top Relevant"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="SalesforceKBInternal" style="display:none">
+            <div data-custom-content-type="external" style="display:none">SalesforceKBInternal</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview"></div>
+                    </div>
+                    <div class="coveo-result-cell">
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <span class="CoveoFieldValue" data-field="@infadocid"
+                                    style="padding-right: 10px;"></span>
+                                <a class="CoveoResultLink" target="_blank"></a>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"> <span class="CoveoExcerpt"></span> </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+
+                        <!-- <T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <span style="display:none" class="CustomContentVisited" data-isChildContent="false"
+                                    data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                            <!-- </T02> -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="SalesforceKBDraft" style="display:none">
+            <div data-custom-content-type="external" style="display:none">SalesforceKBDraft</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview"></div>
+                    </div>
+                    <div class="coveo-result-cell">
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <span class="CoveoFieldValue" data-field="@infadocid"
+                                    style="padding-right: 10px;"></span>
+                                <a class="CoveoResultLink" target="_blank"></a>
+                            </div>
+                            <div class="coveo-result-cell" style="width:72px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <span class="CoveoExcerpt"></span>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+
+                        <!-- <T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <span style="display: none" class="CustomContentVisited" data-isChildContent="false"
+                                    data-customContentURL="{{- raw.sysclickableuri}}"
+                                    title="This information is browser specific"></span>
+                            </div>
+                        </div>
+                        <!-- </T02> -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="SalesforceKBPublic" style="display:none">
+            <div data-custom-content-type="external" style="display:none">SalesforceKBPublic</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview"></div>
+                    </div>
+                    <div class="coveo-result-cell">
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <span class="CoveoFieldValue" data-field="@infadocid"
+                                    style="padding-right: 10px;"></span>
+                                <a class="CoveoResultLink" target="_blank"></a>
+                            </div>
+                            <div class="coveo-result-cell" style="width:72px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <span class="CoveoExcerpt"></span>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="Jive" style="display:none">
+            <div data-custom-content-type="external" style="display:none">Jive</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+                        <span class="CoveoIcon search-kb-icon" data-custom-coveo-class="data-custom-coveo-html-value"
+                            data-custom-coveo-function="fnCustomCoveoEvaluvateJiveCoveoIconGetHtml"></span>
+                        <div class="CoveoQuickview" style="font-size:12px;">
+                            <div class="custom-coveo-icon-for-quickview"></div>
+                            <div class="custom-coveo-quickview-text">Quick View</div>
+                        </div>
+                    </div>
+                    <div class="coveo-result-cell">
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <span class="CoveoFieldValue" data-field="@infadocid"
+                                    style="padding-right: 10px;"></span>
+                                <a class="CoveoResultLink" target="_blank"></a>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sflastmodifieddate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <!-- <div class="CoveoPrintableUri" style="font-size:14px"></div>  -->
+
+                                <span class="CoveoFieldValue" data-field="@inisanswered" data-helper="inansweredDisplay"
+                                    data-html-value="true"></span>
+
+                                <span style="color:#999;display:none;"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"
+                                    data-custom-coveo-condition-field-equal-raw-jivequestion="true"
+                                    data-custom-coveo-condition-field-not-equal-raw-jiveanswer="undefined"
+                                    data-custom-coveo-function-type="self-display">This question has
+                                    been </span>
+                                <span class="text-success" data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"
+                                    data-custom-coveo-condition-field-equal-raw-jivequestion="true"
+                                    data-custom-coveo-condition-field-not-equal-raw-jiveanswer="undefined"
+                                    style="display:none;"
+                                    data-custom-coveo-function-type="self-display"><strong>Answered</strong></span>
+                                <span style="color:#999;display:none;"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"
+                                    data-custom-coveo-condition-field-equal-raw-jivequestion="true"
+                                    data-custom-coveo-condition-field-equal-raw-jiveanswer="undefined"
+                                    data-custom-coveo-function-type="self-display">This question is
+                                </span>
+                                <span class="text-danger" data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"
+                                    data-custom-coveo-condition-field-equal-raw-jivequestion="true"
+                                    data-custom-coveo-condition-field-equal-raw-jiveanswer="undefined"
+                                    style="display:none;" data-custom-coveo-function-type="self-display"><strong>Not
+                                        Answered</strong></span>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <span class="CoveoExcerpt"></span>
+                            </div>
+                        </div>
+                        <!-- <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <span class="CoveoFieldValue" data-field="@sfbody"
+                                style="padding-right: 10px;" data-html-value="true"></span>
+                            </div>
+                        </div> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+                        <!-- <T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                        <!-- </T02> -->
+                    </div>
+                </div>
+
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:85px;text-align:center">
+
+                    </div>
+                    <div class="coveo-result-cell">
+                        <div class="coveo-result-row" style="display: none;"
+                            data-custom-coveo-function="fnCustomCoveoEvaluvateOnChildResultPresentGetHtml">
+                            <div class="coveo-result-cell" style="font-size:13px">
+                                <span class="CoveoResultFolding" data-result-template-id="JiveChildResult"
+                                    data-one-result-caption="Displaying the only reply in this discussion"
+                                    data-normal-caption="Most Relevant Replies" data-expanded-caption="All Replies"
+                                    data-more-caption="Show More Replies"
+                                    data-less-caption="Show Only Top Relevant Replies"
+                                    rearrange="date descending"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="Bugs" style="display:none">
+            <div data-custom-content-type="external" style="display:none">Bugs</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell">
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <span class="CoveoFieldValue" data-field="@infadocid"></span>
+                                <a class="CoveoResultLink" target="_blank"></a>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <span class="CoveoExcerpt"></span>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+
+                        <!-- <T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                        <!-- </T02> -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="Trainings" style="display:none">
+            <div data-custom-content-type="external" style="display:none">Trainings</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview"></div>
+                    </div>
+                    <div class="coveo-result-cell">
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <span class="CoveoFieldValue" data-field="@infadocid"
+                                    style="padding-right: 10px;"></span>
+                                <a class="CoveoResultLink" target="_blank"></a>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row"
+                            data-custom-coveo-condition-field-not-equal-raw-infasolutiontype="undefined"
+                            style="display:none;" data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"
+                            data-custom-coveo-function-type="self-display">
+                            <div class="coveo-result-cell"
+                                style="font-size:16px; color: #264ea1 !important; font-weight: 400;">
+                                <span>[[=raw.infasolutiontype]]</span>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"> <span class="CoveoExcerpt"></span> </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+                        <!-- <T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                        <!-- </T02> -->
+                    </div>
+                </div>
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:85px;text-align:center">
+                    </div>
+                    <div class="coveo-result-cell">
+                        <div class="coveo-result-row" style="display: none;"
+                            data-custom-coveo-function="fnCustomCoveoEvaluvateOnChildResultPresentGetHtml">
+                            <div class="coveo-result-cell" style="font-size:13px">
+                                <span class="CoveoResultFolding" data-result-template-id="TrainingsChildResult"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="Default" style="display:none">
+            <div data-custom-content-type="external" style="display:none">Default</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+
+                        <span class="CoveoIcon search-kb-icon"></span>
+                        <div class="CoveoQuickview"></div>
+                    </div>
+                    <div class="coveo-result-cell">
+
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size:18px">
+                                <span class="CoveoFieldValue" data-field="@infadocid"
+                                    style="padding-right: 10px;"></span>
+                                <a class="CoveoResultLink" target="_blank"></a>
+                            </div>
+                            <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                                <span class="CoveoFieldValue" data-field="@sysdate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                            </div>
+
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <span class="CoveoExcerpt" data-html-value="true"></span>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell">
+                                <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                            </div>
+                        </div>
+                        <!-- <T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="false" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                        <!-- </T02> -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="ProdDocsAttachment" style="display:none">
+            <div data-custom-content-type="external" style="display:none">ProdDocsAttachment</div>
+            <div class="coveo-attachment-container">
+                <div class="coveo-result-frame">
+                    <div class="coveo-result-row">
+                        <div class="coveo-result-cell" style="width:30px;text-align: left;padding-right: 10px;">
+                            <span class="CoveoIcon search-kb-icon" data-small="true"></span>
+                        </div>
+                        <div class="coveo-result-cell">
+                            <a class="CoveoResultLink" target="_blank"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="ProductDocChildResult" style="display:none">
+            <div data-custom-content-type="external" style="display:none">ProductDocChildResult</div>
+            <div class="coveo-result-frame">
+
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:1%;"></div>
+                    <div class="coveo-result-cell" style="font-size:16px;">
+                        <a class="CoveoResultLink" target="_blank" data-result-position="[[index]]"
+                            data-result-type="[[=raw.infadocumenttype]]"
+                            data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></a>
+                    </div>
+                    <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+                        <span class="CoveoFieldValue" data-field="@sysdate"
+                            data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"
+                            style="display:none;"></span>
+                    </div>
+                </div>
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:1%;"></div>
+                    <div class="coveo-result-cell" style="font-size:15px;">
+                        <span class="CoveoExcerpt"></span>
+                    </div>
+                </div>
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:1%;"></div>
+                    <div class="coveo-result-cell"></div>
+                </div>
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell">
+                        <div class="CoveoMissingTerms" style="font-size: 16px !important;"></div>
+                    </div>
+                </div>
+                <!-- <T02> -->
+                <div class="coveo-result-cell">
+                    <div class="coveo-result-row">
+                        <div class="coveo-result-cell">
+                            <span style="display: none" class="CustomContentVisited" data-isChildContent="true"
+                                data-customContentURL="[[=raw.sysclickableuri]]"
+                                title="This information is browser specific"
+                                data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- </T02> -->
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="TrainingsChildResult" style="display:none">
+            <div data-custom-content-type="external" style="display:none">TrainingsChildResult</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:1%;">
+                    </div>
+                    <div class="coveo-result-cell" style="font-size:12px;">
+                        <i class="fa fa-map-marker infa-orange"></i><span>&nbsp;</span><span class="CoveoFieldValue"
+                            data-field="@infasessionlocation"></span>
+                    </div>
+                    <div class="coveo-result-cell" style="font-size:12px;">
+                        <span>&nbsp;</span><i class="fa fa-calendar infa-orange"></i><span>&nbsp;</span><span
+                            class="CoveoFieldValue" data-field="@infasessionstartdate"
+                            data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                        <span class="CoveoFieldValue" data-field="@infasessionstarttime"></span>
+                        <span class="CoveoFieldValue" data-field="@infasessiontimezone"></span>
+                    </div>
+                </div>
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:1%;">
+                    </div>
+                </div>
+                <div class="coveo-result-cell">
+                    <div class="coveo-result-row">
+                        <div class="coveo-result-cell">
+                            <span style="display: none" class="CustomContentVisited" data-isChildContent="true"
+                                data-customContentURL="[[=raw.sysclickableuri]]"
+                                title="This information is browser specific"
+                                data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="JiveChildResult" style="display:none">
+            <div data-custom-content-type="external" style="display:none">JiveChildResult</div>
+            <div class="coveo-result-frame">
+                <div class="coveo-result-row">
+                    <div class="coveo-result-cell" style="width:50px;">
+                        <span class="CoveoIcon search-kb-icon"
+                            style="width: 20px !important;height: 20px !important;background-color:transparent;"></span>
+                        <div class="CoveoQuickview" style="font-size:12px;">
+                            <div class="custom-coveo-icon-for-quickview"></div>
+                            <div class="custom-coveo-quickview-text">Quick View</div>
+                        </div>
+                    </div>
+                    <div class="coveo-result-cell">
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell coveo-comment-header">
+                                <span class="coveo-comment-from"> From:
+                                    <span class="CoveoFieldValue" data-field="@sysauthor"></span>
+                                    <span class="CoveoFieldValue" data-field="@sfcreatedbyname"></span>
+                                    <span class="CoveoFieldValue" data-field="@inbestanswer"
+                                        data-helper="inbestanswerDisplay" data-html-value="true"></span>
+                                    <span class="CoveoFieldValue" data-field="@jiveanswer"
+                                        data-helper="jiveanswerDisplay" data-html-value="true"></span>
+                                    <span class="CoveoFieldValue" data-field="@jivehelpful"
+                                        data-helper="jivehelpfulDisplay" data-html-value="true"></span>
+                                </span>
+                            </div>
+                            <!-- <div class="coveo-result-row">
+                                <div class="coveo-result-cell">
+                                    <div class="CoveoFieldValue" data-field="@sfcreatedbyname" data-helper="inanswercreatedDisplay" data-html-value="true"></div>
+                                </div>
+                            </div> -->
+                            <div class="coveo-result-cell coveo-date" style="width:120px; text-align:right;">
+                                <span class="CoveoFieldValue" data-field="@sfcreateddate"
+                                    data-helper-options-predefined-format="dd MMM yyyy" data-helper="date"></span>
+                                <span class="jive-badge jive-status" style="display: none;"
+                                    data-custom-coveo-class="data-custom-coveo-html-value"
+                                    data-custom-coveo-child-function="fnCustomCoveoEvaluvateJiveChildCoveoIconGetHtml">Helpful</span>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="font-size: 16px;padding-top:5px;padding-bottom:5px;">
+                                <a class="CoveoResultLink" target="_blank">
+                                    <span class="CoveoExcerpt"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- <T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell"><span style="display:none" class="CustomContentVisited"
+                                    data-isChildContent="true" data-customContentURL="[[=raw.sysclickableuri]]"
+                                    title="This information is browser specific"
+                                    data-custom-coveo-function="fnCustomCoveoEvaluvateTheHtmlTag"></span>
+                            </div>
+                        </div>
+                        <!-- </T02> -->
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="padding-bottom:5px; padding-top:5px">
+                                <span class="CoveoChatterLikedBy" data-nb-likes-to-render="1"></span>
+                            </div>
+                        </div>
+                        <div class="coveo-result-row">
+                            <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+                                <span class="CoveoChatterPostAttachment"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-custom-content-type="external" class="CoveoCustomNoResults" style="display:none">
+            <div data-custom-content-type="external" style="display:none">CoveoCustomNoResults</div>
+            <div class="no-results">
+                <!-- Changed '<%=' to '<%-' in below line for fixing XSS hackerone issue. AT-314 Athena Support ticket #00033384 -->
+                <p><b>We found no results SEARCHKEYWORD !</b></p>
+                <div id="didyoumean" style="font-weight: bold; font-size: 20px;"></div>
+                <br></br>
+                <div class="suggestions-options row">
+                    <div class="suggestions-options-div-text col-md-6">
+                        <p>Try your search again, but first:</p>
+                        <ul class="suggestions">
+                            <li>Double-check your spelling</li>
+                            <li>Try alternative or fewer keywords </li>
+                            <li>Provide fewer search terms</li>
+                            <li id="DeleteFilters" style="display:none">Delete one or more filters</li>
+                        </ul>
+                    </div>
+                    <div class="suggestions-options-div-link col-md-6">
+                        <p>Still unsuccessful? Try one of the following:</p>
+                        <ul class="suggestions">
+                            <li><a id="Discussion" target="_blank" onclick="EmptyKBSiteMySupportLink();"
+                                    href="{!$Label.c.AskQuestion}">Ask a
+                                    Question</a></li>
+                            ALLCONTENTTABLINK
+                            <li><a href="{!$Label.c.CreateCaseUrl}" target="_blank"
+                                    onclick="EmptyKBSiteMySupportLink();">Create a case</a></li>
+                            <li><a href="{!$Label.c.InfaSupportCenter}" target="_blank"
+                                    onclick="EmptyKBSiteMySupportLink();">Contact
+                                    Informatica Support Center</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <p></p>
+            </div>
+        </div>
+    </div>
+    <!-- *******************************EXTERNAL******END********************************************** -->
+    <!-- *******************************EXTERNAL*ESUPPORT******START********************************************** -->
+    <div class="KBContentSearchExternalForeSupportTemplate" style="display: none;"></div>
+    <!-- *******************************EXTERNAL*ESUPPORT******END********************************************** -->
+</aura:component>

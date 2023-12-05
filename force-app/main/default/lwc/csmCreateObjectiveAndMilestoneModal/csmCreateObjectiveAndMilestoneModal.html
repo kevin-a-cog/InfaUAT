@@ -1,0 +1,98 @@
+<template>
+    <template if:false={isStep3}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium"
+        aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container ">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" data-name="closeModal" onclick={handleClick}>
+                    <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" data-name="closeModal"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{header}</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium slds-is-relative" style="min-height: 20rem"
+                id="modal-content-id-1">
+                <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+
+                <template if:true={isStep1}>
+                    <lightning-record-edit-form object-api-name="Objective__c" record-id={objectiveId}
+                        onsuccess={handleObjectiveSuccess} onload={handleLoad} onerror={handleError} if:false={showSpinner}>
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item size="12">
+                                <h3 class="slds-section__title slds-theme_shade">Information</h3>
+                                <lightning-layout multiple-rows="true">
+                                    <lightning-layout-item flexibility="auto" padding="around-small">
+                                        <lightning-input-field field-name="Name" variant="label-stacked" required>
+                                        </lightning-input-field>
+                                        <lightning-input-field field-name="Plan__c" class="slds-hide" value={planRecord}>
+                                        </lightning-input-field>     
+                                        <lightning-input-field field-name="Business_Goal__c" variant="label-stacked" required>
+                                        </lightning-input-field> 
+                                        <lightning-input-field field-name="Technical_Goal__c" variant="label-stacked" required>
+                                        </lightning-input-field>                                                                          
+                                        <lightning-input-field field-name="Is_Internal__c" value={isPlanInternal} variant="label-stacked" disabled={isPlanInternal} if:false={boolIsCSMCommunity}>
+                                        </lightning-input-field>                                                                      
+                                    </lightning-layout-item>                                   
+                                </lightning-layout>                                                             
+                            </lightning-layout-item>
+                        </lightning-layout>
+                                                    
+                        <lightning-button class="slds-hide" type="submit" name="Save" label="Save Objective"
+                            data-name="objectiveFormSubmitButton">
+                        </lightning-button>
+                    </lightning-record-edit-form>
+                </template>
+                <template if:true={isStep2}>
+                   <c-csm-manage-objective-products record-id={planRecord} objective-id={objectiveId} bool-pre-select onselectedrows={handleProductSelect} str-default-tab="2"></c-csm-manage-objective-products >
+                </template>
+
+            </div>
+            <footer class="slds-modal__footer slds-modal__footer_directional">
+                <button class="slds-button slds-button_neutral slds-float_left" data-name="cancel" onclick={handleClick}
+                    disabled={showSpinner}>Close</button>
+                <button class="slds-button slds-button_neutral slds-float_left slds-hide" data-name="back"
+                    if:true={showBack} onclick={handleClick} disabled={showSpinner}>Back</button>
+                <button class="slds-button slds-button_brand slds-float_right" if:true={showSaveAndNext} data-name="saveObectiveAndClose"
+                onclick={handleClick} disabled={showSpinner}>Save
+                &amp;
+                Close</button>
+                <button class="slds-button slds-button_brand slds-float_right" if:true={showSaveAndNext} data-name="saveAndNext"
+                    onclick={handleClick} disabled={showSpinner}>Save
+                    &amp;
+                    Add Objective Products</button>
+                   <!-- <button class="slds-button slds-button_brand slds-float_right" if:true={showSaveAndNext}
+                    data-name="saveObectiveAndAddMilestone" onclick={handleClick} disabled={showSpinner}>Save
+                    &amp; Add
+                    Milestone</button>  -->
+                <button class="slds-button slds-button_brand slds-float_right" if:true={showSaveAndClose} data-name="saveAndClose"
+                    onclick={handleClick} disabled={showSpinner}>Save
+                    &amp;
+                    Close</button>                                 
+                <button class="slds-button slds-button_brand slds-float_right" if:true={showSaveAddMilestone}
+                    data-name="saveAndAddMilestone" onclick={handleClick} disabled={showSpinner}>Save
+                    &amp; Add
+                    Milestone</button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+    <template if:true={isStep3}>
+        <!--<lightning-button label="Add Milestone" icon-name="utility:add" onclick={handleClick}
+            data-name="addMilestone"></lightning-button>
+
+        <template for:each={milestones} for:item="mi" for:index="ind">
+            <c-create-milestone-with-product objective-id={objectiveId} milestone-id={mi.Id} index={ind}
+                key={mi.key} obj-products={objectiveProducts} onremove={handleMilestoneRemove}
+                onkeychange={handleKeyChange}>
+            </c-create-milestone-with-product>
+        </template>-->
+
+        <c-csm-create-milestone-with-product-modal objective-id={objectiveId} plan-id={planRecord}  onclose={handleCancel} str-default-tab="2" bool-pre-select>
+        
+    </c-csm-create-milestone-with-product-modal>
+    </template>
+</template>

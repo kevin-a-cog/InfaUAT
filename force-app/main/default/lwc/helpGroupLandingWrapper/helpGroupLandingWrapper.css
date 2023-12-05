@@ -1,0 +1,28 @@
+.row-padding{
+    padding-left: 72%;
+    margin-bottom: -40px;
+    
+}
+.heading-wrapper{
+    background-image: url('/resource/./informaticaNetwork/ideabg.png');
+    background-size: 100% 100%;
+}
+
+.in-groups-create-search-section {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: -30px;
+}
+
+.in-start-group-button {
+    margin-top: 19px;
+}
+.in-start-group-button,
+.in-groups-search-box {
+    margin-right: 15px;
+}
+
+/* new CSS added */
+.in-communities-wrapper {
+    position: relative;
+}

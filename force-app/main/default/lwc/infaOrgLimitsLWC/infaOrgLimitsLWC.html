@@ -1,0 +1,23 @@
+<template>
+    <lightning-card title="Org Limits">
+    <div class="slds-box slds-theme_default">
+        <div if:true={orgLimits.data}>
+            <template for:each={orgLimits.data} for:item='limitResult'>
+                {limitResult.name} : {limitResult.usage} / {limitResult.max} ( {limitResult.usageRate}% )
+                <lightning-progress-bar key={limitResult.name} value={limitResult.usageRate}></lightning-progress-bar>
+            </template>
+
+        </div>
+        <div if:true={orgLimits.error}>
+            <div class="slds-box slds-theme_error">
+                <h4>Error</h4>
+                Can't get orgLimits at this time.
+                <template for:each={errorMessages} for:item="message">
+                    <p key={message} class="error-message">{message}</p>
+                </template>
+            </div>
+        </div>
+
+    </div>
+</lightning-card>
+</template>

@@ -1,0 +1,84 @@
+<template>
+    <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+    <div class="slds-m-bottom_large">
+        <lightning-layout>
+            <lightning-layout-item size="3" class="slds-p-right_small" large-device-size="3" small-device-size="12"
+                medium-device-size="12">
+                <lightning-button-menu if:true={caseCommentsCount} alternative-text="SORT BY" label={selectedSort}
+                    onselect={handleSelect} variant="bare">
+                    <lightning-menu-subheader label="SORT BY"></lightning-menu-subheader>
+                    <template for:each={filters} for:item="filter">
+                        <lightning-menu-item key={filter.value} checked={filter.isSelected} value={filter.value}
+                            label={filter.label}></lightning-menu-item>
+                    </template>
+                </lightning-button-menu>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" large-device-size="6" small-device-size="6" medium-device-size="6" class="slds-p-horizontal_small">
+                <lightning-input if:true={caseCommentsCount} type="search" variant="label-hidden" value={searchKey} style="min-width: 100%;" onchange={handleKeyUp}>
+                </lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="3" large-device-size="3" small-device-size="6" medium-device-size="6" class="slds-clearfix slds-p-left_small">
+                <div class="slds-float_right">
+                    <template if:true={caseCommentsCount}>
+                                    <lightning-button-icon icon-name="utility:expand_all" alternative-text="Expand"
+                                        onclick={handleClick} name="expandAll" class="slds-m-left_small" title="Expand all replies"
+                                        if:false={isExpanded}>
+                                    </lightning-button-icon>
+                                    <lightning-button-icon icon-name="utility:collapse_all" alternative-text="Collapse"
+                                        onclick={handleClick} name="collapseAll" class="slds-m-left_small"
+                                        title="Collapse all replies" if:true={isExpanded}>
+                                    </lightning-button-icon>
+                                </template>
+                    <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh" onclick={handleClick} name="refresh" class="slds-m-left_small" title="Refresh">
+                    </lightning-button-icon>
+                    <!--lightning-button-icon icon-name="utility:new_window" alternative-text="Pop Out" onclick={handleClick}
+                                    name="popout" class="slds-m-left_small" title="Pop Out">
+                                </lightning-button-icon-->
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+
+
+
+<c-case-comment-timeline if:true={caseCommentsCount} showbutton={showButtons} access={commentVisibility} comment-list={caseCommentList} 
+    case-record-id={recordId} 
+    onshowreply={handleShowReply} 
+    onhidereply={handleHideReply} 
+    onreloadfeedback={handleReloadFeedBack}
+    onloadmore={handleLoadMore} 
+    is-full-screen={fullScreen}
+    cc-full-screen={ccFullScreen}
+    >
+</c-case-comment-timeline>
+
+<template if:true={isPopout}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <c-case-comment-timeline if:true={caseCommentsCount} access={commentVisibility} comment-list={caseCommentList}
+                    case-record-id={recordId} is-full-screen={fullScreen} cc-full-screen={ccFullScreen} onshowreply={handleShowReply} onhidereply={handleHideReply} onreloadfeedback={handleReloadFeedBack}>
+                </c-case-comment-timeline>
+                
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+<!--<lightning-accordion allow-multiple-sections-open onsectiontoggle={handleSectionToggle}
+        active-section-name={activeSections} class="slds-m-top_small">
+        <template for:each={caseCommentList} for:item="comment">
+            <lightning-accordion-section key={comment.Id} name={comment.Id} label={comment.CreatedBy.Name}>
+                <lightning-formatted-rich-text value={comment.Comment__c}>
+                </lightning-formatted-rich-text>
+            </lightning-accordion-section>
+        </template>
+    </lightning-accordion>-->
+
+
+<div if:false={caseCommentsCount} class="slds-p-top_small">
+    <img src="/img/chatter/OpenRoad.svg"></img>
+    <div class="slds-align_absolute-center"> No {commentVisibility} collaborations to show</div>
+</div>
+
+
+</template>

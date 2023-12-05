@@ -1,0 +1,48 @@
+<!--The component used to display the fullfillment Line,Version and download links associated with the order-->
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionwithoutHeader" access="global" controller="viewDownloadLinksController">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="orderRecord" type="Object"/>    
+    <aura:attribute name="lstRow" type="sObject[]"/>
+    <aura:attribute name="fieldarray" type="List" />
+    <aura:attribute name="sortedBy" type="String"/>
+    <aura:attribute name="sortedDirection" type="String" default="asc"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:html tag="style">
+        .slds-modal__container{
+            max-width: 100% !important;
+            width:75% !important;
+        }        
+    </aura:html>    
+
+    <force:recordData layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.orderRecord}"/>
+
+   	<div class="slds-col modal-header slds-modal__header">
+         <h2 class="title slds-text-heading--medium">Download Links</h2>
+    </div> 
+    
+    <div class="slds-clearfix" >
+        <div class="slds-float_left slds-p-around_medium">
+            <div class="slds-text-title_caps" >
+                <a href="javascript:void(0);" onclick="{!c.goToOrder}">Fulfillment</a> > <a href="javascript:void(0);" onclick="{!c.goToOrder}">{!v.orderRecord.Name}</a>
+            </div>
+        </div>
+    </div>    
+    
+    <div class="slds-border_top">
+            <lightning:datatable
+                columns="{! v.fieldarray }"
+                data="{! v.lstRow }"
+                keyField="Id"
+                hideCheckboxColumn ="true"
+                showRowNumberColumn="false"
+                onsort="{!c.handleSort}"
+                sortedBy="{!v.sortedBy}"
+                sortedDirection="{!v.sortedDirection}"
+                suppressBottomBar="true"
+            />                        
+    </div>                 
+
+</aura:component>

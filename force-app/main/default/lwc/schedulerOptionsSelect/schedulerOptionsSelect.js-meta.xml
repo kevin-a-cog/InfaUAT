@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <isExposed>true</isExposed>
+	<masterLabel>Scheduler Options Select</masterLabel>
+	<description>This LWC shows additional details required by the Ask An Expert scheduler.</description>
+    <targets>
+		<target>lightningCommunity__Page</target>
+		<target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+       <targetConfig targets="lightning__FlowScreen">
+            <propertyType name="A" extends="SObject" label="Select object API name" description="Please select Ask_An_Expert_Product__mdt as the object" />
+            <property name="lstAAEProducts" type="{A[]}" label="List of Ask An Expert Products" role="inputOnly"/>
+            <property name="strSelectedProduct" type="String" label="Selected Product" role="inputOnly"/>
+            <property name="strSelectedArea" type="String" label="Selected Area"/>
+            <property name="strSelectedCategory" type="String" label="Selected Category"/>
+            <property name="boolRequiredFieldsFilled" type="Boolean" label="Required Fields filled"/>
+       </targetConfig>
+   </targetConfigs>
+</LightningComponentBundle>

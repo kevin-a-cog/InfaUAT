@@ -1,0 +1,29 @@
+<!--
+Component Name: ErpSiteDetails
+@Author:        Chandana Gowda
+@Created Date:  11 Mar 2021
+@Description:   Used in the SBQQ__Quote__c lightning record pages to display the ERP Site details in the Tax Information Tab    
+                Created for TAX 19
+  Change Log
+   ModifiedBy           Date                Requested By        Description                                                 Tag   
+   Nishit S             03-MAY-2023         TAX-349             Access Exemption History of ERP SiteI2C-1908                <TAX-349>
+-->
+<template>
+    <template if:true={soldToAccountERPSiteId}>
+        <lightning-record-form 
+            record-id={soldToAccountERPSiteId} 
+            object-api-name={objApiName} 
+            fields={fields} 
+            columns="2"
+            mode="view"
+            onsubmit={handleSubmit}>
+        </lightning-record-form>
+        <!-- <TAX-349> -->
+        <lightning-record-view-form 
+            object-api-name="SBQQ__Quote__c" 
+            record-id={recordId}>
+            <lightning-output-field field-name="Sold_to_Account_ERP_Site__c"></lightning-output-field>    
+        </lightning-record-view-form>
+        <!--</TAX-349> -->
+    </template>
+</template>

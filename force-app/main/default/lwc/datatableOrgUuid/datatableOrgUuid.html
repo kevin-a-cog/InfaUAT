@@ -1,0 +1,13 @@
+<template>
+    <div if:true={showMsg}><span>Copied!</span></div>
+
+    <div  style="float:left;margin:auto;width: 90%;">         
+        <div style="float:left;width: 10%;">
+            <lightning-icon icon-name="utility:copy" if:true={value} size="x-small" alternative-text="Copy" title="Copy" onclick={handleCopyText}></lightning-icon>
+        </div> 
+        <div style="float:left;width: 80%;">
+            <lightning-formatted-text value={value} onchange={handleOrgUUIDChange} ></lightning-formatted-text>
+        </div>      
+    </div>
+    
+</template>

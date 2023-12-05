@@ -1,0 +1,33 @@
+<!--
+/*
+ * Name			:	CsmObjectivesAndMilestonesViewerContainer
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	9/6/2021
+ * Description	:	Objectives and Milestones Container HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		9/6/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	
+	<!-- If the component is Popped Out. -->
+    <template if:true={isPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-objectives-and-milestones" aria-modal="true" aria-describedby="modal-content-id-objectives-and-milestones" 
+				class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%; margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-objectives-and-milestones" style="min-height: 100vh;">
+                    <c-csm-objectives-and-milestones-viewer record-id={recordId} bool-hide-actions={boolHideActions} onpopout={popOut} is-popped-out></c-csm-objectives-and-milestones-viewer>
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+    <template if:false={isPoppedOut}>
+        <c-csm-objectives-and-milestones-viewer record-id={recordId} bool-hide-actions={boolHideActions} onpopout={popOut}></c-csm-objectives-and-milestones-viewer>
+    </template>
+</template>

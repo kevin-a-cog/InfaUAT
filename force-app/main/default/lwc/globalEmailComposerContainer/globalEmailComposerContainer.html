@@ -1,0 +1,33 @@
+<!--
+/*
+ * Name			:	globalEmailComposerContainer
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	10/05/2021
+ * Description	:	This LWC servers as a container for the Email Composer LWC.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		10/05/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	
+	<!-- If the component is Popped Out. -->
+    <template if:true={boolIsPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-scheduler" aria-modal="true" aria-describedby="modal-content-id-scheduler" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%; margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-scheduler" style="min-height: 100vh;">
+                    <c-global-email-composer record-id={recordId} bool-is-reply={boolIsReply} bool-is-reply-all={boolIsReplyAll} bool-is-forward={boolIsForward} 
+							bool-is-popped-out onpopout={popOut}></c-global-email-composer>
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+    <template if:false={boolIsPoppedOut}>
+        <c-global-email-composer record-id={recordId} bool-is-reply={boolIsReply} bool-is-reply-all={boolIsReplyAll} bool-is-forward={boolIsForward} onpopout={popOut}></c-global-email-composer>
+    </template>
+</template>

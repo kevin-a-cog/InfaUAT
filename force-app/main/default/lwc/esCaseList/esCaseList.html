@@ -1,0 +1,111 @@
+<template>
+<div class="container-fluid position-relative p-0">
+<div class="es-breadcrumb-container es-breadcrumb-container--sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="es-breadcrumb-wrapper">
+                    <lightning-breadcrumbs>
+                        <lightning-breadcrumb
+                            label="Home"
+                            href="path/to/place/1"
+                            onclick={handleNavigateToCustomPage1}>
+                        </lightning-breadcrumb>
+                        <lightning-breadcrumb
+                            label="Cases"
+                            href="path/to/place/2"
+                            onclick={handleNavigateToCustomPage2}>
+                        </lightning-breadcrumb>
+                    </lightning-breadcrumbs>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="es-banner-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="es-banner__heading">Cases</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<img class="es-case-banner" src={caseBanner} alt="case banner" />
+</div>
+<div class="container-fluid es-container-fluid--grey">
+<div class="container">
+    <template if:true={showSpinner}>
+        <lightning-spinner class="slds-is-fixed" alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+    <div class="row">
+        <div class="col-md-9 mt-30">
+            <div class="es-caselist-wrapper">                          
+                <lightning-tabset class="es-tabs">
+                    <lightning-tab label="MY OPEN CASES" class="es-tabs__label">
+                        <template  if:true={areDetailsAvailableOpenCase}>
+                            <div class="table-responsive">
+                                <c-es-case-table  tab-name = "My Open Cases" open-cases={openCases} is-checkbox-on="false"  columns={COL_CONTACTS} disable-search={disableSearch}  map-fields={mapFieldVal} ></c-es-case-table>
+                            </div>                                
+                        </template>
+                        <template if:false={areDetailsAvailableOpenCase}>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p>There are no open cases right now.</p>
+                            </div>
+                        </template>
+                    </lightning-tab>
+                    <lightning-tab label="ALL OPEN CASES" class="es-tabs__label">
+                        <template  if:true={areDetailsAvailableAllCase}>
+                            <div class="table-responsive">
+                                <c-es-case-table  tab-name = "All Open Cases" open-cases={allOpenCases} is-checkbox-on="false"  columns={COL_CONTACTS} disable-search={disableSearch}  map-fields={mapFieldVal} ></c-es-case-table>
+                             </div>                                
+                        </template>
+                        <template if:false={areDetailsAvailableAllCase}>
+                            <div class="d-flex align-items-center justify-content-center es-section--empty">
+                                <p>There are no open cases right now.</p>
+                            </div>
+                        </template>
+                    </lightning-tab>
+                    <lightning-tab label="ALL CLOSED CASES" class="es-tabs__label">
+                        <template  if:true={areDetailsAvailableCloseCase}>
+                            <div class="table-responsive">
+                                <c-es-case-table  tab-name = "All Closed Cases" open-cases={allClosedCases} is-checkbox-on="false"  columns={COL_CONTACTS} disable-search={disableSearch}  map-fields={mapFieldVal} ></c-es-case-table>
+                            </div>                                
+                        </template>
+                        <template if:false={areDetailsAvailableOpenCase}>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p>There are no closed cases right now.</p>
+                            </div>
+                        </template>
+                    </lightning-tab>
+                </lightning-tabset>  
+                
+            </div>
+        </div>
+        <div class="col-md-3 mt-30">
+            <c-es-quicklinks ></c-es-quicklinks>
+        </div>
+        <!--<div class="col-md-3 mt-30">
+            <h4 class="es-sidebar__heading--big pt-2">Other ways to access help</h4>
+            <ul class="link-option-vanilla-wrapper">                 
+                <li class="link-option-vanilla__item">
+                    <span class="link-option-vanilla__img"><img src={postQuestions} alt="post questions" /></span>
+                    <span class="link-option-vanilla__text">Post your question to our community</span>
+                    <span class="float-right"><lightning-button-icon variant="container" size="x-small" icon-name="utility:chevronright"></lightning-button-icon></span>
+                </li>
+                <li class="link-option-vanilla__item">
+                    <span class="link-option-vanilla__img"><img src={searchKb} alt="search knowledge base" /></span>
+                    <span class="link-option-vanilla__text">Search in our Knowledge Base</span>
+                    <span class="float-right"><lightning-button-icon variant="container" size="x-small" icon-name="utility:chevronright"></lightning-button-icon></span>
+                </li>
+            </ul>
+        </div>-->
+    </div>
+</div>
+<svg class="d-none">
+    <symbol class="icon icons-8" id="flag">
+        ><path d="M13 8.4c0 .08-.731 1.2-2.762 1.2-.894 0-1.707-.24-2.52-.64-1.38-.56-2.762-.88-4.306-.8-.812.08-1.624.16-2.437.4v7.04c.081.4-.325.4-.487.4C.325 16 0 16 0 15.52V.88C1.3.32 2.681 0 4.063 0c1.38.08 2.68.32 3.9.88.73.32 1.543.56 2.356.56 1.056.08 2.112-.4 2.681-1.28V8.4zm-1.056-6.32c-.488.24-1.057.4-1.625.32-.894 0-1.788-.24-2.682-.64C6.582 1.2 5.444.88 4.226.88c-1.137 0-2.194.16-3.25.48v6.08c.813-.24 1.706-.4 2.6-.4 1.625 0 3.169.32 4.631 1.04.65.32 1.382.48 2.113.48.568 0 1.137-.16 1.543-.48.082-.4.082-6 .082-6z"></path>
+    </symbol>
+</svg>
+</div>
+</template>

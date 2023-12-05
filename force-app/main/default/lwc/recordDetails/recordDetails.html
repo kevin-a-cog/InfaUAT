@@ -1,0 +1,79 @@
+<!--
+  @description       : 
+  @author            : SF Developer
+  @group             : 
+  @last modified on  : 01-24-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   01-24-2021   SF Developer   Initial Version
+/*
+ Change History
+ *********************************************************************************************************************
+ Modified By			Date			Jira No.		Description								                  Tag
+ *********************************************************************************************************************
+ NA		                NA		        UTOPIA			Initial version.						                  NA
+ Vignesh Divakaran      02-Jun-2022     I2RT-6401       Show GCS Segment only for Technical and Operations case   T01         
+ */
+-->
+<template>
+    <lightning-record-edit-form record-id={recordId} object-api-name={sObjectName} 
+          onsubmit={handleFormSubmit} onsuccess={handleFormSuccess} onerror={handleFormError}>
+  
+              <lightning-spinner if:true={showSpinner} class="loadingSpinner" variant="brand"></lightning-spinner>
+              
+                  <lightning-messages></lightning-messages>
+  
+                  <!--General case fields section-->
+                  <div class="slds-grid slds-wrap">
+                      <template for:each={recordFields} for:item="field">
+                          <template if:true={field.show}>  <!-- <T01> -->
+                            <div class="slds-col slds-size_1-of-1 pad-left pad-right" if:false={field.layoutSizeTwo} key={name}>
+                                <lightning-input-field if:true={field.editable} field-name={field.name} required={field.required} onchange={setHasChanged}>
+                                </lightning-input-field>
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col custom-col-size-9 slds-border_bottom">
+                                        <lightning-output-field if:false={field.editable} field-name={field.name} size="6">
+                                        </lightning-output-field>
+                                    </div>
+                                    <template if:true={canEdit}>
+                                        <div if:true={field.updateable} class="slds-col custom-col-size-1">
+                                            <span class="pointer" if:true={field.showEditPencil} onclick={toggleEdit}>
+                                                <lightning-icon class="fill-color" icon-name="utility:edit" alternative-text="edit" size="xx-small">
+                                                </lightning-icon>
+                                            </span>
+                                        </div>
+                                        <div if:false={field.updateable} class="slds-col custom-col-size-1"></div>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 pad-left pad-right" if:true={field.layoutSizeTwo} key={name}>
+                                <lightning-input-field if:true={field.editable} field-name={field.name} required={field.required} onchange={setHasChanged}>
+                                </lightning-input-field>
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col custom-col-size-9 slds-border_bottom">
+                                        <lightning-output-field if:false={field.editable} field-name={field.name} size="6">
+                                        </lightning-output-field>
+                                    </div>
+                                    <template if:true={canEdit}>
+                                        <div if:true={field.updateable} class="slds-col custom-col-size-1">
+                                            <span class="pointer" if:true={field.showEditPencil} onclick={toggleEdit}>
+                                                <lightning-icon class="fill-color" icon-name="utility:edit" alternative-text="edit" size="xx-small">
+                                                </lightning-icon>
+                                            </span>
+                                        </div>
+                                        <div if:false={field.updateable} class="slds-col custom-col-size-1"></div>
+                                    </template>
+                                </div>
+                            </div>
+                          </template>  <!-- <T01> -->
+                      </template>
+                  </div>
+              
+                  <div class="slds-col slds-align_absolute-center" if:true={showFooter}>
+                      <lightning-button variant="Brand" label="Save" if:true={canSave} type="submit" class="slds-var-m-left_x-small"></lightning-button>
+                      <lightning-button variant="Neutral" label="Cancel" title="Cancel" onclick={toggleCancel} class="slds-var-m-left_x-small"></lightning-button>
+                  </div>
+  
+      </lightning-record-edit-form>
+  </template>

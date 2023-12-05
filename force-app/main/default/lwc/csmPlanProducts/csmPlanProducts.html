@@ -1,0 +1,156 @@
+<!--
+/*
+ * Name			:	csmPlanProducts
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	6/15/2021
+ * Description	:	Manage Plan Products HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		6/15/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	<lightning-card>
+		<div class="slds-p-horizontal_small">
+
+			<!-- Header controls. -->
+			<div class="slds-card">
+				<lightning-card variant="Narrow" title={objConfiguration.strCardTitle} icon-name={objConfiguration.strIconName}>
+					<!--lightning-button label={label.New_Button} variant="brand" onclick={newRecord} slot="actions"></lightning-button-->
+					<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" alternative-text={label.Refresh_Button} class="slds-m-left_xx-small" onclick={refreshCard} 
+							slot="actions"></lightning-button-icon>
+					<template if:false={fromcreatepage}>	
+						<template if:false={isPoppedOut}>
+							<lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+						</template>
+						<template if:true={isPoppedOut}>
+							<lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+						</template>
+					</template>	
+				</lightning-card>
+			</div>
+
+			<!-- Card body. -->
+			<div class="slds-card">
+
+				<!-- Search field. -->
+				<div>
+					<lightning-input class="searchField" variant="label-hidden" placeholder={objConfiguration.strSearchPlaceholder} type="search" onchange={searchRecord}></lightning-input>
+				</div>
+
+				<!-- Tabs. -->
+				<lightning-tabset variant="default" active-tab-value={strDefaultTab}>
+
+					<!-- We iterate over the Tabs configuration. -->
+					<template for:each={objConfiguration.lstTabs} for:item="objTab">
+
+						<!-- Tab definition. -->
+						<lightning-tab key={objTab.strTabValue} label={objTab.strLabel} value={objTab.strTabValue} onactive={refreshCard} title={objTab.strTitle}>
+
+							<!-- Only display once the spinner is done. -->
+							<template if:false={boolDisplaySpinner}>
+
+								<template if:true={showAllAssignedCheckBox}>
+									<lightning-input type="checkbox" label={label.Show_All} data-id="showAllAssigned" onchange={showAllAssigned} class="showAllAssignedCheckbox" checked={isShowAllAssigned}></lightning-input>
+									<div class="slds-grid slds-gutters">
+										<div class="slds-col">&nbsp;</div>
+									</div>
+								</template>
+								
+
+								<!-- Unassigned Products checkbox. -->
+								<template if:true={objTab.boolDisplayShowAllCheckbox}>
+									<!-- <lightning-input type="checkbox" label={label.Show_All} onchange={showAll} class="showAllCheckbox" checked={boolCheckboxValue}></lightning-input> -->
+									<div class="slds-grid slds-gutters">
+										<div class="slds-col">&nbsp;</div>
+									</div>
+								</template>
+
+								<!-- Table section. -->
+								<c-global-data-table class={objTab.strTableClass} obj-parameters={objTab.objParameters} onaction={executeAction}></c-global-data-table>
+							</template>
+						</lightning-tab>
+					</template>
+				</lightning-tabset>
+			</div>
+
+			<!-- Spinner. -->
+			<div class="spinner">
+				<template if:true={boolDisplaySpinner}>
+					<lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+				</template>
+			</div>
+		</div>
+	</lightning-card>
+
+	<!-- Modal. -->
+    <template if:true={boolIsModalOpen}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+
+				<!-- Header. -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small" ></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium slds-hyphenate">{strModalTitle}</h2>
+                </header>
+
+				<!-- Body. -->
+				<div class="slds-modal__content slds-p-around_medium csmPlanProducts">
+
+					<!-- Stage update. -->
+					<template if:true={boolIsUpdateStage}>
+						<lightning-record-edit-form object-api-name="Related_Account_Plan__c">
+							<lightning-input-field field-name="Stage__c" class="stageField"></lightning-input-field>
+						</lightning-record-edit-form>
+					</template>
+	
+					<!-- Move Plan. -->
+					<template if:true={boolIsMove}>
+						<c-plan-lookup-component obj-name="Plan__c" search-placeholder={label.Search_Plan} filter={strAccountId} onlookupselected={handlePlanSelection} 
+								onlookupremoved={handlePlanRemoval}></c-plan-lookup-component>
+					</template>
+				</div>
+
+				<!-- Footer. -->
+				<footer class="slds-modal__footer">
+					<button class="slds-button slds-button_neutral" onclick={closeModal} title={label.Cancel_Button}>{label.Cancel_Button}</button>
+					
+					<!-- Save button: Stage change. -->
+					<template if:true={boolIsUpdateStage}>
+						<button class="slds-button slds-button_brand" onclick={updateStage} title={label.Save_Button}>{label.Save_Button}</button>
+					</template>
+					
+					<!-- Save button: Move records. -->
+					<template if:true={boolIsMove}>
+						<button class="slds-button slds-button_brand" onclick={moveRecords} title={label.Save_Button}>{label.Save_Button}</button>
+					</template>
+				</footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+	<template if:true={showInterlockDeleteAlert}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small"
+            aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Delete Interlock</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_large lwcbody" id="modal-content-id-1">
+                    Removing these Plan Products will remove the associated Interlocks. Do you want to continue?
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="brand" label="Cancel" title="Cancel" onclick={closeConfirmationScreen} class="slds-m-left_x-small"></lightning-button>
+                    <lightning-button variant="brand" label="Continue" title="Continue" onclick={deleteInterlock} class="slds-m-left_x-small"></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

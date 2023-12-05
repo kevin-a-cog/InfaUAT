@@ -1,0 +1,68 @@
+.headerCard {
+    padding-bottom: 10px;
+    background-color: rgba(243, 242, 242, 1);
+    padding-top: 10px;
+    margin-top: -25px;
+}
+
+ 
+
+.headerCard lightning-icon.slds-icon-standard-actions-and-buttons.slds-icon_container {
+    margin-left: 17px;
+   
+}
+.headerCard .header[c-kBArticleActions_kBArticleActions] {
+    font-size: 1rem;
+	font-weight: 700;
+	display: inline-block;
+	padding-left: 10px;
+	vertical-align: middle;
+	line-height: 1.25;
+}
+
+
+.divcasecontainerborder {
+    width: 100%;
+    line-height: 14px;
+    width: 100%;
+    line-height: 14px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    overflow: hidden;
+    border-radius: 5px;
+    -pie-background: linear-gradient(#ece9d8, #E5ECD8);
+    box-shadow: #666 0px 2px 3px;
+    behavior: url(Include/PIE.htc);    
+    overflow: hidden;
+    padding: 17px;   
+    border: 1px solid #F3F2F2 ;
+    margin-bottom: 5px;
+}
+
+.link-kb-popup-content::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+/* Track */
+
+.link-kb-popup-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+
+.link-kb-popup-content::-webkit-scrollbar-thumb {
+    background: #C1C1C1;
+}
+
+/* Handle on hover */
+
+.link-kb-popup-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.link-kb-popup-content {
+    overflow: auto;
+    scrollbar-width: thin;
+}

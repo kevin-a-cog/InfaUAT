@@ -1,0 +1,142 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+        </lightning-spinner>
+    </template>
+    <template lwc:if={boolIsTextArea}>
+            <lightning-textarea 
+                value={textAreaValue} 
+                name={questionName} 
+                label={questionLabel} 
+                placeholder={questionPlaceHolder} 
+                class="validate slds-m-bottom_small custom-textarea" 
+                onchange={handleTextAreaChange} 
+                field-level-help={questionToolTip}
+                required={questionIsRequired}>
+            </lightning-textarea>
+    </template>
+    
+    <template lwc:if={boolIsPicklist}>
+        <lightning-combobox
+            name={questionName}
+            class="validate slds-m-bottom_small"
+            label={questionLabel}
+            value={comboBoxValue}
+            placeholder={questionPlaceHolder}
+            options={comboBoxOptions}
+            onchange={handleComboBoxChange} 
+            field-level-help={questionToolTip}
+            required={questionIsRequired}>
+        </lightning-combobox>
+    </template>
+
+    <template lwc:if={boolIsRadioButton}>
+        <lightning-radio-group 
+            name={questionName}
+            class="validate slds-m-bottom_small"
+            label={questionLabel}
+            options={radioButtonOptions}
+            onchange={handleRadioButtonChange}
+            value={radioButtonValue}
+            placeholder={questionPlaceHolder}
+            required={questionIsRequired}
+            type="radio">
+        </lightning-radio-group>
+        
+    </template>
+
+    <template lwc:if={boolIsText}>
+        <lightning-input 
+            type="text"
+            value={textValue}
+            class="validate slds-m-bottom_small" 
+            label={questionLabel} 
+            placeholder={questionPlaceHolder}
+            onchange={handleTextChange}
+            field-level-help={questionToolTip}
+            required={questionIsRequired}>
+        </lightning-input>
+    </template>
+
+    <template lwc:if={boolIsCheckBox}>
+        <lightning-checkbox-group 
+            name={questionName}
+            class="validate slds-m-bottom_small" 
+            label={questionLabel} 
+            placeholder={questionPlaceHolder}
+            options={checkBoxOptions}
+            value={checkBoxValue}
+            onchange={handleCheckBoxChange}
+            field-level-help={questionToolTip}
+            required={questionIsRequired}>
+        </lightning-checkbox-group>
+    </template>
+
+    <template lwc:if={boolIsDateTime}>
+        <lightning-input 
+            type="datetime"
+            class="validate slds-m-bottom_small"
+            label={questionLabel}
+            value={dateTimeValue}
+            onchange={handleDateTimeChange}
+            field-level-help={questionToolTip}
+            required={questionIsRequired}>
+        </lightning-input>
+    </template>
+
+    <template lwc:if={boolIsDate}>
+        <lightning-input 
+            type="date"
+            class="validate slds-m-bottom_small"
+            label={questionLabel}
+            value={dateValue}
+            onchange={handleDateChange}
+            field-level-help={questionToolTip}
+            required={questionIsRequired}>
+        </lightning-input>
+    </template>
+    
+    <template lwc:if={boolIsOutputText}>
+        <lightning-formatted-text 
+            value={outputTextValue}>
+        </lightning-formatted-text>
+    </template>
+
+    <template lwc:if={boolIsFileUpload}>
+        <!-- <lightning-icon class="es-form__icon-with-upload" size="x-small" icon-name="utility:attach"></lightning-icon> -->
+        <lightning-file-upload
+            label={questionLabel}
+            class="file-upload-input slds-m-bottom_small"
+            name={questionName}
+            accept={acceptedFormats}
+            record-id={myRecordId}
+            onuploadfinished={handleUploadFinished}
+            field-level-help={questionToolTip}
+            required={questionIsRequired}
+            multiple>
+        </lightning-file-upload>
+        
+        <template lwc:if={uploadedFiles}>
+            <template for:each={uploadedFiles} for:item="file">
+                <lightning-pill class="sp-form__icon-with-upload" key={file.documentId} label={file.name} name={file.name} onremove={handleFileRemove}></lightning-pill>         
+            </template>
+        </template>
+        
+        
+    </template>
+    
+    <template lwc:if={boolIsCustomPicklist}>
+        <lightning-combobox
+            name={questionName}
+            class="validate slds-m-bottom_small"
+            label={questionLabel}
+            value={customComboBoxValue}
+            placeholder={questionPlaceHolder}
+            options={customComboBoxOptions}
+            onchange={handleCustomComboBoxChange} 
+            field-level-help={questionToolTip}
+            required={questionIsRequired}>
+        </lightning-combobox>
+    </template>
+
+</template>

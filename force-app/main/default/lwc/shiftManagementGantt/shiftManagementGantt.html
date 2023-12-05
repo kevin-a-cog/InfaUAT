@@ -1,0 +1,207 @@
+<!--
+    
+Change History
+****************************************************************************************************
+ModifiedBy      Date        Jira No.    Tag     Description
+****************************************************************************************************
+balajip         11/22/2021  I2RT-4425   T01     added refresh button, changed the View to one week instead of two
+
+-->
+<template>
+    <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+    <div class="slds-scope">
+        <div class="slds-card slds-theme_default">
+            <!-- Header Bar -->
+            <div class="slds-var-p-around_medium slds-border_bottom">
+                <div class="slds-grid slds-grid_vertical-align-center">
+                    <div class="slds-col slds-col slds-size_5-of-12 gcs-shiftmanagement__filter">
+                    <!-- Filter Button -->
+                    <template if:true={showResourceFilter}>
+                        <div class="slds-col slds-grow-none slds-var-m-left_x-small">
+                            <lightning-button-menu alternative-text="FILTER BY" icon-name="utility:filterList"
+                                onselect={handleFilterChange} variant="bare" label={filterLabel}>
+                                <template for:each={filters} for:item="filter">
+                                    <lightning-menu-item key={filter.value} checked={filter.isSelected}
+                                        value={filter.value} label={filter.label}></lightning-menu-item>
+                                </template>
+                            </lightning-button-menu>
+                        </div>
+
+                        <template if:true={filteredBy.none}>
+                            <div class="slds-m-left_x-small">
+                                <c-lookup label="" placeholder="Search resources..."  onsearch={handleSearch}
+                                onselectionchange={handleLookupUserChange}></c-lookup>
+                            </div>
+                        </template>
+
+                        <template if:true={filteredBy.myTeam}>
+                            <lightning-combobox name="myTeam" label="My Team" value={filteredByValue}
+                                placeholder="Select team member..." options={teamMemberOptions} onchange={handleTeamMemberChange}
+                                variant="label-hidden" class="slds-m-left_x-small"></lightning-combobox>
+                        </template>
+
+                        <template if:true={filteredBy.bySkill}>
+                            <lightning-combobox name="skill" label="Skill" value={filteredByValue}
+                                placeholder="Select skill..." options={skillOptions} onchange={handleSkillChange}
+                                variant="label-hidden" class="slds-m-left_x-small"></lightning-combobox>
+                        </template>
+                        
+                        <template if:true={filteredBy.none}>
+                            <lightning-combobox name="allocationFilter" label="" value={allocFilterValue}
+                                placeholder="Select a value..." options={allocFilterOptions} onchange={handleAllocFilterChange}
+                                variant="label-hidden" class="slds-m-left_x-small">
+                            </lightning-combobox>
+                        </template>
+                    </template>
+                    <!-- /Filter Button -->
+                    </div>
+
+                    <div class="slds-col slds-col slds-size_3-of-12">
+                    <!-- Title (Date Range) -->
+                    <div class="slds-col slds-text-align_center">
+                        <h2 class="slds-text-heading_medium" style="font-size: 18px;">
+                            {dateHeader}
+                            <!-- {formattedStartDate}&nbsp;-&nbsp;{formattedEndDate} -->
+                            <!-- <lightning-formatted-date-time value={formattedStartDate} year="numeric" month="short"
+                                day="2-digit" weekday="short"></lightning-formatted-date-time>&nbsp;-&nbsp;
+                            <lightning-formatted-date-time value={formattedEndDate} year="numeric" month="short"
+                                day="2-digit" weekday="short"></lightning-formatted-date-time> -->
+                        </h2>
+                    </div>
+                    <!-- /Title (Date Range) -->
+                    </div>
+
+                    <div class="slds-col slds-col slds-size_4-of-12 slds-text-align_right">
+                    <!-- Date Navigation -->
+                    <div class="slds-col slds-grow-none">
+                        <div class="slds-show_inline-block">
+                            <!--T01-->
+                            <lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" 
+                                onclick={refreshPlans}></lightning-button-icon>
+                            <!--/T01-->
+                            <lightning-button-icon icon-name="utility:left" variant="border-filled"
+                                onclick={navigateToPrevious}>
+                            </lightning-button-icon>
+                            <lightning-button label="Today" onclick={navigateToToday}></lightning-button>
+                            <lightning-button-icon icon-name="utility:right" variant="border-filled"
+                                onclick={navigateToNext}>
+                            </lightning-button-icon>
+                        </div>
+                        <div class="slds-show_inline-block">
+                            <lightning-input label="Date" type="date" name="select-date" variant="label-hidden"
+                                class="lwc-datepicker slds-var-m-left_small" value={datePickerString}
+                                onchange={navigateToDay}>
+                            </lightning-input>
+                        </div>
+                        <!-- View Select -->
+                        <!--div class="slds-show_inline-block">
+                            <lightning-combobox value={view.value} options={options} onchange={handleViewChange}
+                                variant="label-hidden" class="slds-var-m-left_small"></lightning-combobox>
+                        </div-->
+                        <!-- /View Select -->
+                    </div>
+                    <!-- /Date Navigation -->
+                    </div>
+                </div>
+            </div>
+            <!-- /Header Bar -->
+
+            <!-- Gantt Chart -->
+            <div class="slds-scrollable_x1">
+                <div class="slds-var-p-around_medium lwc-chart_container">
+                    <!-- Timeline -->
+                    <div class="slds-grid lwc-timeline">
+                        <div class="slds-col slds-size_3-of-12 slds-align-bottom ">
+                            <lightning-input data-name="shiftFilter" type="search" variant = "label-hidden"
+                                placeholder="Type few chars of Shift Type or Product Name..." 
+                                onchange={filterShifts}>
+                            </lightning-input>
+                            <div class="slds-text-heading_medium slds-var-p-around_small">
+                                Requests
+                                <div style="float:right" if:true={showManagerView}>
+                                    <lightning-button-icon variant="container" icon-name="utility:add"
+                                        name="addSkillReq" onclick={handleClick}></lightning-button-icon>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col">
+                            <div class="slds-grid">
+                                <template for:each={dates} for:item="date">
+                                    <div key={date} class="slds-col lwc-timeline_month-container" style={date.style}>
+                                        <div class="slds-grid">
+                                            <div class="slds-col slds-has-flexi-truncate">
+                                                <div
+                                                    class="lwc-timeline_month slds-var-p-around_xx-small slds-theme_shade slds-text-align_center slds-text-color_weak slds-text-body_small slds-var-m-horizontal_x-small ">
+                                                    {date.name}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-grid">
+                                            <template for:each={date.days} for:item="day">
+                                                <div key={day} class={day.class}>
+                                                    <div if:true={day.dayName}>{day.dayName}</div>
+                                                    <div>{day.label}</div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Timeline -->
+
+                    <!-- Allocation Table -->
+                    <!-- Resource Rows -->
+                    <template if:true={showManagerView}>
+                        <template if:true={resources.length}>
+                            <template for:each={resources} for:item="resource">
+                                <c-shift-management-gantt-manager key={resource.Id} class="lwc-resource-component"
+                                    resource={resource} date-increment={view.slotSize} start-date={startDate}
+                                    end-date={endDate} onrefresh={handleRefresh} oneditrequest={handleEditRequest}>
+                                </c-shift-management-gantt-manager>
+                            </template>
+                        </template>
+                    </template>
+                    <template if:false={showManagerView}>
+                        <template if:true={resources}>
+                            <c-shift-management-gantt-resource label="Assigned" class="lwc-resource-component"
+                                resource={resources} date-increment={view.slotSize}
+                                user-id={currentUserId} start-date={startDate} end-date={endDate}
+                                onrefresh={handleRefresh} is-available>
+                            </c-shift-management-gantt-resource>
+                            <c-shift-management-gantt-resource label="Unassigned" class="lwc-resource-component" 
+                                resource={resources} date-increment={view.slotSize} 
+                                user-id={currentUserId} start-date={startDate} end-date={endDate}
+                                onrefresh={handleRefresh}>
+                            </c-shift-management-gantt-resource>
+                        </template>
+                    </template>
+                    <!-- /Resource Rows -->
+
+                    <div class="slds-var-m-top_small" if:true={showShiftPlanModal}>
+                        <c-create-shift-request onclose={handleClose} shift-plan-id-for-edit={shiftPlanId}>
+                        </c-create-shift-request>
+                    </div>
+
+
+                    <div class="slds-var-m-top_small" if:true={shiftRequestId}>
+                        <c-edit-shift-request onclose={handleClose} shift-request-id={shiftRequestId}>
+                        </c-edit-shift-request>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div if:false={resources} class="slds-text-align_center slds-var-p-around_medium">
+                        <span class="slds-text-color_weak">No Resources to Show</span>
+                    </div>
+                    <!-- /Empty State -->
+                    <!-- /Allocation Table -->
+
+
+                    <!-- /Add Resource Button -->
+                </div>
+            </div>
+            <!-- /Gantt Chart -->
+        </div>
+    </div>
+</template>

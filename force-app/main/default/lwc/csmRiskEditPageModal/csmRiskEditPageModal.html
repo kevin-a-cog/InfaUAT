@@ -1,0 +1,18 @@
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true">
+        <div class="slds-modal__container">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleClose}>
+                <lightning-icon icon-name="utility:close"
+                    alternative-text="close"
+                    variant="inverse"
+                    data-name="cancel"
+                    size="small" ></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+            </button>
+            <div class="slds-modal__content" id="modal-content-id-1">
+                <c-csm-risk-edit-page record-id={recordId} risk-record-id={riskRecordId} bool-from-p-a-f={boolFromPAF} onclose={handleClose} from-create-risk={fromCreateRisk}></c-csm-risk-edit-page>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

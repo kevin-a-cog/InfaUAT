@@ -1,0 +1,14 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <lightning:flow aura:id="flowData" class="bgcolorflow" />
+   <lightning:workspaceAPI aura:id="workspace"/>
+    <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 60rem !important;
+        width:80% !important;
+        }
+        .slds-modal__Content{
+            height: auto !important;
+        }
+    </aura:html>
+    <c:gcsCaseCreation recordId="{!v.recordId}" onvalueFromSubmit="{!c.getValueFromLwc}" onclosequickaction="{!c.closeQuickAction}" onhideQuickAction="{!c.hideQuickAction}" onclosemodal="{!c.closeModal}"/>
+</aura:component>

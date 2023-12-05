@@ -1,0 +1,83 @@
+/* .elastic-container {
+    padding: 10px 10px 10px 0px;
+}
+
+.static-container {
+    padding: 10px 10px 10px 10px;
+} */
+
+.table-container {
+    padding: 10px 10px 10px 10px;
+}
+
+.table {
+    padding: 10px 10px 10px 10px;
+}
+
+/* All Table Cells */
+.table-cell {
+    border: 0.5px solid #EAEAEA;
+    padding: 2px 2px 2px 2px;
+}
+
+/* Individual Cell Styles */
+.header {
+    background-color: #FF7D00;
+    color: white;
+}
+
+.read-only {
+    background-color: #EAEAEA;
+    color: black;
+}
+
+.editable {
+    background-color: #FFFFFF;
+    color: black;
+}
+
+/* Input Field */
+.input-field {
+    border: 0px;
+    --slds-c-input-radius-border: 0px;
+}
+
+.elastic-cell {
+    border: 0px;
+    text-align: right;
+}
+
+.add-button {
+    --sds-c-button-color-background: green;
+    --lwc-colorTextIconDefault: #FFFFFF;
+    padding-right: 8px;
+}
+
+.remove-button {
+    --sds-c-button-color-background: red;
+    --lwc-colorTextIconDefault: #FFFFFF;
+    padding-right: 8px;
+}
+
+.confirm-modal {
+    text-align: center;
+}
+
+.spinner{
+    position: relative;
+    display: inline-block;
+}
+
+/**** Remove Arrows from Number Input Field ****/
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

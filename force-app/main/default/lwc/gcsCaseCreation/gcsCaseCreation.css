@@ -1,0 +1,10 @@
+.custom-slds-error{
+    color: var(--lwc-colorTextError,rgb(234, 0, 30));
+    font-size: 0.75rem;
+}
+.pad-bottom{
+    padding-bottom: 1.5rem;
+}
+.padding-stacked{
+    padding: 0 var(--lwc-spacingXxSmall,0.25rem);
+}

@@ -1,0 +1,18 @@
+<template>
+    <div class="container-fluid es-container-fluid--grey">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 mt-30">
+                   <!-- tets - -{supportAccountId}-->
+                    <c-es-tabs-l-d-s acc-id ={selectedaccount} open-cases={openCases} all-open-cases={allOpenCases} all-closed-cases={allClosedCases}></c-es-tabs-l-d-s>
+                    
+                </div>
+                <div class="col-md-3 mt-30">
+                    <template if:true={flagIndicatingDataHasBeenLoaded}>
+                        <c-es-sidebar-seta signature-successs-icon={signatureSuccesssIcon} support-acc-id={supportAccountId} support-guide={supportguide} account-members={accountMembers} account-members-wrp={accountMembersWrp} primary-contacts={primaryContacts} success-offering={successOffering}></c-es-sidebar-seta>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

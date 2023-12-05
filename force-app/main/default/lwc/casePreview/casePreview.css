@@ -1,0 +1,6 @@
+.override-slds-modal__container{
+	width: 60% !important;
+}
+.override-slds-modal__Close{
+	display: block;
+}

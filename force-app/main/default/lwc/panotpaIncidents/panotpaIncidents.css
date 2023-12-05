@@ -1,0 +1,252 @@
+.card{
+    padding: 0 20px;
+}
+.search-result{
+    margin-top: 1em;
+    font-size: 14px;
+    color: #4a4a4a;
+}
+.buttons{
+    margin-top: 1em;
+    text-align: center;
+}
+.search-term{
+    font-weight: bold;
+}
+.tab-section{
+    background-color: transparent;
+    width: 100%;
+    min-height: 52px;
+    /* background-color: #f7f8f9; */
+    text-align: center;
+    border-bottom: 1px solid #bcc3ca;
+    font-size: 0;
+    white-space: nowrap;
+}
+.tab{
+    color: #67768b;
+    text-decoration: none;
+    cursor: pointer;
+    height: 52px;
+    display: inline-block;
+    font-size: 12px;
+    padding: 0 10px 2px;
+    text-transform: uppercase;
+    vertical-align: middle;
+    white-space: normal;
+}
+.tab p{
+    height: 100%;
+    color: #0059b3;
+}
+.tab * {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 52px;
+    margin: 0;
+}
+.tab.tab-selected p, .tab.tab-selected:hover p {
+    border-bottom: 2px solid #263e55;
+}
+.tab.tab-selected{
+    border-bottom: 0;
+    font-weight: 700;
+}
+.resultActionsMenu{
+    display: none;
+    position: relative;
+    height: 1.5rem;
+    right: 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: -24px;
+    background: white;
+    border-color: #e5e5e5;
+}
+.resultList{
+    margin: 0;
+    font-family: "Salesforce Sans",Arial,sans-serif;
+}
+.list-layout{
+    padding: 10px 0;
+    border-bottom: thin solid #bcc3ca;
+}
+.result-frame{
+    margin-left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.result-row{
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    margin: 0.25em 0;
+}
+.result-cell{
+    line-height: 1.25em;
+    display: table-cell;
+    vertical-align: top;
+}
+a.resultLink{
+    color: #0059b3;
+    text-decoration: none;
+    cursor: pointer;
+    word-wrap: break-word;
+}
+.result-frame .result-cell > *{
+    vertical-align: middle;
+}
+.viewedByCustomer{
+    color: black;
+    font-weight: bold;
+    font-size: 14px;
+}
+.attach-to-case > div{
+    position: relative;
+    height: 100%;
+}
+.show-actions{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    float: right;
+}
+.attach-to-case svg{
+    color: #4a4a4a;
+    fill: #4a4a4a;
+}
+.attach-to-case span{
+    color: #adadad;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.attach-to-case .coveo-attach-to-case-icon{
+    visibility: visible;
+    height: 100%;
+}
+.attach-to-case svg.coveo-attach-icon{
+    height: 1em;
+    width: 2em;
+    vertical-align: sub;
+}
+.coveo-attach-to-case-icon {
+    display: inline-block;
+}
+svg.coveo-attached{
+    color: #ecad00 !important;
+    fill: #ecad00 !important;
+}
+svg.coveo-loading-icon{
+    display: none;
+    height: 1em;
+    width: 2em;
+    vertical-align: sub;
+}
+svg.coveo-load{
+    display: inline-block;
+    fill: #373737;
+    animation: loading 0.8s linear 0s infinite normal running;
+}
+svg.approval-pending-icon{
+    display: inline-block;
+    height: 1em;
+    width: 2em;
+    vertical-align: sub;
+    fill: red !important;
+}
+.coveo-caption-for-icon{
+    font-size: 12px;
+    display: none;
+    background: #263e55;
+    color: white;
+    border-radius: 2px;
+    padding: 6px 16px;
+    position: absolute;
+    white-space: nowrap;
+    z-index: 99;
+}
+.coveo-caption-for-icon::before{
+    border: solid;
+    border-color: #263e55 transparent;
+    border-width: 7px 6px 0;
+    content: "";
+    position: absolute;
+    z-index: 99;
+    bottom: -6px;
+    top: initial;
+    left: calc(50% - 6px);
+}
+.coveo-attach:hover .coveo-caption-for-icon{
+    display: inline;
+    bottom: 30px;
+    transform: translateX(-50%);
+    left: 50%;
+}
+.pager{
+    text-align: center;
+    display: block;
+    margin-left: 0;
+}
+.pager-list{
+    padding-left: 0;
+    margin: 0;
+    display: inline-block;
+}
+ol, ul {
+    list-style: none;
+}
+.pager-previous{
+    margin: 5px 6px;
+    list-style: none;
+    display: inline-block;
+    vertical-align: baseline;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+.pager-list-item{
+    border: thin solid #7e8c9a;
+    border-radius: 2px;
+    margin: 5px 6px;
+    padding: 4px 8px;
+    list-style: none;
+    display: inline-block;
+    vertical-align: baseline;
+    color: #0059b3;
+    text-decoration: none;
+    font-size: 14px;
+    border-color: #e5e5e5;
+    color: #4a4a4a;
+}
+.pager-next{
+    margin: 5px 6px;
+    list-style: none;
+    display: inline-block;
+    vertical-align: baseline;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+.coveo-pager-list-item-text{
+    text-decoration: none;
+    cursor: default;
+}
+svg.disp-attached-icon{
+    height: 1em;
+    width: 1em;
+    vertical-align: sub;
+    margin-left: 4px;
+}
+.flex-align-center{
+    height: 10em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.show{
+    display: block;
+}
+.hide{
+    display: none;
+}

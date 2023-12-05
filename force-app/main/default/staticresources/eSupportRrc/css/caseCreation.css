@@ -1,0 +1,398 @@
+/*** Case creation ***/
+.es-case-wrapper {
+    padding: 22px 26px;
+    background: #fff;
+    margin-bottom: 20px;
+    border: 1px solid #DBDBDB;
+    border-radius: 2px;
+}
+.es-flows-wrapper {
+    padding: 0 10px;
+    background: #fff;
+    margin-bottom: 20px;
+    border: 1px solid #DBDBDB;
+    border-radius: 2px;
+}
+@media only screen and ( max-width: 420px ){
+    .es-case-wrapper {
+        padding: 22px 12px;
+    }
+}
+.es-case-section {
+    margin-left: 38px;
+    margin-bottom: 30px;
+}
+@media only screen and ( max-width: 420px ){
+    .es-case-section {
+        margin-left: 0;
+    }
+}
+.es-case__heading {
+    font-size: 12px;
+    padding-bottom: 8px;
+}
+.es-case__heading--with-border {
+    border-bottom: 1px solid #BBB;
+}
+.es-case__heading .slds-button_icon {
+    width: 10px;
+    height: 10px;
+    margin-right: 10px;
+}
+.es-case__step {
+    border: 1px solid #000;
+    color: #000;
+    padding: 2px 7px;
+    margin-right: 10px;
+    border-radius: 50%; 
+    font-size: 16px;
+}
+.es-case__step--active {
+    border: 1px solid #FF6710;
+    color: #FF6710;
+}
+.es-case__details {
+    font-size: 16px;
+    /*TBR*/
+    margin-left: 38px;
+    margin-top: -16px;
+}
+.es-case-info__label {
+    color: #808080;
+    font-size: 12px;
+    font-weight: 300;
+}
+.es-case-info__value {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    margin-bottom: 18px;
+    word-break: break-word;
+}
+.es-case-info__value--with-icon svg {
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+}
+.es-case-info__value--with-icon img {
+    width: 20px;
+    height: 20px;
+    margin: 0 0 2px 5px;
+}
+.es-form-criteria {
+    margin-bottom: 5px;
+}
+.es-form-criteria:last-child {
+    margin-bottom: 0;
+}
+.es-form-criteria__tick {
+    background: #C4FCBC;
+    border-radius: 50%;
+    margin-right: 8px;
+    /* vertical-align: middle; */
+    text-align: center;
+    width: 14px;
+    height: 14px;
+    line-height: 13px;
+    display: inline-block;
+}
+.es-form-criteria__tick--disabled {
+    background: rgba(208,2,27,0.4);
+}
+.es-form-criteria__text {
+   font-weight: 300;
+   font-size: 10px;
+}
+.es-form-criteria__sub-text {
+    display: inline-block;
+    color: #767676;
+    font-weight: 300;
+    font-size: 10px;
+    padding-left: 23px;
+    line-height: 11px;
+}
+.es-case-addnl-info__icon {
+    color: #fff;
+    background: #000;
+    border-radius: 50%;
+    height: 12px;
+    width: 12px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 13px;
+    text-align: center;
+    margin-right: 5px;
+}
+.es-case-info__strength-meter {
+    margin: 0 0 0 5px;
+}
+.es-case-summary__strength-indicator {
+    background: #DDDDDD;
+    width: 25px;
+    height: 6px;
+    display: inline-block;
+    /* margin-right: 1px; */
+}
+.es-case-summary__strength-indicator--filled {
+    background: #FF7D00;
+}
+.es-case-summary__note .slds-form-element {
+    min-width: auto;
+}
+.es-case-summary__note {
+    display: flex;
+    padding: 5px;
+    font-size: 12px;/*10px*/
+    border-radius: 2px;
+}
+.es-case-summary__note--success {
+    background: #E7F6D9;
+    border: 1px solid #459E0F;
+}
+.es-sidebar__tag {
+    background: #00a9bb;
+    padding: 2px 12px;
+    border-radius: 0 5px 5px 0;
+    font-size: 12px;
+    color: #fff;
+}
+.es-case-info-horizontal-wrapper {
+    background: #fff;
+    box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.3);
+    border-radius: 2px;
+    padding: 12px 10px;
+    margin-bottom: 20px;
+}
+.es-case-info-horizontal__title {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #000;
+    margin-bottom: 20px;
+}
+.es-case-info-horizontal__priority {
+    border: 1px solid #000;
+    font-size: 8px;
+    padding: 3px;
+    font-weight: 900;
+    margin-right: 10px;
+}
+.es-case-info-horizontal__number {
+    font-size: 14px;
+    vertical-align: middle;
+}
+.es-case-info-horizontal__info-item {
+    display: flex;
+    margin-bottom: 15px;
+}
+.es-case-info-horizontal__label {
+    flex: 1 0 40%;
+    color: #666;
+    font-size: 11px;
+}
+.es-case-info-horizontal__value {
+    flex: 1 0 60%;
+    font-size: 11px;
+    font-weight: 600;
+}
+.es-kb-recommended-wrapper {
+    background: #fff;
+    box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.3);
+    border-radius: 2px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.es-kb-recommended__title {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    margin-bottom: 8px;
+}
+.es-kb-recommended__title--s-lg {
+    margin-bottom: 20px;
+}
+.es-kb-recommended__desc {
+    font-size: 10px;
+    margin-bottom: 8px;
+}
+.es-kb-recommended__date {
+    font-size: 10px;
+    color: #6F6F6F;
+}
+.es-kb-recommended__info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    align-items: center;
+}
+.es-kb-recommended-wrapper--lg .es-kb-recommended__info {
+    margin-bottom: 20px;
+}
+.es-kb-recommended-wrapper--lg .es-kb-recommended__desc {
+    font-size: 12px;
+}
+.es-kb-recommended__tag {
+    background: #FFDFCD;
+    padding: 2px 12px;
+    border-radius: 0 5px 5px 0;
+}
+.es-last-applied-wrapper {
+    background: #CCC;
+}
+/*** Case listing ***/
+.es-caselist-wrapper {
+    background: #fff;
+    padding: 8px;
+    margin-bottom: 20px;
+}
+/* .es-caselist-wrapper .slds-button_icon svg {
+    width: 18px;
+    height: 18px;
+} */
+.es-caselist-wrapper .slds-button_icon svg {
+    color: #333;
+}
+/*** Case Details ***/
+.es-case__note-main-text {
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.es-case__note-sub-text {
+    font-weight: 300;
+}
+.es-case__note-highlight {
+    font-weight: 500;
+}
+/*** Generic ***/
+.es-case__note {
+    padding: 2px 10px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+}
+.es-case__note--info {
+    background: #FDF4C3;
+}
+.es-case__note--help {
+    background: #D7EBFC;
+}
+.es-case__note--big {
+    padding: 15px;
+}
+/***Cta items ***/
+.link-option-vanilla-wrapper {
+    display: block;
+}
+.link-option-vanilla__item {
+    list-style: none;
+    padding: 25px 10px;
+    background: #fff;
+    border: 1px solid #DBDBDB;
+    margin-bottom: 20px;
+    border-radius: 2px;
+}
+.link-option-vanilla__item--horizontal {
+    flex: 0 1 25%;
+    margin: 0 20px 0 0;
+    padding: 16px 10px;
+}
+.link-option-vanilla__text {
+    line-height: 14px;
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+.link-option-vanilla__text-available--active {
+    margin-left: 10px;
+    color: #70BE44;
+    /* display: block; */
+}
+.link-option-vanilla__text-available--active:before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #70BE44;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+.link-option-vanilla__img {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 10px;
+}
+@media only screen and (max-width: 480px) {
+    .link-option-vanilla-wrapper {
+        flex-wrap: wrap;
+    }
+    .link-option-vanilla__item {
+        margin: 0 0 10px 0;
+    }
+    .modal-open{
+        overflow: hidden;
+        position: fixed;
+    }
+}
+/* .slide-open {
+    max-height: 400px;
+    transition: max-height 0.25s ease-in;
+}
+.slide-close {
+    max-height: 0;
+    transition: max-height 0.45s ease-out;
+    overflow: hidden;
+} */
+/*** Overrides ***/
+.modal-open .siteforceStarterBody {
+    position: static;
+}
+
+
+/* I2RT-7585 KB Recomendation Widget Floating Start */
+
+
+@media only screen and (min-width:  767px){
+    .es-kb-recommended-wrapper {
+        flex: 0 0 41.666667%;        
+        z-index: 3;        
+        top: 120px;         
+        width: 100%;
+        position: sticky;               
+        max-width: 100%;
+    }
+    }
+
+@media only screen and (min-width:  991px){
+    .es-kb-recommended-wrapper {
+        flex: 0 0 41.666667%;        
+        z-index: 3;        
+        top: 120px;        
+        width: 100%;
+        position: sticky;               
+        max-width: 100%;
+    }
+    }
+
+@media only screen and (min-width:  1201px){
+    .es-kb-recommended-wrapper {
+        flex: 0 0 41.666667%;        
+        z-index: 3;        
+        top: 120px;       
+        width: 100%;
+        position: sticky;               
+        max-width: 100%;
+    }
+    }
+
+@media only screen and (min-width:  1401px){
+    .es-kb-recommended-wrapper {
+        flex: 0 0 41.666667%;        
+        z-index: 3;        
+        top: 120px;        
+        width: 100%;
+        position: sticky;               
+        max-width: 100%;
+    }
+    }
+
+/* I2RT-7585 KB Recomendation Widget Floating End */

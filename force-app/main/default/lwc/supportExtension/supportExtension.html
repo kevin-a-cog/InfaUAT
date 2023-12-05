@@ -1,0 +1,50 @@
+<!--
+/*
+ * Name			:	supportExtension
+ * Author		:	Gabriel Coronel
+ * Created Date	: 	23/12/2021
+ * Description	:	This LWC is used to extend the support on Entitled Product.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description							Tag
+ **********************************************************************************************************
+ Vignesh Divakaran		23/12/2021		I2RT-4792		Initial version.					N/A
+ */
+-->
+<template>
+
+    <!--Quick Action-->
+    <lightning-quick-action-panel title="Support Extension">
+        <div class="slds-is-relative">
+
+            <!-- Lightning Spinner -->
+            <lightning-spinner alternative-text="Loading" size="medium" if:true={isLoading}></lightning-spinner>
+
+            <!-- Modal Header -->
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-supportextension" class="slds-modal__title slds-hyphenate">Support Extension</h2>
+            </header>
+
+            <!-- Modal Body -->
+            <div class="slds-p-around_small">
+                
+                <!-- Lightning form -->
+                <lightning-record-edit-form object-api-name={objectApiName} record-id={recordId} density="comfy">
+                    <lightning-input-field field-name={objEntitledProductFields.NAME} required="true"> </lightning-input-field>
+                    <lightning-input-field field-name={objEntitledProductFields.END_DATE} required="true"> </lightning-input-field>
+                    <lightning-input-field field-name={objEntitledProductFields.REASON_FOR_EXTEND_SUPPORT} required="true"> </lightning-input-field>
+                </lightning-record-edit-form>
+
+            </div>
+        </div>
+
+        <!-- Footer Buttons -->
+        <div slot="footer">
+            <lightning-button label="Cancel" title="Cancel" variant="brand" onclick={handleCancel} disabled={disableCancel}></lightning-button>
+            &nbsp; &nbsp;
+            <lightning-button label="Save" title="Save" variant="brand" onclick={handleSave} disabled={disableSave}></lightning-button>
+        </div>
+
+    </lightning-quick-action-panel>
+</template>

@@ -1,0 +1,12 @@
+<template>
+    <template if:true={loadchildComp}>
+        <template if:true={displayChildComp}>
+            <c-paf-assessmentcmp boolprimary-estimator={DGlineExist} parentid={recordId} ondealsubmit={onPafSubmitEvent}  journey={currectJourneyValue} view-mode={viewMode} onviewcompfiredevent={displayComp}></c-paf-assessmentcmp>
+        </template>
+    </template>
+    <template if:false={loadchildComp}>
+        <template if:true={displayChildComp}>
+            <c-paf-assessmentcmp boolprimary-estimator={DGlineExist} parentid={recordId} ondealsubmit={onPafSubmitEvent} journey={currectJourneyValue}  view-mode={viewMode} onviewcompfiredevent={displayComp}></c-paf-assessmentcmp>
+        </template>
+    </template>
+</template>

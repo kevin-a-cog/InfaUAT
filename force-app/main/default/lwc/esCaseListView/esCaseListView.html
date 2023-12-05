@@ -1,0 +1,50 @@
+<!--
+/*
+ * Name			:	esCaseListView
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	9/24/2022
+ * Description	:	This is used to show case in a List view.
+
+ Change History
+ ****************************************************************************************************************
+ Modified By			Date			Jira No.		Description					                         Tag
+ ****************************************************************************************************************
+ Vignesh Divakaran	    9/24/2022		I2RT-6880		Initial version.			                         N/A
+ Vignesh Divakaran	    10/29/2022		I2RT-7296		Remove Priority field & add hover for product field  T01
+ */
+-->
+<template>
+
+    <div class="in-wrapper-bg-fuild-white case-wrapper mt-4">
+        <ul>
+            <li>
+                <div class="case-num"><span onclick={redirectToCase} data-id={objCase.Id}>{objCase.CaseNumber}</span></div>
+                <div class="case-label">{label.Case_Number}</div>
+            </li>
+            <li>
+                <div class="case-value">{objCase.Org_Formula_Id__c}</div>
+                <div class="custom-toolTip">{objCase.Org_Formula_Id__c}</div>
+                <div class="case-label">{label.Org_ID}</div>
+            </li>
+            <li>
+                <div class="case-value">{objCase.Forecast_Product__c}</div>
+                <div class="custom-toolTip">{objCase.Forecast_Product__c}</div> <!-- <T01> -->
+                <div class="case-label">{label.Product}</div>
+            </li>
+            <li>
+                <div class="case-value">{objCase.Next_Action__c}</div>
+                <div class="case-label">{label.Next_Action}</div>
+            </li>
+            <li>
+                <div class="case-value">{objCase.Status}</div>
+                <div class="case-label">{label.Status}</div>
+            </li>
+        </ul>
+        <div class="case-detail-wrapper mt-4">
+            <div class="case-detail">{objCase.Subject}</div>
+            <div class="custom-toolTip">{objCase.Subject}</div>
+            <div class="case-label">{label.Subject}</div>
+        </div>
+    </div>
+
+</template>

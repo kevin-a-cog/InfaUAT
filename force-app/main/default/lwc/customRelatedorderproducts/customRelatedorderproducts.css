@@ -1,0 +1,24 @@
+.p-center{
+    text-align: center;
+    margin-top: 17px;
+    margin-bottom: 17px;
+}
+
+.tooltip .tooltiptext {
+    width: 120px;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+  }
+
+  .overlay-visible{
+    position: absolute;
+    top: 0;   
+    left: 20px;   
+    background-color: rgb(215, 221, 223); 
+  }
+
+  .slds-modal__container {
+    max-width: 60rem !important;
+    width: 55% !important;
+}

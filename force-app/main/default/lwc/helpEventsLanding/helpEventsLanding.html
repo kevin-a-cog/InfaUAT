@@ -1,0 +1,78 @@
+<template>
+    <div class="heading-wrapper">
+        <div class="in-banner__content">
+            <div class="container">
+                <div class="in-banner-heading">Events</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="in-wrapper-bg-fuild-grey in-events-landing-bg">
+        <div class="container">
+            <div class="pt-3">
+                <div class="in-wrapper-bg-fuild-white in-communities-wrapper">
+
+                    <div class="filter-search-wrapper">
+                        <div class="filterButton">
+                            <button variant="brand" class="slds-button slds-button_brand" onclick={handleShowFilters}>
+                                <img class="in-btn-icon" src="/resource/./informaticaNetwork3/Filter-Icon.svg" />
+                                <span class="slds-p-left_x-small">
+                                    Filters
+                                </span>
+                            </button>
+                        </div>
+                        
+                        <div class="searchBox">
+                            <lightning-input type="search" variant="label-hidden" placeholder="Search Event"
+                                name="Search Event" value={searchInput} onchange={searchEvent}>
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <lightning-tabset active-tab-value={activeTab} class="in-communities-tab__section">
+                        <template if:true={userId}>
+                            <lightning-tab label="My Events" value=1 onactive={handleActive} class="help-tab-pad1 pb-0">
+                                <template if:true={showMyEvents}>
+                                    <c-help-event-list result-set={manipulatedArr} all-events={allEventsList}
+                                        first-filter={userGroups} show-filters={showFilters}
+                                        onfirstfilterchange={handleFirstFilterChange}
+                                        firstplaceholder={firstplaceholder} secondplaceholder={secondplaceholder}
+                                        second-filter={eventTypes} onsecondfilterchange={handleSecondFilterChange}
+                                        third-filter={periodOptions} onthirdfilterchange={handleThirdFilterChange}
+                                        thirdplaceholder={thirdplaceholder} selectedfilters={selectedFilters}
+                                        onclearall={handleClearAll} onjoinevent={handleJoinEvent}
+                                        onclearselectfilter={handleclearselectfilter} nosearchresult={noSearchResult}
+                                        selected-product={selectedSortFilter} onsortby={handleSortBy}
+                                        onmonthyearselect={handleMonthYearFilterChange}></c-help-event-list>
+                                </template>
+                            </lightning-tab>
+                        </template>
+
+                        <lightning-tab label="All Events" value=2 onactive={handleActive} class="help-tab-pad1 pb-0">
+                            <template if:true={showAllEvents}>
+                                <c-help-event-list result-set={manipulatedArr} all-events={allEventsList}
+                                    first-filter={userGroups} show-filters={showFilters}
+                                    onfirstfilterchange={handleFirstFilterChange}
+                                    firstplaceholder={firstplaceholder} secondplaceholder={secondplaceholder}
+                                    second-filter={eventTypes} onsecondfilterchange={handleSecondFilterChange}
+                                    third-filter={periodOptions} onthirdfilterchange={handleThirdFilterChange}
+                                    thirdplaceholder={thirdplaceholder} selectedfilters={selectedFilters}
+                                    onclearall={handleClearAll} onjoinevent={handleJoinEvent}
+                                    onclearselectfilter={handleclearselectfilter} nosearchresult={noSearchResult}
+                                    selected-product={selectedSortFilter} onsortby={handleSortBy}
+                                    onmonthyearselect={handleMonthYearFilterChange}></c-help-event-list>
+                            </template>
+                        </lightning-tab>
+                    </lightning-tabset>
+                </div>
+            </div>
+            <template lwc:if={showPagination}>
+                <c-help-pagination
+                            current-page={currentPage}
+                            total-pages={totalPages}
+                            onsendcurrentpage={onPageRequest}>
+                </c-help-pagination>
+            </template>
+        </div>
+    </div>
+</template>

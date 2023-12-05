@@ -1,0 +1,147 @@
+<!--
+/*
+ * Name			:	schedulerAAE
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	8/11/2022
+ * Description	:	This LWC books timeslots and creates Service Appointments for "Ask An Expert".
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description								Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		8/11/2022		N/A				Initial version.						 N/A
+ Shashikanth			10/18/2023		I2RT-7702		Timezone & Timeslot Font size Change	 T01
+ */
+-->
+<template>
+	
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+	<!-- Card body. -->
+	<lightning-card>
+
+		<!-- Header. -->
+		<!-- <h2 class="slds-modal__title slds-hyphenate" slot="title">{label.Scheduler_AAE_Title}</h2> -->
+		<h2 class="slds-text-align_center slds-m-vertical_small slds-text-color_default slds-text-heading_large">{label.Scheduler_AAE_Title}</h2>
+
+		<!-- Action buttons. -->
+		<!-- <lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-left_xx-small" onclick={initializeComponent} slot="actions"></lightning-button-icon> -->
+
+		<!-- Spinner. -->
+		<template lwc:if={boolDisplaySpinner}>
+			<div class="slds-is-relative spinnerProperties">
+				<lightning-spinner variant="brand" size="medium"></lightning-spinner>
+			</div>
+		</template>
+
+		<!-- Scheduler. -->
+		<template lwc:else>
+
+			<template lwc:if={boolHasSlots}>
+
+				<!-- Modal Body. -->
+				<div class={strBodyClasses}>
+					<div class="slds-grid">
+				
+						<!-- Left panel. -->
+						<div class="slds-col slds-size_12-of-12 slds-p-right_x-small">
+				
+							<!-- Header. -->
+							<div class="slds-page-header">
+								<div class="slds-page-header__row">
+				
+									<!-- Date range. -->
+									<div class="slds-page-header__col-title slds-m-top_x-small">
+										<span class="slds-page-header__title slds-truncate">{strStart} - {strStop}</span>
+									</div>
+				
+									<!-- Calendar controls. -->
+									<div class="slds-grid slds-float_right">
+										<div class="slds-page-header__control slds-m-right_xx-small">
+											<ul class="slds-button-group-list">
+												<li>
+													<lightning-button-icon icon-name="utility:chevronleft" variant="border-filled"
+														size="large" onclick={moveBackwards}></lightning-button-icon>
+												</li>
+												<li>
+													<lightning-button-icon icon-name="utility:chevronright" variant="border-filled"
+														size="large" onclick={moveForward}></lightning-button-icon>
+												</li>
+											</ul>
+										</div>
+										<div class="slds-page-header__control slds-m-right_x-small">
+											<lightning-input type="date" value={strSelectedDate} min={strCalendarStart}
+												max={strCalendarStop} class="calendarButton" onchange={setSpecificDate}>
+											</lightning-input>
+										</div>
+									</div>
+								</div>
+								<div class="slds-page-header__row">
+				
+									<!-- Time zone picker. -->
+									<div class="slds-page-header__col-title slds-size_12-of-12">
+										<lightning-combobox name="timezone" value={strSelectedTimeZone} options={lstTimezones}
+											onchange={updateTimeZone} class="slds-text-body_regular"></lightning-combobox>	<!-- <T01> -->
+									</div>
+								</div>
+							</div>
+				
+							<!-- Slots. -->
+							<div class="slds-grid slds-grid_align-space slds-has-divider_bottom slds-p-vertical_small">
+								<template for:each={lstAvailableDays} for:item="objDay">
+									<div class="slds-col slds-medium-size_1-of-7 slds-large-size_1-of-7 slds-text-align_center" key={objDay}>
+										<h3 class="slds-text-body_regular">{objDay.strHeader}</h3>
+									</div>
+								</template>
+							</div>
+
+							<div class="slds-grid slds-grid_align-space slotContainer">
+								<template for:each={lstAvailableDays} for:item="objDay">
+				
+									<!-- Slots available. -->
+									<template lwc:if={objDay.boolHasSlots}>
+										<div key={objDay} class="slds-col slds-medium-size_1-of-7 slds-large-size_1-of-7 slds-grid_vertical">
+											<div class="slds-grid slds-grid_vertical slds-grid_vertical-align-center">
+												<div class="slds-p-top_x-small slds-text-body_small">
+													<template for:each={objDay.lstSlots} for:item="objSlot">
+														<div key={objSlot.strId} class="slds-grid parentSlots">
+															<div class="slds-col">
+																<lightning-button-stateful label-when-off={objSlot.strSlotLabel}
+																	label-when-on={objSlot.strSlotLabel} variant={objSlot.strState}
+																	data-id={objSlot.strId} onclick={clickSlot} class="slots slds-text-body_regular">	<!-- <T01> -->
+																</lightning-button-stateful>
+															</div>
+														</div>
+													</template>
+												</div>
+											</div>
+										</div>
+									</template>
+				
+									<!-- Empty day. -->
+									<template lwc:else>
+										<div key={objDay} class="slds-col slds-medium-size_1-of-7 slds-large-size_1-of-7 slds-grid_vertical">
+											<div class="noTimeslots"></div>
+										</div>
+									</template>
+								</template>
+							</div>
+						</div>
+					</div>
+				</div>
+			</template>
+
+			<!-- No Slot Message -->
+			<template lwc:else>
+				<div class="slds-illustration slds-illustration_large" aria-hidden="true">
+					<img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt="" />
+					<div class="slds-text-color_weak">
+						<h3 class="slds-text-heading_medium">No Slots available</h3>
+					</div>
+				</div>
+			</template>
+
+		</template>
+	</lightning-card>
+</template>

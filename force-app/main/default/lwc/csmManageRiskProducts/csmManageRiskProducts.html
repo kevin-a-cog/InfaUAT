@@ -1,0 +1,61 @@
+<!--
+/*
+ * Name			:	csmManageRiskProducts
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	6/12/2021
+ * Description	:	Manage Risk Products HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		6/12/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	<lightning-card>
+		<div class="slds-p-horizontal_small">
+			<!-- Header controls. -->
+			<div class="slds-card">
+				<lightning-card variant="Narrow" title={objConfiguration.strCardTitle} icon-name={objConfiguration.strIconName}>
+					<lightning-button if:true={showButtons} label={label.New_Button} variant="brand" onclick={newRecord} slot="actions"></lightning-button>
+					<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" alternative-text={label.Refresh_Button} class="slds-m-left_xx-small" onclick={refreshCard} 
+							slot="actions"></lightning-button-icon>
+					<template if:false={isPoppedOut}>
+						<lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+					</template>
+					<template if:true={isPoppedOut}>
+						<lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+					</template>
+				</lightning-card>
+			</div>
+
+			<!-- Card body. -->
+			<div class="slds-card">
+
+				<!-- Search field. -->
+				<div>
+					<lightning-input class="searchField" variant="label-hidden" placeholder={objConfiguration.strSearchPlaceholder} type="search" onchange={searchRecord}></lightning-input>
+				</div>
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col">&nbsp;</div>
+				</div>
+				<!-- Only display once the spinner is done. -->
+				<template if:false={boolDisplaySpinner}>
+					<!-- Table section. -->
+					<c-global-data-table class={objConfiguration.objParameters.strTableClass} obj-parameters={objConfiguration.objParameters} onaction={executeAction}></c-global-data-table>
+				</template>
+			</div>
+			<!-- Spinner. -->
+			<div class="spinner">
+				<template if:true={boolDisplaySpinner}>
+					<lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+				</template>
+			</div>
+		</div>
+	</lightning-card>
+
+	<template if:true={boolRiskProductCreateScreen}>
+		<c-csm-edit-risk-product-modal record-id={recordId} onclose={handleClose} risk-product-id={riskProductId} from-create-risk-product={boolNewScreen}></c-csm-edit-risk-product-modal>
+	</template>
+</template>

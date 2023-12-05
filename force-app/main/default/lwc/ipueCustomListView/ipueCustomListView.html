@@ -1,0 +1,53 @@
+<template>
+    
+    <div class="slds-page-header--object-home slds-page-header_joined slds-page-header_bleed slds-page-header slds-shrink-none test-headerRegion forceListViewManagerHeader"  style="background:white">
+        
+        <div class="slds-grid" if:true={DataTableResponseWrappper}>
+           <div class="slds-col slds-has-flexi-truncate firstHeaderRow" if:false={DataTableResponseWrappper.hideHeader}>
+              <div class="slds-media slds-no-space slds-grow" >
+                 
+                <div class="highlights-icon-container slds-avatar slds-m-right_small icon" style="background-color: #6a89e5" >
+
+                    <lightning-icon icon-name={DataTableResponseWrappper.tableIcon} alternative-text="custom7" title="custom7"></lightning-icon>
+  
+                </div>
+                 <div class="slds-media__body slds-align-middle" >
+                     
+                        <div class="slds-breadcrumb slds-list_horizontal slds-wrap slds-p-top--x-small" if:true={DataTableResponseWrappper}>
+                            <div class="slds-breadcrumb__item slds-line-height--reset slds-text-heading--small"><span class="slds-var-p-right_x-small">
+                                <b>{DataTableResponseWrappper.tableTitle}</b>                         
+                            </span>
+                        </div>
+                         </div>
+                 </div>
+              </div>
+           </div>
+           <div class="slds-col slds-no-flex slds-grid slds-align-bottom" if:true={showRefresh}>
+
+            <div class="slds-m-left_xx-small">
+               <div class="slds-button-group">
+                  <lightning-button-icon class="forceRefreshButton" icon-name="utility:refresh" onclick={refreshData}>
+                     
+                  </lightning-button-icon>
+               </div>
+    
+            </div>
+         
+            </div>
+        </div>
+
+        <div class="slds-box slds-m-top--medium" style="height: 400px;padding:0px">
+            <lightning-datatable data={finalSObjectDataList} 
+            columns={DataTableResponseWrappper.lstDataTableColumns} 
+            key-field="Id"
+            if:true={DataTableResponseWrappper}
+            load-more-offset="20"
+            class="CustomCSS"
+            onloadmore={handleLoadMore} enable-infinite-loading hide-checkbox-column>
+            </lightning-datatable>
+        </div>
+   
+
+
+     </div>
+</template>

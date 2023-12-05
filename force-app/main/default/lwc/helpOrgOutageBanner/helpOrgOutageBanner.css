@@ -1,0 +1,42 @@
+.service-name{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 25px;
+    color: #000000;
+}
+.child-service-name{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 21px;
+    line-height: 25px;
+    color: #000000;
+    padding-left: 30px;
+}
+.pod-component-status{
+    padding: 10px;
+    background-color: blue;
+    color: white;
+}
+.content-padding{
+    padding: 0px 16px;
+}
+.content-margin{
+    margin: 0px;
+    margin-right: 16px;
+}
+.service-status-operational{
+    padding: 10px;
+    background-color: #94D13C;
+    color: white;
+}
+.service-status-maintenance{
+    padding: 10px;
+    background-color: #4CC3D0;
+    color: white;
+}
+.padding-on-top{
+    padding-top: 30px;
+}

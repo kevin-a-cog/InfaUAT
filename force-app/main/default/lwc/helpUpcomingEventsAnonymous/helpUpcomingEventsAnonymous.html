@@ -1,0 +1,80 @@
+<template>
+    <template if:true={isGuestUser}>
+        <template if:true={resultSet}>
+            <div class="bg-color1">
+                <div class="container in-upcoming-events-container in-pb-30">
+                    <div class="d-flex align-items-center">
+                        <a href={eventLanding} class="in-section-link-header">
+                            <div class="in-section-heading">Upcoming Events</div>
+                            <lightning-icon class="chevron-down right-chev"
+                                icon-name="utility:chevronright" size="x-small">
+                            </lightning-icon>
+                        </a>
+                    </div>
+
+                    <div class="row">
+                        <template for:each={resultSet} for:item="item">
+                            <div key={item.Id} class="col-md-4">
+                                <div class="in-community-tile pt-0">
+                                    <div class="m-0 mb-3 pt-2">
+                                        <div class="in-community-desc">
+                                            <div class="in-community-name">
+                                                {item.Subject}
+                                            </div>
+                                            <div class="demo-only demo-only--sizing slds-grid slds-wrap slds-status2">
+                                                {item.Type}
+                                            </div>
+                                            <div>
+                                                <div class="row in-upcoming-events-row">
+                                                    <div class="col-sm-6 col-6 pl-0 in-upcoming-events-text">
+                                                        <lightning-icon class="iconcolor in-upcoming-events-icon"
+                                                            icon-name="utility:event" size="small">
+                                                        </lightning-icon>
+                                                        {item.ActivityDate}
+                                                    </div>
+                                                    <div class="col-sm-6 col-6 in-upcoming-events-text">
+                                                        <lightning-icon class="iconcolor in-upcoming-events-icon"
+                                                            icon-name="utility:clock" size="small">
+                                                        </lightning-icon>
+                                                        {item.ActivityTime}
+                                                    </div>
+                                                </div>
+                                                <div class="row in-upcoming-events-row">
+                                                    <div
+                                                        class="in-upcoming-events-location in-upcoming-events-text pl-0">
+                                                        <lightning-icon class="iconcolor in-upcoming-events-icon"
+                                                            icon-name="utility:checkin" size="small">
+                                                        </lightning-icon>
+                                                        {item.Location}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex in-upcoming-events-cta">
+                                                <div>
+                                                    <lightning-button data-id={item.Id} data-value={item.Subject} variant="brand-outline"
+                                                        label="JOIN EVENT" onclick={joinEvent}
+                                                        disabled={item.disablebutton}></lightning-button>
+                                                </div>
+                                                <!-- <div style="padding-left:73px;">
+                                        <a href={item.Link} class="row in-take-me-cta change-pointer m-0 ml-auto p-2">
+                                            Learn More
+                                            <i style="font-style: normal; padding-left: 5px;"><span>&#8594;</span></i>
+                                        </a>
+
+                                    </div> -->
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                </div>
+            </div>
+        </template>
+    </template>
+</template>

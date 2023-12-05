@@ -1,0 +1,55 @@
+<!--Page to Call Lighting Component for Add Product for Hybrid Deal Management (Opportunity)-->
+<apex:page standardController="Opportunity">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <apex:includeLightning />
+    <div id="lightning" />    
+    
+    <div id="toast" class="slds-scope slds-hide" style="height:4rem;display:none;">
+        <div class="slds-notify_container slds-is-relative">
+            <div id="theme" class="slds-notify slds-notify_toast slds-theme_error" role="status">
+                <span class="slds-assistive-text">Error</span>
+                <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                    <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                        <use xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#error')}"></use>
+                    </svg>
+                </span>
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small" id="heading_small">Error</h2>
+                </div>
+                <div class="slds-notify__close">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    var recordId = "{!$CurrentPage.parameters.id}";
+    $Lightning.use("c:OpportunityApp", function() {
+        $Lightning.createComponent(
+            "c:OpportunityProductsList",
+            {"recordId" : recordId,
+            "VfPageMethod" : showToast},
+            "lightning"
+        );
+        
+    });
+    function showToast(message,duration,theme) {
+        document.getElementById('theme').classList.remove('slds-theme_error');
+        document.getElementById('theme').classList.remove('slds-theme_success');
+        document.getElementById('theme').classList.add('slds-theme_'+theme);
+            
+        document.getElementById('heading_small').innerHTML = message;
+        document.getElementById('toast').classList.remove('slds-hide');
+        document.getElementById('toast').scrollIntoView();
+        document.getElementById('toast').classList.add('slds-show');
+        document.getElementById('toast').style.display = 'block';
+        setInterval(function(){closeToast()},duration);
+    }
+    function closeToast(){
+        document.getElementById('toast').style.display = 'none';
+        document.getElementById('toast').classList.add('slds-hide');
+        document.getElementById('toast').classList.remove('slds-show');
+    }
+    </script>
+    </html>
+</apex:page>

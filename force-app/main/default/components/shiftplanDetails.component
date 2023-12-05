@@ -1,0 +1,29 @@
+<apex:component access="global" controller="shiftPlanDetailsCtrl">
+
+    <apex:attribute name="shiftPlanValue" type="String" description="This is the Id of the Shift Plan" assignTo="{!shiftPlanId}" access="global"/>
+     
+    <table border="1" style="border-collapse:collapse">
+        <thead>    
+            <tr>
+                <th>Skill</th>
+                <th>User FullName</th>
+                <th>User Phone</th> 
+                <th>User Team</th>
+                
+            </tr>
+        </thead>        
+        <tbody>
+        <apex:repeat value="{!shiftRequest}" var="req">
+            <apex:repeat value="{!req.Shift_Allocations__r}" var="allocation">
+                <tr>
+                    <td>{!req.Skill__r.Name}</td>
+                    <td>{!allocation.Service_Resource__r.RelatedRecord.Name}</td>
+                    <td>{!allocation.Service_Resource__r.RelatedRecord.Phone}</td>
+                    <td>{!allocation.Service_Resource__r.RelatedRecord.GCS_Team__c}</td>
+                </tr>
+            </apex:repeat>            
+        </apex:repeat>
+        </tbody>   
+    </table>
+
+</apex:component>

@@ -1,0 +1,221 @@
+<template>
+
+  <!-- <lightning-card title="Next Action Recommendation" icon-name="standard:actions_and_buttons" >-->
+    <div class="slds-card ">
+      <div class="slds-card-header slds-grid slds-m-left_small slds-m-right_small slds-m-top_small ">
+        <div class="slds-media slds-media--center slds-has-flexi-truncate">
+          <div class="slds-media__figure">
+
+            <lightning-icon icon-name="standard:actions_and_buttons" alternative-text="Recommendations"
+                                      title="Recommendations" >
+          </lightning-icon>
+            
+          </div>
+          <div class="slds-media__body slds-truncate">
+            <h2>
+                <span class="slds-text-heading--small">Next Action Recommendations</span>
+              
+            </h2>
+          </div>
+       </div>
+       <div class="slds-no-flex">
+         <div if:true={show}>
+          <lightning-button-icon icon-name="utility:down" alternative-text="Hide"
+                                      class="slds-m-left_x-small" title="Hide" onclick={hideRecommendation}>
+          </lightning-button-icon>
+          </div>
+
+          <div if:false={show}>
+
+          <lightning-button-icon icon-name="utility:right" alternative-text="Show"
+                                      class="slds-m-left_x-small" title="Show" onclick={showRecommendation}>
+          </lightning-button-icon>
+          </div>
+        </div>
+      </div>
+
+      <div if:true={show}>
+
+      <div class= "slds-card__body slds-card_tiles slds-grid slds-m-left_small slds-m-right_small slds-m-top_small">
+   
+                    <ul class="slds-list--vertical ">
+                      
+                      <template if:true={suggestionarr}>
+
+                        <template iterator:it={suggestionarr}>
+
+                          <li class="slds-tile slds-media slds-has-dividers_around-space slds-has-tiles--space " style="background-color: #f3f2f2" key={it.value.id}>
+
+                            <lightning-icon icon-name="action:info"  class="slds-icon_medium" alternative-text="Suggestion" title="Suggestion">
+                            
+                            </lightning-icon>
+
+                            <div class="slds-media__body">
+                              <div class="slds-grid slds-grid--align-spread slds-has-flexi-truncate">
+                                <!--<p class="slds-tile__title slds-truncate"><a href="#">{it.value.Name}</a></p>-->
+                              </div>
+                              <div class="slds-tile__detail slds-m-left_small ">
+                                <dl class="slds-dl--horizontal slds-text-body--small">
+                                
+                                  <dd class="slds-tile__meta">
+                                    <p>
+                                    <lightning-formatted-text value ={it.value.Next_Action_Summary__c}>
+
+                                    </lightning-formatted-text>
+                                    </p>
+                                  </dd>
+                              
+                                </dl>
+                              </div>
+                              <!-- commented actions
+                              <div class="slds-grid ">
+
+                                <lightning-button-icon icon-name="utility:like" alternative-text="Accept"
+                                  class="slds-m-left_x-small" title="Accept" onclick={updateRecommendationAccepted}>
+                                </lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:dislike" alternative-text="Reject"
+                                  class="slds-m-left_x-small" title="Reject" onclick={updateRecommendationRejected}>
+                                </lightning-button-icon>
+                              </div>
+                            -->
+                            </div>
+
+                          </li>
+
+                        </template>
+                      </template>
+
+                      <!--Commented Taks and engagements
+                      <template if:true={taskarr}>
+
+                        <template iterator:it={taskarr}>
+
+                          <div class="slds-tile slds-media " key={it.value.id}>
+
+                            <lightning-icon icon-name="action:new_task" class="slds-icon_medium" alternative-text="New Task" title="New Task">
+                            </lightning-icon>
+
+
+                            <div class="slds-media__body slds-m-left_small ">
+                              <div class="slds-grid slds-grid--align-spread slds-has-flexi-truncate">
+                                <p class="slds-tile__title slds-truncate"><a href="#">{it.value.Name}</a></p>
+                              </div>
+                              <div class="slds-tile__detail">
+                                <dl class="slds-dl--horizontal slds-text-body--small">
+                                  <dt class="slds-dl--horizontal__label">
+                                        <p >Next Action Owner:</p>
+                                      </dt>
+                                  <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <p > {it.value.Next_Action_Owner__r.Name}</p>
+
+                                  </dd>
+                                  <dt class="slds-dl--horizontal__label">
+                                        <p >Next Action BU:</p>
+                                      </dt>
+                                  <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <p > {it.value.Next_Action_BU__c}</p>
+                                  </dd>
+                                  <dt class="slds-dl--horizontal__label">
+                                        <p >Summary:</p>
+                                      </dt>
+                                  <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <p > {it.value.Next_Action_Summary__c}</p>
+                                  </dd>
+                                  <dt class="slds-dl--horizontal__label">
+                                        <p >Action Time Period:</p>
+                                      </dt>
+                                  
+                                  <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <p > {it.value.Action_Time_Period__c} Days</p>
+                                  </dd>
+                                </dl>
+                              </div>
+                              <div class="slds-grid ">
+
+                                <lightning-button-icon icon-name="utility:like" alternative-text="Accept"
+                                  class="slds-m-left_x-small" title="Accept" onclick={updateRecommendationAccepted}>
+                                </lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:dislike" alternative-text="Reject"
+                                  class="slds-m-left_x-small" title="Reject" onclick={updateRecommendationRejected}>
+                                </lightning-button-icon>
+                              </div>
+                            </div>
+
+                          </div>
+
+                        </template>
+                      </template>
+
+                      <template if:true={engagementarr}>
+
+                        <template iterator:it={engagementarr}>
+
+                          <div class="slds-tile slds-media " key={it.value.id}>
+
+                            <lightning-icon icon-name="action:new_group" alternative-text="Engagement" title="Engagement">
+                            </lightning-icon>
+
+                            <div class="slds-media__body slds-m-left_small">
+                              <div class="slds-grid slds-grid--align-spread slds-has-flexi-truncate">
+                                <p class="slds-tile__title slds-truncate"><a href="#">{it.value.Name}</a></p>
+                              </div>
+                              <div class="slds-tile__detail">
+                                <dl class="slds-dl--horizontal slds-text-body--medium">
+                                  <dt class="slds-dl--horizontal__label">
+                                        <p >Next Action Owner:</p>
+                                      </dt>
+                                  <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <p > {it.value.Next_Action_Owner__r.Name}</p>
+
+                                  </dd>
+                                  <dt class="slds-dl--horizontal__label">
+                                        <p >Next Action BU:</p>
+                                      </dt>
+                                  <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <p > {it.value.Next_Action_BU__c}</p>
+                                  </dd>
+                              
+                                      <dt class="slds-dl--horizontal__label">
+                                        <p >Summary:</p>
+                                      </dt>
+                                    
+                                  <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <p > {it.value.Next_Action_Summary__c}</p>
+                                  </dd>
+                                
+                                      <dt class="slds-dl--horizontal__label">
+                                        <p >Action Time Period:</p>
+                                      </dt>
+                                  
+                                  <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <p > {it.value.Action_Time_Period__c} Days</p>
+                                  </dd>
+                                </dl>
+                              </div>
+                              <div class="slds-grid ">
+
+                                <lightning-button-icon icon-name="utility:like" alternative-text="Accept" class="slds-m-left_x-small"
+                                  title="Accept" onclick={updateRecommendationAccepted}>
+                                </lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:dislike" alternative-text="Reject" class="slds-m-left_x-small"
+                                  title="Reject" onclick={updateRecommendationRejected}>
+                                </lightning-button-icon>
+                              </div>
+                            </div>
+
+                          </div>
+
+                        </template>
+                      </template>
+                    -->
+                    </ul>
+          
+      </div>
+    </div>
+      <template if:true={nextActionRecommendations.error}>
+        <p></p>
+      </template>
+
+    </div>
+   
+</template>

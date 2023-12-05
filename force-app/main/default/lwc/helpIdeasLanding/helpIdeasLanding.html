@@ -1,0 +1,194 @@
+<template>
+    <template if:true={showFilters}> 
+
+        <div class="row">
+            <div class="col-12">
+                <div class="in-communities-bar">
+                    <div class="in-communities-filter">
+                        <c-help-multi-pick-list if:true={firstFilter} options={firstFilter} selectedfilters={selectedfilters}
+                            onvaluechange={handlefirstChange} label="FILTER BY" placeholder={firstplaceholder}
+                            class="filter-combo" data-id="in-first-filter">
+                        </c-help-multi-pick-list>
+                        <c-help-multi-pick-list if:true={secondFilter} options={secondFilter} onvaluechange={handlesecondChange}
+                            selectedfilters={selectedfilters} label="" placeholder={secondplaceholder} class="filter-combo"
+                            data-id="in-second-filter">
+                        </c-help-multi-pick-list>
+                        <c-help-multi-pick-list if:true={thirdFilter} options={thirdFilter} onvaluechange={handlethirdChange}
+                            label="" placeholder={thirdplaceholder} class="filter-combo">
+                        </c-help-multi-pick-list>
+                        <!-- <div class="more-filters">More Filters</div> -->
+                    </div>
+
+                    <div class="in-communities-sortview">
+                        <div class="in-communities-sort">
+                            <lightning-combobox label="SORT BY" placeholder="Select" value={selectedProduct} options={productList}
+                                onchange={handleChange1}>
+                            </lightning-combobox>
+                        </div>
+                        <div class="in-communities-view">
+                            <template if:true={isTileView}>
+                                <img class="tile-icon change-pointer" src={color_tile}>
+                
+                                <img onclick={toggleListView} class="list-icon change-pointer" src={list}>
+                            </template>
+                
+                            <template if:false={isTileView}>
+                                <img onclick={toggleTileView} class="tile-icon change-pointer" src={tile}>
+                
+                                <img class="list-icon change-pointer" src={color_list}>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="container p-0">
+        <template if:true={selectedfilters}>
+        
+            <div class="row">
+                <div class="col-12">
+                    <div class="search-filter-items">
+                        <template for:each={selectedfilters} for:item="filter">
+                            <div key={filter}>
+                                <div class="in-search-cta search-filter">
+                                    {filter}
+                                    <lightning-icon class="ml-3 change-pointer" icon-name="utility:close"
+                                        onclick={handleFilterOption} size="xx-small" alternative-text="close" title="close"
+                                        data-id={filter}></lightning-icon>
+                                </div>
+                            </div>
+                        </template>
+        
+                        <div class="pl-2 change-pointer clear-filter" onclick={handleClearAll}>
+                            Clear All Filters
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>
+    <div class="row in-wrapper-bg-fuild-grey row-margin1">
+        <template if:true={isTileView}>
+            <template for:each={resultSet} for:item="item">
+                <div key={item.Id} class="col-md-4 mb-3 mt-3">
+                    <div class="in-community-tile pt-0">
+                        <div class="row m-0 mb-3 pt-2">
+
+                            <template if:true={communityLogo}>
+                                <img style="width:71px; height:71px; margin-left: -15px;" src={communityLogo}>
+                            </template>
+
+                            <template if:false={communityLogo}>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-3 slds-upvote">
+                                        <div class="slds-green-upvote">
+                                            <lightning-button-icon variant="bare" class="green-icon"
+                                                icon-name="utility:chevronup" alternative-text="up" size="large" disabled="true">
+                                            </lightning-button-icon>
+                                        </div>
+                                        <div>
+                                            {item.upvoteCount}
+                                        </div>
+                                        <div>
+                                            <lightning-button-icon variant="bare" class="red-icon"
+                                                icon-name="utility:chevrondown" alternative-text="down" size="large" disabled="true">
+                                            </lightning-button-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <div class="in-title-follow">
+                                <div class="in-community-name">
+                                    {item.Name}
+                                </div>
+                                <template if:true={item.CreatorName}>
+                                    <div class="parent-comm-name">{item.CreatorName}&nbsp;-{item.createddate}</div>
+                                </template>
+                            </div>
+
+                        </div>
+                        <div class="hr"></div>
+                        <div class="in-community-desc">
+                            {item.Description}
+                        </div>
+                        <div>
+                            <a href={item.Link} class="row in-take-me-cta change-pointer" data-value={item.Name} onclick={handleOnClick}>
+                                <div>LEARN MORE</div>
+                                <i class="in-take-me-arrow"><span>&#8594;</span></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+
+    <template if:false={isTileView}>
+        <div class="in-wrapper-bg-fuild-grey row-margin pr-3">
+            <template for:each={resultSet} for:item="item">
+                <div key={item.Id} class="row row-list">
+                    <div class="col-md-12 mt-3">
+                        <div class="in-community-tile pt-0">
+                            <div class="row m-0 mb-3 pt-2">
+
+                                <template if:true={communityLogo}>
+                                    <img style="width:71px; height:71px; margin-left: -15px;" src={communityLogo}>
+                                </template>
+
+                                <template if:false={communityLogo}>
+                                    <div class="slds-grid slds-gutters">
+                                        <div class="slds-col slds-size_1-of-3 slds-upvote">
+                                            <div class="slds-green-upvote">
+                                                <lightning-button-icon variant="bare" class="green-icon"
+                                                    icon-name="utility:chevronup" alternative-text="up" size="large" disabled="true">
+                                                </lightning-button-icon>
+                                            </div>
+                                            <div>
+                                                {item.upvoteCount}
+                                            </div>
+                                            <div>
+                                                <lightning-button-icon variant="bare" class="red-icon"
+                                                    icon-name="utility:chevrondown" alternative-text="down"
+                                                    size="large" disabled="true">
+                                                </lightning-button-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <div class="in-title-follow">
+                                    <div class="in-community-name-list">
+                                        {item.Name}
+                                    </div>
+                                    <template if:true={item.CreatorName}>
+                                        <div class="parent-comm-name-list">{item.CreatorName}&nbsp;-{item.createddate}</div>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="hr"></div>
+                            <div class="in-community-desc-list">
+                                {item.Description}
+                            </div>
+                            <div class="d-flex">
+                                <a href={item.Link} class="row in-take-me-cta change-pointer m-0 ml-auto p-2" data-value={item.Name} onclick={handleOnClick}>
+                                    <div>LEARN MORE</div>
+                                    <i class="in-take-me-arrow"><span>&#8594;</span></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+    </template>
+
+    <template if:true={nosearchresult}>
+        <div class="row d-flex justify-content-center pt-3 pb-3 in-wrapper-bg-fuild-grey in-grey-margin">
+            No results found
+        </div>
+    </template>
+</template>

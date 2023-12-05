@@ -1,0 +1,52 @@
+.headerCard {
+    padding-bottom: 10px;
+    background-color: rgba(243, 242, 242, 1);
+    padding-top: 10px;
+    margin-top: -25px;
+}
+
+.headerCard lightning-icon.slds-icon-standard-actions-and-buttons.slds-icon_container {
+    margin-left: 17px;
+
+}
+
+.container {
+    background-color: #ffffff;
+}
+.csmplan-search-popout-hide {
+    display: none;
+    background: #fff;
+}
+
+.csmplan-search-normal {
+    background-color: #ffffff;
+}
+
+.csmplan-search-popout {
+    float: right;
+    z-index: 1569;
+    background-color: #fff;
+    position: fixed;
+    display: block;
+    top: 0;
+    border: 1px solid #C1C1C1;
+    left: 0;
+    width: 100%;    
+    overflow-y: scroll;
+    height: 94.5%;
+}
+.csm-plan-popinout {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+.CoveoPager {
+    margin-left: 0px !important;
+}
+.csm-lightning-card {
+    top: 0px;
+    height:38px;
+    display: inline-flex;
+}
+.align-end {
+    text-align: end;
+}

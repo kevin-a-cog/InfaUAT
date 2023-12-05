@@ -1,0 +1,129 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" controller="CSMPlanCommunicationController">
+    <aura:attribute name="isAddComment" type="Boolean" default="false" />
+    <aura:attribute name="isPoppedOut" type="Boolean" default="false" />
+    <aura:attribute name="showAddButton" type="Boolean" default="false" />
+	<aura:attribute name="boolDisplayCommentSection" type="Boolean" default="true" />
+	<aura:attribute name="boolDisplayChatterSection" type="Boolean" default="false" />
+	<aura:attribute name="boolDisplayEmailSection" type="Boolean" default="false" />
+	<aura:attribute name="intSelectedValue" type="Integer" default="1"/>
+	<aura:attribute name="strPredefinedBody" type="String" default=""/>
+    
+	<!-- Handles. -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<aura:handler name="change" value="{!v.intSelectedValue}" action="{!c.handleCommentSectionChange}"/>
+
+    <!-- If the component is Popped Out. -->
+    <aura:if isTrue="{!v.isPoppedOut}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-plan-communication-container" aria-modal="true" aria-describedby="modal-content-id-plan-communication-container" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-plan-communication-container" style="min-height: 100vh;">
+                    <lightning:card title="Plan Communication" iconName="custom:custom103">
+                        <aura:set attribute="actions">
+                            <div class="slds-grid">
+                                <aura:if isTrue="{! !v.isAddComment}">
+                                    <aura:if isTrue="{!v.showAddButton}">
+                                        <div class="slds-col slds-p-left_small">
+                                            <lightning:button iconName="utility:add" label="Add" name="newPlanComment" onclick="{!c.handleAddComment}" />
+                                        </div>
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!v.isAddComment}">
+                                    <div class="slds-col slds-p-left_small">
+                                        <lightning:buttonIcon iconName="utility:close" alternativeText="Close" onclick="{!c.handleClose}" name="close" />
+                                    </div>
+                                    <div class="slds-col slds-p-left_small">
+										<lightning:select value="{!v.intSelectedValue}" class="label-hidden">
+											<option value="1">Comment</option>
+											<option value="2">Chatter</option>
+											<option value="3">Email</option>
+										</lightning:select>
+                                    </div>
+                                </aura:if>
+								<div class="slds-col slds-p-left_small">                        
+									 <aura:if isTrue="{!v.isPoppedOut}">
+										 <lightning:buttonIcon iconName="utility:pop_in" alternativeText="popOut" onclick="{!c.popOut}" name="popOut" />
+									 </aura:if>
+								 </div>           
+                            </div>
+                        </aura:set>
+                        <div class="slds-p-horizontal_small">
+                            <aura:if isTrue="{!v.isAddComment}">
+                                <aura:if isTrue="{!v.boolDisplayChatterSection}">
+                                    <forceChatter:publisher context="RECORD" recordId="{!v.recordId}" />
+                                </aura:if>
+                                <aura:if isTrue="{!v.boolDisplayCommentSection}">
+                                    <div class="slds-p-bottom_large">
+                                        <c:csmPlanCommunicationEditForm  recordId="{!v.recordId}" isPoppedOut ="{!v.isPoppedOut}" onclose="{!c.handleClose}"/>
+                                    </div>
+                                </aura:if> 
+								<aura:if isTrue="{!v.boolDisplayEmailSection}">
+									<div class="slds-p-bottom_large">
+										<c:globalEmailComposer aura:id="globalEmailComposerInline" recordId="{!v.recordId}" boolDisplayCancelButton="false" boolOnlyDefaultAndCurrentUser="true" boolDefaultFromCurrentUser="true"
+												strParentRecordId="{!v.recordId}" strNotifyComponentOnEmailSent="csmPlanCommunicationTimelineViewer" strTemplateFolderName="Plan QuickText Templates"
+												strPredefinedBody="{!v.strPredefinedBody}" onsuccess="{!c.handleClose}" />
+										<c:csmPlanCommunicationButtons aura:id="csmPlanCommunicationButtons" recordId="{!v.recordId}" onsharelink="{!c.updateEmailBody}"/>
+									</div>
+								</aura:if>
+                            </aura:if>
+                            <c:csmPlanCommunicationViewer recordId="{!v.recordId}" />
+                        </div>
+                    </lightning:card>
+                </div>
+            </div>
+        </section>
+    </aura:if>
+
+    <aura:if isTrue="{! !v.isPoppedOut}">
+        <lightning:card title="Plan Communication" iconName="custom:custom103">
+            <aura:set attribute="actions">
+                <div class="slds-grid">
+                    <aura:if isTrue="{! !v.isAddComment}">
+                        <aura:if isTrue="{!v.showAddButton}">
+                            <div class="slds-col slds-p-left_small">
+                                <lightning:button iconName="utility:add" label="Add" name="newPlanComment" onclick="{!c.handleAddComment}" />
+                            </div>
+                        </aura:if>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isAddComment}">
+                        <div class="slds-col slds-p-left_small">
+                            <lightning:buttonIcon iconName="utility:close" alternativeText="Close" onclick="{!c.handleClose}" name="close" />
+                        </div>
+                        <div class="slds-col slds-p-left_small">
+							<lightning:select value="{!v.intSelectedValue}" class="label-hidden">
+								<option value="1">Comment</option>
+								<option value="2">Chatter</option>
+								<option value="3">Email</option>
+							</lightning:select>
+                        </div>
+                    </aura:if>  
+					<div class="slds-col slds-p-left_small">                        
+						 <aura:if isTrue="{! !v.isPoppedOut}">
+							 <lightning:buttonIcon iconName="utility:new_window" alternativeText="popOut" onclick="{!c.popOut}" name="popOut" />
+						 </aura:if>
+					 </div>             
+                </div>
+            </aura:set>
+            <div class="slds-p-horizontal_small">
+                <aura:if isTrue="{!v.isAddComment}">
+                    <aura:if isTrue="{!v.boolDisplayChatterSection}">
+                        <forceChatter:publisher context="RECORD" recordId="{!v.recordId}" />
+                    </aura:if>
+                    <aura:if isTrue="{!v.boolDisplayCommentSection}">
+                        <div class="slds-p-bottom_large">
+                            <c:csmPlanCommunicationEditForm  recordId="{!v.recordId}" isPoppedOut ="{!v.isPoppedOut}" onclose="{!c.handleClose}"/>
+                        </div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.boolDisplayEmailSection}">
+                        <div class="slds-p-bottom_large">
+                            <c:globalEmailComposer aura:id="globalEmailComposerPopOut" recordId="{!v.recordId}" boolDisplayCancelButton="false" boolOnlyDefaultAndCurrentUser="true" boolDefaultFromCurrentUser="true"
+									strParentRecordId="{!v.recordId}" strNotifyComponentOnEmailSent="csmPlanCommunicationTimelineViewer" strTemplateFolderName="Plan QuickText Templates"
+									strPredefinedBody="{!v.strPredefinedBody}" onsuccess="{!c.handleClose}" />
+							<c:csmPlanCommunicationButtons aura:id="csmPlanCommunicationButtons" recordId="{!v.recordId}" onsharelink="{!c.updateEmailBody}"/>
+                        </div>
+                    </aura:if>
+                </aura:if>
+            </div>
+        </lightning:card>
+    </aura:if>
+</aura:component>

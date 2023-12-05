@@ -1,0 +1,55 @@
+<template>
+    <div class="es-sidebar-wrapper">
+        <div class="es-sidebar__item">
+          <div class="es-success-offering-wrapper">
+            <h3 class="es-sidebar__header">Success Offerings</h3>
+            <div class="es-success-offering__item">
+              <p class="es-success-offering__name"><img src={signatureSuccesssIcon} alt="signature success icon" />{successOffering}</p>
+              <p class="es-success-offering__link"><a href={supportGuide} class="es-link" target="_blank">View Guide</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="es-sidebar__item">
+          <div class="es-info-team-wrapper">
+            <h3 class="es-sidebar__header">Know Your <span class="es-infa-orange">Informatica</span> Team</h3>
+            <div>
+              <div class="es-team-info-horizontal__info-item">
+                <div class="es-team-info-horizontal__label">Primary Support Account Contact</div>
+                <template for:each={primaryContacts} for:item="contact">
+                  <div key={contact.Id}>
+                    <div class="es-team-info-horizontal__value">
+                      <lightning-formatted-email value={contact.Contact.Email} label={contact.Contact.Name} hide-icon></lightning-formatted-email>
+                    </div>
+                  </div>
+                </template>
+              </div>
+                
+              <template for:each={accountMembersWrp} for:item="accountMember">
+                <div key={accountMember.strRoleName} class="es-team-info-horizontal__info-item">
+                <div class="es-team-info-horizontal__label">{accountMember.strRoleName}</div>
+                <template for:each={accountMember.accountMembers} for:item="Item">                    
+                    <div key={Item.Id} class="es-team-info-horizontal__value">
+                      <lightning-formatted-email value={Item.User.Email} label={Item.User.FirstName} hide-icon></lightning-formatted-email>
+                      <lightning-formatted-email value={Item.User.Email} label={Item.User.LastName} hide-icon></lightning-formatted-email>
+                    </div>
+                </template>
+              </div>
+              </template>
+             <!-- <template for:each={accountMembers} for:item="accountMember">
+                <div key={accountMember.Id} class="es-team-info-horizontal__info-item">
+                  <div class="es-team-info-horizontal__label">{accountMember.TeamMemberRole}</div>
+                  <div class="es-team-info-horizontal__value">
+                    <lightning-formatted-email value={accountMember.User.Email} label={accountMember.User.FirstName} hide-icon></lightning-formatted-email>
+                    <lightning-formatted-email value={accountMember.User.Email} label={accountMember.User.LastName} hide-icon></lightning-formatted-email>
+                  </div>
+                </div>
+              </template> -->
+            </div>
+          </div>
+          <!--<c-es-quicklinks primary-contacts={primaryContacts}  ></c-es-quicklinks>-->
+        </div>
+        
+      </div> 
+     
+        
+</template>

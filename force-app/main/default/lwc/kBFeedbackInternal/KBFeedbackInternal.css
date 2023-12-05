@@ -1,0 +1,11 @@
+.dislike {
+    background-color: red;
+    background:linear-gradient(to bottom,#dd644d 0,#d02200 100%);
+    width: 2rem;
+    height: 2rem;    
+  }
+  .like {
+    background:linear-gradient(to bottom,#56a54d 0,#0d7e00 100%);
+   width: 2rem;
+   height: 2rem;    
+ }

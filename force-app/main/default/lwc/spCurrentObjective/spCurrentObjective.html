@@ -1,0 +1,40 @@
+<template>
+    <!-- <lightning-spinner class="slds-is-fixed" alternative-text="Loading" size="small"></lightning-spinner> -->
+    <div>
+        <!-- <h4 class="sp-plan-info__label">Current Objectives</h4> -->
+        <p class="sp-current-obj__obj-name-header"><span class="sp-current-obj__obj-name">{objectiveName}</span></p>
+        <div class="row">
+			<template if:false={noCurrentObjective}>
+				<template if:true={boolDisplayBusinessGoal}>
+					<div class="col-md-4">
+						<div class="sp-current-obj__card">
+							<h5 class="sp-current-obj__header">Business Goal</h5>
+							<p class="sp-current-obj__desc">{nextBusinessGoal}</p>
+						</div>  
+					</div>
+				</template>
+				<template if:true={boolDisplayTechnicalGoal}>
+					<div class="col-md-4">
+						<div class="sp-current-obj__card">
+							<h5 class="sp-current-obj__header">Technical Goal</h5>
+							<p class="sp-current-obj__desc">{nextTechnicalGoal}</p>
+						</div>
+					</div>
+				</template>
+				<template if:true={boolDisplayTargetKPI}>
+					<div class="col-md-4">
+						<div class="sp-current-obj__card">
+							<h5 class="sp-current-obj__header">Target KPI</h5>
+							<p class="sp-current-obj__desc">{nextTargetKpi}</p>
+						</div>
+					</div>
+				</template>
+			</template>
+			<template if:true={noCurrentObjective}>
+				<div class="sp-content--empty">
+					<p>There are no Current Objectives</p>
+				</div>
+			</template>
+        </div> 
+    </div>    
+</template>

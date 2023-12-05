@@ -1,0 +1,847 @@
+@media screen and (min-width: 769px) {
+    .in-header {
+        height: 115px;
+    }
+}
+@media screen and (max-width: 768px) {
+    .in-header {
+        height: 68px;
+    }
+}
+.infa-header {
+    height: auto;
+}
+.infa-app-header {
+    position: relative;
+}
+@media screen and (max-width: 768px) {
+    .infa-app-header {
+        position: static;
+    }
+}
+.chevron-down {
+    margin-left: 5px;
+}
+.profile-dropdown-menu {
+    height: auto;
+    width: 300px !important;
+    left: -214px;
+    margin-top: 1px !important;
+}
+.infa-separator-profile {
+    border-right: 2px solid #949494;
+    height: 215px;
+    margin-top: 15px;
+}
+
+.profile-img-container {
+    height: 108px;
+    width: 180px;
+    border: 1px solid #373737;
+}
+.profile-section-1 {
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 5px;
+}
+.logout-btn {
+    font-size: 18px;
+    background: #ff4c00;
+    padding: 7px 20px;
+    color: #ffffff !important;
+    height: 40px !important;
+    display: inline-block;
+    text-transform: uppercase;
+    margin-top: 20px;
+}
+.logout-btn:hover {
+    background: #001aff;
+}
+.profile-img {
+    height: 100%;
+    display: block;
+    margin: auto;
+}
+.user-name {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 21px;
+    letter-spacing: 0.03em;
+    line-break: anywhere;
+}
+.user-email {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 21px;
+    letter-spacing: 0.03em;
+}
+.infa-header-notifications {
+    margin-right: 25px;
+    margin-top: 2px;
+}
+.infa-header-notifications.mobile {
+    display: none;
+}
+@media screen and (max-width: 768px) {
+    .infa-header-notifications {
+        margin: 0;
+    }
+    .infa-header-notifications.mobile {
+        display: flex;
+    }
+}
+.infa-header-notif-title {
+    font-size: 18px;
+}
+
+.infa-header-notif-body {
+    font-size: 12px;
+}
+
+.infa-header-notification-popup {
+    position: absolute;
+    min-width: 500px;
+    left: -463.5px;
+    top: 30px;
+}
+.infa-header-notification-popup.mobile {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .infa-header-notification-popup {
+        top: 0 !important;
+        position: relative;
+        left: 0;
+        margin: 0 auto;
+        min-width: 0;
+        width: 86%;
+    }
+    .infa-header-notification-popup.mobile {
+        display: block;
+    }
+}
+
+.infa-header-profile-links {
+    display: flex;
+}
+
+.notif-mobile {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .notif-mobile {
+        display: block !important;
+        top: 47px;
+        right: 0px;
+        height: 100vh;
+        margin-top: 43px;
+        position: absolute;
+        background: white;
+        width: 100%;
+    }
+}
+
+@-webkit-keyframes infacomSmoothScrollHeader {
+    0% {
+        -webkit-transform: translateY(-102px);
+        transform: translateY(-102px);
+    }
+
+    to {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes infacomSmoothScrollHeader {
+    0% {
+        -webkit-transform: translateY(-102px);
+        transform: translateY(-102px);
+    }
+
+    to {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+.infa-h-sticky {
+    position: fixed;
+    z-index: 8889; /* I2RT-7620: z-index: 5 to 8889 - updated by Chetan */
+    background: white;
+}
+.infa-header-nav-section {
+    padding-top: 8px;
+}
+.navbar-bg {
+    background-color: white;
+    /* box-shadow: 0 8px 6px -7px rgb(0 0 0 / 15%); */
+    box-shadow: 0 10px 51px 10px rgba(0,0,0,.25);
+}
+.infa-header-logo-container {
+    display: flex;
+    align-items: center;
+}
+.infa-navbar-logo {
+    width: 200px;
+}
+.infa-header-search-nav-section {
+    position: static;
+}
+.infa-navbar-search-section {
+    height: 40px;
+    position: relative;
+}
+.infa-navbar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+    position: static;
+}
+.infa-separator {
+    border-left: 2px solid #d3d3d3;
+    height: 19px;
+    top: 12px;
+    position: relative;
+}
+.infa-navbar-search-section-mobile {
+    display: none;
+}
+.infa-navbar-search {
+    cursor: pointer;
+    border: none;
+    color: transparent;
+    background-repeat: no-repeat;
+    border-radius: 5%;
+    position: absolute;
+    display: inline-block;
+    height: 29px;
+    width: 15px;
+    top: 30px;
+    right: 0;
+    margin-right: 15px;
+}
+@media screen and (max-width: 768px) {
+    .infa-navbar-search {
+        position: absolute;
+        top: 35px;
+        right: 7%;
+    }
+}
+.infa-navbar-search-form-wrapper {
+    position: relative;
+    width: 100%;
+}
+.infa-navbar-search-form-wrapper .search-bar {
+    width: 100%;
+}
+@media screen and (max-width: 768px) {
+    .infa-navbar-search-form-wrapper .search-bar {
+        margin: 0 auto;
+        width: 86%;
+    }
+}
+.infa-navbar-search-form-wrapper .search-bar input[type="text"] {
+    border-radius: 0 !important;
+    border: 1px solid #373737;
+}
+.infa-app-header .dropdown-menu {
+    border: none;
+    margin-top: 8px;
+    box-shadow: 1px 6px 11px 2px rgba(0, 0, 0, 0.312992);
+    top: 92%;
+    width: 100%;
+    padding: 20px;
+    border-radius: 0;
+}
+/* .infa-app-header .dropdown {
+  position: static;
+} */
+.infa-app-header .dropdown.infa-navbar-profile {
+    position: relative;
+}
+.infa-header-dropdown-title,
+.infa-header-dropdown-title a {
+    font-size: 16px;
+    font-weight: 500;
+    color: #323232;
+}
+.infa-header-dropdown-title a:hover {
+    color: #001aff;
+}
+.infa-header-dropdown-title.authenticated::after {
+    content: "";
+    background-image: url("/resource/./informaticaNetwork2/lock-black.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 15px;
+    width: 15px;
+    display: inline-block;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+.infa-header-dropdown-title.authenticated:hover::after {
+    background-image: url("/resource/./informaticaNetwork2/lock-blue.svg");
+}
+.infa-header-dropdown-description {
+    font-size: 12px;
+    padding-top: 5px;
+    padding-bottom: 15px;
+    width: 90%;
+    color: #323232;
+}
+
+.infa-header-dropdown-section.left,
+.infa-header-dropdown-section.middle {
+    background-image: linear-gradient(#4dc2cf 33%, rgba(255, 255, 255, 0) 0%);
+    background-position: right;
+    background-size: 2px 10px;
+    background-repeat: repeat-y;
+}
+.infa-header-reduced-dropdown {
+    position: relative;
+}
+.infa-header-reduced-dropdown .infa-dropdown-menu {
+    min-width: 350px;
+}
+.infa-app-header .row .infa-navbar-level2-col-text {
+    padding: 38px 21px 49px 44px;
+    background-repeat: no-repeat;
+}
+.infa-navbar-level2-col-text:first-of-type {
+    background: none !important;
+}
+.infa-navbar .nav-link.infa-nav-link {
+    font-size: 16px;
+    line-height: 26px;
+    color: #373737;
+    font-style: normal;
+    font-weight: 300;
+    padding-left: 0 !important;
+}
+
+.infa-navbar .nav-link.infa-nav-link:hover {
+    color: #001aff;
+}
+
+.infa-header-chevron.chevron-down {
+    --sds-c-icon-color-foreground-default: #373737;
+}
+
+.infa-navbar .nav-link.infa-nav-link:hover .infa-header-chevron.chevron-down {
+    --sds-c-icon-color-foreground-default: #001aff;
+}
+.infa-header-chevron.chevron-right {
+    --sds-c-icon-color-foreground-default: #001aff;
+    display: none;
+}
+.infa-header-chevron.chevron-left {
+    margin-right: 15px;
+    --sds-c-icon-color-foreground-default: #001aff;
+}
+.infa-header-nav-link.selected {
+    font-size: 22px;
+    color: #001aff;
+    font-weight: 300;
+}
+@media screen and (max-width: 768px) {
+    .infa-header-chevron.chevron-down {
+        display: none;
+    }
+    .infa-header-chevron.chevron-right {
+        display: block;
+        margin-left: auto;
+    }
+}
+.infa-header-nav-link {
+    position: static;
+    padding-bottom: 8px;
+}
+
+@media screen and (min-width: 769px) {
+    .infa-header-nav-link + .infa-header-nav-link {
+        margin-left: 25px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .infa-header-nav-link {
+        display: inline-block;
+        width: 100%;
+        padding-bottom: 25px;
+    }
+    .infa-header-nav-link a {
+        color: #373737;
+    }
+    .infa-header-nav-link .logout-btn {
+        color: #ffffff;
+    }
+}
+.infa-navbar .nav-link.infa-nav-link:hover,
+.infa-app-header-top-row .nav-item a:hover {
+    color: #001aff;
+}
+.infa-app-header-top-row .nav-item a:hover .infa-header-chevron-down {
+    --sds-c-icon-color-foreground-default: #001aff;
+}
+.infa-navbar .nav-link.infa-nav-link.infa-nav-login-link {
+    padding: 10px 1em 0px 1em;
+}
+.infa-navbar-profile {
+    position: relative;
+    top: 19px;
+    height: 46px;
+}
+.infa-justify-image {
+    margin-right: 10px;
+}
+.infa-inline-flex {
+    display: inline-flex;
+}
+.infa-navbar-profile .dropdown-menu {
+    width: auto;
+    position: absolute;
+    max-width: 10rem;
+    min-width: 7rem;
+    left: -68px;
+}
+.infa-navbar-header-login .dropdown-menu {
+    left: -38px;
+    top: 42px;
+}
+.infa-navbar-profile .dropdown-menu .dropdown-item {
+    padding-left: 10px;
+    padding-top: 0px;
+    background-color: transparent;
+    font-weight: 300;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.infa-navbar-profile .dropdown-menu a.dropdown-item {
+    color: #001aff;
+}
+.infa-navbar-profile .dropdown-menu a.dropdown-item:hover {
+    color: #ff4d00;
+}
+.infa-arrow-right {
+    font-style: normal;
+    font-size: 16px;
+    margin-left: 10px;
+    display: inline-block;
+    transition: transform 0.5s ease-in;
+    color: #001aff;
+}
+a:hover .infa-arrow-right {
+    color: #ff4d00;
+    transform: translateX(50%);
+    -ms-transform: translateX(50%);
+    transition: all 0.5s ease-out;
+}
+
+.infa-navbar-search-form-wrapper input[type="text"] {
+    border: 1px solid #373737 !important;
+    width: 100% !important;
+}
+.infa-navbar-search-form-wrapper form {
+    display: inline-block;
+}
+.infa-navbar-search-close {
+    cursor: pointer;
+    font-size: 24px;
+    position: absolute;
+    margin-top: -54px;
+    right: 10px;
+    z-index: 3;
+    color: #979797;
+}
+
+.infa-block {
+    display: block !important;
+}
+.infa-hide {
+    display: none !important;
+}
+.infa-app-header-top-row ul {
+    margin-bottom: 0;
+}
+.infa-app-header-top-row .nav-item a {
+    font-size: 16px;
+    line-height: 26px;
+    color: #112128;
+    font-style: normal;
+    font-weight: 300;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 112px;
+}
+.infa-header-user-links {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+.infa-header-user-links .infa-app-header-top-row {
+    margin-top: 28px;
+}
+@media screen and (max-width: 768px) {
+    .infa-app-header .nav-item.infa-nav-username {
+        padding-bottom: 25px;
+    }
+    .infa-app-header .nav-item.infa-nav-username a,
+    .infa-app-header .nav-item.infa-nav-logout a {
+        color: #001aff;
+    }
+}
+
+.infa-nav-profile-mobile {
+    display: none;
+}
+
+.infa-header-logo-mobile {
+    display: none;
+}
+
+.infa-header-navbar-nav.subList {
+    display: none;
+}
+
+.infa-header-navbar-nav.desktop-nav {
+    display: flex;
+}
+
+.infa-header-navbar-nav.mobile-nav {
+    display: none;
+}
+
+.infa-header-link-arrow-mobile {
+    display: none;
+}
+.infa-nav-username {
+    display: flex;
+}
+.infa-nav-username .infa-header-avatar {
+    margin-top: 6px;
+}
+
+.infa-nav-username .infa-header-avatar img {
+    width: 30px;
+    height: 30px !important;
+    border-radius: 61%;
+}
+
+.infa-nav-username.mobile {
+    display: none;
+}
+
+.infa-nav-logout.mobile {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .infa-header-link-arrow-mobile {
+        display: inline-block;
+        font-style: normal;
+        margin-left: 15px;
+    }
+}
+
+@media all and (min-width: 769px) {
+    .navbar .nav-item:hover .dropdown-menu {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .infa-app-header .navbar-collapse {
+        margin-top: 20px;
+    }
+    .infa-app-header .nav-item .dropdown-menu {
+        display: none;
+    }
+    .navbar .nav-link.infa-nav-link,
+    .navbar .nav-link.infa-nav-link.infa-nav-login-link {
+        font-size: 22px;
+        padding: 0;
+        display: flex;
+    }
+    .infa-app-header .navbar-light .navbar-toggler {
+        border: none;
+        float: right;
+        position: relative;
+        padding-right: 0;
+    }
+    .infa-navbar-search-section {
+        display: none;
+    }
+    .infa-navbar-profile {
+        top: -3px;
+    }
+    .infa-navbar-search-section-mobile {
+        display: block;
+        margin-bottom: 25px;
+    }
+    .infa-navbar-search-mobile {
+        margin-left: 0px;
+        height: 16px;
+        top: 11px;
+        margin-bottom: 15px;
+    }
+    .infa-nav-login-link {
+        display: none;
+    }
+    .infa-app-header .infa-navbar-header-login .dropdown-menu {
+        display: block;
+        left: auto;
+        top: auto;
+        box-shadow: none;
+    }
+    .infa-navbar-header-login .dropdown-menu .dropdown-item {
+        color: #112128;
+        padding-left: 0px;
+        margin-bottom: 14px;
+        font-size: 14px;
+    }
+    .infa-navbar-header-login .dropdown-menu .dropdown-item .infa-arrow-right {
+        display: none;
+    }
+    .infa-navbar-profile {
+        height: 103px;
+    }
+    .infa-app-header .navbar-collapse {
+        position: absolute;
+        background: white;
+        right: 0;
+        width: 100%;
+        height: 100vh;
+        top: 60px;
+        z-index: 100;
+        box-shadow: 7px 8px 10px 0 rgb(0 0 0 / 8%);
+    }
+    .infa-app-header-top-row {
+        display: none;
+    }
+    .infa-navbar {
+        display: flex;
+        width: 39%;
+        justify-content: flex-end;
+    }
+    .infa-header-nav-section {
+        display: flex;
+    }
+    .infa-navbar .row {
+        display: block;
+        margin-right: 0;
+        margin-left: 0;
+    }
+    .infa-nav-profile-mobile {
+        display: flex;
+    }
+    .infa-separator {
+        top: 13px;
+    }
+    .infa-navbar-logo {
+        margin-right: 0;
+    }
+}
+@media screen and (min-width: 1300px) {
+    .infa-navbar-search-close {
+        margin-left: 15px;
+    }
+}
+
+.btnIconOverlay {
+    position: absolute;
+    z-index: 1;
+    margin: 0.5% 0 0 92%;
+}
+/****************** Code for navbar icon and close icon for mobile starts**************/
+@media screen and (max-width: 768px) {
+    .navbar-toggler {
+        position: absolute;
+        text-indent: 100%;
+        white-space: nowrap;
+        z-index: 2;
+        cursor: pointer;
+        -moz-user-select: none;
+        user-select: none;
+        top: 0 !important;
+        right: -25px;
+        width: 60px;
+        height: 60px;
+        background-color: transparent;
+    }
+    .hamburgermenu {
+        position: absolute;
+        width: 20px;
+        height: 2px;
+        background: #001aff;
+        top: 50%;
+        margin-top: -1px;
+        left: 50%;
+        margin-left: -15px;
+        -webkit-transition: background 0.3s;
+    }
+    .hamburgermenu::after {
+        background: #001aff;
+        width: 65%;
+        transition: transform 0.3s, background 0s, -webkit-transform 0.3s;
+        top: 8px;
+        height: 100%;
+        right: 1px;
+        content: "";
+        position: absolute;
+    }
+    .hamburgermenu::before {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 71px;
+        background: #001aff;
+        width: 65%;
+        transition: transform 0.3s, background 0s, -webkit-transform 0.3s;
+        top: -7px;
+        height: 100%;
+    }
+    .infa-navbar-close-icon {
+        background-image: none !important;
+        position: absolute;
+        right: 0.8em;
+        top: 1em;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+        opacity: 1;
+    }
+    .infa-navbar-close-icon::before {
+        position: absolute;
+        left: 15px;
+        content: " ";
+        height: 23px;
+        width: 2px;
+        background-color: #001aff;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+    .infa-navbar-close-icon::after {
+        position: absolute;
+        left: 15px;
+        content: " ";
+        height: 23px;
+        width: 2px;
+        background-color: #001aff;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+    .nav-item .dropdown-menu {
+        padding: 0;
+    }
+    .nav-item .dropdown-menu .dropdown-item {
+        padding: 0;
+    }
+    .infa-header-search-section,
+    .infa-header-logo-container {
+        display: none;
+    }
+    .infa-header-logo-mobile {
+        display: block;
+    }
+}
+/****************** Code for navbar icon and close icon for mobile ends**************/
+/** Dropdown css**/
+@media screen and (max-width: 768px) {
+    .no-desc-for-mobile {
+        display: none;
+    }
+    .infa-navbar-level2-col-text {
+        background: none !important;
+    }
+    .infa-app-header .row .infa-navbar-level2-col-text {
+        padding: 0;
+        margin-left: 10px;
+    }
+
+    .infa-app-header .dropdown-menu {
+        box-shadow: none;
+    }
+
+    .infa-navbar-level2-text-heading {
+        font-size: 12px;
+    }
+    .infa-header-navbar-nav {
+        margin: 0 auto;
+        width: 86%;
+    }
+    .infa-header-navbar-nav.desktop-nav {
+        display: none;
+    }
+    .infa-header-navbar-nav.mobile-nav {
+        display: block;
+    }
+    .infa-nav-username.mobile {
+        display: block;
+    }
+    .infa-nav-logout.mobile {
+        display: block;
+    }
+}
+/** dropdown code ends**/
+.navbar .nav-item:hover .dropdown-menu {
+    display: block;
+}
+
+.nav-item .dropdown-menu .dropdown-item {
+    padding: 0;
+}
+.nav-item .dropdown-menu .dropdown-item:hover {
+    background: none;
+}
+.dropdown-toggle::after {
+    display: none;
+}
+
+.help-header-search-coveo{
+    min-height: 0;
+    margin-top: 7px;
+}
+
+@media screen and (max-width: 769px){
+    .help-header-search-coveo .CoveoSearchbox{
+        margin-right: 0px;
+    }
+}
+
+.in-header-lock{
+    --lwc-colorTextIconDefault: black;
+    padding-left:10px;
+}
+
+.in-header-outerdiv{
+    display: flex;
+}
+.in-search-bar-hide {
+    padding-top: 18px;
+}
+
+.in-icon-grey{
+    color:grey;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.infa-header-dropdown-item-disabled, .infa-header-dropdown-item-disabled a:first-child {
+    cursor: not-allowed!important;
+    opacity: .5;
+}
+
+
+.icn{
+    --sds-c-button-color-background: white;
+   --sds-c-tooltip-text-color: white;
+}
+.coveo-suggestion-link {
+    cursor: pointer;
+    color: #264ea1;
+}

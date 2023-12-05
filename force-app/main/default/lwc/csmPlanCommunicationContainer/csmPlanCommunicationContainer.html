@@ -1,0 +1,31 @@
+<!--
+/*
+ * Name			:	CsmPlanCommunicationContainer
+ * Author		:	Monserrat Pedroza
+ * Created Date	:   22/10/2021
+ * Description	:	HTML Page
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Deva M		            22/10/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>	
+	<!-- If the component is Popped Out. -->
+    <template if:true={isPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-plan-communication-container" aria-modal="true" aria-describedby="modal-content-id-plan-communication-container" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-plan-communication-container" style="min-height: 100vh;">
+                    <c-csm-plan-communication-viewer record-id={recordId} onpopout={popOut} is-popped-out></c-csm-plan-communication-viewer>
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+    <template if:false={isPoppedOut}>
+       <c-csm-plan-communication-viewer record-id={recordId} onpopout={popOut}></c-csm-plan-communication-viewer>
+    </template>
+</template>

@@ -1,0 +1,80 @@
+<template>
+    <lightning-card title="Shadow Assignment Request">
+        <template if:false={loaded}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <div class="slds-border_top slds-p-left_small slds-p-right_small slds-p-top_small slds-p-bottom_small slds-page-header__title slds-align_absolute-center">For Consulting Managers to submit candidates for Shadow assignment</div>
+
+        <div class = "slds-p-left_small slds-p-right_small slds-p-top_small">
+            <lightning-record-edit-form object-api-name="psa_Shadow_Engagement_Request__c">
+                <div class="slds-box slds-theme_shade">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_1-of-2">
+                            <span>
+                                <div class="slds-p-top_x-small slds-p-right_small slds-p-bottom_x-small">
+                                    <label for="consultantNameField">Consultant Name</label>
+                                    <lightning-input-field id="consultantNameField" value={recordId} field-name='Consultant_name__c' variant="label-hidden" disabled = "true"></lightning-input-field>
+                                </div>
+                            </span>
+                            <span>
+                                <div class="slds-p-top_x-small slds-p-right_small slds-p-bottom_x-small">
+                                    <label for="resourceSurveyField">Shadow Resource Survey Status</label>
+                                    <lightning-input-field id="resourceSurveyField" field-name='Shadow_Resource_Survey_Status__c' variant="label-hidden" disabled = "true"></lightning-input-field>
+                                </div>
+                            </span>
+                            <span>
+                                <div class="slds-p-top_x-small slds-p-right_small slds-p-bottom_x-small">
+                                    <label for="resourceSurveyField">Shadow Assignment Survey Status</label>
+                                    <lightning-input-field id="assignmentSurveyField" field-name='Shadow_Assignment_Survey_status__c' variant="label-hidden" disabled = "true"></lightning-input-field>
+                                </div>
+                            </span> 
+                            <span>
+                                <div class="slds-p-top_x-small slds-p-right_small slds-p-bottom_x-small">
+                                    <label for="trainingField">Training prerequisites completed?</label>
+                                    <abbr title="required" class="slds-required">*</abbr>
+                                    <lightning-input-field id="trainingField" field-name='Training_Certification__c' variant="label-hidden" onchange={handletrainingChange} required></lightning-input-field>
+                                </div>
+                            </span>                                                  
+                        </div>  
+                        <div class="slds-col slds-size_1-of-2">
+                            <span>
+                                <div class="slds-p-top_x-small slds-p-right_small slds-p-bottom_x-small">
+                                    <label for="shadowSchUrgencyField">Shadow Scheduling Urgency</label>
+                                    <abbr title="required" class="slds-required">*</abbr>
+                                    <lightning-input-field id="shadowSchUrgencyField" field-name='Shadow_Scheduling_Urgency__c' variant="label-hidden" onchange={handleShadowSchUrgencyChange} required></lightning-input-field>
+                                </div>
+                            </span>
+                            <span>
+                                <div class="slds-p-top_x-small slds-p-right_small slds-p-bottom_x-small">
+                                    <label for="focusAreaField">Shadow Focus Area</label>
+                                    <abbr title="required" class="slds-required">*</abbr>
+                                    <lightning-input-field id="focusAreaField" field-name='Shadow_Focus_Area__c' required variant="label-hidden" onchange={handleFocusAreaChange}></lightning-input-field>
+                                </div>
+                            </span> 
+                            <span>
+                                <div class="slds-p-top_x-small slds-p-right_small slds-p-bottom_x-small">
+                                    <label for="shadowObjField">Shadow Objective</label>
+                                    <lightning-input-field id="shadowObjField" field-name='Shadow_Objective__c' variant="label-hidden" onchange={handleShadowObjChange}></lightning-input-field>
+                                </div>
+                            </span>                                
+                            <span>
+                                <div class="slds-p-top_x-small slds-p-right_small slds-p-bottom_x-small">
+                                    <label for="commentField">Additional comments and details</label>
+                                    <lightning-input-field id="commentField" field-name='Comments_Details__c' variant="label-hidden" onchange={handleCommentChange}></lightning-input-field>
+                                </div>
+                            </span>
+                        </div>  
+                    </div>     
+                </div>                   
+            </lightning-record-edit-form>
+            <template if:true={displayError}>
+                <div class="slds-text-color_destructive slds-p-top_x-small slds-p-bottom_x-small">
+                    {errorMessage}
+                </div>
+            </template>
+            <div class="slds-clearfix slds-p-top_small slds-p-bottom_small slds-p-right_small slds-float_right"> 
+                <lightning-button class="slds-p-left_xx-small" onclick={handleSave} variant="brand" label="Submit"></lightning-button>                
+            </div> 
+        </div>
+    </lightning-card>
+</template>

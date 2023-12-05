@@ -1,0 +1,11 @@
+<template>
+    <template if:false={isLoggedInUserId}>
+        <div class="pt-3 pb-3"> 
+            <div class="container">
+                <div class="help-anonymous-msg-text">
+                    <p class="pl-1 pr-1"><a href={loginUrl}>Log in </a>to access personalized support tools and more. Not a member? <a href={registerUrl}>Sign Up</a></p>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,15 @@
+<!--
+*  @VF Page: showAccountsonTerr
+*  @Author: Wasim Akram
+*  @Date: 29 Jun 2021
+*  @Description: SALESRT-12995 : Vf Page to open Report in New Tab
+-->
+<apex:page standardController="Territory2" extensions="showAccountsonTerrController"> 
+    <script>
+    window.addEventListener('load', 
+                            function() { 
+                                window.open("{!terrUrl}","_self");
+                                window.open("{!url}");
+                            }, false);
+    </script>
+</apex:page>

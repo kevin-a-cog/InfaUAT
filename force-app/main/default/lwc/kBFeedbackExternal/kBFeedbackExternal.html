@@ -1,0 +1,45 @@
+<template>     
+    
+  <lightning-card >
+      <div class="slds-card">  
+          <div class="slds-m-around--small">
+             <div class="slds-m-top_medium slds-m-bottom_x-large">               
+                 <span> Was this article helpful? </span>
+                 <div class="slds-float_right">
+                   <lightning-button-icon  icon-name="utility:like"  onclick={handlelike}  variant={likevariant} alternative-text="Like"></lightning-button-icon>
+                   <lightning-button-icon class= "slds-m-left_x-small" icon-name="utility:dislike"  onclick={handledislike} variant={dislikevariant} alternative-text="Dislike"  title="Dislike"></lightning-button-icon>
+                   
+                 </div>              
+              </div>    
+          </div>
+<!--div data-id="divblock" class="slds-hidden slds-m-around--small slds-is-collapsed">    
+  <lightning-combobox 
+  name="Select a Reason"
+  label={label}
+  value={value}
+  placeholder="Select a Reason"
+  options={options}
+  onchange={handleChange} ></lightning-combobox>
+</div -->
+
+<div  data-id="feedbacksec" class="slds-m-around--small slds-is-collapsed ">        
+
+      <div class="slds-form-element">
+        <label class="slds-form-element__label" for="textarea-id-01">
+            
+              <span style="color:black" > Additional Comments </span>
+              <abbr data-id="descripstar" class="slds-hidden" title="required">* </abbr>
+          </label>
+          <div class="slds-form-element__control">
+              <textarea required={feedback} class="slds-textarea" placeholder="Please leave us some feedback"></textarea>
+          </div>
+      </div>
+  </div>
+
+  
+   <lightning-button data-id="submitbt"  style="color:black"  class="slds-align_absolute-center slds-m-around--medium slds-is-collapsed"  variant="brand" label="Submit" title="submit" onclick={handlesubmit}></lightning-button>
+  
+</div>
+</lightning-card>
+  
+</template>

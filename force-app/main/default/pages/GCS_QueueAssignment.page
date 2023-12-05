@@ -1,0 +1,15 @@
+<apex:page >        
+    <apex:includeLightning />
+    <div id="GCSAssignmen" />
+    <script>
+        $Lightning.use("c:GCS_QueueAssignmentApp", function() {
+            $Lightning.createComponent(
+                "c:gCS_QueueAssignment",
+                {},
+                "GCSAssignmen",
+                function(cmp) {
+                    
+                });
+            });        
+      </script>
+</apex:page>

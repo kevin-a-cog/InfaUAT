@@ -1,0 +1,5 @@
+<apex:page contentType="text/plain">
+    User-agent: *  
+    Allow: /s   
+    Sitemap: https://network.informatica.com/s/sitemap.xml
+</apex:page>

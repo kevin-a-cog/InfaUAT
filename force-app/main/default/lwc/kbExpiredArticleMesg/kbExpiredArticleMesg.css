@@ -1,0 +1,7 @@
+.show-expired-mesg {
+    color: red;
+    font-size: 13px;
+}
+.expired-article {
+    display: none;
+}

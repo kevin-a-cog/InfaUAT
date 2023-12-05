@@ -1,0 +1,303 @@
+<template>      
+
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+    
+	<!-- Component. -->
+    <div class="container slds-m-top_small">
+        <div class="row" style="background: rgb(243, 242, 242);">
+            <ul class="timeline-v2">
+                <template if:true={_commentList}>
+                <template for:each={_commentList} for:item="notif">
+                    <li if:true={notif.date} key={notif.date}  style="margin-right: .65rem;" >
+                        <lightning-formatted-text value={notif.date} style="margin-left: -15px;"></lightning-formatted-text>
+                        <template if:true={notif.comments}>
+                            <template for:each={notif.comments} for:item="comment">
+                                <div key={comment.time} data-id={comment.Id} class="d-md-flex">
+                                    <img src={comment.iconName}  class="slds-icon_container comment_icon" />
+                                    <div class="media collapsed expanded" data-uid={comment.uid} data-name="parent">
+                                        <!--Seaction Header-->
+                                        <div class="slds-page-header expand" style="padding:5px;" onclick={handleClick} data-uuid={comment.uid} data-name="control">
+                                            <div class="slds-page-header__row">
+                                                <div class="slds-page-header__col-title">
+                                                    <div class="slds-media">
+                                                        <div class="slds-media__figure">
+                                                            <div class="media-left">
+                                                                <!--Left Aligned compinent of Section Header-->
+                                                                <lightning-icon data-icon={comment.uid} 
+                                                                                class="slds-m-right_xx-small" 
+                                                                                size="xx-small" icon-name="utility:switch">
+                                                                </lightning-icon>
+                                                                <span style="margin-left:8px;font-weight:bold;">
+                                                                    <template if:true={comment.hasMetrics}>
+                                                                        <span class="tooltip">
+																			<lightning-icon class="slds-m-right_xx-small" data-id={comment.Id} size="xx-small" icon-name="utility:metrics" 
+																					onclick={openmetrics}></lightning-icon>
+																			<span class="tooltiptext">Click to open delivery metrics</span>
+																		</span>
+                                                                    </template>
+                                                                    <template if:true={comment.boolIsEmail}>
+																		<span class="tooltip">
+																			<lightning-icon class="slds-m-right_xx-small" data-record-id={comment.uid} size="xx-small" icon-name="utility:email" 
+																					onclick={openRecord}></lightning-icon>
+																			<span class="tooltiptext">{label.Email_Message_Tooltip}</span>
+																		</span>
+                                                                        {comment.strSubject}
+                                                                    </template>
+                                                                    <template if:false={comment.boolIsEmail}>
+                                                                        <template if:true={comment.boolIsAttentionRequest}>
+                                                                            <img src={commentIcons.RedArrow} title="Attention Request" width="12px;">&nbsp;
+                                                                        </template>
+                                                                        {comment.innternalCatgory}
+                                                                    </template>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <!--Right Aligned Area of Section Header-->
+                                                        <div class="slds-media__body">
+                                                            <div class="slds-float_right">
+                                                                <span style="font-size: 7pt">{comment.countdown}</span>                                                                
+                                                                <span class="slds-m-left_small">                                                                    
+                                                                    <lightning-button-icon icon-name="utility:edit"
+                                                                        variant="bare" data-name="edit" data-id={comment.Id}
+                                                                        onclick={handleClick} size="small" if:true={comment.isEditable}>
+                                                                    </lightning-button-icon>
+                                                                </span>
+                                                                <span class="slds-m-left_small">
+                                                                    <lightning-button-icon icon-name="utility:delete"
+                                                                        variant="bare" data-name="delete" data-id={comment.Id}
+                                                                        onclick={handleClick} size="small" if:true={comment.isDeletable}>
+                                                                    </lightning-button-icon>
+                                                                </span>
+                                                            </div>
+
+                                                            <div style="float:right;" class={comment.titleClass}>
+                                                                <div class="slds-page-header__name-title">
+                                                                    <h1>
+                                                                        <div class="slds-page-header__title slds-truncate" style="font-size: 9pt;">
+                                                                            
+                                                                            <a href="javascript:void(0);">
+                                                                                <img class="image--cover"
+                                                                                    src={comment.fullPhotoUrl}
+                                                                                    width="16px;">
+                                                                            </a>
+                                                                            <span class='slds-m-left_xx-small'>
+                                                                                {comment.creatorName}
+                                                                            </span>
+                                                                            <span if:true={comment.role}
+                                                                                    style="font-size: 7pt;" class='slds-m-left_xx-small'>({comment.role})</span>
+                                                                                <span class='slds-m-left_x-small'
+                                                                                    if:true={comment.isDraft}>
+                                                                                    <img src={commentIcons.draft_16} title="Draft"
+                                                                                        width="12px;">
+                                                                                </span>
+                                                                                <span class='slds-m-left_x-small'
+                                                                                    if:true={comment.isScheduled}>                                                                                    
+                                                                                    <img src={commentIcons.calendar_16} title="Scheduled"
+                                                                                        width="12px;">
+                                                                                </span>
+                                                                                <span class='slds-m-left_x-small'
+                                                                                    if:true={comment.isSubmitted}>
+                                                                                    <img src={commentIcons.submitted_16} title="Submitted"
+                                                                                        width="12px;">
+                                                                                </span>
+                                                                                <span class='slds-m-left_x-small' title="Important"
+                                                                                    if:true={comment.isHighImportance}>
+                                                                                    <span class="dot highImportance"></span>
+                                                                                </span>
+                                                                                <span class='slds-m-left_x-small' title="Private"
+                                                                                    if:true={comment.isPrivate}>
+                                                                                    <span class="circle private">P</span>
+                                                                                </span>
+                                                                                <span class='slds-m-left_x-small' title="Internal"
+                                                                                    if:true={comment.isInternal}>
+                                                                                    <span class="circle internal">I</span>
+                                                                                </span>                                                                            
+                                                                                <span class='slds-m-left_x-small' title="External"
+                                                                                    if:true={comment.isExternal}>
+                                                                                    <span class="circle external">E</span>
+                                                                                </span>
+                                                                        </div>
+                                                                    </h1>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Section Content-->
+                                        <div class="media-body media-middle slds-m-top_xx-small " data-time={comment.datetime}>
+											<template if:true={comment.boolIsAttentionRequest}>
+												<a href="#" data-record-id={comment.objAttentionRequest.objCase.Id} onclick={openRecord}>{comment.objAttentionRequest.objCase.CaseNumber}</a>
+												<br />
+											</template>
+                                            <lightning-formatted-rich-text value={comment.commentText}>
+                                            </lightning-formatted-rich-text>
+                                        </div>
+                                        <div class="slds-m-top_xx-small" if:true={comment.hasAttachments}>
+                                            <div class="slds-border_bottom">
+                                                <lightning-icon size="xx-small" icon-name="utility:attach">
+                                                </lightning-icon>&nbsp;Attachments ({comment.attachmentCount})
+                                            </div>
+
+                                            <!-- Attachments with Remove icon. -->
+                                            <lightning-pill-container items={comment.attachments} 
+                                                class="timelineAttachments" if:false={comment.isExternal}>
+                                            </lightning-pill-container>
+
+                                            <!-- Attachments without Remove icon. -->
+                                            <lightning-pill-container items={comment.attachments} data-id={recordId}
+                                                class="timelineAttachments csmPlanCommunicationTimeline-attachments" if:true={comment.isExternal}>
+                                            </lightning-pill-container>
+                                        </div>
+                                        <div class="slds-m-top_xx-small" if:true={comment.hasTaggedUsers}>
+
+                                            <!-- Tagged Users with Remove icon. -->
+                                            <lightning-pill-container items={comment.taggedUsers} data-id={recordId} onitemremove={removeTaggedUser}
+                                                    class="timelineAttachments" if:false={comment.isSubmitted}>
+                                            </lightning-pill-container>
+
+                                            <!-- Tagged Users without Remove icon. -->
+                                            <lightning-pill-container items={comment.taggedUsers} data-id={recordId}
+                                                    class="timelineAttachments csmPlanCommunicationTimeline-attachments" if:true={comment.isSubmitted}>
+                                            </lightning-pill-container>
+                                        </div>
+                                        <div class="slds-m-top_x-small" >  
+                                            <template if:false={comment.boolIsEmail}>
+                                                <lightning-button-icon if:true={comment.canReply} icon-name="utility:comments" variant="bare" data-attention={comment.boolIsAttentionRequest}
+                                                        data-case-id={comment.objAttentionRequest.objCase.Id} data-case-number={comment.objAttentionRequest.objCase.CaseNumber}
+                                                        data-customer-risk-reason={comment.objAttentionRequest.strCustomerRiskReason}
+                                                        icon-class="fill_brand"  class="fill_brand" data-name="reply" data-id={comment.Id} data-type={comment.Type} data-subtype={comment.Sub_Type} onclick={handleClick}>
+                                                </lightning-button-icon>
+                                            </template>                                          
+
+                                            <!-- If the current record is an Email message, we show Reply and Reply All. -->
+                                            <template if:true={comment.boolDisplayReplyIcons}>
+                                                <lightning-button-icon icon-name="utility:reply" variant="bare" icon-class="fill_brand" class="fill_brand" 
+                                                        data-action="1" data-id={comment.Id} onclick={replyEmail}>
+                                                </lightning-button-icon>&nbsp;
+                                                <lightning-button-icon icon-name="utility:reply_all" variant="bare" icon-class="fill_brand" class="fill_brand" 
+                                                        data-action="2" data-id={comment.Id} onclick={replyEmail}>
+                                                </lightning-button-icon>
+                                            </template>
+                                        </div>
+
+                                        <div if:true={comment.Plan_Comments} class="slds-m-top_x-small">
+                                            <template if:true={comment.showReplies}>
+                                            	<c-csm-plan-communication-timeline record-id={recordId} comment-list={comment.replies} bool-display-paginator="false" onclose={handleClose}></c-csm-plan-communication-timeline>            
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                    </li>
+                    </template>
+                </template>
+
+				<!-- Paginator. -->
+				<template if:true={boolDisplayPaginator}>
+					<div class="slds-grid">
+						<div class="slds-col">&nbsp;</div>
+					</div>
+					<c-global-paginator lst-records={lstOriginalRecords} int-total-records={lstOriginalRecords.length} onpaginatorchange={changeTablePage}></c-global-paginator>
+				</template>
+            </ul>
+        </div>
+    </div>
+    <!--Edit Form Modal-->
+    <template if:true={showEditCommentModal}>
+        <c-csm-plan-communication-edit-form-modal  record-id={recordId} comment-record-id={commentRecordId} alternate-id={parentCommentRecordId} onclose={handleClose} is-edit-form={showEditCommentModal}></c-csm-plan-communication-edit-form-modal>
+    </template>
+    <!--Edit Form Modal-->
+    <template if:true={parentCommentRecordId}>
+        <template if:true={showReplyCommentModal}>
+            <c-csm-plan-communication-edit-form-modal  record-id={recordId} str-parent-comment-id={parentCommentRecordId} onclose={handleClose} is-edit-form={showReplyCommentModal} 
+					is-reply-form={showReplyCommentModal} str-comment-body={strAttentionRequestPrepopulation}></c-csm-plan-communication-edit-form-modal>
+        </template>
+    </template>
+    <!--Delete Form Modal-->
+    <template if:true={showDeleteCommentModal}>
+        <c-csm-plan-communication-edit-form-modal  record-id={recordId} comment-record-id={commentRecordId} onclose={handleClose} is-edit-form={showEditCommentModal}></c-csm-plan-communication-edit-form-modal>
+    </template>
+
+	<!-- Email modal. -->
+	<template if:true={boolDisplayEmailModal}>
+		<section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header" style="padding-top: 0px; padding-bottom: 0px;">
+					<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={hideEmailModal}>
+						<lightning-icon icon-name="utility:close" variant="inverse" size="small"></lightning-icon>
+					</button>
+				</header>
+				<div class="slds-modal__content">
+					<c-global-email-composer record-id={strEmailRelatedRecordId} bool-is-reply={boolEmailIsReply} bool-is-reply-all={boolEmailIsReplyAll} bool-only-default-and-current-user="true"
+							str-notify-component-on-email-sent="csmPlanCommunicationTimelineViewer" str-related-record-id={strEmailRelatedRecordId} str-parent-record-id={recordId} 
+							str-template-folder-name="Plan QuickText Templates" onclose={closeModal} onready={createPlanComment}></c-global-email-composer>
+				</div>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</template>
+
+    <template if:true={openMetrics}>  
+        <div class="slds-modal slds-fade-in-open slds-backdrop">  
+          <div class="slds-modal__container">  
+            <!------HEADER Section-->  
+            <div class="slds-modal__header">  
+              <lightning-button-icon icon-name="utility:close" alternative-text="Close this window" size="large"  
+                variant="bare-inverse" onclick={closeMetrics} class="slds-modal__close">  
+              </lightning-button-icon>  
+              <h2 style="font-size:large">Email Metrics</h2>  
+            </div>  
+            <!------Body Section-->  
+            <div class="slds-modal__content slds-p-around_medium">  
+                <div >
+                   <!-- <p style="font-weight:bold;font-size:medium"> Email Delivery Status - <span style="font-weight:bold;font-size:medium">{caseCommentToShow.Delivery__c }</span></p>
+                    <p style="font-weight:bold;font-size:medium"> Customer has Read the Email - <span style="font-weight:bold;font-size:medium">{caseCommentToShow.Email_Opened__c }</span></p>-->
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                        <thead>
+                            <tr>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Email">Email Send To</div>
+                                 </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Email Opened">Email Opened</div>
+                                 </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Email Clicked">Any Links in the Email Clicked </div>
+                                        </th>
+                                            <th class="" scope="col">
+                                                <div class="slds-truncate" title="Delivery">Delivery</div>
+                                            </th>
+                                   
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <template for:each={metrics} for:item="metric">
+                                <tr key={metric.Id}>
+                                    <td>{metric.Email__c}</td>
+                                    <td><lightning-input type="checkbox" checked={metric.Email_Opened__c} disabled> </lightning-input></td>
+                                    <td><lightning-input type="checkbox" checked={metric.Email_Clicked__c} disabled> </lightning-input></td>
+                                    <td>{metric.Delivery__c }</td>
+                                </tr>
+                                </template>
+                           
+                        </tbody>
+                        
+                    </table>
+                </div>   
+            </div>  
+            <!------Footer Section-->  
+            <div class="slds-modal__footer">  
+              <lightning-button icon-name="utility:close" label="close" variant="brand" onclick={closeMetrics}>  
+              </lightning-button>  
+            </div>  
+          </div>  
+        </div>  
+      </template>  
+</template>

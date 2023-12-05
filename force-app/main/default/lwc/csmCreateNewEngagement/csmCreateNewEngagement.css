@@ -1,0 +1,27 @@
+.my-icon {
+    --sds-c-icon-color-foreground-default: white;
+}
+
+.slds-modal__container{
+    width: 60% !important;
+    max-width: 80% !important;
+}
+
+.overlay_custom{
+    color:grey;height:calc(100% - 60px); 
+}
+
+.slds-modal__content{
+    overflow: initial;
+}
+
+.coveomodal{
+    overflow: auto;
+    height: 80%;
+}
+
+.csm_coveo_max{
+    width: 95% !important;
+    max-width: 95% !important;
+    height: 110% !important;
+}

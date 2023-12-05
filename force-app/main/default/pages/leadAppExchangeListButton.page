@@ -1,0 +1,279 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0" standardController="Lead" recordSetVar="leads" extensions="leadAppExchangeHandler">
+
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Sync AppExchange Leads to Marketo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Import the Design System style sheet -->
+  <apex:slds />
+  <style type="text/css">
+  	#spinner-container {
+  		display: none;
+  	}
+  	#result {
+  		display: none;
+  	}
+  	
+  	.slds-spinner-text {
+  		position: absolute;
+  		top: 50%;
+  		left: 50%;
+  		transform: translate(-50%,124%);
+  	}
+  </style>
+</head>
+
+<!-- REQUIRED SLDS WRAPPER -->
+<body class="slds-scope">
+
+
+
+    <!-- MASTHEAD -->
+    <div class="slds-page-header">
+    	<div class="slds-grid">
+	    	<div class="slds-media">
+	    		<div class="slds-media__figure">
+	    			<span class="slds-icon_container slds-icon-standard-lead" title="Sync AppExchange Leads">
+	    				<svg class="slds-icon" aria-hidden="true">
+	    					<use xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#lead"></use>
+	    				</svg>
+	    			</span>
+	    		</div>
+	    		<div class="slds-media__body">
+	    			<p class="slds-text-title_caps slds-line-height_reset">Leads</p>
+	    			<h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Sync AppExchange Leads">Sync AppExchange Leads</h1>    			
+	    		</div>
+	    	</div>
+    	</div>
+    	
+    	<div class="slds-grid slds-m-top_medium">
+    		<div class="slds-col slds-align-bottom">
+    			<p class="slds-text-body_small">{!numberSelected} items</p>
+    		</div>
+    	</div>
+    </div>
+    <!-- / MASTHEAD -->
+
+    <!-- PRIMARY CONTENT WRAPPER -->
+    <div class="myapp" id="myapp">
+		
+		<div style="height: 6rem; padding: 2rem;">
+			<div id="spinner-container" class="slds-spinner-container">
+				<div role="status" class="slds-spinner slds-spinner_brand slds-spinner_medium">
+					<div class="slds-spinner__dot-a"></div>
+					<div class="slds-spinner__dot-b"></div>
+				</div>
+				<div class="slds-text-align_center slds-text-heading_medium slds-spinner-text">Syncing...</div>
+			</div>
+			
+			<div id="result" class="slds-box"></div>
+			
+		</div>
+
+    </div>
+    <!-- / PRIMARY CONTENT WRAPPER -->
+
+
+	<script type="text/javascript">
+		var syncResult;
+		
+		function messageBox(icon, text) {
+			var resultBox = document.getElementById("result");
+			
+			var resultMessageContainer = document.createElement("span");
+			resultMessageContainer.className = "slds-icon_container";
+			
+			var resultMessageIconSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+			var resultMessageIconSvgClass = "slds-icon slds-icon--small slds-m-right--small";
+			if(icon == "error") resultMessageIconSvgClass  += " slds-icon-text-error";
+			else resultMessageIconSvgClass  += " slds-icon-text-default";
+			resultMessageIconSvg.setAttribute("class", resultMessageIconSvgClass);
+			resultMessageIconSvg.setAttribute("aria-hidden", "true");
+			
+			var resultMessageIconUse = document.createElementNS("http://www.w3.org/2000/svg", "use");
+			resultMessageIconUse.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+			if(icon == "error") resultMessageIconUse.setAttributeNS("http://www.w3.org/1999/xlink", "href", "/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#error");
+			else resultMessageIconUse.setAttributeNS("http://www.w3.org/1999/xlink", "href", "/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#success");
+			
+			var resultMessageText = document.createElement("span");
+			resultMessageText.className = "slds-align-middle";
+			resultMessageText.appendChild(document.createTextNode(text));
+			
+			resultMessageIconSvg.appendChild(resultMessageIconUse);
+			resultMessageContainer.appendChild(resultMessageIconSvg);
+			resultMessageContainer.appendChild(resultMessageText);
+			resultBox.appendChild(resultMessageContainer);
+			
+			resultBox.style.display = "block";
+			document.getElementById("spinner-container").style.display = "none";
+		}
+		
+		function createResultsTable(results) {
+			
+			var hasResults = false;
+			var resultsTable = document.createElement("table");
+			var tableColumns = new Set();
+			
+			//gather columns
+			for(var r in results) {
+				hasResults = true;
+				
+				var resultDetails = results[r];
+				for(var rd in resultDetails) {
+					tableColumns.add(rd);
+				}		
+			}
+			
+			//build columns
+			var tableHead = document.createElement("thead");
+			
+			var tableHeadRow = document.createElement("tr");
+			tableHeadRow.className = "slds-text-title_caps";
+			
+			//create first column: row number
+			tableHeaderFirstCol = document.createElement("th");
+			tableHeaderFirstCol.setAttribute("scope", "col");
+			
+			tableHeaderText = document.createElement("div");
+			tableHeaderText.className = "slds-truncate";
+			
+			tableHeaderFirstCol.appendChild(tableHeaderText);
+			tableHeadRow.appendChild(tableHeaderFirstCol);
+			
+			//create second column: salesforce lead id
+			tableHeaderSecondCol = document.createElement("th");
+			tableHeaderSecondCol.setAttribute("scope", "col");
+			
+			tableHeaderSecondText = document.createElement("div");
+			tableHeaderSecondText.className = "slds-truncate";
+			tableHeaderSecondText.title = "id";
+			tableHeaderSecondText.appendChild(document.createTextNode("id"));
+			
+			tableHeaderSecondCol.appendChild(tableHeaderSecondText);
+			tableHeadRow.appendChild(tableHeaderSecondCol);
+			
+			tableColumns.forEach(function(val, key, set) {
+				
+				tableHeader = document.createElement("th");
+				tableHeader.setAttribute("scope", "col");
+				
+				tableHeaderText = document.createElement("div");
+				tableHeaderText.className = "slds-truncate";
+				tableHeaderText.title = val;
+				tableHeaderText.appendChild(document.createTextNode(val));
+				
+				tableHeader.appendChild(tableHeaderText);
+				tableHeadRow.appendChild(tableHeader);
+			});
+			
+			tableHead.appendChild(tableHeadRow);
+			
+			
+			//build rows
+			var tableBody = document.createElement("tbody");
+			var rowNumber = 1;
+			for(var r in results) {
+				
+				var tableRow = document.createElement("tr");
+				
+				//create first column: row number
+				var tableFirstCol = document.createElement("th");
+				tableFirstCol.setAttribute("scope", "row");
+				
+				tableFirstColText = document.createElement("div");
+				tableFirstColText.className = "slds-truncate";
+				tableFirstColText.title = rowNumber;
+				tableFirstColText.appendChild(document.createTextNode(rowNumber));
+				
+				tableFirstCol.appendChild(tableFirstColText);
+				tableRow.appendChild(tableFirstCol);
+				
+				//create second column: salesforce lead id
+				var tableSecondCol = document.createElement("td");
+				tableSecondCol.setAttribute("data-label", "id");
+				
+				tableSecondColText = document.createElement("div");
+				tableSecondColText.className = "slds-truncate";
+				tableSecondColText.title = r;
+				tableSecondColText.appendChild(document.createTextNode(r));
+				
+				tableSecondCol.appendChild(tableSecondColText);
+				tableRow.appendChild(tableSecondCol);
+				
+				tableColumns.forEach(function(val, key, set) {
+					var textValue = results[r].hasOwnProperty(val) ? results[r][val] : "";
+					
+					var tableRowCol = document.createElement("td");
+					tableRowCol.setAttribute("data-label", val);
+					
+					tableRowColText = document.createElement("div");
+					tableRowColText.className = "slds-truncate";
+					tableRowColText.title = textValue;
+					tableRowColText.appendChild(document.createTextNode(textValue));
+					
+					tableRowCol.appendChild(tableRowColText);
+					tableRow.appendChild(tableRowCol);
+				});
+				
+				tableBody.appendChild(tableRow);
+				
+				rowNumber++;
+			}
+			
+			
+			//build table
+			resultsTable.appendChild(tableHead);
+			resultsTable.appendChild(tableBody);
+
+			
+			if(hasResults) {
+				resultsTable.className = "slds-table slds-table_bordered slds-table_cell-buffer slds-m-top_large";
+				document.getElementById("myapp").appendChild(resultsTable);
+			}
+
+		}
+		
+		(function syncAppExchangeLeads() {
+			document.getElementById("spinner-container").style.display = "block";
+			var leads = {!selectedJSON};
+			
+			if(leads.length == 0) {
+				messageBox("error", "No leads selected.");
+				return;
+			}
+			
+			for(var i=0; i<leads.length; i++) leads[i] = leads[i].Id;
+			
+			
+			Visualforce.remoting.Manager.invokeAction(
+				"{!$RemoteAction.leadAppExchangeHandler.remoteSyncAppExchangeLeads}",
+				leads,
+				function(result, event) {
+					syncResult = result;
+					
+					if(result == null) {
+						
+						messageBox("error", "Error: Unexpected Error.");
+						
+					} else if(result.success) {
+						
+						messageBox("success", "Leads synced successfully.");
+					
+					} else {
+					
+						messageBox("error", "Error: " + result.errorMessage);
+					}
+					
+					if(result != null) createResultsTable(result.results);
+					
+				}
+			);
+		})();
+	</script>
+</body>
+<!-- / REQUIRED SLDS WRAPPER -->
+</html>
+</apex:page>

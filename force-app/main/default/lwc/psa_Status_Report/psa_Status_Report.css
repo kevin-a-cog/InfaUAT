@@ -1,0 +1,7 @@
+.button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+.accordion{
+  background-color: var(  --slds-c-accordion-summary-color-background ,transparent);
+}

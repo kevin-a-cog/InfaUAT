@@ -1,0 +1,263 @@
+<!--THE LWC COMPONENT USED TO ADJUST THE CANCEL REASON ON DELETIONOF QUOTE LINES-->
+<template>
+    <lightning-card>
+        <!--The main picklist value used for mass update-->
+        <div class=" slds-grid slds-wrap slds-p-bottom_small">
+            <div class="slds-size_1-of-3"></div>
+            <div class="slds-size_1-of-3">
+            <template if:true={churnStatusPicklistValues.data}>
+                <lightning-combobox name="churnstatus" label="Cancel Reason" value={picklistValue}
+                    placeholder="-Select-" options={churnStatusPicklistValues.data.values}
+                    onchange={handleChangePicklist}>
+                </lightning-combobox>
+            </template>
+            </div>
+            <div class="slds-size_1-of-3"></div>
+        </div>
+
+        <!--The main table that lists all the deleted quote Lines
+            Allows for mass update as well as single Line update-->
+        <div class="slds-scrollable_y" style="height:30rem;">
+            <div class="slds-p-horizontal_x-small">
+                <table aria-multiselectable="true"
+                    class="slds-table slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols"
+                    role="grid">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-text-align_right" scope="col" style="width:3.25rem;text-align:left;padding-left: 5px;">
+                                <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                                <div class="slds-th__action slds-th__action_form">
+                                    <div class="slds-checkbox">
+                                        <input type="checkbox" name="options" id="checkbox-unique-id-293"
+                                            value="checkbox-unique-id-293" tabindex="0"
+                                            aria-labelledby="check-select-all-label column-group-header"
+                                            onclick={selectAllClicked} />
+                                        <label class="slds-checkbox__label" for="checkbox-unique-id-293"
+                                            id="check-select-all-label">
+                                            <span class="slds-checkbox_faux"></span>
+                                            <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th class="" scope="col" style="width: 4%;">
+                                <div class="slds-truncate" title="Parent">Parent</div>
+                            </th>
+                            <th class="" scope="col" style="width: 7%;  padding-left: 7px;">
+                                <div class="slds-truncate" title="Contract">Contract</div>
+                            </th>
+                            <th class="" scope="col" style="width: 9%;  padding-left: 6px;">
+                                <div class="slds-truncate" title="Subscription Line">Subscription Line</div>
+                            </th>
+                            <th class="" scope="col" style="padding-left: 7px;">
+                                <div class="slds-truncate" title="Product">Product</div>
+                            </th>
+                            <th class="" scope="col" style="width: 7%;  padding-left: 7px;">
+                                <div class="slds-truncate" title="Quote">Quote</div>
+                            </th>
+                            <th class="" scope="col" style="width: 20%;  padding-left: 7px;">
+                                <div class="slds-truncate" title="Cancellation Reason">Cancel Reason</div>
+                            </th>
+                            <th class="" scope="col" style="width: 9%;  padding-left:30px;">
+                                <div class="slds-truncate" title="Child Lines">Child Lines</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={unrenewedRecs} for:item="unrenewed">
+                            <template if:false = {unrenewed.Parent_Product_Name__c}>
+                                <tr key={unrenewed.Id} aria-selected="false" class="slds-hint-parent">
+                                    <td class="slds-text-align_right" role="gridcell">                                        
+                                        <lightning-input type="checkbox" name={unrenewed.Name} id={unrenewed.Id}></lightning-input>
+                                    </td>
+
+                                    <th scope="row">
+                                        <template if:true={unrenewed.Is_Parent__c}>
+                                            <div class="slds-cell-wrap" title={unrenewed.Is_Parent__c}>P</div>
+                                        </template>
+                                        <template if:false={unrenewed.Is_Parent__c}>
+                                            <div class="slds-cell-wrap" title={unrenewed.Is_Parent__c}>C</div>
+                                        </template>
+                                    </th>
+
+                                    <td role="gridcell">
+                                        <div class="slds-cell-wrap"
+                                            title={unrenewed.Subscription__r.SBQQ__ContractNumber__c}>
+                                            {unrenewed.Subscription__r.SBQQ__ContractNumber__c}
+                                        </div>
+                                    </td>
+
+                                    <td role="gridcell">
+                                        <div class="slds-cell-wrap" title={unrenewed.Subscription__r.Name}>
+                                            {unrenewed.Subscription__r.Name}
+                                        </div>
+                                    </td>
+
+                                    <td role="gridcell">
+                                        <div class="slds-cell-wrap" title={unrenewed.Product__r.Name}>
+                                            {unrenewed.Product__r.Name}
+                                        </div>
+                                    </td>
+
+                                    <td role="gridcell">
+                                        <div class="slds-cell-wrap" title={unrenewed.Quote__r.Name}>
+                                            {unrenewed.Quote__r.Name}
+                                        </div>
+                                    </td>
+
+                                    <td role="gridcell">
+                                        <div class="slds-cell-wrap" title={unrenewed.Churn_Status__c}
+                                            style="overflow:visible">
+                                            <template if:true={churnStatusPicklistValues.data}>
+                                                <lightning-combobox name={unrenewed.Name} value={unrenewed.Churn_Status__c}
+                                                    id={unrenewed.Id}
+                                                    placeholder="-Select-"
+                                                    options={churnStatusPicklistValues.data.values} 
+                                                    onchange={handleChangePicklistLineLevel}>
+                                                </lightning-combobox>
+                                            </template>
+                                        </div>
+                                    </td>
+
+                                    <td role="gridcell" style="padding-left:45px;">
+                                        <template if:true = {unrenewed.has_children__c}>
+                                        <div class="slds-cell-wrap" title={unrenewed.Subscription__r.Name}>
+                                            <a name={unrenewed.Name} onclick={showChildView}>View</a>
+                                        </div>
+                                        </template>
+                                    </td>
+                                </tr>
+                                </template>
+                            </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </lightning-card>
+
+    <!--Modal shown on clicking of View child Lines, Read only table no editing allowed-->
+    <template if:true ={showChild}>
+    <!-- CHILD VIEW SECTION -->
+    <!-- ====================================================================================================================================================== -->
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large"
+        aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container">
+
+            <!-- MODAL HEADER -->
+            <!-- =============================================================================== -->
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    onclick={closeChildView}>
+                    <!--<lightning:icon class="slds-button__icon slds-button__icon_large fillColor"
+                            iconName="utility:close" size="x-small" alternativeText="search" />-->
+                    <lightning-icon class="slds-button__icon slds-button__icon_large fillColor"
+                        icon-name="utility:close" size="x-small" variant="inverse" alternative-text="Close">
+                    </lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">Child Lines</h2>
+            </header>
+
+            <!-- MODAL CONTENT -->
+            <!-- =============================================================================== -->
+            <div class="slds-modal__content slds-var-p-around_xxx-small" id="modal-content-id-1">
+                <div class="slds-p-horizontal_x-small slds-scrollable_y" style="height:20rem;">
+                                    <table aria-multiselectable="true"
+                    class="slds-table slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols"
+                    role="grid">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col" style="width: 7%;  padding-left: 7px;">
+                                <div class="slds-truncate" title="Contract">Contract</div>
+                            </th>
+                            <th class="" scope="col" style="width: 9%;  padding-left: 6px;">
+                                <div class="slds-truncate" title="Subscription Line">Subscription Line</div>
+                            </th>
+                            <th class="" scope="col" style="padding-left: 7px;">
+                                <div class="slds-truncate" title="Product">Product</div>
+                            </th>
+                            <th class="" scope="col" style="width: 7%;  padding-left: 7px;">
+                                <div class="slds-truncate" title="Quote">Quote</div>
+                            </th>
+                            <th class="" scope="col" style="width: 20%;  padding-left: 7px;">
+                                <div class="slds-truncate" title="Cancellation Reason">Cancel Reason</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={childUnrenewedRecs} for:item="unrenewed">
+                                <tr key={unrenewed.Id} aria-selected="false" class="slds-hint-parent">
+
+                                    <td role="gridcell">
+                                        <div class="slds-cell-wrap"
+                                            title={unrenewed.Subscription__r.SBQQ__ContractNumber__c}>
+                                            {unrenewed.Subscription__r.SBQQ__ContractNumber__c}
+                                        </div>
+                                    </td>
+
+                                    <td role="gridcell">
+                                        <div class="slds-cell-wrap" title={unrenewed.Subscription__r.Name}>
+                                            {unrenewed.Subscription__r.Name}
+                                        </div>
+                                    </td>
+
+                                    <td role="gridcell">
+                                        <div class="slds-cell-wrap" title={unrenewed.Product__r.Name}>
+                                            {unrenewed.Product__r.Name}
+                                        </div>
+                                    </td>
+
+                                    <td role="gridcell">
+                                        <div class="slds-cell-wrap" title={unrenewed.Quote__r.Name}>
+                                            {unrenewed.Quote__r.Name}
+                                        </div>
+                                    </td>
+
+                                    <td role="gridcell">
+                                        <div class="slds-cell-wrap" title={unrenewed.Churn_Status__c}
+                                            style="overflow:visible">
+                                            <template if:true={churnStatusPicklistValues.data}>
+                                                {unrenewed.Churn_Status__c}
+                                            </template>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+            <!-- MODAL FOOTER -->
+            <!-- =============================================================================== -->
+            <footer class="slds-modal__footer">
+                <!-- BUTTONS: RIGHT CORNER -->
+                <!-- ====================================== -->
+                <div class="slds-float_right">
+                    <div class="slds-button">
+                        <lightning-button variant="brand-outline" label="Close" onclick={closeChildView}></lightning-button>
+                        <!--<lightning:button label="Close" name="Cancel" onclick="{!c.closeModalOne}" />-->
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </section>
+
+    <!--SHADED BACKDROP -->
+    <!-- ===============================================================================-->
+    <div class="slds-backdrop slds-backdrop_open"></div>    
+    </template>
+
+    <!--Modal Footer-->
+    <footer class="slds-modal__footer"> 
+        <template if:false = {orderBillAndContract}>
+        <lightning-button disabled=true class ="slds-p-right_x-small" variant="Brand" label="Save" onclick={handleSave}></lightning-button>
+        </template>
+        <template if:true = {orderBillAndContract}>
+        <lightning-button disabled=true class ="slds-p-right_x-small" variant="Brand" label="Save" onclick={handleSaveAndPush}></lightning-button>
+        </template>
+        <lightning-button variant="Neutral" label="Cancel" onclick={closeModal}></lightning-button>
+    </footer>
+    <!--End of Modal Footer-->
+</template>

@@ -1,0 +1,125 @@
+.sp-timeline-wrapper {
+    padding: 0;
+}
+.sp-timeline-content {
+    padding-left: 2%;
+    margin-bottom: 0;
+}
+.sp-timeline__block {
+    position: relative;
+    padding-left: 50px;
+    margin-bottom: 20px;
+}
+.sp-timeline__action-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+}
+.sp-timeline__time {
+    margin-left: auto;
+    font-size: 11px;
+    color: #aaa;
+}
+.sp-timeline__content-datewise {
+    position: relative;
+}
+.sp-timeline__content-datewise:before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 32px;
+    width: 1px;
+    height: 98%;
+    background-color: #EEE;
+}
+.sp-timeline__content {
+    border-radius: 2px;
+    border: 1px solid #CCC;
+}
+.sp-timeline__header {
+    background: #F3F3F3;
+    padding: 6px;
+    font-size: 14px;
+}
+.sp-timeline__icon--regular {
+    /* background: #B4DF77; */
+    background: rgba(0, 169, 187, 0.7)
+}
+.sp-timeline__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    left: -16px;
+    top: 0;
+    margin-right: 10px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 32px;
+}
+.sp-timeline__icon img{
+    width: 18px;
+}
+.sp-timeline__icon {
+    position: absolute;
+    left: -1%;
+    top: 0; 
+}
+.sp-timeline__body {
+    padding: 16px;
+}
+.sp-timeline__body-text {
+    font-size: 13px;
+    line-height: 20px;
+}
+.sp-timeline__date {
+    font-size: 14px;
+    color: #333;
+    display: inline-block;
+    font-weight: 800;
+    margin-left: -20px;
+    padding-bottom: 15px;
+}
+.sp-timeline__time {
+    font-size: 10px;
+}
+.sp-timeline__attachment {
+    font-size: 13px;
+    margin-left: 10px;
+}
+.sp-timeline__attachment-items {
+    margin-left: 10px;
+}
+.sp-timeline__comment-header {
+    font-weight: bold;
+}
+.sp-timeline__heading .sp-timeline__avatar{
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin: 0 8px;
+}
+.sp-timeline__heading span {
+    margin-right: 4px;
+}
+.sp-slds-media-wrapper--inbound:before {
+    border: 1px solid #2196f3; 
+}
+.sp-slds-media-wrapper--outbound:before {
+    border: 1px solid #4caf50; 
+}
+ul::-webkit-scrollbar {
+    display: none;
+}
+@media screen and (max-width: 420px) {
+    .sp-timeline-wrapper {
+        padding: 0 10px 0 0;
+    }
+    .sp-timeline-content {
+        padding-left: 0;
+    }
+    .sp-timeline__content-datewise:before {
+        left: 12px;
+    }
+}

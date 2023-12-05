@@ -1,0 +1,3 @@
+<apex:page standardController="blng__RevenueSchedule__c">
+  You cannot delete Revenue Schedules !!!
+</apex:page>

@@ -1,0 +1,210 @@
+<template>
+    <div class="container slds-top-m_small">
+        <div class="row">
+            
+            <ul class="es-timeline__wrapper slds-scrollable_y col-md-10 col-xs-12" onscroll={handleScroll}>
+                <div class="es-timeline__options d-flex">
+                    <div class="d-md-flex es-lds-form-group">
+                        <!-- TEJASVI -> eSupport Feedback -->
+                        <!-- Amarender - I2RT-3151 - Modified Add Update to Add Updates/Files, Add comment to Add Updates/Files -->
+                        <lightning-button label="Add Updates/Files" onclick={handleClick} name="Add Updates/Files"
+                            class="es-button es-button--primary slds-m-right_x-small slds-m-bottom_x-small slds-show_inline-block"  if:true={showAddComment}>
+                        </lightning-button>
+                        <lightning-button 
+                            label="Expand All"
+                            onclick={handleClick}
+                            name="Expand"
+                            class="es-button es-button--primary slds-m-right_x-small slds-m-bottom_x-small slds-show_inline-block" 
+                            if:false={isExpanded}>
+                        </lightning-button>
+                        <lightning-button 
+                            label="Collapse All"
+                            onclick={handleClick}
+                            name="Collapse"
+                            class="es-button es-button--secondary slds-m-right_x-small slds-m-bottom_x-small slds-show_inline-block" 
+                            if:true={isExpanded}>
+                        </lightning-button>
+                        <lightning-input name="comment-search" label="Find a comment" placeholder="Find a comment..." 
+                        variant="label-hidden" type="search" onchange={handleCommentSearch}>
+                        </lightning-input>
+                        <!--<div class="slds-form-element">
+                            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                                <lightning-icon size="xx-small" class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" icon-name="utility:search"></lightning-icon>
+                                <input type="text" id="text-input-id-1" placeholder="Find something" class="slds-input"/>
+                            </div>
+                        </div>-->
+                    </div>
+                    <div class="es-dropdown pl-2">
+                        {sortedBy} &nbsp; &nbsp;
+                        <lightning-button-menu icon-name="utility:sort" alternative-text="Show menu" menu-alignment="right" 
+                        icon-size="large" onselect={handleCommentSort}>
+                            <template if:true={isSortedByEarliest}>
+                                <lightning-menu-item value="Latest" label="Sort by Latest"></lightning-menu-item>
+                            </template>
+                            <template if:false={isSortedByEarliest}>
+                                <lightning-menu-item value="Earliest" label="Sort by Earliest"></lightning-menu-item>
+                            </template>        
+                        </lightning-button-menu>
+                    </div>
+                </div>
+                <template for:each={caseUpdates} for:item="notif">
+                    <li key={notif.key} class="es-timeline__datewise">
+                        <span class="es-timeline__date">
+                            <lightning-formatted-date-time value={notif.key} year="numeric" month="short" day="2-digit" time-zone="UTC"></lightning-formatted-date-time> <!-- <T01> -->
+                        </span>
+                        <template for:each={notif.value} for:item="comment">
+                            <div key={comment.id} class="es-timeline__block">
+                                    <div class="es-slds-media-wrapper es-slds-media-wrapper--inbound">
+                                        <div class="es-slds-media__content">
+                                            <div class="slds-page-header">
+                                                <div class="slds-page-header__row">
+                                                    <div class="slds-page-header__col-title">
+                                                        <div class="slds-media">
+                                                            <div class="slds-media__body">
+                                                                <!-- <div class="slds-float_left"> -->
+                                                                    <div class="es-timeline__header d-md-flex">
+
+                                                                        <span class={comment.className}><img src={comment.iconName} alt="caseupdate" class="slds-icon_container"/></span>
+                                                                        <template if:false={comment.inbound}>
+                                                                            <img class="es-timeline__avatar" src={inboundImgSrc} alt="avatar" />
+                                                                        </template>
+                                                                        <template if:true={comment.inbound}>
+                                                                            <img class="es-timeline__avatar" src={comment.userPhoto} alt="avatar" />
+                                                                        </template>
+                                                                        <!-- <template if:true={comment.inbound}> -->
+                                                                             <span class="es-timeline__user-name">{comment.CreatedBy}</span>&nbsp;
+                                                                         <!-- </template> -->
+                                                                         <!-- <template if:false={comment.inbound}>
+                                                                            <span class="es-timeline__user-name">Informatica Support</span>&nbsp;
+                                                                        </template> -->
+                                                                        <span class="es-timeline__time">
+                                                                            <lightning-formatted-date-time value={comment.time} year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                                                                 minute="2-digit" hour12="false" time-zone={userTimeZone}></lightning-formatted-date-time> <!-- <T01> -->
+                                                                        </span>
+                                                                        <!-- <span>updated</span>&nbsp;
+                                                                        <span><b>{comment.header}</b></span> -->
+                                                                    </div>
+                                                                <!-- </div> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-media__body es-timeline__body">
+                                                <!-- TEJASVI -> eSupport Feedback
+                                                <div class="d-flex">
+                                                    <lightning-button-icon variant="container" size="x-small" icon-name={iconName} data-target-id={comment.id} onclick={handleToggle}></lightning-button-icon>
+                                                    <h6 class="es-timeline__comment-header">{comment.header}</h6>
+                                                </div> -->
+                                                <div class={className} data-id={comment.id} if:true={buttonClicked}>
+                                                    <div class="es-timeline__comment-text">
+                                                        <lightning-formatted-rich-text value={comment.comment}></lightning-formatted-rich-text>
+                                                        <!-- <template if:true={comment.inbound}> 
+                                                            <div class="row es-comment-row">
+                                                                 <img src={inboundimgsrc} alt="inbound" class="es-comment-text-left col-sm-1"/> 
+                                                                
+                                                            </div>
+                                                         </template> -->
+                                                        <!-- <template if:false={comment.inbound}>
+                                                            <div class="row es-comment-row">
+                                                                <img src={outboundimgsrc} alt="outbound" class="es-comment-text-left col-sm-1"/>
+                                                                <lightning-formatted-rich-text value={comment.comment}></lightning-formatted-rich-text>
+                                                            </div>
+                                                        </template> -->
+                                                    </div>
+                                                    <template if:true={comment.isChildCommentAvailable}>
+                                                        <template for:each={comment.childComments} for:item="childComment">
+                                                            <div key={childComment.id} class="es-timeline__header d-md-flex">
+                                                            <!-- I2RT-4634 commented below span tag -->
+                                                            <!-- span key={childComment.id} class={comment.className}><img src={childComment.iconName} class="slds-icon_container"/></span-->
+                                                                <template if:false={childComment.inbound}>
+                                                                    <img key={childComment.id} class="es-timeline__avatar" src={inboundImgSrc} alt="avatar" />
+                                                                </template>
+                                                                <template if:true={childComment.inbound}>
+                                                                    <img key={childComment.id} class="es-timeline__avatar" src={childComment.userPhoto} alt="avatar" />
+                                                                </template>
+                                                                    <span  key={childComment.id} class="es-timeline__user-name">{childComment.CreatedBy}</span>&nbsp;
+                                                            </div>        
+                                                            <div key={childComment.id} class="es-timeline__reply-block">
+                                                                <lightning-button-icon icon-name="utility:reply" variant="bare"
+                                                                    icon-class="fill_brand" class="fill_brand" name="reply">
+                                                                </lightning-button-icon>
+                                                                <span>1 Reply</span>
+                                                                <p class="es-timeline__reply"><lightning-formatted-rich-text value={childComment.comment}></lightning-formatted-rich-text></p>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                    <template if:true={comment.attachmentCount}>
+                                                        <div class="es-timeline__attachment">
+                                                            <lightning-icon size="xx-small" icon-name="utility:attach">
+                                                            </lightning-icon>&nbsp;Attachments ({comment.attachmentCount})                                    
+                                                            <template for:each={comment.attachmentNames} for:item="attachments">
+                                                                <span key={attachments}><a href="#">{attachments}</a></span>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                            <!-- <p class="es-timeline__link text-right"><a href="#">Read more</a></p> -->
+                                        </div>
+                                    </div>
+                                <!-- <template if:false={comment.inbound}>
+                                    <div class="es-slds-media-wrapper es-slds-media-wrapper--outbound">
+                                        <div class="es-slds-media__content">
+                                            <div class="slds-page-header">
+                                                <div class="slds-page-header__row">
+                                                    <div class="slds-page-header__col-title">
+                                                        <div class="slds-media">
+                                                            <div class="slds-media__body">
+                                                                <div class="slds-float_right">
+                                                                    <div class="es-timeline__header d-flex">
+                                                                        <div>
+                                                                            <img src={Avatar} alt="avatar" />
+                                                                            <span class="es-timeline__user-name">{comment.CreatedBy}</span>
+                                                                            <span class="es-timeline__comment-header">{comment.header}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-media__body es-timeline__body">
+                                                <div class="d-flex">
+                                                    <lightning-button-icon variant="container" size="x-small" icon-name={iconName} data-target-id={comment.id} onclick={handleToggle}></lightning-button-icon>
+                                                    <h6 class="es-timeline__comment-header">{comment.header}</h6>
+                                                </div>
+                                                <div class={className} data-id={comment.id} if:true={buttonClicked}>
+                                                    <div class="es-timeline__comment-text">
+                                                        <p>Thank you for contacting Informatica Global Customer Support.</p>
+                                                        <p>The issue you reported has been logged as case 02756492. Please take a moment to check if the environment details are accurate. A copy of this email is also marked to the primary contact of the project Badrinath Ramanujam.</p>
+                                                        <p>Thanks<br/>Global Customer Care</p>
+                                                    </div>
+                                                    <template if:true={comment.attachmentCount}>
+                                                        <div class="es-timeline__attachment">
+                                                            <lightning-icon size="xx-small" icon-name="utility:attach">
+                                                            </lightning-icon>&nbsp;Attachments ({comment.attachmentCount})                                    
+                                                            <template for:each={comment.attachmentNames} for:item="attachments">
+                                                                <span key={attachments}><a href="#">{attachments}</a></span>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template> -->
+                            </div>
+                        </template>
+                    </li>
+                </template>
+            </ul>
+            <template if:true={noCaseComment}>
+                <div class="es-content--empty slds-align_absolute-center">
+                    <p>There are no Case Comments available.</p>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

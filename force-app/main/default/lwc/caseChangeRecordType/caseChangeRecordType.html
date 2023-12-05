@@ -1,0 +1,282 @@
+<!--
+ * Name			:	CaseChangeRecordType
+ 	
+ * Description	:	This LWC is used to change the record type of case
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description							Tag
+ **********************************************************************************************************
+ Isha Bansal            03-30-2023     I2RT-6727            Include FTO in the change owner while record type change             T02
+-->
+<template>   
+    <lightning-quick-action-panel title="Change Record Type">
+        <div class="slds-is-relative">
+
+            <!--Spinner-->
+            <lightning-spinner alternative-text="Loading" size="medium" if:true={showSpinner}></lightning-spinner>
+
+            <!--Show on Closed Case-->
+            <template if:true={isClosedCase}>
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Convert Case</h2>
+                </header>
+                <div class="cCenterPanel" style="overflow-y: auto;">
+                    <div class="cTitle">{sCloseCaseErrorMsg}</div>
+                </div>
+            </template>
+
+            <!--Show on Open Case-->
+            <template if:false={isClosedCase}>
+
+                <!--Modal Header-->
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Convert Case</h2>
+                </header>
+
+                <!--Modal Body-->
+                <div class="cCenterPanel" style="overflow-y: auto;">
+
+                    <!--Show First Step-->
+                    <template if:true={isStep1}>
+                        <div class="mb10">
+                            <lightning-radio-group label="Case Record Type" options={lstCurrentRecordType} disabled>
+                            </lightning-radio-group>
+                        </div>
+            
+                        <div class="mb10">
+                            <lightning-radio-group label="Record Types" options={lstRecordType} value={selectedRecordType}
+                                onchange={handleRecordTypeChange} required>
+                            </lightning-radio-group>
+                        </div>
+                        <lightning-layout>
+                            <!-- <lightning-layout-item size="4" small-device-size="6" medium-device-size="4" large-device-size="4">
+                                <c-custom-lookup-field label="Change Case Owner" placeholder="Select the Engineer or Queue"
+                                    onsearch={handleCombinedLookupSearch} onselectionchange={handleCombinedLookupSelectionChange}
+                                    required>
+                                </c-custom-lookup-field>
+                            </lightning-layout-item> -->
+                        </lightning-layout>
+                    </template>
+            
+                    <!--Show Second Step-->
+                    <template if:true={isStep2}>
+                        <div class="mb10">
+                            <lightning-radio-group label="Case Record Type" options={lstCurrentRecordType} disabled>
+                            </lightning-radio-group>
+                        </div>
+            
+                        <div class="mb10">
+                            <lightning-radio-group label="Selected Record Type" options={lstSelectedRecordType}
+                                value={selectedRecordType} disabled>
+                            </lightning-radio-group>
+                        </div>
+
+                        <!--Change Owner Lookup-->
+                        <lightning-layout>
+                            <lightning-layout-item size="6">
+                                <div class="slds-p-around_x-small">
+                                    <c-custom-lookup-field label="Change Case Owner" placeholder="Select the Engineer or Queue"
+                                        onsearch={handleCombinedLookupSearch} onselectionchange={handleCombinedLookupSelectionChange}
+                                        required>
+                                    </c-custom-lookup-field>
+                                </div>
+                            </lightning-layout-item>                            
+                        </lightning-layout>
+                        <c-user-upcoming-events userid={changedCaseOwnerId} if:true={displayftotable}></c-user-upcoming-events> <!-- T02 I2RT-6727 -->
+                        <lightning-layout multiple-rows="true">
+
+                            <!--Show Technical Case Mandatory fields-->
+                            <template if:true={isTechnical}>
+                                <lightning-layout-item size="6">
+                                    <div class="slds-p-around_x-small">
+                                        <lightning-combobox 
+                                            dropdown-alignment="auto" 
+                                            field-name="Forecast_Product__c"
+                                            label="Product"
+                                            placeholder="Choose Product"
+                                            options={lstProducts}
+                                            value={selectedProduct}
+                                            onchange={handleProductChange}
+                                            required>
+                                        </lightning-combobox>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6">
+                                    <div class="slds-p-around_x-small">
+                                        <lightning-combobox 
+                                            dropdown-alignment="auto" 
+                                            field-name="Version__c"
+                                            label="Version"
+                                            placeholder="Choose Version"
+                                            options={lstVersions}
+                                            value={selectedVersion}
+                                            onchange={handleVersionChange}
+                                            required>
+                                        </lightning-combobox>
+                                    </div>
+                                </lightning-layout-item>
+                            </template>
+
+                            <!--Show Administrative Case Mandatory fields-->
+                            <template if:true={isAdministrative}>
+                                <lightning-layout-item size="6">
+                                    <div class="slds-p-around_x-small">
+                                        <lightning-combobox 
+                                            dropdown-alignment="auto" 
+                                            field-name="Problem_Area__c"
+                                            label="Problem Area"
+                                            placeholder="Choose Problem Area"
+                                            options={lstProblemArea}
+                                            value={caseRecord.fields.Problem_Area__c.value}
+                                            onchange={handleProblemAreaChange}
+                                            required>
+                                        </lightning-combobox>
+                                    </div>
+                                </lightning-layout-item>
+                            </template>
+
+                            <!--Show Fulfillment Case Mandatory fields-->
+                            <template if:true={isFulfillment}>
+                                <lightning-layout-item size="6">
+                                    <div class="slds-p-around_x-small">
+                                        <lightning-combobox 
+                                            dropdown-alignment="auto" 
+                                            field-name="Forecast_Product__c"
+                                            label="Product"
+                                            placeholder="Choose Product"
+                                            options={lstProducts}
+                                            value={selectedProduct}
+                                            onchange={handleProductChange}
+                                            required>
+                                        </lightning-combobox>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6">
+                                    <div class="slds-p-around_x-small">
+                                        <lightning-combobox 
+                                            dropdown-alignment="auto" 
+                                            field-name="Version__c"
+                                            label="Version"
+                                            placeholder="Choose Version"
+                                            options={versionOptions}
+                                            value={selectedVersion}
+                                            onchange={handleVersionChange}
+                                            required>
+                                        </lightning-combobox>
+                                    </div>
+                                </lightning-layout-item>
+                            </template>
+            
+                            <!--Show Operations Case Mandatory fields-->
+                            <template if:true={isOperations}>
+                                <lightning-layout-item size="6">
+                                    <div class="slds-p-around_x-small">
+                                        <div>
+                                            <lightning-textarea value={caseRecord.fields.Issue_Summary__c.value}
+                                                onchange={handleIssueSummaryChange} label="Case Conversion Summary" max-length="3000" required>
+                                            </lightning-textarea>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                
+                                <lightning-layout-item size="6">
+                                    <div class="slds-p-around_x-small">
+                                        <div>
+                                            <lightning-textarea value={caseRecord.fields.Description.value}
+                                                onchange={handleDescriptionChange} label="Description" max-length="3000" required>
+                                            </lightning-textarea>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                
+                                <lightning-layout-item size="6">
+                                    <div class="slds-p-around_x-small">
+                                        <div>
+                                            <lightning-combobox dropdown-alignment="auto" field-name="Environment__c"
+                                                label="Environment" placeholder="Choose Environment" options={lstEnvironment}
+                                                value={caseRecord.fields.Environment__c.value} onchange={handleEnvironmentChange}
+                                                required>
+                                            </lightning-combobox>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                
+                                <lightning-layout-item size="6">
+                                    <div class="slds-p-around_x-small">
+                                        <div>
+                                            <lightning-combobox dropdown-alignment="auto" field-name="Activity_Type__c"
+                                                label="Activity Type" placeholder="Choose Activity Type" options={lstActivityType}
+                                                value={caseRecord.fields.Activity_Type__c.value} onchange={handleActivityTypeChange}
+                                                required>
+                                            </lightning-combobox>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6">
+                                    <div class="slds-p-around_x-small">
+                                        <div>
+                                            <lightning-combobox dropdown-alignment="auto" field-name="Priority" label="Priority"
+                                                placeholder="Choose Priority" options={lstPriority}
+                                                value={caseRecord.fields.Priority.value} onchange={handlePriorityChange} required>
+                                            </lightning-combobox>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                                
+                                <template if:true={showSessionDate}>
+                                    <lightning-layout-item size="12">
+                                        <div class="slds-p-around_x-small">
+                                            <label class="es-form-label">Time Zone: {userTimeZone}</label>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <div class="slds-p-around_x-small">
+                                            <lightning-combobox name="SessionDate" label="Select a date"
+                                                placeholder="Please select a date" options={availableDates} value={selectedDate}
+                                                onchange={handleDateSelect} dropdown-alignment="auto" required>
+                                            </lightning-combobox>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <div class="slds-p-around_x-small">
+                                            <lightning-combobox name="availableSlots" label="Available Slots"
+                                                placeholder="Select a slot" options={availableSlots} value={selectedSlot}
+                                                onchange={handleSlotSelect} dropdown-alignment="auto" required>
+                                            </lightning-combobox>
+                                        </div>
+                                    </lightning-layout-item>
+                                </template>
+                            </template>
+            
+                        </lightning-layout>
+                    </template>
+                </div>
+            </template>
+        </div>
+
+        <!--Show Footer on Open Case-->
+        <div slot="footer" if:false={isClosedCase}>
+
+            <!--Show on First Step-->
+            <template if:true={isStep1}>
+                <!-- <template if:false={isOperations}>
+                    <lightning-button label="Save" title="Save" variant="brand" onclick={onSave} disabled={disableBTNs}></lightning-button>
+                </template> -->
+    
+                <!-- <template if:true={isOperations}> -->
+                    <lightning-button label="Next" title="Next" variant="brand" onclick={onNext} disabled={disableBTNs}></lightning-button>
+                <!-- </template> -->
+            </template>
+    
+            <!--Show on Second Step-->
+            <template if:true={isStep2}>
+                <lightning-button label="Previous" title="Previous" variant="brand" onclick={onPrevious} disabled={disableBTNs}></lightning-button>
+                &nbsp; &nbsp;
+                <lightning-button label="Save" title="Save" variant="brand" onclick={onSave} disabled={disableBTNs}></lightning-button>
+
+            </template>
+        </div>
+
+    </lightning-quick-action-panel>
+</template>

@@ -1,0 +1,56 @@
+.align-center{
+    text-align: center;
+}
+.align-right{
+    text-align: right;
+}
+.padding-top{
+    padding-top: 1rem;
+} 
+.padding-right{
+    padding-right: 1rem;
+}
+.border-bottom-shadow{
+    /* margin-top: 10px; */
+    border-top: 2px solid #dddbda;
+}
+.top-component{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.modal-height{
+    min-height: 280px;
+}
+.datatable-height{
+    height: 200px;
+}
+.header-font-weight{
+    font-weight: 400;
+}
+.flex-align-center{
+    height: 10em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.flex-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.error-message{
+    color: #c23934;
+    padding-bottom: 1rem;
+}
+.container{
+    width: 100%;
+    padding: 10px 15px 0px 15px;
+    margin-right: auto;
+    margin-left: auto;
+    display: grid;
+    grid-template-columns: 7fr 3fr 1fr;
+    /* grid-template-columns: repeat(6, 3fr); */
+}
+/* .searchLookup{
+    grid-column-start: 6;
+} */

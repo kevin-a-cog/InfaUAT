@@ -1,0 +1,59 @@
+.btn-style .slds-button_brand{
+    width: 180px !important;
+    height: 60px !important;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    border-radius: 0%;
+}
+.btn-style .slds-button_outline-brand{
+    width: 180px !important;
+    height: 60px !important;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #FF4D00;;
+    border-radius: 0%;
+}
+.release-downloads .slds-show{
+    display: none;
+}
+.release-downloads .slds-tabs_default__nav{
+    display: flex;
+    align-items: flex-start;
+}
+.release-downloads ul{
+    margin-bottom: 0%;
+    list-style: none;
+}
+
+@media screen and (max-width: 786px) {
+    .btn-style .slds-button_brand, .btn-style .slds-button_outline-brand{
+        width: 150px !important;
+        height: 60px !important;
+    }
+    .help-hotfix-ebf-btn .slds-button.slds-button_brand{
+        width: 130px !important;
+    }
+}
+
+.slds-grid.content .slds-col.slds-size_2-of-3 {
+    display: flex;
+}
+.slds-grid.content{
+    margin-top: -10px;
+}
+.content .slds-border_top.slds-p-around_medium{
+    padding: 10px 0px;
+}

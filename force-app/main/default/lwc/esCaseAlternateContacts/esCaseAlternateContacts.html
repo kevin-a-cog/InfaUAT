@@ -1,0 +1,40 @@
+<template>
+        <div class="slds-card">
+        <!--I2RT-4421-->    <div class={buttonSearchClass}>
+            <div class="es-lds-form-group"> 
+                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                <lightning-icon size="xx-small" class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" icon-name="utility:search"></lightning-icon>
+                  <!-- <input type="text" placeholder="Enter Search Text.." label="Search" variant="label-hidden" slot="actions" onchange={handleSearchText} disabled={disableSearch} />
+                  -->
+             <lightning-input type="text" placeholder="Enter Search Text.." label="Search" variant="label-hidden" slot="actions" onchange={handleSearchText} ></lightning-input>
+            </div>
+            </div>
+        </div><!--I2RT-4421-->
+            <div class="es-datatable">
+                <lightning-datatable    
+                    class="slds-max-medium-table_stacked"
+                    columns={columns} 
+                    data={data}  
+                    key-field="id" 
+                    onrowselection={handleRowSelected} 
+                    suppress-bottom-bar="true"                   
+                    sorted-direction={sortDirection}
+                    sorted-by={sortedBy}
+                    onsort={onHandleSort}>
+                </lightning-datatable>
+            </div>
+            <div class="pt-2 clearfix">
+                <template if:true={displayAddBTN}>
+                    <lightning-button variant="Brand" label="Confirm" title="Confirm" onclick={createCaseContact}
+                        class="es-button es-button--primary float-right" disabled={disableConfirmBTN}></lightning-button>
+                </template>
+            </div>
+        </div>
+    
+     <template if:true={NoDataAfterRendering}>
+        <div class="datatable-height flex-align-center">
+            No Contacts to display
+        </div>
+    </template>
+
+</template>

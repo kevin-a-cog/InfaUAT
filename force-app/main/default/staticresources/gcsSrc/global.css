@@ -1,0 +1,19 @@
+.comments-icn .slds-icon-utility-arrowup svg{
+    fill: red;
+}
+.gcs-dropdown .gcs-option .slds-dropdown-trigger .slds-dropdown {
+  height: 150px;
+}
+@media screen and (min-width: 768px) {
+  .es-case-comment-actions .slds-align_absolute-center, .slds-align--absolute-center{
+    flex-wrap: wrap;
+  }
+  .slds-button_neutral, .slds-button--neutral, .slds-button_brand{
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 5px;
+  }
+}
+.toastMessage.forceActionsText{
+  white-space : pre-line !important;
+}

@@ -1,0 +1,124 @@
+<!--
+@author : Ramya Ravi
+@date 	: 12/02/2021
+@purpose: I2C-1072 : Enable 'Mass Update' Capability on the Order for Billing Frequency Changes
+
+**********************************************************************************************************************************************************************************************************************
+ChangeHistory
+
+ModifiedBy                      Date                     Requested By                     Description                                                                                                     Tag                                                                                                    
+Nishit S						15-JUN-2022				 I2C-1620						  Enable "One Time" Billing on the "Mass Update of Billing Frequency" option on Order							  <I2C-1620>
+Nishit S						19-SEP=2023				 I2C-2043						  Mass Update option on the Order to update 'Override Next Billing Date' & 'Bill Through Date Override'			  <I2C-2043>
+**********************************************************************************************************************************************************************************************************************
+-->
+<aura:component controller="UpdateOrderProductBillingFrequency" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:attribute name="massUpdateBillingDates" type="boolean"/>
+    <aura:attribute name="massUpdateBillingFrequency" type="boolean"/>
+    <aura:attribute name="menu" type="boolean" default="true"/>
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="billThroughDateOverride" type="Date" />
+    <aura:attribute name="overrideNextBillingDate" type="Date" />
+    <aura:attribute name="proceedDisabled" type="boolean" default="true"/>
+      
+    <aura:attribute name="recordId" type="Id" /> 
+    <aura:attribute name="spinneract" type="boolean"/>
+    <aura:attribute name="isBFInvoicePlan" type="boolean" default="false"/>
+    <aura:attribute name="isBFNInvoice" type="boolean" default="false"/>
+    <aura:handler name="init" action="{!c.getOrderLineStatus}" value="{!this}" />
+    <aura:attribute name="ExpectedBlngFreq" type="String" default="Annual"/>   
+    <aura:attribute name="CheckBoxValue" type="Boolean" default="false"/>
+    
+    <!--Custom Styles for Modal Header and Footer--> 
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>  
+    <div>
+        <div class="slds-col modal-header slds-modal__header">
+            <p class="slds-page-header__title slds-truncate" title="">Update Order Products Billing Frequency/ Billing Dates</p>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+    <aura:if isTrue="{!v.menu}">
+    <div>
+        <center>
+            <p>
+            <lightning:button label="Update Billing Frequency" iconName="utility:connected_apps" iconPosition="right" variant="brand" onclick="{!c.gotoUpdateBillingFrequency}"/> <br/> <br/> <br/>
+            </p>
+        </center>
+        <center>
+            <p>
+            <lightning:button label="Update Billing Dates" iconName="utility:connected_apps" iconPosition="right" variant="brand" onclick="{!c.gotoUpdateBillingDates}"/> <br/> <br/> <br/>
+            </p>
+        </center>
+    </div>
+    </aura:if>
+    <aura:if isTrue="{!v.massUpdateBillingFrequency}">
+    <div class="updateBillingFrequency">
+        <div class="myDiv" style="width:90%;height:90%;">    
+            <p style="opacity: 0;">Line Break </p> 
+            <p>&nbsp;&nbsp;Select the Billing Frequency for <b>"Recurring"</b> or <b>"Subscription"</b> products below</p> 
+            <lightning:select class="slds-m-left_x-small" aura:id="selectBlngFreq" name="selectPicklistValue" value="{!v.ExpectedBlngFreq}" onchange="{!c.updateCheckbox}">
+                <option value="Annual">Annual</option>
+                <option value="Semiannual">Semi-Annual</option>
+                <option value="Quarterly">Quarterly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="One-Time/Accelerate">One-Time/Accelerate</option>
+                <option value="Invoice Plan">Invoice Plan</option>
+            </lightning:select>
+        </div>
+        
+        <aura:if isTrue="{!AND(v.ExpectedBlngFreq != 'Invoice Plan' , v.ExpectedBlngFreq != 'One-Time/Accelerate')}">
+            <p>&nbsp;</p>
+            <p class="slds-m-left_x-small">Keep One-Time chargeable products as is <b>OR</b> </p>
+            <p>&nbsp;</p>
+            <lightning:input class="slds-m-left_x-small" type="checkbox" disabled="{!v.ExpectedBlngFreq == 'One-Time/Accelerate' || v.ExpectedBlngFreq == 'Invoice Plan'}" label="Keep Billing Frequency as Invoice plan for Products with Charge Type = One-Time?" name="inputbox" checked="{!v.CheckBoxValue}"/>            
+        </aura:if>
+        
+        <aura:if isTrue="{!v.ExpectedBlngFreq == 'Invoice Plan'}">
+            <p>&nbsp;</p>
+            <p class="slds-m-left_x-small">Do you want to update billing frequency to <b>Invoice Plan</b> and nullify Override Next Billing Date on <b>ALL</b> Order Products(<b>Subscription and One-Time</b>) ? </p>
+        </aura:if>
+        
+        <p>&nbsp;</p>
+        <p class="slds-m-left_x-small"><b>NOTE:</b> This button should be used only when there is <b>NO</b> Invoice generated for the Order or after cancelling all generated invoices and <b>Total Billed Amount</b> should be <b>0</b> on ORDER. </p> 
+        <p>&nbsp;</p>
+        <div class="slds-col modal-footer slds-modal__footer">
+            <lightning:button label="Cancel" name="Cancel" variant="brand" onclick="{!c.navigateOrderPage}" />
+            <lightning:button variant="brand" label="Proceed" onclick="{!c.updateCheck}"  />
+        </div>
+    </div>
+    </aura:if>
+    <aura:if isTrue="{!v.massUpdateBillingDates}">
+        <div style="width:90%;height:90%;">    
+            <p style="opacity: 0;">Line Break </p> 
+            <p>&nbsp;&nbsp;Select the Billing Dates for Order products below</p> 
+            <lightning:input class="slds-m-left_x-small" dateStyle="short" type="date" name="onbdField" aura:id="onbdField" label="Override Next Billing Date" onblur="{!c.checkDatesValid}" value="{!v.overrideNextBillingDate}" min="{!v.today}" />
+            <br/>
+            <lightning:input class="slds-m-left_x-small" dateStyle="short" type="date" name="btdoField" aura:id="btdoField" label="Bill Through Date Override" onblur="{!c.checkDatesValid}" value="{!v.billThroughDateOverride}" min="{!v.today}" />
+        </div>
+        <p>&nbsp;</p>
+        <p class="slds-m-left_x-small"><b>NOTE:</b> The above selected dates will be updated on all the Order Products which have Pending Billing and linked to <b>Standard</b> Billing Frequencies.</p> 
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <div class="slds-col modal-footer slds-modal__footer">
+            <lightning:button label="Cancel" name="Cancel" variant="brand" onclick="{!c.navigateOrderPage}" />
+            <lightning:button variant="brand" label="Proceed" disabled="{!v.proceedDisabled}"   onclick="{!c.updateBillingDates1}"/>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.spinneract}">
+        <div class="slds-backdrop slds-backdrop_open">
+            <lightning:spinner variant="brand"  title="Processing......" alternativeText="Processing......"  size="medium"/>
+        </div>
+    </aura:if> 
+    
+</aura:component>

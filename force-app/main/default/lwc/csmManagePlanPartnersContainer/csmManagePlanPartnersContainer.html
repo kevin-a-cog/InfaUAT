@@ -1,0 +1,32 @@
+<!--
+/*
+ * Name			:	managePlanPartnersContainer
+ * Author		:	Gabriel Coronel
+ * Created Date	: 	6/2/2021
+ * Description	:	This LWC serves as a container for the Manage Plan Partners functionality.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Gabriel Coronel		6/2/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	
+	<!-- If the component is Popped Out. -->
+    <template if:true={isPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-manage-plan-partners" aria-modal="true" aria-describedby="modal-content-id-manage-plan-partners" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-manage-plan-partners" style="min-height: 100vh;">
+                    <c-csm-manage-plan-partners record-id={recordId} onpopout={popOut} is-popped-out></c-csm-manage-plan-partners >
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+    <template if:false={isPoppedOut}>
+        <c-csm-manage-plan-partners record-id={recordId} onpopout={popOut}></c-csm-manage-plan-partners >
+    </template>
+</template>

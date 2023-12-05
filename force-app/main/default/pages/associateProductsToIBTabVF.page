@@ -1,0 +1,17 @@
+<apex:page standardController="InstallBase_Mapping__c">
+    <apex:includeLightning />
+    
+    <div id="lightning" />
+    
+    <script>
+    $Lightning.use("c:associateProductToIBApp", function() {
+        $Lightning.createComponent("c:associateProductsToIB",
+                                   {},
+                                   "lightning",
+                                   function(cmp) {
+                                       console.log("Component was created");
+                                   }
+                                  );
+    });
+    </script>
+</apex:page>

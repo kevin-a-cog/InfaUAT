@@ -1,0 +1,75 @@
+<!--
+/*
+ * Name			:	globalManageContacts
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	8/19/2021
+ * Description	:	Global Manage Contacts HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		8/19/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+	<!-- Clipboard field. -->
+	<input class="clipboard" style="position:fixed;top:-5rem;height:1px;width:10px;"></input>
+
+	<!-- Card. -->
+	<lightning-card class="wrapper">
+		<div class="slds-p-horizontal_small">
+
+			<!-- Header controls. -->
+			<div class="slds-card">
+				<lightning-card variant="Narrow" title={objConfiguration.strCardTitle} icon-name={objConfiguration.strIconName}>
+					<lightning-button label={label.New_Button} variant="brand" onclick={newRecord} slot="actions"></lightning-button>
+					<lightning-button-icon icon-name="utility:copy_to_clipboard" variant="border-filled" size="medium" class="slds-m-left_xx-small" onclick={copyToClipboard} 
+							slot="actions"></lightning-button-icon>
+					<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" alternative-text={label.Refresh_Button} class="slds-m-left_xx-small" onclick={refreshCard} 
+							slot="actions"></lightning-button-icon>
+					<template if:false={isPoppedOut}>
+						<lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+					</template>
+					<template if:true={isPoppedOut}>
+						<lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+					</template>
+				</lightning-card>
+			</div>
+
+			<!-- Card body. -->
+			<div class="slds-card">
+
+				<!-- Tabs. -->
+				<lightning-tabset variant="default" active-tab-value={strDefaultTab}>
+
+					<!-- We iterate over the Tabs configuration. -->
+					<template for:each={objConfiguration.lstTabs} for:item="objTab">
+
+						<!-- Tab definition. -->
+						<lightning-tab key={objTab.strTabValue} label={objTab.strLabel} value={objTab.strTabValue} onactive={refreshCard} title={objTab.strTitle}>
+
+							<!-- Only display once the spinner is done. -->
+							<template if:false={boolDisplaySpinner}>
+
+								<!-- Table section. -->
+								<c-global-data-table class={objTab.strTableClass} obj-parameters={objTab.objParameters} onaction={executeAction}></c-global-data-table>
+							</template>
+						</lightning-tab>
+					</template>
+				</lightning-tabset>
+			</div>
+
+			<!-- Spinner. -->
+			<div class="spinner">
+				<template if:true={boolDisplaySpinner}>
+					<lightning-spinner variant="brand" size="small"></lightning-spinner>
+				</template>
+			</div>
+		</div>
+	</lightning-card>
+</template>

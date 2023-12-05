@@ -1,0 +1,33 @@
+<!--
+* Name         :   helpGroupChapterLeaders
+* Author       :   Saumya Gaikwad
+* Created Date :   28/07/2022
+* Description  :   LWC HTML for chapter leader section on group details page
+
+Change History
+**********************************************************************************************************
+Modified By            Date            Jira No.        Description                Tag
+**********************************************************************************************************
+Saumya Gaikwad      28/07/2022         I2RT-6758      Initial version.            T3
+-->
+
+
+<template>
+	<template if:true={isComponentVisible}>
+	<!-- START - T3 - Displaying chapter leaders name in the Group details widget.-->
+		<h1 class="in-heading in-teal in-heading-bottom">Chapter Leaders</h1>
+		<ul>
+			<template for:each={chapterLeaderResult} for:item="item">
+				<li key={item.chapterLeader.Id} class="list-item d-flex">
+					<div>
+						<img src={item.chapterLeader.Member.FullPhotoUrl} class="profile-icon">
+					</div>
+					<div class="pl-2 d-flex name-icon" style="justify-content: center;">
+						<a href={item.profileUrl} class="user-name">{item.chapterLeader.Member.CommunityNickname}</a>
+					</div>
+				</li>
+			</template>
+		</ul>
+	<!-- END - T3 - Displaying chapter leaders name in the Group details widget.-->
+</template>
+</template>

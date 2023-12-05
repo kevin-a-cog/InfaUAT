@@ -1,0 +1,357 @@
+<!--
+/*
+ * Name			:	globalDataTable
+ * Author		:	Gabriel Coronel
+ * Created Date	: 	9/2/2021
+ * Description	:	This LWC exposes the generica Data Table component created for Global.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Gabriel Coronel		9/2/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+	<div class="customSpecificCSS" lwc:dom="manual"></div>
+	<div class="customTreeCSS" lwc:dom="manual"></div>
+	
+	<!-- Data section. -->
+
+	<template if:true={boolHasRecords}>
+		<div class="slds-card" data-global-id={strGlobalTableId}>
+			<div class="datatable-height" data-id={strGlobalTableId}>
+
+				<!-- If the data has collapsible child rows. -->
+				<template if:true={objParameters.boolHasCollapsibleRows}>
+
+					<!-- Table. -->
+					<table class="slds-table slds-table_bordered">
+
+						<!-- Parent Headers. -->
+						<thead>
+							<tr class="slds-line-height_reset">
+								<template for:each={objColumns.lstColumns} for:item="objColumn">
+									<template if:false={objColumn.boolHide}>
+										<th key={objColumn.strLabel} scope="col" style={objColumn.strStyle}>
+											<div class="slds-truncate" title={objColumn.strLabel}>{objColumn.strLabel}</div>
+										</th>
+									</template>
+								</template>
+							</tr>
+						</thead>
+
+						<!-- Parent Body. -->
+						<template for:each={lstRecords} for:item="objRecord">
+
+							<!-- Parent Rows. -->
+							<tbody key={objRecord}>
+								<tr class="slds-hint-parent">
+									<template for:each={objRecord.lstParentData} for:item="objCell">
+										<template if:false={objCell.boolHide}>
+											<td key={objCell} class="slds-cell-wrap" style={objCell.strTDStyle}>
+
+												<!-- Cell value. -->
+												<c-global-custom-cell-plain-table obj-cell={objCell} obj-record={objRecord} str-record-id={objRecord.Id} 
+														onaction={executeLocalAction}></c-global-custom-cell-plain-table>
+											</td>
+										</template>
+									</template>
+								</tr>
+							</tbody>
+
+							<!-- Child card. -->
+							<template if:true={objRecord.boolDisplayChildCard}>
+								<tbody key={objRecord} class="slds-hide additionalInformation" data-parent-id={objRecord.strLocalId}>
+									<tr key={objRecord}>
+										<td class="collapsibleRowElement" colspan={objRecord.intTotalColumns}>&nbsp;</td>
+									</tr>
+									<tr key={objRecord}>
+										<template if:true={objRecord.boolAddMarginTD}>
+											<td class="collapsibleRowElement">&nbsp;</td>
+										</template>
+										<td class="collapsibleRowElement" colspan={objRecord.intNumberOfColumns}>
+											<lightning-card>
+												<lightning-layout horizontal-align="spread">
+													<template for:each={objRecord.lstChildData} for:item="objChild">
+														<lightning-layout-item key={objChild.strHeader} padding="around-small">
+															<div class="header-column">
+																<p class={objChild.strClasses}>{objChild.strHeader}</p>
+																<p style={objChild.strValueStyle}>{objChild.strValue}</p>
+															</div>
+														</lightning-layout-item>
+													</template>
+												</lightning-layout>
+											</lightning-card>
+										</td>
+									</tr>
+								</tbody>
+							</template>
+
+							<!-- Child table. -->
+							<template if:true={objRecord.boolDisplayChildTable}>
+								<tbody key={objRecord} class="slds-hide childTable" data-parent-id={objRecord.strLocalId}>
+									<tr key={objRecord}>
+										<template if:true={objRecord.boolAddMarginTD}>
+											<td class="collapsibleRowElement">&nbsp;</td>
+										</template>
+										<td class="collapsibleRowElement" colspan={objRecord.intNumberOfColumns}>
+	
+											<!-- Table. -->
+											<table class="slds-table slds-table_cell-buffer slds-table_bordered">
+	
+												<!-- Parent Headers. -->
+												<template if:true={objColumns.objHeaders.boolDisplayChildRecords}>
+													<thead class={objColumns.objHeaders.strClassesChildRecordsColumns} style={objColumns.objHeaders.strStyleChildRecordsColumns}>
+														<tr class="slds-line-height_reset">
+															<template for:each={objColumns.lstChildRecordsColumns} for:item="objColumn">
+																<th key={objColumn.strLabel} scope="col">
+																	<div class="slds-truncate" title={objColumn.strLabel}>{objColumn.strLabel}</div>
+																</th>
+															</template>
+														</tr>
+													</thead>
+												</template>
+						
+												<!-- Parent Body. -->
+												<tbody>
+													<template for:each={objRecord.lstChildRecords} for:item="objChildRecord">
+						
+														<!-- Parent Rows. -->
+														<tr key={objChildRecord} class="slds-hint-parent">
+															<template for:each={objChildRecord.lstData} for:item="objCell">
+																<template if:false={objCell.boolHide}>
+																	<td key={objCell} class="slds-cell-wrap">
+
+																		<!-- Cell value. -->
+																		<c-global-custom-cell-plain-table obj-cell={objCell} obj-record={objRecord} str-record-id={objChildRecord.Id}
+																				onaction={executeLocalAction}></c-global-custom-cell-plain-table>
+																	</td>
+																</template>
+															</template>
+														</tr>
+													</template>
+												</tbody>
+											</table>
+										</td>
+									</tr>
+									<tr key={objRecord}>
+										<td class="collapsibleRowElement" colspan={objRecord.intTotalColumns}>&nbsp;</td>
+									</tr>
+								</tbody>
+							</template>
+						</template>
+					</table>
+				</template>
+		
+				<!-- If the data doesn't have collapsible child rows. -->
+				<template if:false={objParameters.boolHasCollapsibleRows}>
+					<div class="slds-is-relative">
+				
+						<!-- Spinner. -->
+						<template if:true={boolIsLoadingTable}>
+							<lightning-spinner variant="brand" size="small"></lightning-spinner>
+						</template>
+		
+						<!-- Table. -->
+						<template if:false={boolIsLoadingTable}>
+
+							<!-- Standard Table. -->
+							<template if:false={objParameters.boolEnableTreeView}>
+								<c-global-lightning-datatable columns={lstColumns} data={lstRecords} key-field={strKeyField} 
+										default-sort-direction={objConfiguration.strDefaultSortDirection} sorted-direction={objConfiguration.strSortDirection} sorted-by={strSortedBy} onsort={sortTable} 
+										onrowselection={selectRecords} row-number-offset={intRowNumberOffsetRecords} suppress-bottom-bar={boolSuppressBottomBar} selected-rows={lstPreSelectedRows}
+										class={strTableStyleClasses} onlinkcellmouseover={linkCellMouseOver} onlinkcellmouseout={linkCellMouseOut} max-row-selection={intMaximumRowSelection}
+										draft-values={lstDraftValues} oncustomcellchange={updateDraftValuesManually} onsave={saveInlineChanges} oncellchange={inlineEditing}
+										hide-checkbox-column={boolHideCheckboxColumn} oncustomcellfiredevent={customCellFiredEvent} onrowaction={fireRowAction}
+										onsendeventtoparent={sendEventToParent} onaction={executeLocalAction}></c-global-lightning-datatable>
+							</template>
+
+							<!-- Tree view. -->
+							<template if:true={objParameters.boolEnableTreeView}>
+								<div class="table-responsive-lg">
+									<table class="slds-table slds-table_bordered slds-no-row-hover">
+
+										<!-- Headers. -->
+										<thead>
+											<tr class="slds-line-height_reset">
+												<template for:each={lstColumns} for:item="objColumn">
+													<th key={objColumn.label} scope="col" style={objColumn.strStyle} width={objColumn.initialWidth}>
+														<div class="slds-truncate" style={objColumn.strInnerStyle} title={objColumn.strHelpText}>{objColumn.label}</div>
+													</th>
+												</template>
+											</tr>
+										</thead>
+				
+										<!-- Body. -->
+										<tbody>
+											<template for:each={lstRecords} for:item="objRecord">
+
+												<!-- If the record has its own internal structure. -->
+												<template if:true={objRecord.boolHasItsOwnStructure}>
+													<tr key={objRecord.Id} class={objRecord.strClasses}>
+														<td class="slds-cell-wrap" style="padding: 0px;" colspan={intColspan}>
+															<table style="background-color: #F6F6F6">
+
+																<!-- Vertical layout. -->
+																<template if:true={objRecord.boolIsLayoutVertical}>
+																	<tbody>
+																		<template for:each={objRecord.lstMapRows} for:item="lstRows">
+																			<tr key={lstRows}>
+																				<template for:each={lstRows} for:item="objCell">
+																					<td key={objCell.strColumnLabel} scope="col" class="detailsCell"
+																							style="font-weight: var(--lwc-fontWeightBold,700); vertical-align: top;">
+																						<div class="slds-truncate" title={objCell.strColumnLabel}>{objCell.strColumnLabel}</div>
+																					</td>
+																					<td key={objCell.strValue} class="slds-cell-wrap detailsCell" style={objCell.strStyle}>
+																						{objCell.strValue}
+																					</td>
+																				</template>
+																			</tr>
+																		</template>
+																	</tbody>
+																</template>
+
+																<!-- Horizontal layout. -->
+																<template if:true={objRecord.boolIsLayoutHorizontal}>
+
+																	<!-- Headers. -->
+																	<thead>
+																		<tr class="slds-line-height_reset">
+																			<template for:each={objRecord.lstColumns} for:item="objColumn">
+																				<th key={objColumn.label} scope="col" style="background-color: lightgray; border: 0px;">
+																					<div class="slds-truncate" title={objColumn.label}>{objColumn.label}</div>
+																				</th>
+																			</template>
+																		</tr>
+																	</thead>
+											
+																	<!-- Body. -->
+																	<tbody>
+																		<tr>
+																			<template for:each={objRecord.lstValues} for:item="objCell">										
+																				<td key={objCell.strRowId} class="slds-cell-wrap" width={objCell.intWidth} style="border: 0px;">
+																						 <c-global-custom-cell str-record-label={objCell.strRecordLabel} str-record-object-a-p-i-name={objCell.strRecordObjectAPIName} 
+																							str-record-field-a-p-i-name={objCell.strRecordFieldAPIName} 
+																							str-record-parent-object-a-p-i-name={objCell.strRecordParentObjectAPIName} bool-is-name={objCell.boolIsName} 
+																							map-ids={objCell.mapIds} bool-is-editable={objCell.boolIsEditable} str-row-id={objCell.strRowId} 
+																							str-display-value={displayvalue} booldisplaycopy={booldisplaycopy} bool-edit-screen={enableEditing} view-mode={viewMode}
+																							min-range={sliderMinRange} max-range={sliderMaxRange} step-range={sliderStepRange} bool-enable-edit-frm-parent={boolEnableEditFrmParent}
+																							bool-show-preview-icon={boolShowPreviewIcon} str-value={objCell.strValue} str-field-type={objCell.strFieldType} str-table-id={objCell.strTableId} 
+																							str-column-label={objCell.strColumnLabel} obj-additional-attributes={objCell.objAdditionalAttributes} 
+																							data-id={objCell.strRowId} onaction={executeLocalAction} oncustomcellchange={updateDraftValuesManually}
+																							onsendeventtoparent={sendEventToParent}></c-global-custom-cell>
+																				</td>
+																			</template>
+																		</tr>
+																	</tbody>
+																</template>
+															</table>
+
+															<!-- In case we need to display another table here. -->
+															<div if:true={objRecord.boolHasChildTable} class="slds-m-top_medium">
+																<c-global-data-table obj-parameters={objRecord.objChildTable} onaction={executeAction}></c-global-data-table>
+															</div>
+														</td>
+													</tr>
+												</template>
+
+												<!-- If the record follows the global structure. -->
+												<template if:false={objRecord.boolHasItsOwnStructure}>
+													<template if:true={objRecord.boolIsVisible}>
+														<tr key={objRecord.Id} class={objRecord.strClasses} data-id={objRecord.Id} data-parent-id={objRecord.strParentId} data-stripes={boolShowStripes}
+																data-is-new-record={objRecord.boolIsNewRecord} data-row-number={objRecord.intPosition}>
+															<template for:each={objRecord.lstValues} for:item="objCell">
+																<td key={objCell.strRowId} class="slds-cell-wrap" width={objCell.intWidth} style={objCell.strStyle} data-field-type={objCell.strFieldType}>
+																	<c-global-custom-cell if:true={objCell.boolIsVisible} str-record-label={objCell.strRecordLabel} str-record-object-a-p-i-name={objCell.strRecordObjectAPIName} 
+																			str-record-field-a-p-i-name={objCell.strRecordFieldAPIName} data-field-type={objCell.strFieldType}
+																			str-record-parent-object-a-p-i-name={objCell.strRecordParentObjectAPIName} bool-is-name={objCell.boolIsName} 
+																			map-ids={objCell.mapIds} bool-is-editable={objCell.boolIsEditable} str-row-id={objCell.strRowId} 
+																			str-display-value={displayvalue} booldisplaycopy={booldisplaycopy} bool-edit-screen={enableEditing} view-mode={viewMode}
+																			min-range={sliderMinRange} max-range={sliderMaxRange} step-range={sliderStepRange} bool-enable-edit-frm-parent={boolEnableEditFrmParent}
+																			bool-show-preview-icon={boolShowPreviewIcon} str-value={objCell.strValue} str-field-type={objCell.strFieldType} str-table-id={objCell.strTableId} str-column-label={objCell.strColumnLabel}
+																			obj-additional-attributes={objCell.objAdditionalAttributes} data-id={objCell.strRowId} onaction={executeLocalAction}
+																			onsendeventtoparent={sendEventToParent} oncustomrowselection={customRowSelection}
+																			oncustomcellchange={updateDraftValuesManually} oncustomcellkeydown={keyDown} 
+																			oncustomcellchanged={changed}></c-global-custom-cell>
+																</td>
+															</template>
+														</tr>
+													</template>
+												</template>
+											</template>
+										</tbody>
+									</table>
+								</div>
+							</template>
+						</template>
+					</div>
+				</template>
+	
+				<!-- Action buttons. -->
+				<template if:true={boolDisplayActions}>
+					<template if:true={boolDisplayTableActions}>
+						<div class="slds-col slds-modal__footer">
+
+							<!-- Custom Action Buttons. -->
+							<template if:true={boolDisplayTableActionsCustom}>
+								<template for:each={objParameters.lstActionButtons} for:item="objButton">
+									<lightning-button key={objButton.strId} data-id={objButton.strId} variant={objButton.strVariant} label={objButton.strLabel} title={objButton.strTitle} onclick={actionButton} 
+											class={objButton.strStyleClasses}></lightning-button>
+								</template>
+							</template>
+
+							<!-- Save Inline button. -->
+							<template if:true={boolDisplayTableActionsSaveInline}>
+								<template if:false={boolExcludedScenario}>
+									<lightning-button variant="neutral" label="Cancel Changes" title="Cancel Changes" onclick={cancelInlineChanges}
+										class="slds-var-m-left_x-small"></lightning-button>
+								</template>
+								<template if:false={viewMode}>
+									<lightning-button variant="brand" label={label.Save_Changes} title={label.Save_Changes} onclick={saveInlineChanges}
+										class="slds-var-m-left_x-small"></lightning-button>
+								</template>
+							</template>
+						</div>
+					</template>
+				</template>
+			</div>
+		</div>
+	
+		<!-- Paginator. -->
+		<template if:true={boolDisplayPaginator}>
+			<div class="slds-grid">
+				<div class="slds-col">&nbsp;</div>
+			</div>
+			<c-global-paginator lst-records={lstOriginalRecords} int-total-records={lstOriginalRecords.length} onpaginatorchange={changeTablePage} class={strPaginatorStyleClasses}></c-global-paginator>
+		</template>
+	
+		<!-- Compact Layout pop over. -->
+		<div class="compactLayout slds-is-relative slds-col slds-size_5-of-12 slds-float_right">
+			<template if:true={boolDisplayPopOver}>
+				<section tabindex="-1" class="slds-popover slds-nubbin_top-left" role="dialog">
+					<div class="slds-popover__body">
+						<lightning-record-form record-id={strLinkCellId} object-api-name={strLinkCellObjectName} layout-type="Compact" mode="readonly" density="density"></lightning-record-form>
+					</div>
+				</section>
+			</template>
+		</div>
+	</template>
+
+	<!-- No records found. -->
+	<template if:true={boolDisplayNoRecordsFound}>
+		<template if:false={boolHasRecords}>
+			<div class="slds-col slds-size_12-of-12">
+				<div class="slds-illustration slds-illustration_small" aria-hidden="true">
+					<img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt={label.No_Records_Found} />
+					<div class="slds-text-color_weak">
+						<h3 class="slds-text-heading_medium">{label.No_Records_Found}</h3>
+					</div>
+				</div>
+			</div>
+		</template>
+	</template>
+</template>

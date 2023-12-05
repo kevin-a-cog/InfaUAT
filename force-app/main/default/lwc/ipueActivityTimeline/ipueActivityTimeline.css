@@ -1,0 +1,11 @@
+.slds-timeline__item_task:before{
+    background : rgb(77 194 207);
+}
+.slds-timeline__item_task:after{
+    background : rgb(77 194 207);
+}
+.grid-container {
+    display: flex;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 6px;
+}

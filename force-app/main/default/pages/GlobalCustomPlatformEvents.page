@@ -1,0 +1,267 @@
+<!--
+/*
+ * Name         :   GlobalCustomPlatformEvents
+ * Author       :   Monserrat Pedroza
+ * Created Date :   7/1/2022
+ * Description  :   This Visualforce Page exposes the Custom Platform Events functionality.
+
+ Change History
+ **********************************************************************************************************
+ Modified By            Date            Jira No.        Description                 Tag
+ **********************************************************************************************************
+ Monserrat Pedroza      7/1/2022        N/A             Initial version.            N/A
+ */
+-->
+<apex:page applyBodyTag="false" applyHtmlTag="false" cache="false" lightningStylesheets="false" showChat="false" showHeader="false" showQuickActionVfHeader="false" sidebar="false" 
+        standardStylesheets="false" controller="GlobalCustomPlatformEventsController">
+    <script>
+
+        //Public variables.
+        let intInterval = 5000;
+        let objRemotingSettings = { 
+            buffer: false, 
+            escape: true, 
+            timeout: 60000
+        };
+        let lstData = new Array();
+		const MESSAGING_CHANNEL = "{!$MessageChannel.CustomPlatformEvents__c}";
+        
+        /*
+         Method Name : subscribe
+         Description : This listener receives data from the parent LWC and sends it to the backend.
+         Parameters  : Object, called from subscribe, objData Event.
+         Return Type : None
+         */
+		sforce.one.subscribe(MESSAGING_CHANNEL, (objData) => {
+            let strRecordId;
+            try {
+
+                //If we received full data.
+                if(isNotNull(objData) && isNotNull(objData.boolSubscribe) && isNotBlank(objData.idRecord) && isNotBlank(objData.idSubscriber)) {
+                    strRecordId = objData.idRecord + objData.idSubscriber;
+
+                    //Now we check if we have to subcribe or unsubscribe.
+                    if(objData.boolSubscribe) {
+
+                        //First we make sure we received all the required data.
+                        if(isNotBlank(objData.strObjectAPIName) && isNotNull(objData.lstFields) && Object.keys(objData.lstFields).length > 0) {
+                    
+                            //First we check if we already listen to data changes in the given id or not.
+                            if(isNull(lstData[strRecordId])) {
+                                lstData[strRecordId] = {
+                                    idRecord: objData.idRecord,
+                                    idSubscriber: objData.idSubscriber,
+                                    strObjectAPIName: objData.strObjectAPIName,
+                                    lstFields: new Array()
+                                }
+                            }
+                            lstData[strRecordId].lstFields = [...lstData[strRecordId].lstFields, ...objData.lstFields].filter(getUniqueValues);
+                        }
+                    } else if(Object.keys(lstData).length > 0 && isNotNull(lstData[strRecordId])) {
+
+                        //We remove the subscriber.
+                        lstData = lstData.filter(function(objData) {
+                            return (objData.idRecord + objData.idSubscriber) !== strRecordId;
+                        });
+                    }
+                }
+            } catch(objException) {
+                console.error(objException);
+            }
+        });
+
+        /*
+         Method Name : isBlank
+         Description : This method returns if a variable is blank.
+         Parameters : String, called from isBlank, strValue Value.
+         Return Type : None
+         */
+        const prepareRequest = () => {
+            let objData;
+            let objQuery;
+            let lstQueries = new Array();
+            let lstPromises = new Array();
+            
+            //If we have data to analyze.
+            if(Object.keys(lstData).length > 0) {
+
+                //First, we merge the data.
+                Object.keys(lstData).forEach(strKey => {
+                    objData = lstData[strKey];
+                    if(isNull(lstQueries[objData.strObjectAPIName])) {
+                        lstQueries[objData.strObjectAPIName] = {
+                            strObjectAPIName: objData.strObjectAPIName,
+                            lstIds: new Array(),
+                            lstFields: new Array()
+                        }
+                    }
+                    lstQueries[objData.strObjectAPIName].lstIds.push("'" + objData.idRecord + "'");
+                    lstQueries[objData.strObjectAPIName].lstFields = [...lstQueries[objData.strObjectAPIName].lstFields, ...objData.lstFields];
+                });
+
+                //Now we prepare the queries and promises.
+                Object.keys(lstQueries).forEach(strKey => {
+                    objQuery = lstQueries[strKey];
+                    lstPromises.push(new Promise(function(resolve, reject) {
+                        GlobalCustomPlatformEventsController.executeQuery("SELECT Id, " + objQuery.lstFields.filter(getUniqueValues).join(",") + " FROM " + objQuery.strObjectAPIName + 
+                                " WHERE Id IN (" + objQuery.lstIds.filter(getUniqueValues).join(",") + ") LIMIT 50000", function(lstRecords, objEvent) {
+
+                            //Now we check the differences.
+                            if(isNotNull(lstRecords) && Object.keys(lstRecords).length > 0 && Object.keys(lstData).length > 0) {
+                                lstRecords.forEach(objRecord => {
+                                    if(Object.keys(lstData).length > 0) {
+                                        Object.keys(lstData).forEach(strKey => {
+                                            objData = lstData[strKey];
+
+                                            //First we check the record id.
+                                            if(objRecord.Id === objData.idRecord || objRecord.Id.substring(0, 15) === objData.idRecord) {
+                                            
+                                                //If we have data saved already to compare.
+                                                if(isNotNull(objData.objRecord) && !deepEqual(objData.objRecord, objRecord)) {
+                                                    
+                                                    //The records are different, so we post a message to the subscribers.
+													sforce.one.publish(MESSAGING_CHANNEL, {
+                                                        boolShouldRefresh: true,
+                                                        idRecord: objData.idRecord,
+                                                        idSubscriber: objData.idSubscriber
+                                                    });
+                                                }
+
+                                                //We save the new data.
+                                                objData.objRecord = objRecord;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+
+                            //We resolve the promise.
+                            resolve(lstRecords);
+                        }, objRemotingSettings);
+                    }));
+                });
+
+                //Now we execute the callouts.
+                Promise.allSettled(lstPromises).catch(objError => { 
+                    console.log(objError); 
+                }).finally(() => {
+                    
+                    //Now we repeat the operation.
+                    setTimeout(function() {
+                        prepareRequest();
+                    }, intInterval);
+                });
+            } else {
+
+                //We execute again the checker.
+                setTimeout(function() {
+                    prepareRequest();
+                }, intInterval);
+            }
+        }
+    
+        /*
+         Method Name : deepEqual
+         Parameters  : Object, called from deepEqual, objItemOne Item to be analyzed.
+         Description : This method determines if two objects have the same properties and values.
+                       Object, called from deepEqual, objItemTwo Item to be analyzed.
+         Return Type : Boolean
+        */
+        const deepEqual = (objItemOne, objItemTwo) => {
+            const lstKeysOne = Object.keys(objItemOne);
+            const lstKeysTwo = Object.keys(objItemTwo);
+            let boolResult = true;
+
+            //First we check if both have the same amount of properties.
+            if(lstKeysOne.length !== lstKeysTwo.length) {
+                boolResult = false;
+            } else {
+
+                //Now we check property by property.
+                for(const strKey of lstKeysOne) {
+                    const objValueOne = objItemOne[strKey];
+                    const objValueTwo = objItemTwo[strKey];
+                    const boolAreObject = isObject(objValueOne) && isObject(objValueTwo);
+                    if(boolAreObject && !deepEqual(objValueOne, objValueTwo) || !boolAreObject && objValueOne !== objValueTwo) {
+                        boolResult = false;
+                        break;
+                    }
+                }
+            }
+            return boolResult;
+        }
+
+        /*
+         Method Name : getUniqueValues
+         Description : This method returns unique values from the given data.
+         Parameters  : String, called from getUniqueValues, strValue Value.
+                       Integer, called from getUniqueValues, intIndex Index.
+                       Object, called from getUniqueValues, objSelf Object.
+         Return Type : Boolean
+         */
+        const getUniqueValues = (strValue, intIndex, objSelf) => {
+            return objSelf.indexOf(strValue) === intIndex;
+        }
+
+        /*
+         Method Name : isBlank
+         Description : This method returns if a variable is blank.
+         Parameters : String, called from isBlank, strValue Value.
+         Return Type : None
+         */
+        const isBlank = (strValue) => {
+            let boolResult = true;
+            if(typeof strValue !== "undefined" && strValue !== null && strValue !== "") {
+                boolResult = false;
+            }
+            return boolResult;
+        }
+
+        /*
+         Method Name : isNotBlank
+         Description : This method returns if a variable is not blank.
+         Parameters : String, called from isNotBlank, strValue Value.
+         Return Type : None
+         */
+        const isNotBlank = (strValue) => {
+            return !isBlank(strValue);
+        }
+
+        /*
+         Method Name : isNull
+         Description : This method returns if a variable is null.
+         Parameters : String, called from isNull, objValue Value.
+         Return Type : None
+         */
+        const isNull = (objValue) => {
+            let boolResult = true;
+            if(typeof objValue !== "undefined" && objValue !== null) {
+                boolResult = false;
+            }
+            return boolResult;
+        }
+
+        /*
+         Method Name : isNotNull
+         Description : This method returns if a variable is not null.
+         Parameters : String, called from isNotNull, objValue Value.
+         Return Type : None
+         */
+        const isNotNull = (objValue) => {
+            return !isNull(objValue);
+        }
+
+        /*
+         Method Name : isObject
+         Description : This method determines if a variable is an object.
+         Parameters  : Object, called from isObject, objItem Item to be analyzed.
+         Return Type : Boolean
+        */
+        const isObject = (objItem) => {
+            return isNotNull(objItem) && typeof objItem === 'object';
+        }
+
+        //Now we initiate the backend checker.
+        prepareRequest();
+    </script>
+</apex:page>

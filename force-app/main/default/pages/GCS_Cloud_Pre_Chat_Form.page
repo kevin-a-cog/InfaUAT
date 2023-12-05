@@ -1,0 +1,212 @@
+<!--
+Change History
+***********************************************************************************************************************************************
+    ModifiedBy      JIRA #     Date          Requested By    Description                                                                Tag
+***********************************************************************************************************************************************
+    balajip         SS-8153    12/06/2017    Pattabhi        To show a dropdown if there are multiple projects for the given contact    T01
+    Kiran G         SS-8237    27/07/2017    Madhan          To the values of the Name and Email on the Live chat Transcript object     T02
+    Anil G          SS-8690    17/04/2018    Ojas            To disable automatic case creation                                         T03
+-->
+<apex:page title="Informatica Cloud Chat" docType="html-5.0" showHeader="false">
+<!-- This script takes the endpoint URL parameter passed from the deployment
+  page and makes it the action for the form -->
+
+<!-- -->
+
+<!-- button -->
+
+<script type="text/javascript">
+(function() {
+    function handlePageLoad() {
+        var endpointMatcher = new RegExp("[\\?\\&]endpoint=([^&#]*)");
+        document.getElementById('prechatForm').setAttribute('action',decodeURIComponent(endpointMatcher.exec(document.location.search)[1]));
+    }
+    if (window.addEventListener) {
+        window.addEventListener('load', handlePageLoad, false);
+    } else {
+        window.attachEvent('onload', handlePageLoad, false);
+    }
+})();
+
+
+
+</script>
+
+
+<style>
+
+    body{
+    overflow-x: hidden;
+    }
+
+    #prechatForm label{
+        width: 8em;
+        float: left;
+        text-align: left;
+        margin-right: 0.5em;
+        display: block;
+    }
+    #prechat_submit{
+        margin-left: 6em;
+    }
+    #prechat_title{
+        float: left;
+        width: 99%;
+        margin-left: 1%;
+        margin-bottom: 1.5%;
+    }
+    #prechat_header{
+        height: 99%;
+        width: 99%;
+        margin: 0;
+    }
+   form {
+    margin: 15px;
+    padding: 2px;
+}
+
+</style>
+
+<body>
+
+
+<div id="prechat_header">
+<apex:image url="{!$Resource.Prechat_header_image}"/>
+</div>
+
+<form method='post' id='prechatForm'>
+
+
+
+
+      <p><label>First Name* </label> <input id="firstName" type='text' name='liveagent.prechat:firstName' required='true' pattern=".*\S+.*" title="Enter valid name" maxlength="255"/><br />      </p>      
+      <p><label>Last Name* </label> <input id="lastName" type='text' name='liveagent.prechat:lastName' required='true' pattern=".*\S+.*" title="Enter valid name" maxlength="255" /><br />      </p>           
+      <p><label>Email* </label> <input id="contactEmail" type='email' name='liveagent.prechat:contactEmail' required='true'  maxlength="80" /><br />      </p>
+      <!-- T02 -->
+      <input type="hidden" name="liveagent.prechat.save:firstName" value="FirstName__c" /> 
+      <input type="hidden" name="liveagent.prechat.save:lastName" value="Lastname__c" />  
+      <input type="hidden" name="liveagent.prechat.save:contactEmail" value="Email__c" /> 
+      <!-- T02 -->
+      <p>
+          <label> Project Number </label>
+          <input type='text' id="projectNumber" name="liveagent.prechat:projectNumber" readonly ="true"  />
+          <input type="hidden" name="liveagent.prechat.save:projectNumber" value="Project_Number__c" />
+          <Select id="projectList" style="display:none;width:173px;" onclick="setProjectNumber(this)">
+              <option value=''>--Select--</option>
+          </select>
+          <br />
+      </p>
+      <p id="pCaseSubject" style="display:block;"><label> Subject* </label> <input type="text" id="caseSubject" name="liveagent.prechat:caseSubject" required='true' pattern=".*\S+.*" title="Enter valid text" maxlength="255" /><br /></p>
+
+
+
+
+      <!-- Map FirstNameDetail, LastNameDetail and EmailDetail custom details
+         to Contact's FirstName, LastName and Email fields -->
+
+      <input type="hidden" name="liveagent.prechat.findorcreate.map:Contact" value="Email,contactEmail;" />
+      <input type="hidden" name="liveagent.prechat.findorcreate.map.doFind:Contact" value="Email,true;Id,true;" />
+      <input type="hidden" name="liveagent.prechat.findorcreate.showOnCreate:Contact" value="true" />
+
+      <!-- Save the Contact on the Live Chat Transcript's Contact Loookup -->
+ <!--     <input type="hidden" name="liveagent.prechat.findorcreate.saveToTranscript:Contact" value="ContactId" />-->
+
+      <input type="hidden" name="liveagent.prechat.findorcreate.map:Project__c" value="Project_Number__c,projectNumber;" />
+      <input type="hidden" name="liveagent.prechat.findorcreate.map.doFind:Project__c" value="Project_Number__c,true;Id,true;" />
+      <input type="hidden" name="liveagent.prechat.findorcreate.showOnCreate:Project__c" value="true" />
+   <!--   <input type="hidden" name="liveagent.prechat.findorcreate.saveToTranscript:Project__c" value="Project__c" /> -->
+
+
+      <input type="hidden" name="liveagent.prechat:caseOrigin" value="Chat" />
+      <input type="hidden" name="liveagent.prechat.findorcreate.displayToAgent:caseOrigin" value="false"/>
+
+      <input type="hidden" name="liveagent.prechat:caseStatus" value="Assigned" />
+      <input type="hidden" name="liveagent.prechat.findorcreate.displayToAgent:caseStatus" value="false"/>
+
+      <input type="hidden" name="liveagent.prechat:caseRecordTypeId" value="{!$Label.Case_RecordtypeId_Administrative}" />
+      <input type="hidden" name="liveagent.prechat.findorcreate.displayToAgent:caseRecordTypeId" value="false"/>
+
+      <input type="hidden" name="liveagent.prechat.findorcreate.map:Case" value="Origin,caseOrigin;Subject,caseSubject;Description,caseDescription;CaseNumber,CaseNumber;Project_Num__c,projectNumber;Contact,ContactId;Dev_LiveAgentEmail__c,contactEmail;RecordTypeId,caseRecordTypeId;Status,caseStatus" />
+      <input type="hidden" name="liveagent.prechat.findorcreate.map.doFind:Case" value="CaseNumber,true;" />
+    
+       <!-----------------------------------------------T03--------------------------------------------->
+      <!--   <input id="createCase" type="hidden" name="liveagent.prechat.findorcreate.map.doCreate:Case" value="Origin,true;Subject,true;Project_Num__c,true;Contact,true;Description,true;Dev_LiveAgentEmail__c,true;Dev_LiveAgentEmail__c,true;RecordTypeId,true;Status,true" />
+
+      <input type="hidden" name="liveagent.prechat.findorcreate.showOnCreate:Case" value="true"/>
+      <input type="hidden" name="liveagent.prechat.findorcreate.saveToTranscript:Case" value="CaseId" />
+       -->
+       <!-----------------------------------------------/T03--------------------------------------------->
+ 
+      <!-- <input type= "hidden" name="liveagent.prechat.findorcreate.linkToEntity:Contact" value="Case,ContactId" />-->
+
+      <!-- Link the Contact to the Case
+
+      <input type= "hidden" name="liveagent.prechat.findorcreate.linkToEntity:Project__c" value="Case,Project_Num__c" />-->
+
+      <input type="hidden" name="liveagent.prechat.findorcreate.displayToAgent:Case" value="true"/>
+
+      <input type='submit' value='Request Chat' id='prechat_submit' />
+
+
+      <div>
+      <br /><br /><br />
+      Fields marked with * are mandatory. Please update if necessary.
+      </div>
+  </form>
+
+<style type="text/css">
+p {font-weight: bolder }
+</style>
+
+<script type='text/javascript' src='{!$Label.GCS_LiveAgent_Script_Include_URL}/deployment.js'></script>
+<script type='text/javascript' src='{!$Label.GCS_LiveAgent_Script_Include_URL}/prechat.js'></script>
+
+<script type="text/javascript">
+    console.log('onload javascript');
+    //-------------------------------------------------------------------------<T01>
+    //to pass on the number of the selected project to the chat widget
+    function setProjectNumber(projectListDropdown){
+        var projectNumberTextbox = document.getElementById('projectNumber');
+        projectNumberTextbox.value = projectListDropdown.value;
+        liveagent.addCustomDetail('projectNumber',projectListDropdown.value);
+    }
+    //-------------------------------------------------------------------------</T01>
+
+    //-------------------------------------------------------------------------<T01>
+    //Updated the function to check for multiple projects and show a dropdown accordingly
+    var detailCallback = function (details){
+        var projectListDropdown = document.getElementById('projectList');
+        var projectNumberTextbox = document.getElementById('projectNumber');
+        console.log('details='+details.customDetails);
+
+        var optionsPopulated = false;
+        if (projectListDropdown.options.length>1){
+            optionsPopulated = true;
+        }
+
+        for (var i = 0; i < details.customDetails.length; i++) {
+            var label = details.customDetails[i].label;
+            var value = details.customDetails[i].value;
+            console.log(label+'='+value);
+
+            if (label.substring(0, 8)=='Project-'){
+                if (optionsPopulated == false){
+                    var opt = document.createElement('option');
+                    opt.value = label.substring(8,label.length);
+                    opt.innerHTML = opt.value + ' : ' + value;
+                    projectListDropdown.appendChild(opt);
+                    projectNumberTextbox.style.display = 'none';
+                    projectListDropdown.style.display = 'inline';
+                }
+            }else{
+                document.getElementById(label).value = value;
+            }
+        }
+    };
+    //-------------------------------------------------------------------------</T01>
+
+    liveagent.details.preChatInit('{!$Label.GCS_LiveAgent_Chat_Init_URL}','detailCallback');
+</script>
+
+</body>
+</apex:page>

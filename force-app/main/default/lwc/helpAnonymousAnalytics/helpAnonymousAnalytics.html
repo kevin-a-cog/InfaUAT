@@ -1,0 +1,20 @@
+<template>
+    <template if:true={showAnalytics}>
+        <div class="help-anonymous-analytics-bg">
+            <div class="container">
+                <div class="row">
+                    <template for:each={analyicsCount} for:item="item">
+                        <div key={item} class="col-sm-3 col-6 help-anonymous-analytics-item">
+                            <div class="help-anonymous-count">
+                                {item.count}
+                            </div>
+                            <div class="help-anonymous-name">
+                                {item.name}
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

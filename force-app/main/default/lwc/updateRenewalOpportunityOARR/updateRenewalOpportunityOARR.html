@@ -1,0 +1,22 @@
+<template>
+    <lightning-quick-action-panel title={label.Recalculate_OARR_Title} header={label.Recalculate_OARR_Title}>
+
+        <template if:true={isLoading} class="slds-is-relative" style="top: 25%;height: 50%;">
+            <lightning-spinner alternative-text="Loading..." size="large" variant="brand"></lightning-spinner>
+        </template>
+
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <div style="font-size:15px;">
+                {label.recalculate_OARR_Body_Text}
+            </div>
+        </div>
+
+        <div slot="footer">
+            <lightning-button variant="neutral" label="Cancel" onclick={closeAction} style="padding-right:10px;"></lightning-button>
+            <lightning-button variant="brand" label="Save" onclick={submitForRecalculation}></lightning-button>
+        </div>    
+
+        
+    </lightning-quick-action-panel>
+
+</template>

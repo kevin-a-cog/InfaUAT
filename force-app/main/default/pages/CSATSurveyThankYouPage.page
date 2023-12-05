@@ -1,0 +1,60 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false">
+    <html>
+        <head>
+            <style type="text/css">
+				.ct_qfield { margin:0; }
+				.ct_table_main { border:0; border-spacing:0; padding:2px; }
+				.ct_qtable { margin-bottom:1em; }
+				.ct_qtable { border:0; border-spacing:0; padding:0;}
+				.ct_td_qtext_top { padding-bottom:0.5em; }
+				.ct_td_qtext, .ct_td_text { vertical-align:top; }
+				.ct_td_text_help { vertical-align:top; }                
+				.ct_td_qtext, .ct_td_text { text-align:left; }
+				body {background-color:#454545}
+				.ct_qtext, .ct_choice, .ct_option_label, .ct_option_other, .ct_qpretext, .ct_qposttext {color:#6F6F7D; font-size:10pt; font-family:Verdana;}
+				.ct_qtext {font-style:normal; font-weight:bold;}   
+                .ct_p_text {color:#FFFFFF;}
+			</style>
+            <title>Thank You</title>
+        </head>
+        <body>
+			<table cellpadding="20" cellspacing="10" style="border: 1px solid #DDDDDD" align="center" bgcolor="#FFFFFF" >
+				<tr>
+					<td>
+						<center>
+							<form action="response.jsp" name="ctfrm" id="ctfrm" method="post" onsubmit="javascript:return firstsubmit();" >
+							<table id="ct_main" class="tdquestion ct_table_main" width="100%">
+								<tr>
+									<td valign="top" colspan="1" id="ctq_1163d60b60578b" class="ctq_1163d60b60578b ct_td_question">  
+										<div class="ct_qfield ct_qfield_text  " data-qnum="1">
+											<table class="ct_qtable ct_qtable_text ct_qtable_text_top">
+												<tr>
+                                                    <td class="ct_td_qtext ct_td_qtext_top">
+														<span class="ct_qtext ct_qtext_top">Thank you! Your Survey has been submitted</span>
+													</td>
+                                               	</tr>
+											</table>
+										</div>
+									</td>
+								</tr>
+							</table>
+							</form>
+						</center>
+					</td>
+				</tr>
+			</table>
+            <!-- start of Footer -->
+			<table width="750px" align="center" cellpadding="20" >
+				<tr>
+					<td align="center" class="footer">
+						<!-- Example of image shown outside of main area -->
+                        	<img src="{!$Resource.logo_parc}"/>
+								<!-- Your footer text in here -->
+								<p class="ct_p_text">&copy; Informatica. All rights reserved.</p>
+					</td>
+				</tr>
+			</table>
+			<!-- End of Footer -->
+		</body>
+    </html>
+</apex:page>

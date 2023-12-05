@@ -1,0 +1,369 @@
+<!--
+  @description       : 
+  @author            : Balaji
+  @group             : 
+  @last modified on  : 09-06-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author    Modification
+  1.0   09-27-2020   Balaji   Initial Version
+  Change History
+***************************************************************************************************************************************************
+Modified By            Date            Jira No.            Description                                                                   Tag
+***************************************************************************************************************************************************
+Deeksha Shetty        10-Apr-2023     I2RT-8162            Article Details not showing up on Parameter articles in preview mode.         T1
+-->
+<template>
+
+    <template if:true={showSpinner}>
+        <div class="divmaskArticleContent"
+            style="float: right; z-index: 1569; background-color: white; position: absolute; width: 100%;  height: 100%; display: block;top:0px;left:0px;">
+            <div style="width: 100%;margin: 0;position: fixed;padding: 0;text-align: center;top: 45%;left:0%;">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={viewArticle}>
+        <div class="slds-grid slds-grid_align-end">
+            <div class="slds-col">
+                <lightning-button variant="brand" label="View Article" title="View Article" onclick={doArticleOpen}>
+                </lightning-button>
+            </div>
+        </div>
+    </template>
+    <div hidden={isExternal}>
+        <!--lightning-record-form record-id={recordId} object-api-name="Knowledge__kav" 
+            layout-type="Full" mode="readonly" density="auto">
+        </lightning-record-form-->
+        <span class='preview-field-label'>Title</span></br>
+        <lightning-formatted-rich-text class='preview-field-value' value={title}></lightning-formatted-rich-text></br>
+
+        <div hidden={hideDescription}>
+            <span class='preview-field-label'>Description</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={description}>
+            </lightning-formatted-rich-text></br>
+        </div>
+
+        <div hidden={hideSolution}>
+            <span class='preview-field-label'>Solution</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={solution}></lightning-formatted-rich-text>
+            </br>
+        </div>
+
+        <div hidden={hideAddlInfo}>
+            <span class='preview-field-label'>Additional Information</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={addlInfo}></lightning-formatted-rich-text>
+            </br>
+        </div>
+
+        <div hidden={hideAltQuestions}>
+            <span class='preview-field-label'>Alternate Questions</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={alternateQuestions}>
+            </lightning-formatted-rich-text></br>
+        </div>
+
+        <div hidden={hideInternalNotes}>
+            <span class='preview-field-label'>Internal Notes</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={internalNotes}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <!-- T1 starts-->
+        <div hidden={hideParamName}>
+            <span class='preview-field-label'>Parameter Name</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={paramName}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <div hidden={hideDefinition}>
+            <span class='preview-field-label'>Definition</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={definition}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <div hidden={hideCompApplicable}>
+            <span class='preview-field-label'>Component Applicable</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={compApplicable}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <div hidden={hideParamDatatype}>
+            <span class='preview-field-label'>Parameter Data Type</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={paramDatatype}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <div hidden={hiderecomValue}>
+            <span class='preview-field-label'>Recommended Value</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={recomValue}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <div hidden={hideBehavWithDefVal}>
+            <span class='preview-field-label'>Behavior with Default Value</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={behavWithDefVal}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <div hidden={hideAltVal}>
+            <span class='preview-field-label'>Alternate Value</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={altVal}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <div hidden={hideBehavWithAltVal}>
+            <span class='preview-field-label'>Behavior with Alternate value</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={behavWithAltVal}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <div hidden={hidePossErrSymp}>
+            <span class='preview-field-label'>Possible Error Symptoms</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={possErrSymp}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <div hidden={hideErrorSignatures}>
+            <span class='preview-field-label'>Error Signatures</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={errorSignatures}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <div hidden={hideStepsToconfigParam}>
+            <span class='preview-field-label'>Steps to configure the parameter</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={stepsToconfigParam}>
+            </lightning-formatted-rich-text></br>
+        </div>
+        <div hidden={hideAddInfo2}>
+            <span class='preview-field-label'>Additional Information</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={addInfo2}>
+            </lightning-formatted-rich-text></br>
+        </div>
+
+        <!-- T1 ends-->
+
+        <div class="row">
+            <div class="column">
+                <span class='preview-field-label'>Primary Product</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={primaryProduct}>
+                </lightning-formatted-rich-text></br>
+                <div hidden={hideProductComponent}>
+                    <span class='preview-field-label'>Product Component</span></br>
+                    <lightning-formatted-rich-text class='preview-field-value' value={productComponent}>
+                    </lightning-formatted-rich-text></br>
+                </div>
+            </div>
+            <div class="column">
+                <span class='preview-field-label'>Product Version</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={productVersion}>
+                </lightning-formatted-rich-text></br>
+                <div hidden={hideAlsoAppliesTo}>
+                    <span class='preview-field-label'>Also Applies To</span></br>
+                    <lightning-formatted-rich-text class='preview-field-value' value={alsoAppliesTo}>
+                    </lightning-formatted-rich-text></br>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="column">
+                <span class='preview-field-label'>Keywords</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={keywords}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideDocumentPriority}>
+                <div class="column">
+                    <span class='preview-field-label'>Document Priority</span></br>
+                    <lightning-formatted-rich-text class='preview-field-value' value={documentPriority}>
+                    </lightning-formatted-rich-text></br>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="column">
+                <span class='preview-field-label'>Language</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={language}>
+                </lightning-formatted-rich-text></br>
+                <span class='preview-field-label'>Visible In Public Knowledge Base</span></br>
+                <!--lightning-icon icon-name="action:check" variant="success" size="xx-small"></lightning-icon><br/-->
+                <lightning-formatted-rich-text class='preview-field-value' value={visibleInPkb}>
+                </lightning-formatted-rich-text></br>
+                <div hidden={hideProblemType}>
+                    <span class='preview-field-label'>Problem Type</span></br>
+                    <lightning-formatted-rich-text class='preview-field-value' value={problemType}>
+                    </lightning-formatted-rich-text></br>
+                </div>
+            </div>
+            <div class="column">
+                <span class='preview-field-label'>Expiry Term</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={expiryTerm}>
+                </lightning-formatted-rich-text></br>
+                <div hidden={hideIndustry}>
+                    <span class='preview-field-label'>Industry</span></br>
+                    <lightning-formatted-rich-text class='preview-field-value' value={industry}>
+                    </lightning-formatted-rich-text></br>
+                </div>
+                <div hidden={hideProjectPhases}>
+                    <span class='preview-field-label'>Project Phases</span></br>
+                    <lightning-formatted-rich-text class='preview-field-value' value={projectPhases}>
+                    </lightning-formatted-rich-text></br>
+                </div>
+            </div>
+        </div>
+        <div hidden={hideUserTypes}>
+            <span class='preview-field-label'>User Types</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={userTypes}>
+            </lightning-formatted-rich-text>
+            </br>
+        </div>
+
+        <div class="row">
+            <div class="column">
+                <span class='preview-field-label'>Article Created Date</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={articleCreatedDate}>
+                </lightning-formatted-rich-text>
+                <span class='preview-field-label'>Last Published Date</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={lastPublishedDate}>
+                </lightning-formatted-rich-text>
+            </div>
+            <div class="column">
+                <span class='preview-field-label'>Created By</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={createdBy}>
+                </lightning-formatted-rich-text></br>
+                <span class='preview-field-label'>Last Modified By</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={lastModifiedBy}>
+                </lightning-formatted-rich-text></br>
+            </div>
+        </div>
+
+        <span class='preview-field-label'>Url Name</span></br>
+        <lightning-formatted-rich-text class='preview-field-value' value={urlValue}></lightning-formatted-rich-text>
+        </br>
+    </div>
+
+    <div hidden={isInternal}>
+        <div class='preview-title'>{title}</div><br />
+
+        <div>
+            <div hidden={hideDescription}>
+                <span class='preview-field-label'>Description</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={description}>
+                </lightning-formatted-rich-text></br>
+            </div>
+
+
+            <div hidden={hideSolution}>
+                <span class='preview-field-label'>Solution</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={solution}>
+                </lightning-formatted-rich-text>
+                </br>
+            </div>
+
+            <div hidden={hideAddlInfo}>
+                <span class='preview-field-label'>Additional Information</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={addlInfo}>
+                </lightning-formatted-rich-text></br>
+            </div>
+
+            <!-- T1 starts-->
+            <div hidden={hideParamName}>
+                <span class='preview-field-label'>Parameter Name</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={paramName}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideDefinition}>
+                <span class='preview-field-label'>Definition</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={definition}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideCompApplicable}>
+                <span class='preview-field-label'>Component Applicable</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={compApplicable}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideParamDatatype}>
+                <span class='preview-field-label'>Parameter Data Type</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={paramDatatype}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hiderecomValue}>
+                <span class='preview-field-label'>Recommended Value</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={recomValue}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideBehavWithDefVal}>
+                <span class='preview-field-label'>Behavior with Default Value</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={behavWithDefVal}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideAltVal}>
+                <span class='preview-field-label'>Alternate Value</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={altVal}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideBehavWithAltVal}>
+                <span class='preview-field-label'>Behavior with Alternate value</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={behavWithAltVal}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hidePossErrSymp}>
+                <span class='preview-field-label'>Possible Error Symptoms</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={possErrSymp}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideErrorSignatures}>
+                <span class='preview-field-label'>Error Signatures</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={errorSignatures}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideStepsToconfigParam}>
+                <span class='preview-field-label'>Steps to configure the parameter</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={stepsToconfigParam}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideAddInfo2}>
+                <span class='preview-field-label'>Additional Information</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={addInfo2}>
+                </lightning-formatted-rich-text></br>
+            </div>
+
+            <!-- T1 ends-->
+
+            <span class='preview-field-label'>Primary Product</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={primaryProduct}>
+            </lightning-formatted-rich-text></br>
+            <span class='preview-field-label'>Product Version</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={productVersion}>
+            </lightning-formatted-rich-text></br>
+            <div hidden={hideProductComponent}>
+                <span class='preview-field-label'>Product Component</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={productComponent}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideAlsoAppliesTo}>
+                <span class='preview-field-label'>Also Applies To</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={alsoAppliesTo}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideProblemType}>
+                <span class='preview-field-label'>Problem Type</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={problemType}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideUserTypes}>
+                <span class='preview-field-label'>User Types</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={userTypes}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <div hidden={hideProjectPhases}>
+                <span class='preview-field-label'>Project Phases</span></br>
+                <lightning-formatted-rich-text class='preview-field-value' value={projectPhases}>
+                </lightning-formatted-rich-text></br>
+            </div>
+            <span class='preview-field-label'>Title</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={title}></lightning-formatted-rich-text>
+            </br>
+            <span class='preview-field-label'>Url Name</span></br>
+            <lightning-formatted-rich-text class='preview-field-value' value={urlValue}></lightning-formatted-rich-text>
+            </br>
+        </div>
+    </div>
+
+    <div hidden={isPreview} class='pendingTR'>
+        <lightning-icon style="vertical-align:top" icon-name="utility:error" variant="warning" size="xx-small">
+        </lightning-icon>
+        &nbsp;<span class='review-warning'>{pendingTRMsg}</span></br>
+    </div>
+
+</template>

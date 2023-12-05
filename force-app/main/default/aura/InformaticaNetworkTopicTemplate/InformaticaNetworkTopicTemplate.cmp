@@ -1,0 +1,35 @@
+<aura:component implements="forceCommunity:themeLayout" description="IN container theme Layout">
+    <aura:attribute name="templateHeader" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="banner" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="templateFooter" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="showSearch" type="Integer" default="1920"/>
+    <aura:html tag="style">
+       :root {
+           --maxWidth: {!v.showSearch+'px;'};
+       }
+   </aura:html>
+    <div style="{! 'max-width:'+v.showSearch+'px;'}" class="mx-auto">
+        <div style="position:relative">
+            <div class="newHeader" style="{! 'max-width:'+v.showSearch+'px;'}">
+            {!v.templateHeader}
+        </div>
+            <div class="notificationContainer">
+                 <div class="notifications">
+            <forceCommunity:notifications/>
+                 </div>
+            </div>
+           
+        </div>
+        <div class="newBanner">
+            {!v.banner}
+        </div>
+        <div class="mainContentArea" style="background-color:#eaeaea">
+            <div class="container" style="padding-bottom: 20px;">
+	            {!v.body}
+            </div>
+        </div>
+        <div class="newFooter">
+            {!v.templateFooter}
+        </div>
+    </div>
+</aura:component>

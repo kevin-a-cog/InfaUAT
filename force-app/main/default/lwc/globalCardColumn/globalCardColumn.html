@@ -1,0 +1,53 @@
+<!--
+/*
+ * Name			:	GlobalCardColumn
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	6/22/2021
+ * Description	:	This LWC exposes the generic Card Column HTML created for Global.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		6/22/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+    <div class="slds-grid">
+
+		<!-- First we iterate over the columns. -->
+		<template for:each={lstLocalColumns} for:item="objColumn">
+			<div key={objColumn.strId} class={objColumn.strStyleClasses} style={objColumn.parentStyle}>
+
+				<!-- We display the value of the column, if any. -->
+				<template if:true={objColumn.strValue}>
+
+					<!-- Text value. -->
+					<template if:true={objColumn.boolIsText}>
+						<p class={objColumn.class}>{objColumn.strValue}</p>
+					</template>
+
+					<!-- Record Id value. -->
+					<template if:true={objColumn.boolIsRecordLink}>
+						<a href="#" data-record-id={objColumn.recordId} onclick={openRecord} class="links">{objColumn.strValue}</a>
+					</template>
+
+					<!-- URL value. -->
+					<template if:true={objColumn.boolIsLink}>
+						<a href={objColumn.url} target="_blank" class="links">{objColumn.strValue}</a>
+					</template>
+
+					<!-- Icon. -->
+					<template if:true={objColumn.boolIsIcon}>
+						<lightning-icon icon-name={objColumn.strValue} variant={objColumn.variant} size={objColumn.size} class={objColumn.class} style={objColumn.style}></lightning-icon>
+					</template>
+				</template>
+
+				<!-- If the column has child columns, we display them. -->
+				<template if:true={objColumn.lstColumns}>
+					<c-Global-card-column lst-columns={objColumn.lstColumns} obj-record={objRecord}></c-Global-card-column>
+				</template>
+			</div>
+		</template>
+	</div>
+</template>

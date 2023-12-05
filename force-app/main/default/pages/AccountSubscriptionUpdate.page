@@ -1,0 +1,3 @@
+<apex:page standardController="SBQQ__Subscription__c" recordSetVar="subscription" standardStylesheets="true" showHeader="false" extensions="MassUpdateSubscriptionController" action="{!redirectToLC}"> 
+    <apex:includeLightning />
+</apex:page>

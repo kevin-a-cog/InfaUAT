@@ -1,0 +1,56 @@
+<template>
+    <lightning-quick-action-panel header="Update Engagement Units Consumption">
+        <template if:true={spinner}>
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+
+        <P class="slds-m-bottom_small">Account Name: {accName}</P>
+
+        <template if:true={noEngUnitConMsg}>
+            <p>{label.SA_NoEngUnitConsAvailableMsg}</p>
+        </template>
+        <template if:false={noEngUnitConMsg}>
+        <lightning-combobox
+            name="Type"
+            class="validate slds-m-bottom_small"
+            label="Type"
+            value={contextTypeCBValue}
+            options={contextTypeCBOptions}
+            onchange={handleContextTypeCBChange}
+            required>
+        </lightning-combobox>
+
+        <template if:true={contextTypeCBValue}>
+            <lightning-dual-listbox
+                id="selectOptions"
+                name="Name"
+                label="Name"
+                class="validate slds-m-bottom_small"
+                source-label="Available Names"
+                selected-label="Selected Names"
+                options={engComboboxOptions}
+                value={engComboboxValue}
+                onchange={handleEngComboBoxChange}
+                required>
+            </lightning-dual-listbox>
+        </template>
+
+        <template if:true={engComboboxValue}>
+            <lightning-combobox
+            name="Status"
+            class="validate slds-m-bottom_small"
+            label="Status"
+            value={statusComboboxValue}
+            options={statusComboboxOptions}
+            onchange={handleStatusComboBoxChange}
+            required>
+        </lightning-combobox>
+        </template>
+    </template>
+    </lightning-quick-action-panel>
+
+    <div class="slds-modal__footer">
+        <button class="slds-button slds-button_neutral" onclick={handleCancel}>Cancel</button>
+        <button disabled={noEngUnitConMsg} class="slds-button slds-button_brand" onclick={handleSuccess}>Submit</button>
+    </div>
+</template>

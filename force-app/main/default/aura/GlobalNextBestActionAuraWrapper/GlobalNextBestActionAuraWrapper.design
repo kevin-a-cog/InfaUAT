@@ -1,0 +1,17 @@
+<!--
+/*
+ * Name			:	GlobalNextBestActionAuraWrapper
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	9/22/2021
+ * Description	:	Next Best Action Aura Wrapper Design Attributes.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		9/22/2021		N/A				Initial version.			N/A
+ */
+-->
+<design:component>
+	<design:attribute label="Page Size" name="intRecordsPerPage" description="Number of records per page." />
+</design:component>

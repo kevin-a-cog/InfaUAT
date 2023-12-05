@@ -1,0 +1,14 @@
+.THIS {
+}
+.THIS .alignRight{
+    text-align:right;
+}
+
+.THIS .fields{
+     
+    line-height: 30px;
+  height: 30x;
+     text-align:center;
+     color: red;
+     font-weight: bold;
+}

@@ -1,0 +1,23 @@
+.aem-salesforce-connect .surveyFeedback {
+    display: none;
+}
+
+/* .search-bar .slds-input{
+    position: relative;
+    top: -18px;
+    left: 0;
+    z-index: 2;
+    font-size: 14px;
+    background: #fff;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px solid #979797;
+    height: 35px;
+    width: 190px;
+}
+
+.search-bar .slds-input:focus{
+    box-shadow: none;
+    border: 1px solid #979797;
+    outline: 1;
+} */

@@ -1,0 +1,59 @@
+<!--
+/*
+ * Name			:	enableDisableP0
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	10/21/2023
+ * Description	:	This LWC will enable and disable the P0 flag on the case.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					                Tag
+ **********************************************************************************************************
+ Vignesh Divakaran		10/21/2023		I2RT-8841		Initial version.			                N/A
+ Vignesh Divakaran		11/20/2023		I2RT-9503		Added logic to get Business Justification   T01
+                                                        to enable/disable P0 on the case.
+ */
+-->
+<template>
+    
+    <!--Quick Action-->
+    <lightning-quick-action-panel title={strHeader}>
+        <div class="slds-is-relative">
+            
+            <template lwc:if={boolInitialLoad}>
+                <!-- Lightning Spinner -->
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner> <!-- </T01> -->
+            </template>
+
+            <template lwc:else>
+
+                <!-- Lightning Spinner -->
+                <lightning-spinner alternative-text="Loading" size="medium" if:true={boolDisplaySpinner}></lightning-spinner>
+                
+                <!-- Modal Header -->
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title slds-hyphenate">{strHeader}</h2> <!-- </T01> -->
+                </header>
+                
+                <!-- Modal Body -->
+                <div class="slds-p-around_small">
+    
+                    <!-- Lightning form -->
+                    <lightning-record-edit-form object-api-name={objectApiName} record-id={recordId} density="comfy">
+                        <lightning-input-field field-name="Business_Justification__c" required="true"> </lightning-input-field> <!-- </T01> -->
+                    </lightning-record-edit-form>
+                </div>
+            </template>
+
+        </div>
+    
+        <!-- Footer Buttons -->
+        <div slot="footer">
+            <lightning-button label="Cancel" title="Cancel" onclick={cancel}></lightning-button>
+            &nbsp; &nbsp;
+            <lightning-button label="Save" title="Save" variant="brand" onclick={save}></lightning-button>
+        </div>
+    
+    </lightning-quick-action-panel>
+
+</template>

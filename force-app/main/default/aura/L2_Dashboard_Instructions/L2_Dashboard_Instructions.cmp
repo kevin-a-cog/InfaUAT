@@ -1,0 +1,244 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+          
+   <article class="slds-card" >
+        
+        <!-- <Add warning/alert on L2 Dashboard Monitoring for Refresh>-->
+        <div class="slds-clearfix">
+       <div class="fields" >REFRESH THE DASHBOARD TO SEE LATEST RESULTS         
+      
+        <lightning:button class="slds-float_right" variant="destructive"
+                          label="Dashboard Assistant"
+                          title="Help for Dashbaords"
+                          onclick="{! c.openModel }" iconName="utility:user_role" iconPosition="left" /></div>
+         </div>       
+    </article>
+     <!--<div style="text-align:right;"> </div>-->
+    <!--<div class="slds-m-around_xx-small">-->
+        <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+        <aura:if isTrue="{!v.isModalOpen}">
+             
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                         <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close slds-button__icon_large"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_large slds-hyphenate"  style="color: #01479a;font-weight: normal;">
+                            <lightning:icon iconName="utility:user_role" alternativeText="Dashboard help center!" title="Dashboard Help" />
+                            Dashboard Assistant
+                        </h2>
+                    </header>
+                    
+            
+                                                          
+                     <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered  slds-table_col-bordered" style="table-layout:fixed;width:100%;display:inline-table">
+                <thead style="">
+                    <tr class="slds-line-height_reset" style="">
+                        <th class="" style="color: #01479a;" scope="col">Report name</th>
+                        <th class="" style="color: #01479a;" scope="col">Frequency to monitor</th>
+                        <th class="" style="color: #01479a;" scope="col">Steps to be done</th>
+                        <th class="" style="color: #01479a;" scope="col">If issues persists</th>
+                    </tr>
+                </thead>
+                <tbody style="">
+<!--                        <tr scope="row" class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Accounts NOT interfaced to Old org </td>
+                        <td class="slds-cell-wrap">Everytime </td>
+                        <td class="slds-cell-wrap">False update the record and save. This should retrigger outbound message and create record in old org. Once created, the old org account number will be updated in the new org account </td>
+                        <td class="slds-cell-wrap">If the records are not created in old org, reach out to Srikanth Pantula</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Contacts  NOT interfaced to Old org </td>
+                        <td class="slds-cell-wrap">Everytime </td>
+                        <td class="slds-cell-wrap">False update the record and save. This should retrigger outbound message and create record in old org. Once created, the old org account contact will be updated in the new org Contact </td>
+                        <td class="slds-cell-wrap">If the records are not created in old org, reach out to Srikanth Pantula</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Opportunities NOT interfaced to Old org </td>
+                        <td class="slds-cell-wrap">Everytime </td>
+                        <td class="slds-cell-wrap">Update the field Pass_Integration__c to current date and save. False update the record and save. This should retrigger outbound message and create record in old org. Once created, the old org Opty number will be updated in the new org Opty. </td>
+                        <td class="slds-cell-wrap">If the records are not created in old org, reach out to Srikanth Pantula</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Order and Quote Diff </td>
+                        <td class="slds-cell-wrap">Everytime </td>
+                        <td class="slds-cell-wrap">Check which product amount is not synched from Quote to Order. It should be mostly for Premium Success of Nested DaaS Address Cleansing bundle.  </td>
+                        <td class="slds-cell-wrap">Reach out to dev team</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Draft Orders- Price calculation error </td>
+                        <td class="slds-cell-wrap">Everytime </td>
+                        <td class="slds-cell-wrap">If the Order doesn't contain any Usage product, then update Price Calculation Status to Not Needed. Else, retrigger Price Calculation by clicking Edit Order Products button on Order Header.  </td>
+                        <td class="slds-cell-wrap">Reach out to dev team</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">RA set to Ready, not updated Order </td>
+                        <td class="slds-cell-wrap">Everytime </td>
+                        <td class="slds-cell-wrap">Login As the Revenue Team who updated Revenue Agreement to Ready and update the flag "Revenue Agreement Processed" to TRUE on Order  </td>
+                        <td class="slds-cell-wrap">Reach out to dev team</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">RA is Ready but Order is Review &amp; Fulfil </td>
+                        <td class="slds-cell-wrap">Everytime </td>
+                        <td class="slds-cell-wrap">If Order is CMS Approved, Fulfilled (Fulfillment Completed Date populated) and RA processed, then Order should be moved to "Bill &amp; Contract". Before moving to "Bill &amp; Contract", make sure CPQ Contract is created for the Order  </td>
+                        <td class="slds-cell-wrap">Reach out to dev team</td>
+                    </tr>
+-->
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Orders without CPQ Contracts </td>
+                        <td class="slds-cell-wrap">Everytime </td>
+                        <td class="slds-cell-wrap">If Order is CMS Approved, Fulfilled (Fulfillment Completed Date populated) and RA processed, then Order should be Contracted. If the Order has reference to Quote, then retrigger contract creation by updating "Contracted" checkbox. If that failed, check the SBQQ__RecordJob__c object, which will have the details for this failure.  </td>
+                        <td class="slds-cell-wrap">Reach out to dev team</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">SOP Writeback not processed </td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">
+                        1) Get the Order Id of Orders from the report.
+                        2) Feed the Order Id to OrderIds set class in the <a href="https://infa.my.salesforce.com/sfc/p/41000000dqX7/a/3f0000008h8Y/lrG60WJ2Ckj.7m1N43dk.Ci0q3nJOIBkdthU._POgVk" target="_blank">Script</a>. 
+                        3) Execute the script in Execute anonymous window.
+                        4) Refresh the dashboard again to see if it is cleared.
+                        </td>
+                        <td class="slds-cell-wrap"> Reach out to Dev Team.</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Asset Creation Failed </td>
+                        <td class="slds-cell-wrap">Everytime </td>
+                        <td class="slds-cell-wrap">Check the Error Message on "Asset Creation Error Message" field and act accordingly. If Asset_Creation_Status__c field on order is "Failed" and Asset_Creation_Error_Message__c field is having an error, populate the Asset_Creation_Status__c field as "Initiated" and blank out the error message in Asset_Creation_Error_Message__c field. </td>
+                        <td class="slds-cell-wrap">Reach out to dev team</td>
+                    </tr>
+<!--                   <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Orders without First Invoice </td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">Invoice Batch should be NULL, and Invoice Run Processing Status should be ‘Pending Billing’. Check with Dev Team before making any changes. </td>
+                        <td class="slds-cell-wrap"> Reach out to Dev Team.</td>
+                    </tr>
+-->					
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Renewal Optys NOT created for Contracts </td>
+                        <td class="slds-cell-wrap">Once in a day after 3 PM IST </td>
+                        <td class="slds-cell-wrap">Use SOG button.  </td>
+                        <td class="slds-cell-wrap">Reach out to dev team</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Orders not moved to Completed </td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap"> If the Order is in Bill &amp; Contract Status, with Contract, First Invoice, Asset &amp; Entitlements and Plan Products created, then order should have been moved to "Completed". To check the entire criteria, refer to the ordertriggerhandler class. If the only reason for not moving to completed is that plan products created checkbox is false on order, then check if plan products are created. To check that, navigate to order->contract->related subscription lines. The subscription lines will have plan products. Check if the end date on the plan products are a future date. If so, make the plan products created checkbox on order to true manually, and that will trigger the order to completed automatically </td>
+                        <td class="slds-cell-wrap"> Reach out to Dev Team.</td>
+                    </tr>
+                     <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Revenue Agreement w/o Bookings</td>
+                        <td class="slds-cell-wrap"> Everytime </td>
+                        <td class="slds-cell-wrap">After Revenue Agreement is set to "Sent to RMCS", Booking and Booking Line Details should be created. It happens from Trigger Handler on Revenue Schedules </td>
+                        <td class="slds-cell-wrap"> Reach out to Dev Team.</td>
+                    </tr>
+<!--                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Invoices not interfaced to Oracle</td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">After one hour of Invoice is Posted, the "Invoice Sent?" flag on Invoice shoudld be updated to TRUE. And after two hours of "Invoice Sent?" flag to TRUE, then ERP ID should be populated. </td>
+                        <td class="slds-cell-wrap"> Reach out to Murali Venkatesan.</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">RA processed to Ready and not Sent to RMCS </td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">After two hours when RA is set to Ready, the PSFT Integration should move the RA to "Sent to RMCS" stage. And then after three or four hours of time, PSFT Integration will update RMCS Contract # on Revenue Agreement </td>
+                        <td class="slds-cell-wrap"> Reach out to Mike Wegener </td>
+                    </tr>
+-->	
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Orders stuck in Invoice Scheduler </td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">Check whether Invoice is Posted or not. Check if there are any error logs created under ‘Invoice Run’ of the Order Product/Invoice. If invoice is created and is in draft, check if the due date on invoice is populated. If not, then calculate the due date from invoice date based upon the payment term and populate the due date (Due Date = Invoice Date + Payment Term on order). Then move the invoice to posted. Check with Dev Team before making any changes. </td>
+                        <td class="slds-cell-wrap"> Reach out to Dev Team.</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Invoice Scheduler Errors </td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">Go to Invoice Run and click “Clean Up”. Run the report “Orders stuck in Invoice Scheduler” to check if the clean up is completed.  </td>
+                        <td class="slds-cell-wrap"> Reach out to Dev Team.</td>
+                    </tr>
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Renewal Opportunity with OARRs as 0 </td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">Please make a false update to the related Contract.
+                            Steps to to be done if there are any records and false update is not working:
+                            1) Go to the contract – add a cent to the ARR fields(5 fields – ARR cloud, ARR Daas, ARR perpetual support, ARR 2) Subscription support, ARR Onprem subscription) if there is any value in the ARR fields.
+                            3) Check the opty is updated with the OARR fields visible on the report.
+                            4) GO to the contract – remove the extra cent and have the actual value updated on the ARR fields.
+                        </td>
+                        <td class="slds-cell-wrap">Reach out to Dev Team.</td>
+                    </tr>
+<!--                    <tr class="slds-hint-parent">
+                       <td class="slds-cell-wrap">Burst Asset Orders </td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">Execute the script provided by Ambica. <a href="https://informatica.sharepoint.com/:w:/s/SalesforceCleanup/EblBNjeuT1pGiLgI3UhYGQcBX6hRznMtaOaRhIiVr4b5bg?e=HcsRxj" target="_blank">[Link]</a></td>
+                        <td class="slds-cell-wrap">Reach out to Dev Team.</td>
+                    </tr>
+-->					
+                    <tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Posted Invoices with Draft Invoice Lines</td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">
+                        1) Identify the Invoice Id.
+                        2) Feed the Invoice Id to where clause in the script in the location - <a href="https://informatica.sharepoint.com/:t:/s/SalesforceCleanup/EUS83juNRo5BgPKK-5STpKsB0K4R_a4C0_6Om6AZlLAvqw?e=NAtYdu"> Link to Script</a> 
+                        3) Execute the script in Execute anonymous window.
+                        4) Manually update the Invoice Status to Posted.
+                        </td>
+                        <td class="slds-cell-wrap"> Reach out to Dev Team.</td>
+                    </tr>
+					<tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Orders without ROC junction object</td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">
+                        Create an ROC record manually and link the order to it.
+                        </td>
+                        <td class="slds-cell-wrap"> Reach out to Dev Team.</td>
+                    </tr>
+					<tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">DWLAM - # of Opps Created by GEO</td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">
+                        Copy the Geo values from Territory and update on Opty.
+                        </td>
+                        <td class="slds-cell-wrap"> Reach out to Dev Team.</td>
+                    </tr>
+					<tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Terminated orders</td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap"> Follow the steps as per the senerios documented. <a href="https://informatica.sharepoint.com/:t:/s/SalesforceCleanup/EX1OmXcDlsVBosWnkFIwaN8BiwdHiGUGs4vo1l-ipeG2yQ?e=I9jqBU"> Link to document </a>  </td>
+                        <td class="slds-cell-wrap"> Reach out to Dev Team.</td>	
+                    </tr>
+					<tr class="slds-hint-parent">
+                        <td class="slds-cell-wrap">Interlock and Account Mismatch</td>
+                        <td class="slds-cell-wrap"> Once in a day </td>
+                        <td class="slds-cell-wrap">	Follow the steps as per the steps documented. <a href="https://informatica.sharepoint.com/:w:/s/SalesforceCleanup/EXogo-BZkmJJiQJLcTvtE3cBy4dXUNhASsRaVij_e8RatQ?e=lwdUhW"> Link to document </a> </td>
+                        <td class="slds-cell-wrap"> Reach out to Dev Team</td>	
+                    </tr>
+                </tbody>
+            </table>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <!--<lightning:button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>-->
+                        <lightning:button variant="brand"
+                                          label="OK"
+                                          title="OK"
+                                          onclick="{!c.submitDetails}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    <!--</div>-->
+    
+</aura:component>

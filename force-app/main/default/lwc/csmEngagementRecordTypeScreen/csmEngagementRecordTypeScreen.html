@@ -1,0 +1,35 @@
+<template>
+
+	<div class="slds-modal__header">
+		<h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">New Engagement</h1>
+	</div>
+	<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+
+		<lightning-layout>
+			<lightning-layout-item size="4">
+				<p style="float:right;">Select a record type</p>
+			</lightning-layout-item> 
+			<lightning-layout-item size="8"></lightning-layout-item>
+		</lightning-layout>
+		<lightning-layout multiple-rows="true">
+			<template for:each={recordstypes} for:item="obj">
+				<lightning-layout-item key={obj.id} size="1"></lightning-layout-item>
+				<lightning-layout-item key={obj.id} size="3"></lightning-layout-item>
+				<lightning-layout-item key={obj.id} size="1">
+					<input type="radio" key={obj.id} label="Enter some text" value={obj.value} 
+                    class="slds-m-top_xx-small slds-m-bottom_x-small" checked={obj.isChecked} onclick={handleRadioGrpEvent} 
+                    style=" margin-left:20px;"></input>
+				</lightning-layout-item>
+				<lightning-layout-item key={obj.id} size="7">
+					<p class="slds-m-top_xx-small slds-m-bottom_x-small">{obj.label}</p>
+				</lightning-layout-item>
+			</template>
+		</lightning-layout>
+	</div>
+
+	<div class="slds-modal__footer">
+		<button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={closeModal}>Cancel</button>
+		<button class="slds-button slds-button_brand" onclick={getSelectedRecordtypeId}>Next</button>
+	</div>
+
+</template>

@@ -1,0 +1,21 @@
+.in-action-button{
+    display: flex;
+}
+
+.in-title{
+    margin-left: 9%;
+    margin-right: 6%;
+}
+
+.in-save-button{
+    margin-right: 10px;
+}
+
+.in-upvote{
+    margin-left: 9%;
+    margin-right: 73%;
+}
+
+.event-wrapper{
+    max-width: 400px;
+}

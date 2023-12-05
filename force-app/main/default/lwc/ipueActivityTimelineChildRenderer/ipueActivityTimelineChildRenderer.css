@@ -1,0 +1,12 @@
+.slds-timeline__item_task:before{
+    background : #8b8888;
+    margin-left: -22px;
+}
+.slds-timeline__item_task:after{
+    background : #8b8888;
+    margin-left: -22px;
+}
+.CustomCSS{
+    border-radius: 50%;
+    background:#FF7D00;
+}

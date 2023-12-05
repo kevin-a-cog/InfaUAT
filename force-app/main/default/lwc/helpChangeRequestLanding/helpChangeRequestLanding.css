@@ -1,0 +1,43 @@
+.heading-wrapper {
+    background-image: url('/resource/./informaticaNetwork3/inf_header_banner_37_1440x173.jpg');
+    background-size: 100% 100%;
+}
+
+.searchBox-desktop {
+    display: flex;
+    margin-bottom: -36px;
+    margin-right: 10px;
+}
+
+.searchBox-mobile {
+    display: none;
+}
+
+/* new CSS added */
+.in-communities-wrapper {
+    position: relative;
+}
+
+.in-body-height{
+    min-height: calc(100vh - 396px);
+}
+
+@media screen and (max-width:768px) {
+    .searchBox-mobile {
+        display: block;
+        margin: 18px;
+    }
+
+    .searchBox-desktop {
+        display: none;
+    }
+
+    .in-communities-landing-bg {
+        padding-top: 10px;
+    }
+
+    .in-communities-landing-container {
+        margin: 0 auto;
+        width: 92%;
+    }
+}

@@ -1,0 +1,17 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId"  controller="KBLWCHandler">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="loaded" type="Boolean" default="true"/>
+    
+    <aura:if isTrue="{! v.loaded }">
+             <div class="slds-p-around_medium slds-align_absolute-center" style="height:8rem"> Preview is loading! Please wait</div>
+                    <div role="status" class="slds-spinner slds-spinner_brand slds-spinner_medium">
+                      <span class="slds-assistive-text">Loading</span>
+                      <div class="slds-spinner__dot-a"></div>
+                      <div class="slds-spinner__dot-b"></div>
+                    </div>
+    </aura:if>
+    <aura:if isTrue="{!! v.loaded }">
+        <div class="slds-p-around_medium slds-align_absolute-center" style="height:8rem"> Preview opened Successfully. You can close this popup</div>
+    </aura:if>
+    <!-- c:knowledgepreviewarticle recordId="{!v.recordId}"/ -->
+</aura:component>

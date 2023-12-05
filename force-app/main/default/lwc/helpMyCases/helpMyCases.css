@@ -1,0 +1,13 @@
+.in-component-heading{
+    font-weight: 300;
+    font-size: 33px;
+    color: #333333;
+    margin: 24px 0px;
+    display: inline-block;
+}
+.in-heading-div{
+    align-items: center;
+}
+.my-cases-heading{
+    width: fit-content;
+}

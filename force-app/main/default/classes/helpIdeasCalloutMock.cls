@@ -1,0 +1,10 @@
+global class helpIdeasCalloutMock  implements HttpCalloutMock{
+     global HTTPResponse respond(HTTPRequest req) {   
+        // Create a fake response
+        HttpResponse res = new HttpResponse();
+        res.setHeader('Content-Type', 'application/json');
+        res.setBody('{"totalCount" : 5472,"results" : [ {"title" : "Configuring an IAM Assume Role to Access AWS Resources Using PowerExchange for Amazon S3","uri" : "https://youtube.com/Channel:UCSelL9LuO0Ubp1TQ5QhO0NA/Video:56ptHKf_B0U","printableUri" : "https://www.youtube.com/watch?v=56ptHKf_B0U","clickUri" : "https://www.youtube.com/watch?v=56ptHKf_B0U","raw" : {"systitle" : "Test Coveo Idea","sfdownvote_count__c" : 0.0,"sfupvote_count__c" : 0.0,"syssfid" : "0877j000000GrtXAAS","sftitle" : "Test Coveo Idea","rowid" : 1644328272529649804,"sfcreateddate" : 1644325468000,"clickableuri" : "https://infa--service.my.salesforce.com/0877j000000GrtXAAS","sysdate" : 1644325468000,"sfbody" : "<p>test coveo Idea test coveo Idea test coveo Idea test coveo Idea test coveo Idea test coveo Idea</p>","sfcasestatus" : "New","sfcreatorsmallphotourl" : "https://infa--service--c.documentforce.com/profilephoto/7297j000000GuQU/T","sysrowid" : 1644328272529649804},"Title" : "Configuring an IAM Assume Role to Access AWS Resources Using PowerExchange for Amazon S3","Uri" : "https://youtube.com/Channel:UCSelL9LuO0Ubp1TQ5QhO0NA/Video:56ptHKf_B0U","PrintableUri" : "https://www.youtube.com/watch?v=56ptHKf_B0U","ClickUri" : "https://www.youtube.com/watch?v=56ptHKf_B0U","UniqueId" : "42.8693$https://youtube.com/Channel:UCSelL9LuO0Ubp1TQ5QhO0NA/Video:56ptHKf_B0U","Excerpt" : "This video demonstrates how to configure an IAM assume role to access AWS resources using PowerExchange for Amazon S3.","FirstSentences" : null}]}');
+        res.setStatusCode(200);
+        return res;
+    }
+}

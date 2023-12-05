@@ -1,0 +1,139 @@
+<!--
+  @description       : 
+  @author            : SF Developer
+  @group             : 
+  @last modified on  : 07-27-2021
+  @last modified by  : Tejasvi Royal
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   12-10-2020   SF Developer   Initial Version
+  2.0   31-05-2021   Tejasvi Royal  Modified Version
+  3.0   21-02-2023   Isha Bansal  Modified via I2RT-7258
+-->
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large"
+        aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container custom-container">
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Collaboration Request</h2>
+            </header>
+            <div class="slds-modal__content slds-var-p-around_large lwcbody" id="modal-content-id-1">
+                <template if:true={showType}>
+                    <lightning-combobox data-id="requestType" data-field="Type__c" name="RequestType" label="Type" onchange={handleFieldChange}
+                        required placeholder="Select the type of request" options={typeOptions} value={raiseHandObj.fields.Type__c}>
+                    </lightning-combobox>
+                    <br />
+                </template>
+                <template if:false={showCaseHandoff}>
+                    <template if:true={showSubtype}>
+                        <lightning-combobox data-id="requestSubtype" data-field="Subtype__c" name="RequestSubtype" label="Collaborate With"
+                            onchange={handleFieldChange} required placeholder="Select with whom to Collaborate with"
+                            options={subtypeOptions}>
+                        </lightning-combobox>
+                        <br />
+                    </template>
+                    <!-- T01 change start-->
+                    <template if:true={showAdditionalChoice}>
+                        <lightning-radio-group data-id="addonChoice" name="psOrSuppEnggRadioGroup"
+                                              label=""
+                                              options={additionalSelectionOption}
+                                              value={selectedAddtionalChoice}
+                                              onchange={handleFieldChange}
+                                              type="button">
+                        </lightning-radio-group>
+                             <br/>
+                    </template>
+                <!-- T01 change end -->
+                    <template if:true={showProduct}>
+                        <lightning-combobox data-id="productName" data-field="Product__c" name="productName" label="Product" required
+                            placeholder="Select the Product" options={productOptions} onchange={handleFieldChange}
+                            value={raiseHandObj.fields.Product__c} dropdown-alignment="auto">
+                        </lightning-combobox>
+                        <br />
+                    </template>
+
+                    
+
+                    <template if:true={showTitle}>
+                        <lightning-input data-id="title" data-field="Title__c" name="Title" label="Title" required
+                            placeholder="Enter your title" onchange={handleFieldChange}
+                            value={raiseHandObj.fields.Title__c}>
+                        </lightning-input>
+                        <br />
+                    </template>
+                    <template if:true={showQuestion}>
+                        <lightning-textarea data-id="question" data-field="Question__c" name="Question" label="Question" required
+                            placeholder="Provide details on what help you need. Include in below order Component, [Sub-Component if applicable]," 
+                            onchange={handleFieldChange}>
+                        </lightning-textarea>
+                        <br />
+                    </template>
+                    <template if:true={showMeetingTime}>
+                        <lightning-combobox data-id="meetingTime" data-field="Meeting_Time__c" name="MeetingTime" label="Time" required
+                            placeholder="Select the time" options={meetingTimeOptions} onchange={handleFieldChange}>
+                        </lightning-combobox>
+                        <br/>
+                    </template>
+
+                    
+
+                    <template if:true={showDescription}>
+                        <lightning-textarea data-id="description" data-field="Description__c" name="Description" label="Description" required
+                            placeholder={descPlaceholderText} onchange={handleFieldChange}
+                            class="lwc-textarea"
+                            value={raiseHandObj.fields.Description__c}>
+                        </lightning-textarea>
+                        <br />
+                    </template>
+
+                    <template if:true={showoperations}>
+
+                        
+                            <!--lightning-combobox data-id="productName" data-field="Product__c" name="productName" label="Product" required
+                                placeholder="Select the Product" options={productOptions} onchange={handleFieldChange}
+                                value={raiseHandObj.fields.Product__c}>
+                            </lightning-combobox -->
+                            <br />
+                        
+
+                        
+                        <lightning-combobox data-id="envtype" data-field="Environment__c" name="environmenttype" label="Environment Type" required
+                            placeholder="Select the Environment" options={envtypes} onchange={handleFieldChange}>
+                        </lightning-combobox>
+                        <br/>
+                    
+                        <lightning-combobox data-id="activitytype" data-field="Activity_Type__c" name="Activity Type" label="Activity Type" required
+                            placeholder="Select the Activity Type" options={activitytypes} onchange={handleFieldChange}>
+                        </lightning-combobox>
+                        <br/>
+
+                    
+                        <lightning-input type="datetime" name="activitywindow" data-field="Preferred_Window__c" label="Preferred Window"  
+                          onchange={handleFieldChange}   min={todayDate}  message-when-bad-input="Please enter a valid time in future"
+                            message-when-range-underflow="Please enter a valid time in future">
+                    </lightning-input> 
+                        <br/>
+                    </template>
+
+
+                </template>
+                <template if:true={showCaseHandoff}>
+                    <c-case-raise-handoff record-type-id={caseRecordTypeId} onhandofftypechange={handleHandoffTypeChange}
+                    onlookupqueueselectionchange={handleQueueLookupSelectionChange} onlookupcombinedselectionchange={handleCombinedLookupSelectionChange}
+                    onsupportstartvalue={handleSupportStartValue} onsupportendvalue={handleSupportEndValue}
+                    classname={classname}
+                    classnamesteps={classnamesteps}
+                    onhandoffcommentschange={handleHandoffCommentsChange} onhandoffstepstakenchange={handleHandoffStepsChange}>
+                    </c-case-raise-handoff>
+                </template>
+            </div>
+            <footer class="slds-modal__footer">
+                <template if:true={saveInProgress} class="slds-is-relative">
+                    <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+                </template>
+                <lightning-button class="slds-var-p-right_xx-small" label="Cancel" title="Cancel" onclick={cancel}>Cancel</lightning-button>
+                <lightning-button class="slds-var-p-left_xx-small" label="Submit" title="Submit" variant="brand" onclick={submit}></lightning-button>
+            </footer>
+        </div>
+    </section>
+</template>

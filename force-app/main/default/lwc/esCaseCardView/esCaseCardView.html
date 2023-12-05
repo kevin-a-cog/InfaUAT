@@ -1,0 +1,57 @@
+<!--
+/*
+ * Name			:	esCaseCardView
+ * Author		:	Vignesh Divakaran
+ * Created Date	: 	9/24/2022
+ * Description	:	This is used to show case in a card view.
+
+ Change History
+ ****************************************************************************************************************
+ Modified By			Date			Jira No.		Description					                         Tag
+ ****************************************************************************************************************
+ Vignesh Divakaran	    9/24/2022		I2RT-6880		Initial version.			                         N/A
+ Vignesh Divakaran	    10/29/2022		I2RT-7296		Remove Priority field & add hover for product field  T01
+ */
+-->
+<template>
+
+    <div class="in-wrapper-bg-fuild-white h-100">
+        <div class="card-detail-wrapper">
+            <div class="case-num-wrap">
+                <div class="case-num" data-id={objCase.Id} onclick={redirectToCase}>{objCase.CaseNumber}</div>
+                <div class="case-label">{label.Case_Number}</div>
+            </div>
+
+            <ul class="my-3">
+                <li class="case-org-id">                  
+                    <div class="case-value">{objCase.Org_Formula_Id__c}</div>
+                    <div class="custom-toolTip">{objCase.Org_Formula_Id__c}</div>
+                    <div class="case-label">{label.Org_ID}</div>
+                </li>
+            </ul>
+
+            <div class="case-detail-wrapper my-3">
+                <div class="case-detail">{objCase.Subject}</div>
+                <div class="custom-toolTip">{objCase.Subject}</div>
+                <div class="case-label">{label.Subject}</div>
+            </div>
+
+            <ul class="my-3">
+                <li class="case-product">
+                    <div class="case-value">{objCase.Forecast_Product__c}</div>
+                    <div class="custom-toolTip">{objCase.Forecast_Product__c}</div> <!-- <T01> -->
+                    <div class="case-label">{label.Product}</div>
+                </li>
+                <li>
+                    <div class="case-value">{objCase.Next_Action__c}</div>
+                    <div class="case-label">{label.Next_Action}</div>
+                </li>
+                <li>
+                    <div class="case-value">{objCase.Status}</div>
+                    <div class="case-label">{label.Status}</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</template>

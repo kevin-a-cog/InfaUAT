@@ -1,0 +1,39 @@
+.list-item {
+  padding: 10px 0px;
+  text-transform: capitalize;
+}
+
+.user-name {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 42px;
+  display: flex;
+  align-items: center;
+  color: #373737;
+}
+
+.name-icon {
+  flex-direction: column;
+}
+
+.profile-icon {
+  border: 1px solid #4cc3d0;
+  box-sizing: border-box;
+  border-radius: 44px;
+  width: 50px;
+  height: 50px;
+  margin-top: 10px;
+}
+
+.points{
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: 0.02em;
+  color: #373737;
+}
+
+.border-fix{
+  margin: -25px 0px;
+}

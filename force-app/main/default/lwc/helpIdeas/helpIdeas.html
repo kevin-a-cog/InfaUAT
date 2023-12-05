@@ -1,0 +1,338 @@
+<template>
+    <template if:true={mainData}>
+        <div class="container infa-idea-container">
+            <div>
+                <template for:each={mainData} for:item="item">
+                    <div key={item.ideaId}>
+                        <div>
+                            <div class="ideas-title">
+                                {item.title}
+
+                                <p class="ideas-creatorName">
+                                    <template if:false={changeRequestIdea}>
+                                        <a class="slds-tagblue" href="#">{item.CreatorName} </a>
+                                        &nbsp;{item.CreatedDate}
+                                    </template>
+
+                                    <template if:true={changeRequestIdea}>
+                                        <a class="slds-tagblue" href="#"> </a> &nbsp;{item.CreatedDate}
+                                    </template>
+
+                                </p>
+                            </div>
+                            <div class="infa-status-product">
+                                <div
+                                    class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-status infa-content-tag">
+                                    {item.Status}
+                                </div>
+
+                                <template for:each={item.CategoryList} for:item="categoryName">
+                                    <div key={categoryName}
+                                        class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-status infa-content-tag">
+                                        {categoryName}
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="row">
+                                <template if:false={hideUpvoteAction}>
+                                    <div class="col-sm-1 col-2 infa-ideas-votes">
+                                        <div class="upvote">
+                                            <template if:true={disableUpvote}>
+                                                <div class="slds-green-upvote">
+                                                    <input type="image" src={disableup} alt="up">
+                                                </div>
+                                            </template>
+                                            <template if:false={disableUpvote}>
+                                                <div class="slds-green-upvote">
+                                                    <input type="image" src={chevronup} alt="up" onclick={handleUpvote}
+                                                        disabled={disableUpvote}>
+                                                </div>
+
+                                            </template>
+
+                                            <div class="upvoteNumber">
+                                                {item.upvoteCount}
+                                            </div>
+
+                                            <template if:true={disableDownvote}>
+                                                <div class="slds-red-downvote">
+                                                    <input type="image" src={disabledown} alt="down">
+                                                </div>
+                                            </template>
+                                            <template if:false={disableDownvote}>
+                                                <div class="slds-red-downvote">
+                                                    <input type="image" src={chevrondown} alt="down"
+                                                        onclick={handleDownvote} disabled={disableDownvote}>
+                                                </div>
+                                            </template>
+
+                                        </div>
+
+                                        <div class="votecount">
+                                            {item.upvoteCount} votes
+
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <div class="col-sm-10 col-10">
+                                    <div class="ideas-description">
+                                        <!-- <pre class="slds-ideabody">
+                                        {item.Body}
+                                    </pre> -->
+
+                                        <lightning-formatted-rich-text value={item.Body} access="global">
+                                        </lightning-formatted-rich-text>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <ul class="slds-list_horizontal slds-listItems">
+
+                                    <li class="in-ideas-action-item slds-item">
+                                        <lightning-button-icon variant="bare" onclick={handleLike} data-id={item.ideaId}
+                                            name="IdeaLike" class={togglecls} icon-name="utility:like" size="medium">
+                                        </lightning-button-icon>
+                                    </li>
+                                    <li class="in-ideas-action-item slds-item">
+                                        <lightning-button variant="base" label={likeUItext} title="Like"
+                                            data-id={item.ideaId} name="IdeaLike" onclick={handleLike}
+                                            class="in-ideas-action-label">
+                                        </lightning-button>
+                                    </li>
+                                    <li class="in-ideas-action-item slds-item">
+                                        <lightning-button-icon data-id={item.ideaId} onclick={handleFollow}
+                                            variant="bare" icon-name="utility:add" data-name="Follow" size="medium"
+                                            class={toggleFollow}>
+                                        </lightning-button-icon>
+                                    </li>
+                                    <li class="in-ideas-action-item slds-item">
+                                        <lightning-button variant="base" label={followUItext} title="Follow"
+                                            data-id={item.ideaId} data-name="Follow" onclick={handleFollow}
+                                            class="in-ideas-action-label">
+                                        </lightning-button>
+                                    </li>
+
+
+                                    <!-- <lightning-button-icon variant="bare" class="black-icon" icon-name="utility:share"
+                                        size="large">
+                                    </lightning-button-icon>
+                                    <li class="slds-col slds-item slds-m-right_medium">
+                                        <a href="#"> <span class="slds-tag1"> Share </span> </a>
+                                    </li> -->
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--THe actual comment section is here with GREY BOX AND CONTENTS-->
+
+                    <!-- <template if:true={item.ideaCommentDetail}>
+                        <template for:each={item.ideaCommentDetail} for:item="com">
+                            <div key={com.IdeaId} class="slds-commentbox">
+
+                                <div class="slds-post__content slds-text-longform slds-p-around_medium contentBox">
+
+                                    <div>
+                                        <img class="contentPic" alt={com.CreatorName} src={com.CreatorFullPhotoUrl}
+                                            title={com.CreatorName} />
+                                    </div>
+
+                                    <div class="sample">
+
+                                        <div>
+                                            <a class="slds-tagblue1" href="#">{com.CreatorName} </a>
+                                        </div>
+                                        <p class="daysFont"> {com.noOfDays} &nbsp;days ago</p>
+
+
+                                        <div class="formattedText">
+                                            <lightning-formatted-rich-text value={com.CommentBody}>
+                                            </lightning-formatted-rich-text>
+                                        </div>
+
+
+                                        <ul class="slds-list_horizontal slds-ul">
+                                            <li class="slds-col slds-item slds-m-right_medium slds-tag3">
+                                                <lightning-button variant="base" label={com.label} title="Like"
+                                                    data-id={com.ideaCommentId} onclick={handleIdeaCommentLike}
+                                                    class={togglecomment}>
+                                                </lightning-button>
+                                            </li>
+
+                                            <li class="slds-col slds-item slds-m-right_medium">
+                                                <lightning-button variant="base" label="Edit" title="Edit"
+                                                    disabled={com.disableEdit} data-name={com.CommentBody}
+                                                    data-id={com.ideaCommentId} class="slds-tag2" onclick={handleEdit}>
+                                                </lightning-button>
+
+                                            </li>
+                                            <li class="slds-col slds-item slds-m-right_medium">
+                                                <lightning-button variant="base" label="Delete" title="Delete"
+                                                    disabled={com.disableDelete} onclick={handleDelete}
+                                                    data-id={com.ideaCommentId} class="slds-tag2">
+                                                </lightning-button>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </template> -->
+
+
+                </template>
+
+                <!--For Add Comment Section-->
+                <!-- <div>
+                    <div>
+                        <article class="slds-addcomment">
+                            <div class="slds-media__figure">
+                                <a href="#" class="slds-avatar slds-avatar_circle slds-avatar_medium">
+                                    <img src={avatar} />
+                                </a>
+                            </div>
+                            <div class="infa-comment-input">
+                                <template if:true={showaddcomment}>
+                                    <lightning-input type="text" placeholder="Add a comment" onclick={showButton}>
+                                    </lightning-input>
+                                </template>
+
+                                <template if:true={showButtons}>
+                                    <div class="slds-box">
+                                        <lightning-input-rich-text value={commentBody}
+                                            share-with-entity-id={IdeaIdOnLoad} onchange={handleCommentInput}>
+                                        </lightning-input-rich-text>
+                                    </div>
+                                    <lightning-layout class="infa-comment-buttons">
+                                        <lightning-layout-item >
+                                            <lightning-button variant="brand" label="Comment" title="Comment"
+                                                onclick={handleComment} class="slds-m-left_x-small">
+                                            </lightning-button>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item>
+                                            <lightning-button variant="neutral" label="Cancel" title="Cancel"
+                                                onclick={handleCancel} class="slds-m-left_x-small">
+                                            </lightning-button>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </template>
+                            </div>
+
+                        </article>
+                    </div>
+                </div> -->
+
+            </div>
+        </div>
+
+
+        <!-- For Related Ideas Section
+        <div class="slds-relatedIdea-outerdiv">
+            <div class="container">
+                <h1 class="title">{relatedIdeaslabel}</h1>
+                <div class="row">
+                    <template for:each={relatedIdeas} for:item="item">
+                        <div key={item.IdeaId} class="col-md-4 mb-3 mt-3">
+                            <div class="in-community-tile pt-0">
+                                <div class="row m-0 mb-3 pt-2">
+                                    <div class="slds-grid slds-gutters">
+                                        <div class="slds-col slds-size_1-of-3 slds-upvote">
+                                            <div class="slds-green-upvote">
+                                                <lightning-button-icon variant="bare" class="green-icon"
+                                                    icon-name="utility:chevronup" alternative-text="up" size="large">
+                                                </lightning-button-icon>
+                                            </div>
+                                            <div class="infa-ideas-related-count">
+                                                {item.upvoteCount}
+                                            </div>
+                                            <div class="slds-red-downvote">
+                                                <lightning-button-icon variant="bare" class="red-icon"
+                                                    icon-name="utility:chevrondown" alternative-text="down"
+                                                    size="large">
+                                                </lightning-button-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="in-title-follow">
+                                        <div class="in-community-name">
+                                            {item.title}
+                                        </div>
+                                    </div>
+
+                                    <div class="slds-grid slds-wrap infa-content-tag-list">
+                                        <div
+                                            class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-status-related infa-content-tag">
+                                            {item.Status}
+                                        </div>
+                                        <div
+                                            class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-community infa-content-tag">
+                                            {item.communityName}
+                                        </div>
+                                    </div>
+                                    <div class="slds-para">
+                                        <p> {item.Body}</p>
+                                    </div>
+
+                                    <div class="container learnMore">
+                                        <a href={item.url} target="_blank">
+                                            {learnMore} <i class="infa-cta-arrow"><span>&#8594;</span></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div> -->
+
+
+        <!--Show Edit Comment Popup-->
+        <!-- <template if:true={showEditModal}>
+            <section role="dialog" tabindex="0" class="slds-modal slds-fade-in-open slds-modal_large outerModalContent"
+                aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                <div class="slds-modal__container modalClasses outerModalContent">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={handleModalClose}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                size="small">
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate">
+                            {editIdeaComment}
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-size_2-of-2">
+
+                                <lightning-input-rich-text label="Comment Description" value={editedComment}
+                                    onchange={handleInputedComment}>
+                                </lightning-input-rich-text>
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer class="slds-modal__footer">
+                        <lightning-button class="saveButtonMargin" onclick={saveEditedComment} label="Save"
+                            variant="brand" title="Save"></lightning-button>
+                        <lightning-button onclick={handleModalClose} label="Cancel" title="Cancel">
+                        </lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template> -->
+    </template>
+</template>

@@ -1,0 +1,275 @@
+<!--
+@author : RamEsh M S
+@date 	: 30-Apr-2021
+@purpose: I2C-897 - Merge Revenue Agreement
+-->
+<aura:component controller="mergeRevAgreeController"
+    implements="force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global">
+    <!--Custom Styles for Modal Header and Footer-->
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+         .slds-modal__container{
+        width: 80%;
+        max-width: 70rem;
+        }  
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>
+    <aura:attribute name="isLoading" type="boolean" default="false" />
+    <aura:attribute name="isProcessing" type="boolean" default="false" />
+    <aura:attribute name="RAROCList" type="mergeRevAgreeController.RAROCWrapper" />
+    <aura:attribute name="ROCList" type="Related_Order_and_Contract__c[]" />
+    <aura:attribute name="RAList" type="Revenue_Agreement__c[]" />
+    <aura:attribute name="RASourceList" type="Revenue_Agreement__c[]" />
+    <aura:attribute name="ProceedButton" type="boolean" default="false"/>
+    <aura:attribute name="notsearchScreen" type="boolean" default="false"/>
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="searchMessage" type="String"/>
+    <aura:attribute name="errorMessage" type="String"/>
+    <aura:attribute name="showDetails" type="boolean" default="false"/>
+    <aura:attribute name="hasError" type="boolean" default="false"/>
+    <aura:attribute name="goToRA" type="boolean" default="false"/>
+    <aura:attribute name="hasNoAmend" type="boolean" default="true"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    
+    <!--Spinner-->
+    <aura:if isTrue="{!v.isProcessing}">
+        <lightning:spinner aura:id="myProcessSpinner" variant="brand" title="Moving Revenue Schedules to RA......" alternativeText="Moving Revenue Schedules to RA......"/>
+    </aura:if>
+	
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner aura:id="myLoadSpinner" variant="brand" title="Fetching Revenue Agreement details......" alternativeText="Fetching Revenue Agreement details......"/>
+    </aura:if>
+
+    <!--Header-->
+    <div class="slds-col modal-header slds-modal__header" style="width:100%;height:10%;">
+        <p class="slds-page-header__title slds-truncate" title="">Merge Revenue Agreement</p>
+    </div>
+	
+    <div class="slds-p-around_small slds-clearfix" style="width:100%;height:80%;">
+        
+        <aura:if isTrue="{!v.notsearchScreen}">
+         {!v.message}
+            <aura:set attribute="else">
+            
+        
+        <ul>
+            <li> Please input <b>Order Number</b> OR <b> SFDC Revenue Agreement Name</b> to merge.</li>
+            <li>
+            	<div class="slds-grid slds-wrap slds-grid--pull-padded slds-p-top--small" >
+                       <div class="slds-p-horizontal--medium slds-large-size--1-of-3 slds-medium-size--1-of-2  slds-small-size--1-of-1" >                                    	
+                        	<lightning:input type="string" name="input1" variant = "label-hidden" aura:id="searchId" placeholder="Input Order Number or SFDC RA Number..."/>
+                        </div>
+                       <div class="slds-p-horizontal--small slds-large-size--1-of-6 slds-medium-size--1-of-2  slds-small-size--1-of-1" > 
+                       		<lightning:button aura:id="searchButton" label="Search" name="Search" variant="brand" onclick="{!c.SearchRAController}" />
+                        </div>
+                </div>
+           </li>
+            <br></br>
+                   
+           
+             <br></br> 
+            <aura:if isTrue="{!v.showDetails}">
+               <aura:if isTrue="{!not(empty(v.RAList))}">      
+                   <b> Revenue Agreement details : </b>
+                   <br></br><br></br> 
+              <div class="textInput">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered  slds-border_right slds-border_bottom slds-border_left">
+                    <thead>
+                        <tr class="slds-line-height_reset">                            
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="RA Name">RA Name</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="RMCS Contract Number">RMCS Contract Number</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Total Sales Price">Total Sales Price</div>
+                            </th>    
+                              <th class="" scope="col">
+                                <div class="slds-truncate" title="Total Allocated Booking">Total Allocated Booking</div>
+                            </th>  
+                             <th class="" scope="col">
+                                    <div class="slds-truncate" title="Stage">Stage</div>
+                                </th>
+                            <th class="" scope="col">
+                            	<div class="slds-truncate" title="Business Model">Business Model</div>
+                            </th>
+                                 <th class="" scope="col">
+                                    <div class="slds-truncate" title="Customer Type">Customer Type</div>
+                                </th> 
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration var="RA" items="{!v.RAList}">
+                            <tr class="slds-hint-parent slds-is-selected">
+                                
+                                <th data-label="RA Name" scope="row">
+                                    <div class="slds-truncate" >{!RA.Name}</div>
+                                </th>
+                                <td data-label="RMCS Contract Number">
+                                    <div class="slds-truncate" >{!RA.RMCS_Contract_Number__c}</div>
+                                </td>
+                                <td data-label="Total Sales Price">
+                                    <div class="slds-truncate" >
+                                    	<lightning:formattedNumber value="{!RA.Sum_of_Total_Amount__c}" style="currency" currencyCode="{!RA.CurrencyIsoCode}" currencyDisplayAs="code" minimumFractionDigits="2" maximumFractionDigits="2"/>
+                                	</div>
+                                </td> 
+                                  <td data-label="Total Allocated Booking">
+                                    <div class="slds-truncate" >
+                                       <lightning:formattedNumber value="{!RA.Sum_of_Allocated_Booking__c}" style="currency" currencyCode="{!RA.CurrencyIsoCode}" currencyDisplayAs="code" minimumFractionDigits="2" maximumFractionDigits="2"/>
+                                    </div>
+                                </td>  
+                                 <td data-label="Stage">
+                                     <div class="slds-truncate" >{!RA.Stage__c}</div> 
+                                    </td> 
+                                <td data-label="Business Model">
+                                    <div class="slds-truncate" >{!RA.Business_Model__c}</div>
+                                </td>
+                                     <td data-label="Customer Type">
+                                        <div class="slds-truncate" >
+                                            {!RA.Customer_Type__c}
+                                        </div>
+                                    </td>  
+                            </tr>
+                        </aura:iteration> 
+                    </tbody>
+                </table>  
+                <br></br>
+                   
+       </div>
+ </aura:if>
+            <br></br>
+                      <aura:if isTrue="{!not(empty(v.ROCList))}"> 
+                          <b> List of Orders assoicated with the Revenue Agreement :</b>
+                          <br></br> <br></br>
+              <div class="textInput">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered  slds-border_right slds-border_bottom slds-border_left">
+                    <thead>
+                        <tr class="slds-line-height_reset">                            
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Order Number">Order Number</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Order Type">Order Type</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Original Order">Original Order</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Business Model">Business Model</div>
+                            </th>    
+                              <th class="" scope="col">
+                                <div class="slds-truncate" title="Legal Entity">Legal Entity</div>
+                            </th>  
+                             <th class="" scope="col">
+                                    <div class="slds-truncate" title="Order Amount">Order Amount</div>
+                                </th>
+                            <th class="" scope="col">
+                            	<div class="slds-truncate" title="Billed Amount">Billed Amount</div>
+                            </th>
+                                 <th class="" scope="col">
+                                    <div class="slds-truncate" title="Status">Status</div>
+                                </th> 
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration var="ROC" items="{!v.ROCList}">
+                            <tr class="slds-hint-parent slds-is-selected">
+                                
+                                <th data-label="Order Number" scope="row">
+                                    <div class="slds-truncate" >{!ROC.Order__r.OrderNumber}</div>
+                                </th>
+                                <td data-label="Order Type">
+                                    <div class="slds-truncate" >{!ROC.Order__r.Type}</div>
+                                </td>
+                                <td data-label="Original Order">
+                                    <div class="slds-truncate" >
+                                    	<lightning:input type="checkbox" class="noLabel" checked="{!ROC.Original_Order__c}" variant = "label-hidden" disabled="true"/>
+                                    </div>
+                                </td>
+                                <td data-label="Business Model">
+                                    <div class="slds-truncate" >
+                                    	<div class="slds-truncate" >{!ROC.Order__r.Business_Model__c}</div>
+                                	</div>
+                                </td> 
+                                <td data-label="Legal Entity">
+                                    <div class="slds-truncate" >{!ROC.Order__r.Legal_Entity__r.Name}</div>
+                                </td>
+                                  <td data-label="Order Amount">
+                                    <div class="slds-truncate" >
+                                       <lightning:formattedNumber value="{!ROC.Order__r.TotalAmount}" style="currency" currencyCode="{!ROC.Order__r.CurrencyIsoCode}" currencyDisplayAs="code" minimumFractionDigits="2" maximumFractionDigits="2"/>
+                                    </div>
+                                </td>  
+                                 <td data-label="Billed Amount">
+                                     <div class="slds-truncate" >
+                                     <lightning:formattedNumber value="{!ROC.Order__r.blng__TotalBilling__c}" style="currency" currencyCode="{!ROC.Order__r.CurrencyIsoCode}" currencyDisplayAs="code" minimumFractionDigits="2" maximumFractionDigits="2"/>
+                                     </div> 
+                                    </td> 
+                                
+                                     <td data-label="Status">
+                                        <div class="slds-truncate" >
+                                            {!ROC.Order__r.Status}
+                                        </div>
+                                    </td>  
+                            </tr>
+                        </aura:iteration> 
+                    </tbody>
+                </table>  
+                <br></br>
+                   
+       </div>
+ </aura:if>
+           		<aura:if isTrue="{!v.hasNoAmend}">
+                    <li>The Revenue Agreement of the order will be set as "Cancelled-Merged".</li>
+                    <li>Make sure the Revenue Agreement to be "Cancelled-Merged" is not associated with any other Order other than the current Order.</li>
+                    <li>Click Proceed to continue, otherwise click on Cancel</li>
+                <aura:set attribute="else">
+                	<li><b>NOTE :</b> One of the Order associated with the Revenue Agreement above is of Amendment Type. So, we cannot merge the Order into above Revenue Agreement.</li>
+                </aura:set>
+                </aura:if>
+                
+            <aura:set attribute="else">
+                <aura:if isTrue="{!v.hasError}">
+                    <b>Error in completing the transaction : </b>  <lightning:icon iconName="utility:error" alternativeText="Error!" variant="error" title="error variant" />
+                    <br/> <br/> {!v.errorMessage}
+                   <br/> <br/>  <b>If the error message is understandable to resolve issue, please make necessary changes and try again. Else, please submit a ticket to <a href="mailto:gsd@informatica.com">Global Service Desk</a> with the screenshot of error and Order/RA details</b>
+             		<aura:set attribute="else">
+                        <b> Search Results Message : </b>
+                        	<br/> <br/> <aura:unescapedHtml value="{!v.searchMessage}" /><br/> <br/> <br/>
+                 	</aura:set>
+                </aura:if>
+            </aura:set>
+                </aura:if>
+        </ul>
+        </aura:set>
+        </aura:if>
+    </div>
+    
+    <!--Footer-->
+    <footer class="slds-modal__footer" style="width:100%;height:10%;">
+        <aura:if isTrue="{!v.goToRA}">
+            	<lightning:button label="Go To RA" variant="brand" onclick="{!c.goToRACon}" />
+        <aura:set attribute="else">
+        	<lightning:button label="Cancel" variant="destructive" onclick="{!c.closeModal}" />
+        </aura:set>
+        </aura:if>
+        <aura:if isTrue="{!v.ProceedButton}">
+            <aura:if isTrue="{!v.hasNoAmend}">
+        		<lightning:button label="Proceed" variant="brand" onclick="{!c.mergeAndCancel}" />
+            </aura:if>    
+        </aura:if>
+        
+    </footer>
+</aura:component>

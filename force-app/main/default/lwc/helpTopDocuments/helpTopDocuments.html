@@ -1,0 +1,28 @@
+<template>
+    <template if:false={showNoresult}>
+        <h1 class="in-heading in-orange in-heading-bottom">Recent Documents</h1>
+        <ul>
+            <template for:each={wiredResults} for:item="item">
+                <li key={item} class="list-item">
+                    <div class="d-flex bd-highlight">
+
+                        <div class="pl-3" style="max-width: 77%;">
+                            <a href={item.url} target="_blank" class="in-user-list-item">{item.title}</a>
+
+                            <div class="idea-time">
+                                {item.sfprimaryproduct}
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+            </template>         
+                <li class="list-item">
+                    <a href={viewmore} class="in-user-list-item view-more">
+                        View More
+                        <i style="font-style: normal; padding-left: 5px;"><span>&#8594;</span></i>
+                    </a>
+                </li>
+        </ul>
+    </template>
+</template>

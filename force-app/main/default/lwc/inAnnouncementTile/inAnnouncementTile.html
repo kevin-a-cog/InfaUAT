@@ -1,0 +1,100 @@
+<!--
+ * Name         :   InAnnouncementTile
+ * Author       :   Utkarsh Jain
+ * Created Date :   17-FEB-2022
+ * Description  :   Component used to show Announcements.
+
+ Change History
+ **************************************************************************************************************************
+ Modified By            Date            Jira No.            Description                                               Tag
+ **************************************************************************************************************************
+ Utkarsh Jain          16-FEB-2022      I2RT-5421           Initial version.                                          NA
+ Deeksha Shetty        20-June-2023     I2RT-8366           Open each announcement in a new tab in the browser.       1
+ -->
+ 
+ <template>
+    <template if:true={isAnnouncementTile}>
+        <template if:true={isGroups}>
+            <template if:true={ispublicGroup}>
+                <div class="in-pb-30 pt-3">
+                    <div class="in-announcement-container container">
+                        <h4 class="in-section-heading">{heading}</h4>
+                        <div class="owl-carousel owl-theme">
+                            <template for:each={announcementTiles} for:item="announcement">
+                                <div key={announcement}>
+                                    <div class="in-announcement-img">
+                                        <img src={announcement.Image_URL__c} />
+                                        <div class="in-announcement-details">
+                                            <p class="in-announcement-title">
+                                                {announcement.Name}
+                                            </p>
+                                            <!-- Tag 1 - Target _blank-->
+                                            <a href={announcement.Highlight_link__c} target="_blank"
+                                                class="in-announcement-link" data-value={announcement.Name} onclick={handleOnClick}>
+                                                {announcement.Description__c}
+                                                <i style="font-style: normal; padding-left: 5px;"><span>&#8594;</span></i> </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template if:false={ispublicGroup}>
+                <template if:true={isFollowing}>
+                    <div class="in-pb-30 pt-3">
+                        <div class="in-announcement-container container">
+                            <h4 class="in-section-heading">{heading}</h4>
+                            <div class="owl-carousel owl-theme">
+                                <template for:each={announcementTiles} for:item="announcement">
+                                    <div key={announcement}>
+                                        <div class="in-announcement-img">
+                                            <img src={announcement.Image_URL__c} />
+                                            <div class="in-announcement-details">
+                                                <p class="in-announcement-title">
+                                                    {announcement.Name}
+                                                </p>
+                                                <!-- Tag 1 - Target _blank-->
+                                                <a href={announcement.Highlight_link__c} target="_blank"
+                                                    class="in-announcement-link" data-value={announcement.Name} onclick={handleOnClick}>
+                                                    {announcement.Description__c}
+                                                    <i style="font-style: normal; padding-left: 5px;"><span>&#8594;</span></i> </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </template>
+        <template if:false={isGroups}>
+            <div class="in-pb-30 pt-3">
+                <div class="in-announcement-container container">
+                    <h4 class="in-section-heading">{heading}</h4>
+                    <div class="owl-carousel owl-theme">
+                        <template for:each={announcementTiles} for:item="announcement">
+                            <div key={announcement}>
+                                <div class="in-announcement-img">
+                                    <img src={announcement.Image_URL__c} />
+                                    <div class="in-announcement-details">
+                                        <p class="in-announcement-title">
+                                            {announcement.Name}
+                                        </p>
+                                        <!-- Tag 1 - Target _blank-->
+                                        <a href={announcement.Highlight_link__c} target="_blank"
+                                            class="in-announcement-link" data-value={announcement.Name} onclick={handleOnClick}>
+                                            {announcement.Description__c}
+                                            <i style="font-style: normal; padding-left: 5px;"><span>&#8594;</span></i> </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
+</template>

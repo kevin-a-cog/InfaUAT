@@ -1,0 +1,123 @@
+<template>
+        <template if:true={fullyLoaded}>
+            <div class="background c-container">
+                <div>
+                    <article class="slds-card" style="padding: 10px 80px 10px 80px;">
+                    <div class="slds-card__header custom-margin-top ">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__body">
+                                    <img class="slds-float_left logo" src={logoUrl}></img>
+                                </div>
+                            </header>
+                        </div>
+                    <div class="slds-card__body slds-card__body_inner slds-m-top_large">
+                        <div class="slds-p-horizontal_medium customer-table-margin">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="label"><b>Customer Name:</b></div>
+                                    <div class="value">{accountName}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="label"><b>Estimation ID:</b></div>
+                                    <div class="value">{estimationName}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="label"><b>Contact Name:</b></div>
+                                    <div class="value">{ownerName}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="label"><b>Date Generated:</b></div>
+                                    <div class="value">{currentDate}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-p-horizontal_medium">
+                                <div class="estimationSummaryHeader">
+                                    <p><b>Estimation Summary</b></p>
+                                </div>
+                            </div>
+
+                            <div class="slds-p-horizontal_medium slds-p-top_medium">
+                                <table class="slds-table slds-table_bordered slds-table_fixed-layout">
+                                    <thead>
+                                        <tr>
+                                        <th style="width: 70%; background-color: #F3F3F3; color: black; padding: 5px 10px 5px 10px; font-size: 16px;"
+                                            class="slds-table_cell-buffer">Service name</th>
+                                        <th style="width: 30%; background-color: #F3F3F3; color: black; padding: 5px 10px 5px 10px; font-size: 16px;"
+                                            class="slds-text-align_center slds-table_cell-buffer">Estimated IPUs</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={estimationLinesdata} for:item="row">
+                                            <tr key={row.Id}>
+                                            <td style="width: 70%;" class="slds-table_cell-buffer">
+                                                {row.Service_Name__c}
+                                            </td>
+                                            <td style="width: 30%; text-align: right; padding-right: 20px;"
+                                                class="slds-table_cell-buffer slds-p-right_medium">
+                                                {row.Required_IPUs__c}</td>
+                                        </tr>
+                                    </template>
+                                    <tr>
+                                        <td style="width: 70%; " class="slds-table_cell-buffer">
+                                            <b>Total IPUs</b>
+                                        </td>
+                                        <td style="width: 30%; text-align: right; padding-right: 20px;"
+                                            class="slds-table_cell-buffer slds-p-right_medium">{totalIPUs}</td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Form -->
+                        <div class="slds-p-horizontal_medium custom-margin-top">
+                                <div class="estimationSummaryHeader">
+                                    <p><b>Estimation Details</b></p>
+                                </div>
+                            </div>
+
+                            <!-- Form -->
+                            <div class="pagesDiv">
+                                <template for:each={formData.pages} for:item="page" for:index="pageIndex">
+                                    <div class={page.Id} key={page.Id}>
+                                        <!-- Header -->
+                                        <div if:true={page.hasSelectedSections}>
+                                            <lightning-layout vertical-align="center">
+                                            <lightning-layout-item flexibility="auto"
+                                                class="page-title slds-p-left_small">
+                                                    <span><lightning-formatted-rich-text
+                                                            value={page.name}></lightning-formatted-rich-text></span>
+                                                </lightning-layout-item>
+                                            </lightning-layout>
+                                        </div>
+
+                                    <c-ipue-estimator-page-doc page={page} total-estimation={totalEstimation}
+                                        estimation-summary-id={recordId}></c-ipue-estimator-page-doc>
+                                    </div>
+                                </template>
+                            </div>
+
+
+                            <div class="slds-p-horizontal_medium slds-p-top_medium">
+                                <div class="estimationSummaryHeader">
+                                    <p><b>Terms &amp; Conditions</b></p>
+                                </div>
+                            </div>
+                        <div
+                            class="slds-grid slds-grid_vertical slds-p-horizontal_medium slds-p-top_medium font-size-16">
+                                <div class="slds-col slds-p-bottom_x-small">
+                                    <span>This document is valid for 30 days from the date of generation.</span>
+                                </div>
+                                <div class="slds-col slds-p-bottom_x-small">
+                                    <span><b>Date Generated: &nbsp;</b></span>{currentDate}
+                                </div>
+                                <div class="slds-col slds-p-bottom_x-small">
+                                    <span><b>Date Generated Plus 30 Days: &nbsp;</b></span>{currentDatePlus30}
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </template>
+</template>

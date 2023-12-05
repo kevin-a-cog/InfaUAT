@@ -1,0 +1,58 @@
+/* Simplified Paginator. */
+.pageIndicator {
+	text-align: center;
+	width: 35px;
+	cursor: pointer;
+	border-radius: 2px;
+    padding: 4px 8px;
+    color: #0059b3;
+    text-decoration: none;
+    font-size: 14px;
+    border: thin solid #e5e5e5;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+.pageIndicator:hover {
+	background-color: whitesmoke;
+	border-color: #e5e5e5;
+    color: #4a4a4a;
+}
+.pageIndicator_Active {
+	text-align: center;
+	width: 35px;
+	cursor: pointer;
+	border-radius: 2px;
+    padding: 4px 8px;
+    color: #0059b3;
+    text-decoration: none;
+    font-size: 14px;
+    border: thin solid #e5e5e5;
+	margin-left: 5px;
+	margin-right: 5px;
+	background-color: #1589ee;
+    border-color: #1589ee !important;
+	color: white !important;
+}
+.pageIndicator_NavigationControl {
+	text-align: center;
+	width: 35px;
+	cursor: pointer;
+	visibility: hidden;
+}
+.pageIndicator_NavigationControl_Visible {
+	visibility: initial;
+	z-index: 999;
+}
+.disableTextSelection {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+@media screen and (max-width: 420px) {
+	.customInput {
+		width: 4em;
+	}
+}

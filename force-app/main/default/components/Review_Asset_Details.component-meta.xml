@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>40.0</apiVersion>
+    <label>Review Asset Details</label>
+    <packageVersions>
+        <majorNumber>210</majorNumber>
+        <minorNumber>7</minorNumber>
+        <namespace>SBQQ</namespace>
+    </packageVersions>
+</ApexComponent>

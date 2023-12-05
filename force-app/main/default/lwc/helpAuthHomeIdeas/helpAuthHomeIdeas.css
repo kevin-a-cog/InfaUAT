@@ -1,0 +1,227 @@
+ul {
+    background: #ffffff;
+    box-sizing: border-box;
+    /* box-shadow: 0px 4.58964px 11.4741px rgb(0 0 0 / 25%); */
+}
+
+.list-item:first-child {
+    margin-top: 0;
+    border-top: none;
+}
+
+@media screen and (max-width: 768px) {
+    .in-auth-ideas-container {
+        margin: 0 auto;
+        width: 92%;
+    }
+}
+
+.in-heading-bottom {
+    margin-bottom: 0px;
+}
+
+.in-status {
+    font-size: 10px;
+    line-height: 21px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 1px;
+    color: #ffffff;
+    width: fit-content;
+    padding: 2px 12px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.in-username {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    color: #373737;
+    margin-left: 10px;
+}
+
+.in-user-list-item {
+    font-weight: 400;
+    font-size: 21px;
+    color: #373737;
+}
+@media screen and (max-width: 768px) {
+    .in-user-list-item {
+        font-size: 16px;
+    }
+}
+
+.profile-icon {
+    border: 1px solid #4cc3d0;
+    box-sizing: border-box;
+    border-radius: 44px;
+    width: 25px;
+    margin-left: 10px;
+}
+
+.view-more {
+    font-size: 20px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #001aff;
+}
+
+.vote-count {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.list-item {
+    margin-top: 15px;
+    margin-right: 15px;
+    border-top: 1px solid #e2e2e2;
+    text-transform: capitalize;
+}
+
+.in-heading-bottom {
+    margin-bottom: 0px;
+}
+
+.in-status {
+    font-size: 10px;
+    line-height: 21px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 1px;
+    color: #ffffff;
+    width: fit-content;
+    background: #949494;
+    padding: 2px 12px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.in-username {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    color: #373737;
+    margin-left: 10px;
+}
+
+.profile-icon {
+    border: 1px solid #4cc3d0;
+    box-sizing: border-box;
+    border-radius: 44px;
+    width: 25px;
+    margin-left: 10px;
+}
+
+.view-more {
+    font-size: 20px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #001aff;
+}
+
+.slds-upvote {
+    width: fit-content;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 25px;
+    padding-left: 0;
+}
+
+.slds-green-upvote {
+    padding-top: 10px;
+}
+
+.green-icon {
+    --lwc-colorTextIconDefault: #94d13c;
+}
+
+.red-icon {
+    --lwc-colorTextIconDefault: #e32400;
+}
+.grey-icon {
+    --lwc-colorTextIconDefault: #373737;
+}
+
+.greyarrow {
+    padding-top: 68px;
+    padding-left: 17px;
+}
+
+.bg-color {
+    background-color: #ffffff;
+    box-shadow: 0px 4.596px 9.19199px rgba(0, 0, 0, 0.25);
+}
+.title {
+    font-weight: 300;
+    font-size: 33px;
+    font-style: normal;
+    white-space: nowrap;
+    padding-top: 5px;
+    padding-bottom: 11px;
+    color: #373737;
+}
+@media screen and (max-width: 768px) {
+    .title {
+        font-size: 24px;
+    }
+}
+
+.ideas-creatorName {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    font-family: Roboto;
+    color: #5e5a5ad9;
+    line-height: 21px;
+    text-transform: none;
+}
+
+.slds-status2,
+.slds-community {
+    display: inline-block;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+    background-color: #00a9bb;
+    color: white;
+    white-space: nowrap;
+    padding: 5px 10px;
+    margin-top: 5px;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-right: 5px;
+}
+@media screen and (max-width: 768px) {
+    .slds-status2,
+    .slds-community {
+        text-align: left;
+        white-space: normal;
+    }
+}
+
+.help-status-comm {
+    padding-left: 16px;
+}
+
+.in-auth-ideas-votecount {
+    font-size: 21px;
+}
+
+.in-auth-ideas-text-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

@@ -1,0 +1,83 @@
+.heading-wrapper{
+    background-image: url('/resource/./informaticaNetwork/topicLanding.jpg');
+    background-size: 100% 100%;
+}
+.showFilter{
+    display: flex;
+    margin-bottom: -36px;
+    margin-right: 50px;
+}
+.searchBox-desktop {
+    display: flex;
+    margin-bottom: -36px;
+    margin-right: 10px;
+}
+.searchBox-mobile {
+    display: none;
+}
+.help-confirm-dialog-popup{
+    width: 33%;
+}
+
+.in-modal__body{
+    font-size: 13px;
+}
+.in-modal__header .slds-text-heading_medium{
+    font-size: 15px;
+}
+
+/* new CSS added */
+.in-communities-landing-container {
+    position: relative;
+}
+
+@media screen and (max-width:768px) {
+    .searchBox-mobile {
+        display: block;
+        margin: 18px;
+    }
+    .searchBox-desktop {
+        display: none;
+    }
+    .in-communities-landing-bg {
+        padding-top: 10px;
+    }
+    .in-communities-landing-container {
+        margin: 0 auto;
+        width: 100%;
+    }
+    .help-confirm-dialog-popup{
+        width: calc(100% - 100px);
+        margin: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+
+.row-padding{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1%;
+    margin-bottom: -25px;
+}
+@media screen and (max-width: 768px) {
+    .row-padding {
+        display: block;
+        margin: 0 auto;
+        width: 90%;
+        padding: 20px 0px;
+    }
+}
+
+.createButton{
+    margin-top: 29px;
+    margin-right: 24px;
+    margin-left: 8px;
+}
+
+@media screen and (max-width: 768px) {
+    .createButton {
+        margin-left: 10;
+    }
+}

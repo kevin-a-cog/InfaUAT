@@ -1,0 +1,25 @@
+.THIS .setIconAlign {
+    display:none;
+}
+.THIS.div#help li {
+    text-align: left;
+}
+
+.THIS .popUpIcon {
+    left: 26px;
+    top: 20px;
+    position: absolute;
+    
+}
+.THIS .slds-scope  { 
+     fill: rgba(194, 57, 52, 0.95); 
+}
+.THIS .slds-icon-text-default{
+     fill: rgba(194, 57, 52, 0.95); 
+}
+
+@media (max-width: 720px) {
+.THIS .modal-overflow{
+       overflow: auto;
+    }
+}

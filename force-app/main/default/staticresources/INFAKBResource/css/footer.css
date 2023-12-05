@@ -1,0 +1,74 @@
+body {
+            font-size: 16px;
+            font-family: 'futura-pt', sans-serif;
+        }
+        .community-footer {
+            background-color: hsla(0,0%,88.6%,0.52);
+        }
+        .community-footer-links, .community-footer-social-block {
+            padding-top: 3%;
+        }
+        .community-footer-links > ul {
+            list-style-type: none;
+            padding-left: 0px;
+        }
+        .community-footer-links > ul li {
+            display: inline-block;
+            padding-right: 3%;
+        }
+        .community-footer-links > ul li a {
+            font-family: 'futura-pt', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            color: #333333;
+            opacity: 0.8;
+            text-decoration: none;
+        }
+        .community-footer-links > ul li a:hover {
+            opacity: 1;
+        }
+        .community-footer-social-block {
+            text-align: right;
+        }
+        .community-footer-social-link {
+            height: 25px;
+            width: 25px;
+            background-color: #fff;
+            margin: 7px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .community-footer-social-link > img {
+            padding-bottom: 3px;
+            margin-right: 10px;
+            max-width: 100%;
+            height: auto;
+        }
+        .community-footer-copyright > p {
+            font-family: 'futura-pt', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 300;
+            line-height: 1;
+            color: #333333;
+            text-decoration: none;
+            opacity: 0.7;
+            padding-bottom: 2%;
+            padding-top: 2%;
+			margin-bottom: 0px;
+        }
+        .community-footer-copyright span {
+            padding-right: 7px;
+        }
+        @media screen and (max-width: 768px) {
+            .community-footer-links, .community-footer-social-block, .community-footer-copyright {
+                text-align: center;
+            }
+            .community-footer-copyright > p {
+                padding-bottom: 6%;
+                padding-top: 6%;
+            }
+            .community-footer-social-block {
+                padding-top: 1%;
+            }
+        }

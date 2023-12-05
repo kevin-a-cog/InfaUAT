@@ -1,0 +1,36 @@
+<template>
+  <article class="slds-card">
+      <div class="slds-card__header slds-grid">
+        <header class="slds-media slds-media_center slds-has-flexi-truncate">
+          <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:touch_action" alternative-text="Plan Quick Actions" title="Plan Quick Actions"></lightning-icon>
+          </div>
+          <div class="slds-media__body">
+            <h2 class="slds-card__header-title">               
+                <span>One Click Actions</span>
+            </h2>
+          </div>
+          <div class="slds-no-flex">
+            <template if:false={csmOneClickActionContainerVisibility}>
+                <img src={iconUrls.OnboardSurveyIcon} if:true={isshowResendOnboardSurvey} title="Resend Onboarding Survey" width="35px;"  data-id="ResendOnboardSurvey" alt="Resend Onboarding Survey" onclick={handleResendSurvey} >&nbsp;&nbsp;
+                <img src={iconUrls.OutcomeSurveyIcon} if:true={isshowResendOutcomeSurvey} width="35px;" title="Resend Outcome Survey" data-id="ResendOutcomeSurvey" alt="Resend Outcome Survey" onclick={handleResendSurvey} >&nbsp;&nbsp;
+                <img src={iconUrls.CSTSurveyIcon}  if:true={isshowSendCSTSurvey} width="35px;" title="Send CSA Survey" data-id="ResendCSTSurvey" alt="Send CSA Survey" onclick={handleResendSurvey} >&nbsp;&nbsp;
+                <img src={iconUrls.CSTSurveyIcon}  if:true={isshowResendCSTSurvey} width="35px;" title="ReSend CSA Survey" data-id="ResendCSTSurvey" alt="ReSend CSA Survey" onclick={handleResendSurvey} >&nbsp;&nbsp; 
+                <img src={iconUrls.CSTSurveyIcon}  if:true={isshowSendMFASurvey} width="35px;" title="Send MFA Survey" data-id="ResendMFASurvey" alt="Send MFA Survey" onclick={handleResendSurvey} >&nbsp;&nbsp;
+                <img src={iconUrls.CSTSurveyIcon}  if:true={isshowResendMFASurvey} width="35px;" title="ReSend MFA Survey" data-id="ResendMFASurvey" alt="ReSend MFA Survey" onclick={handleResendSurvey} >&nbsp;&nbsp;
+              <template  if:true={showSnoozeButtonGroup} >
+                  <template if:true={boolDisplaySpinner} class="slds-is-relative slds-show_x-small">
+                    <lightning-spinner variant="brand" alternative-text="Loading..."></lightning-spinner>
+                  </template>
+                  <img src={iconUrls.Snooze_Notification} title="Enable Notifications" onmouseover={mouseOver} onmouseout={mouseOut} if:false={showSnoozeButton} width="35px;"  data-id="snooze" onclick={handleButtonClick} class="slds-Image-box">
+                  <img src={iconUrls.Unsnooze_Notification} title="Disable Notifications" onmouseover={mouseOver} onmouseout={mouseOut} if:true={showSnoozeButton} width="35px;"  data-id="unsnooze" onclick={handleButtonClick} class="slds-Image-box">
+              </template>
+            </template>
+            <lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-left_xx-small" onclick={refreshCard} slot="actions"></lightning-button-icon>
+          </div>
+        </header>
+      </div> 
+      <div class="slds-card__body slds-card__body_inner">
+      </div>
+    </article>
+</template>

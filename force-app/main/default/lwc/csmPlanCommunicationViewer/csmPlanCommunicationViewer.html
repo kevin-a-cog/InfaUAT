@@ -1,0 +1,80 @@
+<!--
+/*
+ * Name			    :	CsmPlanCommunicationViewer
+ * Author		    :	Deva M
+ * Created Date		: 	22/10/2021
+ * Description		:	CSM Plan Communicatiov viewer of html.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			    Jira No.		Description					Tag
+ **********************************************************************************************************
+ Deva M		            22/10/2021		    N/A				Initial version.			N/A
+ */
+-->
+<template>
+	
+	<!-- Custom CSS. -->
+	<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+	 <!-- Spinner. -->
+    <div class="spinner">
+        <template if:true={boolDisplaySpinner}>
+            <lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+        </template>
+    </div>
+
+	<!-- Pop out icons. -->
+	<div class="slds-float_right" style="position: relative; z-index: 1;">
+		<template if:false={isPoppedOut}>
+			<lightning-button-icon icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+		</template>
+		<template if:true={isPoppedOut}>
+			<lightning-button-icon icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+		</template>
+	</div>
+
+	<!-- Card body. -->
+	<div class="slds-card">
+		
+		<!-- Tabs. -->
+		<lightning-tabset variant="default" active-tab-value={strCurrentParentTab} class="parentTab">
+
+			<!-- We iterate over the Tabs configuration. -->
+			<template for:each={objConfiguration.lstTabs} for:item="objTab">
+				<!--Icon show the unread comments count from last time they read-->
+				<!--<lightning-avatar if:true={objTab.boolDisplayUnreadCounter} key={objTab.strTabValue} variant="circle" initials={objTab.strCounterValue} fallback-icon-name="action:close" alternative-text={objTab.strCounterValue} class={objTab.strClass} size="x-small"></lightning-avatar>       -->
+			
+				<!-- Tab definition. -->
+				<lightning-tab key={objTab.strTabValue} label={objTab.strLabel} badge={objTab.strCounterValue} data-title={objTab.strCounterValue} 
+						value={objTab.strTabValue} onactive={captureLevelOneActiveTabValue} title={objTab.strTitle} end-icon-alternative-text={objTab.strCounterValueIndicator}
+						end-icon-name={objTab.strCounterValueIndicatorIcon}>
+
+					<!-- Display only Subtabs are available. -->
+					<template if:true={objTab.lstSubTabs}>
+						<lightning-tabset variant="default" active-tab-value={strCurrentChildTab} class="childTab">
+							<!-- We iterate over the sub Tabs configuration. -->
+							<template for:each={objTab.lstSubTabs} for:item="objSubTab">
+								<!-- Tab definition. -->
+								<lightning-tab key={objSubTab.strTabValue} label={objSubTab.strLabel} value={objSubTab.strTabValue} onactive={captureLevelTwoActiveTabValue} title={objSubTab.strTitle}>
+									<template if:true={objSubTab.boolCommentTab}>
+										<c-csm-plan-communication-timeline-viewer data-id={commentType} record-id={recordId} comment-type={commentType} comment-sub-type={commentSubType} class={objTab.strClass}></c-csm-plan-communication-timeline-viewer> 
+									</template>                                 
+								</lightning-tab>
+							</template>	
+						</lightning-tabset> 
+					</template>
+					<!--Display the Comments if the tab is configured to show-->
+					<template if:false={objTab.lstSubTabs}>  
+						<template if:true={objTab.boolCommentTab}> 
+							<template if:true={commentType}>
+								<c-csm-plan-communication-timeline-viewer record-id={recordId} data-id={commentType}  comment-type={commentType} comment-sub-type={commentSubType} class={objTab.strClass} onloadcomments={handleCommentData} 
+									onresetdata={resetLabels}></c-csm-plan-communication-timeline-viewer>
+							</template>
+						</template> 
+					</template> 
+				</lightning-tab>
+			</template>
+		</lightning-tabset>
+	</div>
+</template>

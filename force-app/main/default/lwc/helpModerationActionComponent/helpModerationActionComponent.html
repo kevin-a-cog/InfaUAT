@@ -1,0 +1,33 @@
+<template>
+    <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+    <template if:true={data}>
+        <lightning-card icon-name="standard:approval" title="RECORDS FOR MODERATION">
+            <template if:true={showButtons}>
+                <div class="in-outer-div">
+                    <div class="in-button-action">
+                        <lightning-button label="Approve All" size="small" variant="brand" onclick={ApproveOnSelection}>
+                        </lightning-button>
+                    </div>
+                    <div>
+                        <lightning-button label="Reject All" size="small" variant="brand" onclick={RejectOnSelection}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </template>
+            <lightning-layout>
+                <lightning-layout-item size="12" padding="around-small">
+                    <div class="help-internal-datatable">
+                        <lightning-datatable key-field="Id" data={data} columns={columns} onrowaction={handleRowAction} onrowselection={handlerowselection}>
+                        </lightning-datatable>
+                    </div>
+                </lightning-layout-item>
+
+            </lightning-layout>
+        </lightning-card>
+    </template>
+    <template if:true={noRecords}>
+        <lightning-card>
+            NO RECORDS TO APPROVE OR REJECT
+        </lightning-card>
+    </template>
+</template>

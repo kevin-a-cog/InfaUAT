@@ -1,0 +1,439 @@
+<!--
+  @description       : 
+  @author            : SF Developer
+  @group             : 
+  @last modified on  : 01-28-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   01-27-2021   SF Developer   Initial Version
+-->
+<template>
+    <div class="card">
+        <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+        <!-- div class="search-section">
+            <div onkeyup={handleKeyUp}>
+                <lightning-input
+                    name="enter-search"
+                    label=""
+                    type="search"
+                    disabled={disableSearch}
+                ></lightning-input>
+            </div>            
+        </div -->
+
+        <lightning-layout>
+            <lightning-layout-item class="slds-p-top_x-small" size="3" large-device-size="3" small-device-size="3"
+                medium-device-size="3">
+                <lightning-button-menu class="slds-list_horizontal" alternative-text="SORT BY" label={selectedSort}
+                    onselect={handleSelect} variant="bare">
+                    <lightning-menu-subheader label="SORT BY"></lightning-menu-subheader>
+                    <template for:each={filters} for:item="filter">
+                        <lightning-menu-item key={filter.value} checked={filter.isSelected} value={filter.value}
+                            label={filter.label}></lightning-menu-item>
+                    </template>
+                </lightning-button-menu>
+            </lightning-layout-item>
+            <lightning-layout-item class="slds-p-top_x-small" size="7" large-device-size="7" small-device-size="7"
+                medium-device-size="7">
+                <lightning-input type="search" variant="label-hidden" value={searchKey} style="min-width: 100%;"
+                    onkeyup={handleKeyUp} onchange={handleKeyUp} is-loading={loading}>
+                </lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="1" large-device-size="1" small-device-size="1" medium-device-size="1"
+                class="slds-p-horizontal_small slds-p-top_x-small" alignment-bump="right">
+
+                <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh" onclick={handleClick}
+                    name="refresh" title="Refresh" size="small">
+                </lightning-button-icon>
+            </lightning-layout-item>
+            <lightning-layout-item if:true={popin} size="1" large-device-size="1" small-device-size="1"
+                medium-device-size="1" class="slds-p-horizontal_small slds-p-top_x-small" alignment-bump="left">
+                <lightning-button-icon icon-name="utility:new_window" alternative-text="Pop Out" onclick={handlepopout}
+                    name="popout" title="Pop Out" size="small">
+                </lightning-button-icon>
+            </lightning-layout-item>
+
+        </lightning-layout>
+
+
+        <!--div class="search-result">
+            <p if:true={showsearchresults}>
+                Search results for "<span class="search-term">{queryTerm}</span>"
+            </p>
+        </div-->
+
+        <!-- All and Attached Results tab -->
+        <div class="tab-section">
+
+            <a class="tab AttachedResultsTab" onclick={handleAttachedResult}>
+                <p>Attached Incidents</p>
+            </a>
+
+            <a class="tab AllTab tab-selected" onclick={handleAll}>
+                <p>All</p>
+            </a>
+        </div>
+
+        <!-- All tab results section -->
+        <div class="resultList" hidden={showAllTab}>
+            <div class="result-list-container list-layout-container">
+                <template if:true={incidents}>
+                    <template for:each={incidents} for:item="incident">
+                        <div class="list-layout" onmouseover={showMenuActions} onmouseout={hideMenuActions}
+                            key={incident.Id}>
+                            <div class="result-frame">
+                                <div class="resultActionsMenu">
+                                    <div class="attach-to-case">
+
+                                        <div class="coveo-attach">
+                                            <span class="coveo-attach-to-case-icon" onclick={handleAttach}
+                                                data-id={incident.Id}>
+
+                                                <template if:false={incident.attachedToCase}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                                        viewBox="0 0 78.905 77.861" class="coveo-attach-icon">
+                                                        <g transform="translate(0,-952.36218)">
+                                                            <path
+                                                                d="m 71.828,957.626 c 8.674,7.675 9.487,20.969 1.813,29.643 l -37.107,41.941 c -1.098,1.241 -2.994,1.357 -4.235,0.259 -1.241,-1.098 -1.357,-2.994 -0.259,-4.235 l 37.107,-41.941 c 5.541,-6.263 4.968,-15.633 -1.295,-21.174 -6.263,-5.541 -15.633,-4.968 -21.174,1.295 l -38.433,43.439 c -3.338,3.773 -2.996,9.366 0.777,12.704 3.773,3.338 9.366,2.996 12.704,-0.777 l 29.100468,-33.05767 c 1.13279,-1.28683 0.800246,-3.29785 -0.259,-4.235 -1.059246,-0.93715 -3.099,-1.025 -4.235,0.259 0,0 -9.944868,9.86376 -18.793868,20.71177 -1.04,1.275 -3.505,4.666 -6.064,2.563 -2.657,-2.184 0.427,-5.30501 1.57,-6.53801 9.517,-10.268 18.793868,-20.71176 18.793868,-20.71176 3.269,-3.695 9.009,-4.046 12.704,-0.777 3.695,3.27 4.046,9.009 0.777,12.704 L 26.219,1022.756 c -5.472,6.185 -14.989,6.767 -21.174,1.295 -6.185,-5.472 -6.767,-14.989 -1.295,-21.174 l 38.432,-43.439 c 7.678,-8.673 20.972,-9.486 29.646,-1.812 z">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                    <svg class="coveo-loading-icon" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 18 18">
+                                                        <g>
+                                                            <path
+                                                                d="m16.76 8.051c-.448 0-.855-.303-.969-.757-.78-3.117-3.573-5.294-6.791-5.294s-6.01 2.177-6.79 5.294c-.134.537-.679.861-1.213.727-.536-.134-.861-.677-.728-1.212 1.004-4.009 4.594-6.809 8.731-6.809 4.138 0 7.728 2.8 8.73 6.809.135.536-.191 1.079-.727 1.213-.081.02-.162.029-.243.029z">
+                                                            </path>
+                                                            <path
+                                                                d="m9 18c-4.238 0-7.943-3.007-8.809-7.149-.113-.541.234-1.071.774-1.184.541-.112 1.071.232 1.184.773.674 3.222 3.555 5.56 6.851 5.56s6.178-2.338 6.852-5.56c.113-.539.634-.892 1.184-.773.54.112.887.643.773 1.184-.866 4.142-4.57 7.149-8.809 7.149z">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                    <div class="coveo-caption-for-icon">Attach</div>
+                                                </template>
+                                                <template if:true={incident.attachedToCase}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                                        viewBox="0 0 78.905 77.861"
+                                                        class="coveo-attach-icon coveo-attached">
+                                                        <g transform="translate(0,-952.36218)">
+                                                            <path
+                                                                d="m 71.828,957.626 c 8.674,7.675 9.487,20.969 1.813,29.643 l -37.107,41.941 c -1.098,1.241 -2.994,1.357 -4.235,0.259 -1.241,-1.098 -1.357,-2.994 -0.259,-4.235 l 37.107,-41.941 c 5.541,-6.263 4.968,-15.633 -1.295,-21.174 -6.263,-5.541 -15.633,-4.968 -21.174,1.295 l -38.433,43.439 c -3.338,3.773 -2.996,9.366 0.777,12.704 3.773,3.338 9.366,2.996 12.704,-0.777 l 29.100468,-33.05767 c 1.13279,-1.28683 0.800246,-3.29785 -0.259,-4.235 -1.059246,-0.93715 -3.099,-1.025 -4.235,0.259 0,0 -9.944868,9.86376 -18.793868,20.71177 -1.04,1.275 -3.505,4.666 -6.064,2.563 -2.657,-2.184 0.427,-5.30501 1.57,-6.53801 9.517,-10.268 18.793868,-20.71176 18.793868,-20.71176 3.269,-3.695 9.009,-4.046 12.704,-0.777 3.695,3.27 4.046,9.009 0.777,12.704 L 26.219,1022.756 c -5.472,6.185 -14.989,6.767 -21.174,1.295 -6.185,-5.472 -6.767,-14.989 -1.295,-21.174 l 38.432,-43.439 c 7.678,-8.673 20.972,-9.486 29.646,-1.812 z">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                    <svg class="coveo-loading-icon" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 18 18">
+                                                        <g>
+                                                            <path
+                                                                d="m16.76 8.051c-.448 0-.855-.303-.969-.757-.78-3.117-3.573-5.294-6.791-5.294s-6.01 2.177-6.79 5.294c-.134.537-.679.861-1.213.727-.536-.134-.861-.677-.728-1.212 1.004-4.009 4.594-6.809 8.731-6.809 4.138 0 7.728 2.8 8.73 6.809.135.536-.191 1.079-.727 1.213-.081.02-.162.029-.243.029z">
+                                                            </path>
+                                                            <path
+                                                                d="m9 18c-4.238 0-7.943-3.007-8.809-7.149-.113-.541.234-1.071.774-1.184.541-.112 1.071.232 1.184.773.674 3.222 3.555 5.56 6.851 5.56s6.178-2.338 6.852-5.56c.113-.539.634-.892 1.184-.773.54.112.887.643.773 1.184-.866 4.142-4.57 7.149-8.809 7.149z">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                    <div class="coveo-caption-for-icon">Detach</div>
+                                                </template>
+
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 7px;" class="result-row">
+                                    <div style="vertical-align: top;width: 32px;" class="result-cell">
+                                        <img src={incident.backgroundimage} title="Panopta Incident">
+                                    </div>
+                                    <div style="vertical-align: middle; font-size: 14px; padding-left: 10px;"
+                                        class="result-cell">
+                                        <div style="font-size: 15px;margin: 0;" class="result-row"></div>
+                                        <a href={incident.url} target="_blank">{incident.Instance_Name__c}</a>
+
+
+                                        <template if:true={incident.attachedToCase}>
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                                viewBox="0 0 78.905 77.861" class="disp-attached-icon coveo-attached">
+                                                <g transform="translate(0,-952.36218)">
+                                                    <path
+                                                        d="m 71.828,957.626 c 8.674,7.675 9.487,20.969 1.813,29.643 l -37.107,41.941 c -1.098,1.241 -2.994,1.357 -4.235,0.259 -1.241,-1.098 -1.357,-2.994 -0.259,-4.235 l 37.107,-41.941 c 5.541,-6.263 4.968,-15.633 -1.295,-21.174 -6.263,-5.541 -15.633,-4.968 -21.174,1.295 l -38.433,43.439 c -3.338,3.773 -2.996,9.366 0.777,12.704 3.773,3.338 9.366,2.996 12.704,-0.777 l 29.100468,-33.05767 c 1.13279,-1.28683 0.800246,-3.29785 -0.259,-4.235 -1.059246,-0.93715 -3.099,-1.025 -4.235,0.259 0,0 -9.944868,9.86376 -18.793868,20.71177 -1.04,1.275 -3.505,4.666 -6.064,2.563 -2.657,-2.184 0.427,-5.30501 1.57,-6.53801 9.517,-10.268 18.793868,-20.71176 18.793868,-20.71176 3.269,-3.695 9.009,-4.046 12.704,-0.777 3.695,3.27 4.046,9.009 0.777,12.704 L 26.219,1022.756 c -5.472,6.185 -14.989,6.767 -21.174,1.295 -6.185,-5.472 -6.767,-14.989 -1.295,-21.174 l 38.432,-43.439 c 7.678,-8.673 20.972,-9.486 29.646,-1.812 z">
+                                                    </path>
+                                                </g>
+                                            </svg>
+
+                                        </template>
+
+                                    </div>
+                                </div>
+                                <div class="result-row">
+                                    <div class="result-cell">
+                                        <span class="excerpt">
+                                            Incident: {incident.Incident_Id}
+                                        </span> </br>
+                                        <span class="excerpt">
+                                            Metric: {incident.Metric}
+                                        </span></br>
+                                        <span class="excerpt">
+                                            Status: {incident.Status}
+                                        </span> </br>
+                                        <span class="excerpt">
+                                            Incident Start Time: {incident.Incident_Start}
+                                        </span> </br>
+                                        <span class="excerpt">
+                                            Duration: {incident.Duration}
+                                        </span> </br>
+                                    </div>
+                                </div>
+                                <div class="result-row"></div>
+                                <div class="result-row">
+                                    <div class="result-cell">
+                                        <span class="viewedByCustomer"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Incidents pagination -->
+                    <template if:false={hideIncidentPagination}>
+                        <div class="pager">
+                            <ul class="pager-list">
+                                <li class="pager-previous" if:false={hidePreviousBTN} onclick={prevPage}>
+                                    <a title="Previous">
+                                        <span class="coveo-pager-previous-icon">
+                                            <svg aria-label="Left Arrow" role="img" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 11 20" class="coveo-pager-previous-icon-svg">
+                                                <title>Left Arrow</title>
+                                                <g fill="currentColor">
+                                                    <path
+                                                        d="m10.692 1.811c.412-.413.411-1.086 0-1.5-.2-.201-.465-.311-.746-.311-.283 0-.548.11-.747.31l-8.892 8.939c-.198.2-.307.466-.307.75 0 .286.109.551.305.748l8.893 8.941c.2.201.466.312.748.312h.001c.281 0 .546-.11.745-.309.199-.201.308-.468.308-.753 0-.284-.109-.548-.306-.745l-8.146-8.194z">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="pager-list-item">
+                                    <a class="coveo-pager-list-item-text">
+                                        {currentPage}
+                                    </a>
+                                </li>
+                                <li class="pager-next" if:false={hideNextBTN} onclick={nextPage}>
+                                    <a title="Next">
+                                        <span class="coveo-pager-next-icon">
+                                            <svg aria-label="Right Arrow" role="img" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 11 20" class="coveo-pager-next-icon-svg">
+                                                <title>Right Arrow</title>
+                                                <g fill="currentColor">
+                                                    <path
+                                                        d="m .308 18.189c-.412.413-.411 1.086 0 1.5.2.201.465.311.746.311.282 0 .547-.11.747-.31l8.891-8.939c.199-.2.307-.466.307-.75 0-.286-.109-.551-.305-.748l-8.893-8.942c-.199-.2-.465-.311-.747-.311-.001 0-.001 0-.001 0-.281 0-.546.11-.745.309-.198.201-.308.468-.308.753 0 .284.11.548.306.745l8.145 8.193z">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
+
+                </template>
+            </div>
+
+            <!-- Show No Incidents to display message when there are no records under the All TAB -->
+            <template if:true={NoDataAfterRendering}>
+                <div class="datatable-height flex-align-center">
+                    No Incidents to display!
+                </div>
+            </template>
+        </div>
+
+
+
+        <!-- Attached Results tab section -->
+        <div class="resultList" hidden={showAttResultsTab}>
+            <div class="result-list-container list-layout-container">
+                <template if:true={attIncidents}>
+                    <template for:each={attIncidents} for:item="attIncident">
+                        <div class="list-layout" onmouseover={showMenuActions} onmouseout={hideMenuActions}
+                            key={attIncident.Id}>
+                            <div class="result-frame">
+                                <div class="resultActionsMenu">
+                                    <div class="attach-to-case">
+
+                                        <div class="coveo-attach">
+                                            <span class="coveo-attach-to-case-icon">
+                                            </span>
+                                            <span class="coveo-attach-to-case-icon" onclick={handleAttach_ATT}
+                                                data-id={attIncident.Incident__c}>
+
+                                                <template if:false={attIncident.attachedToCase}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                                        viewBox="0 0 78.905 77.861" class="coveo-attach-icon">
+                                                        <g transform="translate(0,-952.36218)">
+                                                            <path
+                                                                d="m 71.828,957.626 c 8.674,7.675 9.487,20.969 1.813,29.643 l -37.107,41.941 c -1.098,1.241 -2.994,1.357 -4.235,0.259 -1.241,-1.098 -1.357,-2.994 -0.259,-4.235 l 37.107,-41.941 c 5.541,-6.263 4.968,-15.633 -1.295,-21.174 -6.263,-5.541 -15.633,-4.968 -21.174,1.295 l -38.433,43.439 c -3.338,3.773 -2.996,9.366 0.777,12.704 3.773,3.338 9.366,2.996 12.704,-0.777 l 29.100468,-33.05767 c 1.13279,-1.28683 0.800246,-3.29785 -0.259,-4.235 -1.059246,-0.93715 -3.099,-1.025 -4.235,0.259 0,0 -9.944868,9.86376 -18.793868,20.71177 -1.04,1.275 -3.505,4.666 -6.064,2.563 -2.657,-2.184 0.427,-5.30501 1.57,-6.53801 9.517,-10.268 18.793868,-20.71176 18.793868,-20.71176 3.269,-3.695 9.009,-4.046 12.704,-0.777 3.695,3.27 4.046,9.009 0.777,12.704 L 26.219,1022.756 c -5.472,6.185 -14.989,6.767 -21.174,1.295 -6.185,-5.472 -6.767,-14.989 -1.295,-21.174 l 38.432,-43.439 c 7.678,-8.673 20.972,-9.486 29.646,-1.812 z">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                    <svg class="coveo-loading-icon" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 18 18">
+                                                        <g>
+                                                            <path
+                                                                d="m16.76 8.051c-.448 0-.855-.303-.969-.757-.78-3.117-3.573-5.294-6.791-5.294s-6.01 2.177-6.79 5.294c-.134.537-.679.861-1.213.727-.536-.134-.861-.677-.728-1.212 1.004-4.009 4.594-6.809 8.731-6.809 4.138 0 7.728 2.8 8.73 6.809.135.536-.191 1.079-.727 1.213-.081.02-.162.029-.243.029z">
+                                                            </path>
+                                                            <path
+                                                                d="m9 18c-4.238 0-7.943-3.007-8.809-7.149-.113-.541.234-1.071.774-1.184.541-.112 1.071.232 1.184.773.674 3.222 3.555 5.56 6.851 5.56s6.178-2.338 6.852-5.56c.113-.539.634-.892 1.184-.773.54.112.887.643.773 1.184-.866 4.142-4.57 7.149-8.809 7.149z">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                    <div class="coveo-caption-for-icon">Attach</div>
+                                                </template>
+                                                <template if:true={attIncident.attachedToCase}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                                        viewBox="0 0 78.905 77.861"
+                                                        class="coveo-attach-icon coveo-attached">
+                                                        <g transform="translate(0,-952.36218)">
+                                                            <path
+                                                                d="m 71.828,957.626 c 8.674,7.675 9.487,20.969 1.813,29.643 l -37.107,41.941 c -1.098,1.241 -2.994,1.357 -4.235,0.259 -1.241,-1.098 -1.357,-2.994 -0.259,-4.235 l 37.107,-41.941 c 5.541,-6.263 4.968,-15.633 -1.295,-21.174 -6.263,-5.541 -15.633,-4.968 -21.174,1.295 l -38.433,43.439 c -3.338,3.773 -2.996,9.366 0.777,12.704 3.773,3.338 9.366,2.996 12.704,-0.777 l 29.100468,-33.05767 c 1.13279,-1.28683 0.800246,-3.29785 -0.259,-4.235 -1.059246,-0.93715 -3.099,-1.025 -4.235,0.259 0,0 -9.944868,9.86376 -18.793868,20.71177 -1.04,1.275 -3.505,4.666 -6.064,2.563 -2.657,-2.184 0.427,-5.30501 1.57,-6.53801 9.517,-10.268 18.793868,-20.71176 18.793868,-20.71176 3.269,-3.695 9.009,-4.046 12.704,-0.777 3.695,3.27 4.046,9.009 0.777,12.704 L 26.219,1022.756 c -5.472,6.185 -14.989,6.767 -21.174,1.295 -6.185,-5.472 -6.767,-14.989 -1.295,-21.174 l 38.432,-43.439 c 7.678,-8.673 20.972,-9.486 29.646,-1.812 z">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                    <svg class="coveo-loading-icon" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 18 18">
+                                                        <g>
+                                                            <path
+                                                                d="m16.76 8.051c-.448 0-.855-.303-.969-.757-.78-3.117-3.573-5.294-6.791-5.294s-6.01 2.177-6.79 5.294c-.134.537-.679.861-1.213.727-.536-.134-.861-.677-.728-1.212 1.004-4.009 4.594-6.809 8.731-6.809 4.138 0 7.728 2.8 8.73 6.809.135.536-.191 1.079-.727 1.213-.081.02-.162.029-.243.029z">
+                                                            </path>
+                                                            <path
+                                                                d="m9 18c-4.238 0-7.943-3.007-8.809-7.149-.113-.541.234-1.071.774-1.184.541-.112 1.071.232 1.184.773.674 3.222 3.555 5.56 6.851 5.56s6.178-2.338 6.852-5.56c.113-.539.634-.892 1.184-.773.54.112.887.643.773 1.184-.866 4.142-4.57 7.149-8.809 7.149z">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                    <div class="coveo-caption-for-icon">Detach</div>
+                                                </template>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 7px;" class="result-row">
+                                    <div style="vertical-align: top;width: 32px;" class="result-cell">
+                                        <img src={attIncident.backgroundimage} title="Panopta Incident">
+                                    </div>
+                                    <div style="vertical-align: middle; font-size: 14px; padding-left: 10px;"
+                                        class="result-cell">
+                                        <div style="font-size: 15px;margin: 0;" class="result-row"></div>
+                                        <a href={attIncident.url} target="_blank">{attIncident.Incident__r___Name}</a>
+                                        <template if:true={attIncident.isApprovalPending}>
+                                            <svg width="24" height="24" viewBox="0 0 1000 1000"
+                                                xmlns="http://www.w3.org/2000/svg" class="approval-pending-icon">
+                                                <path
+                                                    d="M 526 150C 576 150 602 175 601 224C 600 300 600 350 575 525C 570 560 560 575 525 575C 525 575 475 575 475 575C 440 575 430 560 425 525C 400 355 400 300 400 226C 400 175 425 150 475 150M 500 650C 527 650 552 661 571 679C 589 698 600 723 600 750C 600 805 555 850 500 850C 445 850 400 805 400 750C 400 723 411 698 429 679C 448 661 473 650 500 650C 500 650 500 650 500 650">
+                                                </path>
+                                            </svg>
+                                            <!-- <div class="coveo-caption-for-icon">Pending Approval</div> -->
+                                        </template>
+                                        <template if:false={attIncident.isApprovalPending}>
+                                            <template if:true={attIncident.attachedToCase}>
+
+                                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                                    viewBox="0 0 78.905 77.861"
+                                                    class="disp-attached-icon coveo-attached">
+                                                    <g transform="translate(0,-952.36218)">
+                                                        <path
+                                                            d="m 71.828,957.626 c 8.674,7.675 9.487,20.969 1.813,29.643 l -37.107,41.941 c -1.098,1.241 -2.994,1.357 -4.235,0.259 -1.241,-1.098 -1.357,-2.994 -0.259,-4.235 l 37.107,-41.941 c 5.541,-6.263 4.968,-15.633 -1.295,-21.174 -6.263,-5.541 -15.633,-4.968 -21.174,1.295 l -38.433,43.439 c -3.338,3.773 -2.996,9.366 0.777,12.704 3.773,3.338 9.366,2.996 12.704,-0.777 l 29.100468,-33.05767 c 1.13279,-1.28683 0.800246,-3.29785 -0.259,-4.235 -1.059246,-0.93715 -3.099,-1.025 -4.235,0.259 0,0 -9.944868,9.86376 -18.793868,20.71177 -1.04,1.275 -3.505,4.666 -6.064,2.563 -2.657,-2.184 0.427,-5.30501 1.57,-6.53801 9.517,-10.268 18.793868,-20.71176 18.793868,-20.71176 3.269,-3.695 9.009,-4.046 12.704,-0.777 3.695,3.27 4.046,9.009 0.777,12.704 L 26.219,1022.756 c -5.472,6.185 -14.989,6.767 -21.174,1.295 -6.185,-5.472 -6.767,-14.989 -1.295,-21.174 l 38.432,-43.439 c 7.678,-8.673 20.972,-9.486 29.646,-1.812 z">
+                                                        </path>
+                                                    </g>
+                                                </svg>
+
+                                            </template>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="result-row">
+                                    <div class="result-cell">
+                                        <span class="excerpt">
+                                            Incident: {attIncident.Incident_Id}
+                                        </span></br>
+                                        <span class="excerpt">
+                                            CaseNumber: {attIncident.Case__r_casenumber}
+                                        </span></br>
+                                        <span class="excerpt">
+                                            Metric: {attIncident.Metric}
+                                        </span></br>
+                                        <span class="excerpt">
+                                            Status: {attIncident.Incident__r___Status}
+                                        </span></br>
+                                        <span class="excerpt">
+                                            Start Time: {attIncident.Incident__r___StartTime}
+                                        </span></br>
+
+
+
+                                        <!-- <span class="excerpt">
+                                            Account Instance: {incident.Account_Instance__r___Name}
+                                        </span> -->
+                                    </div>
+                                </div>
+                                <div class="result-row"></div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Case Incidents pagination -->
+                    <template if:false={hideIncidentPagination_ATT}>
+                        <div class="pager">
+                            <ul class="pager-list">
+                                <li class="pager-previous" if:false={hidePreviousBTN_ATT} onclick={prevPage_ATT}>
+                                    <a title="Previous">
+                                        <span class="coveo-pager-previous-icon">
+                                            <svg aria-label="Left Arrow" role="img" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 11 20" class="coveo-pager-previous-icon-svg">
+                                                <title>Left Arrow</title>
+                                                <g fill="currentColor">
+                                                    <path
+                                                        d="m10.692 1.811c.412-.413.411-1.086 0-1.5-.2-.201-.465-.311-.746-.311-.283 0-.548.11-.747.31l-8.892 8.939c-.198.2-.307.466-.307.75 0 .286.109.551.305.748l8.893 8.941c.2.201.466.312.748.312h.001c.281 0 .546-.11.745-.309.199-.201.308-.468.308-.753 0-.284-.109-.548-.306-.745l-8.146-8.194z">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="pager-list-item">
+                                    <a class="coveo-pager-list-item-text">
+                                        {currentPage_ATT}
+                                    </a>
+                                </li>
+                                <li class="pager-next" if:false={hideNextBTN_ATT} onclick={nextPage_ATT}>
+                                    <a title="Next">
+                                        <span class="coveo-pager-next-icon">
+                                            <svg aria-label="Right Arrow" role="img" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 11 20" class="coveo-pager-next-icon-svg">
+                                                <title>Right Arrow</title>
+                                                <g fill="currentColor">
+                                                    <path
+                                                        d="m .308 18.189c-.412.413-.411 1.086 0 1.5.2.201.465.311.746.311.282 0 .547-.11.747-.31l8.891-8.939c.199-.2.307-.466.307-.75 0-.286-.109-.551-.305-.748l-8.893-8.942c-.199-.2-.465-.311-.747-.311-.001 0-.001 0-.001 0-.281 0-.546.11-.745.309-.198.201-.308.468-.308.753 0 .284.11.548.306.745l8.145 8.193z">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
+
+                </template>
+            </div>
+
+            <!-- Show No Attached results to display message when there are no records under the Attached Results TAB -->
+            <template if:true={NoDataAfterRendering_ATT}>
+                <div class="datatable-height flex-align-center">
+                    No Attached results to display!
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

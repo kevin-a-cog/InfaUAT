@@ -1,0 +1,3 @@
+<design:component>
+    <design:attribute name="ApplicationName" label="Application Name" description="Enter Application Name to display links related to the App." />
+</design:component>

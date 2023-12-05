@@ -1,0 +1,58 @@
+/*.THIS tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}*/
+.THIS .slds-scope .slds-media__figure {
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    margin-right: .75rem;
+}
+.THIS .oppRowContainer{
+	display: grid;
+}
+
+.THIS .modal-overflow {
+   overflow: auto;
+}
+
+@media (max-width: 720px) {
+    .THIS .slds-card {
+        height: 50px;
+    }
+
+    .THIS .scrollerSize {
+        height:100vh;
+        width:100vw;
+    }
+}
+
+/*.THIS .mobileCardSize {
+    height: 58px;
+}
+
+.THIS .body {
+    overflow-y: hidden;
+}*/
+
+/*.THIS .table .td .th {
+    border: 1px solid black;
+}
+
+.THIS .table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.THIS .th {
+    height: 50px;
+    text-align: left;
+}
+
+.THIS .slds-truncate {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+   
+}*/

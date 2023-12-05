@@ -1,0 +1,78 @@
+<!--
+@author : Kiran G
+@date 	: 5 Jan 2021
+@purpose: SALESRT-12516 To display banner when the Quote and Order AMount does not match
+SALESRT-12863 : To display message to populate Adjustment Reason Code on -ve Amendment Order
+-->
+
+<aura:component controller = "QuoteOrderAmountDifferenceBanner" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	<aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="Ord" type="Order" />
+    <aura:attribute name="msg" type="String" />
+    <aura:attribute name="error" type="Boolean" default="false"/>
+    <aura:attribute name="payTermMsg" type="String" />
+    <aura:attribute name="payTermError" type="Boolean" default="false"/>
+    <aura:attribute name="invSchMsg" type="String" />
+    <aura:attribute name="invSchError" type="Boolean" default="false"/>
+    <aura:attribute name="BSBTMsg" type="String" />
+    <aura:attribute name="BSBTError" type="Boolean" default="false"/>
+    <aura:attribute name="exemptMsg" type="String" />
+    <aura:attribute name="exemptError" type="Boolean" default="false"/>
+    <aura:attribute name="AdjustCodeMsg" type="String" />
+    <aura:attribute name="AdjustCodeErr" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.myAction}" />
+    
+    <aura:if isTrue="{!v.error}">
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <h2>
+                <b>{!v.msg}</b>
+            </h2>
+        </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.payTermError}">
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <h2>
+                <b>{!v.payTermMsg}</b>
+            </h2>
+        </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.invSchError}">
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <h2>
+                <b>{!v.invSchMsg}</b>
+            </h2>
+        </div>
+    </aura:if>
+    
+     <aura:if isTrue="{!v.BSBTError}">
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <h2>
+                <b>{!v.BSBTMsg}</b>
+            </h2>
+        </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.exemptError}">
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <h2>
+                <b>{!v.exemptMsg}</b>
+            </h2>
+        </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.AdjustCodeErr}">
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <h2>
+                <b>{!v.AdjustCodeMsg}</b>
+            </h2>
+        </div>
+    </aura:if>
+</aura:component>

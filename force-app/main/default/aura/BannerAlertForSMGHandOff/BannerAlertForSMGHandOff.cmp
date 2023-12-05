@@ -1,0 +1,23 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="OutlookEmailController">
+    <aura:attribute name="message" type="String" default="The Interlock is due for SMG sign off, please take necessary action."/>
+    <aura:attribute name="backgroundColour" type="String"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="showBanner" type="Boolean" />
+    <aura:handler name="init" value="{!this}" action="{!c.checkCondition}" />
+    
+    
+    
+    
+    <aura:if isTrue="{!v.showBanner}">
+        <div style="{! 'background-color:' + v.backgroundColour }">
+            <lightning:layout horizontalAlign="space">
+                <lightning:layoutItem padding="around-small" flexibility="auto">
+                    <lightning:icon class="warning" iconName="utility:warning" alternativeText="Warning!" variant="warning" size="small"/>
+                    
+                    <lightning:formattedText value="{!v.message}" />
+                    
+                </lightning:layoutItem>
+            </lightning:layout >
+        </div>
+    </aura:if>
+</aura:component>

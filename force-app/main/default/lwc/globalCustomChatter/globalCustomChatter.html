@@ -1,0 +1,178 @@
+<!--
+/*
+ * Name			:	GlobalCustomChatter
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	10/28/2022
+ * Description	:	This component displays combined chatter feeds based on the given record ids.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		10/28/2022		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Container. -->
+	<div class="slds-is-relative">
+
+		<!-- Spinner. -->
+		<lightning-spinner if:true={boolRenderSpinner} variant="brand"></lightning-spinner>
+	
+		<!-- Card.-->
+		<lightning-card title={label.Global_Chatter}>
+	
+			<!-- Refresh icon.-->
+			<lightning-button-icon icon-name="action:refresh" variant="border-filled" size="medium" class="slds-m-left_xx-small" onclick={loadRecords} slot="actions"></lightning-button-icon>
+
+			<!-- Show Tagged records. -->
+			<div class="slds-clearfix slds-m-right_medium">
+				<div class="slds-float_right">
+					<lightning-input if:true={boolIncludeTaggedRecords} type="toggle" label={label.Show_Tagged_Posts} checked={boolTaggedRecordsToggle} message-toggle-active="" 
+							message-toggle-inactive="" onchange={toggleTaggedRecords}></lightning-input>
+				</div>
+			</div>
+	
+			<!-- Feed items. -->
+			<template if:true={boolHasRecords} for:each={lstFeedItems} for:item="objRecord">
+				<div key={objRecord.idRecord} data-visible={objRecord.boolIsVisible} class="slds-feed">
+					<ul class="slds-feed__list">
+						<li class="slds-feed__item">
+							<article class="slds-post">
+								<header class="slds-post__header slds-media">
+									<div class="slds-media__figure">
+										<lightning-avatar variant="circle" src={objRecord.strCreatedByPhotoURL} fallback-icon-name="standard:person_account" size="medium"></lightning-avatar>
+									</div>
+									<div class="slds-media__body">
+										<div class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">
+											<p>
+												<a data-id={objRecord.idCreatedBy} onclick={openRecord}>{objRecord.strCreatedBy}</a>
+											</p>
+										</div>
+										<p class="slds-text-body_small">
+											<a href="#" class="slds-text-link_reset">{objRecord.strCreatedDate}</a>
+										</p>
+									</div>
+								</header>
+
+								<!-- Body. -->
+								<div data-id={objRecord.idRecord} class="bodyContainer forceChatterMessageSegments" lwc:dom="manual"></div>
+								
+								<!-- Attachments. -->
+								<div class="forceChatterFeedAuxBody--default forceChatterFeedAuxBody forceChatterFeedAuxBodyContentPost">
+									<article class="cuf-auxBody cuf-auxBodyContent cuf-auxBodyContentWithThumbnail">
+										<ul>
+											<template for:each={objRecord.lstAttachments} for:item="objAttachment">
+												<li key={objAttachment.idContentVersion} class="slds-p-horizontal--xx-small slds-show_inline-block">
+													<div class="forceChatterFeedContentAttachmentPreview">
+														<div style="width:201px" class="slds-file slds-file--card">
+															<a style="height:134px" data-id={objAttachment.idContentDocument} data-ids={objRecord.strAttachmentIds} onclick={navigateToFiles} 
+																	class="slds-file__crop">
+																<img src={objAttachment.strURL} />
+															</a>
+														</div>
+													</div>
+												</li>
+											</template>
+											<template if:true={objRecord.boolHasMoreThant3Attachments}>
+												<li class="slds-p-horizontal--xx-small slds-show_inline-block">
+													<div class="forceChatterFeedContentAttachmentPreview">
+														<div style="width:201px" class="slds-file slds-file--card">
+															<a style="height:134px" data-id={objRecord.objThirdAttachment.idContentDocument} data-ids={objRecord.strAttachmentIds} 
+																	onclick={navigateToFiles} class="slds-file__crop">
+																<img src={objRecord.objThirdAttachment.strURL} />
+																<div class="slds-file--overlay">
+																	<div class="slds-file__title slds-file__title--overlay slds-align--absolute-center slds-text-heading--large">
+																		<div class="slds-media--small slds-media--center">
+																			<div class="slds-media__figure slds-line-height--reset"></div>
+																			<div class="slds-media__body">
+																				<span class="slds-file__text slds-truncate">+{objRecord.intExtraAttachments}</span>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</a>
+														</div>
+													</div>
+												</li>
+											</template>
+										</ul>
+									</article>
+								</div>
+							</article>
+							<div if:true={objRecord.boolHasMoreThanOneReply} class="slds-feed__item-comments">
+								<ul>
+									<li>
+										<article class="slds-comment slds-media slds-hint-parent">
+											<a data-id={objRecord.idRecord} onclick={displayAllComments}>{label.More_Comments}</a>
+										</article>
+									</li>
+								</ul>
+							</div>
+
+							<!-- Replies.-->
+							<template for:each={objRecord.lstReplies} for:item="objReply">
+								<div key={objReply.idRecord} data-visible={objReply.boolIsVisible} class="slds-feed__item-comments">
+									<ul>
+										<li>
+											<article class="slds-comment slds-media slds-hint-parent">
+												<div class="slds-media__figure">
+													<lightning-avatar variant="circle" src={objReply.strCreatedByPhotoURL} fallback-icon-name="standard:person_account" size="x-small"></lightning-avatar>
+												</div>
+												<div class="slds-media__body">
+
+													<!-- Header. -->
+													<header class="slds-media slds-media_center">
+														<div class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">
+															<p class="slds-truncate" title={objReply.strCreatedBy}>
+																<a data-id={objReply.idCreatedBy} onclick={openRecord}>{objReply.strCreatedBy}</a>
+															</p>
+														</div>
+													</header>
+
+													<!-- Body. -->
+													<div class="slds-comment__content slds-text-longform">
+														<div data-id={objReply.idRecord} class="bodyContainer marginZero" lwc:dom="manual"></div>
+													</div>
+
+													<!-- Attachments. -->
+													<ul class="auxbodies slds-list_vertical">
+														<template for:each={objReply.lstAttachments} for:item="objAttachment">
+															<div key={objAttachment.idContentVersion} class="forceChatterFeedContentAttachmentPreview">
+																<div style="width:146px" class="slds-file slds-file--card">
+																	<a style="height:97px" data-id={objAttachment.idContentDocument} onclick={navigateToFiles} class="slds-file__crop">
+																		<img src={objAttachment.strURL} />
+																	</a>
+																</div>
+															</div>
+														</template>
+													</ul>
+
+													<!-- Footer. -->
+													<footer>
+														<ul class="slds-list_horizontal slds-has-dividers_right slds-text-body_small">
+															<li class="slds-item">{objReply.strCreatedDate}</li>
+														</ul>
+													</footer>
+												</div>
+											</article>
+										</li>
+									</ul>
+								</div>
+							</template>
+						</li>
+					</ul>
+				</div>
+			</template>
+
+			<!-- No records found. -->
+			<div if:false={boolHasRecords} class="slds-illustration slds-illustration_large" aria-hidden="true">
+				<img src="/img/chatter/OpenRoad.svg" class="slds-illustration__svg" alt="" />
+				<div class="slds-text-color_weak">
+					<h3 class="slds-text-heading_medium">{strNoRecordsFoundMessageLocal}</h3>
+				</div>
+			</div>
+		</lightning-card>
+	</div>
+</template>

@@ -1,0 +1,39 @@
+<!--
+/*
+ * Name			:	CsmAddNewSupportSme
+ * Author		:	Harshita Joshi
+ * Created Date	: 	6/22/2022
+ * Description	:	Make Account Team Record.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description							Tag
+ **********************************************************************************************************
+ Harshita Joshi		    6/22/2022		I2RT-6474		Initial version.					N/A
+ */
+-->
+<template>
+
+    <!--Quick Action-->
+    <lightning-quick-action-panel header="Add Account Team Member">
+        <div class="slds-is-relative">
+
+            <!-- Lightning Spinner -->
+            <lightning-spinner alternative-text="Loading" size="medium" if:true={isLoading}></lightning-spinner>
+
+            <!-- Account Team Member record form -->
+            <lightning-record-edit-form object-api-name="AccountTeamMember" onload={handleDefault} onsubmit={handleSubmit} onsuccess={handleAccountCreated} onerror={handleError}>
+                <lightning-input-field field-name="AccountId" value={accountid} disabled="true">
+                </lightning-input-field>
+                <lightning-input-field field-name="UserId" value={userId}>
+                </lightning-input-field>
+                <lightning-input-field field-name="TeamMemberRole" value={teamMemberRole} required="true">
+                </lightning-input-field>
+                <lightning-input-field field-name="Product__c" value={teamProduct} required="true">
+                </lightning-input-field>
+                <lightning-button class="slds-m-top_small slds-float_right" variant="brand" type="submit" label="Create"></lightning-button>
+            </lightning-record-edit-form>
+
+        </div>
+    </lightning-quick-action-panel>
+</template>

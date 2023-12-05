@@ -1,0 +1,18 @@
+<!--
+@author : Vivek Warrier
+@date 	: 20-Sep-2021
+@purpose: PSA-2025 : To display warning on the RR page when the stage is 'Planned' or 'Missing Paperwork'
+-->
+<aura:component controller="psa_RRAtRisk" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="Resource_Request" type="pse__Resource_Request__c" />
+    <aura:attribute name="msg" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.myAction}" />
+    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+        <span class="slds-assistive-text">warning</span>
+        <h2>
+            <b>Warning: Staffing is at Risk
+            </b>
+        </h2>
+    </div>
+</aura:component>

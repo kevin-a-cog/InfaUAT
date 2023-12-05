@@ -1,0 +1,25 @@
+table, th, td {
+    /*border: 1px solid black;
+    width: 50px;*/
+    height: 25px;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+ }
+
+ td:before {
+    content: '';
+    display: block; 
+    width: 10em;
+}
+
+
+.center-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+tr td:last-child {
+    width: 1%;
+    white-space: nowrap;
+}

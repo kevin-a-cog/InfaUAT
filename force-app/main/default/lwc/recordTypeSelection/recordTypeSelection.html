@@ -1,0 +1,35 @@
+<template>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_1-of-1 slds-large-size_3-of-12">
+            <div class="slds-clearfix">
+                <div class="slds-float_right">
+                    <p>Select a record type</p>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-large-size_9-of-12 slds-p-around_medium">
+            <template iterator:it={options}>
+                <div key={it.value.Id} class="slds-grid slds-gutters slds-p-bottom_medium">
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input if:true={it.first} variant="label-hidden" key={it.value.Id} type="radio"
+                            checked data-value={it.value.Id} onchange={handleChange}></lightning-input>
+                        <lightning-input if:false={it.first} variant="label-hidden" key={it.value.Id} type="radio"
+                            data-value={it.value.Id} onchange={handleChange}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_11-of-12">
+                        <div class="slds-grid slds-grid_vertical">
+                            <div class="slds-col">
+                                <span>{it.value.Name}</span>
+                            </div>
+                            <div class="slds-col" style="word-wrap: break-word">
+                                <div class="slds-p-left_large">
+                                    <span>{it.value.Description}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

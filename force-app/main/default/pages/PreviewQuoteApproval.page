@@ -1,0 +1,13 @@
+<apex:page standardController="SBQQ__Quote__c" extensions="PreviewQuoteApprovalController"  action="{!redirect}">
+
+    <apex:stylesheet value="{!URLFOR($Resource.sbaa__sb)}"/>
+    
+    <apex:pageMessages id="showmsg"></apex:pageMessages>
+    
+    <apex:form > 
+        <div align="right">               
+            <apex:commandButton styleClass="sbBtn" style="margin-right: 20px" value="Return To Quote" action="{!onReturn}" />        
+        </div>
+    </apex:form>
+    
+</apex:page>

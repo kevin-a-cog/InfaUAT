@@ -1,0 +1,241 @@
+<template>
+
+    <!-- Progress Bar -->
+    <template if:true={showConfirmDialogModal}>
+        <c-ipue-confirm-dialog frame-index-val={tempFrameIndex} section-index-val={tempSectionIndex}
+            onclosedialogmodal={handleCloseConfirmDialogModal}
+            onproceed={handleProceedConfirmDialogModal}></c-ipue-confirm-dialog>
+    </template>
+
+    <div class="slds-grid">
+
+        <template for:each={frames} for:item="frame" for:index="frameIndex">
+
+            <!-- Dynamically size column from class built out in Controller -->
+            <div key={frame.Id} class='slds-col slds-size_12-of-12'>
+
+                <!-- Padding around each Frame -->
+                <div class="slds-m-around_x-small">
+
+                    <!-- Show Page Sections -->
+                    <template for:each={frame.pageSections} for:item="section" for:index="sectionIndex">
+                        <template if:true={section.selectedPageSection}>
+                            <div key={section.Id} class="page-section">
+
+                                <!-- Show Total IPU Page Section -->
+                                <template if:true={section.showTotalIpuSection}>
+                                    <div class="form-total">
+                                        <lightning-layout vertical-align="center">
+                                            <lightning-layout-item flexibility="auto" class="form-total-title">
+                                                <!--{section.totalLabel} -->
+                                                <lightning-formatted-rich-text
+                                                    value={section.totalLabel}></lightning-formatted-rich-text>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item flexibility="auto" class="form-total-output">
+                                                <lightning-formatted-number value={totalEstimation}
+                                                    maximum-fraction-digits="0"></lightning-formatted-number> &nbsp;IPUs
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </div>
+                                </template>
+
+                                <!-- Show All Other Page Sections -->
+                                <template if:false={section.showTotalIpuSection}>
+
+                                    <!-- Header -->
+                                    <div class="section-header">
+                                        <lightning-layout vertical-align="center">
+
+                                            <!-- Checkbox & Title -->
+                                            <lightning-layout-item size="12" flexibility="auto">
+                                                <lightning-layout vertical-align="center">
+                                                    <template if:true={section.selectedPageSection}>
+
+                                                        <!-- Checkbox -->
+                                                        <lightning-layout-item>
+                                                            <lightning-input class="slds-p-left_small section-checkbox"
+                                                                checked={section.selectedPageSection} type="checkbox"
+                                                                disabled={section.disableCheckbox}
+                                                                onchange={toggleSection}
+                                                                data-section-index={sectionIndex}
+                                                                data-frame-index={frameIndex}
+                                                                style="Display:none;"></lightning-input>
+                                                        </lightning-layout-item>
+
+                                                        <!-- Title -->
+                                                        <lightning-layout-item>
+                                                            <span class="section-title">
+                                                                <template if:true={section.selectedPageSection}>
+                                                                    <span><lightning-formatted-rich-text
+                                                                            value={section.name}></lightning-formatted-rich-text></span>
+                                                                </template>
+                                                                <template if:false={section.selectedPageSection}>
+                                                                    <span
+                                                                        class='disabled'><lightning-formatted-rich-text
+                                                                            value={section.name}></lightning-formatted-rich-text></span>
+                                                                </template>
+                                                            </span>
+                                                        </lightning-layout-item>
+                                                    </template>
+
+                                                </lightning-layout>
+
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </div>
+
+                                    <!-- Toggle Section -->
+                                    <template if:true={section.selectedPageSection}>
+
+                                        <!-- Section Items -->
+                                        <template for:each={section.sectionItems} for:item="item" for:index="itemIndex">
+                                            <div key={item.Id}>
+
+                                                <!-- Estimation Schedule -->
+                                                <template if:true={item.isSchedule}>
+                                                    <template if:true={item.schedule.showSchedule}>
+                                                        <div class="question">
+                                                            <lightning-layout vertical-align="center">
+
+                                                                <!-- Question -->
+                                                                <lightning-layout-item flexibility="auto" size="9">
+                                                                    <lightning-formatted-rich-text
+                                                                        value={item.schedule.description}></lightning-formatted-rich-text>
+                                                                </lightning-layout-item>
+
+                                                                <!-- Input Field & Notes -->
+                                                                <lightning-layout-item flexibility="auto" size="3">
+
+                                                                    <lightning-layout vertical-align="center">
+
+                                                                        <!-- Input Field -->
+                                                                        <lightning-layout-item flexibility="auto"
+                                                                            size={estOutputLayoutSize}>
+
+                                                                            <!-- Question Input Field (Editable)-->
+                                                                            <template if:true={item.schedule.isInput}>
+                                                                                <lightning-input
+                                                                                    type={item.schedule.type}
+                                                                                    variant="label-hidden"
+                                                                                    value={item.schedule.output.value}
+                                                                                    label="Answer"
+                                                                                    disabled={disableInputs}
+                                                                                    data-item={item}
+                                                                                    data-item-index={itemIndex}
+                                                                                    data-section-index={sectionIndex}
+                                                                                    data-frame-index={frameIndex}
+                                                                                    oncommit={handleInput}></lightning-input>
+
+                                                                            </template>
+                                                                            <!-- Picklist Input Field (Editable) -->
+                                                                            <template
+                                                                                if:true={item.schedule.isPicklist}>
+                                                                                <lightning-combobox name="question"
+                                                                                    value={item.schedule.output.picklistValue}
+                                                                                    variant="label-hidden"
+                                                                                    placeholder="Select Option..."
+                                                                                    disabled={disableInputs}
+                                                                                    options={item.schedule.picklistValues}
+                                                                                    data-item={item}
+                                                                                    data-item-index={itemIndex}
+                                                                                    data-section-index={sectionIndex}
+                                                                                    data-frame-index={frameIndex}
+                                                                                    onchange={handleInput}></lightning-combobox>
+                                                                            </template>
+                                                                            <!-- Calculated Input Field (Read Only) -->
+                                                                            <template
+                                                                                if:true={item.schedule.isCalculated}>
+                                                                                <lightning-input disabled
+                                                                                    variant="label-hidden"
+                                                                                    value={item.schedule.output.value}></lightning-input>
+                                                                            </template>
+
+                                                                        </lightning-layout-item>
+                                                                    </lightning-layout>
+                                                                </lightning-layout-item>
+                                                                <!-- End Input Field & Notes -->
+                                                            </lightning-layout>
+                                                        </div>
+                                                    </template>
+                                                </template> <!-- End Question -->
+
+                                                <!-- Table Section -->
+                                                <template if:true={item.isTable}>
+                                                    <c-ipue-table disable-inputs={disableInputs}
+                                                        current-frame-index={frameIndex}
+                                                        current-section-index={sectionIndex}
+                                                        current-item-index={itemIndex} table={item.table}
+                                                        loading-rows={loadingRows} onupdateparent={handleInputFromTable}
+                                                        onaddrow={handleAddRowToTable}
+                                                        onremoverow={handleRemoveRowFromTable}></c-ipue-table>
+                                                </template>
+
+                                            </div>
+                                        </template> <!-- End Interation: Section Items -->
+
+                                        <!-- Show Page Section IPU Total -->
+                                        <template if:true={section.showSectionTotal}>
+                                            <div class="section-total-footer">
+                                                <lightning-layout vertical-align="center">
+                                                    <lightning-layout-item flexibility="auto"
+                                                        class="section-total-title">
+                                                        <lightning-formatted-rich-text
+                                                            value={section.totalLabel}></lightning-formatted-rich-text>
+                                                    </lightning-layout-item>
+                                                    <lightning-layout-item flexibility="auto"
+                                                        class="section-total-output">
+                                                        <lightning-formatted-number value={section.sectionTotal}
+                                                            maximum-fraction-digits="0"></lightning-formatted-number>
+                                                            &nbsp;IPUs
+                                                    </lightning-layout-item>
+                                                </lightning-layout>
+                                            </div>
+                                        </template>
+
+                                    </template> <!-- End Conditional: section.showSection = true -->
+                                </template> <!-- End Conditional: section.showTotalIpuSection = false -->
+                            </div>
+                        </template>
+                    </template> <!-- End Interation: Page Section -->
+                </div>
+            </div>
+        </template> <!-- End Iteration: Frame -->
+    </div>
+
+    <template if:true={hasSDocButtons}>
+
+        <div class="slds-float_right">
+
+            <lightning-button-group>
+
+                <template for:each={sDocButtons.mainButtons} for:item="mainButton">
+
+                    <div key={mainButton.templateId}>
+
+                        <!-- Main Buttons -->
+                        <lightning-button label={mainButton.label} value={mainButton.templateId}
+                            onclick={handleSDocButtonClick}></lightning-button>
+
+                    </div>
+                </template>
+
+                <lightning-button-menu alternative-text="Additional Options" menu-alignment="auto"
+                    variant="border-filled">
+
+                    <template for:each={sDocButtons.menuButtons} for:item="menuButton">
+
+                        <!-- Menu Items -->
+                        <div key={menuButton.templateId}>
+                            <lightning-menu-item label={menuButton.label} value={menuButton.templateId}
+                                onclick={handleSDocButtonClick}></lightning-menu-item>
+                        </div>
+
+                    </template>
+                </lightning-button-menu>
+
+            </lightning-button-group>
+        </div>
+
+    </template> <!-- End Conditional: Has sDoc Buttons -->
+
+</template>

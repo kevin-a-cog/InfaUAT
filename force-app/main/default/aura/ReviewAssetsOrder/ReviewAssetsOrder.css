@@ -1,0 +1,18 @@
+@media (max-width: 900px) {
+    .THIS .modal-overflow{
+        overflow: auto;
+    }
+    
+    .THIS .slds-input{
+        width: 50%;
+    }
+}
+
+.THIS .inputDateStyle{
+        width: 95%;
+    }
+
+.THIS .inputStatusStyle .slds-form-element__label{
+    padding-top: 0em;
+    margin-bottom: 0em;
+}

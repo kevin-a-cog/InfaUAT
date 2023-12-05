@@ -1,0 +1,72 @@
+<!--
+/*
+ * Name			:	GlobalCustomCellPlainTable
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	9/9/2021
+ * Description	:	Generic Custom Cell component created for Plain tables in Data Table Global component.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		9/9/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- Icon. -->
+	<template if:true={objCell.boolIsIcon}>
+		<lightning-icon class={objCell.strClasses} icon-name={objCell.strIconName} size="xx-small" onclick={executeAction} data-action={objCell.intAction} 
+				data-target={objRecord.strLocalId} data-origin={objCell.strLocalId} data-record-id={strRecordId}></lightning-icon>
+	</template>
+
+	<!-- Another type. -->
+	<template if:false={objCell.boolIsIcon}>
+
+		<!-- Multiple values. -->
+		<template if:true={objCell.boolMultipleValues}>
+
+			<!-- Badges values. -->
+			<template if:true={objCell.boolIsBadge}>
+				<template for:each={objCell.lstValues} for:item="strBadge">
+					<lightning-badge key={strBadge} label={strBadge} class={objCell.strClasses} style={objCell.strStyle}></lightning-badge>
+				</template>
+
+				<!-- "More" icon. -->
+				<template if:true={objCell.boolDisplayMoreIcon}>
+					<lightning-icon class="slds-p-left_small slds-text-link_reset" icon-name={objCell.strIconName} size="xx-small" 
+							onclick={executeAction} data-action={objCell.intAction} data-target={objRecord.strLocalId} data-origin={objCell.strLocalId} 
+							data-record-id={strRecordId}></lightning-icon>
+				</template>
+			</template>
+		</template>
+
+		<!-- Another type. -->
+		<template if:false={objCell.boolMultipleValues}>
+
+			<!-- Badges format. -->
+			<template if:true={objCell.boolIsBadge}>
+				<lightning-badge key={objCell.strValue} label={objCell.strValue} class={objCell.strClasses} style={objCell.strStyle}></lightning-badge>
+			</template>
+
+			<!-- Another type. -->
+			<template if:false={objCell.boolIsBadge}>
+
+				<!-- Button menu type. -->
+				<template if:true={objCell.boolIsButtonMenu}>
+					<lightning-button-menu icon-name={objCell.strIconName} variant="bare" onselect={selectMenuItem} data-action={objCell.intAction} 
+							data-target={objRecord.strLocalId} data-origin={objCell.strLocalId} data-record-id={strRecordId}>
+						<template for:each={objCell.lstItems} for:item="objItem">
+							<lightning-menu-item key={objItem.strLabel} value={objItem.intAction} label={objItem.strLabel}></lightning-menu-item>
+						</template>
+					</lightning-button-menu>
+				</template>
+
+				<!-- Another type. -->
+				<template if:false={objCell.boolIsButtonMenu}>
+					<div class={objCell.strClasses}>{objCell.strValue}</div>
+				</template>
+			</template>
+		</template>
+	</template>
+</template>

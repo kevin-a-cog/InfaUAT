@@ -1,0 +1,97 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <div class="container in-upcoming-events-container">
+        <div class="in-heading-upcoming-events">
+            <a href={eventsLandingPage} class="in-section-link-header">
+                <div class="in-section-heading">Events</div>
+                <lightning-icon data-name="events" class="right-chev pl-3" icon-name="utility:chevronright" size="x-small">
+                </lightning-icon>
+            </a>
+        </div>
+
+        <div class="slds-grid slds-wrap">
+            <div class="slds-size_1-of-3 in-upcoming-events-calendar">
+                <div class="slds-box_x-small help-upcoming-events-calendar-body">
+                    <div style="background:#fff;" class="slds-grid slds-m-top_medium">
+                        <div id="calendar" class="fullcalendarjs">
+                        </div>
+                    </div>
+                    <div class="upcomingEvents-header my-events-header">
+                        <a href={eventsLandingPage}>My Events</a>
+                    </div>
+                    <div class="no-events" if:true={showEventsSpinner}>
+                        <lightning-spinner size="small">
+                        </lightning-spinner>
+                    </div>
+
+                    <div class="no-events" if:true={showNoEvents}>
+                        No Events available for you
+                    </div>
+                    <template for:each={userEvents} for:item="todayevent" if:false={showNoEvents}>
+                        <div key={todayevent.Id} class="in-my-events-list">
+                            <div data-name="eventdetail" data-id={todayevent.Id} class="upcoming-event-subject my-event-subject" title={todayevent.Subject} onclick={handleRedirect}>
+                                <div class="help-events-subject">{todayevent.Subject}</div>
+                                <lightning-icon class="chevron-down align-items-center ml-auto d-flex right-chev pl-3"
+                                    icon-name="utility:chevronright" size="xx-small"> </lightning-icon>
+                            </div>
+                            <div class="upcoming-event-datetimelocation my-event-datetimelocation mt-0">
+                                <img class="in-upcoming-event-datetime my-event-datetime"
+                                    src={eventTime}>{todayevent.ActivityTime}
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div class="slds-size_2-of-3 in-upcoming-events-list">
+                <div class="in-upcoming-events-data slds-var-m-around_x-small">
+                    <div class="upcomingEvents-header slds-var-m-around_x-small">
+                        Upcoming Events
+                    </div>
+                    <div class="no-upcoming-events" if:true={showEventsSpinner}>
+                        <lightning-spinner size="small">
+                        </lightning-spinner>
+                    </div>
+                    <div class="no-upcoming-events" if:true={showNoUpcomingEvents}>
+                        No Upcoming Events available
+                    </div>
+                    <div class="slds-var-m-around_x-small">
+                        <template for:each={upcomingEvents} for:item="upevent">
+                            <div key={upevent.Id} class="slds-grid slds-wrap in-upcoming-events-item">
+                                <div class="col-md-10 pl-0">
+                                    <div class="upcoming-event-subject event-subject-truncate" data-name="eventdetail" data-id={upevent.Id} title={upevent.Subject}
+                                        onclick={handleRedirect}>
+                                        {upevent.Subject}
+                                    </div>
+                                    <div if:true={upevent.Type}>
+                                        <span class="upcoming-event-type">
+                                            {upevent.Type}
+                                        </span>
+                                    </div>
+                                    <div class="upcoming-event-datetimelocation">
+                                        <div class="upcoming-event-info">
+                                            <img class="in-upcoming-event-datetime" src={eventCalendar}>
+                                            {upevent.ActivityDate}
+                                        </div>
+                                        <div class="upcoming-event-info">
+                                            <img class="in-upcoming-event-datetime" src={eventTime}>{upevent.ActivityTime}
+                                        </div>
+                                        <div class="upcoming-event-info">
+                                            <img class="in-upcoming-event-datetime" src={eventLocation}
+                                                if:true={upevent.Location}>{upevent.Location}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col join-btn-css">
+                                    <lightning-button data-id={upevent.Id} data-value={upevent.Subject} variant="brand-outline"
+                                        icon-name="utility:add" label="JOIN" onclick={handleJoinEvent}
+                                        if:false={upevent.IsFollowing}></lightning-button>
+                                </div>
+                                <div class="hr-tag"></div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

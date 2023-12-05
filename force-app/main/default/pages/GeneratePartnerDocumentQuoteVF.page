@@ -1,0 +1,13 @@
+<!--
+*  @VF Page: GenerateDocumentQuote VF
+*  @Author: Chandana Gowda
+*  @Date: 22 Jun 2021
+*  @Description: TAX-141 : Vf Page displayed on clicking of Generate Partner Document on Quote
+-->
+<apex:page standardController="SBQQ__Quote__c" extensions="taxICRTControllerExtension" action="{!fromGeneratePartnerDocumentQuoteVF}">
+    <apex:outputText rendered="{!!isTaxAppicable}">
+        <script>
+        sforce.one.navigateToURL('{!URLFOR($Action.SBQQ__Quote__c.Conga_Composer_Generate_Partner_Document,SBQQ__Quote__c.Id)}');
+        </script>
+    </apex:outputText>     
+</apex:page>

@@ -1,0 +1,291 @@
+<!--
+  @description       : 
+  @author            : SF Developer
+  @group             : 
+  @last modified on  : 10-25-2021
+  @last modified by  : SF Developer
+/*
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					                Tag
+ **********************************************************************************************************
+ NA                     NA      		UTOPIA			Initial version.			                N/A
+ Vignesh Divakaran      31-Aug-2022		I2RT-6865		Pass the alternate contacts description     T01
+                                                        to child component
+ Amit G                 25-Oct-2022     I2RT-7221       commented out the method to remove 
+                                                        validation check                            T02
+ balajip                12-Jan-2023     I2RT-7257       added fields OrgId and Secure Agent         T03
+*/
+-->
+<template>
+    <template if:true={showSpinner}>
+    <lightning-spinner class="slds-is-fixed" alternative-text="Loading" size="large"></lightning-spinner>
+    </template>    
+    <div class="container-fluid es-container-fluid--grey">
+        <template if:true={shoShippingCaseInfo}>
+            <div class="container">
+                <h2 class="es-page__heading">
+                    <lightning-button-icon variant="container" size="medium" icon-name="utility:chevronleft" title="Back" onclick={backButton}></lightning-button-icon>
+                    Create a New Case
+                </h2>
+                <div class="row">
+                    <div class="col-md-12">
+                        <c-es-case-creation-filled filled-step="1" filled-label="Case Type" filled-value="Fulfillment | Product Download & License Request"></c-es-case-creation-filled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="es-case-wrapper">
+                            <h3 class="es-case__heading"> <span class="es-case__step es-case__step--active">2</span> Case Information</h3>
+                            <div class="es-case-section">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <form class="es-form">
+                                            <div class="form-row">
+                                                <div class="form-group es-form-group es-lds-form-group col-md-6">
+                                                    <lightning-combobox
+                                                        name="supportAccount"
+                                                        label="Support Account Name"
+                                                        placeholder="Select your support account"
+                                                        options={supportAccounts}
+                                                        value={selectedSupportAccount}
+                                                        onchange={handleAccountSelect}
+                                                        required
+                                                        readonly>
+                                                    </lightning-combobox>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group es-form-group es-lds-form-group col-md-6">
+                                                    <lightning-combobox
+                                                        name="productDetails"
+                                                        label="Product"
+                                                        placeholder="Select your product details"
+                                                        options={products}
+                                                        value={selectedProduct}
+                                                        onchange={handleProductSelect}
+                                                        required>
+                                                    </lightning-combobox>
+                                                  <!--T02--> <!-- <template if:true={showUnentitledMessage}>	
+                                                        <label class="warning">The selected product is not part of your entitlement</label>	
+                                                    </template>-->
+                                                </div>
+                                                <template if:true={showDeliveryMethod}>
+                                                    <div class="form-group es-form-group es-lds-form-group col-md-6">
+                                                        <lightning-combobox
+                                                            name="deliveryMethod"
+                                                            label="Delivery Method"
+                                                            placeholder="Select delivery method"
+                                                            options={deliveryMethods}
+                                                            value={selectedDeliveryMethod}
+                                                            onchange={handleDeliveryMethodChange}
+                                                            required
+                                                            disabled={disableDeliveryMethod}
+                                                            field-level-help={label.eSupport_Delivery_Method_Help_Text}>
+                                                        </lightning-combobox>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                            <!-- T03 -->
+                                            <div class="form-row form-group es-form-group es-lds-form-group" if:true={showHosted}>
+                                                <div class="col-md-6">
+                                                    <template if:false={ShowOrgtxtId}>
+                                                        <lightning-combobox
+                                                            name="orgName"
+                                                            label="Org ID"
+                                                            placeholder="Select your org name"
+                                                            options={orgs}
+                                                            value={selectedOrg}
+                                                            onchange={handleOrgChange}
+                                                            required
+                                                            disabled={disableFields}>
+                                                        </lightning-combobox>
+                                                    </template>
+                                                    <template if:true={ShowOrgtxtId}>
+                                                        <lightning-input type="text" label="Org ID" disabled={disableFields}  value={ManualOrgId} onchange={handleManualOrgOrgChange}  required="true" ></lightning-input>
+                                                    </template>
+                                                    <lightning-input class="mt-2" type="checkbox" label="Add Org ID Manually" disabled={disableFields} value={isOrgValue} onchange={handlechkBoxOrgChange} checked={ShowOrgtxtId}></lightning-input>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <lightning-input type="text" name="Agent" label="Secure Agent" value={secureAgent} placeholder="Enter agent detail" onchange={handleSecureAgentChange} disabled={disableFields}>                                                    
+                                                    </lightning-input>                                                
+                                                </div>
+                                                <template if:true={showBanner}>
+                                                    <c-es-org-outage-banner support-account-id={selectedOrg} message="true"> </c-es-org-outage-banner>
+                                                </template>
+                                            </div>
+                                            <!-- /T03 -->
+                                            <div class="form-row">
+                                                <div class="form-group es-form-group es-lds-form-group col-md-6">
+                                                    <lightning-combobox
+                                                        name="environmentType"
+                                                        label="Environment Type"
+                                                        placeholder="Select environment type"
+                                                        options={environments}
+                                                        value={selectedEnvironment}
+                                                        onchange={handleEnvironmentChange}
+                                                        required>
+                                                    </lightning-combobox>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group es-form-group es-lds-form-group col-md-5">
+                                                    <lightning-combobox
+                                                        name="priority"
+                                                        label="Priority"
+                                                        placeholder="Select priority"
+                                                        options={priorities}
+                                                        value={selectedPriority}
+                                                        onchange={handlePriorityChange}
+                                                        required>
+                                                    </lightning-combobox>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">                                
+                                                <div class="form-group es-form-group es-lds-form-group col-md-8">
+                                                    <lightning-input type="text" name="subject" label="Subject" value={subject} placeholder="Enter subject" onchange={handleSubjectChange} onblur={handleSearchDataOnBlur} required></lightning-input>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">                             
+                                                <div class="form-group es-form-group es-lds-form-group col-md-8">  
+                                                    <lightning-textarea name="description" label="Description" value={description} onchange={handleDescriptionChange} onblur={handleSearchDataOnBlur} placeholder="Describe the issue in detail." required></lightning-textarea>
+                                                </div>
+                                            </div> 
+                                            <div class="form-row">                                
+                                                <div class="form-group es-form-group es-lds-form-group es-lds-file-select col-md-6">
+                                                    <lightning-file-upload
+                                                        label="Attach Files (Upload limit is 2GB)"
+                                                        name="fileUploader"
+                                                        accept={acceptedFormats}
+                                                        record-id={contactId}
+                                                        onuploadfinished={handleUploadFinished}
+                                                        multiple>
+                                                    </lightning-file-upload>
+                                                    <!-- <p><span class="es-case-addnl-info__icon">+</span>Add Files</p> -->
+                                                </div>
+                                            </div>
+                                            <template if:true={showUploadedFiles}>
+                                                <div data-id="uploadedAttachments">
+                                                    <div class="table-responsive">
+                                                        <table class="table es-table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th scope="col">Name</th>
+                                                                <th scope="col">Content Type</th>
+                                                                <th scope="col">&nbsp;</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <template for:each={uploadedFiles} for:item="attachments">
+                                                                    <tr key={attachments.id}>                                      
+                                                                        <td><a style="text-decoration: underline;color: steelblue;" data-id={attachments.ContentDocumentId} onclick={downloadDoc}>{attachments.ContentDocument.Title}</a></td>
+                                                                        <td>{attachments.ContentDocument.FileType}</td>
+                                                                        <td class="es-button--icon-in-table text-right">
+                                                                            <lightning-button-icon variant="container" size="x-small" icon-name="utility:delete" title="delete" value={attachments.ContentDocumentId} onclick={removeAttachment}></lightning-button-icon>
+                                                                        </td>
+                                                                    </tr>
+                                                                </template>
+                                                            </tbody>
+                                                        </table> 
+                                                    </div> 
+                                                </div>
+                                            </template>
+                                            <template if:true={isAttachmentDeletePopup}>
+                                                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                                                    <div class="slds-modal__container">
+                                                        <div class="es-modal__content">
+                                                            <header class="slds-modal__header es-modal__header">
+                                                                <button class="es-button--only-icon" title="Close" onclick={cancelFileRemove}>
+                                                                    <lightning-icon icon-name="utility:close"
+                                                                        alternative-text="close"
+                                                                        size="xx-small" ></lightning-icon>
+                                                                    <span class="slds-assistive-text">Close</span>
+                                                                </button>
+                                                                <h2 class="slds-text-heading_medium slds-hyphenate">Confirm Delete</h2>
+                                                            </header>
+                                                            <div class="es-modal__faux-body">
+                                                                <div class="es-modal__body">
+                                                                    <p>Are you sure you want to delete this document?</p>
+                                                                </div>
+                                                            </div>
+                                                            <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                                                                <lightning-button label="No" class="es-button es-button--secondary"  onclick={cancelFileRemove}></lightning-button>
+                                                                <lightning-button label="Yes" class="es-button es-button--primary"  onclick={confirmFileRemove}></lightning-button>		
+                                                            </footer>
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                                <div class="slds-backdrop slds-backdrop_open"></div>
+                                            </template>
+                                            <!-- <input type="file" class="mb-2" name="myfile"> -->  
+                                        </form>
+                                        <div class="es-btn-grp d-flex justify-content-end">
+                                            <lightning-button label="Cancel" class="es-button es-button--secondary" onclick={showCancelpopup}></lightning-button>
+                                            <a href={prevPageURL}><lightning-button label="Go Back" class="es-button es-button--secondary" ></lightning-button></a>
+                                            <lightning-button label="Proceed" class="es-button es-button--primary" onclick={showAlternateContact}></lightning-button>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <!-- <div class="slds-p-bottom_large slds-p-left_large">
+                            <lightning-record-edit-form object-api-name="Account">
+                                <lightning-messages></lightning-messages>
+                                <lightning-input-field field-name="Name">
+                                    </lightning-input-field>
+                                <lightning-input-field field-name="Phone">
+                                    </lightning-input-field>
+                                <lightning-input-field field-name="BillingAddress">
+                                    </lightning-input-field>
+                                <lightning-button type="submit"
+                                                name="submit"
+                                                label="Create Account">
+                                    </lightning-button>
+                            </lightning-record-edit-form>
+                        </div> -->
+                    </div>
+                    <div class="col-md-3">
+                        <c-es-sidebar-setb essidebarsetbsearch={triggerforsearch} essidebarsetbplacedin={placedin}></c-es-sidebar-setb><!-- Property added for Case Deflection Search -->
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template if:true={showCaseCancelModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                <div class="slds-modal__container">
+                    <div class="es-modal__content">
+                        <header class="slds-modal__header es-modal__header">
+                            <button class="es-button--only-icon" title="Close" onclick={hideCancelPopup}>
+                                <lightning-icon icon-name="utility:close"
+                                    alternative-text="close"
+                                    size="xx-small" ></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 class="slds-text-heading_medium slds-hyphenate">Confirm Cancellation</h2>
+                        </header>
+                        <div class="es-modal__faux-body">
+                            <div class="es-modal__body">
+                                <p>Are you sure you want to cancel case creation process?</p>
+                            </div>
+                        </div>
+                        <footer class="es-modal__footer es-btn-grp d-flex justify-content-end">
+                            <lightning-button label="No" class="es-button es-button--secondary"  onclick={hideCancelPopup}></lightning-button>
+                            <lightning-button label="Yes" class="es-button es-button--secondary"  onclick={goPrevPage}></lightning-button>
+                            <!-- <a href="newcase" ><lightning-button label="Yes" class="es-button es-button--primary"></lightning-button></a> -->
+                        </footer>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        <template if:true={showAlternateContactInfo}>
+            <c-es-case-creation-alternate-contact selected-account={selectedSupportAccount} show-additional-case-information={showAdditionalCaseInfo} oncancel={showCancelpopup} ongoback={backToShippingCaseInfo} onproceed={ShowfinalSummary} case-information={caseInformation} case-attachment-number={fileSize} case-type="Fulfillment | Product Download & License Request" related-contacts={relatedContacts} preselected-contacts={selectedContactList} contact-list={allContactData} str-alternate-contacts-description={strAlternateContactsDescription}></c-es-case-creation-alternate-contact> <!-- <T01> -->
+        </template>
+        <template if:true={showCaseSummary}>
+            <c-es-case-creation-summary case-type="Fulfillment | Product Download & License Request" case-information={caseInformation} oncancel={showCancelpopup} file-size={fileSize} alternate-contact={alternateContact} show-additional-case-information={showAdditionalCaseInfo} show-product="false" case-info={caseInfoToSave} onconfirmcasecreate={saveCase} onbacktoalternatecontact={backToAlternateContact} case-response-time={caseResponseTime} contact-list={allContactData}></c-es-case-creation-summary>                        
+        </template>
+        <template if:true={showCaseDetails}>
+            <c-es-case-details case-info={caseInfo} case-contacts={caseContacts} case-documents={caseDocuments}></c-es-case-details>
+        </template>
+    </div>
+</template>

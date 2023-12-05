@@ -1,0 +1,39 @@
+<template>
+    <div class="es-caselist-wrapper">
+       
+        <lightning-tabset class="es-tabs">
+            <lightning-tab label="MY OPEN CASES" class="es-tabs__label">
+               <!-- <iframe width="300" height="300" src={fullUrl} scrolling="true"></iframe>-->
+                <template  if:true={isMyCace}> 
+                    <c-es-case-table  acc-id ={accId} open-cases={getcaselist} is-checkbox-on="false"  columns={COL_CONTACTS} disable-search={disableSearch}  map-fields={mapFieldVal} ></c-es-case-table>
+                </template>
+                <template if:false={isMyCace}>
+                    <div class="d-flex align-items-center justify-content-center es-section--empty">
+                        <p>There are no open cases right now. </p>
+                    </div>
+                </template>
+            </lightning-tab>
+            <lightning-tab label="ALL OPEN CASES" class="es-tabs__label">
+                <template  if:true={isAllCace}> 
+                    <c-es-case-table acc-id ={accid} open-cases={getAllcaselist} is-checkbox-on="false" columns={COL_CONTACTS} disable-search={disableSearch} map-fields={mapFieldVal}></c-es-case-table>
+                </template>
+                <template if:false={isAllCace}>
+                    <div class="d-flex align-items-center justify-content-center es-section--empty">
+                        <p>There are no open cases right now.</p>
+                    </div>
+                </template>
+            </lightning-tab>
+            <lightning-tab label="ALL CLOSED CASES" class="es-tabs__label" >
+                <template  if:true={isClosedCace}> 
+                    <c-es-case-table acc-id ={accid} tab-name="All Closed Cases" open-cases={getClosedcaselist} is-checkbox-on="false" columns={COL_CONTACTS} disable-search={disableSearch} map-fields={mapFieldVal}></c-es-case-table>
+                </template>
+                <template if:false={isClosedCace}>
+                    <div class="d-flex align-items-center justify-content-center es-section--empty">
+                        <p>There are no open cases right now.</p>
+                    </div>
+                </template>
+            </lightning-tab>
+        </lightning-tabset>  
+    </div>
+    <c-e-support-learning-path></c-e-support-learning-path>
+</template>

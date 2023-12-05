@@ -1,0 +1,10 @@
+.slds-table td, .slds-table th{
+    padding: 0.50rem .5rem !important;
+}
+.h3-center{
+    text-align: center;
+}
+
+.datatable-height{
+    height: 250px;;
+}

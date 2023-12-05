@@ -1,0 +1,121 @@
+<template>
+
+<lightning-card>
+<lightning-tabset>
+    <template if:false={visibility}>
+    <lightning-tab label="Unattached Timecards" onactive={handleActiveTab}>
+        <template if:true={hasTimecard}>
+        <p>Please choose the timecards listed below to attach to the status report</p>
+            <lightning-datatable
+                    key-field="id"
+                    data={unAttachedTimecardData}
+                    columns={timeCardColumns}
+                    onrowselection={getSelectedName}>
+            </lightning-datatable>
+        </template>
+        <template if:false={hasTimecard}>
+            <p> No Timecards available to attach to this status report </p>
+            </template> 
+    </lightning-tab>
+    <lightning-tab label="Attached Timecards" onactive={handleActiveTab}>
+        <template if:true={hasAttachedTimecard}>
+        <p>Below Timecards are attached to the status report</p>
+            <lightning-datatable
+                    key-field="id"
+                    data={attachedTimecardData}
+                    columns={timeCardColumns}
+                    onrowselection={getSelectedName}>
+            </lightning-datatable>
+        </template>
+        <template if:false={hasAttachedTimecard}>
+            <p> No Timecards attached to the status report</p>
+            </template> 
+    </lightning-tab>
+</template>
+<template if:true={visibility}>
+    <lightning-tab label="Unattached Issues" onactive={handleActiveTab}>
+        <template if:true={hasIssues}>
+        <p>Please choose the issues listed below to attach to the status report</p>
+            <lightning-datatable
+                    key-field="id"
+                    data={issueData}
+                    columns={issueColumns}
+                    onrowselection={getSelectedName}
+                    default-sort-direction={defaultSortDirection}
+                    sorted-direction={sortDirectionUnAttachIssue}
+                    sorted-by={sortedByUnAttachIssue}
+                    onsort={onHandleSort}>
+            </lightning-datatable>
+        </template>
+        <template if:false={hasIssues}>
+            <p>No issues available to attach to this status report</p>
+            </template> 
+    </lightning-tab>
+    <lightning-tab label="Unattached Risks" onactive={handleActiveTab}>
+    <template if:true={hasRisks}>
+    <p>Please choose the risks listed below to attach to the status report</p>
+            <lightning-datatable
+                        key-field="id"
+                        data={riskData}
+                        columns={riskColumns}
+                        onrowselection={getSelectedName}
+                        default-sort-direction={defaultSortDirection}
+                        sorted-direction={sortDirectionUnAttachRisk}
+                        sorted-by={sortedByUnAttachRisk}
+                        onsort={onHandleSort}>
+                </lightning-datatable>
+            </template> 
+            <template if:false={hasRisks}>
+                <p>No risks available to attach to this status report</p>
+                </template>   
+        </lightning-tab>
+        <lightning-tab label="Issues Attached" onactive={handleActiveTab}>
+            <template if:true={hasAttachedIssues}>
+            <p>Below Issues are attached to the status report</p>
+                <lightning-datatable
+                        key-field="id"
+                        data={attachedIssueData}
+                        columns={issueColumns}
+                        onrowselection={getSelectedName}
+                        default-sort-direction={defaultSortDirection}
+                        sorted-direction={sortDirectionAttachIssue}
+                        sorted-by={sortedByAttachIssue}
+                        onsort={onHandleSort}>
+                </lightning-datatable>
+            </template>
+            <template if:false={hasAttachedIssues}>
+                <p>No Issues attached to this status report</p>
+                </template> 
+        </lightning-tab>
+        <lightning-tab label="Risks Attached" onactive={handleActiveTab}>
+            <template if:true={hasAttachedRisks}>
+            <p>Below Risks are attached to the status report</p>
+                <lightning-datatable
+                        key-field="id"
+                        data={attachedRiskData}
+                        columns={riskColumns}
+                        onrowselection={getSelectedName}
+                        default-sort-direction={defaultSortDirection}
+                        sorted-direction={sortDirectionAttachRisk}
+                        sorted-by={sortedByAttachRisk}
+                        onsort={onHandleSort}>
+                </lightning-datatable>
+            </template>
+            <template if:false={hasAttachedRisks}>
+                <p>No Risks attached to the status report</p>
+                </template> 
+        </lightning-tab>
+    </template>
+</lightning-tabset>
+
+<div ><footer class="slds-card__footer">
+    <template if:true={showAttach}>
+    <lightning-button variant="brand" label="Attach" title="attach" disabled={disableAttach}  onclick={attach} ></lightning-button>
+    </template>
+    <template if:false={showAttach}>
+        <lightning-button variant="brand" label="Remove" title="Remove" disabled={disableRemove}  onclick={remove} ></lightning-button>
+        </template>
+</footer>
+</div>
+</lightning-card>
+</template>

@@ -1,0 +1,62 @@
+<!--
+    @description       : LWC Component for the Fulfillment Lines 
+    @author            : Vignesh D
+    @group             : 
+    Modifications Log  
+    Ver   Date         Author       Modification                                Tag
+    2.0   04-05-2021   Pavithra V   F2A-364 - Changes in Fulfillment Screen     T01
+-->
+
+<template>
+    <lightning-card>
+
+        <div class="slds-col slds-text-align_right">
+            <header class="slds-card__header">
+                <div class="slds-col slds-text-align_left" style="float:left;margin:auto;width: 60%;">
+                    <h2 id="modal-heading-01" class="slds-card__header-title"></h2>
+                </div>
+                <lightning-button-icon icon-name="action:refresh"  size="medium" alternative-text="Refresh" class="slds-m-left_xx-small" onclick={handleCancel}></lightning-button-icon>
+            </header>
+        </div>
+
+        <lightning-tabset variant="default" active-tab-value={defaultTabOnInitialization}>
+            <div class="slds-p-left_small slds-p-right_small">
+                <template if:true={tabs}>
+                    <template for:each={tabs} for:item="tab">
+                        <lightning-tab label={tab.label} value={tab.key} key={tab.key} onactive={handleActiveTab}>
+                            <template if:true={data}>
+                             <!-- <lightning-button label="Provisioning Complete" variant="brand" onclick={handleShipComplete}></lightning-button> -->
+                            <!-- <div class="pad-5"></div> -->
+                                
+                                    <div class="datatable-height">
+                                        <c-my-custom-datatable
+                                            columns={columns} 
+                                            data={data} 
+                                            key-field="Id" 
+                                            draft-values={draftValues} 
+                                            onpicklistchanged={picklistChanged} 
+                                            onrowselection={handleRowSelected}
+                                            oncellchange={handleCellChange}
+                                            onsave={handleSave}
+                                            oncancel={handleCancel}
+                                            onlookupchange={handlelookupchange}
+                                            onorgchange={handleorgchange}
+                                            oncloneffline ={addRow}
+                                            suppress-bottom-bar>
+                                        </c-my-custom-datatable>
+                                    </div>                                
+                            </template>
+                        </lightning-tab>
+                    </template>
+
+                    <footer class="slds-modal__footer">
+                        <lightning-button if:true={draftValues.length} variant="Neutral" label="Cancel" title="Cancel"  onclick={handleCancel} class="slds-var-m-right_x-small"></lightning-button>
+                        <lightning-button if:true={draftValues.length} variant="Brand" label="Save" title="Save"  onclick={handleSave} class="slds-var-m-right_x-small"></lightning-button>
+                        <lightning-button if:true={selectedRow.length} label="Provisioning Complete" variant="brand" onclick={handleShipComplete}></lightning-button>
+                    </footer>
+                    
+                </template>
+            </div>
+        </lightning-tabset>
+    </lightning-card>
+</template>

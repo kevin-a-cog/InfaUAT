@@ -1,0 +1,49 @@
+.content-pods{
+    width: 100%;
+	display:none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.components-container {
+	width: 100%;
+	border-bottom : 1px solid #E0E0E0;
+	border-left : 1px solid #E0E0E0;
+	border-right : 1px solid #E0E0E0;
+    border-top : 1px solid #E0E0E0;
+    padding: 10px 20px;
+	background-color: #fff;	    
+}
+
+.pod-component-status, .component-status {
+	font-size: 13px;
+    float: right;
+	color: #d1331e;
+	text-transform:capitalize;
+    cursor:pointer;	
+    text-decoration:none;
+}
+
+.es-block {
+    display: block !important;
+    top: 0px;
+    right: 0px;
+    z-index: 1;
+}
+
+.es-hide {
+    display: none !important;
+}
+
+.content-justified{
+    margin-top: 10px;
+}
+
+.inline-display{
+    display: inline;
+    margin-bottom: 4px;
+}
+
+.margin-start{
+    margin-left: 12px;
+}

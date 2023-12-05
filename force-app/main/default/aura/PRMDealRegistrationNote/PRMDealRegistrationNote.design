@@ -1,0 +1,6 @@
+<design:component label="Dynamic Custom Note">
+	<design:attribute name="textColor" label="Text Color" description="Add the color of the Text to display"/>
+    <design:attribute name="fontSize" label="Font Size (pt)" description="Add the size of the Text to display"/>
+    <design:attribute name="fontStyle" label="Font Style" description="If the text needs to be bold, italic or Underline"/>
+    <design:attribute name="note" label="Note" description="Add the Text to display"/>
+</design:component>

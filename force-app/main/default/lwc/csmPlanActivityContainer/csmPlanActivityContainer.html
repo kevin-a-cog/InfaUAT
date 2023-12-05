@@ -1,0 +1,32 @@
+<!--
+/*
+ * Name			:	CsmPlanActivityContainer
+ * Author		:	Deva M
+ * Created Date	: 	05-April-2022
+ * Description	:	Manage activity container 
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Deva M         		05-April-2022		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	
+	<!-- If the component is Popped Out. -->
+    <template if:true={isPoppedOut}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-manage-plan-products" aria-modal="true" aria-describedby="modal-content-id-manage-plan-products" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-manage-plan-products" style="min-height: 100vh;">
+                    <c-csm-plan-activities record-id={recordId} onpopout={popOut} is-popped-out></c-csm-plan-activities>
+                </div>
+            </div>
+        </section>
+    </template>
+
+	<!-- If the component is not Popped Out. -->
+    <template if:false={isPoppedOut}>
+        <c-csm-plan-activities record-id={recordId} onpopout={popOut}></c-csm-plan-activities>
+    </template>
+</template>

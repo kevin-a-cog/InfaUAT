@@ -1,0 +1,54 @@
+<template>
+    <div class="commmunity-banner">
+        <div class="owl-carousel owl-theme">
+            <template for:each={announcementTiles} for:item="announcement">
+                <template if:true={announcement.isCarousel}>
+                    <div key={announcement.Id}>
+                        <template if:true={announcement.isPrimaryBanner}>
+                            <template if:true={isOnlyPrimaryBanner}>
+                                <div class="heading-wrapper img-background-size mb-2" style={announcement.img}>
+                                    <div class="container">
+                                        <div class={announcement.colorName} style={announcement.img}>{contentSpecificName}</div>
+                                    </div>    
+                                </div>
+                            </template>
+                            <template if:false={isOnlyPrimaryBanner}>
+                                <template if:false={announcement.cta}>
+                                    <div class="heading-wrapper img-background-size" style={announcement.img}>
+                                        <div class="container">
+                                            <div class={announcement.colorName} style={announcement.img}>{contentSpecificName}</div>
+                                        </div>    
+                                    </div>
+                                </template>
+                                <template if:true={announcement.cta}>
+                                    <a href={announcement.link}>
+                                        <div class="help-topic-banner-height img-background-size" style={announcement.img}></div>
+                                    </a>
+                                </template>
+                            </template>
+                        </template>
+                        <template if:false={announcement.isPrimaryBanner}>
+                            <div class="help-topic-banner-onclick" data-value={announcement.link} onclick={handleBannerOnclick}>
+                                <template if:true={isMobileView}>
+                                    <img class="img-background-size" src='{mobileBanner}'>
+                                </template>
+                                <template if:false={isMobileView}>
+                                    <div class="help-topic-banner-height img-background-size" style={announcement.img}></div>
+                                </template>
+                                <div class="container container-desc">
+                                    <div class={announcement.colorTitle} data-id={announcement.Id}>{announcement.title}</div>
+                                    <div class={announcement.colorDesc} data-id={announcement.Id}>{announcement.desc}</div>
+                                    <div class="banner-btn-container">
+                                        <a href={announcement.link} class="banner-btn" data-value={announcement.title} onclick={handleOnClick}>
+                                            {announcement.cta}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </div>
+</template>

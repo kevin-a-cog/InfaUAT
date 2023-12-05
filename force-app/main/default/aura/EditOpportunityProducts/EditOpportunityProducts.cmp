@@ -1,0 +1,172 @@
+<!-- ================================================================== -->
+<!-- PLEASE KEEP THE FORMATTING CLEAN, MAKES DEBUGGING EASY, THANK YOU -->
+<!-- ================================================================== -->
+
+<aura:component controller="EditOpportunityProductsController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+	<!-- ATTRIBUTES + HANDLERS -->
+    <!-- ====================================================================================================================================================== -->
+    <aura:attribute name="oliWrapperList" type="List" />
+    <aura:attribute name="saveBtnClicked" type="Boolean" default="false" />
+    <aura:attribute name="ErrorMsgList" type="String[]" />
+    <aura:attribute name="deleteProduct" type="Boolean" default="false" />
+    <aura:attribute name="deletedItem" type="String" />
+    <aura:attribute name="transactionTypeOptions" type="String[]" default="--None--,New,Renew,Upsell"/>
+
+    <aura:attribute name="VfPageMethod" type="object"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+	<!-- POP UP WINDOW SECTION -->
+    <!-- ====================================================================================================================================================== -->
+	<div id="mainSection" class="slds-show" style="overflow:auto">
+		<section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-1">
+			<div class="slds-modal__container" style="height:106%; overflow:auto">
+
+				<!-- HEADER: TITLE + CLOSE 'X' BUTTON -->
+                <!-- ====================================================================================================================================================== -->
+				<header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.CloseModalOne}">
+                        <lightning:icon class="slds-button__icon slds-button__icon_large fillColor" iconName="utility:close" size="x-small" alternativeText="search"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">Edit All Products </h2>
+                </header>
+
+                <!-- BODY: PRODUCTS TABLE -->
+                <!-- ====================================================================================================================================================== -->
+                <div class="slds-modal__content slds-grow modal-overflow" id="modal-content-id-1" style="overflow:auto">
+                	<div class="slds-col slds-grid slds-grid_vertical">
+
+                		<!-- PRODUCTS TABLE -->
+                		<!-- ====================================== -->
+                		<div class="slds-grow">
+                			<div class="slds-p-top--small">
+                				<aura:if isTrue="{!v.oliWrapperList.length == 0}">
+                					<p class="slds-m-top_x-small slds-align_absolute-center">There is no products to edit.</p>
+                				</aura:if>
+
+                				<aura:if isTrue="{!v.oliWrapperList.length > 0}">
+                					<div class="table-overflow">
+                						<table class="slds-table slds-table_bordered slds-table_cell-buffer" role="grid">
+
+                							<!-- TABLE HEADER -->
+                							<!-- ====================================== -->
+                							<thead>
+                								<tr class="slds-text-title_caps">
+                									<th scope="col" role="gridcell" class="slds-cell-shrink">
+							                            <div class="slds-truncate" title="listingNo"></div>
+							                        </th>
+							                        <th scope="col">
+							                            <div class="slds-truncate" title="Product">Product</div>
+							                        </th>
+                                                    <!--<th scope="col">
+							                            <div class="slds-truncate" title="Orderable In">Orderable In</div>
+							                        </th>-->
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="TransactionType">Transaction Type</div>
+                                                    </th>
+							                        <th scope="col">
+							                            <div class="slds-truncate" title="SalesPrice">Sales Price</div>
+							                        </th>
+                                                    <th scope="col" role="gridcell" class="slds-cell-shrink">
+                                                        <div class="slds-truncate" title="dropDownBtn"></div>
+                                                    </th>
+                								</tr>
+                							</thead>
+
+                							<!-- TABLE BODY -->
+                							<!-- ====================================== -->
+                							<tbody>
+                                                <aura:iteration items="{!v.oliWrapperList}" var="oliWrapper" indexVar="idx">
+                                                    <tr>
+                                                        <td role="gridcell" class="slds-cell-shrink">
+                                                            {!idx + 1} 
+                                                        </td>
+                                                        <td class="slds-text-body--regular">
+                                                            <a href="javascript:void(0);">{!oliWrapper.oli.Product2.Name}</a>
+                                                        </td>
+														<!--<td class="slds-text-body-(add a hyphen here)regular">
+                                                            {!oliWrapper.oli.Orderable__c}
+                                                        </td>-->
+                                                        <td class="slds-text-body--regular">
+                                                            <lightning:select name="oliTransTypePicklist" label=" " value="{!oliWrapper.TransactionType}">
+                                                                <aura:iteration items="{!v.transactionTypeOptions}" var="tt">
+                                                                    <option value="{!tt}" text="{!tt}"></option>
+                                                                </aura:iteration>
+                                                            </lightning:select>
+                                                        </td>
+                                                        <td class="slds-text-body--regular">
+                                                            <!--<ui:inputNumber class="slds-input" value="{!oliWrapper.UnitPrice}" format="USD #.00" aura:id="editPriceInput"/>-->
+                                                            <ui:inputNumber class="slds-input" value="{!oliWrapper.UnitPrice}" format="{!oliWrapper.oli.Opportunity.CurrencyIsoCode + ' #0.00'}" aura:id="editPriceInput"/>
+                                                        </td>
+                                                        <td class="slds-text-body--regular">
+                                                            <div class="slds-dropdown-trigger slds-is-open">
+                                                                <button class="slds-button slds-button_icon slds-button_icon-border-filled" aria-haspopup="true" title="Delete This Product." onclick="{!c.deleteProduct}" id="{!oliWrapper.oli.Id}" aura:id="deleteButton">X</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </aura:iteration>
+                							</tbody>
+                						</table>
+                					</div>
+                				</aura:if>
+                			</div>
+                		</div>
+                	</div>
+                </div>
+
+                <!-- FOOTER: CANCEL & SAVE BUTTONS -->
+                <!-- ====================================================================================================================================================== -->
+                <footer class="slds-modal__footer">
+                    <!-- ERROR MESSAGE BOX -->
+                    <!-- ====================================== -->
+                    <div class="slds-hide" aura:id="errorPopUpBox" style="position:absolute;bottom:90px;right:30px" id="errorPopUp">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom_left slds-theme--error forceStatusIcon uiPanel--default uiPanel--error" role="tooltip" id="help">
+                            <div class="slds-popover__body">
+                                <div class="slds-float_left">Cannot save records with errors.</div><br/>
+                                <aura:iteration items="{!v.ErrorMsgList}" var="err">
+                                    <li style="margin-left:5px;text-align:left">{!err}</li>
+                                </aura:iteration>
+                            </div>
+                        </div>
+
+                        <div aura:id="errorIcon" class="slds-form-element" style="left:11px;position:absolute;bottom:-36px">
+                            <div class="slds-form-element__icon slds-align-middle">
+                                <button class="slds-button slds-button_icon" aria-describedby="help" title="Help">
+                                    <lightning:icon class="slds-button__icon slds-button__icon_large fillColor" iconName="utility:warning" size="small" alternativeText="warning"/>
+                                    <span class="slds-assistive-text">Help</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BUTTONS: RIGHT CORNER -->
+                    <!-- ====================================== -->
+	                <div class="slds-float--right">
+	                    <div class="slds-button">
+	                        <lightning:button label="Cancel" name="Cancel" onclick="{!c.CloseModalOne}" />
+	                        <lightning:button aura:id="saveBtn" label="Save" name="Save" variant="brand" onclick="{!c.Save}" />
+	                    </div>
+	                </div>
+                </footer>
+                <!-- END OF FOOTER -->
+                <!-- ====================================================================================================================================================== -->
+			</div>
+
+            <!-- DELETE POP UP WINDOW -->
+            <!-- ====================================== -->
+            <div>
+                <c:UtilityModal title="Delete Opportunity Product"
+                                    confirmLabel="Delete"
+                                    cancelLabel="Cancel"
+                                    onCancelClick="{!c.closeDeleteModal}"
+                                    onSaveClick="{!c.fireDelete}"
+                                    aura:id="deleteOLIModal"
+                                    containerCSSStyle="width:40%">
+                    <div class="slds-text-align_center" >Are you sure you want to delete this Opportunity Product?</div>
+                </c:UtilityModal>
+            </div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</div>
+</aura:component>

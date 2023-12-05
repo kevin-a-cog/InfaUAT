@@ -1,0 +1,9 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="SendSurveyProjRegControllerAura"  >
+	<aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="message" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div class="slds-hide">
+    	<lightning:flow aura:id="flowSendSurvey" onstatuschange="{!c.handleStatusChange}"/>
+    </div>
+    <ui:outputText aura:Id="outputTextId" value="{!v.message}"/>
+</aura:component>

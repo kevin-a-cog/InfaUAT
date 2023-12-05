@@ -1,0 +1,13 @@
+.heading-wrapper{
+    background-image: url('/resource/./informaticaNetwork/topicLanding.jpg');
+    background-size: 100% 100%;
+}
+
+.help-tab-pad{
+    padding: 0px 10px 0px 0px;
+}
+
+/* new CSS added */
+.in-communities-wrapper {
+    position: relative;
+}

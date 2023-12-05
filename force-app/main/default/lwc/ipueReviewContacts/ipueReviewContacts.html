@@ -1,0 +1,53 @@
+<template>
+    <!--Body-->
+    <template if:true={existingCollaborators}>
+        <!--Display table only if records are passed from parent component-->
+        <template if:true={existingCollaborators.length}>
+            <lightning-card variant="Narrow" title = "Existing Collaborators" icon-name="standard:groups">
+                <c-ipue-review-contacts-table
+                    contact-recs={existingCollaborators}
+                    selected-conatcts={selectedExistingCollaborators}
+                    table-height={existingCollabsHeight}
+                    onupdatecollaborators={updateCollaborator}>
+                </c-ipue-review-contacts-table>
+            </lightning-card>
+        </template>
+    </template>
+
+    <template if:true={newCollaborators}>
+        <!--Display table only if records are passed from parent component-->
+        <template if:true={newCollaborators.length}>
+            <lightning-card variant="Narrow" title = "New Collaborators" icon-name="standard:groups">
+                <c-ipue-review-contacts-table
+                    contact-recs={newCollaborators}
+                    selected-conatcts={selectedNewCollaborators}
+                    table-height={newCollabsHeight}
+                    onupdatecollaborators={updateCollaborator}>
+                </c-ipue-review-contacts-table>
+            </lightning-card>
+        </template>
+    </template>
+
+    <!--Display custom message when no records are selected-->
+    <template if:true={showError}>        
+        <c-ipue-illustration
+            title="No Records Found"
+            message="No Records Available. Please select some records">
+        </c-ipue-illustration>
+    </template>
+
+    <!--Display spinner when clicked on finish-->
+    <template if:true={showLoading}>
+        <lightning-spinner variant="brand"> </lightning-spinner>
+    </template>
+
+    <!--Footer Buttons-->
+    <div class="slds-m-top_x-small slds-clearfix slds-theme_shade">
+        <div slot="footer" class="slds-p-vertical_small slds-float_right">
+            <lightning-button label="Cancel" onclick={handleCancel} class="slds-m-right_x-small"></lightning-button>
+            <lightning-button variant="brand-outline" label="Previous" onclick={handlePrevious} class="slds-m-right_x-small"></lightning-button>
+            <lightning-button variant="brand" disabled={disableFinish} onclick={handleFinish} label="Finish" class="slds-m-right_x-small"></lightning-button>
+        </div>
+    </div>
+
+</template>

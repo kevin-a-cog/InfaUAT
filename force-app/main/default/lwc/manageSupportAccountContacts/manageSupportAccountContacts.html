@@ -1,0 +1,393 @@
+<!--
+/*
+ Change History
+ **************************************************************************************************************************
+ Modified By            Date            Jira No.            Description                                               Tag
+ **************************************************************************************************************************
+ NA                     NA              UTOPIA              Initial version.                                          NA
+ Vignesh Divakaran      15-Mar-2022     I2RT-5410           Show actions only for user with GCS Admin permission      T01       
+ balajip                22-FEB-2023     I2RT-7659           to capture Language while added Contact to Account        T02
+ */
+-->
+
+<template>
+
+    <div class="slds-card">
+        <div class="slds-grid">
+            <div class="slds-col">
+
+                <header class="slds-card__header slds-text-heading_medium header-font-weight slds-text-align_left">Manage Support Account
+                    Contacts</header>
+
+            </div>
+            <div class="slds-col slds-text-align_right">
+
+                <header class="slds-card__header">
+                    <lightning-button-icon if:true={showpopicon} icon-name="utility:new_window" alternative-text="Pop Out" onclick={openModal} 
+                        class="slds-m-left_xx-small"></lightning-button-icon>
+                    <lightning-button-icon icon-name="action:refresh" size="medium" alternative-text="Refresh"
+                        class="slds-m-left_xx-small" onclick={handleIconRefresh}></lightning-button-icon>
+                </header>
+
+            </div>
+        </div>
+
+        <div class="spinner">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                </lightning-spinner>
+            </template>
+        </div>
+
+
+        <div class="border-bottom-shadow"></div>
+
+        <div class="container">
+            <span class="align-left">
+                <c-custom-lookup-with-create field-label="Select Account Record" child-object-api-name='Contact'
+                    default-value={supportAccount.ParentId} target-field-api-name='AccountId'
+                    onvalueselected={handleAccountSelcted}>
+                </c-custom-lookup-with-create>
+            </span>
+            <span class="searchLookup">
+                <lightning-input variant="label-hidden" placeholder="Search Contact" type="search" onchange={onChange}>
+                </lightning-input>
+            </span>
+            <!-- <T01> -->
+            <template if:true={isGCSAdmin}>
+                <span class="align-center">
+                    <lightning-button label="New" variant="brand" onclick={createContactWithDefaultValues}>
+                    </lightning-button>
+                </span>
+            </template>
+            <!-- </T01> -->
+        </div>
+
+        <lightning-tabset variant="default" active-tab-value={defaultTabOnInitialization}>
+            <template for:each={tabs} for:item="tabObj">
+                <lightning-tab label={tabObj.tab} value={tabObj.tab} key={tabObj.tab} onactive={handleActiveTab}
+                    title={tabObj.helpText}>
+
+                    <template if:true={showErrorMessage}>
+                        <div class="slds-col align-center error-message">
+                            {showErrorMessage}
+                        </div>
+                    </template>
+
+                    <template if:true={data}>
+                        <div class="slds-card">
+                            <template if:true={maxrows}>
+                               
+                                <div class="datatable-height  datatable-wrap" >
+                                    <!-- <T01> -->
+                                    <template if:true={isGCSAdmin}>
+                                        <lightning-datatable columns={columns} data={dataToShow} key-field="Id"
+                                            onrowaction={handleRowAction} onrowselection={handleRowSelected}
+                                            sorted-by={sortBy} sorted-direction={sortDirection} onsort={doSorting}
+                                            max-row-selection="1" min-column-width="180">
+                                        </lightning-datatable>
+                                    </template>
+                                    <template if:false={isGCSAdmin}>
+                                        <lightning-datatable columns={columns} data={dataToShow} key-field="Id"
+                                            sorted-by={sortBy} sorted-direction={sortDirection} onsort={doSorting}
+                                            min-column-width="180">
+                                        </lightning-datatable>
+                                    </template>
+                                    <!-- </T01> -->
+                                </div>
+                                Showing {currentPage} - {nextPage} of {AllDataCount} <br></br>
+                                <lightning-layout-item class="mr-auto my-2 swap-first-layout-button">
+                                    <lightning-button disabled={showPrev} class="es-button es-button--secondary mr-1" label="First" icon-name="utility:arrow_left" onclick={moveToFirstPage}></lightning-button>
+                                    <lightning-button disabled={showPrev} class="es-button es-button--primary mt-1 mt-sm-0" label="Previous" icon-name="utility:chevronleft" onclick={moveToPrevPage}></lightning-button>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="ml-auto my-2 swap-second-layout-button">
+                                    <lightning-button disabled={nextClass} class="es-button es-button--primary mt-1 mt-sm-0" label="Next" icon-name="utility:chevronright" icon-position="right" onclick={Nextsetofdata}></lightning-button>
+                                    <lightning-button disabled={nextClass} class="es-button es-button--secondary ml-1" label="Last" icon-name="utility:arrow_right" icon-position="right" onclick={moveToLastPage}></lightning-button>
+                                </lightning-layout-item>
+                                
+                            </template>
+
+                            <template if:false={maxrows}>
+                                
+                                <div class="datatable-height datatable-wrap">
+                                    <!-- <T01> -->
+                                    <template if:true={isGCSAdmin}>
+                                        <lightning-datatable columns={columns} data={dataToShow} key-field="Id"
+                                            show-row-number-column="true" onrowaction={handleRowAction}
+                                            onrowselection={handleRowSelected} sorted-by={sortBy}
+                                            sorted-direction={sortDirection} onsort={doSorting} min-column-width="180">
+                                        </lightning-datatable>
+                                    </template>
+                                    <template if:false={isGCSAdmin}>
+                                        <lightning-datatable columns={columns} data={dataToShow} key-field="Id"
+                                            show-row-number-column="true" sorted-by={sortBy}
+                                            sorted-direction={sortDirection} onsort={doSorting} min-column-width="180">
+                                        </lightning-datatable>
+                                    </template>
+                                    <!-- </T01> -->
+                                </div>
+                                Showing {currentPage} - {nextPage} of {AllDataCount} <br></br>
+                                <lightning-layout-item class="mr-auto my-2 swap-first-layout-button">
+                                    <lightning-button disabled={showPrev} class="es-button es-button--secondary mr-1" label="First" icon-name="utility:arrow_left" onclick={moveToFirstPage}></lightning-button>
+                                    <lightning-button disabled={showPrev} class="es-button es-button--primary mt-1 mt-sm-0" label="Previous" icon-name="utility:chevronleft" onclick={moveToPrevPage}></lightning-button>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="ml-auto my-2 swap-second-layout-button">
+                                    <lightning-button disabled={nextClass} class="es-button es-button--primary mt-1 mt-sm-0" label="Next" icon-name="utility:chevronright" icon-position="right" onclick={Nextsetofdata}></lightning-button>
+                                    <lightning-button disabled={nextClass} class="es-button es-button--secondary ml-1" label="Last" icon-name="utility:arrow_right" icon-position="right" onclick={moveToLastPage}></lightning-button>
+                                </lightning-layout-item>
+                            </template>
+
+                            <div class="slds-col slds-modal__footer">
+
+                                <!-- Common buttons to be displayed on the tabs -->
+
+                                <template if:true={displayDataTableFooter}>
+
+                                    <template if:true={displaysave}>
+                                        <lightning-button variant="Brand" label="Save" title="Save" onclick={handleSave}
+                                            class="slds-var-m-left_x-small"></lightning-button>
+                                    </template>
+
+                                    <template if:true={displaycancel}>
+                                        <lightning-button variant="Neutral" label="Cancel" title="Cancel"
+                                            onclick={handleCancel} class="slds-var-m-left_x-small"></lightning-button>
+                                    </template>
+
+                                    <!-- Display button only when active tab is Assigned Contacts -->
+                                    <template if:true={displayRemoveBTN}>
+                                        <lightning-button variant="Brand" label="Remove" title="Remove"
+                                            onclick={handleRemove} class="slds-var-m-left_x-small"></lightning-button>
+                                    </template>
+
+                                    <!-- Display button only when active tab is Unassigned Contacts -->
+                                    <template if:true={displayAddBTN}>
+                                        <lightning-button variant="Brand" label="Add" title="Add"
+                                            onclick={createACRWithDefaultValues} class="slds-var-m-left_x-small">
+                                        </lightning-button>
+                                    </template>
+
+                                </template>
+                            </div>
+
+                        </div>
+                    </template>
+
+                    <!-- Show No Products to display message when there are no records under the active tab -->
+                    <template if:true={NoDataAfterRendering}>
+                        <div class="datatable-height flex-align-center">
+                            No Contacts to display
+                        </div>
+                    </template>
+                </lightning-tab>
+            </template>
+        </lightning-tabset>
+    </div>
+
+    <!-- Record forms for creating new Contact and new ACR -->
+    <template if:true={isShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+
+                <div class="slds-is-relative">
+                    <lightning-spinner alternative-text="Loading" variant="brand" size="large" if:true={isLoadingSpinner}></lightning-spinner>
+
+                <!-- modal header start -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={hideModalBox}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{headerValue}</h2>
+                </header>
+
+                <!-- modal body start -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+
+                        <!-- <div class="spinner slds-is-relative">
+                        <template if:true={isLoadingSpinner}>
+                            <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                            </lightning-spinner>
+                        </template>
+                        </div> -->
+
+                    <!-- Create New Account Contact Relationship  -->
+                    <template if:true={isCreateNewACR}>
+                        <lightning-record-edit-form object-api-name="AccountContactRelation" onerror={handleError}
+                            onsubmit={handleContactSubmit} onsuccess={handleSucess}>
+                            <lightning-messages></lightning-messages>
+
+                            <div class="slds-grid slds-wrap slds-form_horizontal slds-form">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="AccountId" required="true" value={recordId}
+                                        disabled="true"></lightning-input-field>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="IsActive"></lightning-input-field>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="ContactId" required="true"
+                                        value={defaultValContact} disabled="true"></lightning-input-field>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Primary__c"></lightning-input-field>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    
+                                    <lightning-input-field field-name="Access_Level__c" required="true">
+                                    </lightning-input-field>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Timezone__c" required="true">
+                                    </lightning-input-field>
+                                </div>
+
+                                <!-- T02 -->
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Language__c" required="true"
+                                    value={defaultValContactLang} ></lightning-input-field>
+                                </div>
+                                <!-- /T02 -->
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <!--
+                                    <lightning-input-field field-name="Roles"></lightning-input-field>
+                                    -->
+                                </div>
+
+
+                            </div>
+
+                            <div class="slds-modal__footer" style="text-align: center;">
+                                <lightning-button class="slds-m-top_small" variant="brand" type="submit" label="Save">
+                                </lightning-button> &nbsp;&nbsp;
+                                <lightning-button class="slds-m-top_small" variant="brand" onclick={hideModalBox}
+                                    label="Cancel"></lightning-button>
+                            </div>
+                        </lightning-record-edit-form>
+                    </template>
+
+                    <!-- Create New Contact -->
+                    <template if:true={isCreateNewContact}>
+                        <lightning-record-edit-form object-api-name="Contact" onsubmit={handleNewContactSubmit}
+                            onsuccess={handleSucess} onerror={handleError} onload={handleOnLoad}>
+                            <lightning-messages></lightning-messages>
+
+                            <div class="slds-grid slds-wrap slds-form_horizontal slds-form">
+                                <div class="slds-col slds-size_1-of-1">
+                                    <h3 class="slds-section__title slds-theme_shade">Contact Information</h3>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Name" required="true"></lightning-input-field>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="AccountId" required="true"
+                                        value={defaultValAccount} disabled="true"></lightning-input-field>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Phone" required="true"></lightning-input-field>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Email" required="true"></lightning-input-field>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="INFA_Language__c" required="true">
+                                    </lightning-input-field>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <!-- <lightning-input-field field-name="Timezone__c" required="true">
+                                    </lightning-input-field> -->
+                                    <lightning-input-field field-name="TimeZone_Lookup__c" required="true">
+                                    </lightning-input-field>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <!--
+                                    <lightning-input-field field-name="Access_Level__c" required="true">
+                                    </lightning-input-field>-->
+                                </div>
+
+                                <!--Address Information Section -->
+                                <div class="slds-col slds-size_1-of-1">
+                                    <h3 class="slds-section__title slds-theme_shade">Address Information</h3>
+                                </div>
+
+                                <!--<div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="MailingAddress" required="true">
+                                    </lightning-input-field>
+                                </div>-->
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="MailingStreet" required="true">
+                                    </lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="MailingCity" required="true">
+                                    </lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="MailingState" required="true">
+                                    </lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="MailingPostalCode" required="true">
+                                    </lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="MailingCountry" required="true">
+                                    </lightning-input-field>
+                                </div>
+
+                            </div>
+                            <div class="slds-modal__footer" style="text-align: center;">
+                                <lightning-button class="slds-m-top_small" variant="brand" type="submit" label="Save">
+                                </lightning-button> &nbsp;&nbsp;
+                                <lightning-button class="slds-m-top_small" variant="brand" onclick={hideModalBox}
+                                    label="Cancel"></lightning-button>
+                            </div>
+                        </lightning-record-edit-form>
+                    </template>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Open backdrop when the model is Open-->
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+    </template>
+
+    <!-- Modal to show manageSupportAccountAssets component -->
+    <template if:true={showPopOut}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-03" aria-modal="true" aria-describedby="modal-content-id-3" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closepopout}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <c-manage-support-account-contacts record-id={recordId}></c-manage-support-account-contacts>
+                </header>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

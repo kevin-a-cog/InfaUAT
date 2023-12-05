@@ -1,0 +1,168 @@
+<aura:component controller="CancelDebookOrder" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="simpleRecord" type="Object" />
+    <aura:attribute name="recordError" type="String" />
+    <aura:attribute name="picklistOption" type="String[]" />
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="showCancelReasonText" type="boolean" />
+    <aura:attribute name="showDebookModal" type="boolean" default="false"/>
+    <aura:attribute name="showCancelModal" type="boolean" default="false"/>
+    <aura:attribute name="initialLoadModal" type="boolean" default="true"/>
+    <aura:attribute name="picklistvalue" type="String" default=""/>
+    <aura:attribute name="cancelReasonTextValue" type="String" default=""/>
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:attribute name="error" type="Boolean" default="false"/>
+    <aura:attribute name="spinneract" type="boolean"/>
+    <aura:attribute name="showDebookModalDirect" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!--Custom Styles for Modal Header and Footer--> 
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>
+    
+    <div>
+        <div class="slds-col modal-header slds-modal__header">
+            <p class="slds-page-header__title slds-truncate" title="">Cancel/Debook Order</p>
+        </div>
+        
+        <aura:if isTrue="{!v.error}">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert" aura:id="error-msg-Id">  
+                <span class="slds-assistive-text">Error</span>                    
+                <h2><ui:outputText value="{!v.message}"/></h2>                                
+            </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!and(v.initialLoadModal ,not(v.error))}">
+        
+        <!--aura:if isTrue="{!and(v.initialLoadModal ,not(v.error))}"-->
+            <div>
+                <!--body -->
+                <div style="overflow-y: auto !important;">    
+                    <lightning:select label="Select Cancel Reason" name="uzr" required="true" aura:id="orderCancelReason" onchange="{!c.displayCancelReasonText}">
+                        <option value="">---None---</option>
+                        <aura:iteration items="{!v.picklistOption}" var="pickValue">
+                            <option value="{!pickValue}">{!pickValue}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                    
+                    <aura:if isTrue="{!v.showCancelReasonText}">
+                        <lightning:input aura:id="cancelReasonTextId"  required="true" type="text" label="Enter Cancel Reason" name="color"/>
+                    </aura:if> 
+                    
+                </div>
+                
+                <div class="slds-col modal-footer slds-modal__footer">
+                    <lightning:button label="Cancel" name="Cancel" variant="brand" onclick="{!c.closeModalOne}" />
+                    <lightning:button aura:id="saveBtn" label="Next" name="Save" variant="brand" onclick="{!c.onClickNext}" />
+                </div>
+            </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showDebookModal}">
+            <div>   
+                 <aura:if isTrue="{!v.spinneract}">
+                    <div class="slds-backdrop slds-backdrop_open">
+                        <lightning:spinner variant="brand"  title="Processing......" alternativeText="Processing......"  size="medium"/>
+                    </div>
+            	</aura:if> 
+                      <ul>
+                            <li>Make sure finance is aware of the debook before proceeding.</li><br/>
+                            <li>1. System will merge all the Contracts on the Order.</li>
+                            <li>2. You will be redirected to Amend Screen.</li>
+                            <li>3. Click Amend on the page to Create Amend Quote.</li>
+                            <li>4. Quantity on all lines will be set to 0 automatically,resulting in a negative balance.</li>
+                            <li>5. Click Save on Quote Line Editor.</li>
+                            <li>6. Amend Quote will be auto approved, SOG will have to create an Order.</li>
+                            <li>7. Amend Opportunity will be set to Closed Won with Win/Loss Reason as Full Debook.</li>
+                            <li>If this is a debook of a Renewal make sure the negative dollar amounts are allocated to Renewal ABV.</li>
+                            <li>If rebooking a New Sales Opportunity, then create a new opportunity and quote</li>
+                            <li>If rebooking Renewal Opportunity, then go back to the original contract and create a new renewal opportunity and quote</li>
+                            <li> ********Once you click Next, this process cannot be undone! ********</li>
+                            <li>Click Next to continue, otherwise click on Cancel</li>
+                           
+                        </ul>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button label="Cancel" name="Cancel" variant="brand" onclick="{!c.closeInfoModal}" />
+                        <lightning:button aura:id="saveBtn" label="Next" name="Save" variant="brand" onclick="{!c.debookSave}" />
+                    </footer>
+                   
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showDebookModalDirect}">
+            <div>   
+                 <aura:if isTrue="{!v.spinneract}">
+                    <div class="slds-backdrop slds-backdrop_open">
+                        <lightning:spinner variant="brand"  title="Processing......" alternativeText="Processing......"  size="medium"/>
+                    </div>
+            	</aura:if> 
+                      <ul>
+                            <li>Make sure finance is aware of the Debook before proceeding.</li><br/>
+                            <li>1. A new Debook Order will be generated when the Order is in Bill &amp; Contract OR Completed stage. You will be redirected to the newly created Debook Order Page where you can process the  new debook order.</li><br/>
+                            <li>********Once you click Next, this process cannot be undone! ********</li><br/>
+                            
+                            <li>Click Next to continue, otherwise click on Cancel</li>
+                           
+                        </ul>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button label="Cancel" name="Cancel" variant="brand" onclick="{!c.closeInfoModal}" />
+                        <lightning:button aura:id="saveBtn" label="Next" name="Save" variant="brand" onclick="{!c.debookDirectSave}" />
+                    </footer>
+                   
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showCancelModal}">
+            <div>
+                 <aura:if isTrue="{!v.spinneract}">
+                    <div class="slds-backdrop slds-backdrop_open">
+                        <lightning:spinner variant="brand"  title="Processing......" alternativeText="Processing......"  size="medium"/>
+                    </div>
+            	</aura:if> 
+                <ul>
+                     
+                    <li>Make sure finance is aware of the cancel before proceeding.</li><br/>
+                    		<li> Order from Quote</li>
+                                <li>
+                                    <ul class="slds-is-nested">
+                                        <li>1. Order will be released from the Quote</li>
+                                        <li>2. You will be redirected to the Quote Page where you can create a new order</li>
+                                    </ul>
+                                </li>
+                    		<br/>
+                    		<li> Direct Order</li>
+                                <li>
+                                    <ul class="slds-is-nested">
+                                        <li>1. Order will be marked as cancelled when the Order is in Draft stage.</li>
+                                        <li>2. Order and its related Revenue Agreement will be marked as cancelled when the Order is in Review &amp; Fulfill stage. The Bookings Object will be marked as 'deleted' if it is already created.</li>
+                                    </ul>   
+                                </li>
+                    		<br/>
+                    		<li>********Once you click Next, this process cannot be undone! ********</li>
+                   			<li>Click Next to continue, otherwise click on Cancel</li>
+                           
+                </ul>        
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button label="Cancel" name="Cancel" variant="brand" onclick="{!c.closeInfoModal}" />
+                        <lightning:button label="Next" name="Cancel" variant="brand" onclick="{!c.closeCancelModal}" />
+                    </footer>
+                    
+        </aura:if>
+    </div>
+    
+</aura:component>

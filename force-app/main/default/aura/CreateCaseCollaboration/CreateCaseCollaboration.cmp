@@ -1,0 +1,160 @@
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global" controller="CaseCommentController">
+
+	<!-- Libraries. -->
+	<lightning:overlayLibrary aura:id="overlayLib"/>
+    <lightning:navigation aura:id="navService" />
+    <lightning:messageChannel type="CaseCommunicationMessageChannel__c" onMessage="{!c.handleMessage}"
+        aura:id="msgChannel" scope="APPLICATION" />
+
+	<!-- Attributes. -->
+	<aura:attribute name="boolIsSendSchedule" type="Boolean" default="false" />
+	<aura:attribute name="boolIsCreateInvite" type="Boolean" default="false" />
+    <aura:attribute name="toggleValue" type="Boolean" default="false" />
+    <aura:attribute name="isAddComment" type="Boolean" default="false" />
+    <aura:attribute name="isPopout" type="Boolean" default="false" />
+    <aura:attribute name="preDraftComment" type="Object" />
+    <aura:attribute name="preDraftCommentAnother" type="Object" />
+    <aura:attribute name="preDraftCommentOriginal" type="Object" />
+ 	<aura:attribute name="commentCounterFlag" type="Boolean" default="true" />
+    <aura:attribute name="permissionValue" type="Boolean" default="true" />
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+    
+	<aura:if isTrue="{!v.permissionValue}">
+    	<lightning:card title="Case Communication" iconName="custom:custom103">
+        <aura:set attribute="actions">
+            <div class="slds-grid">
+                <aura:if isTrue="{!!v.isAddComment}">
+                    <div class="slds-col">
+                        <lightning:button iconName="utility:add" label="Add" name="newCaseComment"
+                            onclick="{!c.handleAddComment}" />
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!v.isAddComment}">
+                    <div class="slds-col">
+                        <lightning:buttonIcon iconName="utility:close" alternativeText="Close"
+                            onclick="{!c.handleCloseCreate}" name="close" />
+                    </div>
+                </aura:if>
+                <div class="slds-col">
+                    <lightning:buttonIcon iconName="utility:new_window" alternativeText="Pop Out"
+                        onclick="{!c.handlePopOut}" name="popOut" class="slds-m-left_small" />
+                </div>
+                <aura:if isTrue="{!v.isAddComment}">
+                    <div class="slds-col slds-p-left_small">
+                        <lightning:input type=" toggle" label="Collaboration Mode" name="collabMode"
+                            variant="label-hidden" checked="{!v.toggleValue}" messageToggleActive="Chatter"
+                            messageToggleInactive="Communication" class="center-text">
+                        </lightning:input>
+                    </div>
+                </aura:if>
+            </div>
+        </aura:set>
+        <aura:if isTrue="{!!v.isPopout}">
+            <aura:if isTrue="{!v.isAddComment}">
+                <div class="slds-p-horizontal_small">
+                    <aura:if isTrue="{!v.toggleValue}">
+                        <forceChatter:publisher context="RECORD" recordId="{!v.recordId}" />
+                    </aura:if>
+
+                    <aura:if isTrue="{!!v.toggleValue}">
+                        <div class="slds-p-bottom_large">
+                            <!-- <T01> -->
+                            <c:caseCommentCreate recordId="{!v.recordId}" popout ="false" commentRecord="{!v.preDraftCommentAnother}"
+                                onsave="{!c.handleClose}" oncasecommentupdate="{!c.handleCaseCommentUpdate}" />
+                            <!-- </T01> -->
+                        </div>
+                    </aura:if> 
+                </div>
+            </aura:if>
+        </aura:if>
+    </lightning:card>
+    </aura:if>
+    <aura:if isTrue="{!v.isPopout}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="min-width: 100%;margin: 0;">
+                <header class="slds-modal__header">
+                    <div class="slds-page-header">
+                        <div class="slds-page-header__row">
+                            <div class="slds-page-header__col-title">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <span class="slds-icon_container" title="Case Communication">
+                                            <lightning:icon iconName="custom:custom103" />
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <div class="slds-page-header__name">
+                                            <div class="slds-page-header__name-title">
+                                                <h1>
+                                                    <span class="slds-page-header__title slds-truncate"
+                                                        title="Case Communication">Case Communication</span>
+                                                </h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-page-header__col-actions">
+                                        <div class="slds-grid">
+                                            <aura:if isTrue="{!!v.isAddComment}">
+                                                <div class="slds-col">
+                                                    <lightning:button iconName="utility:add" label="Add"
+                                                        name="newCaseComment" onclick="{!c.handleAddComment}" />
+                                                </div>
+                                            </aura:if>
+                                            <aura:if isTrue="{!v.isAddComment}">
+                                                <div class="slds-col">
+                                                    <lightning:buttonIcon iconName="utility:close"
+                                                        alternativeText="Close" onclick="{!c.handleClose}" name="close"
+                                                        class="styledPopIn" />
+                                                </div>
+                                            </aura:if>
+                                            <div class="slds-col">
+                                                <lightning:buttonIcon iconName="utility:pop_in" title="Pop In"
+                                                    variant="brand-outline" onclick="{!c.handlePopin}" name=" popIn"
+                                                    class="slds-float_right slds-m-left_small styledPopIn" />
+                                            </div>
+                                            <aura:if isTrue="{!v.isAddComment}">
+                                                <div class="slds-col slds-p-left_small">
+                                                    <lightning:input type=" toggle" label="Collaboration Mode"
+                                                        name="collabMode" variant="label-hidden"
+                                                        checked="{!v.toggleValue}" messageToggleActive="Chatter"
+                                                        messageToggleInactive="Communication" class="center-text">
+                                                    </lightning:input>
+                                                </div>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="min-height: 87vh;">
+
+                    <aura:if isTrue="{!v.isAddComment}">
+                        <div class="slds-border_bottom slds-p-bottom_medium">
+                            <aura:if isTrue="{!v.toggleValue}">
+                                <forceChatter:publisher context="RECORD" recordId="{!v.recordId}" />
+                            </aura:if>
+
+                            <aura:if isTrue="{!!v.toggleValue}">
+                                <div class="slds-p-bottom_large">
+                                    <!-- <T01> -->
+                                    <c:caseCommentCreate commentRecord="{!v.preDraftCommentAnother}" popout ="true" recordId="{!v.recordId}"
+                                        onsave="{!c.handleClose}" oncasecommentupdate="{!c.handleCaseCommentUpdate}"/>
+                                    <!-- </T01> -->
+                                </div>
+                            </aura:if>
+                        </div>
+                    </aura:if>
+                    <div class="slds-m-around_small">
+                        <c:caseCommentTimeLineView recordId="{!v.recordId}" isFullScreen="{!v.isPopout}"  commentCounterFlag="{!v.commentCounterFlag}"/>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,36 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global"
+    controller="SupportAccountService">
+
+<aura:attribute name="hideSpinner" type="boolean" default="false"/>
+<aura:attribute name="recordId" type="String"/>
+
+<aura:html tag="style">
+    .slds-fade-in-open {
+        visibility: hidden !important;
+       }
+    .slds-modal__content {
+        background-color: transparent;
+    }
+    .slds-modal__container{
+        background-color: transparent;
+    }
+     .slds-spinner_container{
+        background-color: transparent;
+        background: transparent;
+       }
+    </aura:html>  
+
+<aura:handler name="init" value="{!this}" action="{!c.doinIt}"/>
+<div class="invisibleClass">
+<aura:if isTrue="{! v.hideSpinner }">
+    <div aura:id="spinnerId" class="slds-spinner_container">
+        <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+</aura:if>
+</div>
+
+</aura:component>

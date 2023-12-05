@@ -1,0 +1,48 @@
+.row {
+    display: table;
+    width: 100%
+    }
+    
+    .cell {
+    display: table-cell;
+    }
+    
+    .r3 .cell {
+    width: 33.333333%;
+    }
+    
+    .r2 .cell {
+    width: 50%;
+    }
+    
+    .r1 .cell {
+    width: 100%;
+    }
+
+    .iconClass {
+        width: 4% !important;
+        vertical-align: top;
+    }
+
+    .contentClass {
+        width: 60% !important;
+        vertical-align: top;
+    }
+
+    .actionClass {
+        width: 36% !important;
+        vertical-align: top;
+    }
+
+    .sectionHeader {
+        cursor:pointer;
+    }
+
+    .sectionHeader:hover, .sectionHeader:active, .sectionHeader:focus {
+        border: 0.5px solid #BFBFBF;
+        background-color: #EDEDED;
+    }
+
+    .no-margin {
+        margin-top: 0rem !important;
+    }

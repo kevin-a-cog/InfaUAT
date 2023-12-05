@@ -1,0 +1,26 @@
+<!--
+/*
+ * Name			:	GlobalRecordCompletionAuraWrapper
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	12/10/2021
+ * Description	:	Record Completion Aura Wrapper Design Attributes.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description									Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		12/10/2021		N/A				Initial version.							N/A
+ VENKATESH BALLA		10/20/2023		SALESRT-17407   Additional changes to support Opportunity  <SALESRT-17407>
+ 														substage progression.
+ */
+-->
+<design:component>
+	<design:attribute label="Header" name="strHeader" description="Card header." />
+	<design:attribute label="Display as Percentage" name="boolOutputPercentage" description="If TRUE, the result will be displayed as percentage, otherwise as Index." />
+	<design:attribute label="Minimum Color" name="strMinimumColor" description="Minimum Color." />
+	<design:attribute label="Midpoint Color" name="strMidpointColor" description="Midpoint Color." />
+	<design:attribute label="Maximum Color" name="strMaximumColor" description="Maximum Color." />
+	<design:attribute label="Progress Bar mode" name="boolProgressBarMode" description="If TRUE, the chart will be displayed as a progress bar." />
+	<design:attribute label="Progress Bar Color" name="strProgressBarColor" description="Progress Bar Color." />
+	<design:attribute label="Next Step Name" name="strNextStepName" description="Specify Next Step Nme. " /><!--<SALESRT-17407>-->
+</design:component>

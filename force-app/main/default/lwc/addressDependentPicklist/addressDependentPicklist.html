@@ -1,0 +1,45 @@
+<template>
+    <template if:true={isLoading}>
+        <div class="slds-is-relative" >
+            <lightning-spinner alternative-text="Loading" variant="brand" size="medium">
+            </lightning-spinner>
+        </div>
+    </template>
+    <lightning-card title="Address">
+        <lightning-button label="Edit Address" slot="actions" onclick={handleEdit} class="slds-float_right slds-p-right_medium"></lightning-button>
+        <div class="slds-border_top">
+        <div class="slds-clearfix">
+            <template if:true={displayWarning}>
+                <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                    <h2>{labels.MsaCodeWarning}</h2>
+                </div>
+            </template>
+        </div>
+        <div class="slds-grid slds-wrap slds-form_horizontal slds-form slds-p-top_small">
+            <div class="slds-col slds-size_1-of-2 slds-p-left_xx-large slds-p-right_xx-large">
+                <lightning-combobox name="Country" label="Work Country" placeholder="--Select Country--" options={countryOptions}
+                onchange={handleCountryChange} value={selectedCountryValue} read-only={disabledCountry} required></lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-left_xx-large  slds-p-right_xx-large">
+                <lightning-combobox name="State" label="Work State" placeholder="--Select State--" options={stateOptions}
+                onchange={handleStateChange} value={selectedStateValue} read-only={disabledState} required></lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-left_xx-large slds-p-right_xx-large">
+                <lightning-combobox  name="City" label="Work City" placeholder="--Select City--" options={cityOptions}
+                onchange={handleCityChange} value={selectedCityValue} read-only={disabledCity} required></lightning-combobox>
+            </div>
+        </div>
+        <template if:true={displayNonUSValidationError}>
+            <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                <h2>{errorMessage}</h2>
+            </div>
+        </template>
+        <template if:true={showButtons}>
+            <div class="slds-clearfix slds-align_absolute-center slds-p-top_small">            
+                <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+                <lightning-button class="slds-p-left_xx-small" label="Save" variant="brand" onclick={handleSave} disabled={disableSave}></lightning-button>
+            </div>
+        </template>
+        </div>
+    </lightning-card>
+</template>

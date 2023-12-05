@@ -1,0 +1,4 @@
+/* Hides the Label of the picklist, to avoid alignment issues. */
+.THIS .label-hidden > label {
+    display: none;
+}

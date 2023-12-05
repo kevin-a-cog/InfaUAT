@@ -1,0 +1,41 @@
+<apex:page showHeader="false" sidebar="false" title="Sync Solution Types" standardController="psa_pm_Solution_Type__c" recordSetVar="solutionType" lightningStylesheets="false" >
+    
+    <div style="font-size:30px; text-align:center">
+    <apex:outputPanel >
+        <img src="/img/loading32.gif" width="25" height="25" />
+    </apex:outputPanel>            
+    
+    <p class="slds-align_absolute-center" style="font-size:30px; text-align:center">Syncing in Progress... Please wait...</p>
+    </div>
+    
+    <apex:includeLightning />
+    <div id="lightning" />
+    <script>
+    var OpportunityId = "{!$CurrentPage.parameters.id}";
+    $Lightning.use("c:psa_CreateSolutionTypeRecsApp", function() {
+        $Lightning.createComponent("c:psa_CreateSolutionTypeRecs",
+                                   {"OppId" : OpportunityId},
+                                   "lightning",
+                                   function(component) {
+                                       $A.eventService.addHandler({ "event": "c:psa_ToastEventforSolutionTypeRecs", "handler" : VFEventHandler});
+                                   });
+        
+    });
+    
+    function VFEventHandler(event){
+        var message = event.getParam("toastMessage");
+        var title = event.getParam("title");
+        var type = event.getParam("type");
+        console.log('value passed from aura component;'+message);
+        /**Show Toast Message**/
+        sforce.one.showToast({
+            "title": title,
+            "message": message,
+            "type": type
+        });
+        sforce.one.back(true); // Added this to refresh the page and redirect to previous page
+    }
+    
+    </script>
+    
+</apex:page>

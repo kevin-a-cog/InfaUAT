@@ -1,0 +1,131 @@
+<template>
+    <section aria-modal="true" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container ">
+            <header class="slds-modal__header">
+                <h2 class="slds-text-heading_small">{modalHeader}</h2>
+                <lightning-icon class="slds-modal__close" icon-name="utility:close" size="small" onclick={closeModal}>
+                </lightning-icon>
+            </header>
+            <div class={modalClass}>
+                <template if:true={saveLoading}>
+                    <lightning-spinner alternative-text="Loading" size="large" class="spinnerClass">
+                    </lightning-spinner>
+                </template>
+                <div if:false={showStdScreen} class="slds-p-around_small">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_1-of-2">
+                            <div class="slds-p-left_xx-small slds-p-vertical_x-small slds-theme_shade">
+                                <p style="font-weight: bold;">Account Information</p>
+                            </div>
+                            <div class="slds-align_absolute-center slds-p-vertical_xx-small slds-p-horizontal_xx-small">
+                                <p>To do an exact search, use double quotes ""</p>
+                            </div>
+                            <lightning-input disabled={isAccountSelected}
+                                class="slds-p-horizontal_xx-small" type="text"
+                                label="Account Name" value={accountName} onchange={accountNameChange}
+                                placeholder="type here..." required></lightning-input>
+                            <lightning-input-address disabled={isAccountSelected} class="slds-p-horizontal_xx-small"
+                                street-label="* Street" city-label="* City" country-label="* Country"
+                                province-label="State/ Province" postal-code-label="Zip/ Postal Code"
+                                street={addressStreet} city={addressCity} province={addressState}
+                                postal-code={addressPostal} country={addressCountry} onchange={addressInputChange}>
+                            </lightning-input-address>
+                            <lightning-input disabled={isAccountSelected}
+                                class="slds-p-horizontal_xx-small slds-p-vertical_small" type="text" label="Site DUNS"
+                                value={accountSiteDuns} onchange={accountSiteDunsChange}>
+                            </lightning-input>
+                            <lightning-input  disabled={isAccountSelected} class="slds-p-horizontal_xx-small" type="phone" label="Phone Number"
+                                value={phoneNumber} onchange={phoneNumberChange} placeholder="type here..."></lightning-input>
+                             <lightning-input  disabled={isAccountSelected} class="slds-p-horizontal_xx-small" type="text" label="Web Site"
+                                value={website} onchange={webSiteChange} placeholder="type here..."></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-radio-group
+                                class="slds-float_right slds-p-bottom_small custom-radio-group slds-p-right_xx-small"
+                                options={optionsForResult} value={numberOfResults} onchange={handleRadioButtonChange}
+                                type="button"></lightning-radio-group>
+                            <div class="slds-p-left_xx-small slds-p-vertical_x-small slds-theme_shade">
+                                <p style="font-weight: bold;">Number of results</p>
+                            </div>
+                            <div>
+                                <div if:true={showLoading} class="slds-is-relative custom-spinner">
+                                    <lightning-spinner alternative-text="Loading" size="large" class="spinnerClass">
+                                    </lightning-spinner>
+                                </div>
+                                <div if:false={showLoading}>
+                                    <div if:true={isResultBlank}>
+                                        <div class="slds-notify slds-notify_alert slds-alert_warning slds-m-top_large" role="alert">
+                                            <span class="slds-assistive-text">warning</span>
+                                            <h2>No Accounts found.</h2>
+                                        </div>
+                                    </div>
+                                    <template for:each={arrayOfAccountMap} for:item="acc" key={acc.Id}>
+                                        <c-search-account-card class="slds-p-around_medium" key={acc.Id} index={acc.Id}
+                                            idnumber={acc.fields.accountNumber} name={acc.fields.accountName}
+                                            address={acc.fields.address} city={acc.fields.city} state={acc.fields.state}
+                                            postal-code={acc.fields.postalCode} country={acc.fields.country}
+                                            score={acc.fields.score} gduns={acc.fields.site_gduns} phone-number={acc.fields.phoneNumber}
+                                            website={acc.fields.website} is-salesforce-record={acc.fields.isSalesforceRecord}
+                                            account-type={acc.fields.Account_Type} salesforce-id={acc.fields.salesforce_id} onselected={handleSelect}
+                                            is-clicked={acc.selected}>
+                                        </c-search-account-card>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- standard record type selection screen starts here -->
+                <div if:true={showStdScreen} class="slds-p-around_small">
+                    <c-record-type-selection options={options} onselect={handleRecordTypeChange}>
+                    </c-record-type-selection>
+                </div>
+                <!--/div-->
+            </div>
+            <footer class="slds-modal__footer">
+            <!-- Hiding Switch Screen for Lead conversion SALESRT-13356 -->
+                <div if:false={isLeadConversion}>
+                    <div class="slds-float_left">
+                        <lightning-button if:true={isStdAccountScreenEnabled} disabled={disableSwitch} variant="brand"
+                            label="Switch Screen" onclick={handleSwitch} class="slds-p-around_x-small"></lightning-button>
+                    </div>
+                </div>    
+                <!---->             
+                <div if:false={showStdScreen}>
+                    <div class="slds-grid slds-grid_align-end">
+                        <div class="slds-col">
+                            <lightning-button variant="neutral" label="Reset" onclick={handleReset}
+                            class="slds-p-around_x-small">
+                            </lightning-button>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button variant="neutral" label="Cancel" onclick={closeModal}
+                            class="slds-p-around_x-small"></lightning-button>
+                        </div>
+                        <div class="slds-col">
+                            <div if:false={isLeadConversion}>
+                                <lightning-button disabled={enableSave} variant="brand" label={saveLabel} onclick={handleSave}
+                                class="slds-p-around_x-small"></lightning-button>
+                            </div>                 
+                            <!-- Go To Account button for Lead Conversion SALESRT-13356 -->
+                            <div if:true={isLeadConversion}>
+                                <lightning-button disabled={enableSave} variant="brand" label={saveLabel} onclick={handleSaveLead}
+                                class="slds-p-around_x-small"></lightning-button>
+                            </div> 
+                        </div>
+                    <!---->     
+                    </div>              
+                </div>
+                <div if:true={showStdScreen}>
+                    <lightning-button variant="neutral" label="Cancel" onclick={closeModal}
+                        class="slds-p-around_x-small"></lightning-button>
+                    <lightning-button variant="brand" label="Next" onclick={handleNext} class="slds-p-around_x-small">
+                    </lightning-button>
+                </div>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

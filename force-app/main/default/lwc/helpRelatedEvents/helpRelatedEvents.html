@@ -1,0 +1,73 @@
+<template>
+    <div class="bg-color">
+        <div class="container in-related-events-container">
+
+            <div>
+                <h1 class="title">Related Events</h1>
+            </div>
+
+            <div class="row">
+                <template for:each={resultSet} for:item="item">
+                    <div key={item.Id} class="col-md-4 mt-3">
+                        <div class="in-community-tile pt-0">
+                            <div class="row m-0">
+                                <img style="width: 100%;height: 100%; " src={eventtilepic}>
+                            </div>
+                            <div class="row in-event-tile-desc m-0 mb-4 pt-2">
+
+                                <div class="in-community-desc">
+                                    <div class="in-community-name">
+                                        {item.Subject}
+                                    </div>
+                                    <div class="demo-only demo-only--sizing slds-grid slds-wrap slds-status2">
+                                        {item.Type}
+                                    </div>
+
+                                    <div class="in-events-tile-desc">
+                                        <div class="row in-events-tile-row">
+                                            <div class="col-sm-6">
+                                                <lightning-icon class="iconcolor in-events-tile-icon"
+                                                    icon-name="utility:event" alternative-text="event" size="small">
+                                                </lightning-icon>
+                                                {item.ActivityDate}
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <lightning-icon class="iconcolor in-events-tile-icon"
+                                                    icon-name="utility:clock" alternative-text="clock" size="small">
+                                                </lightning-icon>
+                                                {item.ActivityTime}
+                                            </div>
+                                        </div>
+                                        <div class="row in-events-tile-row">
+                                            <div class="col-sm-10 in-events-tile-location">
+                                                <lightning-icon class="iconcolor in-events-tile-icon"
+                                                    icon-name="utility:checkin" alternative-text="checkin" size="small">
+                                                </lightning-icon>
+                                                {item.Location}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>
+                                            <lightning-button data-id={item.Id} variant="brand-outline"
+                                                label="JOIN EVENT" onclick={joinEvent} disabled={item.disablebutton}
+                                                class="slds-m-left_x-small"></lightning-button>
+                                        </div>
+                                        <div class="help-learnmore">
+                                            <a href={item.Link}
+                                                class="row in-take-me-cta change-pointer m-0 ml-auto p-2">
+                                                Learn More
+                                                <i class="help-i-tag"><span>&#8594;</span></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+    </div>
+</template>

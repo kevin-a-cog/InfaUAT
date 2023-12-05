@@ -1,0 +1,118 @@
+<!--
+/*
+ * Name			:	CsmApplyPlabook
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	6/17/2021
+ * Description	:	Make Playbook HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		6/17/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+	<div class="slds-is-relative">
+
+		<!-- Custom CSS. -->
+		<div class="customGeneralCSS" lwc:dom="manual"></div>
+
+		<!-- Spinner. -->
+		<div class="spinner">
+			<template if:true={boolDisplaySpinner}>
+				<lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+			</template>
+		</div>
+
+		<!-- Step: Plan selection. -->
+		<template if:true={boolIsPlanStep}>
+			<header class="slds-modal__header">
+				<h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{label.Select_Plan}</h2>
+			</header>
+			<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+				<div class="slds-box slds-theme_shade">
+
+					<!-- Search field. -->
+					<template if:true={boolRenderSearchField}>
+						<div class="slds-grid slds-gutters">
+							<div class="slds-col">
+								<lightning-input class="searchField" variant="label-hidden" placeholder={label.Search_Plans_Placeholder} type="search" onchange={searchRecord}></lightning-input>
+							</div>
+						</div>
+					</template>
+
+					<!-- Dynamic filters. -->
+					<div class="slds-grid slds-gutters">
+						<template for:each={lstFilterFields} for:item="objField">
+							<div key={objField.strAPIName} class="slds-col">
+								<lightning-input onchange={applyFilter} class="filterField" data-name={objField.strAlternateAPIName} type="text" placeholder={objField.strLabel}></lightning-input>
+							</div>
+						</template>
+					</div>
+				</div>
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col">&nbsp;</div>
+				</div>
+
+				<!-- Plans' table. -->
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col">
+						<template if:false={boolDisplaySpinner}>
+							<c-global-data-table class="plansTable" obj-parameters={objPlanTable} onaction={executeAction}></c-global-data-table>
+						</template>
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer. -->
+			<footer class="slds-modal__footer">
+				<button class="slds-button slds-button_brand" onclick={movetoOMMSelection}>{label.Next_Button}</button>
+			</footer>
+		</template>
+
+		<!-- Step: Objective, Milestone and Milestone Action selection. -->
+		<template if:true={boolIsOMMStep}>
+			<header class="slds-modal__header">
+				<h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">{label.Select_Records}</h2>
+			</header>
+
+			<!-- OMM selection. -->
+			<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col">
+						<c-global-nested-data-viewer class="nestedViewerOMM" obj-initial-parameters={objInitialParameters}></c-global-nested-data-viewer>
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer. -->
+			<footer class="slds-modal__footer slds-modal__footer_directional">
+				<button class="slds-button slds-button_neutral" onclick={moveBackToPlanSelection}>{label.Back_Button}</button>
+				<button class="slds-button slds-button_brand" onclick={moveToPlanConfirmation}>{label.Next_Button}</button>
+			</footer>
+		</template>
+
+		<!-- Step: Confirmation selection. -->
+		<template if:true={boolIsConfirmation}>
+			<header class="slds-modal__header">
+				<h2 id="modal-heading-03" class="slds-modal__title slds-hyphenate">{label.Apply_Playbook}</h2>
+			</header>
+
+			<!-- Confirmaton. -->
+			<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col">
+						<c-global-nested-data-viewer class="nestedViewerConfirmation" obj-initial-parameters={objInitialParametersConfirm}></c-global-nested-data-viewer>
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer. -->
+			<footer class="slds-modal__footer slds-modal__footer_directional">
+				<button class="slds-button slds-button_neutral" onclick={moveBackToOMMSelection}>{label.Back_Button}</button>
+				<button class="slds-button slds-button_brand" onclick={saveAndCloseClickAction}>{label.Save_Button}</button>
+			</footer>
+		</template>
+	</div>
+</template>

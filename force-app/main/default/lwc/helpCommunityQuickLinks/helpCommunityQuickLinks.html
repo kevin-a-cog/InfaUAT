@@ -1,0 +1,16 @@
+<template>
+    <template if:true={showQuickLinks}>
+        <div class="in-help-quick-link-background">
+            <div class="container help-community-quickLinks-container">
+                <div class="row d-flex help-community-quickLinks-row">
+                    <template for:each={quickLinksList} for:item="quickLink">
+                        <a key={quickLink.name} class="in-help-quick-link-item in-help-quick-link-cursor" data-name={quickLink.name} data-link={quickLink.link} onclick={openLink}>
+                            <img class={quickLink.class} data-name={quickLink.name} data-link={quickLink.link} src={quickLink.icon}>
+                            <div class="in-help-quick-link-item-text" data-name={quickLink.name} data-link={quickLink.link}>{quickLink.name}</div>
+                        </a>    
+                    </template>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

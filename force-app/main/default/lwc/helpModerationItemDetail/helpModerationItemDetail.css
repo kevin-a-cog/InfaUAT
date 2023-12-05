@@ -1,0 +1,68 @@
+.help-in-combo{
+    margin-right: 63%;
+}
+
+.in-action-button{
+    display: flex;
+}
+
+.in-title{
+    margin-left: 10%;
+    margin-right: 6%;
+}
+
+.in-category{
+    margin-right: 63%;
+}
+
+.in-save-button{
+    margin-right: 10%;
+}
+
+.in-upvote{
+    margin-left: 10%;
+    margin-right: 77%;
+}
+
+/* .in-header-detail{
+    margin-left: -5%;
+} */
+
+/* .in-list-item{
+    margin-left: -60%;
+} */
+
+.in-comment-date{
+    font-size: 10px;
+}
+
+.slds-feed-wrapper {
+    border-top: 1px solid #949494;
+}
+
+.in-vertical-align-center {
+    align-items: center;
+}
+
+.in-seperator-pipe {
+    margin: 0 5px;
+}
+
+.in-progress-status {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #00AFC7;
+    color: #fff;
+}
+
+.in-progress-text {
+    font-style: italic;
+    margin-left: 5px;
+    color: #FF4D00;
+}
+
+.in-desc-img {
+    max-width: calc(33.333% - 15px);
+    display: inline-block;
+    margin-right: 15px;
+}

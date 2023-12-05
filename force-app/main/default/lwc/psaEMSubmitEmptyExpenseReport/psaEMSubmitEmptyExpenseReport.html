@@ -1,0 +1,26 @@
+<template>
+    <div>
+        <lightning-card variant="narrow" class="slds-text-title_bold" title="Submit an empty expense report for the week ending:">   
+            <template if:true={requiredDates}>
+                <div if:true={isLoaded} class="slds-is-relative">
+                    <lightning-spinner
+                        alternative-text="Loading..." variant="brand">
+                    </lightning-spinner>
+                </div>
+                <div class = "checkbox-container">                                                                                                        
+                    <lightning-checkbox-group name="Checkbox Group" options={options} value={value} onchange={handleChange}></lightning-checkbox-group>                   
+                </div>
+                <div>
+                    <!--<lightning-button variant="brand" label="SUBMIT EXPENSE" title="Save" onclick={handleSubmitReport} class="slds-m-left_x-small"></lightning-button>-->
+                    <template if:true={showSubmitButton}> 
+                    <lightning-button label="Submit Expense" title="Submit Expense" onclick={handleSubmitReport} disabled={disableSubmitButton} class="slds-m-left_x-small"></lightning-button>
+                    </template>                
+                </div>
+            </template>
+            <div>
+                <template if:true={successMessage}>
+                </template>                                    
+            </div>
+        </lightning-card>
+    </div>
+</template>

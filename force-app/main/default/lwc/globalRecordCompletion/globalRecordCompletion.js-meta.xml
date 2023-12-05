@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Record Completion</masterLabel>
+    <description>This component allows users to see the completion level of a record.</description>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+		<target>lightning__Tab</target>
+		<target>lightning__RecordAction</target>
+		<target>lightningCommunity__Page</target>
+    </targets>
+	<targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage">
+            <property label="Header" name="strHeader" type="String" description="Card header." default="Completeness" />
+            <property label="Display as Percentage" name="boolOutputPercentage" type="Boolean" description="If TRUE, the result will be displayed as percentage, otherwise as Index." default="true" />
+			<property label="Minimum Color" name="strMinimumColor" type="String" description="Minimum Color." default="#c00" />
+            <property label="Midpoint Color" name="strMidpointColor" type="String" description="Midpoint Color." default="orange" />
+            <property label="Maximum Color" name="strMaximumColor" type="String" description="Maximum Color." default="#0c0" />
+			<property label="Progress Bar mode" name="boolProgressBarMode" type="Boolean" description="If TRUE, the chart will be displayed as a progress bar." default="false" />
+			<property label="Progress Bar Color" name="strProgressBarColor" type="String" description="Progress Bar Color." default="#008000" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

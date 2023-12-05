@@ -1,0 +1,179 @@
+<template>
+    <lightning-spinner if:true={showInProgress} alternative-text="Loading..."></lightning-spinner>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-modal_large slds-fade-in-open">
+    <div class="slds-modal__container">
+        <header class="slds-modal__header">
+            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{pageTitle}</h2>
+        </header>
+
+        <div class="slds-modal__content slds-p-around_medium custom-height" id="modal-content-id-1">
+            <div if:true={showStep1}>
+                <div if:false={showSupportAccounts}>
+                    Can't Escalate!<br/>
+                    There isn't any Support Account created for this Account. Please have one created.
+                </div>
+                <div if:true={showSupportAccounts}>
+                    <b>Select the Support Account:</b>
+                    <lightning-input type="search" label="" placeholder="Filter by Support Account or Case Number" onchange={searchRecord}></lightning-input>
+                    <div>
+						<c-global-data-table obj-parameters={objParameters}></c-global-data-table>
+                    </div>
+                </div>    
+            </div>
+           
+            <div if:true={showStep2}>
+                <!-- <div if:true={showCases}> -->
+                    <b>Select Cases (if any) to be associated to the Escalation</b>
+                    <lightning-input type="search" label="" placeholder="filter" onchange={updateSearch}></lightning-input>
+                    <div>
+                        <!-- <lightning-datatable
+                                key-field="id"
+                                data-id="caseList"
+                                data={cases}
+                                columns={caseColumns}>
+                        </lightning-datatable> -->
+                        <!-- <c-escalatecase-datatable
+                            key-field="id"
+                            data-id="caseList"
+                            data={cases}
+                            columns={caseColumns}>
+                        </c-escalatecase-datatable> -->
+                        <lightning-tabset variant="default" active-tab-value={defaultTabOnInitialization}>
+                            <template for:each={tabs} for:item="tabObj">
+                                <lightning-tab label={tabObj.tab} value={tabObj.tab} key={tabObj.tab} onactive={handleActiveTab} title={tabObj.helpText}>
+                                   
+                                    <template if:true={cases}>
+                                        <div class="slds-card">
+                                            <div class="datatable-height">
+												
+                                                <!-- All apps, but Success. -->
+												<template if:false={tabObj.boolIsSuccessApp}>
+													<template if:true={tabObj.showCheckboxCol}>  
+														<c-escalatecase-datatable
+															key-field="id"
+															data-id={tabObj.dataId}
+															data={cases}
+															columns={caseColumns}
+															sorted-by={sortBy}
+															sorted-direction={sortDirection}
+															onsort={doSorting}
+															wrap-text-max-lines="2">
+														</c-escalatecase-datatable>
+													</template>
+													<template if:false={tabObj.showCheckboxCol}>
+														<c-escalatecase-datatable
+															key-field="id"
+															data-id={tabObj.dataId}
+															data={cases}
+															columns={caseColumns}
+															sorted-by={sortBy}
+															sorted-direction={sortDirection}
+															onsort={doSorting}
+															wrap-text-max-lines="2"
+															hide-checkbox-column>
+														</c-escalatecase-datatable>
+													</template>
+												</template>
+												
+                                                <!-- Success app. -->
+												<template if:true={tabObj.boolIsSuccessApp}>
+													<c-escalatecase-datatable
+														key-field="id"
+														data-id={tabObj.dataId}
+														data={cases}
+														columns={caseColumns}
+														sorted-by={sortBy}
+														sorted-direction={sortDirection}
+														onsort={doSorting}
+														wrap-text-max-lines="2">
+													</c-escalatecase-datatable>
+												</template>
+                                            </div>
+                                            <div>
+                                                <lightning-spinner if:true={showDataRenderLoader} alternative-text="Loading..."></lightning-spinner>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <template if:true={NoDataAfterRendering}>
+                                        <div class="datatable-height flex-align-center">
+                                            No Cases to display!
+                                        </div>
+                                    </template>
+                                   
+                                </lightning-tab>
+                            </template>
+                        </lightning-tabset>
+                    </div>
+                <!-- </div> -->
+
+                <!-- <lightning-tabset>
+                    <lightning-tab label="Cases with GEMS">
+
+                    </lightning-tab>
+                    <lightning-tab label="Cases without GEMS">
+
+                    </lightning-tab>
+                </lightning-tabset> -->
+           
+                <!-- <div if:false={showCases}>
+                    No cases found that can be escalated:
+                </div> -->
+            </div>
+
+            <div if:true={showStep3}>
+                <div>
+                    <b>{sectionTitle}</b>
+                    <!--div if:true={showToggleButton} style="float: right" >
+                        <lightning-button name="toggleCreate" label={toggleButtonName} variant="brand" onclick={toggleCreate}></lightning-button>
+                        <div class="slds-col slds-p-left_small">
+                            <lightning-input type="toggle" label="Create Engagement" name="toggleCreate"
+                                message-toggle-active="" message-toggle-inactive=""
+                                onclick={toggleCreate}
+                            ></lightning-input>
+                        </div>
+                    </div-->
+                </div>
+                <div style="clear: right">
+                    <div if:true={showSelectEngSection}>
+                        <div>
+                            <lightning-datatable
+                                    key-field="id"
+                                    data-id="engagementList"
+                                    data={engagements}
+                                    columns={engagementColumns}
+                                    sorted-by={sortBy}
+                                    sorted-direction={sortDirection}
+                                    onsort={doSorting}
+                                    wrap-text-max-lines="2"
+                                    max-row-selection=1>
+                            </lightning-datatable>
+                        </div>    
+                    </div>
+                    <div if:true={showCreateEngSection} style="overflow:scroll;">
+                        <div>
+                            <lightning-record-edit-form object-api-name="Engagement__c">
+                                <!-- <lightning-input-field data-field="Name" field-name="Name" onchange={handleFieldChange} required></lightning-input-field> -->
+                                <lightning-input-field data-field="Title" field-name="Title__c" onchange={handleFieldChange} required></lightning-input-field>
+                                <!--lightning-input-field data-field="Priority" field-name="Priority__c" onchange={handleFieldChange} required></lightning-input-field>
+                                <lightning-input-field data-field="Severity" field-name="Severity__c" onchange={handleFieldChange} required></lightning-input-field-->
+                                <lightning-input-field data-field="Source" field-name="Source__c" onchange={handleFieldChange} required></lightning-input-field>
+                                <lightning-input-field data-field="Details" field-name="Detail__c" onchange={handleFieldChange} value={strDetailPlaceholder} required></lightning-input-field>                                
+                                <lightning-input-field data-field="Contact" field-name="Primary_Escalation_Contact__c" onchange={handleFieldChange} ></lightning-input-field>
+                                <!--lightning-input-field data-field="Category" field-name="Category__c" onchange={handleFieldChange}></lightning-input-field-->    
+                            </lightning-record-edit-form>
+                        </div>    
+                    </div>        
+                </div>
+            </div>
+        </div>
+        <footer class="slds-modal__footer slds-modal__footer_directional">
+            <button title="Cancel" onclick={cancel} class="slds-button slds-button_neutral">Cancel</button>
+            <button if:true={showBackButton} title="Back" onclick={goBack} class="slds-button slds-button_neutral">Back</button>
+            <button if:true={showToggleButton} name="toggleCreate" onclick={toggleCreate} class="slds-button slds-button_brand">{toggleButtonName}</button>
+            <button title="Submit" onclick={submit} class="slds-button slds-button_brand">{submitButtonLabel}</button>
+        </footer>
+    </div>
+</section>
+<div class="slds-backdrop_open"></div>
+</template>

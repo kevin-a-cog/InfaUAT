@@ -1,0 +1,7 @@
+.es-box-clickable{
+    cursor: pointer;
+    color: inherit;
+}
+.link-option-vanilla__text {
+    width: 80%;
+}

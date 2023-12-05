@@ -1,0 +1,65 @@
+.headerCard {
+    padding-bottom: 10px;
+    background-color: rgba(243, 242, 242, 1);
+    padding-top: 10px;
+    /* margin-top: -25px; */
+}
+
+.headerCard lightning-icon.slds-icon-standard-actions-and-buttons.slds-icon_container {
+    margin-left: 17px;
+   
+}
+.headerCard .header[c-caseQuickActions_caseQuickActions] {
+    font-size: 1rem;
+	font-weight: 700;
+	display: inline-block;
+	padding-left: 10px;
+	vertical-align: middle;
+	line-height: 1.25;
+}
+.disp-inline{
+    display: inline;
+}
+.disp-inline-block{
+    display: inline-block;
+}
+.error{
+    color: rgb(234, 0, 30);
+}
+
+.divcontainerborder {
+    max-width: 100%;
+    width: auto;
+    line-height: 14px;
+    line-height: 14px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    overflow: hidden;
+    border-radius: 5px;
+    -pie-background: linear-gradient(#ece9d8, #E5ECD8);
+    box-shadow: #666 0px 2px 3px;
+    behavior: url(Include/PIE.htc);    
+    overflow: hidden;
+    padding: 17px;   
+    border: 1px solid #F3F2F2 ;
+}
+
+/* CSS added for set textarea resize */
+.textarea_height lightning-input-field {
+    --slds-c-textarea-sizing-max-height : max-content;
+}
+
+/* custom scrollbar modal content */
+.caseModal_content::-webkit-scrollbar{
+    width: 10px;
+}
+.caseModal_content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.caseModal_content::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+.caseModal_content::-webkit-scrollbar-thumb:hover {
+    background: #aeaeae;
+}

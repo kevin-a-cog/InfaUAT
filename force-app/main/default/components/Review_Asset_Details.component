@@ -1,0 +1,47 @@
+<apex:component controller="ReviewAssetsOrderController" access="global">
+    <apex:attribute name="record_id" description="Received record_id" assignTo="{!orderId}" type="String"/>
+    <!--apex:outputLink value="{!reviewAssetRedirect}" id="page">Review Assets</apex:outputlink-->
+    <apex:variable var="url" value="{!LEFT($Api.Partner_Server_URL_140, FIND(".com/",$Api.Partner_Server_URL_140)+3)}"/>
+    <apex:outputLink value="{!url}/apex/ReviewAssetsOrderViewPage?id={!orderId}" rendered="{! If(listAssetWrapper.size>0,true,false) }">Review All Assets</apex:outputlink>
+    <apex:dataTable value="{!listAssetWrapper}" var="assetWrapper" rendered="{! If(listAssetWrapper.size>0,true,false) }" border="2" cellpadding="10" cellspacing="10">
+        <apex:column >
+            <apex:facet name="header">Parent Asset</apex:facet>
+            <apex:outputLink value="{!url}/{!assetWrapper.ParentAssetID}">{!assetWrapper.ParentAssetName}</apex:outputlink>
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">Asset Name</apex:facet>
+            <apex:outputLink value="{!url}/{!assetWrapper.ast.Id}">{!assetWrapper.ast.Name}</apex:outputlink>
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">Asset Type</apex:facet>
+            {!assetWrapper.ast.Asset_Type__c}
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">Subscription Start Date</apex:facet>
+            {!assetWrapper.ast.SBQQ__SubscriptionStartDate__c}
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">Subscription End Date</apex:facet>
+            {!assetWrapper.ast.SBQQ__SubscriptionEndDate__c}
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">Quantity</apex:facet>
+            {!assetWrapper.ast.Quantity}
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">Asset Identifier</apex:facet>
+            {!assetWrapper.AssetIdentifier}
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">Status</apex:facet>
+            {!assetWrapper.Status}
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">Associated Asset</apex:facet>
+            <apex:outputLink value="{!url}/{!assetWrapper.AssociatedAssetID}">{!assetWrapper.AssociatedAssetName}</apex:outputlink>
+        </apex:column>
+    </apex:dataTable>
+    <apex:outputPanel rendered="{! If(listAssetWrapper.size==0,true,false) }">
+    No Assets Under Review
+    </apex:outputPanel>
+</apex:component>

@@ -1,0 +1,63 @@
+<template>
+    
+  <div class="slds-timeline__item_expandable slds-timeline__item_task slds-is-open"  >    
+      <span class="slds-assistive-text">task</span>
+      <div class="slds-media">
+        <div class="slds-media__figure">
+    
+          <div class="slds-icon_container slds-icon-standard-task slds-timeline__icon CustomCSS" title="task" 
+          data-value={activity.recordId} onclick={handleToggle}>
+             
+            <template if:true={activity.childList.length}>
+              <template if:false={activity.showChild}>
+                <lightning-icon icon-name="utility:add" class="slds-m-around--xx-small iconCSS" alternative-text="add" title="add" size="small" ></lightning-icon>
+              </template>
+
+              <template if:true={activity.showChild}>
+                <lightning-icon icon-name="utility:dash" class="slds-m-around--xx-small iconCSS" alternative-text="add" title="add" size="small" ></lightning-icon>
+              </template>
+
+          </template>
+
+          <template if:false={activity.childList.length}>
+            <svg class="slds-icon slds-icon_small slds-m-around--xx-small" aria-hidden="true">
+              <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#task"></use>
+            </svg>
+          </template>
+            
+           
+          </div>
+        </div>
+        <div class="slds-media__body" style="padding: 0px;">
+          <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+            <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
+              
+              
+              <a  style="color:black" onclick={handlePostClick} data-value={activity.parentId}>
+                  <strong>
+                      {activity.ownerName}</strong> posted {activity.feedBody} on&nbsp;
+                      <template if:true={activity.createdDay}>
+                          <strong>{activity.createdDay}<sup>th</sup>&nbsp;{activity.createdMonth}&nbsp;{activity.createdYear}</strong>
+                      </template>
+                      <template if:true={activity.recordName}>
+                          <strong>{activity.recordName}</strong>
+                      </template>
+                </a>
+            </div>
+          </div>
+          
+          
+          <div class="slds-timeline__item_details  slds-m-top_x-small slds-m-horizontal_xx-small slds-p-around_medium" 
+          id="task-item-expanded" if:true={activity.showChild} style="padding: 0px;" data-id={activity.recordId}>
+              <template for:each={activity.childList} for:item="act" for:index="index">
+                
+                  <c-ipue-activity-timeline-child-renderer key={act.feedId} activity={act}> 
+      
+                  </c-ipue-activity-timeline-child-renderer>
+              </template>
+          </div>
+
+        </div>
+      </div>
+  </div>
+</template>

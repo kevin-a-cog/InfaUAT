@@ -1,0 +1,333 @@
+<template>
+    <!-- Spinner. -->
+    <div class="spinner">
+        <template if:true={boolDisplaySpinner}>
+            <lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+        </template>
+    </div>
+    <div id="search-documents" data-id="coveoSearchId" class="CoveoSearchInterface" data-enable-history="true"
+        data-design="new" data-results-per-page="10" data-always-open-in-new-window="true"
+        data-allow-queries-without-keywords="true" data-auto-trigger-query="true"
+        data-enable-automatic-responsive-mode="true">
+        <div class="CoveoAnalytics" data-search-hub="successplansearch"></div>
+        <div>
+            <div style="background-color: #fff; height: 100px;">
+                <div class='coveo-search-section' style="background-color: #fff; height: 100px; margin-top: 10px;">
+                    <div class="CoveoSearchbox container" data-enable-omnibox="true" data-enable-query-syntax="false"
+                        data-trigger-query-on-clear="true" style="background-color: white;"
+                        data-enable-query-suggest-addon="true" data-placeholder="Search for your Success Plans...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="coveo-main-section" data-mode="search">
+            <div class="container">
+                <div class="coveo-facet-column">
+                    <div class="CoveoDynamicFacet" data-title="Content Type" data-field="@infacontenttype"
+                        data-number-of-values="5"></div>
+                    <div class="CoveoDynamicFacet" data-title="Plan Stage" data-field="@cosmosplanstage"
+                        data-number-of-values="5"></div>
+                    <div class="CoveoDynamicFacet" data-title="Products" data-field="@athenaproduct"
+                        data-number-of-values="5"></div>
+                </div>
+                <div class="coveo-results-column">
+                    <div class="CoveoBreadcrumb">
+                    </div>
+                    <div class="coveo-results-header">
+                        <div class="coveo-summary-section">
+                            <span class="CoveoQuerySummary" data-enable-search-tips="false"></span>
+                            <span style="padding-left: 4px" class="CoveoQueryDuration">
+                            </span>
+                        </div>
+                        <div class="coveo-sort-section">
+                            <span class="CoveoSort" data-sort-criteria="relevancy" data-caption="Relevance">
+                            </span>
+                            <span class="CoveoSort" data-sort-criteria="date descending,date ascending"
+                                data-caption="Date"></span>
+                        </div>
+                    </div>
+                    <div class="CoveoHiddenQuery">
+                    </div>
+                    <div class="CoveoDidYouMean">
+                    </div>
+                    <div class="CoveoResultList" data-layout="list">
+                        <!--Plan Template-->
+                        <div class="CosmosPlan" style="display:none;">
+                            <div style="display:none">CosmosPlan</div>
+                            <div class="coveo-result-frame">
+                                <div class="coveo-result-frame">
+                                    <div class="coveo-result-cell" style="vertical-align: top;padding-left: 16px;">
+                                        <div class="CoveoMainBadge d-flex">
+                                            <span class="coveo-main-badge Learn" title="Content type" style="background: #ff4d00;
+                                                        padding: 5px 15px;
+                                                        text-transform :uppercase;
+                                                        font-size: 12px;
+                                                        color: #fff;
+                                                        margin-bottom:15px;">
+                                                Plan
+                                            </span>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:0;">
+                                            <div class="coveo-result-cell" style="vertical-align:top;font-size:16px;"
+                                                role="heading" aria-level="2">
+                                                <a class="CoveoResultLink"></a>
+                                            </div>
+                                            <div class="coveo-result-cell"
+                                                style="width:120px;text-align:right;font-size:12px">
+                                                <div class="coveo-result-row">
+                                                    <span class="CoveoFieldValue" data-field="@date"
+                                                        data-helper="date"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:10px;">
+                                            <div class="coveo-result-cell">
+                                                <span class="CoveoFieldValue" data-helper="highlightStreamText" data-html-value="true" data-field="@sfdescription__c"></span>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row">
+                                            <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+                                                <table class="CoveoFieldTable">
+                                                    <tbody>
+                                                        <tr data-field="@cosmosplanstagedetails"
+                                                            data-caption="Current Stage : "></tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row">
+                                            <div class="coveo-result-cell">
+                                                <div class="CoveoMissingTerms"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Objective Template-->
+                        <div class="CosmosObjective" style="display:none;">
+                            <div style="display:none">CosmosObjective</div>
+                            <div class="coveo-result-frame">
+                                <div class="coveo-result-frame">
+                                    <div class="coveo-result-cell" style="vertical-align: top;padding-left: 16px;">
+                                        <div class="CoveoMainBadge d-flex">
+                                            <span class="coveo-main-badge Learn" title="Content type" style="background: #ff4d00;
+                                                        padding: 5px 15px;
+                                                        text-transform :uppercase;
+                                                        font-size: 12px;
+                                                        color: #fff;
+                                                        margin-bottom:15px;">
+                                                Objective
+                                            </span>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:0;">
+                                            <div class="coveo-result-cell" style="vertical-align:top;font-size:16px;"
+                                                role="heading" aria-level="2">
+                                                <a class="CoveoResultLink"></a>
+                                            </div>
+                                            <div class="coveo-result-cell"
+                                                style="width:120px;text-align:right;font-size:12px">
+                                                <div class="coveo-result-row">
+                                                    <span class="CoveoFieldValue" data-field="@date"
+                                                        data-helper="date"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:10px;">
+                                            <div class="coveo-result-cell">
+                                                <span class="CoveoFieldValue" data-helper="highlightStreamText" data-html-value="true" data-field="@sfdescription__c"></span>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:10px;">
+                                            <div class="coveo-result-cell">
+                                                <span class="CoveoFieldValue"  data-text-caption="Business Goal : " data-field="@sfbusiness_goal__c"></span>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:10px;">
+                                            <div class="coveo-result-cell">
+                                                <span class="CoveoFieldValue" data-text-caption="Technical Goal : " data-field="@sftechnical_goal__c"></span>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row">
+                                            <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+                                                <table class="CoveoFieldTable">
+                                                    <tbody>
+                                                        <tr data-field="@cosmosplanname" data-caption="Plan: "></tr>
+                                                        <tr class="CoveoValueRow" data-field="@cosmosproducts" data-caption="Objective Products:"></tr>                                          
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row">
+                                            <div class="coveo-result-cell">
+                                                <div class="CoveoMissingTerms"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Milestone Template-->
+                        <div class="CosmosMilestone" style="display:none;">
+                            <div style="display:none">CosmosMilestone</div>
+                            <div class="coveo-result-frame">
+                                <div class="coveo-result-frame">
+                                    <div class="coveo-result-cell" style="vertical-align: top;padding-left: 16px;">
+                                        <div class="CoveoMainBadge d-flex">
+                                            <span class="coveo-main-badge Learn" title="Content type" style="background: #ff4d00;
+                                                        padding: 5px 15px;
+                                                        text-transform :uppercase;
+                                                        font-size: 12px;
+                                                        color: #fff;
+                                                        margin-bottom:15px;">
+                                                Milestone
+                                            </span>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:0;">
+                                            <div class="coveo-result-cell" style="vertical-align:top;font-size:16px;"
+                                                role="heading" aria-level="2">
+                                                <a class="CoveoResultLink"></a>
+                                            </div>
+                                            <div class="coveo-result-cell"
+                                                style="width:120px;text-align:right;font-size:12px">
+                                                <div class="coveo-result-row">
+                                                    <span class="CoveoFieldValue" data-field="@date"
+                                                        data-helper="date"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:10px;">
+                                            <div class="coveo-result-cell">
+                                                <span class="CoveoFieldValue" data-helper="highlightStreamText" data-html-value="true" data-field="@sfdescription__c"></span>
+                                            </div>
+                                        </div>
+                                         <div class="coveo-result-row" style="margin-top:10px;">
+                                            <div class="coveo-result-cell">
+                                                <span class="CoveoFieldValue"  data-helper="highlightStreamText" data-html-value="true" data-text-caption="Technical Goal : " data-field="@sftechnical_goal__c"></span>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row">
+                                            <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+                                                <table class="CoveoFieldTable">
+                                                    <tbody>
+                                                        <tr data-field="@cosmosplanname" data-caption="Plan: "></tr>
+                                                        <tr class="CoveoValueRow" data-field="@cosmosproducts" data-caption="Milestone Products:"></tr>                                          
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row">
+                                            <div class="coveo-result-cell">
+                                                <div class="CoveoMissingTerms"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                        <!--Plan Comments Template-->                     
+                        <div class="CosmosComments" style="display:none;">
+                            <div style="display:none">CosmosComments</div>
+                            <div class="coveo-result-frame">
+                                <div class="coveo-result-frame">
+                                    <div class="coveo-result-cell" style="vertical-align: top;padding-left: 16px;">
+                                        <div class="CoveoMainBadge d-flex">
+                                            <span class="coveo-main-badge Learn" title="Content type" style="background: #ff4d00;
+                                                        padding: 5px 15px;
+                                                        text-transform :uppercase;
+                                                        font-size: 12px;
+                                                        color: #fff;
+                                                        margin-bottom:15px;">
+                                                Plan Comment
+                                            </span>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:0;">
+                                            <div class="coveo-result-cell" style="vertical-align:top;font-size:16px;"
+                                                role="heading" aria-level="2">
+                                                <a class="CoveoResultLink"></a>
+                                            </div>
+                                            <div class="coveo-result-cell"
+                                                style="width:120px;text-align:right;font-size:12px">
+                                                <div class="coveo-result-row">
+                                                    <span class="CoveoFieldValue" data-field="@date"
+                                                        data-helper="date"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:10px;">
+                                            <div class="coveo-result-cell">
+                                                <span class="CoveoFieldValue" data-field="@sfcomment__c"  data-helper="highlightStreamText" data-html-value="true"></span>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row">
+                                            <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+                                                <table class="CoveoFieldTable">
+                                                    <tbody>
+                                                        <tr data-field="@cosmosplanname" data-caption="Plan: "></tr>
+                                                        <tr class="CoveoValueRow" data-field="@cosmosproducts" data-caption="Milestone Products:"></tr>                                          
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:10px;">
+                                            <div class="coveo-result-cell">
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row">
+                                            <div class="coveo-result-cell">
+                                                <div class="CoveoMissingTerms"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Default" style="display:none;">
+                            <div style="display:none">Default</div>
+                            <div class="coveo-result-frame">
+                                <div class="coveo-result-frame">
+                                    <div class="coveo-result-cell"
+                                        style="vertical-align:top;text-align:center;width:32px;">
+                                    </div>
+                                    <div class="coveo-result-cell" style="vertical-align: top;padding-left: 16px;">
+                                        <span class="CoveoBadge" data-field="@infacontenttype"
+                                            data-split-values="true"></span>
+                                        <div class="coveo-result-row" style="margin-top:0;">
+                                            <div class="coveo-result-cell" style="vertical-align:top;font-size:16px;"
+                                                role="heading" aria-level="2">
+                                                <a class="CoveoResultLink"></a>
+                                            </div>
+                                            <div class="coveo-result-cell"
+                                                style="width:120px;text-align:right;font-size:12px">
+                                                <div class="coveo-result-row">
+                                                    <span class="CoveoFieldValue" data-field="@date"
+                                                        data-helper="date"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:10px;">
+                                            <div class="coveo-result-cell">
+                                                <span class="CoveoFieldValue"  data-helper="highlightStreamText" data-html-value="true" data-field="@sfdescription__c"></span>
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row" style="margin-top:10px;">
+                                            <div class="coveo-result-cell">
+                                            </div>
+                                        </div>
+                                        <div class="coveo-result-row">
+                                            <div class="coveo-result-cell">
+                                                <div class="CoveoMissingTerms"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="CoveoResultsPerPage"></div>
+                    <div class="CoveoPager"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

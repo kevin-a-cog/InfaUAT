@@ -1,0 +1,8 @@
+/* @media only screen and ( max-width: 420px ){
+    .slds-table_header-fixed_container{
+        padding-top: 0px;
+    }
+    .es-datatable .slds-table th, .es-datatable .slds-table td {
+        padding: 8px 0px!important;
+    }
+} */

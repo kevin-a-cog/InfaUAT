@@ -1,0 +1,30 @@
+<!--
+/*
+ * Name			:	GlobalIframeViewer
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	8/6/2021
+ * Description	:	This LWC allows developers to display iframe content.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		8/6/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+    
+	<!-- If the header is provided. -->
+	<template if:true={boolDisplayHeader}>
+		<div class="slds-is-relative">
+			<lightning-card  title={strHeader}>
+				<iframe frameborder={objProperties.strFrameBorder} marginheight={objProperties.strMarginHeight} marginwidth={objProperties.strMarginWidth} src={objProperties.strURL}></iframe>
+			</lightning-card>
+		</div>
+	</template>
+
+	<!-- If the header is provided. -->
+	<template if:false={boolDisplayHeader}>
+		<iframe frameborder={objProperties.strFrameBorder} marginheight={objProperties.strMarginHeight} marginwidth={objProperties.strMarginWidth} src={objProperties.strURL}></iframe>
+	</template>
+</template>

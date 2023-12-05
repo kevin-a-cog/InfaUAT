@@ -1,0 +1,36 @@
+.THIS {}
+
+.THIS .sfdc-button-override {
+      background-color: black;
+      border: none;
+      line-height: inherit;
+}
+
+.THIS span.nav-link {
+      cursor: pointer;
+}
+
+.THIS .mobile-login-link {
+      color: #939598;
+}
+
+.THIS .user-login-info-hide {
+      display: none;
+}
+
+.THIS .user-login-info-show {
+      display: block;
+}
+
+.THIS .user-progress-icon-image {
+      border-width: 0px;
+      cursor: pointer;
+      width: 13px;
+      vertical-align:sub;
+}
+
+.THIS .user-progress-icon
+{
+      width:110.5px;
+      text-align:center;
+}

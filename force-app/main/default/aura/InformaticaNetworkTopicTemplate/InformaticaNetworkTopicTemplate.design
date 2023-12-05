@@ -1,0 +1,3 @@
+<design:component>
+	<design:attribute name="showSearch" label="Max Page Width (640px - 1920px)" min="640" max="1920" />
+</design:component>

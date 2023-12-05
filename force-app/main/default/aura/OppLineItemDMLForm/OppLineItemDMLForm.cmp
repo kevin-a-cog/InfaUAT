@@ -1,0 +1,222 @@
+<aura:component controller="OpportunityProductsDetailsController" implements="force:appHostable,force:hasRecordId,flexipage:availableForRecordHome,flexipage:availableForAllPageTypes" access="global">
+   
+    <aura:attribute name="OLIOperation" type="String" />
+    <!-- Ask bala what we need Obj or list -->
+    <aura:attribute name="oli" type="OpportunityLineItem" />
+    <aura:attribute name="retoppProdList" type="List" /> 
+    <aura:attribute name="saveBtnClicked" type="Boolean" default="false" />
+    <aura:attribute name="oppId" type="String" /> 
+    <aura:attribute name="OpportunityName" type="String" />
+    <aura:attribute name="transactionTypeOptions" type="String[]"/>
+    <aura:attribute name="oppCurrency" type="String" default="USD"/>
+    
+    <!--Event to refresh OLI list on Opportunity after Edit/Update operation-->
+    <aura:RegisterEvent name="OppRefreshEvent" type="c:OppLineItemListRefreshEvent"/>
+    <aura:RegisterEvent name="closeModalEvt" type="c:closeModalEvent" /> 
+
+    <!-- Event to perform Edit/Update operation on Opportunity LineItem -->
+    <aura:RegisterEvent name="OppDMLEvent" type="c:OppLineItemDMLEvent"/>
+
+        <aura:if isTrue="{!v.oli.length == 0}">
+            <b><p class="slds-m-top_x-small slds-align_absolute-center">There is no products to edit.</p></b>
+        </aura:if>
+                	
+            <!-- OPPORTUNITY PRODUCTS - EDIT WINDOW -->
+            <!-- ====================================== -->
+            <aura:if isTrue="{!v.OLIOperation == 'edit'}" >
+                <div class="full forcePageBlock forceRecordLayout slds-p-around--small slds-p-bottom_medium"  data-aura-class="forcePageBlock forceRecordLayout">
+                	<div class="test-id__section slds-section  slds-is-open full forcePageBlockSection forcePageBlockSectionEdit"  data-aura-class="forcePageBlockSection forcePageBlockSectionEdit">
+                		<div class="test-id__section-content slds-section__content section__content slds-p-top--none"  id="4023:0">
+                			<div class="slds-form slds-is-editing" role="list" >
+                			
+                            <!-- 1st row of modal window--><!-- slds-has-divider_top -->
+                			<div class="slds-grid full forcePageBlockSectionRow" data-aura-class="forcePageBlockSectionRow">
+                				<div class="slds-has-flexi-truncate slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView" role="listitem" data-aura-class="forcePageBlockItem forcePageBlockItemView">
+                					<div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element" >
+                						<div class="test-id__field-label-container" >
+                						    <span class="test-id__field-label slds-form-element__label" >Opportunity</span>
+                					    </div>
+                						<div class="slds-form-element__control slds-grid itemBody" >
+                							<span class="test-id__field-value slds-form-element__static slds-grow" >
+                								<span class="uiOutputText forceOutputLookup" data-aura-class="uiOutputText forceOutputLookup">{!v.OpportunityName}</span>
+                							</span>
+                						</div>
+                					</div>
+                				</div>
+
+                				<div class="slds-has-flexi-truncate slds-p-horizontal_medium full forcePageBlockItem forcePageBlockItemEdit" role="listitem" style="" data-aura-class="forcePageBlockItem forcePageBlockItemEdit">
+                					<div class="slds-form-element slds-form-element_edit slds-hint-parent slds-p-vertical_xx-small" >
+                						<div class="slds-form-element__control" >
+                							<div class="uiInput uiInput--default uiInput--input" data-aura-class="uiInput uiInput--default uiInput--input">
+                								<label class="label inputLabel uiLabel-left form-element__label uiLabel" data-aura-class="uiLabel">
+                									<span class="">Sales Price</span>
+                								    <span class="required ">*</span>
+                							    </label>
+                                             <ui:inputNumber class="slds-input" value="{!v.oli.UnitPrice}" format="{!v.oppCurrency + ' #.00'}" aura:id="editPriceInput"/>
+                							</div>
+                						</div>
+                					</div>
+                				</div>
+                			</div>
+                            <!-- 1st row of modal window-->
+
+                            <!-- 2nd row of modal window--> <!-- slds-has-divider_top -->
+                			<div class="slds-grid full forcePageBlockSectionRow" data-aura-class="forcePageBlockSectionRow">
+                				<div class="slds-has-flexi-truncate slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView" role="listitem" data-aura-class="forcePageBlockItem forcePageBlockItemView">
+                					<div class="slds-size_1-of-2 slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                						<div class="test-id__field-label-container">
+                							<span class="test-id__field-label slds-form-element__label">Product</span>
+                						</div>
+                						<div class="slds-form-element__control slds-grid itemBody">
+                							<span class="test-id__field-value slds-form-element__static slds-grow">
+                								<span class="uiOutputText forceOutputLookup" data-aura-class="uiOutputText forceOutputLookup">{!v.oli.Product2.Name}</span>
+                							</span>
+                						</div>
+                					</div>
+                				</div>
+                				<div class="slds-has-flexi-truncate slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView" role="listitem" data-aura-class="forcePageBlockItem forcePageBlockItemView">
+                					<div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element" >
+                						
+                                        <div class="slds-size_1-of-2">
+                                           <div class="slds-text-align_left slds-text-color_weak slds-p-left_medium slds-p-top_medium">Total Price</div>
+                                        </div>
+<!--                                         <div class="test-id__field-label-container" >
+                							<span class="test-id__field-label slds-form-element__label">Total Price</span>
+                						</div> -->
+<!--                 						<div class="slds-form-element__control slds-grid itemBody" >
+                							<span class="test-id__field-value slds-form-element__static slds-grow">
+                								<span  class="forceOutputCurrency" data-aura-class="forceOutputCurrency">{!v.oli.TotalPrice}</span>
+                							</span>
+                						</div> -->
+                                        <div class="slds-size_1-of-2">
+                                            <div class="slds-text-align_left slds-p-left_medium slds-p-top_x-small">
+                                                <ui:outputNumber value="{!v.oli.TotalPrice}" class="slds-text-body--regular" format="{!v.oppCurrency + ' #.00'}"/>
+                                            </div>
+                                        </div>
+
+                					</div>
+                				</div>
+                			</div>
+
+                            <!-- 2nd row of modal window-->
+
+                           <!-- 3rd row of modal window-->
+                			<!--<div class="slds-grid full forcePageBlockSectionRow"  data-aura-class="forcePageBlockSectionRow">
+                				<div class="slds-has-flexi-truncate slds-p-horizontal_medium full forcePageBlockItem forcePageBlockItemEdit" role="listitem" style="" data-aura-class="forcePageBlockItem forcePageBlockItemEdit">
+                				<div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override-slds-form-element" > override(put two hyphens here)slds-form-element
+                						<div class="test-id__field-label-container">
+                								<span class="test-id__field-label slds-form-element__label">Primary</span>
+                                        </div>
+                                        <div class="slds-form-element__control slds-grid itemBody">
+                                            <span class="test-id__field-value slds-form-element__static slds-grow">
+                                                <span class="ui:outputCheckbox forceOutputLookup" data-aura-class="ui:outputCheckbox forceOutputLookup">{!v.oli.Primary__c}</span>
+                                            </span>
+                                        </div>
+                         			</div>
+                            	</div>
+                             </div> -->
+
+
+                        <div class="slds-has-flexi-truncate slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView" role="listitem" data-aura-class="forcePageBlockItem forcePageBlockItemView">
+                            <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element" >
+                                <div class="test-id__field-label-container" >
+                                    <span class="test-id__field-label slds-form-element__label">Transaction Type</span>
+                                </div>
+                               <div class="slds-form-element__control slds-grid itemBody" >
+                                 <span class="test-id__field-value slds-form-element__static slds-grow" >
+                                    <lightning:select name="oliTransTypePicklist" label=" " value="{!v.oli.Transaction_Type__c}">
+                                        <aura:iteration items="{!v.transactionTypeOptions}" var="tt">
+                                            <option value="{!tt}" text="{!tt}"></option>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                 </span>
+                                </div>
+                             </div>
+                         </div>
+<!--                         <td>
+                             <ui:inputSelect class="slds-lookup__search-input slds-input awesomplete" onchange="{!c.change}">
+                             </ui:inputSelect>
+                        </td> -->
+                        <!--3rd row of modal window-->
+
+              <!-- 4th row of modal window--><!-- slds-has-divider_top -->
+              <div class="test-id__section slds-section  slds-is-open full forcePageBlockSection forcePageBlockSectionEdit" data-aura-class="forcePageBlockSection forcePageBlockSectionEdit"><!--render facet: 16988:0-->
+                <div class="test-id__section-content slds-section__content section__content slds-p-top--none">
+                    <div class="slds-form slds-is-editing" role="list" >
+                     <div class="slds-grid full forcePageBlockSectionRow" data-aura-class="forcePageBlockSectionRow">
+                        <div class="slds-has-flexi-truncate slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView" role="listitem"  data-aura-class="forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element" >
+                                    <div class="test-id__field-label-container" >
+                                       <span class="test-id__field-label slds-form-element__label">Created By</span>
+                                    </div>
+                                     <div class="slds-form-element__control slds-grid itemBody" >
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText forceOutputLookup" data-aura-class="uiOutputText forceOutputLookup">{!v.oli.CreatedBy.Name}</span>, 
+                                            <span class="uiOutputDateTime" data-aura-class="uiOutputDateTime">{!v.oli.CreatedDate}</span>
+                                        </span>
+                                     </div>
+                                </div>
+                        </div>
+                        <div class="slds-has-flexi-truncate slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView" role="listitem" data-aura-class="forcePageBlockItem forcePageBlockItemView">
+                            <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element" >
+                                <div class="test-id__field-label-container" >
+                                    <span class="test-id__field-label slds-form-element__label">Last Modified By</span>
+                                </div>
+                               <div class="slds-form-element__control slds-grid itemBody" >
+                                 <span class="test-id__field-value slds-form-element__static slds-grow" >
+                                    <span >
+                                        <span  class="uiOutputText forceOutputLookup" data-aura-class="uiOutputText forceOutputLookup">{!v.oli.LastModifiedBy.Name}</span>, 
+                                        <span  class="uiOutputDateTime" data-aura-class="uiOutputDateTime">{!v.oli.LastModifiedDate}</span>
+                                    </span>
+                                 </span>
+                                </div>
+                             </div>
+                         </div>
+                      </div>
+                    </div>
+                   </div>
+                   </div> 
+                        <!-- 4th row of modal window-->
+
+                 </div>
+               </div>
+              </div>
+             </div>
+          <!--  </div> end of slds-modal-->
+
+                <!-- FOOTER: CANCEL & SAVE BUTTONS -->
+                <!-- ====================================================================================================================================================== -->
+                <footer class="slds-modal__footer">
+
+                           <button name="Cancel" class="slds-button slds-button--neutral" onclick="{!c.CloseModalOne}">Cancel</button>
+                           <button aura:id="saveBtn" name="Save" class="slds-button slds-button--brand" onclick="{!c.Save}">Save</button>    
+
+                </footer>
+                <!-- END OF FOOTER -->
+                <!-- ====================================================================================================================================================== -->
+
+
+        </aura:if>
+    
+       <!-- </div> -->
+      <!-- </div> -->
+
+
+            <!-- OPPORTUNITY PRODUCTS - DELETE WINDOW -->
+            <!-- ====================================== -->
+            <aura:if isTrue="{!v.OLIOperation == 'delete'}" >
+              <div class="slds-text-align_center slds-p-top_medium slds-p-bottom_medium" >Are you sure you want to delete this Opportunity Product?</div>
+                <footer class="slds-modal__footer">
+                     <button name="Cancel" class="slds-button slds-button--neutral" onclick="{!c.CloseModalOne}">Cancel</button>
+
+                     <button name="Delete" class="slds-button slds-button--brand" onclick="{!c.fireDelete}" >Delete</button>
+
+            </footer>
+            </aura:if>
+
+<!--       </div>
+    </section> -->
+         <!-- <div class="slds-backdrop slds-backdrop_open"></div> -->
+  <!-- </div> -->
+
+</aura:component>

@@ -1,0 +1,50 @@
+<aura:component controller = "AdminAmendOnContract" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" >
+	
+    <aura:attribute name="error" type="boolean" default = "false"/>
+    <aura:attribute name="message" type="String" default=""/>	
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!--Custom Styles for Modal Header and Footer--> 
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>
+    
+    <div>
+        <div class="slds-col modal-header slds-modal__header">
+            <p class="slds-page-header__title slds-truncate" title="">Revision Amend</p>
+        </div>
+        
+        <aura:if isTrue="{!v.error}">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert" aura:id="error-msg-Id">  
+                <span class="slds-assistive-text">Error</span>
+                <h2><ui:outputText value="{!v.message}"/></h2>        
+            </div>
+            <div class="slds-col modal-footer slds-modal__footer">  
+            	<lightning:button label="OK" name="OK" variant="brand" onclick="{!c.closeModalOne}" />
+        	</div>
+        </aura:if>
+        	
+        <aura:if isTrue="{!not(v.error)}">
+        	<div class="slds-text-align_center slds-text-heading_medium slds-text-color_inverse" style="padding:0.5rem;background:#16325c;height:80px">
+                <h2><ui:outputText value="{!v.message}"/></h2>
+        	</div>
+            
+        	<div class="slds-col modal-footer slds-modal__footer">
+            	<lightning:button label="Cancel" name="Cancel" variant="brand" onclick="{!c.closeModalOne}" />
+                <lightning:button aura:id="saveBtn" label="Next" name="Save" variant="brand" onclick="{!c.onClickNext}" />
+            </div>
+        </aura:if>        
+    </div>
+</aura:component>

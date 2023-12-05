@@ -1,0 +1,340 @@
+<!--Lightning Component to Display the Asset records related to an Order for Assets & Entitlements Design-->
+<!-- ================================================================== -->
+<!-- PLEASE KEEP THE FORMATTING CLEAN, MAKES DEBUGGING EASY, THANK YOU -->
+<!-- ================================================================== -->
+
+<aura:component controller="ReviewAssetsOrderController" implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <!-- ATTRIBUTES + HANDLERS -->
+    <!-- ====================================================================================================================================================== -->
+    <aura:attribute name="loading" type="Boolean" default="true" />
+    <aura:attribute name="noAssets" type="Boolean" default="false" />
+    <aura:attribute name="assetWrapperList" type="List" />
+    <aura:attribute name="originSObjectName" type="String" />
+    <aura:attribute name="assetStatusOptions" type="String[]" default="--None--,Ready for Provisioning,Provisioning Complete,Sent for Provisioning,Provisioning Incomplete,Marked for Review,New"/>
+    <aura:attribute name="currentSelectedAsset" type="Object" />
+    <aura:attribute name="currentSelectedParentAssetID" type="String" />
+    <aura:attribute name="currentSelectedParentAssetName" type="String" />
+    <aura:attribute name="ascAssetWrapperList" type="List" />
+    <aura:attribute name="currentSelectedAscAssetID" type="String" />
+    <aura:attribute name="currentSelectedAscAssetName" type="String" />
+    <aura:attribute name="error" type="String" />
+    <aura:attribute name="today" type="Date" default=""/>
+    <aura:attribute name="massUpdateMessage" type="String" default="" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!-- MAIN SECTION -->
+    <!-- ====================================================================================================================================================== -->
+    <div id="mainSection" class="slds-show">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="id-of-modalheader-h2" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container" style="height:106%">
+                
+                <!-- MODAL HEADER -->
+                <!-- =============================================================================== -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModalOne}">
+                        <lightning:icon class="slds-button__icon slds-button__icon_large fillColor" iconName="utility:close" size="x-small" alternativeText="search"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">Review All Assets For This Order</h2>
+                </header>
+                
+                <!-- MODAL CONTENT -->
+                <!-- =============================================================================== -->
+                <div class="slds-modal__content slds-grow modal-overflow" id="modal-content-id-1" style="overflow:auto">
+                    <div class="slds-col slds-grid slds-grid_vertical">
+                        <div class="slds-grow slds-p-top--small">
+                            
+                            <!-- Error Message -->
+                            <!-- ====================================== -->
+                            <aura:if isTrue="{!!empty(v.error)}">
+                                <div style="text-align:center;color:red">
+                                    <ui:outputText value="{!v.error}"/>
+                                </div><br/>
+                            </aura:if>
+                            
+                            <aura:if isTrue="{!and(v.loading, empty(v.assetWrapperList))}">
+                                <lightning:spinner variant="brand" size="large"/>
+                            </aura:if>
+                            
+                            <aura:if isTrue="{!v.noAssets}">
+                                <h2 class="slds-text-heading_medium slds-align_absolute-center slds-p-top_xx-large">There are no assets to display.</h2>
+                            </aura:if>
+                            
+                            <aura:if isTrue="{!v.assetWrapperList.length > 0}">
+                                <!-- Added by : Sumit as part of Mass update request from Shipping Team : START-->
+                                <div>
+                                    <header class="slds-modal__header">
+                                        <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">Mass Update</h2>
+                                    </header>
+                                    
+                                    <div class="slds-p-vertical_x-small slds-p-horizontal_large slds-theme_shade">
+                                        
+                                        <div class="slds-form-element">
+                                            <!-- Mass update field -->
+                                            <div class="slds-grid slds-wrap slds-grid--pull-padded slds-p-top--small" >
+                                                <!-- Mass Asset Status update input field-->
+                                                <div class="slds-p-horizontal--small slds-large-size--1-of-3 slds-medium-size--1-of-2  slds-small-size--1-of-1 slds-p-bottom--xx-small" >Status
+                                                    <lightning:select aura:id="aStatus" name="Status" label="" value="" class="inputStatusStyle">
+                                                        <aura:iteration items="{!v.assetStatusOptions}" var="stat">
+                                                            <option value="{!stat}" text="{!stat}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                                
+                                                <!-- Mass Asset Asset identifier -->
+                                                <div class="slds-p-horizontal--small slds-large-size--1-of-3 slds-medium-size--1-of-2  slds-small-size--1-of-1 slds-p-bottom--xx-small" >Asset Identifier                                     	
+                                                    <ui:inputText aura:id="aUniqueIdentifier" value="" class="slds-text-body--regular slds-input" />
+                                                </div>
+                                                
+                                                <!-- Mass Asset Install Date update input field-->
+                                                <div class="slds-p-horizontal--small slds-large-size--1-of-3 slds-medium-size--1-of-2  slds-small-size--1-of-1" >Install Date                                    	
+                                                    <ui:inputDate aura:id="aInstallDate" class="slds-form-element__control slds-input inputDateStyle" displayDatePicker="true" value=""/>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="slds-float--center">
+                                                <div class="slds-button">
+                                                    <lightning:button aura:id="saveMassUpdate" label="Mass Update" name="Mass Update" variant="brand" onclick="{!c.massUpdateAsset}" />
+                                                    <p>{!v.massUpdateMessage}</p>
+                                                </div>
+                                            </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                    <header class="slds-modal__header">
+                                        <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">Asset List</h2>
+                                    </header>
+                                    <!-- Added by : Sumit as part of Mass update request from Shipping Team : END -->
+                                    <div class="table-overflow">
+                                        <table class="slds-table slds-table_bordered slds-table_cell-buffer" role="grid" style="overflow:auto">
+                                            
+                                            <!-- TABLE HEADER -->
+                                            <!-- ====================================== -->
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                    <th scope="col" role="gridcell" class="slds-cell-shrink">
+                                                        <div class="slds-truncate" title="listingNo"></div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="ParentAsset">Parent Asset</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="AssetName">Asset Name</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="AssetType">Asset Type</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="SubscriptionStartDate">Start Date</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="SubscriptionEndDate">End Date</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Quantity">Quantity</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="AssetIdentifier">Asset Identifier</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Status" style="width:150px">Status</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="AssociatedAsset">Associated Asset</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="InstallDate">Install Date</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Project Number">Project Number</div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            
+                                            <!-- TABLE BODY -->
+                                            <!-- ====================================== -->
+                                            <tbody>
+                                                <aura:iteration items="{!v.assetWrapperList}" var="assetWrapper" indexVar="idx">
+                                                    <tr>
+                                                        <td role="gridcell" class="slds-cell-shrink">
+                                                            {!idx + 1} 
+                                                        </td>
+                                                        <td class="slds-text-body--regular" >
+                                                            <button class="slds-button slds-button_icon slds-button_icon-border-filled" aria-haspopup="true" title="Lookup Primary Asset" onclick="{!c.lookupPrimaryAsset}" id="{!assetWrapper.ast.Id}" aura:id="lookupPrimaryAssetBtn">
+                                                                <lightning:icon iconName="utility:add" size="x-small" alternativeText="Lookup Primary Asset"/>
+                                                            </button>
+                                                            <span class="slds-p-left_large">
+                                                                <ui:outputText value="{!assetWrapper.ParentAssetName}" class="slds-text-body--regular"/>
+                                                            </span>
+                                                        </td>
+                                                        <td class="slds-text-body--regular" >
+                                                            <ui:outputText value="{!assetWrapper.ast.Name}" class="slds-text-body--regular"/>
+                                                        </td>
+                                                        <td class="slds-text-body--regular" >
+                                                            <ui:outputText value="{!assetWrapper.ast.Asset_Type__c}" class="slds-text-body--regular"/>
+                                                        </td>
+                                                        <td class="slds-text-body--regular" >
+                                                            <ui:outputDate value="{!assetWrapper.ast.SBQQ__SubscriptionStartDate__c}" class="slds-text-body--regular"/>
+                                                        </td>
+                                                        <td class="slds-text-body--regular" >
+                                                            <ui:inputDate displayDatePicker="true" value="{!assetWrapper.SubscriptionEndDate}" class="slds-text-body--regular slds-scope slds-input"/>
+                                                        </td>
+                                                        <td class="slds-text-body--regular" >
+                                                            <ui:outputNumber value="{!assetWrapper.ast.Quantity}" class="slds-text-body--regular"/>
+                                                        </td>
+                                                        <td class="slds-text-body--regular" >
+                                                            <ui:inputText value="{!assetWrapper.AssetIdentifier}" class="slds-text-body--regular slds-input"/>
+                                                        </td>
+                                                        <td class="slds-text-body--regular ">
+                                                            <lightning:select name="assetStatusPicklist" label=" " value="{!assetWrapper.Status}">
+                                                                <aura:iteration items="{!v.assetStatusOptions}" var="stat">
+                                                                    <option value="{!stat}" text="{!stat}"></option>
+                                                                </aura:iteration>
+                                                            </lightning:select>
+                                                        </td>
+                                                        <td class="slds-text-body--regular" >
+                                                            <button class="slds-button slds-button_icon slds-button_icon-border-filled" aria-haspopup="true" title="Lookup Associated Asset" onclick="{!c.lookupAssociatedAsset}" id="{!assetWrapper.ast.Id}" aura:id="lookupAssociatedAssetBtn">
+                                                                <lightning:icon iconName="utility:add" size="x-small" alternativeText="Lookup Primary Asset"/>
+                                                            </button>
+                                                            <span class="slds-p-left_large">
+                                                                <ui:outputText value="{!assetWrapper.AssociatedAssetName}" class="slds-text-body--regular"/>
+                                                            </span>
+                                                        </td>
+                                                        <td class="slds-text-body--regular" >
+                                                            <ui:inputDate value="{!assetWrapper.InstallDate}" class="slds-text-body--regular slds-input slds-size_3-of-3" displayDatePicker="true"/>
+                                                        </td>
+                                                        <td class="slds-text-body--regular" >
+                                                            <ui:outputText value="{!assetWrapper.ast.Project_Number__c}" class="slds-text-body--regular"/>
+                                                        </td>
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <!-- CASE: THERE ARE NO ASSETS -->
+                                    <!-- ====================================== -->
+                                    <!--<aura:set attribute="else" >
+                     <h2 class="slds-text-heading_medium slds-align_absolute-center slds-p-top_xx-large">There are no assets to display.</h2>
+                    </aura:set>-->
+                                </aura:if>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- MODAL FOOTER -->
+                    <!-- =============================================================================== -->
+                    <footer class="slds-modal__footer">
+                        
+                        <!-- BUTTONS: RIGHT CORNER -->
+                        <!-- ====================================== -->
+                        <div class="slds-float--right">
+                            <div class="slds-button">
+                                <lightning:button label="Cancel" name="Cancel" onclick="{!c.closeModalOne}" />
+                                <lightning:button aura:id="saveBtn" label="Save" name="Save" variant="brand" onclick="{!c.save}" />
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+                
+                <!-- PRIMARY ASSET SELECTION MODAL -->
+                <!-- =============================================================================== -->
+                <c:UtilityModal title="Please Select New Primary Asset"
+                                confirmLabel="OK"
+                                cancelLabel="Cancel"
+                                onCancelClick="{!c.closePrimaryAssetModal}"
+                                onSaveClick="{!c.selectPrimaryAsset}"
+                                aura:id="primaryAssetModal"
+                                containerCSSStyle="width:70%">
+                    <aura:if isTrue="{!v.assetWrapperList.length > 0}">
+                        <div class="table-overflow">
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer" role="grid" style="overflow:auto">
+                                
+                                <!-- MODAL TABLE HEADER -->
+                                <!-- ====================================== -->
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col" role="gridcell" class="slds-cell-shrink">
+                                            <div class="slds-truncate" title="ParentAssetName">Parent Asset Name</div>
+                                        </th>
+                                        <th scope="col" role="gridcell" class="slds-cell-shrink">
+                                            <div class="slds-truncate" title="checkBox"></div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                
+                                <!-- MODAL TABLE BODY -->
+                                <!-- ====================================== -->
+                                <tbody>
+                                    <aura:iteration items="{!v.assetWrapperList}" var="assetWrapper" >
+                                        <aura:if isTrue="{! and(and(assetWrapper.ast.Id != v.currentSelectedParentAssetID, assetWrapper.ast.Id != v.currentSelectedAsset.ast.Id), assetWrapper.ast.Product2.Is_Parent_Asset__c)}">
+                                            <tr>
+                                                <td class="slds-text-body--regular" >
+                                                    <ui:outputText value="{!assetWrapper.ast.Name}" class="slds-text-body--regular"/>
+                                                </td>
+                                                <td class="slds-text-body--regular" >
+                                                    <ui:inputRadio label=" " aura:id="parentAssetCheckbox"  text="{!assetWrapper.ast.Id}" name="parentAssetCheckbox" change="{!c.onParentAssetRadioSelect}"/>
+                                                </td>
+                                            </tr>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                        </div>
+                    </aura:if>
+                </c:UtilityModal>
+                
+                <!-- ASSOCIATED ASSET SELECTION MODAL -->
+                <!-- =============================================================================== -->
+                <c:UtilityModal title="Please Select New Associated Asset"
+                                confirmLabel="OK"
+                                cancelLabel="Cancel"
+                                onCancelClick="{!c.closeAssAssetModal}"
+                                onSaveClick="{!c.selectAssociatedAsset}"
+                                aura:id="associatedAssetModal"
+                                containerCSSStyle="width:70%">
+                    <aura:if isTrue="{!v.assetWrapperList.length > 0}">
+                        <div class="table-overflow" style="overflow:auto">
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer" role="grid" style="overflow:auto">
+                                
+                                <!-- MODAL TABLE HEADER -->
+                                <!-- ====================================== -->
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col" role="gridcell" class="slds-cell-shrink">
+                                            <div class="slds-truncate" title="ParentAssetName">Associated Asset Name</div>
+                                        </th>
+                                        <th scope="col" role="gridcell" class="slds-cell-shrink">
+                                            <div class="slds-truncate" title="checkBox"></div>
+                                        </th>
+                                    </tr>
+                                </thead>    
+                                
+                                <!-- MODAL TABLE BODY -->
+                                <!-- ====================================== -->
+                                <tbody>
+                                    <aura:iteration items="{!v.ascAssetWrapperList}" var="assetWrapper" >
+                                        <aura:if isTrue="{! and(assetWrapper.ast.Id != v.currentSelectedParentAssetID, assetWrapper.ast.Id != v.currentSelectedAsset.ast.Id)}">
+                                            <tr>
+                                                <td class="slds-text-body--regular" >
+                                                    <ui:outputText value="{!assetWrapper.ast.Name}" class="slds-text-body--regular"/>
+                                                </td>
+                                                <td class="slds-text-body--regular" >
+                                                    <ui:inputRadio label=" " aura:id="associatedAssetRadio"  text="{!assetWrapper.ast.Id}" name="associatedAssetRadio" change="{!c.onAscAssetRadioSelect}"/>
+                                                </td>
+                                            </tr>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </tbody>                        
+                            </table>
+                        </div>
+                    </aura:if>
+                </c:UtilityModal>
+            </section>
+            
+            <!-- SHADED BACKDROP -->
+            <!-- =============================================================================== -->
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:component>

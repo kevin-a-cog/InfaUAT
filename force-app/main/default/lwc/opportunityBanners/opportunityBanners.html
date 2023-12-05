@@ -1,0 +1,89 @@
+<template>
+    <template if:true={isAccountHold}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{accountHold}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={isAccountHoldLegalCustomerBacklist}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.accountHoldLegalCustomerBacklistBanner}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={StatusContent}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.quoteBannerWarningLabel}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={StatusContent2}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.quoteBannerWarningLabel2}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={provisionEnvMissingBanner}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.opportunityWarningLabel}</b>
+            </div>
+        </div>
+    </template>
+    
+    <template if:true={optyprimaryEst}>	
+        <div class="slds-p-bottom_x-small">	
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">	
+                <b>{labels.OptyPrimaryEstimatorWarningLabel}</b>	
+            </div>	
+        </div>	
+    </template>
+
+    <template if:true={optyprimaryEstFromQuote}>	
+        <div class="slds-p-bottom_x-small">	
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">	
+                <b>{labels.OptyPrimaryEstimatorWarningLabel2}</b>	
+            </div>	
+        </div>	
+    </template>
+
+    <template if:true={newLogoSpiff}>
+          <p class="ribbon" style="width: 100%;">
+            <span class="text"><strong class="bold">{labels.opportunitySPIFF}</strong></span>
+          </p>
+    </template>
+
+    <template if:true={hasIPUErrors}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{ipuErrorMessage}</b>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={checkAllocation}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.opptyBannerWarningLabel}</b>
+            </div>
+        </div>
+    </template>
+    
+    <template if:true={showOutOfSyncBanner}>
+        <div class="slds-p-bottom_x-small">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                <b>{labels.OpportunityOutOfSync}</b>
+            </div>
+        </div>
+        
+    </template>
+
+</template>

@@ -1,0 +1,7 @@
+@media screen and (max-width: 768px) {
+    .in-feeds-heading {
+        margin-left:auto;
+        margin-right: auto;
+        width: 92%;
+    }
+}

@@ -1,0 +1,43 @@
+<aura:component controller="RecordType_controller" implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickActionwithoutHeader,flexipage:availableForAllPageTypes" access="global" >
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="radioGrpValue" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="sObjectName" type="String"/>
+    <aura:attribute name="Account" type="String"/>    
+    <aura:attribute name="AccountLOB" type="String"/>
+    <aura:attribute name="objToCreate" type="String" default="Related_Opportunity_Plan__c"/>    
+    
+    <div class="slds-col modal-header slds-modal__header">
+        <h2 class="title slds-text-heading--medium">New Interlock</h2>
+    </div>
+    
+    <!--to display the record tyoes Radio buttons-->
+  	<aura:if isTrue="{!v.options}">
+    <div class="slds-form">
+    	<div class="slds-form-element__control">
+    			<div class="slds-clearfix">
+                   <div class="slds-p-horizontal_xx-large">
+                       <div class="slds-p-top_medium">
+                           <h3>Select a record Type</h3>
+                   			<div class="slds-align_absolute-center">
+                           		<lightning:radioGroup name="radioGroupRequired"
+                          			options="{! v.options }"
+                          			value="{! v.radioGrpValue }"
+                          			type="radio"/>
+                           	</div>
+                       </div>
+                    </div>
+                    <!--the cancel and save button-->
+                    <div class="slds-p-top_x-large">
+                    <div class="slds-col modal-footer slds-modal__footer">
+                            <lightning:button variant="neutral" label="Cancel" onclick="{! c.CloseModalOne }"/>
+                            <lightning:button aura:id="saveBtn" label="Next" name="Save" variant="brand" onclick="{!c.handleClick}"/> 
+                    </div>
+                        </div>
+               	</div>
+            </div>
+       </div>
+    </aura:if>
+</aura:component>

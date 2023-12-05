@@ -1,0 +1,39 @@
+<template>
+    <div class="infa-join-community-container">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <a href={groupCatalogUrl} class="in-section-link-header">
+                    <div class="in-section-heading in-section-heading-white">
+                        Top User Groups
+                    </div>
+                    <lightning-icon class="chevron-down right-chev"
+                        icon-name="utility:chevronright" size="x-small">
+                    </lightning-icon>
+                </a>
+            </div>
+            <div class="row infacom-join-community-tiles">
+                <template if:true={allGroupsList}>
+                    <template for:each={allGroupsList} for:item="groupItem">
+                        <div class="col-sm-4" key={groupItem.Id}>
+                            <div class="infa-join-community">
+                                <div class="row infa-join-tile">
+                                    <div class="col-sm-3 infa-join-community-icon"><img
+                                            src={communityLogo} alt=""></div>
+                                    <div class="col-sm-7 infa-join-community-names">
+                                        <div class="infa-join-community-header">{groupItem.Name}</div>
+                                    </div>
+                                    <div class="col-sm-2 infa-join-community-join">
+                                        <div class="infa-join-community-add" data-value={groupItem.Id}  data-id={groupItem.Name} style="cursor: pointer;" onclick={handleGroupRedirect}>
+                                            <img src={addLogo} alt="Follow" data-value={groupItem.Id} style="cursor: pointer;">                                    
+                                            <div class="infa-join-community-background"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>

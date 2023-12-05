@@ -1,0 +1,20 @@
+<template>
+    <lightning-card> 
+            <div class="slds-modal__header">
+            <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Create Ticket</h1>
+            <p class="slds-m-top_x-small">Please use this to send a mail to ServiceNow to create a ticket.</p>
+            </div>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <div style="padding-left: 10px;">
+                    <lightning-input class="email" name="Email" onchange={handleEmailInputChange} value={snowEmail} label="Email ID" pattern="[A-Za-z0-9._-]+@[a-z0-9-]+\.[a-z]{2,}$" message-when-pattern-mismatch="Please enter a valid email" required></lightning-input>
+                </div>  
+                <div style="padding-left: 10px;"> <!-- width: 200px">-->
+                    <lightning-textarea name="Notes" onchange={handleNotesInputChange} value={snowNotes} label="Notes" ></lightning-textarea>
+                </div>
+            </div>
+            <div class="slds-modal__footer">                
+                <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={closeAction}>Cancel</button>
+                <button class="slds-button slds-button_brand" disabled={validated} onclick={saveAction}>Send Email</button>
+            </div>
+    </lightning-card>
+</template>

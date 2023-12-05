@@ -1,0 +1,2118 @@
+﻿/* Styles */
+
+
+html .SharepointToSalesforceMigrationCss {}
+
+body .SharepointToSalesforceMigrationCss {
+  margin: 0;
+  font: 11px/14px Verdana, Arial, Helvetica, sans-serif ;
+  color: #333;
+  height: 100%;
+}
+
+.SharepointToSalesforceMigrationCss h1, .SharepointToSalesforceMigrationCss h2, .SharepointToSalesforceMigrationCss h3, .SharepointToSalesforceMigrationCss h4, .SharepointToSalesforceMigrationCss h5, .SharepointToSalesforceMigrationCss h6 {
+  font: 11px/14px Verdana, Arial, Helvetica, sans-serif ;
+}
+
+.SharepointToSalesforceMigrationCss H5.ms-rteElement-H5 {
+  -ms-name: "Heading 5";
+}
+
+.SharepointToSalesforceMigrationCss H6.ms-rteElement-H6 {
+  -ms-name: "Heading 6";
+}
+
+.SharepointToSalesforceMigrationCss .ms-rteFontFace-12 {
+  -ms-name: "Courier New";
+  font-family: "Courier New";
+}
+
+.SharepointToSalesforceMigrationCss .ms-rteStyle-Normal {
+  color: #333 !important;
+}
+
+.SharepointToSalesforceMigrationCss a {
+  color: #369;
+  text-decoration: none;
+}
+
+.SharepointToSalesforceMigrationCss a:hover {
+  text-decoration: underline;
+}
+
+.SharepointToSalesforceMigrationCss img {
+  border: 0;
+}
+
+.SharepointToSalesforceMigrationCss fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.SharepointToSalesforceMigrationCss form {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.SharepointToSalesforceMigrationCss select {
+  vertical-align: middle;
+}
+
+.SharepointToSalesforceMigrationCss textarea {
+  vertical-align: middle;
+}
+
+.SharepointToSalesforceMigrationCss input {
+  vertical-align: middle;
+}
+
+.SharepointToSalesforceMigrationCss #wrapperNew {
+  margin: 0 auto;
+  width: 100%;
+  min-height: 100%;
+  background: #fff;
+}
+
+.SharepointToSalesforceMigrationCss * html #wrapperNew {
+  height: 100%;
+}
+
+.SharepointToSalesforceMigrationCss #wrapper {
+  margin: 0 auto;
+  width: 930px;
+  min-height: 100%;
+  background: #fff;
+}
+
+.SharepointToSalesforceMigrationCss * html #wrapper {
+  height: 100%;
+}
+
+.SharepointToSalesforceMigrationCss #header {
+  /*height:71px;
+	background: url(../images/bg-header.gif) repeat-x;
+	width:879px;
+	padding:0 23px 0 28px;
+	margin:0 0 14px;*/
+}
+
+.SharepointToSalesforceMigrationCss #ctl00_PlaceHolderMain_PnlPDFExport3 {
+  width: 940px;
+  margin: 0px auto;
+}
+
+/*.logo{
+	background: url(../images/bg-logo.gif) no-repeat;
+	width:151px;
+	height:38px;
+	overflow: hidden;
+	display:block;
+}*/
+
+.SharepointToSalesforceMigrationCss .box-logo {
+  width: 166px;
+  overflow: hidden;
+  border-right: 1px solid #b3c8dd;
+  float: left;
+}
+
+.SharepointToSalesforceMigrationCss .logo a {
+  width: 151px;
+  height: 38px;
+  display: block;
+}
+
+.SharepointToSalesforceMigrationCss .logo span {
+  display: block;
+  text-indent: -9999px;
+}
+
+.SharepointToSalesforceMigrationCss .slogan {
+  float: right;
+  width: 111px;
+  height: 18px;
+  text-indent: -9999px;
+  background: url(../images/bg-slogan.gif) no-repeat;
+  margin: 14px 6px 0 0;
+  display: inline;
+}
+
+.SharepointToSalesforceMigrationCss .area {
+  padding: 16px 0 0;
+  width: 300px;
+  overflow: hidden;
+  float: left;
+}
+
+.SharepointToSalesforceMigrationCss .help {
+  float: right;
+  color: #fff;
+  font: bold 9px/12px Verdana, Arial, Helvetica, sans-serif;
+  background: url(../images/bg-pdf.gif) no-repeat;
+  padding: 0 0 0 15px;
+  margin: 8px 0 0;
+  display: inline;
+}
+
+.SharepointToSalesforceMigrationCss .tip {
+  float: right;
+  color: #fff;
+  font: bold 9px/12px Verdana, Arial, Helvetica, sans-serif;
+  background: url(../images/bg-pdf.gif) no-repeat;
+  background-position: 15px;
+  padding: 0 0 0 30px;
+  margin: 8px 0 0;
+  display: inline;
+}
+
+.SharepointToSalesforceMigrationCss .help:hover {
+  color: #fff;
+}
+
+.SharepointToSalesforceMigrationCss .helpuc {
+  float: right;
+  color: #336699;
+  font: bold 10px Verdana, Arial, Helvetica, sans-serif;
+  background: url(../images/PDFicons.gif) no-repeat;
+  padding: 0 0 0 12px;
+  margin: 4px 0 0;
+  display: inline;
+}
+
+.SharepointToSalesforceMigrationCss .helpuc:hover {
+  color: #336699;
+}
+
+.SharepointToSalesforceMigrationCss .Authoring {
+  float: right;
+  color: #fff;
+  font: bold 9px/12px Verdana, Arial, Helvetica, sans-serif;
+  padding: 0 0 0 15px;
+  margin: 8px 0 0;
+  display: inline;
+}
+
+.SharepointToSalesforceMigrationCss .Authoring:hover {
+  color: #fff;
+}
+
+.SharepointToSalesforceMigrationCss #main {
+  padding: 0 20px 22px;
+  width: 890px;
+  overflow: hidden;
+  clear: both;
+}
+
+.SharepointToSalesforceMigrationCss .breadcrumbs {
+  margin: 0 0 11px 5px;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.SharepointToSalesforceMigrationCss .breadcrumbs li {
+  float: left;
+  line-height: 12px;
+  background: url(../images/arrow.gif) no-repeat 0 4px;
+  padding: 0 12px;
+  margin: 0 0 0 -7px;
+  word-spacing: -1px;
+}
+
+.SharepointToSalesforceMigrationCss .breadcrumbs li a {
+  text-decoration: none;
+  word-spacing: -1px;
+}
+
+.SharepointToSalesforceMigrationCss .breadcrumbs li a:visited {
+  /* color : #336699; */
+}
+
+.SharepointToSalesforceMigrationCss .breadcrumbs li a:hover {
+  text-decoration: underline;
+}
+
+.SharepointToSalesforceMigrationCss .breadcrumbs2010 {
+  margin: 0 0 11px 5px;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.SharepointToSalesforceMigrationCss .breadcrumbs2010 li {
+  float: left;
+  line-height: 12px;
+  padding: 0 12px;
+  margin: 0 0 0 -7px;
+  word-spacing: -1px;
+  font-size: 11px;
+}
+
+.SharepointToSalesforceMigrationCss .breadcrumbs2010 li a {
+  text-decoration: underline;
+  word-spacing: -1px;
+}
+
+.SharepointToSalesforceMigrationCss .breadcrumbs2010 li a:hover {
+  text-decoration: underline;
+}
+
+.SharepointToSalesforceMigrationCss .breadcrumbs2010 li a:visited {
+  color: #336699;
+}
+
+.SharepointToSalesforceMigrationCss .info {
+  width: 100%;
+  overflow: hidden;
+  background: url(../images/bg-info.gif) repeat-y;
+  margin: 0 0 17px;
+}
+
+.SharepointToSalesforceMigrationCss .info .holder {
+  background: url(../images/bg-holder.gif) no-repeat;
+}
+
+.SharepointToSalesforceMigrationCss .info .frame {
+  background: url(../images/bg-frame.gif) no-repeat 0 100%;
+  width: 878px;
+  padding: 5px 6px 10px;
+}
+
+.SharepointToSalesforceMigrationCss .title {
+  width: 862px;
+  background: url(/_layouts/Preview/images/bg-title.jpg) no-repeat;
+  padding: 8px;
+  overflow: hidden;
+}
+
+.SharepointToSalesforceMigrationCss .title .titleright {
+  text-align: right;
+}
+
+.SharepointToSalesforceMigrationCss .title .titleright a {
+  color: #fff;
+  font-weight: normal;
+  margin: 0;
+  font-size: 12px;
+}
+
+.SharepointToSalesforceMigrationCss .title .titleright a:hover {
+  text-decoration: underline;
+}
+
+.SharepointToSalesforceMigrationCss #content {
+  width: 100%;
+  overflow: hidden;
+}
+
+.SharepointToSalesforceMigrationCss .info h1 {
+  color: #fff;
+  font-size: 14px !important;
+  margin: 0;
+  font-weight: normal;
+  padding-top: 0px !important;
+}
+
+.SharepointToSalesforceMigrationCss .twocolumns h2 {
+  color: #fff;
+  font-size: 14px;
+  margin: 0;
+  font-weight: normal;
+}
+
+.SharepointToSalesforceMigrationCss .search {
+  width: 850px;
+  overflow: hidden;
+  padding: 0 20px 0 8px;
+  margin: -3px 0 4px;
+}
+
+.SharepointToSalesforceMigrationCss.sidebar .row {
+  height: 1%;
+  overflow: hidden;
+  padding: 0 0 6px;
+}
+
+.SharepointToSalesforceMigrationCss .questions .row {
+  height: 1%;
+  overflow: hidden;
+  padding: 0 0 6px;
+}
+
+.SharepointToSalesforceMigrationCss .search .row {
+  height: 1%;
+  overflow: hidden;
+  padding: 0 0 6px;
+}
+
+.SharepointToSalesforceMigrationCss .questions .row {
+  padding: 0 10px 3px !important;
+}
+
+.SharepointToSalesforceMigrationCss .search input {
+  padding: 0;
+  font: 10px/12px Verdana, Arial, Helvetica, sans-serif;
+  background: none;
+  border: 0;
+  float: left;
+  width: 719px;
+  margin: 0;
+}
+
+.SharepointToSalesforceMigrationCss .search .text {
+  background: url(../images/bg-input.gif) repeat-x;
+  border: 1px solid #9f9f9f;
+  width: 719px;
+  height: 12px;
+  float: left;
+  padding: 3px 5px;
+  margin: 3px 0 0;
+}
+
+.SharepointToSalesforceMigrationCss .search .btn-search {
+  float: right;
+  width: 108px;
+  height: 29px;
+  color: #690;
+  background: url(../images/bg-btn-search.gif) no-repeat;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0 0 7px 10px;
+  margin: 0 2px 0 0;
+  display: inline;
+}
+
+.SharepointToSalesforceMigrationCss .search label {
+  font-weight: bold;
+  float: left;
+  margin: 0 8px 0 0;
+}
+
+.SharepointToSalesforceMigrationCss .search .products {
+  width: 308px;
+  overflow: hidden;
+  float: left;
+}
+
+.SharepointToSalesforceMigrationCss .search .chek {
+  float: left;
+  width: 530px;
+  overflow: hidden;
+  margin: 0 0 0 7px;
+  display: inline;
+}
+
+.SharepointToSalesforceMigrationCss .search .chek ul label {
+  font-weight: normal;
+  color: #000;
+  margin: 0;
+  line-height: 16px;
+}
+
+.SharepointToSalesforceMigrationCss .chek ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  float: left;
+  width: 465px;
+}
+
+.chek ul li {
+  float: left;
+  padding: 0 12px 0 0;
+}
+
+#chk3 {
+  width: 16px;
+  height: 16px;
+  margin: 0 4px 0 0;
+}
+
+#chk2 {
+  width: 16px;
+  height: 16px;
+  margin: 0 4px 0 0;
+}
+
+#chk1 {
+  width: 16px;
+  height: 16px;
+  margin: 0 4px 0 0;
+}
+
+.SharepointToSalesforceMigrationCss .search select {
+  padding: 0;
+  color: #690;
+  width: 190px;
+  font: 10px/14px Verdana, Arial, Helvetica, sans-serif;
+  float: left;
+}
+
+.SharepointToSalesforceMigrationCss .twocolumns {
+  width: 100%;
+  background: url(../images/bg-twocolumns.gif) repeat-y;
+  margin: 0 0 20px;
+}
+
+.SharepointToSalesforceMigrationCss .twocolumns .holder {
+  background: url(../images/bg-holder2.gif) no-repeat;
+}
+
+.SharepointToSalesforceMigrationCss .twocolumns .frame {
+  background: url(../images/bg-frame2.gif) no-repeat 0 100%;
+  width: 890px;
+  padding: 5px 0 10px;
+  overflow: hidden;
+}
+
+.SharepointToSalesforceMigrationCss .new {
+  float: left;
+  width: 456px;
+  overflow: hidden;
+  padding: 0 6px;
+}
+
+.SharepointToSalesforceMigrationCss .links {
+  float: left;
+  width: 456px;
+  overflow: hidden;
+  padding: 0 6px;
+}
+
+.SharepointToSalesforceMigrationCss .new {
+  float: right;
+  width: 390px;
+  padding: 0 6px 0 7px;
+}
+
+.SharepointToSalesforceMigrationCss .links .title {
+  width: 448px !important;
+  padding: 0 0 0 8px;
+  margin: 0;
+}
+
+.SharepointToSalesforceMigrationCss .title-end {
+  background: url(/_layouts/Preview/images/bg-title.jpg) no-repeat 100% 0;
+  height: 24px;
+  padding: 8px 8px 3px 0;
+  margin: 0 0 14px;
+}
+
+.SharepointToSalesforceMigrationCss .new .title-end {
+  margin: 0 0 13px;
+}
+
+.SharepointToSalesforceMigrationCss .new .title {
+  width: 381px;
+  padding: 0 0 0 8px;
+  margin: 0;
+}
+
+.SharepointToSalesforceMigrationCss .new .list {
+  margin: 0;
+  padding: 0 0 20px;
+  list-style: none;
+  overflow: hidden;
+}
+
+.SharepointToSalesforceMigrationCss .links .list {
+  margin: 0;
+  padding: 0 0 20px;
+  list-style: none;
+  overflow: hidden;
+}
+
+.SharepointToSalesforceMigrationCss .new .list {
+  padding: 0 18px 0 0 !important;
+  width: 363px;
+}
+
+.SharepointToSalesforceMigrationCss .new .list li {
+  display: block;
+  padding: 0 0 10px 12px;
+  background: url(../images/arrow2.gif) no-repeat 0 4px;
+}
+
+.SharepointToSalesforceMigrationCss .links .list li {
+  display: block;
+  padding: 0 0 10px 12px;
+  background: url(../images/arrow2.gif) no-repeat 0 4px;
+}
+
+.SharepointToSalesforceMigrationCss .new .list li {
+  background: url(../images/arrow2.gif) no-repeat 0 3px;
+  padding: 0 0 6px 12px;
+}
+
+.SharepointToSalesforceMigrationCss #footer {
+  width: 886px;
+  height: 22px;
+  margin: -22px auto 0;
+  background: #3e7bb9 url(../images/bg-footer.gif) repeat-x;
+  overflow: hidden;
+  padding: 0 22px;
+}
+
+.SharepointToSalesforceMigrationCss #footer p {
+  font-size: 9px;
+  color: #fff;
+  margin: 4px 0 0;
+}
+
+.SharepointToSalesforceMigrationCss .footer-nav {
+  float: right;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.SharepointToSalesforceMigrationCss .footer-nav li {
+  display: inline;
+  padding: 0 3px 0 7px;
+  margin: 0 0 0 -1px;
+  background: url(../images/separator.gif) no-repeat 0 60%;
+}
+
+.SharepointToSalesforceMigrationCss .footer-nav li a {
+  color: #fff;
+  word-spacing: -1px;
+}
+
+.SharepointToSalesforceMigrationCss .footer-nav li a:hover {
+  color: #fff;
+}
+
+/* inner */
+
+.SharepointToSalesforceMigrationCss .inner {
+  width: 889px;
+  padding: 0 20px 35px 25px !important;
+}
+
+.SharepointToSalesforceMigrationCss .inner .breadcrumbs {
+  margin: 0 0 27px;
+}
+
+.SharepointToSalesforceMigrationCss .inner .breadcrumbs2010 {
+  margin: 0 0 27px;
+}
+
+.SharepointToSalesforceMigrationCss .innerNew {
+  width: 100%;
+  padding: 0 0px 35px 0px !important;
+}
+
+.SharepointToSalesforceMigrationCss .innerNew .breadcrumbs {
+  padding: 15px 0px 5px 0px;
+}
+
+.SharepointToSalesforceMigrationCss .innerNew .breadcrumbs2010 {
+  margin: 0 0 27px;
+}
+
+.SharepointToSalesforceMigrationCss .noactive {
+  background: url(/_layouts/images/INFA_KB/arrow3.gif) no-repeat 0 4px !important;
+}
+
+.SharepointToSalesforceMigrationCss #data {
+  float: left;
+  width: 608px;
+}
+
+.SharepointToSalesforceMigrationCss #data:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.SharepointToSalesforceMigrationCss #data h1 {
+  font-size: 14px;
+  color: #333;
+  line-height: 15px;
+  margin: 0 0 30px !important;
+}
+
+.SharepointToSalesforceMigrationCss #data h2 {
+  font-size: 12px;
+  color: #369;
+  margin: 0;
+}
+
+.SharepointToSalesforceMigrationCss .tabbar {
+  font-size: 15px;
+  color: #369;
+  margin: 0;
+  font-weight: bold;
+  padding-top: 8px;
+  padding-top: 10px;
+  width: 610px;
+}
+
+.SharepointToSalesforceMigrationCss #td_Applies_To {
+  width: 608px;
+}
+
+.SharepointToSalesforceMigrationCss .bodypage {
+  border-width: 100%;
+  padding-bottom: 8px;
+}
+
+.SharepointToSalesforceMigrationCss .bodypageHeading {
+  border-width: 100%;
+  padding-bottom: 8px;
+  font-weight: bold;
+}
+
+.SharepointToSalesforceMigrationCss .section {
+  overflow: hidden;
+  height: 1%;
+  border-bottom: 1px solid #c8c8c8;
+  margin: 0 0 13px;
+}
+
+.SharepointToSalesforceMigrationCss .section p {
+  margin: 0 0 13px;
+}
+
+.SharepointToSalesforceMigrationCss .section ul {
+  margin: 0;
+  padding: 0 0 15px 33px;
+  list-style: none;
+}
+
+.SharepointToSalesforceMigrationCss .section ul li {
+  line-height: 14px;
+  background: url(../images/bullet.gif) no-repeat 0 6px;
+  padding: 0 0 0 8px;
+}
+
+.SharepointToSalesforceMigrationCss .section .box-area {
+  width: 100%;
+  overflow: hidden;
+  padding: 0 0 15px;
+}
+
+.SharepointToSalesforceMigrationCss .section dl {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.section dt {
+  margin: 0 7px 0 0;
+  float: left;
+  font-weight: bold;
+}
+
+.SharepointToSalesforceMigrationCss .section dd {
+  float: left;
+  margin: 0;
+}
+
+.SharepointToSalesforceMigrationCss .inf {
+  float: left;
+  margin: 0 5px 0 0;
+}
+
+.SharepointToSalesforceMigrationCss .form-feedback h2 {
+  margin: 0 0 5px !important;
+}
+
+.SharepointToSalesforceMigrationCss .form-feedback p {
+  margin: 0 0 2px;
+}
+
+.SharepointToSalesforceMigrationCss .form-feedback textarea {
+  width: 278px;
+  max-height: 102px;
+  max-width: 278px;
+  height: 102px;
+  margin: 0 0 7px;
+  border: 1px solid #7f9db9;
+  font: 10px/12px Verdana, Arial, Helvetica, sans-serif;
+  padding: 0;
+  overflow: auto;
+}
+
+.SharepointToSalesforceMigrationCss .form-feedback h3 {
+  font-size: 10px;
+  margin: 0 0 4px;
+}
+
+.SharepointToSalesforceMigrationCss .questions {
+  overflow: hidden;
+  height: 1%;
+  margin: 0 0 10px;
+}
+
+.SharepointToSalesforceMigrationCss .questions input {
+  float: left;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  margin: 0 2px;
+}
+
+.SharepointToSalesforceMigrationCss .questions label {
+  float: left;
+  /* font: 10px/12px Verdana, Arial, Helvetica, sans-serif; */
+  color: #333;
+}
+
+.SharepointToSalesforceMigrationCss .btn-submit {
+  width: 108px;
+  height: 29px;
+  background: url(../images/bg-btn-search.gif) no-repeat;
+  font: bold 10px/12px Verdana, Arial, Helvetica, sans-serif;
+  color: #690;
+  border: none;
+  padding: 0 0 5px 10px;
+  display: block;
+  cursor: pointer;
+}
+
+.SharepointToSalesforceMigrationCss .inner .btn-submit {
+  margin: 0 0 0 -2px;
+  position: relative;
+}
+
+.SharepointToSalesforceMigrationCss .inner .sidebar {
+  float: right;
+  background: none !important;
+  width: 222px;
+  padding: 35px 0 0 !important;
+}
+
+.SharepointToSalesforceMigrationCss .innerNew .btn-submit {
+  margin: 0 0 0 -2px;
+  position: relative;
+}
+
+.SharepointToSalesforceMigrationCss .innerNew .sidebar {
+  float: right;
+  background: none !important;
+  width: 222px;
+  padding: 35px 0 0 !important;
+}
+
+.SharepointToSalesforceMigrationCss .sidebar .row ul {
+  float: right;
+  margin: 0;
+  padding: 4px 0 0;
+  list-style: none;
+}
+
+.SharepointToSalesforceMigrationCss .sidebar .row li {
+  float: left;
+  display: inline;
+  margin: 0 10px 0 0;
+}
+
+.SharepointToSalesforceMigrationCss .sidebar .row li img {
+  display: block;
+}
+
+.SharepointToSalesforceMigrationCss .btn-feedback {
+  float: right;
+  width: 85px;
+  height: 22px;
+  background: url(../images/btn-feedback.gif) no-repeat;
+  font-weight: bold;
+  color: #690;
+  padding: 2px 0 0;
+  text-align: center;
+}
+
+.SharepointToSalesforceMigrationCss .btn-feedback:hover {
+  text-decoration: none;
+}
+
+.SharepointToSalesforceMigrationCss .sidebar {
+  width: 222px;
+  overflow: hidden;
+  float: left;
+  background: url(../images/bg-rate-c.gif) repeat-y;
+}
+
+.SharepointToSalesforceMigrationCss .rate {
+  width: 600px;
+  overflow: hidden;
+  float: left;
+  background: url(../images/bg-rate-c.gif) repeat-y;
+  padding-top: 10px !important;
+}
+
+.SharepointToSalesforceMigrationCss .sidebar {
+  margin: 0 0 0 -2px;
+}
+
+.SharepointToSalesforceMigrationCss .sidebar .t {
+  width: 222px;
+  overflow: hidden;
+  float: left;
+  background: url(../images/bg-rate.gif) no-repeat;
+}
+
+.SharepointToSalesforceMigrationCss .rate .t {
+  width: 222px;
+  overflow: hidden;
+  float: left;
+  background: url(../images/bg-rate.gif) no-repeat;
+}
+
+.SharepointToSalesforceMigrationCss .rate .c {
+  width: 192px;
+  overflow: hidden;
+  background: url(../images/bg-rate.gif) no-repeat -222px 100%;
+  padding: 16px 15px 15px !important;
+  color: #000;
+  float: left;
+}
+
+.SharepointToSalesforceMigrationCss .rate ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.SharepointToSalesforceMigrationCss .rate ul li {
+  padding: 0 0 5px;
+  overflow: hidden;
+  float: left;
+  width: 192px;
+}
+
+.SharepointToSalesforceMigrationCss .sidebar .rate p {
+  float: left;
+  width: 88px;
+  margin: 0 3px 0 0;
+  text-align: right;
+  word-spacing: -2px;
+  letter-spacing: 0;
+}
+
+.SharepointToSalesforceMigrationCss .rate ul li li {
+  width: auto !important;
+  padding: 0 !important;
+}
+
+.SharepointToSalesforceMigrationCss .rate ul li img {
+  display: block;
+}
+
+.SharepointToSalesforceMigrationCss .sidebar .rate .number {
+  float: right;
+  padding: 0 40px 0 0;
+  margin: -3px 0 0;
+}
+
+.SharepointToSalesforceMigrationCss .top-box {
+  width: 890px;
+  overflow: hidden;
+}
+
+.SharepointToSalesforceMigrationCss .container {
+  width: 940px;
+  margin: 0px auto;
+  word-break: initial;
+}
+
+.SharepointToSalesforceMigrationCss .sidebar .c {
+  width: 193px;
+  overflow: hidden;
+  background: url(../images/bg-rate.gif) no-repeat -222px 100%;
+  padding: 8px 10px 0 15px;
+}
+
+.SharepointToSalesforceMigrationCss .item {
+  overflow: hidden;
+  margin: 0 0 11px;
+  height: 1%;
+}
+
+.SharepointToSalesforceMigrationCss .item h3 {
+  font-size: 10px;
+  color: #000;
+  margin: 0 0 2px;
+}
+
+.SharepointToSalesforceMigrationCss .item ul {
+  margin: 0;
+  padding: 0 0 0 14px;
+  list-style: none;
+  width: 160px;
+}
+
+.SharepointToSalesforceMigrationCss .item ul li {
+  padding: 0 0 5px;
+  line-height: 12px;
+}
+
+.SharepointToSalesforceMigrationCss .item ul li a {
+  color: #690;
+}
+
+.SharepointToSalesforceMigrationCss .sidebar p {
+  margin: -3px 0 7px;
+  letter-spacing: -1px;
+  word-spacing: 2px;
+}
+
+.SharepointToSalesforceMigrationCss .navigator {
+  overflow: hidden;
+  margin: 0 0 20px;
+  height: 1%;
+}
+
+.SharepointToSalesforceMigrationCss .navigator h3 {
+  font-size: 10px;
+  color: #000;
+  margin: 0 0 2px;
+}
+
+.SharepointToSalesforceMigrationCss .navigator ul {
+  margin: 0;
+  padding: 0 0 0 14px;
+  list-style: none;
+  width: 160px;
+}
+
+.SharepointToSalesforceMigrationCss .navigator ul li {
+  padding: 0 0 5px;
+  line-height: 12px;
+}
+
+.SharepointToSalesforceMigrationCss .navigator ul li a {
+  color: #690;
+}
+
+.SharepointToSalesforceMigrationCss .sidebar p {
+  margin: -3px 0 7px;
+  letter-spacing: -1px;
+  word-spacing: 2px;
+}
+
+.SharepointToSalesforceMigrationCss .more {
+  color: #690;
+  font-weight: bold;
+  float: left;
+  margin: 0 0 0 14px;
+}
+
+.SharepointToSalesforceMigrationCss .content {
+  float: right;
+  width: 641px;
+}
+
+.SharepointToSalesforceMigrationCss .form-search {
+  width: 641px;
+  overflow: hidden;
+  float: left;
+  margin: 0 0 0px;
+  color: #000;
+}
+
+.SharepointToSalesforceMigrationCss .form-search label {
+  font: bold 10px/12px Verdana, Arial, Helvetica, sans-serif;
+  float: left;
+  width: 87px;
+  text-align: right;
+  padding: 2px 3px 0 0;
+}
+
+.SharepointToSalesforceMigrationCss .aside1 {
+  float: left;
+  width: 250px;
+  overflow: hidden;
+}
+
+.SharepointToSalesforceMigrationCss .aside1 .paging {
+  float: left;
+}
+
+.SharepointToSalesforceMigrationCss .paging {
+  margin: 0 0 0 5px;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.SharepointToSalesforceMigrationCss .paging li {
+  display: inline;
+  padding: 0 0 0 5px;
+  color: #545558;
+}
+
+.SharepointToSalesforceMigrationCss .paging li.prev a {
+  background: url(../images/bg-prev.gif) no-repeat 0 4px;
+  padding: 0 0 0 12px;
+}
+
+.SharepointToSalesforceMigrationCss .paging li.next a {
+  background: url(../images/bg-next.gif) no-repeat 100% 4px;
+  padding: 0 12px 0 0;
+}
+
+.SharepointToSalesforceMigrationCss .paging li a {
+  color: #690;
+  text-decoration: underline;
+}
+
+.SharepointToSalesforceMigrationCss .paging li a:hover {
+  text-decoration: none;
+  color: #545558;
+}
+
+.SharepointToSalesforceMigrationCss .aside2 {
+  float: right;
+  width: 300px;
+  overflow: hidden;
+  text-align: right;
+}
+
+.SharepointToSalesforceMigrationCss .aside1 p {
+  float: left;
+  margin: 0;
+}
+
+.SharepointToSalesforceMigrationCss .sort {
+  overflow: hidden;
+  height: 18px;
+  margin: 0px;
+}
+
+.SharepointToSalesforceMigrationCss .sort select {
+  float: left;
+  font: 10px/14px Verdana, Arial, Helvetica, sans-serif;
+}
+
+.SharepointToSalesforceMigrationCss .narrow {
+  overflow: hidden;
+  height: 1%;
+  float: right;
+}
+
+.SharepointToSalesforceMigrationCss .narrow label {
+  padding-top: 4px;
+}
+
+.SharepointToSalesforceMigrationCss .narrow .narrow-search {
+  float: left;
+  width: 158px;
+  overflow: hidden;
+}
+
+.SharepointToSalesforceMigrationCss .narrow span {
+  height: 15px;
+  width: 117px;
+  border: 1px solid #9f9f9f;
+  background: url(../images/bg-input.gif) repeat-x;
+  padding: 2px 5px 0;
+  float: left;
+  margin: 1px 6px 0 0;
+}
+
+.SharepointToSalesforceMigrationCss .narrow input {
+  width: 117px;
+  border: 0;
+  /* 
+	font :10px/12px Verdana, Arial, Helvetica, sans-serif; */
+  background: none;
+  padding: 0;
+}
+
+.SharepointToSalesforceMigrationCss .narrow .btn-search {
+  float: left;
+  width: 23px !important;
+  height: 21px !important;
+  background: none !important;
+  padding: 0 !important;
+}
+
+.SharepointToSalesforceMigrationCss .results-inf {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.SharepointToSalesforceMigrationCss .results p {
+  margin: 0 0 0px;
+}
+
+.SharepointToSalesforceMigrationCss .results {
+  width: 581px;
+  padding: 0 60px 0 0;
+  overflow: hidden;
+  margin: 0 0 10px;
+  clear: both;
+}
+
+.SharepointToSalesforceMigrationCss .results h2 {
+  font-size: 11px;
+  margin: 0 0 2px;
+}
+
+.SharepointToSalesforceMigrationCss .results h2 a {
+  text-decoration: underline;
+  color: #369;
+}
+
+.SharepointToSalesforceMigrationCss .results h2 a:hover {
+  text-decoration: none;
+}
+
+.SharepointToSalesforceMigrationCss .meta {
+  text-align: right;
+  margin: 0 -45px 0 0 !important;
+}
+
+.SharepointToSalesforceMigrationCss .ms-WPTitle {
+  font-weight: bold;
+}
+
+.SharepointToSalesforceMigrationCss .modifierLabel {
+  margin-left: 10px;
+  _margin-left: 10px;
+}
+
+.SharepointToSalesforceMigrationCss .date_bold {
+  font-weight: normal;
+  color: #333;
+  font-size: 12px;
+}
+
+.SharepointToSalesforceMigrationCss .date {
+  font-weight: normal;
+  color: #333;
+  font-size: 12px;
+  padding-right: 10px;
+}
+
+.SharepointToSalesforceMigrationCss .document_title {
+  /* font-size:16px; */
+  font-size: 20px;
+  /* color:#333; */
+  color: #505050;
+  background-color: #ededee;
+  line-height: 24px;
+  margin: 0 0 30px;
+  /* font-weight: bold; */
+  font-weight: normal;
+  text-align: left;
+  /* border-bottom:1px solid #c8c8c8 !important; */
+  font-family: 'FuturaStd-Medium' !important;
+  padding: 25px 0px !important;
+}
+
+.SharepointToSalesforceMigrationCss #table1 h2 {
+  margin: 0px 0 5px 6px !important;
+  font-size: 24px !important;
+  color: #369;
+  border-top: 1px solid #c8c8c8;
+  padding-top: 10px;
+  width: 610px;
+  color: #000 !important;
+  font-weight: normal !important;
+  font-family: 'FuturaStd-Medium' !important;
+}
+
+.SharepointToSalesforceMigrationCss #table1 p {
+  margin: 0 0 0 6px;
+}
+
+.SharepointToSalesforceMigrationCss #table1 textarea {
+  width: 278px;
+  max-height: 102px;
+  max-width: 278px;
+  height: 102px;
+  margin: 0 0 0 6px;
+  border: 1px solid #d5d4d4;
+  font: 10px/12px Verdana, Arial, Helvetica, sans-serif;
+  padding: 0;
+  overflow: auto;
+  max-width: 327px;
+}
+
+.SharepointToSalesforceMigrationCss #table1 h3 {
+  font-size: 10px;
+  margin: 0 0 0 6px;
+}
+
+.SharepointToSalesforceMigrationCss #table1 .btn-submit {
+  width: 108px;
+  height: 29px;
+  background: url(../images/bg-btn-search.gif) no-repeat;
+  font: bold 10px/12px Verdana, Arial, Helvetica, sans-serif;
+  color: #690;
+  border: none;
+  padding: 0 0 5px 10px;
+  margin: 7px 0 0 5px;
+  display: block;
+  cursor: pointer;
+}
+
+.SharepointToSalesforceMigrationCss h1 {
+  font-size: 16px !important;
+  padding-top: 15px;
+  padding-bottom: 0px;
+  margin-bottom: 0;
+  color: #332255;
+  font-weight: bold !important;
+}
+
+.SharepointToSalesforceMigrationCss h2 {
+  font-size: 14px !important;
+  margin-top: 0;
+  padding-top: 4px;
+  color: #777777;
+  font-weight: bold !important;
+}
+
+.SharepointToSalesforceMigrationCss h3 {
+  font-size: 12px !important;
+  padding-bottom: 0;
+  color: #547293;
+  font-weight: bold !important;
+}
+
+.SharepointToSalesforceMigrationCss h4 {
+  font-size: 12px !important;
+  margin-top: 0;
+  color: #60537A;
+  font-weight: bold !important;
+  font-style: normal !important;
+}
+
+.SharepointToSalesforceMigrationCss h5 {
+  font-size: 12px !important;
+  padding-bottom: 0;
+  margin-bottom: -18px;
+  color: #547293;
+  font-weight: bold !important;
+}
+
+.SharepointToSalesforceMigrationCss h6 {
+  font-size: 11px !important;
+  margin-bottom: -6px;
+  padding-bottom: 0;
+  color: #777777;
+  font-weight: bold !important;
+}
+
+.SharepointToSalesforceMigrationCss .ms-formfieldlabelcontainer {
+  margin: 4px 4px 0px 4px;
+}
+
+.SharepointToSalesforceMigrationCss div.ms-formfieldlabelcontainer span.ms-formfieldlabel {
+  font-family: 'FuturaStd-Medium' !important;
+  ;
+  font-size: 8pt;
+  font-weight: normal;
+  text-align: left;
+  color: #777777;
+  padding: 1px 4px 1px 4px;
+  border-top: 1px solid #cccccc;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+  background-image: url("/_layouts/images/globgrad.gif");
+  background-repeat: repeat-x;
+  background-color: #efebef;
+  height: 18px;
+}
+
+.SharepointToSalesforceMigrationCss .ms-formfieldvaluecontainer {
+  border: 1px solid #cccccc;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  padding: 5px;
+}
+
+.SharepointToSalesforceMigrationCss .metadataMargins {
+  margin-bottom: 15px;
+}
+
+.SharepointToSalesforceMigrationCss .tdPadding {
+  /* padding-left:30px;
+	padding-right:25px; */
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.SharepointToSalesforceMigrationCss .rate #ctl00_PlaceHolderMain_linksTable td {
+  float: left;
+}
+
+.SharepointToSalesforceMigrationCss #ctl00_PlaceHolderMain_linksTable td {
+  padding-left: 0px !important;
+  /*width:100% !important;*/
+}
+
+.SharepointToSalesforceMigrationCss #ctl00_PlaceHolderMain_linksTable {
+  border-bottom: 0px solid #ededee;
+}
+
+.SharepointToSalesforceMigrationCss td.bodypage div.ms-formfieldvaluecontainer {
+  border: 1px solid #cccccc;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  padding: 5px;
+  line-height: 21px !important;
+}
+
+.SharepointToSalesforceMigrationCss span.ms-formvalidation {
+  font-weight: normal !important;
+}
+
+.SharepointToSalesforceMigrationCss p {
+  margin: 0;
+  padding: 0;
+  display: block;
+  line-height: 16px;
+}
+
+.SharepointToSalesforceMigrationCss .tabbar code {
+  color: #505050;
+}
+
+.SharepointToSalesforceMigrationCss ul {
+  /*float:left; width:100%; padding-left:18px;*/
+  line-height: 16px;
+}
+
+/* #layoutControlsContainer ul li {padding-bottom:6px;} */
+
+.SharepointToSalesforceMigrationCss ol {
+  line-height: 16px;
+}
+
+/*#layoutControlsContainer ol li {float:left; width:100%;} */
+
+.SharepointToSalesforceMigrationCss .contentPadding {
+  padding-top: 10px !important;
+}
+
+.SharepointToSalesforceMigrationCss .contentPaddingLeft {
+  padding-left: 0px !important;
+}
+
+.SharepointToSalesforceMigrationCss .contentPaddingBottom {
+  padding-bottom: 15px !important;
+}
+
+.SharepointToSalesforceMigrationCss #td_Applies_To td {
+  padding: 5px 0 5px 0;
+  font-size: 15px;
+  font-family: 'FuturaStd-Medium' !important;
+}
+
+.SharepointToSalesforceMigrationCss .ms-taxonomy-suggestion-container {
+  height: 125px !important;
+}
+
+.SharepointToSalesforceMigrationCss .ms-taxonomy-suggestion-holder {
+  height: 125px !important;
+}
+
+/*  added styles  */
+
+.SharepointToSalesforceMigrationCss #ctl00_PlaceHolderMain_EditModePanel2 {
+  color: #000;
+  font-size: 18px;
+  width: 100%;
+  font-weight: normal !important;
+}
+
+.SharepointToSalesforceMigrationCss .ms-rtestate-field {
+  /*font-size:15px; color:#505050; width:100%; line-height:20px;*/
+}
+
+.SharepointToSalesforceMigrationCss .ms-rtestate-field h6 {
+  /*font-size:12px !important; */
+}
+
+.SharepointToSalesforceMigrationCss .tabbar {
+  width: 100%;
+  margin: 20px 0px;
+  float: left;
+  font-family: 'FuturaStd-Medium' !important;
+}
+
+.SharepointToSalesforceMigrationCss td.body {
+  /*padding:0px !important;*/
+}
+
+.SharepointToSalesforceMigrationCss p {
+  /* float:left; padding:10px 0px;  width:100%;  font-size:14px; font-family:'FuturaStd-Medium' !important; */
+}
+
+.SharepointToSalesforceMigrationCss p code {
+  /* color:#505050; background:#fff; font-size:14px; */
+}
+
+.SharepointToSalesforceMigrationCss #KBMetaDataTable td {
+  font-size: 15px;
+  text-align: left;
+}
+
+.SharepointToSalesforceMigrationCss .questions label {
+  font-family: 'FuturaStd-Medium' !important;
+  font-size: 15px;
+}
+
+.SharepointToSalesforceMigrationCss ol h6 {
+  margin-top: 16px !important;
+  margin-bottom: 11px;
+}
+
+div #eaembedcodecontentcustom:before, div #eaembedcodecontentcustom:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+div #eaembedcodecontentcustom {
+  font-size: 62.5%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+#eaembedcodecontentcustom {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.428571429;
+  color: #333;
+  background-color: #fff;
+}
+
+#eaembedcodecontentcustom .container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#eaembedcodecontentcustom .container:before, #eaembedcodecontentcustom .container:after {
+  display: table;
+  content: " ";
+}
+
+#eaembedcodecontentcustom .container:after {
+  clear: both;
+}
+
+#eaembedcodecontentcustom .container:before, #eaembedcodecontentcustom .container:after {
+  display: table;
+  content: " ";
+}
+
+#eaembedcodecontentcustom .container:after {
+  clear: both;
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom .container {
+    max-width: 750px;
+  }
+}
+
+@media(min-width:992px) {
+  #eaembedcodecontentcustom .container {
+    max-width: 970px;
+  }
+}
+
+@media(min-width:1200px) {
+  #eaembedcodecontentcustom .container {
+    max-width: 1170px;
+  }
+}
+
+.dropup .caret, #eaembedcodecontentcustom.navbar-fixed-bottom .dropdown .caret {
+  border-top: 0 dotted;
+  border-bottom: 4px solid #000;
+  content: "";
+}
+
+.dropup .dropdown-menu, #eaembedcodecontentcustom.navbar-fixed-bottom .dropdown .dropdown-menu {
+  top: auto;
+  bottom: 100%;
+  margin-bottom: 1px;
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar-right .dropdown-menu {
+    right: 0;
+    left: auto;
+  }
+}
+
+#eaembedcodecontentcustom.navbar {
+  position: relative;
+  z-index: 1000;
+  min-height: 50px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+}
+
+#eaembedcodecontentcustom.navbar:before, #eaembedcodecontentcustom.navbar:after {
+  display: table;
+  content: " ";
+}
+
+#eaembedcodecontentcustom.navbar:after {
+  clear: both;
+}
+
+#eaembedcodecontentcustom.navbar:before, #eaembedcodecontentcustom.navbar:after {
+  display: table;
+  content: " ";
+}
+
+#eaembedcodecontentcustom.navbar:after {
+  clear: both;
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar {
+    border-radius: 4px;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-header:before, #eaembedcodecontentcustom.navbar-header:after {
+  display: table;
+  content: " ";
+}
+
+#eaembedcodecontentcustom.navbar-header:after {
+  clear: both;
+}
+
+#eaembedcodecontentcustom.navbar-header:before, #eaembedcodecontentcustom.navbar-header:after {
+  display: table;
+  content: " ";
+}
+
+#eaembedcodecontentcustom.navbar-header:after {
+  clear: both;
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar-header {
+    float: left;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-collapse {
+  max-height: 340px;
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow-x: visible;
+  border-top: 1px solid transparent;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  -webkit-overflow-scrolling: touch;
+}
+
+#eaembedcodecontentcustom.navbar-collapse:before, #eaembedcodecontentcustom.navbar-collapse:after {
+  display: table;
+  content: " ";
+}
+
+#eaembedcodecontentcustom.navbar-collapse:after {
+  clear: both;
+}
+
+#eaembedcodecontentcustom.navbar-collapse:before, #eaembedcodecontentcustom.navbar-collapse:after {
+  display: table;
+  content: " ";
+}
+
+#eaembedcodecontentcustom.navbar-collapse:after {
+  clear: both;
+}
+
+#eaembedcodecontentcustom.navbar-collapse.in {
+  overflow-y: auto;
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar-collapse {
+    width: auto;
+    border-top: 0;
+    box-shadow: none;
+  }
+  #eaembedcodecontentcustom.navbar-collapse.collapse {
+    display: block!important;
+    height: auto!important;
+    padding-bottom: 0;
+    overflow: visible!important;
+  }
+  #eaembedcodecontentcustom.navbar-collapse.in {
+    overflow-y: visible;
+  }
+  #eaembedcodecontentcustom.navbar-collapse #eaembedcodecontentcustom.navbar-nav#eaembedcodecontentcustom.navbar-left:first-child {
+    margin-left: -15px;
+  }
+  #eaembedcodecontentcustom.navbar-collapse #eaembedcodecontentcustom.navbar-nav#eaembedcodecontentcustom.navbar-right:last-child {
+    margin-right: -15px;
+  }
+  #eaembedcodecontentcustom.navbar-collapse #eaembedcodecontentcustom.navbar-text:last-child {
+    margin-right: 0;
+  }
+}
+
+#eaembedcodecontentcustom .container>#eaembedcodecontentcustom.navbar-header, #eaembedcodecontentcustom .container>#eaembedcodecontentcustom.navbar-collapse {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom .container>#eaembedcodecontentcustom.navbar-header, #eaembedcodecontentcustom .container>#eaembedcodecontentcustom.navbar-collapse {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-static-top {
+  border-width: 0 0 1px;
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar-static-top {
+    border-radius: 0;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-fixed-top, #eaembedcodecontentcustom.navbar-fixed-bottom {
+  position: fixed;
+  right: 0;
+  left: 0;
+  border-width: 0 0 1px;
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar-fixed-top, #eaembedcodecontentcustom.navbar-fixed-bottom {
+    border-radius: 0;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-fixed-top {
+  top: 0;
+  z-index: 1030;
+}
+
+#eaembedcodecontentcustom.navbar-fixed-bottom {
+  bottom: 0;
+  margin-bottom: 0;
+}
+
+#eaembedcodecontentcustom.navbar-brand {
+  float: left;
+  padding: 15px 15px;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+#eaembedcodecontentcustom.navbar-brand:hover, #eaembedcodecontentcustom.navbar-brand:focus {
+  text-decoration: none;
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar>#eaembedcodecontentcustom .container #eaembedcodecontentcustom.navbar-brand {
+    margin-left: -15px;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-toggle {
+  position: relative;
+  float: right;
+  padding: 9px 10px;
+  margin-top: 8px;
+  margin-right: 15px;
+  margin-bottom: 8px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+#eaembedcodecontentcustom.navbar-toggle .icon-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+#eaembedcodecontentcustom.navbar-toggle .icon-bar+.icon-bar {
+  margin-top: 4px;
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar-toggle {
+    display: none;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-nav {
+  margin: 7.5px -15px;
+}
+
+#eaembedcodecontentcustom.navbar-nav>li>a {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 20px;
+}
+
+@media(max-width:767px) {
+  #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu {
+    position: static;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+  #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>li>a, #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu .dropdown-header {
+    padding: 5px 15px 5px 25px;
+  }
+  #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>li>a {
+    line-height: 20px;
+  }
+  #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>li>a:hover, #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>li>a:focus {
+    background-image: none;
+  }
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar-nav {
+    float: left;
+    margin: 0;
+  }
+  #eaembedcodecontentcustom.navbar-nav>li {
+    float: left;
+  }
+  #eaembedcodecontentcustom.navbar-nav>li>a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar-left {
+    float: left!important;
+  }
+  #eaembedcodecontentcustom.navbar-right {
+    float: right!important;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-form {
+  padding: 10px 15px;
+  margin-top: 8px;
+  margin-right: -15px;
+  margin-bottom: 8px;
+  margin-left: -15px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar-form .form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+  }
+  #eaembedcodecontentcustom.navbar-form .form-control {
+    display: inline-block;
+  }
+  #eaembedcodecontentcustom.navbar-form .radio, #eaembedcodecontentcustom.navbar-form .checkbox {
+    display: inline-block;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  #eaembedcodecontentcustom.navbar-form .radio input[type="radio"], #eaembedcodecontentcustom.navbar-form .checkbox input[type="checkbox"] {
+    float: none;
+    margin-left: 0;
+  }
+}
+
+@media(max-width:767px) {
+  #eaembedcodecontentcustom.navbar-form .form-group {
+    margin-bottom: 5px;
+  }
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar-form {
+    width: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-right: 0;
+    margin-left: 0;
+    border: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-nav>li>.dropdown-menu {
+  margin-top: 0;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+#eaembedcodecontentcustom#eaembedcodecontentcustom.navbar-fixed-bottom #eaembedcodecontentcustom.navbar-nav>li>.dropdown-menu {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#eaembedcodecontentcustom.navbar-nav.pull-right>li>.dropdown-menu, #eaembedcodecontentcustom.navbar-nav>li>.dropdown-menu.pull-right {
+  right: 0;
+  left: auto;
+}
+
+#eaembedcodecontentcustom.navbar-btn {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+#eaembedcodecontentcustom.navbar-text {
+  float: left;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+@media(min-width:768px) {
+  #eaembedcodecontentcustom.navbar-text {
+    margin-right: 15px;
+    margin-left: 15px;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-default {
+  background-color: #f8f8f8;
+  border-color: #e7e7e7;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-brand {
+  color: #777;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-brand:hover, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-brand:focus {
+  color: #5e5e5e;
+  background-color: transparent;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-text {
+  color: #777;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>li>a {
+  color: #777;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>li>a:hover, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>li>a:focus {
+  color: #333;
+  background-color: transparent;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.active>a, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.active>a:hover, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.active>a:focus {
+  color: #555;
+  background-color: #e7e7e7;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.disabled>a, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.disabled>a:hover, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.disabled>a:focus {
+  color: #ccc;
+  background-color: transparent;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-toggle {
+  border-color: #ddd;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-toggle:hover, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-toggle:focus {
+  background-color: #ddd;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-toggle .icon-bar {
+  background-color: #ccc;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-collapse, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-form {
+  border-color: #e6e6e6;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.dropdown>a:hover .caret, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.dropdown>a:focus .caret {
+  border-top-color: #333;
+  border-bottom-color: #333;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.open>a, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.open>a:hover, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.open>a:focus {
+  color: #555;
+  background-color: #e7e7e7;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.open>a .caret, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.open>a:hover .caret, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.open>a:focus .caret {
+  border-top-color: #555;
+  border-bottom-color: #555;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav>.dropdown>a .caret {
+  border-top-color: #777;
+  border-bottom-color: #777;
+}
+
+@media(max-width:767px) {
+  #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>li>a {
+    color: #777;
+  }
+  #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>li>a:hover, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>li>a:focus {
+    color: #333;
+    background-color: transparent;
+  }
+  #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.active>a, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.active>a:hover, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.active>a:focus {
+    color: #555;
+    background-color: #e7e7e7;
+  }
+  #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.disabled>a, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.disabled>a:hover, #eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.disabled>a:focus {
+    color: #ccc;
+    background-color: transparent;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-link {
+  color: #777;
+}
+
+#eaembedcodecontentcustom.navbar-default #eaembedcodecontentcustom.navbar-link:hover {
+  color: #333;
+}
+
+#eaembedcodecontentcustom.navbar-inverse {
+  background-color: #222;
+  border-color: #080808;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-brand {
+  color: #999;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-brand:hover, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-brand:focus {
+  color: #fff;
+  background-color: transparent;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-text {
+  color: #999;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>li>a {
+  color: #999;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>li>a:hover, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>li>a:focus {
+  color: #fff;
+  background-color: transparent;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.active>a, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.active>a:hover, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.active>a:focus {
+  color: #fff;
+  background-color: #080808;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.disabled>a, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.disabled>a:hover, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.disabled>a:focus {
+  color: #444;
+  background-color: transparent;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-toggle {
+  border-color: #333;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-toggle:hover, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-toggle:focus {
+  background-color: #333;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-toggle .icon-bar {
+  background-color: #fff;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-collapse, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-form {
+  border-color: #101010;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.open>a, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.open>a:hover, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.open>a:focus {
+  color: #fff;
+  background-color: #080808;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.dropdown>a:hover .caret {
+  border-top-color: #fff;
+  border-bottom-color: #fff;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.dropdown>a .caret {
+  border-top-color: #999;
+  border-bottom-color: #999;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.open>a .caret, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.open>a:hover .caret, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav>.open>a:focus .caret {
+  border-top-color: #fff;
+  border-bottom-color: #fff;
+}
+
+@media(max-width:767px) {
+  #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.dropdown-header {
+    border-color: #080808;
+  }
+  #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>li>a {
+    color: #999;
+  }
+  #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>li>a:hover, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>li>a:focus {
+    color: #fff;
+    background-color: transparent;
+  }
+  #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.active>a, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.active>a:hover, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.active>a:focus {
+    color: #fff;
+    background-color: #080808;
+  }
+  #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.disabled>a, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.disabled>a:hover, #eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-nav .open .dropdown-menu>.disabled>a:focus {
+    color: #444;
+    background-color: transparent;
+  }
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-link {
+  color: #999;
+}
+
+#eaembedcodecontentcustom.navbar-inverse #eaembedcodecontentcustom.navbar-link:hover {
+  color: #fff;
+}
+
+#eaembedcodecontentcustom .container .jumbotron {
+  border-radius: 6px;
+}
+
+@media screen and (min-width:768px) {
+  #eaembedcodecontentcustom .container .jumbotron {
+    padding-right: 60px;
+    padding-left: 60px;
+  }
+}
+
+body.modal-open, .modal-open #eaembedcodecontentcustom.navbar-fixed-top, .modal-open #eaembedcodecontentcustom.navbar-fixed-bottom {
+  margin-right: 15px;
+}

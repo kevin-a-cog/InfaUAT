@@ -1,0 +1,6 @@
+.x-accordion-heading .x-accordion-toggle.collapsed {
+    background-color: green !important;
+    }
+    .x-accordion-heading .x-accordion-toggle {
+    background-color: red !important;
+    }

@@ -1,0 +1,9 @@
+.lwcbody {
+    padding: 4px;
+    height: 280px;
+}
+
+td.selectedrow{
+    font-weight: bold;
+    background-color: yellow !important;
+}

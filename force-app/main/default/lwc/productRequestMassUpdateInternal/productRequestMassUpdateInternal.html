@@ -1,0 +1,100 @@
+<template>
+    <template if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+    <lightning-record-edit-form
+                            object-api-name="Product_Request__c"
+                            record-id={tempRecordId}
+                            onsubmit={onSubmitHandler}>
+        <lightning-quick-action-panel header="Mass Update Product Request">
+            
+            <div class="slds-modal__content slds-p-around_medium fixed" id="modal-content-id-1">
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="6" class="margin-vertical">
+                            <lightning-input-field field-name="Status__c" onchange={statusOnChange}> </lightning-input-field>
+                        </lightning-layout-item>
+                        <template if:false={rejected}>
+                            <lightning-layout-item size="6" class="margin-vertical">
+                                    <lightning-input-field field-name="Fulfillment_Date__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" class="margin-vertical">
+                                    <lightning-input-field field-name="License_Key_Org_ID__c"></lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+                        <template if:true={rejected}>
+                            <lightning-layout-item size="6" class="margin-vertical">
+                                <lightning-input-field field-name="Rejection_Reason__c"></lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+                    </lightning-layout>
+                    <lightning-tabset active-tab-value={activeTab}>
+                        <lightning-tab label="Cloud" value="cloud" onactive={tabChange}>
+                            <template if:true={cloudError}>
+                                {cloudError}
+                            </template>
+                            <template if:false={cloudError}>
+                                <lightning-datatable
+                                    key-field="id"
+                                    data={cloudData}
+                                    columns={columns}
+                                    onrowselection={onRowSelectionCloud}>
+                                </lightning-datatable>
+                            </template>
+                        </lightning-tab>
+                        <lightning-tab label="MDM" value="mdm" onactive={tabChange}>
+                            <template if:true={mdmError}>
+                                {mdmError}
+                            </template>
+                            <template if:false={mdmError}>
+                                <lightning-datatable
+                                    key-field="id"
+                                    data={mdmData}
+                                    columns={columns}
+                                    onrowselection={onRowSelectionMdm}>
+                                </lightning-datatable>
+                            </template>
+                        </lightning-tab>
+                        <lightning-tab label="CDGC" value="cdgc" onactive={tabChange}>
+                            <template if:true={cdgcError}>
+                                {cdgcError}
+                            </template>
+                            <template if:false={cdgcError}>
+                                <lightning-datatable
+                                    key-field="id"
+                                    data={cdgcData}
+                                    columns={columns}
+                                    onrowselection={onRowSelectionCdgc}>
+                                </lightning-datatable>
+                            </template>
+                        </lightning-tab>
+                        <lightning-tab label="On Premise" value="onprem" onactive={tabChange}>
+                            <template if:true={onPremError}>
+                                {onPremError}
+                            </template>
+                            <template if:false={onPremError}>
+                                <lightning-datatable
+                                    key-field="id"
+                                    data={onPremData}
+                                    columns={columns}
+                                    onrowselection={onRowSelectionOnPrem}>
+                                </lightning-datatable>
+                            </template>
+                        </lightning-tab>
+                    </lightning-tabset>
+            </div>
+            <div slot="footer">
+                <lightning-button
+                    variant="neutral"
+                    label="Cancel"
+                    onclick={closeQuickAction}
+                ></lightning-button>
+                <lightning-button
+                    variant="brand"
+                    label="Save & Update"
+                    type="submit"
+                    class="slds-m-left_x-small"
+                ></lightning-button>
+            </div>
+        </lightning-quick-action-panel>
+    </lightning-record-edit-form>
+</template>

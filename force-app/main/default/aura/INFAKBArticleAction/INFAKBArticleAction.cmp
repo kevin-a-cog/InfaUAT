@@ -1,0 +1,72 @@
+<!--
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 01-29-2021
+  @last modified by  : Sathish Rajalingam
+  Modifications Log 
+  
+  Tag       |  Date           |  Modified by              |  Jira reference   |   ChangesMade
+    1       |  20-Jul-2020    |  Sathish Rajalingam       |                   |   Initial Version
+    2       |  08-Dec-2020    |  Sathish Rajalingam		    |                   |   Removed the unneeded reference of Jquery, which was already present in the page.
+    3       |  29-Jan-2021    |  Sathish Rajalingam		    |      I2RT-678     |   PDF download is not working on the community page.  
+    4       |  22-Jan-2021    |  Ranjan Kishore           |      I2RT - 869   |   Copy Icon will be shown based on the Article Visibility  
+    5       |  18-Jan-2022    |  Sathish Rajalingam       |      I2RT-3137	  |   Content on PDF Render for non-English articles is distorted and the language continues to be English 
+
+-->
+<aura:component
+  implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId"
+  access="global" controller="KBLWCHandler">
+  <ltng:require scripts="{!$Resource.INFAKBResource + '/js/Analytics/custom.js'}" />
+
+  <aura:attribute name="ArticleId" type="String" default="{!v.recordId}" />
+  <aura:attribute name="knowledgeArticleId" type="String" />
+  <aura:attribute name="knowledgeLanguage" type="String" /> <!-- Tag 5 -->
+  <aura:attribute name="isPublicArticle" type="boolean" default="true" /> <!-- Tag 4 -->
+  <aura:attribute name="viewart" type="String" default="none" />
+  <aura:attribute name="ArticleURL" type="String" default="none" />
+  <!--<3>-->
+  <!--<c:knowledgeFollow  recordId="{!v.recordId}" aura:id="knowledgeFollow"/>-->
+  <div class="slds-grid slds-gutters">
+    <div class="slds-col">
+
+      <!-- <div class="articlelinksection" style="{!'display:' + v.viewart + ';padding-top: 6px;'}">
+        <div>
+          <lightning:button label="View Article" name="View Article" variant="brand" onclick="{!c.doArticleOpen}" />
+        </div>
+      </div> -->
+      <div class="viewArtbutton">
+        <lightning:button class="slds-hide" aura:id="viewArticle" label="View Article" name="View Article"
+          variant="brand" onclick="{!c.doArticleOpen}" />
+      </div>
+    </div>
+    <div class="slds-col" style="line-height: 40px;font-size: 15px;text-align:right;">
+
+      <div class="article-sharing-bar">
+        <!-- <span onclick="{!c.followArticle}" >
+          <img title="Follow" src="{!$Resource.INFAKBResource + '/images/mail.png'}" />
+      </span>-->
+        <span onclick="{!c.articleEmail}">
+          <img title="Email" src="{!$Resource.INFAKBResource + '/images/mail.png'}" />
+        </span>
+        <span onclick="{!c.articlePrint}">
+          <img title="Print" src="{!$Resource.INFAKBResource + '/images/print.png'}" />
+        </span>
+        <span onclick="{!c.articleBookmark}">
+          <img title="Bookmark" src="{!$Resource.INFAKBResource + '/images/bookmark.png'}" />
+        </span>
+        <span onclick="{!c.articleExportToPDF}">
+          <img title="Export to PDF" src="{!$Resource.INFAKBResource + '/images/pdf-icon.png'}" />
+        </span>
+        <aura:if isTrue="{!v.isPublicArticle}">
+          <!-- Tag 4-->
+          <span onclick="{!c.articleCopyURL}">
+            <img title="Copy URL" src="{!$Resource.INFAKBResource + '/images/hyperlink.png'}" id="articleCopyURL" />
+          </span>
+        </aura:if>
+      </div>
+
+    </div>
+  </div>
+  <ltng:require scripts="{!$Resource.INFAKBResource + '/js/dummy.js'}" afterScriptsLoaded="{!c.doInit}" />
+</aura:component>

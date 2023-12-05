@@ -1,0 +1,202 @@
+<template>
+
+    <template if:true={showCasePreview}>
+
+        <!--Modal Starts-->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container override-slds-modal__container">
+
+                <!--Modal Header-->
+                <header class="slds-modal__header">
+                    <button onclick={cancelPreview}
+                        class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse override-slds-modal__Close" title="Close">
+                        <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close">
+                        </lightning-icon>
+                    </button>
+                    <h1 class="slds-modal__title">Case Detail</h1>
+                </header>
+
+                <!--Modal Body-->
+                <div class="slds-modal__content slds-p-around_medium" style="min-height:60%">
+                    <div class="slds-is-relative">
+
+                        <!--Spinner-->
+                        <lightning-spinner alternative-text="Loading" size="medium" if:true={isCaseLoading}></lightning-spinner>
+
+                        <template if:true={caseId}>
+                            <div class="slds-box">
+                                <lightning-record-view-form record-id={caseId} object-api-name="Case">
+                                    <lightning-layout multiple-rows>
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <lightning-output-field field-name="CaseNumber"></lightning-output-field>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <lightning-output-field field-name="Priority"></lightning-output-field>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <lightning-output-field field-name="Subject"></lightning-output-field>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <lightning-output-field field-name="Status"></lightning-output-field>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <lightning-output-field field-name="CreatedDate"></lightning-output-field>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <lightning-output-field field-name="Resolution_Target_DateTime__c">
+                                            </lightning-output-field>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <lightning-output-field field-name="Escalated_Date__c"></lightning-output-field>
+                                        </lightning-layout-item>
+
+                                        <!--Account Fields-->
+                                        <template if:true={accountId}>
+                                            <lightning-layout-item size="6" padding="around-small">
+                                                <lightning-record-view-form record-id={accountId}
+                                                    object-api-name="Account">
+                                                    <lightning-output-field field-name="Name"></lightning-output-field>
+                                                </lightning-record-view-form>
+                                            </lightning-layout-item>
+                                        </template>
+
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <lightning-output-field field-name="Next_Action__c"></lightning-output-field>
+                                        </lightning-layout-item>
+
+                                        </lightning-layout>
+                                </lightning-record-view-form>
+                                
+                                <!--Contact Fields-->
+                                <template if:true={contactId}>
+                                    <lightning-record-view-form record-id={contactId}
+                                        object-api-name="Contact">
+                                        <lightning-layout multiple-rows>
+                                            <lightning-layout-item size="6" padding="around-small">
+                                                <lightning-output-field field-name="Name"></lightning-output-field>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="6" padding="around-small">
+                                                <lightning-output-field field-name="Email"></lightning-output-field>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="6" padding="around-small">
+                                                <lightning-output-field field-name="Phone"></lightning-output-field>
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </lightning-record-view-form>
+                                </template>
+
+                                <template if:true={timezoneId}>
+                                    <lightning-record-view-form record-id={timezoneId}
+                                        object-api-name="TimeZone__c">
+                                        <lightning-layout multiple-rows>
+                                            <lightning-layout-item size="6" padding="around-small">
+                                                <lightning-output-field field-name="Name"></lightning-output-field>
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </lightning-record-view-form>
+                                </template>
+                            </div>
+                        </template>
+                        
+
+                        <!--Case TimeLine-->
+                        <template if:true={caseTimelines}>
+                            <ul class="slds-timeline" style="margin-top:20px">
+                                <template for:each={caseTimelines} for:item="timelineItem">
+                                    <div key={timelineItem.redId}>
+                                        <li>
+                                            <div class="slds-timeline__item_expandable slds-timeline__item_task slds-is-open">
+                                                
+                                                <span class="slds-assistive-text">task</span>
+                                                <div class="slds-media">
+                                                    <div class="slds-media__figure">
+                                                        <div class="slds-icon_container slds-icon-standard-task slds-timeline__icon"
+                                                            title="task">
+                                                            <lightning-icon icon-name="standard:task" size="small"
+                                                                alternative-text="task" title="task"></lightning-icon>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-media__body">
+                                                        <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+                                                            <div
+                                                                class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
+                                                                <h3 class="slds-truncate">
+                                                                    <template if:true={timelineItem.bIsFeedActivity}>
+                                                                        <strong>
+                                                                            <h2>Feed Activity</h2>
+                                                                        </strong>
+                                                                    </template>
+        
+                                                                    <template if:true={timelineItem.bIsCaseComment}>
+                                                                        <strong>
+                                                                            <h2>Comment</h2>
+                                                                        </strong>
+                                                                    </template>
+        
+                                                                </h3>
+                                                            </div>
+                                                            <div class="slds-timeline__actions slds-timeline__actions_inline">
+                                                                <p class="slds-timeline__date">{timelineItem.formattedDate}</p>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <article
+                                                            class="slds-box slds-timeline__item_details slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small"
+                                                            aria-hidden="true">
+                                                            <ul class="slds-list_horizontal slds-wrap">
+                                                                <li class="slds-grid slds-grid_vertical slds-p-bottom_small">
+                                                                    <span class="slds-text-body_medium ">
+                                                                        <template if:true={timelineItem.bIsFeedActivity}>
+                                                                            <c-unescape-html-lwc text={timelineItem.feed.Body}>
+                                                                            </c-unescape-html-lwc>
+                                                                        </template>
+        
+                                                                        <template if:true={timelineItem.bIsCaseComment}>
+                                                                            <c-unescape-html-lwc text={timelineItem.commentBody}>
+                                                                            </c-unescape-html-lwc>
+                                                                        </template>
+                                                                    </span>
+                                                                </li>
+                                                            </ul>
+                                                        </article>
+                                                    </div>
+                                                </div>
+        
+                                            </div>
+                                        </li>
+                                    </div>
+                                </template>
+                            </ul>
+                        </template>
+                    </div>
+                </div>
+
+                <!--Modal Footer-->
+                <footer class="slds-modal__footer" if:true={showNextPreviousBTNs}>
+                    <div class="slds-clearfix">
+                        <div class="slds-float_right">
+
+                            <!--Show Next Case BTN only when there is a next case on list-->
+                            <lightning-button label="Next Case" disabled={boolDisableNextCase} variant="brand"
+                                onclick={handleNextCase}></lightning-button>
+                        </div>
+                        <div class="slds-float_left">
+
+                            <!--Show Previous Case BTN only when there is a Previous case on list-->
+                            <lightning-button disabled={boolDisablePreviousCase} label="Previous Case" variant="brand"
+                                onclick={handlePreviousCase}></lightning-button>
+                        </div>
+                    </div>
+                </footer>
+                
+
+            </div>
+        </section>
+
+        <!--Modal backdrop-->
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+    </template>
+
+</template>

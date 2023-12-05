@@ -1,0 +1,16 @@
+.es-dropdown__values {
+    position: absolute;
+    z-index: 2;
+    background: #fff;
+    width: 130px;
+    box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.5);
+    border-radius: 2px;
+}
+.es-dropdown__value-items {
+    padding: 8px 10px;
+}
+.es-dropdown__value-items a,
+.es-dropdown__value-items a:hover{
+    color: #000;
+    text-decoration: none;
+}

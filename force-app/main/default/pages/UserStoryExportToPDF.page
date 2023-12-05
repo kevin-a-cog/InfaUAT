@@ -1,0 +1,215 @@
+<apex:page controller="UserStoryPdfRendererController" renderAs="pdf">
+<apex:pageBlock title="User Story Details">
+           
+    <table border="1" cellspacing="3">
+                  <tbody>
+               <tr style="display:table-row;">
+                      <th>User Story</th>
+                      <th>User Story Title</th>
+                      <th>Jira Key</th>
+                      <th>Environment Name</th>
+                      <th>Record Type</th>    
+                      <th>Created By</th>   
+                      <th>Last Modified By</th>                    
+                      </tr>
+                      
+                      <tr>
+            <td><apex:outputfield value="{!userstoryVar.Name}"/></td>
+            <td><apex:outputfield value="{!userstoryVar.copado__User_Story_Title__c}"/></td>
+            <td><apex:outputfield value="{!userstoryVar.copadoccmint__JIRA_key__c}"/></td>
+            <td><apex:outputfield value="{!userstoryVar.copado__Environment__r.name}"/></td>
+            <td><apex:outputfield value="{!userstoryVar.RecordType.name}"/></td>
+            <td><apex:outputfield value="{!userstoryVar.CreatedBy.name}"/></td>
+            <td><apex:outputfield value="{!userstoryVar.LastModifiedBy.name}"/></td>
+
+                          </tr>
+                 
+
+                  </tbody>
+              </table>
+ </apex:pageBlock>
+    
+
+  
+ 
+ <apex:pageBlock title="Project Management">
+           
+    <table border="1" cellspacing="3" >
+                  <tbody>
+               <tr style="display:table-row;">
+                      <th>Project</th>
+                      <th>Release</th>
+                      <th>Sprint</th>
+                      <th>Owner</th>
+                      <th>Status</th>                     
+                      </tr>
+                      
+                      <tr>
+             <td><apex:outputfield value="{!userstoryVar.copado__Project__r.name}"/></td>
+             <td><apex:outputfield value="{!userstoryVar.copado__Release__r.name}"/></td>
+             <td><apex:outputfield value="{!userstoryVar.copado__Sprint__r.name}"/></td>
+             <td><apex:outputfield value="{!userstoryVar.Owner.name}"/></td>
+             <td><apex:outputfield value="{!userstoryVar.copado__Status__c}"/></td>
+
+                          </tr>
+                 
+
+                  </tbody>
+              </table>
+ </apex:pageBlock>
+     
+ 
+
+    <apex:pageBlock title="Build">           
+    <table border="1" cellspacing="3">
+                  <tbody>
+               <tr style="display:table-row;">
+                      <th>Org Credential</th>
+                      <th>Environment Name</th>
+                      <th>Platform</th>
+                      <th>Developer</th>   
+                      <th>Latest Commit Date</th>                      
+                      </tr>
+                      
+                      <tr>
+            <td><apex:outputfield value="{!userstoryVar.copado__Org_Credential__r.name}"/></td>
+            <td><apex:outputfield value="{!userstoryVar.copado__Environment__r.name}"/></td>
+            <td><apex:outputfield value="{!userstoryVar.copado__Platform__c}"/></td>
+            <td><apex:outputfield value="{!userstoryVar.copado__Developer__r.name}"/></td>
+            <td><apex:outputfield value="{!userstoryVar.copado__Latest_Commit_Date__c}"/></td>
+                          </tr>
+                 
+
+                  </tbody>
+              </table>
+ </apex:pageBlock>
+    
+  
+ 
+ 
+<apex:pageBlock title="User Story Metadata">
+           
+    <table border="1" cellspacing="3">
+                  <tbody>
+              <tr style="display:table-row;">
+                      <th>Selected Metadata</th>                     
+                      </tr>
+
+                        <apex:repeat var="meta" value="{!userstorymetadataVar}">
+                      <tr>
+            <td><apex:outputfield value="{!meta.copado__Metadata_API_Name__c}"/></td>
+
+                          </tr>
+                      </apex:repeat>
+
+                  </tbody>
+              </table>
+      
+      
+      
+      
+      
+      </apex:pageBlock>
+     
+    
+    
+ 
+ 
+   <apex:pageBlock title="Promotions">
+    
+         
+          <table border="1" cellspacing="3">
+                  <tbody>
+              <tr style="display:table-row;">
+                      <th>Promotion</th>
+                      <th>Project</th>
+                      <th>Release</th>
+                      <th>Source Org</th>
+                      <th>Destination Org</th>
+                      <th>Status</th>                       
+                      </tr>
+
+                        <apex:repeat var="prom" value="{!promotedUserStory}">
+                      <tr>
+                           <td><apex:outputfield value="{!prom.copado__Promotion__r.Name}"/></td>
+            <td><apex:outputfield value="{!prom.copado__Promotion__r.copado__Project__r.name}"/></td>
+            <td><apex:outputfield value="{!prom.copado__Promotion__r.copado__Release__r.name}"/></td>
+            <td><apex:outputfield value="{!prom.copado__Promotion__r.copado__Source_Org_Credential__r.Name}"/></td>
+            <td><apex:outputfield value="{!prom.copado__Promotion__r.copado__Destination_Org_Credential__r.name}"/></td>
+            <td><apex:outputfield value="{!prom.copado__Promotion__r.copado__Status__c}"/></td>
+
+                          </tr>
+                      </apex:repeat>
+
+                  </tbody>
+              </table>
+         
+         
+    
+    </apex:pageBlock>
+    
+    
+       <apex:pageBlock title="User Story Commit">
+    
+         
+          <table border="1" cellspacing="3">
+                  <tbody>
+              <tr style="display:table-row;">
+                      <th>Commit name</th>
+                      <th>Snapshot commit name</th>
+                      <th>Commit message</th>  
+                      <th>User Story name</th> 
+                      <th>Status</th>   
+                      <th>Commit Date</th>                 
+                      </tr>
+
+                        <apex:repeat var="strycom" value="{!userstoryCommit}">
+                      <tr>
+            <td><apex:outputfield value="{!strycom.name}"/></td>
+            <td><apex:outputfield value="{!strycom.copado__Snapshot_Commit__r.Name}"/></td>
+            <td><apex:outputfield value="{!strycom.copado__CommitMessage__c}"/></td>
+            <td><apex:outputfield value="{!strycom.copado__User_Story__r.Name}"/></td>
+            <td><apex:outputfield value="{!strycom.copado__Status__c}"/></td>
+            <td><apex:outputfield value="{!strycom.copado__Snapshot_Commit__r.copado__Commit_Date__c}"/></td>
+
+                          </tr>
+                      </apex:repeat>
+
+                  </tbody>
+              </table>
+         
+         
+    
+    </apex:pageBlock>
+    
+    
+    
+    
+
+    <apex:pageBlock title="User Story History">     
+        <table border="1" cellspacing="3">
+                  <tbody>
+              <tr style="display:table-row;">
+                      <th>Created Date</th>
+                      <th>Field</th>
+                      <th>Original Value</th>
+                      <th>New Value</th>                     
+                      </tr>
+
+                         <apex:repeat var="ushistory" value="{!userstoryHistry}">
+                      <tr>
+            <td><apex:outputfield value="{!ushistory.CreatedDate}"/></td>
+            <td><apex:outputfield value="{!ushistory.field}"/></td>
+            <td><apex:outputfield value="{!ushistory.OldValue}"/></td>
+            <td><apex:outputfield value="{!ushistory.NewValue}"/></td>
+
+                          </tr>
+                      </apex:repeat>
+
+                  </tbody>
+              </table>
+    
+    </apex:pageBlock>
+     
+      
+   </apex:page>

@@ -1,0 +1,96 @@
+<!-- 
+***********************************************************************************************************************************************
+    ModifiedBy        Date          JIRA No.            Description                  Tag 
+***********************************************************************************************************************************************
+    Anil Solanki     11/05/2019    SALESRT-11091         Page to link current OrderItem to a previous Order Item-->
+<apex:page standardController="OrderItem" extensions="LinkPreviousOrderDetailsController" id="pageQuoteId">
+ <apex:pagemessages />
+ <apex:form id="formQuoteId">
+    
+    <apex:pageBlock id="pageBlockQuoteId" title="Previous Linked Order Items">
+         
+         <apex:pageBlockSection title="{!OrderItemNumber}" columns="1">
+                 <apex:pageBlockTable value="{!ExistingPreviousOrderItemList}" var="v">
+                     <apex:column headerValue="Product Desc" id="ColumnProduct">
+                         <apex:OutputText value="{!ProductName}"/> 
+                     </apex:column>
+                     <apex:column headerValue="Previous Quantity" id="ColumnQty">
+                         <apex:OutputText value="{!Quantity}"/> 
+                     </apex:column>
+                     <apex:column headerValue="Select CPQ Order Line" id="ColumnOrderDetailId">
+                         <apex:outputField value="{!v.Previous_Order_Line_CPQ__c}"/> 
+                     </apex:column>
+                     <apex:column headerValue="Select Apptus Order Line" id="ColumnOrderDetailId1">
+                         <apex:outputField value="{!v.Previous_Order_Line_Apttus__c}"/> 
+                     </apex:column>
+                     <apex:column headerValue="Quantity">
+                         <apex:outputField value="{!v.Upgrade_Quantity__c}"/>
+                     </apex:column>
+                     <apex:column headerValue="Percentage">
+                         <apex:outputField value="{!v.Upgrade_Percentage__c}"/>
+                     </apex:column>                           
+                                                               
+                 </apex:pageBlockTable>
+             </apex:pageBlockSection>
+             </apex:pageBlock>
+    
+    <apex:pageBlock >
+    <apex:pageBlockSection id="pbsQuoteId" title="{!OrderItemNumber}" columns="1">
+                 <apex:pageBlockTable value="{!PreviousOrderItemList}" var="va" id="previousOrderTable">
+                     
+                     <apex:column headerValue="Product Desc" id="ColumnProduct">
+                         <apex:OutputText value="{!ProductName}"/> 
+                     </apex:column>
+                     <apex:column headerValue="Quantity" id="ColumnQty">
+                         <apex:OutputText value="{!Quantity}"/> 
+                     </apex:column>
+                     <apex:column headerValue="Select CPQ Order Line" id="ColumnOrderDetailId">
+                         <apex:inputField value="{!va.Previous_Order_Line_CPQ__c}"/> 
+                     </apex:column>
+                     <apex:column headerValue="Select Apptus Order Line" id="ColumnOrderDetailId1">
+                         <apex:inputField value="{!va.Previous_Order_Line_Apttus__c}"/> 
+                     </apex:column>
+                     <apex:column headerValue="Quantity">
+                         <apex:inputfield value="{!va.Upgrade_Quantity__c}"/>
+                     </apex:column>
+                     <apex:column headerValue="Percentage">
+                         <apex:inputfield value="{!va.Upgrade_Percentage__c}"/>
+                     </apex:column>
+                 </apex:pageBlockTable>
+             </apex:pageBlockSection>
+         </apex:pageBlock>
+            
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <apex:commandButton style="float:centre" value="Add one more " action="{!AddPreviousOrderList}" reRender="previousOrderTable" />&nbsp;&nbsp;
+        
+        <apex:commandButton style="float:centre" value="Save" action="{!SavePreviousOrdersItems}"/>
+         <br/><br/>   
+            
+        <apex:pageblock title="CPQ Order Items" >
+            <apex:pageblockSection columns="1"  >
+                <apex:pageblockTable value="{!CPQOrderLineItems}" var="va" Style="border:0.8px solid black">
+                     <apex:column headerValue="Order" value="{!va.Order.OrderNumber}"/>
+                     <apex:column headerValue="Line Num" value="{!va.OrderItemNumber}"/>
+                     <apex:column headerValue="Extended Price" value="{!va.PeopleSoft_Extended_List_Price__c}"/>
+                     <apex:column headerValue="Quantity" value="{!va.Quantity}"/>
+                     <apex:column headerValue="Description" value="{!va.Product2.Name}"/>
+                </apex:pageblockTable>
+            </apex:pageblockSection>
+        </apex:pageblock>
+
+        <apex:pageblock title="Apttus Order Items">
+            <apex:pageblockSection columns="1"  >
+                <apex:pageblockTable value="{!ApttusOrderLineItems}" var="va" Style="border:0.8px solid black">
+                     <apex:column headerValue="Order" value="{!va.Old_Org_Order_Name__c}"/>
+                     <apex:column headerValue="Line Num" value="{!va.name}"/>
+                     <apex:column headerValue="Extended Price" value="{!va.Extended_Price__c}"/>
+                     <apex:column headerValue="Quantity" value="{!va.Quantity__c}"/>
+                     <apex:column headerValue="Description" value="{!va.SKU_Name__c}"/>
+                </apex:pageblockTable>
+            </apex:pageblockSection>
+        </apex:pageblock>    
+            
+ </apex:form>
+ <br/>
+        
+</apex:page>

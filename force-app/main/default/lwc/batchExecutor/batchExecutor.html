@@ -1,0 +1,20 @@
+<template>
+    <lightning-card  title="Batch Executor" class="slds-m-around_medium">
+        <div class="slds-p-around_medium">
+        <lightning-combobox 
+                name="batch"
+                label="Batch Class"
+                value={value}
+                placeholder="Select Batch class to execute"
+                options={options}
+                onchange={handleChange} ></lightning-combobox>
+
+        <p class="slds-p-vertical_medium">Selected batch class: {value}</p>
+    </div>
+    <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+        <lightning-formatted-text value={result}></lightning-formatted-text>
+    </div>
+    <lightning-button label="Execute" class="slds-p-right_medium" disabled={executeDisabled} variant="brand" onclick={executeBatch} slot="footer"></lightning-button>
+    <lightning-button label="Get Status" disabled={disableStatus} variant="brand" onclick={getStatus} slot="footer"></lightning-button>
+    </lightning-card>
+</template>

@@ -1,0 +1,40 @@
+<!--
+/*
+ * Name			:	OpportunitySubStageProgression
+ * Author		:	VENKATESH BALLA
+ * Created Date	: 	12/10/2021
+ * Description	:	Record Completion Aura Wrapper HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description									Tag
+ **********************************************************************************************************
+ VENKATESH BALLA		10/20/2023		SALESRT-17407   Additional changes to support Opportunity    N/A
+ 														substage progression.
+ */
+-->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,lightning:isUrlAddressable,force:hasRecordId" 
+access="global" controller="OpportunitySubStageProgressionController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="nextSubStageMap" type="Map" />
+    <aura:attribute name="selectedSubStageMap" type="Map" />
+    <aura:attribute name="subStagePickVals" type="List"/>
+    <aura:attribute name="currentSubStageName" type="String" default=""/>
+    <aura:attribute name="refreshProgression" type="Boolean"/>
+    <aura:attribute name="selectedValue" type="String"/>
+    <aura:attribute name="substagesToHide" type="String" default=""/>
+    
+    <div style="background-color: white !important;">
+        <aura:iteration items="{!v.nextSubStageMap}" var="subStage" indexVar="key">
+            <c:GlobalRecordCompletionAuraWrapper recordId="{!v.recordId}" strNextStepName="{!subStage.key}" strHeader="{!subStage.value}"/><!--nextSubStage="{!subStage}"/>-->
+        </aura:iteration>
+        <!--to display substage values as dropdown to allow dynamic selection and view the fields criteria-->
+        <lightning:combobox aura:id="substageOptions" name="subStage" class="slds-p-around_x-small slds-size_2-of-3" label="INFAWAY Opportunity Progression" 
+        value="{!v.selectedValue}" placeholder="Select Substage" options="{! v.subStagePickVals }" onchange="{!c.handleOptionSelected}"/>
+        <!--to display progression component as per selection and view the fields criteria-->
+        <aura:iteration items="{!v.selectedSubStageMap}" var="subStage" indexVar="key">
+            <c:GlobalRecordCompletionAuraWrapper recordId="{!v.recordId}" strNextStepName="{!subStage.key}" strHeader="{!subStage.value}"/><!--nextSubStage="{!subStage}"/>-->
+        </aura:iteration>
+    </div>
+</aura:component>

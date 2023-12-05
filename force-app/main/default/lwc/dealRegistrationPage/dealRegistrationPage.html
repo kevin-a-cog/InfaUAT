@@ -1,0 +1,221 @@
+<template>
+    <lightning-quick-action-panel header="Deal Registration">
+
+        <lightning-tabset>
+            <lightning-tab label="Detail">
+                <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                    <div class="slds-m-around-small">
+                        <lightning-record-view-form object-api-name="Lead" record-id={recordId} columns="2">
+
+                            <lightning-accordion-section label="Detail" name="Detail">
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Deal_Registration_Name__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="OwnerId"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Account__c"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="PSM__c"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Field_Sales_Rep__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Informatica_Solution__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Estimated_Opportunity_or_Project_Budget__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Primary_Role_in_Sale__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="CurrencyIsoCode"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Decision_Criteria_for_Customer__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Estimated_Opportunity_Closing_Date__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Dev_Catapult_dupe_id__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Solicitation_RFP_or_Public_Tender__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Opportunity__c"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Partner_Relationship__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Need_Describe_Customer_Issue__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-accordion-section>
+
+                            <lightning-accordion-section label="Partner Information" name="Partner">
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Partner_Distributor__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Distributor__c"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Reseller_SI_Partner__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Role_of_Distributor__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-accordion-section>
+
+                            <lightning-accordion-section label="Customer Information" name="Customer">
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Company"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Email"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Address"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Name"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Division_Organization_Department__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-accordion-section>
+
+                            <lightning-accordion-section label="System Information" name="System">
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="CreatedById"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="LastModifiedById"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="CreatedDate"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="LastModifiedDate"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Status"> </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Accept_Terms_and_Conditions__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6">
+                                        <lightning-output-field field-name="Terms_and_Conditions__c">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-accordion-section>
+
+                        </lightning-record-view-form>
+                    </div>
+                </lightning-accordion>
+            </lightning-tab>
+            <lightning-tab label="Approval" title="Approval History">
+                <div>
+                    <table
+                        class="slds-table slds-table_cell-buffer slds-table_fixed-layout slds-max-medium-table_stacked-horizontal slds-table_bordered"
+                        role="grid">
+                        <thead>
+                            <tr class="slds-line-height--reset">
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-truncate" title="">Step Name</div>
+                                </th>
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-truncate" title="">Date</div>
+                                </th>
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-truncate" title="">Status</div>
+                                </th>
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-truncate" title="">Assigned To</div>
+                                </th>
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-truncate" title="">Actual Approver</div>
+                                </th>
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-truncate" title="">Comments</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template if:true={processHistory}>
+                                <template for:each={processHistory} for:item="hist">
+                                    <template for:each={hist.StepsAndWorkitems} for:item="step">
+                                        <tr key={step.Id} class="slds-hint-parent">
+                                            <td class="slds-truncate">
+                                                <template if:true={step.ProcessNode}>
+                                                    {step.ProcessNode.Name}
+                                                </template>
+                                            </td>
+                                            <td class="slds-truncate">
+                                                <lightning-formatted-date-time value={step.CreatedDate} year="numeric"
+                                                    month="numeric" day="numeric" hour="numeric" minute="numeric"
+                                                    time-zone-name="short"></lightning-formatted-date-time>
+                                            </td>
+                                            <td class="slds-truncate">
+                                                {step.StepStatus}
+                                            </td>
+                                            <td class="slds-truncate">
+                                                <a data-value={step.OriginalActor.Id}
+                                                    onclick={openUserUrl}>{step.OriginalActor.Name}</a>
+                                            </td>
+                                            <td class="slds-truncate">
+                                                <a data-value={step.Actor.Id}
+                                                    onclick={openUserUrl}>{step.Actor.Name}</a>
+                                            </td>
+                                            <td class="slds-truncate">
+                                                {step.Comments}
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </lightning-tab>
+        </lightning-tabset>
+    </lightning-quick-action-panel>
+</template>

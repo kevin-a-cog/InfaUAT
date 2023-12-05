@@ -1,0 +1,23 @@
+.slds-modal__content{
+    width: 125% !important;
+    max-width: 130% !important;
+    
+}
+
+.marginCust{
+    margin-top: 17.5% !important;
+    padding: 1px;
+}
+
+.paddingCust{
+    padding: 2% !important;
+}
+
+.spins::after {
+    position: absolute;
+    content: 'Amendment Quote creation is in progress. Please wait......';
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 3em);
+    font-weight: bold;
+}

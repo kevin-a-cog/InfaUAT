@@ -1,0 +1,416 @@
+<!-- sldsValidatorIgnore -->
+<!--
+/*
+ * Name			    :	CsmManageAdoptionFactorFramework
+ * Author		    :	Deva M
+ * Created Date		: 	20/09/2021
+ * Description		:	CsmManageAdoptionFactorFramework is for manage PAF fucntionality 
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			    Jira No.		Description					Tag
+ **********************************************************************************************************
+ Deva M		        20/09/2021		N/A				  Initial version.			N/A
+ */
+-->
+<template>   
+    <div class="customGeneralCSS" lwc:dom="manual"></div>
+    <!-- Clipboard field. -->
+    <textarea class="clipboard" style="position:fixed;top:-5rem;height:1px;width:10px;"></textarea>    
+
+    <lightning-card class="slds-is-relative" data-name="outside">
+        
+         <!-- Spinner for normal cases-->
+        <div class="spinner">
+            <template if:true={boolDisplaySpinner}>
+                <lightning-spinner variant="brand" size="small" class="slds-m-top_small slds-m-bottom_large"></lightning-spinner>
+            </template>
+        </div> 
+        <h3 slot="title">
+            <template if:true={planHealthScore}>
+                <lightning-avatar variant="square" if:false={isEdit} initials={planHealthScore} fallback-icon-name="standard:answer_public" alternative-text={planHealthScore}  class={healthScoreClass}></lightning-avatar>                
+            </template>
+            Predictive Adoption Factor
+        </h3>
+        <div slot="actions">
+            <!--<span class={lastModifiedDateClass} if:false={isEdit}>            
+                <template if:true={updateDueDate}>    
+                    Update Due By: <lightning-formatted-date-time value={updateDueDate}></lightning-formatted-date-time>
+                </template>  
+            </span> --> 
+            
+
+            <lightning-button-icon title="Cancel" if:true={isEdit} icon-name="utility:close" data-name="close" class="slds-m-left_xx-small"
+                onclick={handleClick}>
+            </lightning-button-icon>
+          
+
+            <lightning-icon if:false={isEdit} icon-name="action:info" data-name="info" class={lastModifiedDateClass} size="xx-small" 
+                onmouseover={handleMouseOver} onmouseout={handleMouseOut} data-id="informationtag">
+            </lightning-icon>
+                
+            <template if:false={boolPlanLocked}>      
+                <template if:true={adoptionRecordResponse}>  
+                    <template if:false={editButtonVisibility}>
+                        <!-- Test-->
+                        <lightning-button-icon title="Edit" if:false={isEdit} icon-name="utility:edit" data-name="edit" class="slds-m-left_xx-small"
+                            onclick={handleClick}>
+                        </lightning-button-icon>
+                    </template>
+                </template>   
+            </template>
+            <lightning-button-icon title="Refresh" if:false={isEdit} icon-name="utility:refresh" data-name="refresh" class="slds-m-left_xx-small"
+                onclick={handleClick}>
+            </lightning-button-icon> 
+            <template if:false={isPoppedOut}>
+                <lightning-button-icon title="Cassini Insights" icon-name="utility:calculated_insights" data-name="cassini" class="slds-m-left_xx-small" onclick={openCassini} slot="actions"></lightning-button-icon>
+            </template>
+            <template if:false={isPoppedOut}>
+                <lightning-button-icon title="Maximize" icon-name="utility:new_window" data-name="popOut" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+            </template>
+            <template if:true={isPoppedOut}>
+                <lightning-button-icon title="Minimize" icon-name="utility:pop_in" data-name="popIn" class="slds-m-left_xx-small" onclick={popOut} slot="actions"></lightning-button-icon>
+            </template>
+        </div>
+    
+        <!-- Card body. -->
+        <div class="slds-p-around_small slds-border_top">
+            <template if:false={showConfirmationModal}>
+                <!--View Adoption factor view-->
+                <template if:false={isEdit}>  
+                    <template if:true={adoptionFactorData}>
+                        <lightning-record-view-form onload={handleviewLoad} record-id={adoptionFactorId} object-api-name="Adoption_Factor__c">
+                            <lightning-layout-item size="12">
+                                <table class="slds-table slds-table_cell-buffer slds-table_striped slds-table_fixed-layout slds-max-medium-table_stacked-horizontal slds-table_bordered">
+                                    <tbody>
+                                        <tr class="slds-hint-parent">
+                                            <td data-label="Product" class="slds-cell-wrap slds-size_5-of-12">
+                                                <div class="" title="Product">
+                                                    <legend class="slds-form-element__legend slds-form-element__label">Product</legend>
+                                                </div>
+                                            </td>
+                                            <td data-label="Product" class="slds-cell-wrap slds-size_7-of-12">
+                                                <!--<lightning-output-field field-name="Product__c" data-id="Output_Product__c" variant="label-hidden">
+                                                </lightning-output-field>-->
+                                                <lightning-icon icon-name={productImage.iconName} variant={productImage.iconVariant}  class={productImage.iconClass} alternative-text={adoptionFactorData.Product__c} data-id="Output_Product__c" title={adoptionFactorData.Product__c} size="x-small"></lightning-icon>
+                                           </td>
+                                        </tr>
+
+                                        <tr class="slds-hint-parent">
+                                            <td data-label="Project" class="slds-cell-wrap slds-size_5-of-12">
+                                                <div class="" title="Project">
+                                                    <legend class="slds-form-element__legend slds-form-element__label">Project</legend>
+                                                </div>
+                                            </td>
+                                            <td data-label="Project" class="slds-cell-wrap slds-size_7-of-12">
+                                                <!--<lightning-output-field field-name="Project__c" data-id="Output_Project__c"  variant="label-hidden">
+                                                </lightning-output-field>-->
+                                                <lightning-icon icon-name={projectImage.iconName} variant={projectImage.iconVariant}  class={projectImage.iconClass} alternative-text={adoptionFactorData.Project__c} data-id="Output_Project__c" title={adoptionFactorData.Project__c} size="x-small"></lightning-icon>
+                                            </td>
+                                        </tr>
+
+                                        <tr class="slds-hint-parent">
+                                            <td data-label="Engagement" class="slds-cell-wrap slds-size_5-of-12">
+                                                <div class="" title="Engagement"> 
+                                                    <legend class="slds-form-element__legend slds-form-element__label">Engagement</legend>
+                                                </div>
+                                            </td>
+                                            <td data-label="Engagement" class="slds-cell-wrap slds-size_7-of-12">
+                                                <!--<lightning-output-field field-name="Engagement__c" data-id="Output_Engagement__c" variant="label-hidden">
+                                                </lightning-output-field>-->
+                                                <lightning-icon icon-name={engagementImage.iconName} variant={engagementImage.iconVariant}  class={engagementImage.iconClass} alternative-text={adoptionFactorData.Engagement__c} data-id="Output_Engagement__c" title={adoptionFactorData.Engagement__c} size="x-small"></lightning-icon>
+                                            </td>
+                                        </tr>
+                                        <tr class="slds-hint-parent">
+                                            <td data-label="Executive Summary" class="slds-cell-wrap slds-size_5-of-12">
+                                                <div class="" title="Executive Summary" >
+                                                    <legend class="slds-form-element__legend slds-form-element__label">Executive Summary</legend>
+                                                </div>
+                                            </td>
+                                            <td data-label="Executive Summary" class="slds-cell-wrap slds-size_7-of-12">
+                                                <lightning-output-field field-name="CSM_Comments__c" data-id="Output_CSM_Comments__c" variant="label-hidden">
+                                                </lightning-output-field>
+                                            </td>
+                                        </tr>
+
+                                        <tr class="slds-hint-parent">
+                                            <td data-label="Impact" class="slds-cell-wrap slds-size_5-of-12">
+                                                <div class="" title="Impact">
+                                                    <legend class="slds-form-element__legend slds-form-element__label">Impact</legend>
+                                                </div>
+                                            </td>
+                                            <td data-label="Impact" class="slds-cell-wrap slds-size_7-of-12">
+                                                <!--<lightning-output-field field-name="Impact__c" variant="label-hidden" data-id="Output_Impact__c">
+                                                </lightning-output-field>-->
+                                                <lightning-icon icon-name={impactImage.iconName} variant={impactImage.iconVariant}  class={impactImage.iconClass} alternative-text={adoptionFactorData.Impact__c} data-id="Output_Impact__c" title={adoptionFactorData.Impact__c} size="x-small"></lightning-icon>
+                                            </td>
+                                        </tr>
+
+                                    
+                                        <tr class="slds-hint-parent">
+                                            <td data-label="Impact Reason" class="slds-cell-wrap slds-size_5-of-12">
+                                                <div class="" title="Impact Reason">
+                                                    <legend class="slds-form-element__legend slds-form-element__label">Impact Reason</legend>
+                                                </div>
+                                            </td>
+                                            <td data-label="Impact Reason" class="slds-cell-wrap slds-size_7-of-12">
+                                                <lightning-output-field field-name="Impact_Reason__c" variant="label-hidden" data-id="Output_Impact_Reason__c">
+                                                </lightning-output-field>
+                                            </td>
+                                        </tr>
+
+                                        <tr class="slds-hint-parent">
+                                            <td data-label="CSM Manager Comments" class="slds-cell-wrap slds-size_5-of-12">
+                                                <div class="" title="CSM Manager Comments">
+                                                    <legend class="slds-form-element__legend slds-form-element__label">CSM Manager Comments</legend>
+                                                </div>
+                                            </td>
+                                            <td data-label="CSM Manager Comments" class="slds-cell-wrap slds-size_7-of-12">
+                                                <lightning-output-field field-name="CSM_Manager_Comments__c" variant="label-hidden" data-id="Output_CSM_Manager_Comments__c">
+                                                </lightning-output-field>
+                                            </td>
+                                        </tr>                      
+                                    </tbody>
+                                </table>
+                            </lightning-layout-item>
+                        </lightning-record-view-form>
+                    </template>
+                </template>
+                <!-- edit page for Adotpion factor-->
+                <template if:true={adoptionFactorData}>
+                    <template if:true={isEdit}> 
+
+                        <lightning-record-edit-form object-api-name="Adoption_Factor__c" 
+                                                    record-id={adoptionFactorIdToEdit}
+                                                    onsuccess={handleSuccess}
+                                                    onerror={handleError}
+                                                    onload={handleLoad}
+                                                    onsubmit={handleSubmit}>
+                            <lightning-layout-item size="12">
+                                    <lightning-layout class="slds-m-top_x-small">
+                                        <lightning-layout-item size="5">
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="7">                                                                             
+                                            <div class="slds-grid">
+                                                <div class="slds-col slds-float_left">
+                                                    <lightning-icon icon-name="utility:like" variant="success" alternative-text="Good" title="Good" size="x-small" class="actionButton"></lightning-icon>
+                                                </div>
+                                                <div class="slds-col slds-align_absolute-center">
+                                                    <lightning-icon icon-name="utility:like" variant="warning" alternative-text="Average" title="Average" size="x-small" class="actionButton rotate-like-icon"></lightning-icon>
+                                                </div>
+                                                <div class="slds-col"> 
+                                                    <lightning-icon icon-name="utility:dislike" variant="error" alternative-text="Poor" title="Poor" size="x-small" class="actionButton slds-float_right"></lightning-icon>
+                                                </div>
+                                            </div>
+                                       </lightning-layout-item>
+                                    </lightning-layout>
+                                    <lightning-layout class="slds-m-top_x-small">
+                                        <lightning-layout-item size="5">
+                                            <legend class="slds-form-element__legend slds-form-element__label"><abbr class="slds-required">*</abbr>Product</legend>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="7">                                           
+                                        <c-global-lightning-slider default-value={productDefaultValue} min-range="0" max-range="100" step-range="50" data-id="Product__c" onrangechange={hangleProductChange}></c-global-lightning-slider>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+
+                                    <lightning-layout class="slds-m-top_x-small">
+                                        <lightning-layout-item size="5">
+                                            <legend class="slds-form-element__legend slds-form-element__label"><abbr class="slds-required">*</abbr>Project</legend>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="7">                                
+                                            <c-global-lightning-slider default-value={projectDefaultValue} min-range="0" max-range="100" step-range="50" data-id="Project__c" onrangechange={handleProjectChange}></c-global-lightning-slider>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+
+                                    <lightning-layout class="slds-m-top_x-small">
+                                        <lightning-layout-item size="5">
+                                            <legend class="slds-form-element__legend slds-form-element__label"><abbr class="slds-required">*</abbr>Engagement</legend>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="7">
+                                            <c-global-lightning-slider default-value={engagementDefaultValue} min-range="0" max-range="100" step-range="50"  data-id="Engagement__c" onrangechange={handleEngagementChange}></c-global-lightning-slider>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+
+                                    <lightning-layout class="slds-m-top_x-small">
+                                        <lightning-layout-item size="5">                       
+                                            <legend class="slds-form-element__legend slds-form-element__label"><abbr class="slds-required">*</abbr>Executive Summary</legend>
+                                            <template if:true={strPreviousPafRecordId}>
+                                                <lightning-icon if:true={isEdit} icon-name="utility:preview" data-name="previewSummary" size="x-small" class="actionIcon previewSummary"
+                                                    onclick={handleClick} data-id="previewSummary" alternative-text="View Previous Comment" title="View Previous Comment">
+                                                </lightning-icon> 
+                                            </template> 
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="7">
+                                            <lightning-input-field field-name="CSM_Comments__c" onchange={handleCsmCommentChange} variant="label-hidden" data-id="CSM_Comments__c" required>
+                                            </lightning-input-field>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+
+                                    <lightning-layout class="slds-m-top_x-small">
+                                        <lightning-layout-item size="5">
+                                            <legend class="slds-form-element__legend slds-form-element__label"><abbr class="slds-required">*</abbr>Impact</legend>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="7">
+                                            <c-global-lightning-slider default-value={impactDefaultValue} min-range="0" max-range="100" step-range="50" data-id="Impact__c" onrangechange={handleImpactChange}></c-global-lightning-slider>
+                                            <lightning-input-field field-name="Plan__c" class="slds-hide" data-id="Plan__c" value={recordId}>
+                                            </lightning-input-field>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+
+                                    <lightning-layout class="slds-m-top_x-small">
+                                        <lightning-layout-item size="5">
+                                            <legend class="slds-form-element__legend slds-form-element__label"><abbr class="slds-required">*</abbr>Impact Reason</legend>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="7">
+                                            <lightning-input-field field-name="Impact_Reason__c" value={adoptionFactorData.Impact_Reason__c} variant="label-hidden" onchange={handleImpactReasonChange} data-id="Impact_Reason__c" required>
+                                            </lightning-input-field>
+                                        </lightning-layout-item>
+                                    </lightning-layout>                        
+
+                                    <lightning-layout class="slds-m-top_x-small">
+                                        <lightning-layout-item size="5">                            
+                                            <legend class="slds-form-element__legend slds-form-element__label"><abbr class="slds-required">*</abbr>CSM Manager Comments</legend>
+                                            <template if:true={strPreviousPafRecordId}>
+                                                <lightning-icon if:true={isEdit} icon-name="utility:preview" data-name="previewManagerComment" size="x-small" class="actionIcon previewManagerComment"
+                                                    onclick={handleClick} data-id="previewManagerComment" alternative-text="View Previous Comment" title="View Previous Comment">
+                                                </lightning-icon> 
+                                            </template> 
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="7">
+                                            <lightning-input-field field-name="CSM_Manager_Comments__c" variant="label-hidden" onchange={handleCsmManagerCommentsChange} data-id="CSM_Manager_Comments__c" required disabled={disableInputFields}>
+                                            </lightning-input-field>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                            </lightning-layout-item>
+                            <lightning-button class="slds-hide" type="submit" name="Save" label={strSaveButtonLabel}
+                                    data-name="pafforSubmitButton">
+                            </lightning-button>   
+                        </lightning-record-edit-form>
+                        <!--Save Button -->
+                        <div class="slds-m-vertical_medium slds-align_absolute-center">
+                            <lightning-button  variant="brand" label={label.SavePAF} data-name="save0" onclick={handleClick}>
+                            </lightning-button>
+                            <lightning-button if:true={boolDisplaySave} class="slds-m-left_x-small" variant="brand" label={strSaveButtonLabel} data-name="save" onclick={handleClick}>
+                            </lightning-button>
+                        </div>
+                    </template>
+                </template>
+            </template>
+             <!-- Modal confirmation for Edit record-->
+            <template if:true={showConfirmationModal}>               
+                <div class="slds-modal__content slds-p-around_medium slds-box">                   
+                    <div class="slds-m-top_medium slds-m-vertical_medium slds-align_absolute-center">
+                    {label.CSM_PAF_Edit_Modal_Question}
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button label="No" data-name="cancelmodal" onclick={handleClick} >
+                    </lightning-button>
+                    <lightning-button label="Yes" class="slds-m-left_small" variant="brand" data-name="confirmmodal"
+                        onclick={handleClick}>
+                    </lightning-button> 
+                </footer>
+            </template>
+        </div>  
+        
+         <!-- Compact Layout pop over. -->
+        <div class="compactLayout slds-is-relative slds-col slds-size_5-of-12 slds-float_right">
+            <template if:true={boolDisplayPopOver}>
+                <section tabindex="-1" class="slds-popover slds-popover_prompt" role="dialog">
+                    <div class="slds-popover__body">
+                        <lightning-record-view-form record-id={adoptionFactorId} 
+                                                object-api-name="Adoption_Factor__c" 
+                                                mode="readonly" 
+                                                columns="1"
+                                                density="density">
+                                                <div class="slds-form-element slds-p-left_xx-small slds-p-bottom_xx-small">
+                                                    <label class="slds-form-element__label" for="LastModifiedById">Last Modified By</label> 
+                                                    <lightning-output-field variant="label-hidden" id="LastModifiedById" field-name="LastModifiedById"></lightning-output-field>
+                                                </div>
+                                                <lightning-output-field field-name="LastModifiedDate"> </lightning-output-field>
+                                                <!--<lightning-output-field field-name="Status__c"> </lightning-output-field>    -->    
+                                                <div class="slds-form-element slds-p-left_xx-small">
+                                                    <label class="slds-form-element__label" for="pafstatus">Status</label>
+                                                    <div class="slds-form-element__control">
+                                                      <lightning-formatted-text value={pafStatus} id="pafstatus"></lightning-formatted-text>
+                                                    </div>
+                                                </div>                                       
+                                                <div class="slds-form-element slds-p-left_xx-small">
+                                                    <label class="slds-form-element__label" for="NAFDate">Update Due By</label>
+                                                    <div class="slds-form-element__control">
+                                                        <lightning-formatted-date-time value={updateDueDate} id="NAFDate" year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time>
+                                                    </div>
+                                                </div>
+                        </lightning-record-view-form>
+                    </div>
+                </section>
+            </template>
+        </div>
+        <div class="compactLayoutPreview slds-is-relative slds-col slds-size_4-of-12 slds-float_left">
+            <template if:true={strPreviousPafRecordId}>
+                <template if:true={boolDisplayPreview}>
+                    <section tabindex="-1" class="slds-popover slds-popover_prompt" role="dialog">
+                        <div class="slds-popover__body slds-popover__body_small">    
+                            <div class="slds-text-longform">   
+                                <template if:true={boolExecutiveSummary}>                         
+                                    <div class="slds-align_absolute-center slds-form-element slds-p-left_xx-small slds-p-bottom_xx-small">
+                                        <b><label class="slds-form-element__label" for="previousexecutivesummary">Previous Executive Summary</label> </b>
+                                    </div>        
+                                    <p><lightning-formatted-text value={objPreviousPafRecord.CSM_Comments__c} ></lightning-formatted-text>
+                                        <span>
+                                            <lightning-button-icon icon-name="utility:copy" data-name="copySummary" class="slds-m-left_x-small"  title="Copy Previous Comment" alternative-text="Copy Previous Comment" onclick={handleClick}></lightning-button-icon>
+                                        </span>
+                                    </p>
+                                </template>  
+                                <template if:true={boolManagerComments}>                         
+                                    <div class="slds-align_absolute-center slds-form-element slds-p-left_xx-small slds-p-bottom_xx-small">
+                                        <b><label class="slds-form-element__label" for="previousManagerComments">Previous Manager Comments</label> </b>
+                                    </div>        
+                                    <p><lightning-formatted-text value={objPreviousPafRecord.CSM_Manager_Comments__c} ></lightning-formatted-text>
+                                        <span>
+                                            <lightning-button-icon icon-name="utility:copy" data-name="copyManagerComment" class="slds-m-left_x-small" title="Copy Previous Comment" alternative-text="Copy Previous Comment" onclick={handleClick}></lightning-button-icon>
+                                        </span>
+                                    </p>
+                                </template> 
+                            </div>
+                        </div>
+                    </section>
+                </template>
+            </template>
+        </div>
+       
+    </lightning-card>
+
+   
+    <!--Risk Screen-->
+    <template if:true={boolShowRiskScreen}>
+        <c-csm-generate-risk-from-p-a-f record-id={recordId} onclose={handleClose}></c-csm-generate-risk-from-p-a-f>
+    </template>
+
+    <template if:true={iscassiniOpen}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <lightning-button-icon class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse slds-button_icon-border-filled" onclick={closeCassini} icon-name="utility:close" data-name="close"></lightning-button-icon>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Cassini Insights</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <c-csm-manage-cassini-framwork record-id={recordId}></c-csm-manage-cassini-framwork>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Close" onclick={closeCassini}>Close</button>
+                </div>
+            </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+    <!-- Churn Forecast Screen-->
+    <template if:true={boolShowChurnForecast}>
+		<c-csm-churn-forecast onclosemodal={handleCloseChurn} record-id={recordId} show-risk={boolShowRisk}></c-csm-churn-forecast>
+	</template>
+
+	<!-- IPU Consumption Goals. -->
+	<c-csm-i-p-u-consumption-goals if:true={boolDisplayIPUConsumptionGoalsModal} record-id={recordId}  bool-is-read-only=false show-forecast={showForecast.data} 
+			onclose={hideIPUConsumptionGoalsModal}></c-csm-i-p-u-consumption-goals>
+</template>

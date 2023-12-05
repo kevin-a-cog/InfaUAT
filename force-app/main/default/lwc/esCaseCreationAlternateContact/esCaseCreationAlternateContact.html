@@ -1,0 +1,181 @@
+<!--
+/*
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					                Tag
+ **********************************************************************************************************
+ NA                     NA      		UTOPIA			Initial version.			                N/A
+ Vignesh Divakaran      31-Aug-2022		I2RT-6865		Pass the alternate contacts description     T01
+                                                        from parent component
+ */
+-->
+<template>
+    <div class="container">
+        <h2 class="es-page__heading">
+            <lightning-button-icon variant="container" size="medium" icon-name="utility:chevronleft" title="Back"></lightning-button-icon>
+            Create a New Case
+        </h2>
+        <div class="row">
+            <div class="col-md-12">
+                <c-es-case-creation-filled filled-step="1" filled-label="Case Type" filled-value={caseType}></c-es-case-creation-filled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <c-es-case-creation-filled filled-step="2" filled-label="Case Information" filled-value={caseInformation}></c-es-case-creation-filled>
+            </div>
+        </div>
+        <template if:true={showAdditionalCaseInformation}>
+            <div class="row">
+                <div class="col-md-12">
+                    <c-es-case-creation-filled filled-step="3" filled-label="Additional Case Information" filled-value={caseAttachmentNumber}></c-es-case-creation-filled>
+                </div>
+            </div>
+        </template>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="es-case-wrapper">
+                    <h3 class="es-case__heading"> 
+                        <span class="es-case__step es-case__step--active">
+                            <template if:false={showAdditionalCaseInformation}>3</template>
+                            <template if:true={showAdditionalCaseInformation}>4</template>
+                        </span> 
+                        Alternate Contacts
+                    </h3>
+                        <div class="es-case-section">
+                            <p class="mb-4">{strAlternateContactsDescription}</p> <!-- <T01> -->
+                            <div class="d-md-flex align-items-center justify-content-between mb-2">
+                                <template if:true={selectedContact}>
+                                    <p>Alternate Contacts Selected ({selectedContact}/{allContacts})</p>
+                                </template>
+                                <template if:false={selectedContact}>
+                                    <p>Alternate Contacts</p>
+                                </template>
+                                
+                                <div class="es-lds-form-group d-md-flex align-items-center">
+                                    <!-- <div class="slds-form-element">
+                                        <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                                            <lightning-icon size="xx-small" class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" icon-name="utility:search"></lightning-icon>
+                                            <input type="text" id="text-input-id-1" placeholder="Find something" class="slds-input" />
+                                        </div>
+                                    </div> -->
+                                    <div class="d-flex align-items-center float-md-right">
+                                        Search &nbsp;&nbsp;
+                                        <div class="es-lds-form-group"> 
+                                            <lightning-input type="text" placeholder="Enter Search Text.." label="Search" variant="label-hidden" slot="actions" onchange={handleSearchText} ></lightning-input>
+                                        </div>
+                                    </div>   
+                                    <template if:true= {isPrimaryContact}>
+                                        <div class="es-contact-mobile">
+                                            <lightning-button label="Create New Contact" class="es-button es-button--primary ml-md-2" onclick={openModal}></lightning-button>
+                                        </div>
+                                    </template>
+                                    <!-- <div class="es-dropdown ml-2">
+                                        <lightning-button-menu icon-name="utility:sort" alternative-text="Show menu" menu-alignment="right" icon-size="large">
+                                            <lightning-menu-item value="MenuItemOne" label="First Name"></lightning-menu-item>
+                                            <lightning-menu-item value="MenuItemTwo" label="Last Name"></lightning-menu-item>
+                                            <lightning-menu-item value="MenuItemThree" label="Email"></lightning-menu-item>
+                                        </lightning-button-menu>
+                                    </div> -->
+                                    <template if:true={isModalOpen}>
+                                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open es-modal-wrapper">
+                                            <div class="slds-modal__container">
+                                                <div class="es-modal__content">
+                                                    <header class="slds-modal__header es-modal__header">
+                                                        <button class="es-button--only-icon" title="Close" onclick={closeModal}>
+                                                            <lightning-icon icon-name="utility:close"
+                                                                alternative-text="close"
+                                                                size="xx-small" ></lightning-icon>
+                                                            <span class="slds-assistive-text">Close</span>
+                                                        </button>
+                                                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create New Contact</h2>
+                                                    </header>
+                                                    <div class="es-modal__faux-body">
+                                                        <c-es-create-contact-record-edit-form supp-acc-id={selectedAccount} onaddnewcontact={handleNewContacts}></c-es-create-contact-record-edit-form>
+                                                    </div>
+                                                    <!-- <footer class="es-modal__footer d-flex">
+                                                        <p>Please Note : You will be contacted by Informatica Support Executive as per your Contact Time Zone.</p>
+                                                        <lightning-button label="Confirm" class="es-button es-button--primary"  onclick={submitDetails}></lightning-button>		
+                                                    </footer> -->
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <div class="slds-backdrop slds-backdrop_open"></div>
+                                    </template>	
+                                </div>
+                            </div>
+
+                            <template if:true={getAlternateContacts}>
+                            <div data-id="accountContacts" class="slds-show">
+                                <div class="table-responsive es-datatable">
+                                    <lightning-datatable class="slds-max-medium-table_stacked" columns={columns}  data={getAlternateContacts}   key-field="Id"   suppress-bottom-bar="true"      default-sort-direction={defaultSortDirection}   
+                                     sorted-direction={sortDirection}  sorted-by={sortedBy}  onsort={onHandleSort}      onrowselection={selectAlternateContacts}   selected-rows={selection}   >
+                                    </lightning-datatable>
+                                </div>
+                                
+                                <div class="es-table-pagination mt-2">
+                                    <p class="es-table__pagination-count">Showing {startingRecord} - {endingRecord} of {totalRecountCount} contacts</p>
+                                </div>
+                                <c-es-do-p-agination onfirst={firstHandler} onprevious={previousHandler} onnext={nextHandler} onlast={lastHandler}> </c-es-do-p-agination>
+                            </div>   
+                            </template>
+                            <template if:false={getAlternateContacts}>
+                                <tr class="es-table--empty">
+                                    <td colspan="9">There are no Alternate Contacts available.</td>
+                                </tr>
+                            </template>
+
+                            <!--<div class="table-responsive">
+                                <table class="table es-table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col"  class="es-table__contact-name-heading">First Name</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">Email Address</th>
+                                        <th scope="col">Phone Number</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={relatedContacts} for:item="altContact">
+                                            <tr key={altContact.Id}>
+                                                 <td><lightning-input label="" type="checkbox" name={altContact.Id} checked="checked" onchange={addItem}>
+                                                </lightning-input></td> 
+                                                <td class="es-table__contact-name">
+                                                    <lightning-input label="" type="checkbox" value={altContact.Id} onchange={addItem}>
+                                                    </lightning-input>
+                                                    <span class="es-table__two-vals">{altContact.Contact.FirstName}</span>
+                                                </td>
+                                                <td>{altContact.Contact.LastName}</td>
+                                                <td>{altContact.Contact.Email}</td>
+                                                <td>{altContact.Contact.Phone}</td>
+                                            </tr>
+                                        </template>
+                                        <template if:true={notAvailableAltContact}>
+                                            <tr class="es-table--empty">
+                                                <td colspan="9">There are no Alternate Contacts available.</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table> 
+                                <template if:false={notAvailableAltContact}>
+                                    <div class="es-table-pagination d-flex align-items-center justify-content-between">
+                                        <p class="es-table__pagination-count">1-10 of 27</p>
+                                        <ul class="es-table__pagination-items">
+                                            <li class="es-table__pagination-item es-table__pagination-item--current">1</li>
+                                            <li class="es-table__pagination-item">2</li>
+                                            <li class="es-table__pagination-item">3</li>
+                                        </ul>
+                                    </div>
+                                </template>
+                            </div>  -->    
+                        </div>               
+                    <div class="es-btn-grp d-md-flex d-sm-inline-flex justify-content-end">
+                        <lightning-button label="Cancel" class="es-button es-button--secondary" onclick={cancelProcess}></lightning-button>
+                        <lightning-button label="Go Back" class="es-button es-button--secondary" onclick={goToPreviousStep}></lightning-button>
+                        <lightning-button label={buttonLabel} class="es-button es-button--primary" onclick={proceed}></lightning-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

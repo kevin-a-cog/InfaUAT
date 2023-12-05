@@ -1,0 +1,89 @@
+<template>    
+    <template if:false={boolSaveProductAndNew}>  
+             <!-- Spinner. -->
+                    <div class="spinner">
+                        <template if:true={boolDisplaySpinner}>
+                            <lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+                        </template>
+                    </div>
+                    <header class="slds-modal__header" if:true={modalTitle}>
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{modalTitle}</h2>
+                    </header>
+                    <lightning-layout vertical-align="center">
+                        <lightning-layout-item flexibility="auto" if:true={objConfiguration.planProducts.showField} padding="horizontal-small">
+
+                            <lightning-combobox name={objConfiguration.planProducts.fieldId}
+                                                label={objConfiguration.planProducts.fieldLabel} 
+                                                placeholder={objConfiguration.planProducts.fieldPlaceHolder} 
+                                                data-name={objConfiguration.planProducts.fieldId}
+                                                options={objConfiguration.planProducts.options}
+                                                onchange={handleChange} 
+                                                dropdown-alignment="auto" 
+                                                variant="label-stacked"
+                                                value={objConfiguration.planProducts.fieldValue} required class={poductClass}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <lightning-layout vertical-align="center">
+                        <lightning-layout-item flexibility="auto" if:true={objConfiguration.opportunity.showField} padding="horizontal-small" class={opportunityClass}>
+                            <!--<c-custom-lookup-field
+                            data-id={objConfiguration.opportunity.fieldId}
+                            label={objConfiguration.opportunity.fieldLabel}
+                            placeholder={objConfiguration.opportunity.fieldPlaceHolder}
+                            onsearch={handleLookupSearch}                            
+                            selection={initialSelection}
+                            onselectionchange={handleLookupSelectionChange}
+                            variant ="label-stacked" 
+                            required                            
+                            ></c-custom-lookup-field>-->
+
+                            <lightning-combobox name={objConfiguration.opportunity.fieldId}
+                                                label={objConfiguration.opportunity.fieldLabel} 
+                                                placeholder={objConfiguration.opportunity.fieldPlaceHolder} 
+                                                data-name={objConfiguration.opportunity.fieldId}
+                                                options={objConfiguration.opportunity.options}
+                                                onchange={handleChange} 
+                                                dropdown-alignment="auto" 
+                                                variant="label-stacked"
+                                                value={objConfiguration.opportunity.fieldValue}
+                                                disabled={objConfiguration.opportunity.disabled} required>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+                    <lightning-layout vertical-align="center">
+                        <lightning-layout-item flexibility="auto" if:true={objConfiguration.renewalProbability.showField} padding="horizontal-small">
+                
+                            <lightning-combobox name={objConfiguration.renewalProbability.fieldId}
+                                                label={objConfiguration.renewalProbability.fieldLabel} 
+                                                placeholder={objConfiguration.renewalProbability.fieldPlaceHolder} 
+                                                data-name={objConfiguration.renewalProbability.fieldId}
+                                                options={objConfiguration.renewalProbability.options}
+                                                onchange={handleChange} 
+                                                dropdown-alignment="auto"   
+                                                variant="label-stacked"
+                                                style="color:grey;height:50px;"                                            
+                                                value={objConfiguration.renewalProbability.fieldValue} required>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </lightning-layout>    
+                    <div class="slds-grid slds-gutters" if:false={showFooter}>
+                        <div class="slds-col">&nbsp;</div>
+                    </div>          
+                <footer class="slds-modal__footer" if:true={showFooter} >
+                    <template for:each={objConfiguration.lstButtons} for:item="objButton">                 
+                            <lightning-button key={objButton.keyValue} variant={objButton.variant} 
+                                                label={objButton.label} 
+                                                title={objButton.title} 
+                                                data-name={objButton.name} 
+                                                onclick={handleClick}
+                                                class={objButton.styleClass}
+                                                if:true={objButton.showButton}>
+                            </lightning-button>                
+                    </template>
+                </footer>
+    </template>
+    <template if:true={boolSaveProductAndNew}>
+        <c-csm-edit-risk-product record-id={recordId} onclose={handleClose} from-create-risk-product={boolSaveProductAndNew}></c-csm-edit-risk-product>
+    </template>
+</template>

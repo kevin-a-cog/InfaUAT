@@ -1,0 +1,66 @@
+<!--
+Change History
+****************************************************************************************************
+ModifiedBy      Date        Jira No.    Tag     Description
+****************************************************************************************************
+Isha Bansal     30/06/2023  I2RT-8234   T01    Replaced standard recordEditForm 
+                                               with c-custom-dynamic-lookup for reference data type  
+-->
+<template>
+    <div>
+        <lightning-spinner variant="brand" if:true={showSpinner}></lightning-spinner>
+        
+        <div class="slds-grid">
+            <div class="slds-col">
+                <template if:true={showText}>
+                    <lightning-input 
+                        label="Value" 
+                        key={item.id}
+                        access-key={item.id}
+                        name="textValue"
+                        placeholder="Enter the Value"
+                        variant = "label-hidden"
+                        onchange={handleValueChange}
+                        value ={item.fieldValue}>
+                    </lightning-input>
+                </template>
+            </div>
+        </div>
+    
+        <template if:true={showPicklist}>
+            <c-multi-select-pick-list
+                key={item.id}
+                access-key={item.id}
+                options={item.multipicklistOptions}
+                onvaluechange={handlePicklistValueChange} 
+                label=""
+                value={item.fieldValue}
+            >
+            </c-multi-select-pick-list>
+        </template>
+
+        <template if:true={showBoolean}>
+            <lightning-combobox
+                key={item.id}
+                access-key={item.id}
+                value={item.fieldValue}
+                options={booleanOptions}
+                onchange={handleBooleanValueChange} 
+                variant='label-hidden'
+            >
+            </lightning-combobox>
+        </template>
+
+        <template if:true={showLookup}>       
+         <!-- T01--> 
+          <c-global-lookup sobject-name={item.lookupRefObjectName}
+          field-label=""
+            title={title}
+            subtitle={subtitle}
+            onselected={handlecustomLookupChange}                      
+            fieldvalueid={item.fieldValue}
+            placeholder={placeholder}></c-global-lookup>
+        </template>
+    </div>
+
+</template>

@@ -1,0 +1,141 @@
+<apex:component Controller="UserLicenseDetailsReport" access="global" allowDML="true">
+
+    <h2 >New Org Prod: Salesforce License Report</h2>
+
+    <table align="centre" border = "2" cellspacing = "2">
+        <tr>
+            <th>Name</th>
+            <th>Status</th>         
+            <th>Total Licenses</th>
+            <th>Used Licenses</th>
+            <th>Remaining Licenses</th>
+            <th>Consumed Licenses(%)</th>           
+            <th>Used Licenses Last Updated</th>         
+        </tr>
+        <apex:repeat value="{!records}" var="item" id="table1">
+        <tr style="{!IF(item.UsedLicenses/item.TotalLicenses*100>80 && item.UsedLicenses/item.TotalLicenses*100<90,'background-color:yellow;font-weight:bold;',IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;',''))}">
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.Name}</td>
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.Status}</td> 
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.TotalLicenses}</td>            
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.UsedLicenses}</td>
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.TotalLicenses- item.UsedLicenses}</td>
+            
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!ROUND(item.UsedLicenses/item.TotalLicenses*100,2)}%</td>
+            
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.UsedLicensesLastUpdated} </td>    
+
+              
+   </tr>
+        </apex:repeat>    
+                   
+       
+    </table>
+    
+    <h2 >New Org Prod: Manage Package License Report</h2>
+    
+        <table align="centre" border = "2" cellspacing = "2">
+        <tr>
+            <th>Name</th>
+            <th>Allowed Licenses</th>
+            <th>Used Licenses</th>         
+            <th>Remaining Licenses</th>
+            <th>Consumed Licenses(%)</th>
+            <th>Pending License Requests</th>
+            <th>Status</th>  
+            <th>System Mods tamp</th>           
+            <th>Expiration Date</th>         
+        </tr>
+        <apex:repeat value="{!lstPackageLicenseDetails}" var="item" id="table2">
+        <tr style="{!IF(item.UsedLicenses/item.AllowedLicenses*100>80 && item.UsedLicenses/item.AllowedLicenses*100<90,'background-color:yellow;font-weight:bold;',IF(item.UsedLicenses/item.AllowedLicenses*100>90,'background-color:red;',''))}">
+            <td style="{!IF(item.UsedLicenses/item.AllowedLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.NamespacePrefix}</td>
+            <td style="{!IF(item.UsedLicenses/item.AllowedLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.AllowedLicenses}</td>
+            <td style="{!IF(item.UsedLicenses/item.AllowedLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.UsedLicenses}</td> 
+            <td style="{!IF(item.UsedLicenses/item.AllowedLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.AllowedLicenses - item.UsedLicenses}</td>
+            <td style="{!IF(item.UsedLicenses/item.AllowedLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!ROUND(item.UsedLicenses/item.AllowedLicenses*100,2)}%</td>
+            <td style="{!IF(item.UsedLicenses/item.AllowedLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.PendingMPLRequests}</td> 
+            <td style="{!IF(item.UsedLicenses/item.AllowedLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.Status} </td>
+            <td style="{!IF(item.UsedLicenses/item.AllowedLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.SystemModstamp} </td>  
+            <td style="{!IF(item.UsedLicenses/item.AllowedLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.ExpirationDate} </td>            
+          
+   </tr>
+        </apex:repeat>    
+        </table>
+        
+         <h2 >New Org Prod: PSL Report</h2>
+    
+        <table align="centre" border = "2" cellspacing = "2">
+        <tr>
+            <th>Name</th>
+            <th>Allowed Licenses</th>
+            <th>Used Licenses</th>         
+            <th>Remaining Licenses</th>
+            <th>Consumed Licenses(%)</th>
+            <th>Pending License Requests</th>
+            <th>Expiration Date</th>         
+        </tr>
+        <apex:repeat value="{!lstPermissionSetLicenseDetails}" var="item" id="table4">
+        <tr style="{!IF(item.UsedLicenses/item.TotalLicenses*100>80 && item.UsedLicenses/item.TotalLicenses*100<90,'background-color:yellow;font-weight:bold;',IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;',''))}">
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.MasterLabel}</td>
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.TotalLicenses}</td>
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.UsedLicenses}</td> 
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.TotalLicenses - item.UsedLicenses}</td>
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!ROUND(item.UsedLicenses/item.TotalLicenses*100,2)}%</td>
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.PendingPSLRequests} </td>    
+            <td style="{!IF(item.UsedLicenses/item.TotalLicenses*100>90,'background-color:red;color:white;font-weight:bold;','')}">{!item.ExpirationDate} </td>            
+          
+   </tr>
+        </apex:repeat>    
+        </table>
+        
+        <h2 >New Org Prod: Feature License Report</h2>
+    
+        <table align="centre" border = "2" cellspacing = "2">
+        <tr>
+            <th>Name</th>
+            <th>Allowed Licenses</th>
+            <th>Used Licenses</th>         
+            <th>Remaining Licenses</th>
+            <th>Consumed Licenses(%)</th>
+                     
+        </tr>
+        <apex:repeat value="{!wrapObjectList}" var="item2" id="table3">
+        <tr style="{!IF(item2.UsedPercent>80 && item2.UsedPercent<90,'background-color:yellow;font-weight:bold;',IF(item2.UsedPercent>90,'background-color:red;color:white;font-weight:bold;',''))}">
+            
+            <td style="{!IF(item2.UsedPercent>90,'background-color:red;color:white;font-weight:bold;','')}">{!item2.name}</td>
+            <td style="{!IF(item2.UsedPercent>90,'background-color:red;color:white;font-weight:bold;','')}">{!item2.TLicen}</td>
+            <td style="{!IF(item2.UsedPercent>90,'background-color:red;color:white;font-weight:bold;','')}">{!item2.UsedLicen}</td> 
+            <td style="{!IF(item2.UsedPercent>90,'background-color:red;color:white;font-weight:bold;','')}">{!item2.AvailLicen}</td>
+            <td style="{!IF(item2.UsedPercent>90,'background-color:red;color:white;font-weight:bold;','')}">{!item2.UsedPercent}%</td>          
+          
+   </tr>
+        </apex:repeat>    
+                   
+       
+    </table>
+    <!--               
+       <table align="centre" border = "2" cellspacing = "2">
+        <tr>
+            <th>Name</th>
+            <th>Allowed Licenses</th>
+            <th>Used Licenses</th>         
+            <th>Remaining Licenses</th>
+            <th>Consumed Licenses(%)</th>
+                     
+        </tr>
+        <apex:repeat value="{!wrapObjectList1}" var="item2" id="table4">
+        <tr>
+            
+            <th>Name</th>
+            <td>{!item2.TLicen}</td>
+            <td>{!item2.UsedLicen}</td> 
+            <td>{!item2.AvailLicen}</td>
+            <td>{!item2.UsedPercent}</td>          
+          
+   </tr>
+        </apex:repeat>    
+                   
+       
+    </table>
+    --> 
+
+</apex:component>

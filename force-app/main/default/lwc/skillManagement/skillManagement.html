@@ -1,0 +1,52 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 08-17-2020
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   08-14-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<template>
+    <div class="slds-template__container">
+       <div class="slds-box slds-theme_shade">
+           <h1> 
+               <lightning-icon icon-name="action:add_relationship" alternative-text="Approved" title="Approved"></lightning-icon> Total Skills({totalitems}) </h1>
+   
+   
+         </div>
+       <template if:true={errorApex}>
+           <div class="slds-m-around_medium slds-text-color_error">
+               {errorApex} <br>
+           </div>
+       </template>
+       <template if:true={errorJavascript}>
+           <div class="slds-m-around_medium slds-text-color_error">
+               {errorJavascript} <br>
+           </div>
+       </template>
+      
+       <!-- lightning-datatable
+                    data={rowData}
+                    columns={columns}
+                    key-field="Id"
+                    onrowselection={updateSelectedRows}                    
+                    onrowaction={handleRowAction}
+                    hide-checkbox-column>
+        </lightning-datatable -->
+       
+       
+       <c-datatable-flow
+   
+               columns={columns}
+               mydata={rowData}
+               onrowactiontaken={handleRowAction}
+               onrowselected={updateSelectedRows}>
+       </c-datatable-flow >
+       <div class="toast-message">
+           <c-toast-message></c-toast-message>
+       </div>
+       
+   </div>
+   </template>

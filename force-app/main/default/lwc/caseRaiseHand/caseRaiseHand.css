@@ -1,0 +1,15 @@
+.lwcbody {
+  height: 460px;
+}
+
+.lwc-textarea {
+  --sds-c-textarea-sizing-min-height:80px;
+}
+
+.custom-container {
+  width: 100% !important;
+  max-width: none !important;
+}
+.required{
+  border: 2px solid red;
+}

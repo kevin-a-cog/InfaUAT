@@ -1,0 +1,18 @@
+<!--Page to Call Lighting Component for Review Assets from Quote for Assets & Entitlements Design-->
+<apex:page standardController="SBQQ__Quote__c">
+    <apex:includeLightning />
+    <div id="lightning" />    
+    
+    <script>
+    var recordId = "{!$CurrentPage.parameters.id}";
+    // var recordId = "8010m0000008XsPAAU"; 
+
+    $Lightning.use("c:ReviewAssetsOrderApp", function() {
+        $Lightning.createComponent(
+            "c:ReviewAssetsOrder",
+            {"recordId" : recordId},
+            "lightning"
+        );
+    });
+    </script>
+</apex:page>

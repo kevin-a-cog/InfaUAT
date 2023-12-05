@@ -1,0 +1,19 @@
+﻿<script id="InfaKBSearchNoResults" class="no-results-template" type="text/x-underscore-template">
+    <% var tab = query.tab %>
+    <div class="no-results">       
+        <p>Zero results found for the term<span style="font-style:italic;"><%- (query.q ? ' : ' + query.q : '') %></span></p>
+        <div id="didyoumean" style="font-weight: bold; font-size: 20px;"></div>
+        <br>
+        <div class="suggestions-options">
+            <div class="suggestions-options-div-text">
+                <p>Please try the following options to refine your search: </p>
+                <ul class="suggestions">
+                    <li>Clear any pre-selected filters</li>
+                    <li>Use generic search terms</li>
+                    <li>For an exact search, enclose the search term within quotes; while searching for CRs, EBFs, specific error codes/messages (Example: "Find duplicates", "AXON-13611", "EBF 14527")</li>                    
+                </ul>
+            </div>            
+        </div>
+        <p></p>
+    </div>
+</script>

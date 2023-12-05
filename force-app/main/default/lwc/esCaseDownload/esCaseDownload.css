@@ -1,0 +1,19 @@
+lightning-input.slds-form-element {
+    padding: 5px;
+}
+lightning-combobox.slds-form-element {
+    padding: 5px;
+}
+.buttonincmp{
+    margin-right:10px;
+    padding: 4px !important;
+}
+.export-card-wrapper{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background: #fff;
+}
+.export-card-wrapper-header{
+    font-size: 0.8125rem;
+    margin-left: 0.5rem;
+}

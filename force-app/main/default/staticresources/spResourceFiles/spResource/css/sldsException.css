@@ -1,0 +1,75 @@
+/*** Recommended KB articles - Coveo ***/
+c-es-case-deflection .CoveoSearchInterface {
+    min-width: 100%!important;
+}
+c-es-case-deflection .coveo-main-section .CoveoExcerpt {
+    font-size: 10px;
+    line-height: 14px;
+}
+c-es-case-deflection .coveo-main-section .CoveoMainBadge {
+    justify-content: space-between;
+    align-items: center;
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    c-es-case-deflection .coveo-main-section .CoveoMainBadge {
+        flex-wrap: wrap;
+    }
+}
+c-es-case-deflection .coveo-main-section .coveo-result-list-container {
+    margin-right: 0;
+}
+c-es-case-deflection .coveo-main-section .coveo-results-column {
+    padding: 0!important;
+}
+c-es-case-deflection .coveo-main-section .coveo-list-layout.CoveoResult {
+    padding: 6px 0;
+}
+c-es-case-deflection .coveo-main-section .CoveoResultList {
+    margin-top: 0;
+}
+c-es-case-deflection .coveo-main-section .CoveoResult .CoveoResultLink {
+    font-weight: 600!important;
+    font-size: 12px!important;
+    line-height: 18px!important;
+    margin: 8px 0!important;
+    color: #333!important;
+    display: inline-block;
+}
+c-es-case-deflection .CoveoPager {
+    margin-left: 0!important;
+}
+c-es-case-deflection .CoveoPager .coveo-pager-list-item {
+    padding: 4px 8px!important;
+    font-size: 12px!important;
+    margin: 2px!important;
+    border: 0 none;
+    background: none!important;
+}
+c-es-case-deflection .CoveoPager .coveo-pager-list-item.coveo-active a, 
+c-es-case-deflection .CoveoPager .coveo-pager-list-item:hover a {
+    color: #333;
+    text-decoration: none;
+}
+c-es-case-deflection .CoveoPager .coveo-pager-next-icon-svg,
+c-es-case-deflection .CoveoPager .coveo-pager-previous-icon-svg {
+    width: 10px;
+    height: 12px;
+}
+.es-recommended-article.coveo-result-frame{
+    padding: 0px !important;
+}
+.es-article-header.CoveoResultLink{
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    line-height: 20px !important;
+}
+/*** Case details - Case update ***/
+.es-timeline__comment-text .slds-rich-text-editor__output table {
+    table-layout: fixed;
+    width: 100%;
+}
+@media only screen and ( max-width: 420px ){
+    .ui-widget .forceCommunityTabset{
+    margin: 0 10px 20px 10px;
+	}
+}

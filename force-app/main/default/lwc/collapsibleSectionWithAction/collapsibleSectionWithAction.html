@@ -1,0 +1,118 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 06-17-2021
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   06-16-2021   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<template>
+
+    <div class="slds-section slds-is-open no-margin" data-name="accordionSection">
+        <h3 class="slds-section__title">
+            <button class="slds-button slds-section__title-action" style={headerStyle} data-name="accordionHeader"
+                onclick={handleSectionClick}>
+                <div class="row r3">
+                    <div class="cell iconClass">
+                        <lightning-icon data-name="accordion-icon" icon-name="utility:switch" size="x-small"
+                            class="slds-p-horizontal_xx-small">
+                        </lightning-icon>
+                    </div>
+                    <div class="cell contentClass">
+                        <slot name="headerContent"></slot>
+                    </div>
+                    <div class="cell actionClass">
+                        <div class="slds-var-p-left_small slds-float_right" if:true={action}>
+                            <template for:each={action} for:item="actionItem">
+                                <template if:true={actionItem.isButtonIcon}>
+                                    <lightning-button-icon icon-name={actionItem.iconName} key={actionItem.name}
+                                        title={actionItem.label} data-name={actionItem.name} class="slds-m-right_small"
+                                        variant="bare" onclick={handleClick}>
+                                    </lightning-button-icon>
+                                </template>
+                                <template if:false={actionItem.isButtonIcon}>
+                                    <lightning-button label={actionItem.label} title={actionItem.label}
+                                        key={actionItem.name} data-name={actionItem.name} class="slds-m-right_small"
+                                        onclick={handleClick}>
+                                    </lightning-button>
+                                </template>
+                            </template>
+                            <div class="slds-p-left_small slds-border_left" style="display:inline-block">
+                                <slot name="milestonePercent"></slot>
+                                <lightning-button-menu alternative-text="Show menu" if:true={menu}
+                                    data-name="action-menu" menu-alignment="auto">
+                                    <template for:each={menu} for:item="menuItem">
+                                        <lightning-menu-item value={menuItem.name} label={menuItem.label}
+                                            key={menuItem.name} onclick={handleClick} data-name={menuItem.name}>
+                                        </lightning-menu-item>
+                                    </template>
+                                </lightning-button-menu>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </button>
+        </h3>
+        <div aria-hidden="false" class="slds-section__content" id="expando-unique-id1">
+            <slot name="body"></slot>
+        </div>
+    </div>
+
+    <!-- <div class="slds-section slds-is-open " data-name="accordionSection">
+        <div class="row r3 slds-border_top slds-border_bottom slds-p-vertical_x-small sectionHeader">
+            <div class="cell iconClass" data-name="accordion-icon" onclick={handleSectionClick}>
+                <lightning-icon icon-name="utility:switch" size="x-small" class="slds-p-horizontal_xx-small">
+                </lightning-icon>
+            </div>
+            <div class="cell contentClass">
+                <slot name="headerContent"></slot>
+            </div>
+            <div class="cell actionClass">
+                <div class="slds-p-horizantal_small slds-float_right" if:true={action}>
+                    <template for:each={action} for:item="actionItem">
+                        <template if:true={actionItem.isButtonIcon}>
+                            <lightning-button-icon icon-name={actionItem.iconName} key={actionItem.name}
+                                title={actionItem.label} data-name={actionItem.name} class="slds-m-right_small"
+                                variant="bare" onclick={handleClick}>
+                            </lightning-button-icon>
+                        </template>
+                        <template if:false={actionItem.isButtonIcon}>
+                            <lightning-button label={actionItem.label} title={actionItem.label} key={actionItem.name}
+                                data-name={actionItem.name} class="slds-m-right_small" onclick={handleClick}>
+                            </lightning-button>
+                        </template>
+                    </template>
+                    <div class="slds-p-horizontal_small slds-border_left" style="display:inline-block">
+                        <slot name="milestonePercent"></slot>
+                        <lightning-button-menu alternative-text="Show menu" if:true={menu}>
+                            <template for:each={menu} for:item="menuItem">
+                                <lightning-menu-item value={menuItem.name} label={menuItem.label} key={menuItem.name}
+                                    onclick={handleClick} data-name={menuItem.name}>
+                                </lightning-menu-item>
+                            </template>
+                        </lightning-button-menu>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!- - <div class="slds-section__title slds-theme_shade">
+            <lightning-layout style="width:100%">
+                <lightning-layout-item size="9">
+                    <lightning-icon icon-name="utility:switch" size="x-small" class="slds-p-horizontal_x-small">
+                    </lightning-icon>
+                    <span class="slds-truncate" title={header}>{header}</span>
+                </lightning-layout-item>
+                <lightning-layout-item size="3">
+
+
+                </lightning-layout-item>
+            </lightning-layout>
+        </div> - ->
+        <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+            <slot name="body"></slot>
+        </div>
+    </div> -->
+
+</template>

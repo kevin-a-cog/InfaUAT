@@ -1,0 +1,46 @@
+.in-alert-img{
+    height: 24px;
+    transform: rotate(335deg);
+}
+
+.in-close-img{
+    height: 24px;   
+}
+
+.in-anouncement-textwrap {
+    flex: 1;
+    padding: 0 10px;
+    font-weight: 500;
+    line-height: 1.2;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.in-anouncement-textwrap li {
+    list-style-position: inside;
+}
+
+h6{
+    margin-bottom: 0rem;
+}
+
+.in-alert{
+    justify-content: left;
+}
+
+.in-alert {
+    padding-left: 0;
+    padding-right: 0;
+    /* I2RT-8760 - Added by Chetan shetty- Mobile View of IN Alerts starts*/
+    word-break: break-word;
+    max-width: 100%;
+     /* I2RT-8760 - Mobile View of IN Alerts ends*/
+}
+
+.in-notify-container {
+    display: flex;
+    align-items: center;
+}
+.in-notify-close {
+    margin-left: auto;
+}

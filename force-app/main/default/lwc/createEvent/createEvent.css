@@ -1,0 +1,60 @@
+/* Styles for Modal popup . Added by Chetan Shetty */
+.slds-modal {
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    margin-top: 15px;
+}
+.in-modal__faux-body {
+    margin: 20px;
+}
+.in-modal__body{
+    margin: 0;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+.in-modal__footer {
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+    background: #fff;
+}
+.in-button--only-icon{
+    top: 8px;
+}
+/* ends here */
+
+.help-tz {
+    position: relative;
+}
+
+.help-start-timeZone {
+    position: absolute;
+    top: 2px;
+    left: 90px;
+}
+
+.help-end-timeZone {
+    position: absolute;
+    top: 2px;
+    left: 85px;
+}
+
+.help-icon-wrap {
+    display: inline-block;
+    vertical-align: bottom;
+    padding-left: 4px;
+}
+
+.help-timeZone {
+    font-size: 12px;
+    font-weight: 300;
+    color: #333;
+}
+
+.help-text-icon {
+    display: flex;
+}
+
+.help-icon-wrap1 {
+    padding-top: 13px;
+}

@@ -1,0 +1,55 @@
+<apex:component controller="PRMProductTableController" access="global">
+    
+    <apex:attribute name="AcctId" type="Id" description="Id of the account" assignTo="{!engagementId}"/>
+
+    <br/><br/>
+    PRN Number: {!engagement.Product_Request_Number__c}<br/>
+    Requester Name: {!engagement.Requested_By__r.Name}<br/>
+    E-Mail: {!engagement.Requested_By__r.Email}<br/>
+    Partner Organization: {!engagement.Account__r.Name} <br/>
+    Opportunity ID: {!engagement.Opportunity_Id__c} <br/>
+    Customer Name: {!engagement.Customer_Name__c} <br/><br/>
+
+    <apex:outputPanel rendered="{!(mdmProducts.size > 0)}">
+        Service Selected: MDM Saas<br/>
+        Training Completed: {!mdmProducts[0].Training_Completed__c}<br/>
+        List of MDM Services Selected <br/><br/>
+        <table border = "2" cellspacing = "5">
+            <tr>
+                <td>Product Request Id</td>
+                <td>Product Name</td>
+                <td>Product Status</td>
+            </tr>
+            <apex:repeat value="{!mdmProducts}" var="o">
+            <tr>
+                <td>{!o.Name}</td>
+                <td>{!o.Product__r.Name}</td>   
+                <td>{!o.Status__c}</td>             
+            </tr>
+            </apex:repeat>       
+        </table>
+    </apex:outputPanel>
+
+    <br/><br/>
+
+    <apex:outputPanel rendered="{!(cdgcProducts.size > 0)}">
+        Service Selected: CDGC<br/>
+        Training Completed: {!cdgcProducts[0].Training_Completed__c}<br/>
+        List of CDGC Services Selected <br/>
+        <table border = "2" cellspacing = "5">
+            <tr>
+                <td>Product Request Id</td>
+                <td>Product Name</td>
+                <td>Product Status</td>
+            </tr>
+            <apex:repeat value="{!cdgcProducts}" var="o">
+            <tr>
+                <td>{!o.Name}</td>
+                <td>{!o.Product__r.Name}</td>   
+                <td>{!o.Status__c}</td>             
+            </tr>
+            </apex:repeat>       
+        </table>
+    </apex:outputPanel>
+    <br/>
+</apex:component>

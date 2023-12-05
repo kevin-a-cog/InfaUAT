@@ -1,0 +1,17 @@
+<template>
+
+    <div class="modal-header slds-modal__header">
+        <h3 class="title slds-text-heading_medium">Remove Related KB ?</h3>
+    </div>
+    <div class="modal-body scrollable slds-modal__content slds-p-around--medium" style="padding:16px;">
+        <div class="detail slds-text-align--center">
+            The Related KB will be removed from the KB Record.</div>
+    </div>
+    <div class="modal-footer slds-modal__footer">
+        <div class="slds-align_absolute-center">
+            <button class="slds-button slds-button_neutral" onclick={closeQuickAction} title="Cancel">Cancel</button>
+            <button class="slds-button slds-button_brand" onclick={deleteRelatedKB} title="Delete">Delete</button>
+        </div>
+    </div>
+
+</template>

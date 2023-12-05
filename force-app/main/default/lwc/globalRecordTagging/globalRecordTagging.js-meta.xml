@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Global Record Tagging</masterLabel>
+    <description>This LWC displays the related tags based on the Record Tagging rule engine.</description>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+		<target>lightning__Tab</target>
+		<target>lightning__RecordAction</target>
+		<target>lightningCommunity__Page</target>
+    </targets>
+	<targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage">
+            <property label="Child Object.Field" name="strChildRelationship" type="String" description="Child object and Lookup field related to the current record, to search for child records. i.e. Case.AccountId" />
+			<property label="Style" name="strStyle" type="String" description="CSS Style to be applied to the Tags container." />
+			<property label="Component Style" name="strComponentStyle" type="String" description="CSS Style to be applied to the component itself." />
+			<property label="Should Blink?" name="boolBlink" type="Boolean" description="If true, the component will blink." />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

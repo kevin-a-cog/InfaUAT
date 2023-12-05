@@ -1,0 +1,36 @@
+<!--
+/*
+ * Name			:	GlobalScheduler
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	5/20/2022
+ * Description	:	This Visualforce Page exposes the Share Availability functionality on a Force.com Site.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		5/20/2022		N/A				Initial version.			N/A
+ */
+-->
+<apex:page showHeader="false" sidebar="false">
+
+	<!-- We include the lightning libraries. -->
+    <apex:includeLightning />
+
+	<!-- Now we define the LWC container. -->
+    <div id="globalSchedulerContainerExternalSite" />
+
+	<!-- Now we execute the Lightning Out part. -->
+    <script>
+		let strRecordId = "{!$CurrentPage.parameters.id}";
+		if(typeof strRecordId !== "undefined" && strRecordId !== null && strRecordId !== "") {
+			$Lightning.use("c:GlobalSchedulerApp", function() {
+				$Lightning.createComponent("c:globalScheduler", {
+					recordId: strRecordId,
+					boolIsExternalSite: true
+				},
+				"globalSchedulerContainerExternalSite", null);
+			});
+		}
+    </script>
+</apex:page>

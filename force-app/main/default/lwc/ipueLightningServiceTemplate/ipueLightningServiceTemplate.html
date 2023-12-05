@@ -1,0 +1,44 @@
+<template>
+    <div class="page-section">
+        <template if:true={showSpinner}>
+            <div class="spinnerContainer">
+                <lightning-spinner
+                    alternative-text="Recalculating..."
+                    size="small"
+                    title="Recalculating...">
+                </lightning-spinner>
+            </div>
+        </template>
+        <template for:each={templates} for:item="template">
+            <div key={template.Id}>
+                <div class="slds-m-bottom_medium slds-m-left_small">
+                    <template if:true={template.hasIntegrations}>
+                        <template if:true={template.contentFound}>
+                            <div class="templateName">{template.name}</div>
+                            <div class="slds-p-around_small">
+                                <lightning-formatted-rich-text value={template.content}>
+                                </lightning-formatted-rich-text>
+                            </div>
+                        </template>
+                        <template if:false={template.contentFound}>
+                            <div class="disabled">
+                                <div class="templateName">{template.name}</div>
+                                <div class="slds-p-around_small">
+                                    <!-- This ought to be a label -->
+                                    Update a value to see the most up-to-date information!
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:false={template.hasIntegrations}>
+                        <div class="templateName">{template.name}</div>
+                        <div class="slds-p-around_small">
+                            <lightning-formatted-rich-text value={template.content}>
+                            </lightning-formatted-rich-text>
+                        </div>
+                    </template>                    
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

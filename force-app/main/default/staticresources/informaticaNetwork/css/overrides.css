@@ -1,0 +1,344 @@
+/* 
+Container
+*/
+.cb-section_column.slds-size_12-of-12.slds-max-medium-size_12-of-12{
+  padding: 0px !important;
+}
+
+.cb-section_column.slds-size_12-of-12.slds-max-medium-size_12-of-12.slds-large-size_9-of-12{
+  padding: 16px 10px 16px 0px !important;
+}
+@media screen and (max-width: 768px) {
+  .cb-section_column.slds-size_12-of-12.slds-max-medium-size_12-of-12.slds-large-size_9-of-12{
+    padding: 16px 0px 16px 0px !important;
+  } 
+}
+
+
+.cb-section_column.slds-size_12-of-12.slds-max-medium-size_12-of-12.slds-large-size_3-of-12{
+  padding: 16px 0px 16px 10px !important;
+}
+@media screen and (max-width: 768px) {
+  .cb-section_column.slds-size_12-of-12.slds-max-medium-size_12-of-12.slds-large-size_3-of-12{
+    padding: 0px !important;
+  }
+}
+
+/* 
+Trending Discussion - Landing Page
+My Feed - Landing Page
+*/
+.compactFeed.forceChatterCompactFeed .forceChatterScroller,
+.forceCommunityForceCommunityFeed .forceChatterFeed .forceChatterStyle .forceChatterFeedInner{
+  background: #ffffff;
+  box-sizing: border-box;
+  box-shadow: 0px 4.58964px 11.4741px rgb(0 0 0 / 25%);
+}
+@media screen and (max-width: 768px){
+  .forceCommunityForceCommunityFeed,
+  .cChatterViewHelper {
+    margin: 0 auto;
+    width: 92%;
+  }
+  .forceCommunityForceCommunityFeed .forceChatterFeed .forceChatterStyle .forceChatterFeedInner{
+    padding: 0px 15px;
+  }
+}
+
+/* 
+Tending Discussion - Landing Page 
+*/
+.slds-grid.slds-grid_align-spread.slds-grid_vertical-align-end.slds-m-vertical_small {
+  padding: 0px 20px;
+}
+
+/* 
+Hall of fame - Landing Page
+Trending Communities - Landing page
+*/
+.ui-widget .forceCommunityReputationLeaderboard42,
+.ui-widget .forceCommunityTrendingTopics {
+  background: #ffffff;
+  box-sizing: border-box;
+  box-shadow: 0px 4.58964px 11.4741px rgba(0, 0, 0, 0.25);
+}
+
+@media screen and (max-width: 768px) {
+  .ui-widget .forceCommunityReputationLeaderboard42 {
+    margin: 0 auto;
+    width: 92%;
+  }
+}
+.ui-widget .forceCommunityReputationLeaderboard42
+  .slds-avatar.slds-avatar_large.slds-avatar_circle {
+    height: auto;
+    width: 35px;
+    margin-top: 12px;
+}
+/* 
+Padding for OOTB components
+*/
+.forceChatterScroller
+  .resizeCaptureFrameWrapper
+  .skip-feed-wrapper
+  .cuf-feedElementIterationItem.slds-feed__item,
+  .compactFeedList .compactFeedListItem,
+  .forceCommunityReputationLeaderboard42 .clear{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+@media screen and (max-width: 768px) {
+  .forceChatterScroller
+  .resizeCaptureFrameWrapper
+  .skip-feed-wrapper
+  .cuf-feedElementIterationItem.slds-feed__item {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .forceChatterScroller
+  .resizeCaptureFrameWrapper
+  .skip-feed-wrapper
+  .cuf-feedElementIterationItem.slds-feed__item
+  .cuf-feedElement.cuf-feedElement {
+    padding: 15px 0px;
+  }
+  .forceChatterScroller
+  .resizeCaptureFrameWrapper
+  .skip-feed-wrapper
+  .cuf-feedElementIterationItem.slds-feed__item
+  .cuf-feedElement.cuf-feedElement
+  .cuf-entityLinkId.forceChatterEntityLink.entityLinkHover,
+  .forceChatterScroller
+  .resizeCaptureFrameWrapper
+  .skip-feed-wrapper
+  .cuf-feedElementIterationItem.slds-feed__item
+  .cuf-feedElement.cuf-feedElement
+  .uiOutputText {
+    font-size: 14px;
+  }
+}
+
+/* 
+Font Size - Hall of Fame - Landing Page
+*/
+.slds-media__body
+  .levelAndPointsCol.slds-truncate.slds-p-left_small.slds-align-middle
+  .comm-leaderboard__user-name.slds-text-body_regular,
+.slds-grid.slds-wrap .slds-col.slds-truncate .uiOutputText {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 32px;
+  letter-spacing: 0.02em;
+  color: #333333;
+}
+
+.slds-media__body
+.levelAndPointsCol.slds-truncate.slds-p-left_small.slds-align-middle
+.comm-leaderboard__user-name.slds-text-body_regular,
+.comm-leaderboard__points-column .comm-leaderboard__points {
+  font-weight: 400;
+}
+.comm-leaderboard__level-name {
+  margin-left: 10px;
+}
+
+/* Ask A Question button - Landing Page */
+/*.cb-section.forceCommunitySection .ui-widget .askCommunityBtn{
+  height: 72px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  line-height: 21px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}*/
+
+/* 
+Footer - Aglets
+*/
+.infalib-app-footer-v2 .infalib-social-link {
+  margin-left: 10px;
+  margin-right: 0px;
+}
+
+/* 
+Tabs 
+*/
+.slds-tabs_default__item.slds-is-active{
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 18px;
+  color: #FF4D00;
+}
+.slds-tabs_default__item{
+  font-style: normal;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 18px;
+  color: #373737;
+  margin: 0px 15px 0px 10px;
+  padding: 0px;
+}
+
+.slds-tabs_default__item:hover:after{
+  background-color: #FF4D00;
+}
+@media screen and (max-width: 768px) {
+  .slds-tabs_default__item.slds-tabs_default__overflow-button {
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+  }  
+  .in-second-filter .slds-form-element__label:empty {
+    display: none;
+  }
+}
+
+/* 
+For Topic Metrics
+*/
+.topicStats.slds-card-wrapper.forceChatterTopicMetrics.forceCommunityTopicMetrics{
+  background: #FFFFFF;
+  border: 1px solid #C4C4C4;
+  box-sizing: border-box;
+  border-radius: 0px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+}
+
+@media screen and (max-width:768px){
+  .topicStats.slds-card-wrapper.forceChatterTopicMetrics.forceCommunityTopicMetrics{
+    margin: 0 auto 0 1%;
+    width: 95%;
+  }
+}
+
+.topicStats.slds-card-wrapper.forceChatterTopicMetrics.forceCommunityTopicMetrics .secondRow {
+  margin-bottom: 10px;
+}
+
+.forceChatterTopicMetrics .lightningIconWidth {
+  margin-top: -2px;
+}
+
+.showTalkingAbout{
+  font-size: 12px !important;
+}
+
+.topicStats.slds-card-wrapper.hideEl.forceChatterTopicMetrics.forceCommunityTopicMetrics{
+  display: none;
+}
+
+/* 
+Top Articles
+*/
+.topicRelatedArticleList{
+  background: #ffffff;
+  box-sizing: border-box;
+  box-shadow: 0px 4.58964px 11.4741px rgb(0 0 0 / 25%);
+}
+
+.desc-height .slds-textarea{
+  height: 200px;
+}
+
+/* Announcement Carousel */
+
+@media screen and (max-width: 768px) {
+  .in-announcement-container .owl-dots {
+    display: flex;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    position: relative;
+    margin-top: 30px !important;
+  }
+  .help-hero-banner-border .owl-dots {
+    left: 0;
+    width: 100%;
+  }
+}
+
+/* User Profile Stats */
+
+.slds-scope.forceCommunityUserProfileStats {
+  background: white;
+  border-radius: 0;
+  border: none;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+}
+@media screen and (max-width: 768px) {
+  .slds-scope.forceCommunityUserProfileStats {
+    margin: 0 auto;
+    width: 92%;
+  }
+  .forceDiscoveryUserProfileKnowledgeableAbout {
+    margin: 0 auto;
+    width: 92%;
+    border-radius: 0 !important;
+  }
+}
+
+/*
+User group headings 
+ */
+.slds-card.slds-card_boundary.forceBaseCard.forceChatterGroupDetailCard.forceCommunityGroupDetail .slds-card__header.slds-grid{
+  background: #00A9BB;
+  color: #ffffff;
+  padding: 10px;
+  font-style: normal;
+  font-size: 18px;
+  letter-spacing: 0.03em;
+}
+
+@media screen and (max-width: 768px) {
+  .slds-card.slds-card_boundary.forceBaseCard.forceChatterGroupDetailCard {
+    margin: 0 auto;
+    width: 92%;
+  }
+}
+
+.slds-card.slds-card_boundary.forceBaseCard.forceChatterGroupDetailCard.forceCommunityGroupDetail .slds-card__header.slds-grid .slds-card__header-title.slds-truncate{
+  font-weight: 400;
+}
+
+.slds-card.slds-card_boundary.forceBaseCard.forceChatterGroupDetailCard.forceCommunityGroupDetail .groupDescription.slds-is-relative.truncateGroupDetail{
+  max-height: 116px;
+}
+
+
+.siteforceSldsOneColLayout.siteforceContentArea .slds-col--padded.contentRegion.comm-layout-column{
+  padding: 0px;
+}
+
+/* Feed and bookmark tab on user profile page */
+.uiTabBar {
+  background: #00A9BB;
+}
+span.title {
+  color: white;
+  padding: 10px;
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+}
+	
+.help-searchbar-result-title{
+  cursor: text !important;
+}
+.help-searchbar-result-title:hover{
+  background-color: white !important;
+}
+
+.in-notify-alert.slds-notify_alert a, .in-notify-alert.slds-notify--alert a  {
+  color: blue;
+  text-decoration: underline !important;
+}
+
+.in-notify-alert.slds-notify_alert a:hover, .in-notify-alert.slds-notify--alert a:hover {
+  color: #007bff;
+  text-decoration: underline !important;
+}

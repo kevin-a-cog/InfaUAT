@@ -1,0 +1,56 @@
+<aura:component controller="ThanksBadgesController"
+  implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global">
+  <aura:attribute name="badges" type="List" />
+  <aura:attribute name="recordId" type="Id" />
+
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+  <aura:if isTrue="{!empty(v.badges)}">
+    <div class="slds-align_absolute-center">
+      No badges available.
+    </div>
+    <aura:set attribute="else">
+      <!--<lightning:card title="Thanks Badges">-->
+      <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-box slds-scrollable">
+        <thead>
+          <tr class="slds-line-height_reset">
+            <th class="slds-text-title_caps slds-cell-wrap" scope="col">
+              <div class="slds-truncate" title=""></div>
+            </th>
+            <th class="slds-text-title_caps slds-cell-wrap" scope="col">
+              <div class="slds-truncate" title="Badge">Badge</div>
+            </th>
+            <th class="slds-text-title_caps slds-cell-wrap" scope="col">
+              <div class="slds-truncate" title="Message">Message</div>
+            </th>
+            <th class="slds-text-title_caps slds-cell-wrap" scope="col">
+              <div class="slds-truncate" title="Given by">Given by</div>
+            </th>
+          </tr>
+        </thead>
+        <aura:iteration items="{!v.badges}" var="item">
+          <tbody>
+            <td scope="row" class="slds-cell-wrap">
+              <span class="slds-avatar slds-avatar--large">
+                <div class="slds-truncate" title="{!item.ImageUrl}"><img src="{!item.ImageUrl}" /></div>
+              </span>
+            </td>
+            <td scope="row" class="slds-cell-wrap">
+              <div align="center" class="slds-grid slds-has-flexi-truncate" title="{!item.Definition.Name}">
+                {!item.Definition.Name}</div>
+            </td>
+            <td scope="row" class="slds-cell-wrap">
+              <div class="slds-grid slds-has-flexi-truncate" title="{!item.Message}">{!item.Message}</div>
+            </td>
+            <td scope="row" class="slds-cell-wrap">
+              <div align="center" class="slds-grid slds-has-flexi-truncate" title="{!item.Giver.Name}">
+                {!item.Giver.Name}
+              </div>
+            </td>
+          </tbody>
+        </aura:iteration>
+      </table>
+      <!--</lightning:card>-->
+    </aura:set>
+  </aura:if>
+</aura:component>

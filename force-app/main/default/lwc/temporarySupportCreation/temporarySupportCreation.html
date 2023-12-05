@@ -1,0 +1,45 @@
+<template>
+    <lightning-quick-action-panel title="Temporary Support">
+        <div class="spinner-relative">
+            <lightning-spinner alternative-text="Loading" size="medium" if:true={isLoading}></lightning-spinner>
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-temporarysupport" class="slds-modal__title slds-hyphenate">Temporary Support</h2>
+            </header>
+            <div class="slds-p-around_small">
+                <template if:true={showProductPicklist}>
+                    <lightning-layout multiple-rows="true">
+                        
+                        <lightning-layout-item size="12">
+                            <lightning-combobox name="product" label="Product " placeholder="Choose Product" value={productSelected}
+                                options={productdropdownValues} onchange={handleProductChange} dropdown-alignment="auto" required>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        
+                        <lightning-layout-item size="12">
+                            <lightning-input value={dateSelected} type="date" name="enddate" label="End Date"
+                                onchange={handleDateChange} required>
+                            </lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12">
+                            <lightning-combobox name="successoffering" label="Success Offering " placeholder="Choose Success Offering" value={successOfferingSelected}
+                                options={successOfferingdropdownValues} onchange={handleSuccessOfferingChange} dropdown-alignment="auto" required>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12">
+                            <lightning-textarea value={reasonSelected} name="reason" label="Reason for Temporary Support"
+                            onchange={handleReasonChange} required>
+                        </lightning-textarea>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+            </div>
+        </div>
+        <div slot="footer">
+            <lightning-button label="Cancel" title="Cancel" variant="neutral" onclick={handlecancel} disabled={disableCancel} if:true={showProductPicklist}></lightning-button>
+            &nbsp; &nbsp;
+            <lightning-button label="Save" title="Save" variant="brand" onclick={handleSave} disabled={disableSave}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

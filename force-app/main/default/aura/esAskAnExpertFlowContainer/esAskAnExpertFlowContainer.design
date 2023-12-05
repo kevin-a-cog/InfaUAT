@@ -1,0 +1,4 @@
+<design:component >
+    <design:attribute name="serviceResourceId" label="serviceResourceId" />
+    <design:attribute name="serviceterritoryId" label="serviceterritoryId"  />    
+</design:component>

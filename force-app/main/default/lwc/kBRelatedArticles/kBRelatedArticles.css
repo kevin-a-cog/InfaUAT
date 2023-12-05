@@ -1,0 +1,26 @@
+.related-articles-container {
+    border: 1px solid #d4d4d4;
+    border-radius: 0.25rem;
+    border-bottom: none;
+}
+.related-articles-container .slds-form-element__label {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #d4d4d4;
+    font-weight: 400;
+    font-size: 1.2rem!important;
+    line-height: 1.25!important;
+    padding-top: 15px;
+}
+.related-articles-list .slds-form-element {
+    padding: 10px 10px 10px 14px;
+}
+.related-articles-list .slds-form-element:nth-child(odd) {
+    background: #f7f8f9;
+}
+.related-articles-list span {
+    color: #007bff;
+}
+.related-articles-list span:hover {
+    color: #0056b3;
+}

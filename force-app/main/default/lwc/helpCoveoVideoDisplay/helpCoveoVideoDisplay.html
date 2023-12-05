@@ -1,0 +1,59 @@
+<template>
+    <template if:true={urlarr}>
+        <div class="container bg-color">
+            <div>
+                <h1 class="title">{headerTitle}</h1>
+            </div>
+            <div class="row in-coveo-video-content">
+                <template for:each={urlarr} for:item="urlitem">
+                    <div key={urlitem.rowId} class="col-sm-4">
+                        <div class="outerparent">
+                            <div class="parent" data-id={urlitem.rowId} onclick={displayVideo}>
+                                <img class="in-coveo-video-play-btn" src={playicon}>
+                            </div>
+                            <img class="in-coveo-video-thumbnail" src={urlitem.htmlImage} />
+                        </div>
+                        <a class="in-coveo-video-desc" href={urlitem.clickUri} target="_blank">
+                            <p class="in-coveo-video-desc-text">
+                                {urlitem.title}
+                            </p>
+                        </a>
+                    </div>
+                </template>
+                <div class="in-coveo-video-view-more">
+                    <a href={viewmore} class="in-user-list-item view-more">
+                        ALL VIDEOS
+                        <i class="view-more-arrow"><span>&#8594;</span></i>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+
+        <template if:true={displaymodal}>
+            <!-- Modal/Popup Box LWC starts here -->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open outerModalContent">
+                <div class="slds-modal__container in-coveo-videos-outerModalContent">
+                    <!-- Modal/Popup Box LWC header here -->
+                    <header style="border: 0px;" class="in-coveo-videos-popup-header slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                size="x-small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <!-- Modal/Popup Box LWC body starts here -->
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <iframe class="in-video-modal-iframe" src={embeddedhtmlmodal} frameborder="0" allowfullscreen
+                            allow="autoplay; encrypted-media"></iframe>
+                    </div>
+
+                </div>
+            </section>
+            <!-- <div class="slds-backdrop slds-fade-in-open"></div> -->
+        </template>
+    </template>
+</template>

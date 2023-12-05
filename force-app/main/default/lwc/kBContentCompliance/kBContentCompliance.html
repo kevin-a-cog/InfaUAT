@@ -1,0 +1,225 @@
+<!--
+  @description       : 
+  @author            : Sathish Rajalingam
+  @group             : 
+  @last modified on  : 09-06-2021
+  @last modified by  : SF Developer
+  Modifications Log 
+  Ver   Date         Author               Modification
+  1.0   03-22-2021   Sathish Rajalingam   Initial Version
+-->
+<template>
+    <template if:true={isThereAnyViolations}>
+        <lightning-card>
+            <template if:false={isDataAvailableOnLoad}>
+                <div class="slds-align_absolute-center" style="height:5rem">
+                    <lightning-spinner alternative-text="Loading..." variant="brand" size="small">
+                    </lightning-spinner>
+                </div>
+            </template>
+            <template if:true={isDataAvailable}>
+                <div class='gdprdata'>
+                    <div class="gdprdata-header">                        
+                        <h1 class="header">{wizardtitle}</h1>
+                        <button class="slds-button"
+                            style="padding: 7px;padding-right:12px;height: 26px;background: #f3f2f2;color: red;float:right;"
+                            onclick={openModal}>
+                            <lightning-icon icon-name="utility:expand_alt" size="x-small" title="Full Screen">
+                            </lightning-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="slds-scrollable_x gdprdata-content" style="margin-bottom:-13px;">
+                    <div class={expandminimizeWidgetCss}>
+                        <div style="display: flex;">
+                            <template if:true={isResponseWithSuccess}>
+                                <div style="flex-basis: 100%;">
+                                    <template if:true={isThereAnyViolations}>
+                                        <div class="slds-tabs_scoped">
+                                            <ul class="slds-tabs_scoped__nav" role="tablist">
+                                                <template if:true={isThereAnyGDPRViolations}>
+                                                    <li class={titleTabToggle} title={complianceTabTitle}
+                                                        role="presentation" onclick={handleComplianceTab}>
+                                                        <span class="slds-tabs_scoped__link" role="tab"
+                                                            tabindex="0" aria-selected="true"
+                                                            aria-controls="tab-scoped-1" id="tab-scoped-1__item"
+                                                            style="font-size:13px;line-height: 30px;height: 30px;">
+                                                            <span class="slds-tabs__left-icon">
+                                                                <img src={warningIconPath}
+                                                                    style="width: 20px;" />
+                                                            </span>{complianceTabTitle}</span>
+                                                    </li>
+                                                </template>
+                                                <template if:true={isThereAnyAdditionalInformation}>
+                                                    <li class={othersTabToggle} title={othersTabTitle}
+                                                        role="presentation" onclick={handleOthersTab}>
+                                                        <span class="slds-tabs_scoped__link" role="tab"
+                                                            tabindex="-1" aria-selected="false"
+                                                            aria-controls="tab-scoped-2" id="tab-scoped-2__item"
+                                                            style="font-size:13px;line-height: 30px;height: 30px;">
+                                                            <span class="slds-tabs__left-icon">
+                                                                <img src={checklistIconPath}
+                                                                    style="width: 28px;" />
+                                                            </span>{othersTabTitle}</span>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                            <template if:true={isThereAnyGDPRViolations}>
+                                                <div id="tab-scoped-1" class={titleContentToggle} role="tabpanel"
+                                                    aria-labelledby="tab-scoped-1__item">
+                                                    <lightning-formatted-rich-text class='preview-field-value'
+                                                        value={gdprFinalOutputHTML}>
+                                                    </lightning-formatted-rich-text>
+                                                </div>
+                                            </template>
+                                            <template if:true={isThereAnyAdditionalInformation}>
+                                                <div id="tab-scoped-2" class={othersContentToggle} role="tabpanel"
+                                                    aria-labelledby="tab-scoped-2__item">
+                                                    <lightning-accordion onsectiontoggle={handleToggleSection}
+                                                        class="additional-info">
+                                                        <template for:each={lstAdditionalInfo} for:item="accordian">
+                                                            <lightning-accordion-section name={accordian.Type}
+                                                                label={accordian.Title} key={accordian.key}>
+                                                                <lightning-formatted-rich-text
+                                                                    class='preview-field-value' value={accordian.value}>
+                                                                </lightning-formatted-rich-text>
+                                                            </lightning-accordion-section>
+                                                        </template>
+                                                    </lightning-accordion>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                            <template if:true={isResponseWithError}>
+                                <div class="slds-p-bottom_large slds-p-left_large" style="color:red; width:100%;">
+                                    <lightning-formatted-rich-text class='preview-field-value'
+                                        value={gdprFinalOutputHTML}>
+                                    </lightning-formatted-rich-text>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                <div class="gdprdata-footer">
+                    <button class="slds-button" label="show"
+                        style="width: 100%;background: rgb(243, 242, 242);top: 13px;height: 20px;"
+                        onclick={expandminimizeWidget} title="Show more">
+                        <lightning-icon class="slds-align_absolute-center" icon-name={showMoreOrLessiconCss}
+                            size="xx-small"></lightning-icon>
+                    </button>
+                </div>
+            </template>
+            <template if:true={isModalOpen}>
+                <!-- Modal/Popup Box LWC starts here -->
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+                    <div class="slds-modal__container">
+                        <!-- Modal/Popup Box LWC header here -->
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={closeModal}>
+                                <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                    size="small"></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{wizardtitle}
+                            </h2>
+                        </header>
+                        <!-- Modal/Popup Box LWC body starts here -->
+                        <div class="slds-modal__content slds-p-around_medium gdprdata-popup-content"
+                            style="padding: 0px;" id="modal-content-id-1">
+                            <div style="display: flex;">
+                                <template if:true={isDataLoadInProgress}>
+                                    <div class="slds-is-relative" style="height:4rem">
+                                        <lightning-spinner alternative-text="Loading..." variant="brand" size="medium">
+                                        </lightning-spinner>
+                                    </div>
+                                </template>
+                                <template if:true={isDataAvailable}>
+                                    <template if:true={isResponseWithSuccess}>
+                                        <div style="flex-basis: 100%;">
+                                            <template if:true={isThereAnyViolations}>
+                                                <lightning-tabset variant="scoped" class="slds-hide"></lightning-tabset>
+                                                <div class="slds-tabs_scoped">
+                                                    <ul class="slds-tabs_scoped__nav" role="tablist">
+                                                        <template if:true={isThereAnyGDPRViolations}>
+                                                            <li class={titlePopUpTabToggle} title={complianceTabTitle}
+                                                                role="presentation" onclick={handlePopUpComplianceTab}>
+                                                                <span class="slds-tabs_scoped__link" role="tab"
+                                                                    tabindex="0" aria-selected="true"
+                                                                    aria-controls="tab-scoped-3" id="tab-scoped-3__item"
+                                                                    style="font-size:13px;line-height: 30px;height: 30px;">
+                                                                    <span class="slds-tabs__left-icon">
+                                                                        <img src={warningIconPath}
+                                                                            style="width: 22px;" />
+                                                                    </span>{complianceTabTitle}</span>
+                                                            </li>
+                                                        </template>
+                                                        <template if:true={isThereAnyAdditionalInformation}>
+                                                            <li class={othersPopUpTabToggle} title={othersTabTitle}
+                                                                role="presentation" onclick={handlePopUpOthersTab}>
+                                                                <span class="slds-tabs_scoped__link" role="tab"
+                                                                    tabindex="-1" aria-selected="false"
+                                                                    aria-controls="tab-scoped-4" id="tab-scoped-4__item"
+                                                                    style="font-size:13px;line-height: 30px;height: 30px;">
+                                                                    <span class="slds-tabs__left-icon">
+                                                                        <img src={checklistIconPath}
+                                                                            style="width: 28px;" />
+                                                                    </span>{othersTabTitle}</span>
+                                                            </li>
+                                                        </template>
+                                                    </ul>
+                                                    <template if:true={isThereAnyGDPRViolations}>
+                                                        <div id="tab-scoped-3" class={titlePopUpContentToggle}
+                                                            role="tabpanel" aria-labelledby="tab-scoped-3__item">
+                                                            <lightning-formatted-rich-text class='preview-field-value'
+                                                                value={gdprFinalOutputHTML}>
+                                                            </lightning-formatted-rich-text>
+                                                        </div>
+                                                    </template>
+                                                    <template if:true={isThereAnyAdditionalInformation}>
+                                                        <div id="tab-scoped-4" class={othersPopUpContentToggle}
+                                                            role="tabpanel" aria-labelledby="tab-scoped-4__item">
+                                                            <lightning-accordion onsectiontoggle={handleToggleSection}
+                                                                class="additional-info">
+                                                                <template for:each={lstAdditionalInfo}
+                                                                    for:item="accordian">
+                                                                    <lightning-accordion-section name={accordian.Type}
+                                                                        label={accordian.Title} key={accordian.key}>
+                                                                        <lightning-formatted-rich-text
+                                                                            class='preview-field-value'
+                                                                            value={accordian.value}>
+                                                                        </lightning-formatted-rich-text>
+                                                                    </lightning-accordion-section>
+                                                                </template>
+                                                            </lightning-accordion>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                    <template if:true={isResponseWithError}>
+                                        <div class="slds-p-bottom_large slds-p-left_large" style="color:red;">
+                                            <lightning-formatted-rich-text class='preview-field-value'
+                                                value={gdprerror}>
+                                            </lightning-formatted-rich-text></br>
+                                        </div>
+                                    </template>
+                                </template>
+                            </div>
+                        </div>
+                        <!-- Modal/Popup Box LWC footer starts here -->
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_brand" onclick={closeModal}
+                                title="Close">Close</button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+        </lightning-card>
+    </template>
+</template>

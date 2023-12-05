@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__Tab</target>
+         <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default,lightning__RecordPage">
+            
+            <property
+                name="listViewName"
+                type="String"
+                label="List View Name"
+                description="To get list view name as per custom metadata"
+            />
+
+            <property
+                name="showRefresh"
+                type="Boolean"
+                label="Show Refresh Icon"
+                description="To show and hide refresh button"
+            />    
+
+            <property
+            name="recordId"
+            type="String"
+            label="Record Id"
+            description="Automatically bind the page's record id to the component variable"
+             />  
+        </targetConfig>
+    
+    </targetConfigs>    
+
+   
+  
+</LightningComponentBundle>

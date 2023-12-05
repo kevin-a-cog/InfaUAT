@@ -1,0 +1,161 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionwithoutHeader" access="global" controller="associateProductsToIBController">
+    <aura:attribute name="productFamilyList" type="String[]"/>
+    <aura:attribute name="businessUnitList" type="String[]"/>
+    <aura:attribute name="forecastProductList" type="String[]"/>
+    <aura:attribute name="addOnCategoryList" type="String[]"/>
+    <aura:attribute name="addOnCountryList" type="String[]"/>    
+    <aura:attribute name="productFamily" type="String"/>
+    <aura:attribute name="businessUnit" type="String"/>
+    <aura:attribute name="forecastProduct" type="String"/>
+    <aura:attribute name="addOnCategory" type="String"/>
+    <aura:attribute name="addOnCountry" type="String"/>
+    <aura:attribute name="productColumns" type="List" default="[]"/>
+    <aura:attribute name="products" type="List" default="[]"/>
+    <aura:attribute name="pillsList" type="List" />
+    <aura:attribute name="fieldarray" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="installBase" type="String" default=""/>
+    <aura:attribute name="IBrecord" type="Object"/>
+    <aura:attribute name="searchKeyword" type="string" default=""/>
+    
+    <aura:handler name="oSelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleComponentEvent}"/>
+    
+    <!--to manage the Quick Action pop-up width-->
+    <aura:html tag="style">
+        .slds-modal__container{
+        width:90%;
+        max-width:90% ;
+        }        
+    </aura:html>
+    
+    <!--to get the value of current record without server call-->
+    <force:recordData layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.IBrecord}"
+                      recordUpdated="{!c.getInitialRecId}" />
+  
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-modal="true" aria-labelledby="modal-heading-01" aria-describedby="modal-content-id-1">
+        <!--Main window-->
+        <div class="slds-modal__container">
+            <header class="slds-modal__header slds-modal__header_empty">
+                <lightning:buttonIcon iconName="utility:close"
+                                      onclick="{! c.CloseModalOne }"
+                                      alternativeText="close"
+                                      variant="bare-inverse"
+                                      class="slds-modal__close"/>
+            </header>
+            
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">    
+                <!--Header-->
+                <div class="slds-align_absolute-center slds-border_bottom" style="background-color:white;">
+                    <div class="slds-text-heading_large">
+                        Associate Products to Install Base
+                    </div>
+                </div>
+                
+                <!--Picklist Value to select-->
+                <div class="c-container">
+                    <lightning:layout horizontalAlign="space">
+                        <!--The lookup component-->
+                        <lightning:layoutItem padding="around-small" size="2">
+                            <ul style="width:100%">
+                                <li>InstallBase</li>
+                                <li><c:installBaseLookup aura:id="lookupComponent"/></li>
+                            </ul>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-small" size="2">
+                            <lightning:select name="edition" label="Product Family" onchange="{!c.onProductFamilyChange}">
+                                <option text="" value=""/>
+                                <aura:iteration items="{!v.productFamilyList}" var="option">
+                                    <option text="{!option}" value="{!option}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-small" size="2">
+                            <lightning:select name="product" label="Business Unit" onchange="{!c.onBUChange}">
+                                <option text="" value=""/>
+                                <aura:iteration items="{!v.businessUnitList}" var="option">
+                                    <option text="{!option}" value="{!option}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                        </lightning:layoutItem>                        
+                        <lightning:layoutItem padding="around-small" size="2">
+                            <lightning:select name="product" label="Forecast Product" onchange="{!c.onProductChange}">
+                                <option text="" value=""/>
+                                <aura:iteration items="{!v.forecastProductList}" var="option">
+                                    <option text="{!option}" value="{!option}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                        </lightning:layoutItem>            
+                    </lightning:layout>
+                    <lightning:layout horizontalAlign="space">
+                        <!--The lookup component-->
+                        <lightning:layoutItem size="11">
+                            <!--the search box to search products-->
+                            <div class="slds-p-around_small">    
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label slds-assistive-text" for="combobox-unique-id">Search Product</label>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-combobox_container">
+                                            <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                                                <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                                                    <ui:inputText updateOn="keyup" keyup="{!c.searchProducts}" aura:id="searchId" class="slds-input slds-combobox__input" value="{!v.searchKeyword}" placeholder="Search Product" />
+                                                    <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right" title="Description of icon when needed">
+                                                        <lightning:icon class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" iconName="utility:search" size="x-small" alternativeText="search" />
+                                                        <span class="slds-assistive-text">Description of icon</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+                    </lightning:layout>    
+                </div>
+                
+                <!--pill section that will show selected records-->
+                <aura:if isTrue="{!v.pillsList.length > 0}">
+                    <div class="slds-pill_container slds-pill_container_bare">                
+                        <div id="listbox-unique-id" role="listbox">
+                            <ul class="slds-listbox" role="presentation">
+                                <li role="presentation" class="slds-listbox__item">
+                                    <div class="slds-p-top--x-small">                                                
+                                        <aura:iteration var="pill" items="{!v.pillsList}">                                
+                                            <lightning:pill label="{!pill.Name}" href="{!'/'+ pill.Id}" onremove="{!c.handleRemove }" name="{!pill.Id}">
+                                                <aura:set attribute="media">
+                                                    <lightning:icon iconName="standard:shipment"  alternativeText="Product"/>
+                                                </aura:set>
+                                            </lightning:pill>
+                                        </aura:iteration>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>                        
+                </aura:if>
+                
+                <!--The table for displaying the product records available for association-->
+                <div class="slds-border_top">
+                    <lightning:datatable
+                                        columns="{! v.productColumns }"
+                                        data="{! v.products }"
+                                        keyField="Id"
+                                        hideCheckboxColumn ="true"
+                                        showRowNumberColumn="false"
+                                        onrowaction="{! c.handleRowAction }"
+                                        enableInfiniteLoading ="true"
+                                        loadMoreOffset = "5"
+                                        suppressBottomBar="true"
+                                        />                        
+                </div>
+            </div>
+                <!--Footer section-->
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{! c.CloseModalOne }" />
+                    <lightning:button variant="brand" label="Save" title="Save" onclick="{! c.addInstallBaseMapping }" disabled="{!v.pillsList.length > 0 ?  false : true}"/>        
+                </footer>                                    
+        </div>
+    </section>    
+    <div class="slds-backdrop slds-backdrop_open"></div>   
+</aura:component>

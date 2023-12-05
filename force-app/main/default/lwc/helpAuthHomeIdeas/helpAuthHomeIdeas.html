@@ -1,0 +1,68 @@
+<template>
+    <template if:true={showIdea}>
+        <div class="container in-auth-ideas-container">
+            
+            <div class="d-flex align-items-center">
+                <a href={IdeaPage} class="d-flex in-component-heading">
+                    <div class="title">
+                        Ideas
+                    </div>
+                    <lightning-icon class="chevron-down align-items-center d-flex right-chev pl-3"
+                        icon-name="utility:chevronright" size="x-small">
+                    </lightning-icon>
+                </a>
+            </div>
+
+
+            <ul>
+                <template for:each={wiredResults} for:item="item">
+                    <li key={item} class="list-item">
+                        <div class="d-flex bd-highlight">
+
+                            <div class="slds-col slds-size_1-of-3 slds-upvote">
+                                <div class="slds-green-upvote">
+                                    <lightning-button-icon variant="bare" class="green-icon"
+                                        icon-name="utility:chevronup" size="large" disabled="true">    <!--T1-->
+                                    </lightning-button-icon>
+                                </div>
+                                <div class="in-auth-ideas-votecount">
+                                    {item.upvoteCount}
+                                </div>
+                                <div>
+                                    <lightning-button-icon variant="bare" class="red-icon"
+                                        icon-name="utility:chevrondown" size="large" disabled="true">   <!--T1-->
+                                    </lightning-button-icon>
+                                </div>
+                            </div>
+
+                            <div class="in-auth-ideas-text-content">
+                                <a data-value={item.title} data-link={item.url} data-community={item.Category} data-target={target} class="in-user-list-item" onclick={handleOnClick}>{item.title}</a>
+                                <div class="ideas-creatorName">
+                                    {item.CreatorName} &nbsp;{item.CreatedDate}
+                                </div>
+                                <div class="row help-status-comm">
+                                    <div class="slds-status2">
+                                        {item.Status}
+                                    </div>
+
+                                    <div class="slds-community">
+                                        {item.Category}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </li>
+                </template>
+                <!-- <li class="list-item">
+            <a href={viewmore} class="in-user-list-item view-more">
+                View More
+                <i style="font-style: normal; padding-left: 5px;"><span>&#8594;</span></i>
+            </a>
+        </li> -->
+            </ul>
+        </div>
+    </template>
+</template>

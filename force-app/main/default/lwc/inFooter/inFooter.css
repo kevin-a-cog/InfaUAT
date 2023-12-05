@@ -1,0 +1,47 @@
+/* Added CSS to footer update */
+.infalib-app-footer-logo-wrap {
+  margin-right: 20px;
+}
+.infalib-app-footer-item {
+  margin: 5px 20px 5px 0;  
+}
+.infalib-app-footer-item:last-child{
+  margin-right: 0;
+}
+.infalib-app-footer-item a {
+  margin-left: 0;
+}
+.social-links {
+  min-width: 210px;
+}
+.infalib-app-footer-v2 .infalib-app-footer-list{
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+  .infalib-app-footer-list {
+    flex-direction: column;
+  }
+  .infalib-app-main-footer {
+    flex-direction: column;
+  }
+  .infalib-app-footer-item,
+  .infalib-app-footer-logo-wrap {
+    margin-right: 0;
+  }
+}
+
+/* Styles for tablet view */
+@media screen and (min-width: 769px) and (max-width: 1024px)  {
+  .infalib-app-main-footer {
+    align-items: start;
+  }    
+  .infalib-app-footer-list {
+    flex-direction: column;
+  }
+  .infalib-app-footer-item {
+    margin-right: 0px;
+  }    
+}
+/* Ends Styles for tablet view */

@@ -1,0 +1,14 @@
+<template>
+    <div>
+        <lightning-combobox 
+            name="picklist" 
+            record-id={recordId}
+            value={value}
+            disabled={disabled}
+            placeholder="--Select--" 
+            dropdown-alignment = "auto"
+            options={accessTypes}
+            onchange={handleChange}>
+        </lightning-combobox>
+    </div>
+</template>

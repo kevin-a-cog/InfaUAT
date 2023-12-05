@@ -1,0 +1,11 @@
+<aura:component implements="lightning:actionOverride,force:hasRecordId,force:hasSObjectName,lightning:isUrlAddressable">
+    <lightning:workspaceAPI aura:id="workspace" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="isConsole" type="Boolean"/>
+    <aura:attribute name="url" type="String"/>
+    <aura:attribute name="currentTabId" type="String"/>
+    <aura:attribute name="pageReference" type="Object"/>
+    <lightning:navigation aura:id="navService"/>
+    <aura:handler name="render" value="{!this}" action="{!c.onRender}"/>
+    <c:searchAccount onclosemodal="{!c.handleCloseModal}" onsuccess="{!c.handleSuccess}"></c:searchAccount>
+</aura:component>

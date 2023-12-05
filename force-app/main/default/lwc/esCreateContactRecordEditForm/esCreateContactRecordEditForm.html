@@ -1,0 +1,74 @@
+<template>
+    <div class="es-modal__faux-body slds-is-relative">
+        <template if:true={isLoadingSpinner}>
+            <lightning-spinner  alternative-text="Loading" size="large"></lightning-spinner>
+        </template>    
+
+        <template if:true={isCreateNewContact}>
+            <lightning-record-edit-form class="es-lds-record-form-wrapper" object-api-name="Contact" onsubmit={handleSubmit} >                         
+                <div class="es-modal__body es-modal__body--fix-height">
+                <lightning-messages></lightning-messages>                          
+                    <div class="slds-grid slds-grid_vertical">
+                        <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-input-field field-name="Name" required="true"></lightning-input-field>
+                        </div> -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-input-field field-name="Salutation"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-input-field field-name="FirstName" required="true"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-input-field field-name="MiddleName"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-input-field field-name="LastName" required="true"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-input-field field-name="Suffix"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-input-field field-name="Email" required="true" type="email"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-input-field field-name="Phone"  required="true" ></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-input-field field-name="INFA_Language__c" required="true"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-combobox
+                                                name="Region"
+                                                label="Region"
+                                                placeholder="Select Region"
+                                                value={conTimezoneRegion}
+                                                options={regionOptions}
+                                                onchange={handleRegionChange}
+                                                required>
+                                            </lightning-combobox>
+                            <!--<lightning-input-field field-name="Timezone__c" required="true"></lightning-input-field>-->
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-combobox
+                                                name="Location"
+                                                label="Location"
+                                                placeholder="Select Location"
+                                                value={conTimezoneLocation}
+                                                options={locationOptions}
+                                                onchange={handleLocationChange}
+                                                required>
+                                            </lightning-combobox>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 es-lds-record-form">
+                            <lightning-input-field field-name="Access_Level__c" required="true"></lightning-input-field>
+                        </div>
+                    </div>
+                </div>
+                <footer class="es-modal__footer es-btn-grp d-flex justify-content-between">
+                    <p>Please Note : You will be contacted by Informatica Support Executive as per your Contact Time Zone.</p>
+                    <lightning-button class="es-button es-button--primary float-right" variant="brand" label="Confirm" type="submit"></lightning-button>
+                </footer>
+            </lightning-record-edit-form>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,12 @@
+.my-icon {
+    --sds-c-icon-color-foreground-default: white;
+}
+
+.slds-modal__container{
+    width: 60% !important;
+    max-width: 80% !important;
+}
+
+.lookup_overlay_custom{
+    color:grey;height:250px;
+}

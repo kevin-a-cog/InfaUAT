@@ -1,0 +1,58 @@
+<!--
+/*
+ * Name			:	GlobalRecordCompletionAuraWrapper
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	12/10/2021
+ * Description	:	Record Completion Aura Wrapper HTML.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description									Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		12/10/2021		N/A				Initial version.							N/A
+ VENKATESH BALLA		10/20/2023		SALESRT-17407   Additional changes to support Opportunity  <SALESRT-17407>
+ 														substage progression.
+ */
+-->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,lightning:isUrlAddressable,force:hasRecordId" access="global">
+
+	<!-- Variables. -->
+	<aura:attribute name="recordId" type="String" />
+	<aura:attribute name="strHeader" type="String" default="Completeness" /> 
+	<aura:attribute name="boolOutputPercentage" type="Boolean" default="true" />
+	<aura:attribute name="strMinimumColor" type="String" default="#c00" />
+	<aura:attribute name="strMidpointColor" type="String" default="orange" />
+	<aura:attribute name="strMaximumColor" type="String" default="#0c0" />
+	<aura:attribute name="boolProgressBarMode" type="Boolean" default="false" />
+	<aura:attribute name="strProgressBarColor" type="String" default="#008000" />
+	<aura:attribute name="boolIsModalOpen" type="boolean" default="false"/>
+	<aura:attribute name="strNextStepName" type="String" default=""/><!--<SALESRT-17407>-->
+	<!-- Dynamic components, with modal. -->
+	<aura:if isTrue="{!v.boolIsModalOpen}">
+		<section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open forceModal">
+			<div class="slds-modal__container">
+
+				<!-- Header. -->
+				<header class="slds-modal__header">
+					<lightning:buttonIcon iconName="utility:close" onclick="{!c.closeModal}" variant="bare-inverse" class="slds-modal__close" />
+				</header>
+
+				<!-- Body. -->
+				<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+					{!v.body}
+				</div>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+
+		<!-- Dynamic components, without modal. -->
+		<aura:set attribute="else">
+			{!v.body}
+		</aura:set>
+	</aura:if>
+
+    <!-- LWC. -->
+    <c:globalRecordCompletion recordId="{!v.recordId}" strHeader="{!v.strHeader}" boolOutputPercentage="{!v.boolOutputPercentage}" strMinimumColor="{!v.strMinimumColor}" 
+			strMidpointColor="{!v.strMidpointColor}" strMaximumColor="{!v.strMaximumColor}" boolProgressBarMode="{!v.boolProgressBarMode}" 
+			strProgressBarColor="{!v.strProgressBarColor}" strNextStepName="{!v.strNextStepName}" onexecuteaction="{!c.executeAction}" />
+</aura:component>

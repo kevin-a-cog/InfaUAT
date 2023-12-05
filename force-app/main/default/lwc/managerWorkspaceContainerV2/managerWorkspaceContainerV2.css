@@ -1,0 +1,21 @@
+.comments-icn{
+    --sds-c-icon-color-foreground-default: red;
+    fill : red;
+}
+
+/* Extra large modal. */
+.slds-modal__container {
+    max-width: 80rem !important;
+    width: 80% !important;
+}
+
+/* Minimum Height for the modal. */
+.slds-modal__content {
+	min-height: 300px;
+}
+.modalBody{
+    overflow: hidden;
+    height: 73vh;
+    overscroll-behavior-x: auto;
+    overflow-y: scroll;
+}

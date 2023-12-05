@@ -1,0 +1,68 @@
+.es-dropdown-searchandfav-container {
+  min-width: 444px;
+  left: 56px;
+}
+.es-dropdown-searchandfav__list {
+  display: flex;
+  justify-content: flex-start;
+  cursor: context-menu;
+  align-items: center;
+}
+.es-dropdown-searchandfav__list-label span {
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 24px;
+}
+.es-dropdown-searchandfav__list-icon {
+  margin-left: auto;
+  display: inline-flex;
+}
+.search-input-class {
+  border: 1px solid #8f8f8f;
+  font-style: italic;
+  padding: 14px 12px 12px;
+  font-size: 14px;
+  line-height: 10px;
+}
+.combobox-input-class {
+  cursor: pointer;
+  line-height: 10px;
+}
+.add-bg {
+  background-color: #e3f1ff;
+}
+.check-icon {
+  visibility: hidden;
+}
+.add-bg .check-icon {
+  visibility: visible;
+}
+.ico .lightning-primitive-icon {
+  line-height: 24px;
+}
+.icn {
+  height: 24px;
+  border-radius: 2px;
+  padding: 4px;
+  margin-left: 3px;
+  cursor: pointer;
+}
+@media only screen and (max-width: 420px) {
+  .es-dropdown-searchandfav-container {
+    min-width: 300px;
+    left: 127px;
+  }
+  .es-dropdown-searchandfav__list-label {
+    max-width: 65%;
+    overflow: visible;
+    white-space: pre-line;
+    text-overflow: clip;
+  }
+  .es-dropdown-searchandfav__list-label span {
+    line-height: 16px;
+  }
+  .es-pin-inline {
+    justify-content: center;
+  }
+}

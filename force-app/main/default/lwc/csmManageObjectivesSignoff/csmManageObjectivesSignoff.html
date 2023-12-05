@@ -1,0 +1,106 @@
+<!--
+/*
+ * Name			    :	csmManageObjectivesSignoff
+ * Author		    :	Deva M
+ * Created Date		: 	05/07/2021
+ * Description		:	Manage Objectives Signoff view of html.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			    Jira No.		Description					Tag
+ **********************************************************************************************************
+ Deva M		            30/11/2021		N/A				    Initial version.			N/A
+ */
+-->
+<template> 
+    <!-- Spinner. -->
+  <div class="spinner">
+      <template if:true={boolDisplaySpinner}>
+          <lightning-spinner alternative-text={label.Loading} variant="brand" size="small"></lightning-spinner>
+      </template>
+  </div>
+  <template if:true={boolDisplaySignOffModal}>
+    <template if:false={boolDisplayPlanCommentModal}>   
+      <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" data-name="closeModal" onclick={handleClick}>
+                <lightning-icon icon-name="utility:close"
+                    alternative-text="close"
+                    variant="inverse"
+                    size="small" data-name="closeModal"></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{objParameters.strModalTitle}</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+          
+                <template if:false={boolDisplaySpinner}>
+                  <template if:true={boolDisplayObjtivesTable}>
+                    <!-- Table section. -->
+                    <c-global-data-table class={objParameters.strTableClass} obj-parameters={objParameters} onaction={executeAction} ></c-global-data-table>
+                  </template>
+                  <!--Commented as this was replaced with Plan comments
+                  <template if:true={boolDisplaySignoffRichText}>
+                    <lightning-layout>
+                        <lightning-layout-item flexibility="auto">                            
+                            <lightning-input-rich-text name="objsignoffcomment" label="Sign off Body"  
+                                                        formats={objParameters.allowedRichTxtFormats} 
+                                                        data-name="commentBody"
+                                                        value={objParameters.richTextBody.fieldValue}
+                                                        class={richTextHeightClass}
+                                                        onchange={handleChange} variant="bottom-toolbar" valid="false">
+                            </lightning-input-rich-text> 
+                        </lightning-layout-item>
+                    </lightning-layout>
+                  </template>-->
+                  <!--Sign on Behalf screen one-->
+                  <template if:true={boolDisplaySignOnBehalfScreenOne}>
+                    <lightning-layout>
+                      <lightning-layout-item flexibility="auto">
+                        <div class="slds-p-around_small slds-scrollable" style="height:10rem">
+                          <!--<lightning-combobox name="Contact" 
+                                              variant="label-inline" 
+                                              label="Contact" 
+                                              placeholder="Select Contact" 
+                                              data-name="contactChange"
+                                              options={objParameters.options}
+                                              onchange={handleChange} 
+                                              dropdown-alignment="auto" 
+                                              value={strContactValue} required>
+                          </lightning-combobox>-->
+                          <!-- Table section. -->
+						              <c-global-data-table obj-parameters={objContactParameters} onaction={executeAction}></c-global-data-table>
+                        </div>
+                      </lightning-layout-item>
+                    </lightning-layout>
+                  </template>
+               </template>
+          </div>
+          <footer class="slds-modal__footer">
+            <template for:each={objParameters.lstButtons} for:item="objButton">                 
+                <lightning-button key={objButton.keyValue} variant={objButton.variant} 
+                                    label={objButton.label} 
+                                    title={objButton.title} 
+                                    data-name={objButton.name} 
+                                    onclick={handleClick}
+                                    class={objButton.styleClass}
+                                    if:true={objButton.showButton}>
+                </lightning-button>                
+        </template>
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <template if:true={boolDisplayPlanCommentModal}>
+      <c-csm-plan-communication-edit-form-modal record-id={recordId} 
+                                                onclose={handleClose}
+                                                is-edit-form={boolDisplayPlanCommentModal}
+                                                str-signoff-contact={strContactValue}
+                                                lst-selected-objectives={selectedRecords}
+                                                str-comment-body={objParameters.richTextBody.fieldValue}
+                                                >
+                                              </c-csm-plan-communication-edit-form-modal>
+    </template>
+</template></template>

@@ -1,0 +1,68 @@
+<template>
+    <template if:true={showRelatedData}>
+        <div class=" bg-color">
+            <div class="container in-related-ideas-container">
+                <div>
+                    <h1 class="title">{relatedIdeaslabel}</h1>
+                </div>
+                <div class="row help-row">
+                    <template for:each={relatedIdeas} for:item="item">
+                        <div key={item.IdeaId} class="col-md-4 mb-3 mt-3">
+                            <div class="in-community-tile pt-0">
+                                <div class="row m-0 mb-3 pt-2">
+                                    <div class="slds-grid slds-gutters">
+                                        <div class="slds-col slds-size_1-of-3 slds-upvote">
+                                            <div class="slds-green-upvote">
+                                                <lightning-button-icon variant="bare" class="green-icon"
+                                                    icon-name="utility:chevronup" alternative-text="up" size="large"
+                                                    disabled="true">
+                                                </lightning-button-icon>
+                                            </div>
+                                            <div class="infa-ideas-related-count">
+                                                {item.upvoteCount}
+                                            </div>
+                                            <div class="slds-red-downvote">
+                                                <lightning-button-icon variant="bare" class="red-icon"
+                                                    icon-name="utility:chevrondown" alternative-text="down" size="large"
+                                                    disabled="true">
+                                                </lightning-button-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="in-title-follow">
+                                        <div class="in-community-name">
+                                            {item.title}
+                                        </div>
+                                    </div>
+
+                                    <div class="slds-grid slds-wrap infa-content-tag-list">
+                                        <div
+                                            class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small infa-content-tag">
+                                            {item.Status}
+                                        </div>
+                                        <div
+                                            class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-community infa-content-tag">
+                                            {item.communityName}
+                                        </div>
+                                    </div>
+                                    <div class="slds-para">
+                                        <p> {item.Body}</p>
+                                    </div>
+
+                                    <div class="container learnMore">
+                                        <a href={item.url} target="_blank">
+                                            {learnMore} <i class="infa-cta-arrow"><span>&#8594;</span></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

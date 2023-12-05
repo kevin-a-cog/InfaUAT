@@ -1,0 +1,43 @@
+<!--
+* Name         :   InAnnouncement
+ * Author       :   Utkarsh Jain
+ * Created Date :   15-Feb-2022
+ * Description  :   Component used to Display IN alerts.
+
+ Change History
+ **************************************************************************************************************************
+ Modified By            Date            Jira No.            Description                                               Tag
+ **************************************************************************************************************************
+
+ Deeksha Shetty         18-July-2023    I2RT-8674         Description in Alerts and announcement should be similar    3
+                                                          to Announcement.
+
+-->
+ 
+ <template>
+    <div class={inAnnouncementContainer}>
+        <template for:each={announcementMessage} for:item="announcement">
+            <div key={announcement.Id} class="slds-notify slds-notify_alert in-notify-alert slds-alert_warning in-alert" role="alert"
+                data-id={announcement.Id}>
+                <div class="container in-notify-container">
+                    <span class="slds-icon_container slds-icon-utility-warning">
+                        <img src={anouncementLogo} class="in-alert-img">
+                    </span>
+                    <div class="in-anouncement-textwrap">
+                        <!--Tag 3 starts-->
+                        <lightning-formatted-rich-text value={announcement.Description__c} access="global">
+                        </lightning-formatted-rich-text>
+                         <!--Tag 3 ends-->
+                    </div>
+                    <div class="in-notify-close">
+                        <button data-id={announcement.Id} class="slds-button slds-button_icon slds-button_icon-small"
+                            onclick={hideAnnouncement} title="Close">
+                            <img src={closeLogo} class="in-close-img">
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

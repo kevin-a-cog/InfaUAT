@@ -1,0 +1,78 @@
+<!--
+/*
+ * Name			:	globalCardData
+ * Author		:	Monserrat Pedroza
+ * Created Date	: 	6/22/2021
+ * Description	:	This LWC exposes the generic Card Data HTML created for Global.
+
+ Change History
+ **********************************************************************************************************
+ Modified By			Date			Jira No.		Description					Tag
+ **********************************************************************************************************
+ Monserrat Pedroza		6/22/2021		N/A				Initial version.			N/A
+ */
+-->
+<template>
+
+	<!-- We create the card container. -->
+	<div class="slds-is-relative card_background">
+
+		<!-- Cards. -->
+		<template if:true={boolHasRecords}>
+			<div class="slds-grid">
+				<div class="slds-col">
+					<ul class="slds-has-dividers_around-space">
+						<template for:each={lstRecords} for:item="objRecord">
+							<li key={objRecord.strId} class="slds-item globalCardDataRow" onmouseenter={mouseOverCard} onmouseleave={mouseOutCard} data-id={objRecord.strId}>
+								<lightning-card variant="Narrow">
+								
+									<!-- Recursive values. -->
+									<template for:each={lstRowsLayout} for:item="objRow">
+										<div key={objRow.strId} class="slds-grid rowMargin">
+											<div class="slds-col">
+												<c-global-card-column lst-columns={objRow.lstColumns} obj-record={objRecord}></c-global-card-column>
+											</div>
+										</div>
+									</template>
+		
+									<!-- Action buttons. -->
+									<template for:each={lstActionButtons} for:item="objActionButton">
+										<template if:true={objRecord.boolDisplayActionButtons}>
+											<lightning-button-icon key={objActionButton.strKey} icon-name={objActionButton.strIconName} variant={objActionButton.strVariant} 
+													size={objActionButton.strSize} class={objActionButton.strStyleClasses} slot="actions"></lightning-button-icon>
+										</template>
+									</template>
+								</lightning-card>
+							</li>
+						</template>
+					</ul>
+				</div>
+			</div>
+			<div class="slds-grid">
+				<div class="slds-col">&nbsp;</div>
+			</div>
+	
+			<!-- Paginator. -->
+			<div class="slds-grid">
+				<div class="slds-col">
+					<c-global-paginator lst-records={lstOriginalRecords} int-total-records={lstOriginalRecords.length} onpaginatorchange={changeComponentPage} 
+							class={strPaginatorStyleClasses} obj-parameters={objPaginatorParameters}></c-global-paginator>
+				</div>
+			</div>
+		</template>
+
+		<!-- No records found. -->
+		<template if:true={boolDisplayNoRecordsFound}>
+			<template if:false={boolHasRecords}>
+				<div class="slds-col slds-size_12-of-12">
+					<div class="slds-illustration slds-illustration_small" aria-hidden="true">
+						<img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt={label.No_Records_Found} />
+						<div class="slds-text-color_weak">
+							<h3 class="slds-text-heading_medium">{label.No_Records_Found}</h3>
+						</div>
+					</div>
+				</div>
+			</template>
+		</template>
+	</div>
+</template>

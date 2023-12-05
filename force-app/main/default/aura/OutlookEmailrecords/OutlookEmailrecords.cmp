@@ -1,0 +1,65 @@
+<!--
+This component handles the email context on initialization. It retrieves Plan emails based on the email addresses 
+included in the email recipients list. 
+-->
+
+<aura:component 
+                implements="clients:availableForMailAppAppPage,clients:hasItemContext,flexipage:availableForAllPageTypes" 
+                controller="OutlookEmailController">
+    
+    
+    <!--<aura:handler name="change" value="{!v.subject}" action="{!c.fetchPlan}" /> !-->
+    <aura:handler name="change" value="{!v.messageBody}" action="{!c.fetchPlan}" /> 
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    
+    <!-- <aura:attribute name="messageBody" type="String" />!-->
+    <!--<aura:attribute name="condetails" type="sObject[]"/>!-->  
+     <aura:attribute name="condetails" type="List"/>  
+    <aura:attribute name="emailids" type="string[]"/>  
+    <aura:attribute name="mycolumns" type="string[]"/>  
+    <aura:attribute name="listSize" type="Integer"/>
+     
+      <aura:attribute name="titleType" type="string"/>  
+  
+    
+    <div >
+        <aura:if isTrue = "{!not(empty(v.condetails))}"> 
+            <lightning:layoutItem  padding="around-small">
+            <article class="slds-card_boundary">
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-account" title="account">
+                                
+                                <lightning:icon iconName="action:add_contact" size="xx-small" variant="success"></lightning:icon>
+                                <span class="slds-assistive-text">Contacts</span>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">
+                                <span class="slds-card__header-link slds-truncate" title="contacts">
+                                    <span>{!v.titleType} ({!v.listSize})</span>
+                                </span>
+                            </h2>
+                        </div>
+                        <div class="slds-grid slds-grid--align-end">
+                            <lightning:button variant="neutral"
+                                              label="Copy Email" 
+                                              onclick="{!c.copyemail}"                              
+                                              iconName="utility:copy_to_clipboard"
+                                              aura:id="btn1"/>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body_inner">
+                    <lightning:datatable  
+                                         data="{! v.condetails }"
+                                         columns="{! v.mycolumns }"
+                                         keyField="Email"                         
+                                         onrowselection="{! c.handleRowAction }"  />
+                </div>
+            </article>
+         </lightning:layoutItem>
+        </aura:if>
+    </div>
+</aura:component>

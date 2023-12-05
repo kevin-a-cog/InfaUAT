@@ -1,0 +1,27 @@
+<template>
+    <div class="help-hero-banner-border">
+        <div class="owl-carousel owl-theme">
+            <template for:each={announcementTiles} for:item="announcement">
+                <template if:true={announcement.isCarousel}>
+                    <div key={announcement.Id}>
+                        <template if:true={isMobileView}>
+                            <img style={bannerHeightStyle} src='{mobileBanner}'>
+                        </template>
+                        <template if:false={isMobileView}>
+                            <img style={bannerHeightStyle} src='{announcement.img}'>
+                        </template>
+                        <div class="container container-desc">
+                            <div class={announcement.colorTitle} data-id={announcement.Id}>{announcement.title}</div>
+                            <div class={announcement.colorDesc} data-id={announcement.Id}>{announcement.desc}</div>
+                            <div class="banner-btn-container">
+                                <a href={announcement.link} class="banner-btn" data-value={announcement.title} onclick={handleOnClick}>
+                                    {announcement.cta}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </div>
+</template>
