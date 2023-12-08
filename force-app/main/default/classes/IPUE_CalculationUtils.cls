@@ -5,10 +5,10 @@ Change History
 ModifiedBy          Date        Requested By        Description                                                   Tag
 Anusha Akella       07/15/2022   KKA                Implement FLOOR, CEIL & ROUND functions for IPU Calculations <T14064>
 Chandana Gowda      11/Jan/2022  SALESRT-14808      Enhance IPU calculation performance                          <T02>
-Kevin Antonioli     Nov 2023     PNP-515            Add null checks                                              <T03>
 *************************************************************************************************************************
 */
 public without sharing class IPUE_CalculationUtils {
+
     public static final String delimiter = '~';
 
     ////////////////////////////////////////////////////////
@@ -31,15 +31,13 @@ public without sharing class IPUE_CalculationUtils {
     // Parses the string formula in to a list of Tokens
     private static List<Token> parseToTokens(String formula) {
         // Basic error handling
-        if (String.isBlank(formula)) {
-            return null;
-        }
+        if (String.isBlank(formula)) { return null; }
 
         List<Token> tokens = new List<Token>();
         List<String> charArray = formula.trim().split('');
         for (Integer index = 0; index < charArray.size(); index++) {
             // Ignore spaces between tokens
-            while (index < charArray.size() && charArray[index].isWhitespace()) {
+            while(index < charArray.size() && charArray[index].isWhitespace()) {
                 index++;
             }
 
@@ -69,22 +67,13 @@ public without sharing class IPUE_CalculationUtils {
                         // }
                         // When following an operator or start of block, should be the negative number indicator
                         when else {
-                            index++; // We need to look ahead at the number following it
+                            index++;    // We need to look ahead at the number following it
                             // Look ahead for a number, variable, or function, skipping whitespace
                             while (index < charArray.size() && charArray[index].isWhitespace()) {
                                 index++;
                             }
-                            if (
-                                index >= charArray.size() ||
-                                !(charArray[index].isAlphaNumeric() ||
-                                charArray[index].equals('$') ||
-                                charArray[index].equals('('))
-                            ) {
-                                throw new ParsingException(
-                                    'Unexpected character after "-": "' +
-                                        (index >= charArray.size() ? 'end of input' : charArray[index]) +
-                                        '"'
-                                );
+                            if (index >= charArray.size() || !(charArray[index].isAlphaNumeric() || charArray[index].equals('$') || charArray[index].equals('('))) {
+                                throw new ParsingException('Unexpected character after "-": "' + (index >= charArray.size() ? 'end of input' : charArray[index]) + '"');
                             }
                             if (charArray[index].isNumeric()) {
                                 // Handle -number
@@ -119,7 +108,7 @@ public without sharing class IPUE_CalculationUtils {
                             } else {
                                 // throw new ParsingException('Unexpected minus sign after operator: "' + prevToken.actualString + '"; must be followed by number, variable, or function');
                             }
-                            index--; // Correct for the extra lookahead
+                            index--;    // Correct for the extra lookahead
                         }
                     }
                 }
@@ -137,7 +126,7 @@ public without sharing class IPUE_CalculationUtils {
                     requiresMore = false;
                 }
                 when '<' {
-                    if (index + 1 < charArray.size() && charArray[index + 1].equals('=')) {
+                    if (index + 1 < charArray.size() && charArray[index+1].equals('=')) {
                         tokens.add(new Token(TokenType.LESS_THAN_EQUAL, '<='));
                         index++;
                     } else {
@@ -145,7 +134,7 @@ public without sharing class IPUE_CalculationUtils {
                     }
                 }
                 when '>' {
-                    if (index + 1 < charArray.size() && charArray[index + 1].equals('=')) {
+                    if (index + 1 < charArray.size() && charArray[index+1].equals('=')) {
                         tokens.add(new Token(TokenType.GREATER_THAN_EQUAL, '>='));
                         index++;
                     } else {
@@ -240,6 +229,7 @@ public without sharing class IPUE_CalculationUtils {
             }
             // move index back down so that we can process the paren separately
             index--;
+
         } else {
             throw new ParsingException('Unknown function: "' + functionName + '"');
         }
@@ -269,16 +259,12 @@ public without sharing class IPUE_CalculationUtils {
             when PLUS, MINUS, TIMES, DIVIDE, LESS_THAN, LESS_THAN_EQUAL, GREATER_THAN, GREATER_THAN_EQUAL, EQUALS {
                 // After operator, there should come a number, variable, left paren, or function
                 if (!isAfterOperator(last)) {
-                    throw new ParsingException(
-                        'After ' + prev.actualString + ' should come number, variable, left parenthesis, or function'
-                    );
+                    throw new ParsingException('After ' + prev.actualString + ' should come number, variable, left parenthesis, or function');
                 }
             }
             when RPAREN, NUMBER_LITERAL, STRING_LITERAL, VAR_LITERAL {
                 if (!isAfterLiteral(last)) {
-                    throw new ParsingException(
-                        'After ' + prev.actualString + ' should come operator, comma, right parenthesis, or end of formula'
-                    );
+                    throw new ParsingException('After ' + prev.actualString +  ' should come operator, comma, right parenthesis, or end of formula');
                 }
             }
             when else {
@@ -292,7 +278,7 @@ public without sharing class IPUE_CalculationUtils {
         return afterLiteral.contains(t.type);
     }
 
-    private static final Set<TokenType> afterLiteral = new Set<TokenType>{
+    private static final Set<TokenType> afterLiteral = new Set<TokenType> {
         TokenType.PLUS,
         TokenType.MINUS,
         TokenType.TIMES,
@@ -310,7 +296,7 @@ public without sharing class IPUE_CalculationUtils {
         return afterOperator.contains(t.type);
     }
 
-    private static final Set<TokenType> afterOperator = new Set<TokenType>{
+    private static final Set<TokenType> afterOperator = new Set<TokenType> {
         TokenType.NUMBER_LITERAL,
         TokenType.STRING_LITERAL,
         TokenType.VAR_LITERAL,
@@ -344,11 +330,7 @@ public without sharing class IPUE_CalculationUtils {
                 }
                 when PLUS, MINUS, TIMES, DIVIDE, LESS_THAN, GREATER_THAN, LESS_THAN_EQUAL, GREATER_THAN_EQUAL, EQUALS, COMMA {
                     Integer currentPrecedence = operatorPrecedence.get(t.type);
-                    for (
-                        Integer nextPrecedence = operatorPrecedence.get(operatorStack.peek()?.type);
-                        !operatorStack.isEmpty() && nextPrecedence > currentPrecedence;
-                        nextPrecedence = operatorPrecedence.get(operatorStack.peek()?.type)
-                    ) {
+                    for (Integer nextPrecedence = operatorPrecedence.get(operatorStack.peek()?.type); !operatorStack.isEmpty() && nextPrecedence > currentPrecedence; nextPrecedence = operatorPrecedence.get(operatorStack.peek()?.type)) {
                         outputList.add(operatorStack.pop());
                     }
                     operatorStack.push(t);
@@ -362,11 +344,7 @@ public without sharing class IPUE_CalculationUtils {
                 }
                 when RPAREN {
                     Token operator;
-                    for (
-                        operator = operatorStack.pop();
-                        operator.type != TokenType.LPAREN && !operatorStack.isEmpty();
-                        operator = operatorStack.pop()
-                    ) {
+                    for (operator = operatorStack.pop(); operator.type != TokenType.LPAREN && !operatorStack.isEmpty(); operator = operatorStack.pop()) {
                         if (operator.type == TokenType.COMMA) {
                             commaCounter++;
                         } else {
@@ -382,9 +360,7 @@ public without sharing class IPUE_CalculationUtils {
                         Integer actualParams = hasParam ? commaCounter + 1 : 0;
                         if (paramCount >= 0) {
                             if (actualParams != paramCount) {
-                                throw new ParsingException(
-                                    'Function "' + func.actualString + '" expects ' + paramCount + ' parameters, received ' + actualParams
-                                );
+                                throw new ParsingException('Function "' + func.actualString + '" expects ' + paramCount + ' parameters, received ' + actualParams);
                             }
                         } else if (paramCount < 0) {
                             // Encodes variable number of parameters
@@ -426,14 +402,13 @@ public without sharing class IPUE_CalculationUtils {
         Set<String> names = new Set<String>();
         for (String s : delimitedFormula.split(delimiter)) {
             if (s.startsWith('$')) {
-                names.add(s.substring(1)); // Cut off the leading '$'
+                names.add(s.substring(1));  // Cut off the leading '$'
             }
         }
         return names;
     }
 
-    public class ParsingException extends Exception {
-    }
+    public class ParsingException extends Exception {}
 
     ////////////////////////////////////////////////////////
     // Evaluation
@@ -452,15 +427,11 @@ public without sharing class IPUE_CalculationUtils {
     public static Map<Id, Map<String, Decimal>> computedValuesByCalcId = new Map<Id, Map<String, Decimal>>();
     private static Map<Id, ConsumptionSchedule> schedulesByCalcId = new Map<Id, ConsumptionSchedule>();
 
-    //Added the parameter avoidRecursionCalculation - holds the calculations for unfilled sections - <T02>
-    public static Map<Id, Map<String, Decimal>> evaluateCalculation(
-        Calculation__c calculation,
-        List<Estimation_Output__c> variables,
-        Map<Id, Map<String, Decimal>> avoidRecursionCalculation
-    ) {
+    //Added the parameter unfilledSectionCalculation - holds the calculations for unfilled sections - <T02>
+    public static Map<Id, Map<String,Decimal>> evaluateCalculation(Calculation__c calculation, List<Estimation_Output__c> variables,Map<Id, Map<String, Decimal>> unfilledSectionCalculation) {
+
         // If it's already been calculated, just return
-        // <T03>: add null check to condition
-        if (calculation != null && computedValuesByCalcId.containsKey(calculation.Id)) {
+        if (computedValuesByCalcId.containsKey(calculation.Id)) {
             return computedValuesByCalcId;
         }
 
@@ -472,16 +443,18 @@ public without sharing class IPUE_CalculationUtils {
         Map<String, ConsumptionSchedule> schedulesByName = queryAllSchedules(tokenListByScheduleName, calculation);
 
         // Recursive method to calculate answers
-        //Added the parameter avoidRecursionCalculation - <T02>
-        return evaluateRecursive(calculation, tokenListByScheduleName, schedulesByName, avoidRecursionCalculation);
+        //Added the parameter unfilledSectionCalculation - <T02>
+        return evaluateRecursive(calculation, tokenListByScheduleName, schedulesByName, unfilledSectionCalculation);
     }
 
     // Step 0: Modify the input data so that we can work with it easily
     private static Map<String, List<Token>> transformVariables(List<Estimation_Output__c> inputs) {
-        Map<String, List<Token>> tokenListByScheduleName = new Map<String, List<Token>>();
 
+        Map<String, List<Token>> tokenListByScheduleName = new Map<String, List<Token>>();
+        
         // Loop through Estimation Outputs and convert to Tokens to be used later in calculations
         for (Estimation_Output__c var : inputs) {
+            
             List<Token> tokenList = new List<Token>();
             Token token;
 
@@ -493,12 +466,13 @@ public without sharing class IPUE_CalculationUtils {
             // Create Token for Estimation Output record
             try {
                 token = new Token(TokenType.NUMBER_LITERAL, stringValue(decimalValue(var.User_Value__c)));
-            } catch (TypeException e) {
+            } catch(TypeException e) {
                 token = new Token(TokenType.STRING_LITERAL, var.User_Value__c);
             }
 
             // If the Output is part of an Elastic Table, add the row number to the Token
             if (var.Parent_Estimation_Schedule__r.Data_Type__c == IPUE_CONSTANTS.TABLE_ELASTIC && var.Row_Number__c > 0) {
+                
                 token.rowNumber = var.Row_Number__c;
                 token.columnNumber = var.Column_Number__c;
 
@@ -506,13 +480,13 @@ public without sharing class IPUE_CalculationUtils {
                 if (tokenListByScheduleName.containsKey(var.IPUE_ScheduleName__c)) {
                     tokenList = tokenListByScheduleName.get(var.IPUE_ScheduleName__c);
                 }
-
+            
                 Token parentToken;
 
                 // If the Parent Schedule (i.e. Table) has already been added, find the associated Token
                 if (tokenListByScheduleName.containsKey(var.Parent_Estimation_Schedule__r.Name)) {
                     parentToken = tokenListByScheduleName.get(var.Parent_Estimation_Schedule__r.Name)[0]; // Return first one
-                    // Otherwise, create a new Token to represent the Parent
+                // Otherwise, create a new Token to represent the Parent
                 } else {
                     parentToken = new Token(TokenType.STRING_LITERAL, '');
                 }
@@ -520,11 +494,12 @@ public without sharing class IPUE_CalculationUtils {
                 // Add the children names to the Parent Token to be used later in the aggregate functions
                 parentToken.children.add(var.IPUE_ScheduleName__c);
                 // Add the updated parent token to the Token Map
-                tokenListByScheduleName.put(var.Parent_Estimation_Schedule__r.Name, new List<Token>{ parentToken });
-            }
+                tokenListByScheduleName.put(var.Parent_Estimation_Schedule__r.Name, new List<Token>{parentToken});
+            } 
 
             tokenList.add(token);
             tokenListByScheduleName.put(var.IPUE_ScheduleName__c, tokenList);
+
         }
 
         return tokenListByScheduleName;
@@ -536,15 +511,8 @@ public without sharing class IPUE_CalculationUtils {
         Set<String> allNames = getRelatedScheduleNames(calc);
         allNames.addAll(inputs.keySet());
         for (ConsumptionSchedule schedule : [
-            SELECT
-                Id,
-                Name,
-                Data_Type__c,
-                Active__c,
-                IPU_Calculation__c,
-                IPU_Calculation__r.IPUE_PostfixFormula__c,
-                IPU_Calculation__r.Id,
-                IPU_Calculation__r.Name,
+            SELECT Id, Name, Data_Type__c, Active__c, IPU_Calculation__c, IPU_Calculation__r.IPUE_PostfixFormula__c, IPU_Calculation__r.Id, 
+            IPU_Calculation__r.Name,
                 (
                     SELECT Id, IPU_Lower_Bound__c, IPU_Upper_Bound__c, Outcome__c
                     FROM ConsumptionRates
@@ -563,11 +531,9 @@ public without sharing class IPUE_CalculationUtils {
 
     private static Set<String> getRelatedScheduleNames(Calculation__c calc) {
         Set<String> names = new Set<String>();
-        if (calc != null) {
-            for (String s : calc.IPUE_PostfixFormula__c.split(delimiter)) {
-                if (s.startsWith('$')) {
-                    names.add(s.substring(1));
-                }
+        for (String s : calc.IPUE_PostfixFormula__c.split(delimiter)) {
+            if (s.startsWith('$')) {
+                names.add(s.substring(1));
             }
         }
         return names;
@@ -577,22 +543,17 @@ public without sharing class IPUE_CalculationUtils {
     //  Looks through the formula for any variables that represent calculations
     //  Recursively calculates those calculations
     //  Calculates the formula with the newly-found inputs
-    //  Added the parameter avoidRecursionCalculation - holds the calculations for unfilled sections - <T02>
-    private static Map<Id, Map<String, Decimal>> evaluateRecursive(
-        Calculation__c calculation,
-        Map<String, List<Token>> tokenListByScheduleName,
-        Map<String, ConsumptionSchedule> schedulesByName,
-        Map<Id, Map<String, Decimal>> avoidRecursionCalculation
-    ) {
+    //  Added the parameter unfilledSectionCalculation - holds the calculations for unfilled sections - <T02>
+    private static Map<Id, Map<String, Decimal>> evaluateRecursive(Calculation__c calculation, Map<String, List<Token>> tokenListByScheduleName, Map<String, ConsumptionSchedule> schedulesByName, Map<Id, Map<String, Decimal>> unfilledSectionCalculation) {
+        
         // If it's already been calculated, just return
-        // <T03>: add null check to condition
-        if (calculation != null && computedValuesByCalcId.containsKey(calculation.Id)) {
+        if (computedValuesByCalcId.containsKey(calculation.Id)) {
             return computedValuesByCalcId;
         }
 
-        if (avoidRecursionCalculation.containsKey(calculation.Id)) {
+        if(unfilledSectionCalculation.containsKey(calculation.Id)){
             //If the section is not filled do not evaluate the calculation - <T02>
-            return new Map<Id, Map<String, Decimal>>{ calculation.Id => avoidRecursionCalculation.get(calculation.Id) };
+            return new Map<Id, Map<String, Decimal>>{calculation.Id => unfilledSectionCalculation.get(calculation.Id)};
         }
 
         // 1. Parse the formula into tokens for easy reading
@@ -603,54 +564,55 @@ public without sharing class IPUE_CalculationUtils {
 
         // 2. Recursively evaluate any nested calculations
         for (Integer i = 0; i < postFixFormula.size(); i++) {
+
             Token t = postFixFormula[i];
 
             if (
-                t.type ==
-                TokenType.VAR_LITERAL && // The token is a variable
-                schedulesByName.get(t.actualString)?.Data_Type__c == IPUE_CONSTANTS.CALCULATED && // It represents an equation
-                schedulesByName.get(t.actualString)?.Active__c && // It's active
-                !(i + 1 < postFixFormula.size() && isRangeFunction(postfixFormula[i + 1])) // It's not just being used as a rate card
+                t.type == TokenType.VAR_LITERAL // The token is a variable
+                && schedulesByName.get(t.actualString)?.Data_Type__c == IPUE_CONSTANTS.CALCULATED // It represents an equation
+                && schedulesByName.get(t.actualString)?.Active__c   // It's active
+                && !(i+1 < postFixFormula.size() && isRangeFunction(postfixFormula[i+1]))  // It's not just being used as a rate card
             ) {
-                Map<Id, Map<String, Decimal>> newValuesByCalcId = evaluateRecursive(
-                    schedulesByName.get(t.actualString).IPU_Calculation__r,
-                    tokenListByScheduleName,
-                    schedulesByName,
-                    avoidRecursionCalculation
-                );
+
+                Map<Id, Map<String, Decimal>> newValuesByCalcId = evaluateRecursive(schedulesByName.get(t.actualString).IPU_Calculation__r, tokenListByScheduleName, schedulesByName, unfilledSectionCalculation);
 
                 // Track calculated values
                 computedValuesByCalcId.putAll(newValuesByCalcId);
 
                 // Loop through any new Calculations and update the tokenListByScheduleName Map
                 for (Id calcId : newValuesByCalcId.keySet()) {
+
                     Map<String, Decimal> answerMap = newValuesByCalcId.get(calcId);
                     String scheduleName = schedulesByCalcId.get(calcId).Name;
                     List<Token> tokenList = new List<Token>();
 
                     for (String key : answerMap.keySet()) {
-                        Token token = new Token(TokenType.NUMBER_LITERAL, stringValue(answerMap.get(key)));
 
+                        Token token = new Token(TokenType.NUMBER_LITERAL, stringValue(answerMap.get(key)));
+                        
                         try {
                             token.rowNumber = Decimal.valueOf(key);
-                        } catch (Exception e) {
+                        } catch (Exception e){
                             // do nothing
                         }
 
                         tokenList.add(token);
                     }
-
+    
                     tokenListByScheduleName.put(scheduleName, tokenList);
+                    
                 }
             }
         }
 
         // 3. Evaluate the formula with all of the new data
         try {
-            Map<String, Decimal> resultByKey = evaluateWithVariables(postfixFormula, tokenListByScheduleName, schedulesByName);
+
+            Map<String, Decimal> resultByKey = evaluateWithVariables(postfixFormula, tokenListByScheduleName, schedulesByName);  
             computedValuesByCalcId.put(calculation.Id, resultByKey);
             return computedValuesByCalcId;
-        } catch (Exception e) {
+
+        } catch(Exception e) {
             System.debug('Exception: ' + e);
             System.debug('Exception message: ' + e.getMessage());
             System.debug('Exception stack trace: ' + e.getStackTraceString());
@@ -665,7 +627,7 @@ public without sharing class IPUE_CalculationUtils {
         List<String> split = formula.split(delimiter);
         List<Token> tokens = new List<Token>();
         for (String s : split) {
-            String firstChar = s.substring(0, 1);
+            String firstChar = s.substring(0,1);
             switch on firstChar {
                 when '+' {
                     tokens.add(new Token(TokenType.PLUS, firstChar));
@@ -733,10 +695,7 @@ public without sharing class IPUE_CalculationUtils {
     }
 
     // Step 1.5: Find additional variables as necessary
-    private static Map<String, ConsumptionSchedule> queryAdditionalSchedules(
-        Calculation__c calc,
-        Map<String, ConsumptionSchedule> schedulesByName
-    ) {
+    private static Map<String, ConsumptionSchedule> queryAdditionalSchedules(Calculation__c calc, Map<String, ConsumptionSchedule> schedulesByName) {
         Set<String> missingNames = new Set<String>();
         for (String s : calc.IPUE_PostfixFormula__c.split(delimiter)) {
             if (s.startsWith('$') && !schedulesByName.keySet().contains(s.substring(1))) {
@@ -745,14 +704,7 @@ public without sharing class IPUE_CalculationUtils {
         }
         if (!missingNames.isEmpty()) {
             for (ConsumptionSchedule schedule : [
-                SELECT
-                    Id,
-                    Name,
-                    Data_Type__c,
-                    Active__c,
-                    IPU_Calculation__c,
-                    IPU_Calculation__r.IPUE_PostfixFormula__c,
-                    IPU_Calculation__r.Id,
+                SELECT Id, Name, Data_Type__c, Active__c, IPU_Calculation__c, IPU_Calculation__r.IPUE_PostfixFormula__c, IPU_Calculation__r.Id, 
                     (
                         SELECT Id, IPU_Lower_Bound__c, IPU_Upper_Bound__c, Outcome__c
                         FROM ConsumptionRates
@@ -770,19 +722,18 @@ public without sharing class IPUE_CalculationUtils {
 
     // By this time, we just need the formula to do its calculations
     // Step 3: Evaluate using stacks
-    private static Map<String, Decimal> evaluateWithVariables(
-        List<Token> formula,
-        Map<String, List<Token>> tokenListByScheduleName,
-        Map<String, ConsumptionSchedule> schedulesByName
-    ) {
+    private static  Map<String, Decimal> evaluateWithVariables(List<Token> formula, Map<String, List<Token>> tokenListByScheduleName, Map<String, ConsumptionSchedule> schedulesByName) {
+        
         Map<String, Decimal> returnMap = new Map<String, Decimal>();
         // Prep data so that only the following is performed per row
         Map<String, Map<String, Token>> tokenMapByKey = new Map<String, Map<String, Token>>();
 
         /***** Reorganize data to build Map where tokens are organized by rows *******/
         for (String scheduleName : tokenListByScheduleName.keySet()) {
+
             // Loop through all tokens associated to the same Estimation Schedule
             for (Token token : tokenListByScheduleName.get(scheduleName)) {
+
                 String key;
 
                 if (token.rowNumber != null) {
@@ -802,18 +753,21 @@ public without sharing class IPUE_CalculationUtils {
 
         /********* For every set of unique data (i.e. Default, Row 1, Row 2, etc.) ******/
         for (String uniqueKey : tokenMapByKey.keySet()) {
+
             // Find Tokens unique to the data set
             Map<String, Token> tokenByScheduleName = tokenMapByKey.get(uniqueKey);
             TokenStack paramStack = new TokenStack();
 
             // Evaluate formula
             for (Token t : formula) {
+
                 switch on t.type {
                     when NUMBER_LITERAL, VAR_LITERAL, STRING_LITERAL {
                         paramStack.push(t);
                     }
                     // By process of elimination, at this point it MUST be an operator
                     when PLUS {
+
                         Decimal b = decimalValue(paramStack.pop(), tokenByScheduleName);
                         Decimal a = decimalValue(paramStack.pop(), tokenByScheduleName);
                         Decimal result;
@@ -946,9 +900,7 @@ public without sharing class IPUE_CalculationUtils {
                                     Token param = paramStack.pop();
                                     Boolean isValidNumber = param.type == TokenType.NUMBER_LITERAL && !String.isBlank(param.actualString);
                                     Boolean isValidString = param.type == TokenType.STRING_LITERAL && !String.isBlank(param.actualString);
-                                    Boolean isValidVar =
-                                        param.type == TokenType.VAR_LITERAL &&
-                                        !String.isBlank(tokenByScheduleName.get(param.actualString)?.actualString);
+                                    Boolean isValidVar = param.type == TokenType.VAR_LITERAL && !String.isBlank(tokenByScheduleName.get(param.actualString)?.actualString);
                                     count += isValidNumber || isValidString || isValidVar ? 1 : 0;
                                 }
                                 paramStack.push(new Token(TokenType.NUMBER_LITERAL, String.valueOf(count)));
@@ -1041,6 +993,7 @@ public without sharing class IPUE_CalculationUtils {
                                 }
                             }
                             when 'sumall' {
+
                                 Decimal columnNumber = decimalValue(paramStack.pop().actualString);
                                 String tableName = paramStack.pop().actualString;
 
@@ -1053,13 +1006,15 @@ public without sharing class IPUE_CalculationUtils {
                                 Decimal sum = 0;
 
                                 // Loop through children associated to Table
-                                for (String childName : childrenNames) {
-                                    // Get up to date child token
+                                for (String childName : childrenNames ) {
+
+                                    // Get up to date child token 
                                     List<Token> tokenList = tokenListByScheduleName.get(childName);
 
                                     // Return list of tokens associated to child
                                     for (Token outputToken : tokenList) {
-                                        if (outputToken.columnNumber == columnNumber) {
+
+                                        if (outputToken.columnNumber == columnNumber) {   
                                             Decimal value = decimalValue(outputToken.actualString);
                                             sum = value != null ? sum + value : sum;
                                         }
@@ -1067,8 +1022,9 @@ public without sharing class IPUE_CalculationUtils {
                                 }
 
                                 paramStack.push(new Token(TokenType.NUMBER_LITERAL, stringValue(sum)));
-                            }
+                            } 
                             when 'min' {
+
                                 Decimal columnNumber = decimalValue(paramStack.pop().actualString);
                                 String tableName = paramStack.pop().actualString;
 
@@ -1077,13 +1033,13 @@ public without sharing class IPUE_CalculationUtils {
                                 }
 
                                 Set<String> childrenNames = tokenByScheduleName.get(tableName).children;
-
+                                
                                 Decimal minValue;
 
                                 // Loop through children associated to Table
-                                for (String childName : childrenNames) {
+                                for (String childName : childrenNames ) {
                                     for (Token outputToken : tokenListByScheduleName.get(childName)) {
-                                        if (outputToken.columnNumber == columnNumber) {
+                                        if (outputToken.columnNumber == columnNumber) {   
                                             Decimal value = decimalValue(outputToken.actualString);
                                             if (value != null) {
                                                 if (minValue == null) {
@@ -1094,15 +1050,16 @@ public without sharing class IPUE_CalculationUtils {
                                             }
                                         }
                                     }
-                                }
+                                }  
 
                                 if (minValue == null) {
                                     paramStack.push(new Token(TokenType.NUMBER_LITERAL, '0'));
                                 } else {
                                     paramStack.push(new Token(TokenType.NUMBER_LITERAL, stringValue(minValue)));
                                 }
-                            }
+                            } 
                             when 'max' {
+
                                 Decimal columnNumber = decimalValue(paramStack.pop().actualString);
                                 String tableName = paramStack.pop().actualString;
 
@@ -1111,24 +1068,25 @@ public without sharing class IPUE_CalculationUtils {
                                 }
 
                                 Set<String> childrenNames = tokenByScheduleName.get(tableName).children;
-
+                                
                                 Decimal maxValue = 0;
 
                                 // Loop through children associated to Table
-                                for (String childName : childrenNames) {
+                                for (String childName : childrenNames ) {
                                     for (Token outputToken : tokenListByScheduleName.get(childName)) {
-                                        if (outputToken.columnNumber == columnNumber) {
+                                        if (outputToken.columnNumber == columnNumber) {   
                                             Decimal value = decimalValue(outputToken.actualString);
                                             if (value != null && value > maxValue) {
                                                 maxValue = value;
                                             }
                                         }
                                     }
-                                }
+                                }  
 
-                                paramStack.push(new Token(TokenType.NUMBER_LITERAL, stringValue(maxValue)));
-                            }
+                                paramStack.push(new Token(TokenType.NUMBER_LITERAL, stringValue(maxValue)));  
+                            } 
                             when 'average' {
+                                
                                 Decimal columnNumber = decimalValue(paramStack.pop().actualString);
                                 String tableName = paramStack.pop().actualString;
 
@@ -1137,14 +1095,14 @@ public without sharing class IPUE_CalculationUtils {
                                 }
 
                                 Set<String> childrenNames = tokenByScheduleName.get(tableName).children;
-
+                                
                                 Integer count = 0;
                                 Decimal sum = 0;
-
+                                
                                 // Loop through children associated to Table
-                                for (String childName : childrenNames) {
+                                for (String childName : childrenNames ) {
                                     for (Token outputToken : tokenListByScheduleName.get(childName)) {
-                                        if (outputToken.columnNumber == columnNumber) {
+                                        if (outputToken.columnNumber == columnNumber) {   
                                             count++;
                                             Decimal value = decimalValue(outputToken.actualString);
                                             if (value != null) {
@@ -1152,16 +1110,17 @@ public without sharing class IPUE_CalculationUtils {
                                             }
                                         }
                                     }
-                                }
+                                }  
 
                                 if (sum > 0 && count > 0) {
-                                    Decimal average = sum / count;
+                                    Decimal average = sum/count;
                                     paramStack.push(new Token(TokenType.NUMBER_LITERAL, stringValue(average)));
                                 } else {
                                     paramStack.push(new Token(TokenType.NUMBER_LITERAL, '0'));
                                 }
-                            }
+                            } 
                             when 'countcolumn' {
+
                                 Decimal columnNumber = decimalValue(paramStack.pop().actualString);
                                 String tableName = paramStack.pop().actualString;
 
@@ -1170,21 +1129,22 @@ public without sharing class IPUE_CalculationUtils {
                                 }
 
                                 Set<String> childrenNames = tokenByScheduleName.get(tableName).children;
-
+                                
                                 Integer count = 0;
-
+                                
                                 // Loop through children associated to Table
-                                for (String childName : childrenNames) {
+                                for (String childName : childrenNames ) {
                                     for (Token outputToken : tokenListByScheduleName.get(childName)) {
-                                        if (outputToken.columnNumber == columnNumber) {
+                                        if (outputToken.columnNumber == columnNumber) {   
                                             count++;
                                         }
                                     }
-                                }
+                                }  
 
                                 paramStack.push(new Token(TokenType.NUMBER_LITERAL, stringValue(count)));
-                            }
+                            } 
                             when 'counta' {
+
                                 Decimal columnNumber = decimalValue(paramStack.pop().actualString);
                                 String tableName = paramStack.pop().actualString;
 
@@ -1193,50 +1153,51 @@ public without sharing class IPUE_CalculationUtils {
                                 }
 
                                 Set<String> childrenNames = tokenByScheduleName.get(tableName).children;
-
+                                
                                 Integer count = 0;
-
+                                
                                 // Loop through children associated to Table
-                                for (String childName : childrenNames) {
+                                for (String childName : childrenNames ) {
                                     for (Token outputToken : tokenListByScheduleName.get(childName)) {
-                                        if (outputToken.columnNumber == columnNumber) {
+                                        if (outputToken.columnNumber == columnNumber) {   
                                             if (outputToken.actualString != null) {
                                                 count++;
+
                                             }
                                         }
                                     }
-                                }
-
-                                paramStack.push(new Token(TokenType.NUMBER_LITERAL, stringValue(count)));
-                            }
+                                }  
+                                
+                                paramStack.push(new Token(TokenType.NUMBER_LITERAL, stringValue(count)));   
+                            } 
                             //T14064
                             when 'round' {
                                 Integer numOfDigits = Integer.valueOf(paramStack.pop().actualString);
                                 Decimal actNumber = decimalValue(paramStack.pop().actualString);
-
-                                Decimal dem = actNumber?.setScale(numOfDigits == null ? 0 : numOfDigits);
-
+                                
+								Decimal dem = actNumber?.setScale(numOfDigits == NULL ? 0 : numOfDigits ) ;
+                 
                                 paramStack.push(new Token(TokenType.NUMBER_LITERAL, stringValue(dem)));
                             }
                             when 'ceil' {
                                 Integer numOfDigits = Integer.valueOf(paramStack.pop().actualString);
                                 Decimal actNumber = decimalValue(paramStack.pop().actualString);
-
-                                Decimal dem = actNumber.setScale((numOfDigits == null ? 0 : numOfDigits), System.RoundingMode.UP);
-
+                                
+                                Decimal dem = actNumber.setScale((numOfDigits == NULL ? 0 :numOfDigits),System.RoundingMode.UP);
+                                
                                 paramStack.push(new Token(TokenType.NUMBER_LITERAL, stringValue(dem)));
                             }
                             when 'floor' {
-                                Integer numOfDigits = Integer.valueOf(paramStack.pop().actualString);
+								Integer numOfDigits = Integer.valueOf(paramStack.pop().actualString);
                                 Decimal actNumber = decimalValue(paramStack.pop().actualString);
-
-                                Decimal dem = actNumber.setScale((numOfDigits == null ? 0 : numOfDigits), System.RoundingMode.DOWN);
-
+                                
+                                Decimal dem = actNumber.setScale((numOfDigits == NULL ? 0 :numOfDigits),System.RoundingMode.DOWN);
+                                
                                 paramStack.push(new Token(TokenType.NUMBER_LITERAL, stringValue(dem)));
                             }
                             //T14064
                             // Shouldn't ever be anything else
-                            // when else {}
+                            // when else {} 
                         }
                     }
                 }
@@ -1245,12 +1206,14 @@ public without sharing class IPUE_CalculationUtils {
             Decimal decimalAnswer = decimalValue(paramStack.pop(), tokenByScheduleName);
             decimalAnswer = decimalAnswer == null ? 0 : decimalAnswer.round(RoundingMode.CEILING);
             returnMap.put(uniqueKey, decimalAnswer);
+
         }
+
         return returnMap;
+
     }
 
-    public class EvaluationException extends Exception {
-    }
+    public class EvaluationException extends Exception {}
 
     // Wrapper around OOTB string-to-decimal converter to gracefully handle null
     private static Decimal decimalValue(String s) {
@@ -1315,7 +1278,7 @@ public without sharing class IPUE_CalculationUtils {
         return rangeFunctions.contains(t.actualString);
     }
 
-    private static final Set<String> rangeFunctions = new Set<String>{
+    private static final Set<String> rangeFunctions = new Set<String> {
         'rangelower',
         'rangeupper',
         'rangeoutput',
@@ -1327,6 +1290,7 @@ public without sharing class IPUE_CalculationUtils {
     };
 
     public static Boolean containsTableFunction(String function) {
+        
         for (String tableFunction : tableFunctions) {
             if (function.contains(tableFunction + '(')) {
                 return true;
@@ -1339,7 +1303,14 @@ public without sharing class IPUE_CalculationUtils {
         return tableFunctions.contains(t.actualString);
     }
 
-    private static final Set<String> tableFunctions = new Set<String>{ 'sumall', 'min', 'max', 'average', 'countcolumn', 'counta' };
+    private static final Set<String> tableFunctions = new Set<String> {
+        'sumall',
+        'min',
+        'max',
+        'average',
+        'countcolumn',
+        'counta'
+    };
 
     ////////////////////////////////////////////////////////
     // Shared utilities
@@ -1352,7 +1323,7 @@ public without sharing class IPUE_CalculationUtils {
         public String actualString;
         public String key;
         public Decimal rowNumber;
-        public Decimal columnNumber;
+        public Decimal columnNumber; 
         public Set<String> children = new Set<String>();
 
         public Token(TokenType type, String actualString) {
@@ -1384,7 +1355,7 @@ public without sharing class IPUE_CalculationUtils {
     }
 
     // TODO: Convert these next 2 maps to metadata types, and query/call access methods to get those
-    private static final Map<TokenType, Integer> operatorPrecedence = new Map<TokenType, Integer>{
+    private static final Map<TokenType, Integer> operatorPrecedence = new Map<TokenType, Integer> {
         TokenType.PLUS => 2,
         TokenType.MINUS => 2,
         TokenType.TIMES => 3,
@@ -1400,7 +1371,7 @@ public without sharing class IPUE_CalculationUtils {
 
     // -1 encodes variable number of parameters
     // May be replaced with a metadata type in the future
-    private static final Map<String, Integer> functionNamesToParamCounts = new Map<String, Integer>{
+    private static final Map<String, Integer> functionNamesToParamCounts = new Map<String, Integer> {
         'count' => -1,
         'if' => 3,
         'rangeupper' => 2,
@@ -1462,9 +1433,10 @@ public without sharing class IPUE_CalculationUtils {
         public override String toString() {
             String acc = '';
             for (Integer index = 0; index <= currentIndex; index++) {
-                acc += stack[index].actualString + (index == currentIndex ? '' : delimiter);
+                acc += stack[index].actualString + (index == currentIndex? '' : delimiter);
             }
             return acc;
         }
     }
+
 }

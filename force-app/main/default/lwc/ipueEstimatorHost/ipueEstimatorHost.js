@@ -1,924 +1,551 @@
-/*
-    @Author:        ???
-    @Created Date:  ???
-    @Description:   this is the LWC that assimilates the estimation summary record when the record initially loades
-
-    Change History
-    ********************************************************************************************************************************************
-    ModifiedBy            Date          JIRA No.        Description                                                 Tag
-
-    Kevin Antonioli       October 2023  PNP-512         Update logic to improve performance                         <T01>
-    Kevin Antonioli       Nov 2023      PNP-512         Table Lock functionality                                    <T02>
-    Kevin Antonioli       Nov 2023      PNP-512         Implement real-time page subtotal adjustment                <T03>
-    Kevin Antonioli       Nov 2023      PNP-515         Improve calculation performance                             <T04>
-    ********************************************************************************************************************************************
-*/
-import { LightningElement, api, wire } from "lwc";
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import checkForFeedExist from "@salesforce/apex/IPUE_FormController.checkForFeedItemExist";
-import fetchFormData from "@salesforce/apex/IPUE_FormController.fetchFormData";
-import saveInput from "@salesforce/apex/IPUE_FormController.processInput";
-import callIntegrations from "@salesforce/apex/IPUE_FormController.callIntegrations";
-import updateTableRows from "@salesforce/apex/IPUE_FormController.updateElasticTableRows";
-import { NavigationMixin } from "lightning/navigation";
-import {
-  publish,
-  subscribe,
-  MessageContext,
-  APPLICATION_SCOPE
-} from "lightning/messageService";
-import openChatter from "@salesforce/messageChannel/openChatter__c";
-import LOGO_URL from "@salesforce/contentAssetUrl/INFLogoHorFCRGBpng";
+import { LightningElement, api, wire, track } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import checkForFeedExist from '@salesforce/apex/IPUE_FormController.checkForFeedItemExist';
+import fetchFormData from '@salesforce/apex/IPUE_FormController.fetchFormData';
+import saveInput from '@salesforce/apex/IPUE_FormController.processInput';
+import callIntegrations from '@salesforce/apex/IPUE_FormController.callIntegrations';
+import updateTableRows from '@salesforce/apex/IPUE_FormController.updateElasticTableRows';
+import { NavigationMixin } from 'lightning/navigation';
+import { publish, subscribe, MessageContext, APPLICATION_SCOPE } from 'lightning/messageService';
+import openChatter from '@salesforce/messageChannel/openChatter__c';
+import LOGO_URL from '@salesforce/contentAssetUrl/INFLogoHorFCRGBpng';
 
 //export default class IpueEstimatorHost extends LightningElement {
-export default class IpueEstimatorHost extends NavigationMixin(
-  LightningElement
-) {
-  // Api properties
-  @api recordId;
-  @api formId;
+export default class IpueEstimatorHost extends NavigationMixin(LightningElement) {
 
-  // Private properties
-  // Front-end things
-  logoUrl = LOGO_URL;
+    // Api properties
+    @api recordId;
+    @api formId;
 
-  // Data
-  @api formData = {};
-  formDataMap = {}; // <T01>, performance optimization (front end)
-  selectedSectionIds = []; // <T04>, performance optimization (back end)
-  crossDependentSectionIds = []; // <T04>, performance optimization (back end)
-  estimationSummaryRecord;
-  accountName;
-  accountNumber;
-  accountAddress;
-  isClosed;
-  totalEstimation;
-  integrationCount;
-  pageSectionIds = [];
-  pageNumbersAlreadyLoaded = []; // <T01>, performance optimization (front end)
-  currentPageNumber = 1; // <T01>, performance optimization (front end)
-  tableRelocked = false; // <T02>, table lock functionality
+    // Private properties
+    // Front-end things
+    logoUrl = LOGO_URL;
 
-  // State management
-  pageLoading = false; // <T01>, cosmetics
-  formLoaded = false;
-  accountLoaded = false;
-  loadingRows = false;
-  get fullyLoaded() {
-    return this.formLoaded && this.accountLoaded;
-  }
-  //for chatter functionality
-  summaryChatterIconClass;
-  isInternalUser;
-  // Debouncing
-  pendingSectionUpdates;
-  concurrentCalcTriggeredSectionIds = []; // <T04>
-  pendingUpdate;
-  apexRunning = false;
-  apexRunningMessage;
+    // Data
+    @api formData = {};
+    accountName;
+    accountNumber;
+    accountAddress;
+    isClosed;
+    totalEstimation;
+    integrationCount;
+    pageSectionIds = [];
 
-  pageIndex;
-  frameIndex;
-  sectionIndex;
+    // State management
+    formLoaded = false;
+    accountLoaded = false;
+    loadingRows = false;
+    get fullyLoaded() {
+        return this.formLoaded && this.accountLoaded;
+    }
+    //for chatter functionality
+    summaryChatterIconClass;
+    isInternalUser;
+    // Debouncing
+    pendingSectionUpdates;
+    pendingUpdate;
+    apexRunning = false;
+    apexRunningMessage;
 
-  error = false;
-  @api errorTitle;
-  @api errorMessage;
+    pageIndex;
+    frameIndex;
+    sectionIndex;
 
-  firstLoad = true;
-  currentPageIndex;
-  currentPage;
-  get hasNextPage() {
-    return this.currentPageIndex < this.formData?.pages?.length - 1;
-  }
-  get hasPrevPage() {
-    return this.currentPageIndex > 0;
-  }
-  get requiredFieldsMissing() {
-    let missingFieldCount = 0;
+    error = false;
+    @api errorTitle;
+    @api errorMessage;
 
-    if (!this.isClosed) {
-      this.formData.pages[this.currentPageIndex].frames.forEach((frame) => {
-        frame.pageSections.forEach((section) => {
-          section.sectionItems.forEach((sectionItem) => {
-            // If the field is required, not calculated, and the input is blank, mark as missing
-            if (
-              sectionItem.schedule !== undefined &&
-              sectionItem.schedule.isRequired &&
-              !sectionItem.schedule.isCalculated &&
-              (sectionItem.schedule.output.value == undefined ||
-                sectionItem.schedule.output.value === "")
-            ) {
-              missingFieldCount++;
-            }
-          });
-        });
-      });
+    firstLoad = true;
+    currentPageIndex;
+    currentPage;
+    get hasNextPage() {
+        return this.currentPageIndex < this.formData?.pages?.length - 1;
+    }
+    get hasPrevPage() {
+        return this.currentPageIndex > 0;
+    }
+    get requiredFieldsMissing() {
+
+        let missingFieldCount = 0;
+
+        if (!this.isClosed) {
+            this.formData.pages[this.currentPageIndex].frames.forEach(frame => {
+                frame.pageSections.forEach(section => {
+                    section.sectionItems.forEach(sectionItem => {
+
+                        // If the field is required, not calculated, and the input is blank, mark as missing
+                        if (sectionItem.schedule !== undefined && sectionItem.schedule.isRequired && !sectionItem.schedule.isCalculated &&
+                            (sectionItem.schedule.output.value == undefined || sectionItem.schedule.output.value === '')
+                        ) {
+                            missingFieldCount++;
+                        }
+                    });
+                });
+            });
+        }
+
+        return missingFieldCount > 0;
+    }
+    //handle message content for the lms
+    @wire(MessageContext)
+    messageContext;
+
+    /************ Initialization *************/
+
+    connectedCallback() {
+        this.subsToMessageChannel();
+        this.applyCssStyleSheet()
+        this.loadForm();
     }
 
-    return missingFieldCount > 0;
-  }
-  //handle message content for the lms
-  @wire(MessageContext)
-  messageContext;
-
-  /************ Initialization *************/
-
-  connectedCallback() {
-    this.subsToMessageChannel();
-    this.applyCssStyleSheet();
-    this.loadForm(
-      this.recordId,
-      true, // initialLoad
-      true, // pageLoadFlag
-      null, // specificPageRecordId
-      null, // specificFrameRecordId
-      null, // toggledPageSectionRecord
-      null, // estSummaryLines
-      false, // newlyCheckedOnceBefore
-      false, // sectionCheckedState
-      1 // pageNumber
-    );
-  }
-
-  //Encapsulate logic for LMS subscribe
-  subsToMessageChannel() {
-    if (!this.subscription) {
-      this.subscription = subscribe(
-        this.messageContext,
-        openChatter,
-        (message) => this.handleMessage(message),
-        { scope: APPLICATION_SCOPE }
-      );
+    //Encapsulate logic for LMS subscribe
+    subsToMessageChannel() {
+        if (!this.subscription) {
+            this.subscription = subscribe(
+                this.messageContext,
+                openChatter,
+                (message) => this.handleMessage(message),
+                { scope: APPLICATION_SCOPE }
+            );
+        }
     }
-  }
-  // Handler for message received by component
-  handleMessage(message) {
-    if (message.description == "refreshSummary") {
-      checkForFeedExist({
-        recordId: this.recordId,
-        objectName: "Estimation_Summary__c"
-      })
-        .then((result) => {
-          if (result) {
-            //if feed exist then we change the color of icon.
-            this.summaryChatterIconClass = "svgClass";
-          } else {
-            //if feed exist then we remove the color of icon.
-            this.summaryChatterIconClass = "";
-          }
-        })
-        .catch((error) => {});
+    // Handler for message received by component
+    handleMessage(message) {
+        if (message.description == 'refreshSummary') {
+            checkForFeedExist({ recordId: this.recordId, objectName: 'Estimation_Summary__c' })
+                .then((result) => {
+                    if (result) {
+                        //if feed exist then we change the color of icon.       
+                        this.summaryChatterIconClass = 'svgClass';
+                    } else {
+                        //if feed exist then we remove the color of icon.       
+                        this.summaryChatterIconClass = '';
+                    }
+                })
+                .catch((error) => {
+
+                });
+        }
     }
-  }
-  //applying custom css
-  applyCssStyleSheet() {
-    document.styleSheets[0].insertRule(`.svgClass svg{
+    //applying custom css
+    applyCssStyleSheet() {
+        document.styleSheets[0].insertRule(`.svgClass svg{
             fill:#f3f3f3;}`);
 
-    document.styleSheets[0].insertRule(`.svgClass button{
+        document.styleSheets[0].insertRule(`.svgClass button{
             background:#0171d2;
         }`);
-  }
-  // Show the first page once the form is rendered for the first time
-  renderedCallback() {
-    if (this.firstLoad && this.fullyLoaded) {
-      this.jumpToPage(0);
-      this.firstLoad = false;
     }
-  }
+    // Show the first page once the form is rendered for the first time
+    renderedCallback() {
+        if (this.firstLoad && this.fullyLoaded) {
+            this.jumpToPage(0);
+            this.firstLoad = false;
+        }
+    }
 
-  /**
-   * fetch the form data when the Estimation Summary record page initially loads
-   * @param recordId
-   * @param initialLoad               <T01>. This will be true on Estimation Summary record page load, not necessarily on section toggle or page navigation
-   * @param pageLoadFlag              <T01>. This will be true on Estimation Summary record page load, not necessarily on section toggle
-   * @param specificPageRecordId      <T01>. This will be null on Estimation Summary record page load, not necessarily on section toggle
-   * @param specificFrameRecordId     <T01>. This will be null on Estimation Summary record page load, not necessarily on section toggle
-   * @param toggledPageSectionRecord  <T01>. This will be null on Estimation Summary record page load, not necessarily on section toggle
-   * @param estSummaryLines           <T01>. This will be null on Estimation Summary record page load, not necessarily on section toggle
-   * @param newlyCheckedOnceBefore    <T01>. This will be false on Estimation Summary record page load, not necessarily on section toggle
-   * @param sectionCheckedState       <T01>. This will be false on Estimation Summary record page load, not necessarily on section toggle
-   * @param pageNumber                <T01>. This will be 1 on Estimation Summary record page load, not necessarily on navigation between pages
-   * @return void
-   */
-  loadForm(
-    recordId,
-    initialLoad,
-    pageLoadFlag,
-    specificPageRecordId,
-    specificFrameRecordId,
-    toggledPageSectionRecord,
-    estSummaryLines,
-    newlyCheckedOnceBefore,
-    sectionCheckedState,
-    pageNumber
-  ) {
-    this.pageLoading = true; // <T01>: performance optimization (front end)
-    // add conditional check for <T01>: only query the page section data for the current form page if the current form has not yet been navigated to:
-    if (this.pageNumbersAlreadyLoaded.indexOf(pageNumber) === -1) {
-      fetchFormData({
-        recordId: recordId,
-        initialLoad: initialLoad,
-        pageLoadFlag: pageLoadFlag,
-        specificPageRecordId: specificPageRecordId,
-        specificFrameRecordId: specificFrameRecordId,
-        toggledPageSectionRecord: toggledPageSectionRecord,
-        estSummaryLines: estSummaryLines,
-        newlyCheckedOnceBefore: newlyCheckedOnceBefore,
-        sectionCheckedState: sectionCheckedState,
-        pageNumber: pageNumber
-      })
-        .then((result) => {
-          if (result) {
-            console.log("result: ", result);
-            this.formData = JSON.parse(JSON.stringify(result.form)); // Create deep clone
-            //storing attr req for chatter func.
-            this.summaryChatterIconClass = result.chatterIconClass;
-            this.isInternalUser = result.isUserInternal;
-            this.accountName = result.accountModel.name;
-            this.accountNumber = result.accountModel.accountNumber;
-            this.accountAddress = result.accountModel.address;
-            //Make the Estimator read Only if the opty is closed or if the current user has read only access to the estimation summary record
-            this.isClosed = result.hasReadOnlyAccess;
-            this.totalEstimation = result.totalEstimation
-              ? result.totalEstimation
-              : 0;
-            this.integrationCount = result.integrationCount;
-            this.pageSectionIds = result.pageSectionIds;
-            this.sDocButtons = result.sDocButtons;
-            this.currentPageNumber = pageNumber; // <T01:, performance optimization (front end)
-            if (!this.formLoaded) {
-              this.selectedSectionIds = result.initialSelectedSectionIds;
-              this.crossDependentSectionIds = result.crossDependentSectionIds;
+    loadForm() {
+
+        fetchFormData({
+            recordId: this.recordId
+        })
+            .then((result) => {
+
+                if (result) {
+
+                    this.formData = JSON.parse(JSON.stringify(result.form)); // Create deep clone
+                    //storing attr req for chatter func.
+                    this.summaryChatterIconClass = result.chatterIconClass;
+                    this.isInternalUser = result.isUserInternal;
+                    this.accountName = result.accountModel.name;
+                    this.accountNumber = result.accountModel.accountNumber;
+                    this.accountAddress = result.accountModel.address;
+                    //Make the Estimator read Only if the opty is closed or if the current user has read only access to the estimation summary record
+                    this.isClosed = result.hasReadOnlyAccess;
+                    this.totalEstimation = result.totalEstimation ? result.totalEstimation : 0;
+                    this.integrationCount = result.integrationCount;
+                    this.pageSectionIds = result.pageSectionIds;
+                    this.sDocButtons = result.sDocButtons;
+                    this.formLoaded = true;
+                    this.accountLoaded = true;
+
+                    console.log('result: ', result);
+
+                } else {
+                    this.error = true;
+                    this.errorMessage = 'This page is not available for manually uploaded estimations. Please navigate to the "Details" tab for the total IPU and the “Related” tab for the IPU estimated for each service.';
+                }
+
+            })
+            .catch(error => {
+
+                console.error('Error Loading IPU Estimator: ', error);
+                let message = error;
+
+                // If a more specific error can be found, return it
+                if (error.body && error.body.message) {
+                    message = error.body.message;
+                }
+
+                this.error = true;
+                this.errorTitle = 'Error Loading IPU Estimator';
+                this.errorMessage = message;
+
+                this.showToast(
+                    'Error Loading IPU Estimator',
+                    'Form or related data is not setup correctly. Please contact your System Administrator. ',
+                    'error',
+                    'sticky'
+                );
+            });
+
+    }
+
+    /************ Handle Dispatched Events *************/
+
+    handleUserInput(event) {
+
+        this.pageIndex = this.formData.pages.findIndex(page => {
+            return page.Id === event.detail.pageId;
+        });
+
+        this.frameIndex = event.detail.frameIndex;
+        this.sectionIndex = event.detail.sectionIndex;
+
+        // Using indexes, find the applicable section and update it
+        this.formData.pages[this.pageIndex].frames[this.frameIndex].pageSections[this.sectionIndex] = { ...event.detail.section };
+        this.formData = { ...this.formData };
+
+        if (this.apexRunning) {
+
+            this.pendingSectionUpdates = this.pendingSectionUpdates || [];
+            let index = this.pendingSectionUpdates.findIndex((elem) => elem.Id === event.detail.section.Id);
+
+            if (index >= 0) {
+                this.pendingSectionUpdates[index] = JSON.parse(JSON.stringify(event.detail.section));
+            } else {
+                this.pendingSectionUpdates.push(JSON.parse(JSON.stringify(event.detail.section)));
             }
-            this.formLoaded = true;
-            this.accountLoaded = true;
 
-            console.log("selectedSectionIds: ", this.selectedSectionIds);
-            console.log(
-              "crossDependentSectionIds: ",
-              this.crossDependentSectionIds
+        } else if (!event.detail.section.inputMissing) {
+            this.apexRunningMessage = 'Calculating Estimates...';
+            this.handleSave(event.detail.section);
+        }
+    }
+
+    handleNoteInput(event) {
+
+        const pageIndex = this.formData.pages.findIndex(page => {
+            return page.Id === event.detail.pageId;
+        });
+
+        const frameIndex = event.detail.frameIndex;
+        const sectionIndex = event.detail.sectionIndex;
+        const itemIndex = event.detail.itemIndex;
+        const hasNotes = event.detail.hasNotes ? true : false;
+        const notes = event.detail.notes;
+
+        // Using indexes, find the applicable section and update it
+        this.formData.pages[pageIndex].frames[frameIndex].pageSections[sectionIndex].sectionItems[itemIndex].schedule.output.hasNotes = hasNotes;
+        this.formData.pages[pageIndex].frames[frameIndex].pageSections[sectionIndex].sectionItems[itemIndex].schedule.output.notes = notes;
+        this.formData = { ...this.formData };
+    }
+
+    handleRowUpdate(event) {
+
+        console.log('handle add row ipuehost!');
+
+        this.pageIndex = this.formData.pages.findIndex(page => {
+            return page.Id === event.detail.pageId;
+        });
+        this.frameIndex = event.detail.frameIndex;
+        this.sectionIndex = event.detail.sectionIndex;
+        const itemIndex = event.detail.itemIndex;
+
+        updateTableRows({
+            estimationSummaryId: this.formData.estimationSummaryId,
+            tableId: event.detail.tableId,
+            action: event.detail.action,
+            numRows: event.detail.numRows,
+            numColumns: event.detail.numColumns,
+            rowIndex: event.detail.rowIndex
+        })
+            .then((result) => {
+
+                let table = this.formData.pages[this.pageIndex].frames[this.frameIndex].pageSections[this.sectionIndex].sectionItems[itemIndex].table;
+
+                if (event.detail.action == 'Add Row') {
+
+                    let tableRow = result.rows[0];
+                    let rowIndex = event.detail.numRows - 1;
+
+                    table.rows.splice(
+                        rowIndex,   // Index to insert element before
+                        0,          // Remove 0 elements 
+                        tableRow    // Row to Add
+                    );
+
+                } else if (event.detail.action == 'Remove Row') {
+                    table = result;
+                }
+
+                this.formData.pages[this.pageIndex].frames[this.frameIndex].pageSections[this.sectionIndex].sectionItems[itemIndex].table = { ...table };
+                this.formData.pages[this.pageIndex].frames[this.frameIndex].pageSections[this.sectionIndex].showSectionSpinner = true;
+                this.formData = JSON.parse(JSON.stringify(this.formData));
+
+                let pageSection = this.formData.pages[this.pageIndex].frames[this.frameIndex].pageSections[this.sectionIndex];
+                this.apexRunningMessage = 'Re-Calculating Estimates...';
+                this.handleSave(pageSection);
+
+            })
+            .catch(error => {
+
+                console.error('Error Updating Table Row: ', error);
+                let message = error;
+                this.loadingRows = false;
+
+                // If a more specific error can be found, return it
+                if (error.body && error.body.message) {
+                    message = error.body.message;
+                }
+
+                this.error = true;
+                this.errorTitle = 'Error Updating Table Row';
+                this.errorMessage = message;
+
+                this.showToast(
+                    'Error Updating Table Row',
+                    'Please contact your System Administrator. ',
+                    'error',
+                    'sticky'
+                );
+            });
+
+    }
+
+    /************ Helper Methods *************/
+
+    async handleSave(payload) {
+
+        console.log('handleSave');
+
+        // Indicate to child component that Apex is Running so loading spinners are shown
+        this.apexRunning = true;
+
+        try {
+
+            let saveResult = await this.callApexSaveInput(payload);
+
+            if (saveResult != null) {
+                this.updateOutputValues(saveResult);
+            }
+
+            if (this.integrationCount > 0) {
+                this.apexRunningMessage = 'Refreshing Integrations...';
+                await this.getIntegrations();
+            }
+
+        } catch (error) {
+
+            console.error('Error saving values: ', error);
+            let message = error.body && error.body.message ? error.body.message : 'Unknown Error';
+            this.apexRunning = false;
+
+            this.showToast(
+                'Error Saving/Calculating Values',
+                message,
+                'error',
+                'sticky'
             );
 
-            this.formDataMap[pageNumber] = { ...this.formData }; // <T01>, performance optimization (front end)
+        } finally {
 
-            // added conditional block for <T01>, performance optimization (front end)
-            if (this.pageNumbersAlreadyLoaded.indexOf(pageNumber) === -1) {
-              this.pageNumbersAlreadyLoaded.push(pageNumber);
-            }
-          } else {
-            this.error = true;
-            this.errorMessage =
-              'This page is not available for manually uploaded estimations. Please navigate to the "Details" tab for the total IPU and the “Related” tab for the IPU estimated for each service.';
-          }
-          this.pageLoading = false; // <T01>
-        })
-        .catch((error) => {
-          console.error("Error Loading IPU Estimator: ", error);
-          let message = error;
+            if (this.pendingSectionUpdates) {
 
-          // If a more specific error can be found, return it
-          if (error.body && error.body.message) {
-            message = error.body.message;
-          }
+                let payload = this.pendingSectionUpdates[0];
+                payload.schedules = this.pendingSectionUpdates.reduce((prev, curr) => prev.concat(curr.schedules), []);
+                this.pendingSectionUpdates = null;
+                this.handleSave(payload);
 
-          this.error = true;
-          this.errorTitle = "Error Loading IPU Estimator";
-          this.errorMessage = message;
-          this.pageLoading = false; // <T01>
+            } else {
 
-          this.showToast(
-            "Error Loading IPU Estimator",
-            "Form or related data is not setup correctly. Please contact your System Administrator. ",
-            "error",
-            "sticky"
-          );
-        });
-    } else {
-      // if page user navigated to already loaded once before in current browser session, just grab the cached form data for that page
-      this.formData = this.formDataMap[pageNumber]; // added for <T01>, performance optimization (front end)
-      this.pageLoading = false; // <T01>
-    }
-  }
-
-  /************ Handle Dispatched Events *************/
-
-  handleUserInput(event) {
-    console.log("ipueEstimatorHost handleUserInput");
-    this.pageIndex = this.formData.pages.findIndex((page) => {
-      return page.Id === event.detail.pageId;
-    });
-
-    this.frameIndex = event.detail.frameIndex;
-    this.sectionIndex = event.detail.sectionIndex;
-    this.tableRelocked = event.detail.tableRelocked;
-
-    let performCalculation = event.detail.performCalculation;
-    let inputMissing = event.detail.section.inputMissing;
-
-    // <T03>: keep track of selected sections to pass down to apex calculations
-    //  also, update the current page IPU subtotal and Total Esitmated IPUs in real-time
-    //  for estimators without cross-section calc dependent products
-    this.getSelectedSectionIds(
-      event.detail.section,
-      event.detail.sectionToggled
-    );
-
-    console.log(
-      "ipueEstimatorHost this.selectedSectionIds 2: ",
-      this.selectedSectionIds
-    );
-    console.log(
-      "ipueEstimatorHost this.crossDependentSectionIds 2: ",
-      this.crossDependentSectionIds
-    );
-
-    // If the section was just toggled:
-    if (
-      event.detail.sectionToggled &&
-      this.crossDependentSectionIds.length === 0
-    ) {
-      if (event.detail.section.showSection) {
-        this.updateIpuTotalsOnPage(event.detail.section, "add");
-      } else {
-        this.updateIpuTotalsOnPage(event.detail.section, "subtract");
-      }
-    }
-
-    let copiedSection = { ...event.detail.section };
-    if (this.crossDependentSectionIds.length > 0) {
-      performCalculation = true;
-      inputMissing = false;
-      copiedSection.showSectionSpinner = true;
-    }
-
-    // Using indexes, find the applicable section and update it
-    this.formData.pages[this.pageIndex].frames[this.frameIndex].pageSections[
-      this.sectionIndex
-    ] = copiedSection;
-
-    this.formData = { ...this.formData };
-
-    console.log("ipueEstimatorHost apexrunning: ", this.apexRunning);
-    if (this.apexRunning) {
-      this.pendingSectionUpdates = this.pendingSectionUpdates || [];
-      if (
-        this.concurrentCalcTriggeredSectionIds.indexOf(
-          event.detail.section.Id
-        ) === -1
-      ) {
-        this.concurrentCalcTriggeredSectionIds.push(event.detail.section.Id); // <T04>
-      }
-
-      let index = this.pendingSectionUpdates.findIndex(
-        (elem) => elem.Id === event.detail.section.Id
-      );
-
-      if (index >= 0) {
-        this.pendingSectionUpdates[index] = JSON.parse(
-          JSON.stringify(event.detail.section)
-        );
-      } else {
-        this.pendingSectionUpdates.push(
-          JSON.parse(JSON.stringify(event.detail.section))
-        );
-      }
-    } else if (!inputMissing && performCalculation) {
-      if (
-        this.concurrentCalcTriggeredSectionIds.indexOf(
-          event.detail.section.Id
-        ) === -1
-      ) {
-        this.concurrentCalcTriggeredSectionIds.push(event.detail.section.Id); // <T04>
-      }
-
-      this.apexRunningMessage = "Calculating Estimates...";
-      this.handleSave(event.detail.section, performCalculation);
-    }
-
-    console.log(
-      "concurrentCalcTriggeredSectionIds: ",
-      this.concurrentCalcTriggeredSectionIds
-    );
-  }
-
-  getSelectedSectionIds(section, sectionToggled) {
-    if (section.showSection) {
-      if (this.selectedSectionIds.indexOf(section.Id) === -1) {
-        this.selectedSectionIds.push(section.Id);
-      }
-    } else {
-      this.selectedSectionIds = this.selectedSectionIds.filter(function (
-        sectionId
-      ) {
-        return sectionId !== section.Id;
-      });
-    }
-
-    if (sectionToggled && section.isCrossDependent) {
-      if (section.isChecked) {
-        if (this.crossDependentSectionIds.indexOf(section.Id) === -1) {
-          this.crossDependentSectionIds.push(section.Id);
-        }
-      } else {
-        this.crossDependentSectionIds = this.crossDependentSectionIds.filter(
-          function (sectionId) {
-            return sectionId !== section.Id;
-          }
-        );
-      }
-    }
-  }
-
-  /**
-   * <T03>: update page subtotal in real-time based on section select/deselect
-   * @param {section} section               section that was selected/deselected
-   * @param {string}  operator              add/subtract
-   * @return void
-   */
-  updateIpuTotalsOnPage(section, operator) {
-    const numOfSectionsInFrame =
-      this.formData.pages[this.pageIndex].frames[this.frameIndex].pageSections
-        .length;
-    if (operator === "add") {
-      this.totalEstimation += section.sectionTotal;
-    } else {
-      this.totalEstimation -= section.sectionTotal;
-    }
-
-    if (
-      !this.formData.pages[this.pageIndex].frames[this.frameIndex].pageSections[
-        numOfSectionsInFrame - 2
-      ].showTitle
-    ) {
-      if (operator === "add") {
-        try {
-          this.formData.pages[this.pageIndex].frames[
-            this.frameIndex
-          ].pageSections[numOfSectionsInFrame - 2].sectionItems.find((item) =>
-            item.schedule.description
-              .toLowerCase()
-              .includes("current page ipu subtotal")
-          ).schedule.output.value += section.sectionTotal;
-        } catch (error) {}
-        try {
-          this.formData.pages[this.pageIndex].frames[
-            this.frameIndex
-          ].pageSections[numOfSectionsInFrame - 2].sectionItems.find((item) =>
-            item.schedule.description
-              .toLowerCase()
-              .includes("additional ipus needed")
-          ).schedule.output.value += section.sectionTotal;
-        } catch (error) {}
-      } else {
-        try {
-          this.formData.pages[this.pageIndex].frames[
-            this.frameIndex
-          ].pageSections[numOfSectionsInFrame - 2].sectionItems.find((item) =>
-            item.schedule.description
-              .toLowerCase()
-              .includes("current page ipu subtotal")
-          ).schedule.output.value -= section.sectionTotal;
-        } catch (error) {}
-        try {
-          this.formData.pages[this.pageIndex].frames[
-            this.frameIndex
-          ].pageSections[numOfSectionsInFrame - 2].sectionItems.find((item) =>
-            item.schedule.description
-              .toLowerCase()
-              .includes("additional ipus needed")
-          ).schedule.output.value -= section.sectionTotal;
-        } catch (error) {}
-      }
-    }
-  }
-
-  handleNoteInput(event) {
-    const pageIndex = this.formData.pages.findIndex((page) => {
-      return page.Id === event.detail.pageId;
-    });
-
-    const frameIndex = event.detail.frameIndex;
-    const sectionIndex = event.detail.sectionIndex;
-    const itemIndex = event.detail.itemIndex;
-    const hasNotes = event.detail.hasNotes ? true : false;
-    const notes = event.detail.notes;
-
-    // Using indexes, find the applicable section and update it
-    this.formData.pages[pageIndex].frames[frameIndex].pageSections[
-      sectionIndex
-    ].sectionItems[itemIndex].schedule.output.hasNotes = hasNotes;
-    this.formData.pages[pageIndex].frames[frameIndex].pageSections[
-      sectionIndex
-    ].sectionItems[itemIndex].schedule.output.notes = notes;
-    this.formData = { ...this.formData };
-  }
-
-  handleRowUpdate(event) {
-    console.log("handle add row ipuehost!");
-
-    this.pageIndex = this.formData.pages.findIndex((page) => {
-      return page.Id === event.detail.pageId;
-    });
-    this.frameIndex = event.detail.frameIndex;
-    this.sectionIndex = event.detail.sectionIndex;
-    const itemIndex = event.detail.itemIndex;
-
-    updateTableRows({
-      estimationSummaryId: this.formData.estimationSummaryId,
-      tableId: event.detail.tableId,
-      action: event.detail.action,
-      numRows: event.detail.numRows,
-      numColumns: event.detail.numColumns,
-      rowIndex: event.detail.rowIndex
-    })
-      .then((result) => {
-        let table =
-          this.formData.pages[this.pageIndex].frames[this.frameIndex]
-            .pageSections[this.sectionIndex].sectionItems[itemIndex].table;
-
-        if (event.detail.action == "Add Row") {
-          let tableRow = result.rows[0];
-          let rowIndex = event.detail.numRows - 1;
-
-          table.rows.splice(
-            rowIndex, // Index to insert element before
-            0, // Remove 0 elements
-            tableRow // Row to Add
-          );
-        } else if (event.detail.action == "Remove Row") {
-          table = result;
-        }
-
-        this.formData.pages[this.pageIndex].frames[
-          this.frameIndex
-        ].pageSections[this.sectionIndex].sectionItems[itemIndex].table = {
-          ...table
-        };
-        this.formData.pages[this.pageIndex].frames[
-          this.frameIndex
-        ].pageSections[this.sectionIndex].showSectionSpinner = true;
-        this.formData = JSON.parse(JSON.stringify(this.formData));
-
-        let pageSection =
-          this.formData.pages[this.pageIndex].frames[this.frameIndex]
-            .pageSections[this.sectionIndex];
-        this.apexRunningMessage = "Re-Calculating Estimates...";
-        this.handleSave(pageSection);
-      })
-      .catch((error) => {
-        console.error("Error Updating Table Row: ", error);
-        let message = error;
-        this.loadingRows = false;
-
-        // If a more specific error can be found, return it
-        if (error.body && error.body.message) {
-          message = error.body.message;
-        }
-
-        this.error = true;
-        this.errorTitle = "Error Updating Table Row";
-        this.errorMessage = message;
-
-        this.showToast(
-          "Error Updating Table Row",
-          "Please contact your System Administrator. ",
-          "error",
-          "sticky"
-        );
-      });
-  }
-
-  /************ Helper Methods *************/
-
-  async handleSave(payload, performCalculation) {
-    console.log("handleSave");
-    // Indicate to child component that Apex is Running so loading spinners are shown
-    this.apexRunning = true;
-    // added condition check for <T01>: conditionally trigger a calculation depending on use case
-    if (performCalculation) {
-      try {
-        let saveResult = await this.callApexSaveInput(payload);
-
-        if (saveResult != null) {
-          this.updateOutputValues(saveResult);
-        }
-
-        if (this.integrationCount > 0) {
-          this.apexRunningMessage = "Refreshing Integrations...";
-          await this.getIntegrations();
-        }
-        this.concurrentCalcTriggeredSectionIds = [];
-      } catch (error) {
-        console.error("Error saving values: ", error);
-        let message =
-          error.body && error.body.message
-            ? error.body.message
-            : "Unknown Error";
-        this.apexRunning = false;
-
-        this.showToast(
-          "Error Saving/Calculating Values",
-          message,
-          "error",
-          "sticky"
-        );
-      } finally {
-        if (this.pendingSectionUpdates) {
-          let payload = this.pendingSectionUpdates[0];
-          payload.schedules = this.pendingSectionUpdates.reduce(
-            (prev, curr) => prev.concat(curr.schedules),
-            []
-          );
-
-          this.pendingSectionUpdates = null;
-          this.concurrentCalcTriggeredSectionIds = [];
-          this.handleSave(payload);
-        } else {
-          // Using indexes, update all loading spinners to false
-          this.formData.pages[this.pageIndex].frames[
-            this.frameIndex
-          ].pageSections.forEach((section) => {
-            section.showSectionSpinner = false;
-          });
-
-          this.formData = { ...this.formData };
-          this.apexRunning = false;
-          this.loadingRows = false;
-
-          // added for <T02>:
-          if (this.tableRelocked) {
-            this.removeBackgroundOverlay();
-            this.updateChildComponents();
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * New method created for <T02>: resets CSS styles on sections with tables after a calculate was triggered by relocking a table
-   * @param null
-   * @return void
-   */
-  updateChildComponents() {
-    const childPageCmps = this.template.querySelectorAll(
-      "c-ipue-estimator-page"
-    );
-    for (let i = 0; i < childPageCmps.length; i++) {
-      let targetPageNumber = childPageCmps[i].pageNumber;
-      if (targetPageNumber == this.currentPageNumber) {
-        childPageCmps[i].resetPropertiesOnTable(false);
-        break;
-      }
-    }
-  }
-
-  async callApexSaveInput(payload) {
-    // Call Apex Controller to calculate values
-    delete payload.pageSectionRecord; // <T01>: avoid deserialization error in IPUE_FormInputHelper
-    let saveResult = await saveInput({
-      formInputJSON: JSON.stringify(payload),
-      estimationId: this.formData.estimationSummaryId,
-      selectedSectionIds: this.selectedSectionIds, // added param for <T04>
-      concurrentCalcTriggeredSectionIds: this.concurrentCalcTriggeredSectionIds // added param for <T04>
-    });
-
-    // If there are updates in the UI pending apex callout, do those first
-    if (this.pendingSectionUpdates) {
-      let newPayload = this.pendingSectionUpdates[0];
-      newPayload.schedules = this.pendingSectionUpdates.reduce(
-        (prev, curr) => prev.concat(curr.schedules),
-        []
-      );
-      this.pendingSectionUpdates = null;
-
-      let updatedValues = await this.callApexSaveInput(newPayload);
-
-      // Update the return value with the fresher data
-      saveResult = updatedValues;
-    }
-
-    return saveResult;
-  }
-
-  updateOutputValues(resultWrapper) {
-    this.formData.pages.forEach((page) => {
-      page.frames.forEach((frame) => {
-        frame.pageSections.forEach((section) => {
-          // Update Section Total Value
-          if (resultWrapper.pageSectionTotalMap[section.Id] != null) {
-            section.sectionTotal =
-              resultWrapper.pageSectionTotalMap[section.Id];
-          }
-
-          // Update the calculated value shown to user in Estimation Output
-          section.sectionItems.forEach((item) => {
-            if (item.isSchedule) {
-              let schedule = item.schedule;
-
-              if (resultWrapper.outputMap[schedule.output.Id] != null) {
-                schedule.output.value =
-                  resultWrapper.outputMap[schedule.output.Id].User_Value__c;
-              }
-            } else if (item.isTable) {
-              item.table.rows.forEach((row) => {
-                row.cells.forEach((cell) => {
-                  if (
-                    cell.output != null &&
-                    resultWrapper.outputMap[cell.output.Id] != null
-                  ) {
-                    cell.output.value =
-                      resultWrapper.outputMap[cell.output.Id].User_Value__c;
-                  }
+                // Using indexes, update all loading spinners to false
+                this.formData.pages[this.pageIndex].frames[this.frameIndex].pageSections.forEach(section => {
+                    section.showSectionSpinner = false;
                 });
-              });
+
+                this.formData = { ...this.formData };
+                this.apexRunning = false;
+                this.loadingRows = false;
             }
-          });
-        });
-      });
-    });
 
-    this.totalEstimation = resultWrapper.totalEstimation
-      ? resultWrapper.totalEstimation
-      : 0;
-    this.formData = JSON.parse(JSON.stringify(this.formData));
-  }
-
-  async getIntegrations() {
-    try {
-      let result = await callIntegrations({
-        formId: this.formData.Id,
-        estimationId: this.formData.estimationSummaryId,
-        pageSectionIds: this.pageSectionIds
-      });
-
-      if (result != null) {
-        this.updateIntegrationValues(result);
-      }
-    } catch (error) {
-      console.error("Error saving values: ", error);
-      let message =
-        error.body && error.body.message ? error.body.message : "Unknown Error";
-
-      this.showToast(
-        "Error Handling Integration Values",
-        message,
-        "error",
-        "sticky"
-      );
+        }
     }
-  }
 
-  updateIntegrationValues(returnMap) {
-    this.formData.pages.forEach((page) => {
-      page.frames.forEach((frame) => {
-        frame.pageSections.forEach((section) => {
-          section.sectionItems.forEach((item) => {
-            if (item.isTemplate) {
-              let template = item.template;
-              // If the Template Id matches, update the Content shown to user
-              if (returnMap[template.templateId] != null) {
-                template.content = returnMap[template.templateId].content;
-                template.contentFound = true;
-              }
+    async callApexSaveInput(payload) {
+
+        // Call Apex Controller to calculate values
+        let saveResult = await saveInput({
+            formInputJSON: JSON.stringify(payload),
+            formId: this.formData.Id,
+            estimationId: this.formData.estimationSummaryId
+        });
+
+        // If there are updates in the UI pending apex callout, do those first
+        if (this.pendingSectionUpdates) {
+
+            let newPayload = this.pendingSectionUpdates[0];
+            newPayload.schedules = this.pendingSectionUpdates.reduce((prev, curr) => prev.concat(curr.schedules), []);
+            this.pendingSectionUpdates = null;
+
+            let updatedValues = await this.callApexSaveInput(newPayload);
+
+            // Update the return value with the fresher data
+            saveResult = updatedValues;
+
+        }
+
+        return saveResult;
+    }
+
+    updateOutputValues(resultWrapper) {
+
+        this.formData.pages.forEach(page => {
+            page.frames.forEach(frame => {
+                frame.pageSections.forEach(section => {
+
+                    // Update Section Total Value
+                    if (resultWrapper.pageSectionTotalMap[section.Id] != null) {
+                        section.sectionTotal = resultWrapper.pageSectionTotalMap[section.Id];
+                    }
+
+                    // Update the calculated value shown to user in Estimation Output
+                    section.sectionItems.forEach(item => {
+
+                        if (item.isSchedule) {
+                            let schedule = item.schedule;
+                            if (resultWrapper.outputMap[schedule.output.Id] != null) {
+                                schedule.output.value = resultWrapper.outputMap[schedule.output.Id].User_Value__c;
+                            }
+                        } else if (item.isTable) {
+
+                            item.table.rows.forEach(row => {
+                                row.cells.forEach(cell => {
+
+                                    if (cell.output != null && resultWrapper.outputMap[cell.output.Id] != null) {
+                                        cell.output.value = resultWrapper.outputMap[cell.output.Id].User_Value__c;
+                                    }
+                                });
+                            });
+                        }
+                    })
+                });
+            });
+        });
+
+        this.totalEstimation = resultWrapper.totalEstimation ? resultWrapper.totalEstimation : 0;
+        this.formData = JSON.parse(JSON.stringify(this.formData));
+    }
+
+    async getIntegrations() {
+
+        try {
+            let result = await callIntegrations({
+                formId: this.formData.Id,
+                estimationId: this.formData.estimationSummaryId,
+                pageSectionIds: this.pageSectionIds
+            })
+
+            if (result != null) {
+                this.updateIntegrationValues(result);
             }
-          });
-        });
-      });
-    });
-    this.formData = JSON.parse(JSON.stringify(this.formData));
-  }
 
-  /************ Navigation *************/
+        } catch (error) {
+            console.error('Error saving values: ', error);
+            let message = error.body && error.body.message ? error.body.message : 'Unknown Error';
 
-  // Page navigation
-  toPrevPage() {
-    this.jumpToPage(this.currentPageIndex - 1);
-    // added for <T01>, performance optimization (front end) only query the page section data for the current page:
-    this.loadForm(
-      this.recordId,
-      false, // initialLoad
-      true, // pageLoadFlag
-      null, // specificPageRecordId
-      null, // specificFrameRecordId
-      null, // toggledPageSectionRecord
-      null, // estSummaryLines
-      false, // newlyCheckedOnceBefore
-      false, // sectionCheckedState
-      this.currentPageIndex + 1 // pageNumber
-    );
-  }
+            this.showToast(
+                'Error Handling Integration Values',
+                message,
+                'error',
+                'sticky'
+            );
+        }
 
-  toNextPage() {
-    this.jumpToPage(this.currentPageIndex + 1);
-    // added for <T01>, performance optimization (front end) only query the page section data for the current page:
-    this.loadForm(
-      this.recordId,
-      false, // initialLoad
-      true, // pageLoadFlag
-      null, // specificPageRecordId
-      null, // specificFrameRecordId
-      null, // toggledPageSectionRecord
-      null, // estSummaryLines
-      false, // newlyCheckedOnceBefore
-      false, // sectionCheckedState
-      this.currentPageIndex + 1 // pageNumber
-    );
-  }
-
-  jumpToPage(pageIndex) {
-    if (pageIndex >= 0 && pageIndex < this.formData.pages.length) {
-      this.hideCurrentPage();
-      this.currentPageIndex = pageIndex;
-      this.currentPage = this.formData.pages[pageIndex];
-      this.showCurrentPage();
     }
-  }
 
-  hideCurrentPage() {
-    let selector = ".pagesDiv ." + this.currentPage?.Id;
-    let currentPageDiv = this.template.querySelector(selector);
-    if (currentPageDiv) {
-      currentPageDiv.style.display = "none";
+    updateIntegrationValues(returnMap) {
+
+        this.formData.pages.forEach(page => {
+            page.frames.forEach(frame => {
+                frame.pageSections.forEach(section => {
+                    section.sectionItems.forEach(item => {
+                        if (item.isTemplate) {
+                            let template = item.template;
+                            // If the Template Id matches, update the Content shown to user
+                            if (returnMap[template.templateId] != null) {
+                                template.content = returnMap[template.templateId].content;
+                                template.contentFound = true;
+                            }
+                        }
+                    })
+                })
+            })
+        })
+        this.formData = JSON.parse(JSON.stringify(this.formData));
     }
-  }
 
-  showCurrentPage() {
-    let selector = ".pagesDiv ." + this.currentPage?.Id;
-    let currentPageDiv = this.template.querySelector(selector);
-    if (currentPageDiv) {
-      currentPageDiv.style.display = "block";
+    /************ Navigation *************/
+
+    // Page navigation
+    toPrevPage() {
+        this.jumpToPage(this.currentPageIndex - 1);
     }
-  }
 
-  showToast(title, message, variant, modeOption) {
-    let mode = modeOption ? modeOption : "dismissible";
-
-    this.dispatchEvent(
-      new ShowToastEvent({
-        title: title,
-        message: message,
-        variant: variant,
-        mode: mode
-      })
-    );
-  }
-
-  handleChatterClick() {
-    const payload = {
-      recordId: this.recordId,
-      publisherContext: "RECORD",
-      feedType: "Record",
-      description: "OpenChatter",
-      isFeedEnabled: true,
-      calledFrom: "Summary"
-    };
-    publish(this.messageContext, openChatter, payload);
-  }
-
-  // method added for <T02>
-  //  apply background overlay when user unlocks a table
-  handleTableLockToggleForHost(event) {
-    console.log("handleTableLockToggle host event:", event);
-    const applyOverlay = event.detail.applyOverlay; // whether to apply the overlay or remove it
-    const performCalculation = event.detail.performCalculation;
-    //this.recentLockedTableSectionId = event.detail.parentPageSectionId;
-
-    if (applyOverlay) {
-      this.applyBackgroundOverlay();
-    } else if (!performCalculation) {
-      this.removeBackgroundOverlay();
+    toNextPage() {
+        this.jumpToPage(this.currentPageIndex + 1);
     }
-  }
 
-  // method added for <T02>
-  //  helper method for handleTableLockToggleForHost
-  applyBackgroundOverlay() {
-    const estimatorHostDivEle = this.template.querySelector(
-      '[data-id="' + this.recordId + '"]'
-    );
-    if (estimatorHostDivEle) {
-      this.template.querySelector(
-        '[data-id="' + this.recordId + '"]'
-      ).className = "overlay-x";
-      this.template.querySelector(
-        '[data-id="' + this.recordId + '"]'
-      ).className += " overlay-dark";
+    jumpToPage(pageIndex) {
+        if (pageIndex >= 0 && pageIndex < this.formData.pages.length) {
+            this.hideCurrentPage();
+            this.currentPageIndex = pageIndex;
+            this.currentPage = this.formData.pages[pageIndex];
+            this.showCurrentPage();
+        }
     }
-  }
 
-  // method added for <T02>
-  //  helper method for handleTableLockToggleForHost
-  removeBackgroundOverlay() {
-    const estimatorHostDivEle = this.template.querySelector(
-      '[data-id="' + this.recordId + '"]'
-    );
-    if (estimatorHostDivEle) {
-      this.template.querySelector(
-        '[data-id="' + this.recordId + '"]'
-      ).className = "";
+    hideCurrentPage() {
+        let selector = '.pagesDiv .' + this.currentPage?.Id;
+        let currentPageDiv = this.template.querySelector(selector);
+        if (currentPageDiv) {
+            currentPageDiv.style.display = 'none';
+        }
     }
-  }
+
+    showCurrentPage() {
+        let selector = '.pagesDiv .' + this.currentPage?.Id;
+        let currentPageDiv = this.template.querySelector(selector);
+        if (currentPageDiv) {
+            currentPageDiv.style.display = 'block';
+        }
+    }
+
+    showToast(title, message, variant, modeOption) {
+
+        let mode = modeOption ? modeOption : 'dismissible';
+
+        this.dispatchEvent(new ShowToastEvent({
+            title: title,
+            message: message,
+            variant: variant,
+            mode: mode
+        }));
+    }
+
+    handleChatterClick() {
+        const payload = { recordId: this.recordId, publisherContext: 'RECORD', feedType: 'Record', description: 'OpenChatter', isFeedEnabled: true, calledFrom: 'Summary' };
+        publish(this.messageContext, openChatter, payload);
+    }
+
 }

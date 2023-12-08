@@ -7,65 +7,65 @@
 } */
 
 .table-container {
-  padding: 10px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
 }
 
 .table {
-  padding: 10px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
 }
 
 /* All Table Cells */
 .table-cell {
-  border: 0.5px solid #eaeaea;
-  padding: 2px 2px 2px 2px;
+    border: 0.5px solid #EAEAEA;
+    padding: 2px 2px 2px 2px;
 }
 
 /* Individual Cell Styles */
 .header {
-  background-color: #ff7d00;
-  color: white;
+    background-color: #FF7D00;
+    color: white;
 }
 
 .read-only {
-  background-color: #eaeaea;
-  color: black;
+    background-color: #EAEAEA;
+    color: black;
 }
 
 .editable {
-  background-color: #ffffff;
-  color: black;
+    background-color: #FFFFFF;
+    color: black;
 }
 
 /* Input Field */
 .input-field {
-  border: 0px;
-  --slds-c-input-radius-border: 0px;
+    border: 0px;
+    --slds-c-input-radius-border: 0px;
 }
 
 .elastic-cell {
-  border: 0px;
-  text-align: right;
+    border: 0px;
+    text-align: right;
 }
 
 .add-button {
-  --sds-c-button-color-background: green;
-  --lwc-colorTextIconDefault: #ffffff;
-  padding-right: 8px;
+    --sds-c-button-color-background: green;
+    --lwc-colorTextIconDefault: #FFFFFF;
+    padding-right: 8px;
 }
 
 .remove-button {
-  --sds-c-button-color-background: red;
-  --lwc-colorTextIconDefault: #ffffff;
-  padding-right: 8px;
+    --sds-c-button-color-background: red;
+    --lwc-colorTextIconDefault: #FFFFFF;
+    padding-right: 8px;
 }
 
 .confirm-modal {
-  text-align: center;
+    text-align: center;
 }
 
-.spinner {
-  position: relative;
-  display: inline-block;
+.spinner{
+    position: relative;
+    display: inline-block;
 }
 
 /**** Remove Arrows from Number Input Field ****/
@@ -78,33 +78,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type=number] {
   -moz-appearance: textfield;
-}
-
-/* added for PNP-512, table lock functionality */
-.table-locker-label {
-  border: none;
-}
-
-/* added for PNP-512, table lock functionality, to avoid overlaying the table if the user unlocked it to trigger a calculation*/
-.table-z-index {
-  position: relative;
-  z-index: 2;
-}
-
-/* added for PNP-512, table lock functionality, show message above unlocked table to inform the user */
-.table-lock-message {
-  position: relative;
-  font-size: large;
-  color: white;
-  margin-top: -38px;
-  padding-bottom: 10px;
-  z-index: 9999;
-}
-
-/* added for PNP-512, table lock functionality, position progress ring over existing one for sections with tables that have lock toggle */
-.progress-ring {
-  margin-top: -9.2rem;
-  margin-right: 0.6rem;
 }

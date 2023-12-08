@@ -1,60 +1,36 @@
-<!--
-    @Author:        Advanced Technology Group
-    @Created Date:  October 2021
-    @Description:   This is the LWC HTML for the end user IPU Estimator Page
-
-    Change History
-    ********************************************************************************************************************************************
-    ModifiedBy            Date          JIRA No.        Description                                                 Tag
-
-    Colton Kloppel        October 2021  IPUE-53         Initial Create
-    Kevin Antonioli   `   October 2023  PNP-512         Add additional attributes to Section input toggles          <T01>
-    Kevin Antonioli   `   October 2023  PNP-512         Table Lock functionality                                    <T02>
-    ********************************************************************************************************************************************
--->
 <template>
+
     <!-- Progress Bar -->
     <template if:true={showNoteModal}>
-        <c-ipue-notes
-            record-id={currentOutputId}
-            onclosemodal={handleCloseNoteModal}
-            onsavemodal={handleSaveNoteModal}
-        ></c-ipue-notes>
+        <c-ipue-notes record-id={currentOutputId} onclosemodal={handleCloseNoteModal}
+            onsavemodal={handleSaveNoteModal}></c-ipue-notes>
     </template>
+
     <div class="slds-grid">
+
         <template for:each={frames} for:item="frame" for:index="frameIndex">
+
             <!-- Dynamically size column from class built out in Controller -->
             <div key={frame.Id} class={frame.columnSize}>
+
                 <!-- Padding around each Frame -->
                 <div class="slds-m-around_x-small">
+
                     <!-- Show Page Sections -->
-                    <template
-                        for:each={frame.pageSections}
-                        for:item="section"
-                        for:index="sectionIndex"
-                    >
+                    <template for:each={frame.pageSections} for:item="section" for:index="sectionIndex">
                         <div key={section.Id} class="page-section">
+
                             <!-- Show Total IPU Page Section -->
                             <template if:true={section.showTotalIpuSection}>
                                 <div class="form-total">
                                     <lightning-layout vertical-align="center">
-                                        <lightning-layout-item
-                                            flexibility="auto"
-                                            class="form-total-title"
-                                        >
+                                        <lightning-layout-item flexibility="auto" class="form-total-title">
                                             <lightning-formatted-rich-text
-                                                value={section.totalLabel}
-                                            ></lightning-formatted-rich-text>
+                                                value={section.totalLabel}></lightning-formatted-rich-text>
                                         </lightning-layout-item>
-                                        <lightning-layout-item
-                                            flexibility="auto"
-                                            class="form-total-output"
-                                        >
-                                            <lightning-formatted-number
-                                                value={totalEstimation}
-                                                maximum-fraction-digits="0"
-                                            ></lightning-formatted-number>
-                                            &nbsp;IPUs
+                                        <lightning-layout-item flexibility="auto" class="form-total-output">
+                                            <lightning-formatted-number value={totalEstimation}
+                                                maximum-fraction-digits="0"></lightning-formatted-number> IPUs
                                         </lightning-layout-item>
                                     </lightning-layout>
                                 </div>
@@ -62,189 +38,106 @@
 
                             <!-- Show All Other Page Sections -->
                             <template if:false={section.showTotalIpuSection}>
-                                <!-- the following div's class dynamically gets set when ontablelocktoggle event is triggered by user -->
+
                                 <!-- Header -->
                                 <div class="section-header">
                                     <lightning-layout vertical-align="center">
+
                                         <!-- Checkbox & Title -->
-                                        <lightning-layout-item
-                                            size="8"
-                                            flexibility="auto"
-                                        >
-                                            <lightning-layout
-                                                vertical-align="center"
-                                            >
-                                                <template
-                                                    if:true={section.showTitle}
-                                                >
+                                        <lightning-layout-item size="8" flexibility="auto">
+                                            <lightning-layout vertical-align="center">
+                                                <template if:true={section.showTitle}>
+
                                                     <!-- Checkbox -->
-                                                    <!-- <T01>: add data-id attribute -->
                                                     <lightning-layout-item>
-                                                        <lightning-input
-                                                            class="slds-p-left_small"
-                                                            checked={section.showSection}
-                                                            type="checkbox"
-                                                            disabled={section.disableCheckbox}
-                                                            onchange={handleToggleSection}
-                                                            data-id={section.Id}
+                                                        <lightning-input class="slds-p-left_small"
+                                                            checked={section.showSection} type="checkbox"
+                                                            disabled={section.disableCheckbox} onchange={toggleSection}
                                                             data-section-index={sectionIndex}
-                                                            data-frame-index={frameIndex}
-                                                        ></lightning-input>
+                                                            data-frame-index={frameIndex}></lightning-input>
                                                     </lightning-layout-item>
+
                                                     <!-- Title -->
                                                     <lightning-layout-item>
-                                                        <span
-                                                            class="section-title"
-                                                        >
-                                                            <template
-                                                                if:true={section.showSection}
-                                                            >
-                                                                <span
-                                                                    ><lightning-formatted-rich-text
-                                                                        value={section.name}
-                                                                    ></lightning-formatted-rich-text
-                                                                ></span>
+                                                        <span class="section-title">
+                                                            <template if:true={section.showSection}>
+                                                                <span><lightning-formatted-rich-text
+                                                                        value={section.name}></lightning-formatted-rich-text></span>
                                                             </template>
-                                                            <template
-                                                                if:false={section.showSection}
-                                                            >
-                                                                <span
-                                                                    class="disabled"
-                                                                    ><lightning-formatted-rich-text
-                                                                        value={section.name}
-                                                                    ></lightning-formatted-rich-text
-                                                                ></span>
+                                                            <template if:false={section.showSection}>
+                                                                <span class='disabled'><lightning-formatted-rich-text
+                                                                        value={section.name}></lightning-formatted-rich-text></span>
                                                             </template>
                                                         </span>
                                                     </lightning-layout-item>
                                                 </template>
+
                                             </lightning-layout>
+
                                         </lightning-layout-item>
 
-                                        <!-- Page Section loading Spinner -->
-                                        <lightning-layout-item
-                                            size="3"
-                                            class="mini-loading-spinner"
-                                            data-spinner-id={section.Id}
-                                        >
+                                        <!-- Loading Spinner -->
+                                        <lightning-layout-item size="3" class="mini-loading-spinner">
                                             <template if:true={apexRunning}>
-                                                <template
-                                                    if:true={section.showSectionSpinner}
-                                                >
-                                                    <lightning-layout-item
-                                                        flexibility="auto"
-                                                    >
-                                                        <span
-                                                            class="slds-is-relative"
-                                                        >
-                                                            <lightning-spinner
-                                                                variant="brand"
+                                                <template if:true={section.showSectionSpinner}>
+                                                    <lightning-layout-item flexibility="auto">
+                                                        <span class="slds-is-relative">
+                                                            <lightning-spinner variant="brand"
                                                                 alternative-text="Loading"
-                                                                size="small"
-                                                            ></lightning-spinner>
+                                                                size="small"></lightning-spinner>
                                                         </span>
-                                                        <span
-                                                            class="slds-m-left_medium"
-                                                            >{apexRunningMessage}</span
-                                                        >
+                                                        <span class="slds-m-left_medium">{apexRunningMessage}</span>
                                                     </lightning-layout-item>
                                                 </template>
                                             </template>
-                                            <!-- <T01> -->
-                                            <!-- <template if:true={showSectionLoadingMessage}> -->
-                                            <template
-                                                if:true={section.showSectionLoadingSpinner}
-                                            >
-                                                <lightning-layout-item
-                                                    flexibility="auto"
-                                                >
-                                                    <span
-                                                        class="slds-is-relative"
-                                                    >
-                                                        <lightning-spinner
-                                                            variant="brand"
-                                                            alternative-text="Loading"
-                                                            size="small"
-                                                        ></lightning-spinner>
-                                                    </span>
-                                                    <span
-                                                        class="slds-m-left_medium"
-                                                        >{sectionLoadingMessage}</span
-                                                    >
-                                                </lightning-layout-item>
-                                            </template>
-                                            <!-- </template> -->
                                         </lightning-layout-item>
 
                                         <!-- Progress Ring -->
-                                        <lightning-layout-item
-                                            size="1"
-                                            data-progress-ring-id={section.Id}
-                                            class=""
-                                        >
-                                            <template
-                                                if:true={section.showProgress}
-                                            >
+                                        <lightning-layout-item size="1">
+                                            <template if:true={section.showProgress}>
                                                 <div class="progress-ring">
-                                                    <c-progress-ring
-                                                        numerator={section.numerator}
+                                                    <c-progress-ring numerator={section.numerator}
                                                         denominator={section.denominator}
-                                                        progress={section.progress}
-                                                    ></c-progress-ring>
+                                                        progress={section.progress}></c-progress-ring>
                                                 </div>
                                             </template>
                                         </lightning-layout-item>
+
                                     </lightning-layout>
                                 </div>
 
                                 <!-- Toggle Section -->
                                 <template if:true={section.showSection}>
+
                                     <!-- Section Items -->
-                                    <template
-                                        for:each={section.sectionItems}
-                                        for:item="item"
-                                        for:index="itemIndex"
-                                    >
+                                    <template for:each={section.sectionItems} for:item="item" for:index="itemIndex">
                                         <div key={item.Id}>
+
                                             <!-- Estimation Schedule -->
                                             <template if:true={item.isSchedule}>
-                                                <template
-                                                    if:true={item.schedule.showSchedule}
-                                                >
+                                                <template if:true={item.schedule.showSchedule}>
                                                     <div class="question">
-                                                        <lightning-layout
-                                                            vertical-align="center"
-                                                        >
+                                                        <lightning-layout vertical-align="center">
+
                                                             <!-- Question -->
-                                                            <lightning-layout-item
-                                                                flexibility="auto"
-                                                                size="9"
-                                                            >
+                                                            <lightning-layout-item flexibility="auto" size="9">
                                                                 <lightning-formatted-rich-text
-                                                                    value={item.schedule.description}
-                                                                ></lightning-formatted-rich-text>
+                                                                    value={item.schedule.description}></lightning-formatted-rich-text>
                                                             </lightning-layout-item>
 
                                                             <!-- Input Field & Notes -->
-                                                            <lightning-layout-item
-                                                                flexibility="auto"
-                                                                size="3"
-                                                            >
-                                                                <lightning-layout
-                                                                    vertical-align="center"
-                                                                >
+                                                            <lightning-layout-item flexibility="auto" size="3">
+
+                                                                <lightning-layout vertical-align="center">
+
                                                                     <!-- Input Field -->
-                                                                    <lightning-layout-item
-                                                                        flexibility="auto"
-                                                                        size={estOutputLayoutSize}
-                                                                    >
+                                                                    <lightning-layout-item flexibility="auto"
+                                                                        size={estOutputLayoutSize}>
+
                                                                         <!-- Question Input Field (Editable)-->
-                                                                        <template
-                                                                            if:true={item.schedule.isInput}
-                                                                        >
+                                                                        <template if:true={item.schedule.isInput}>
                                                                             <template
-                                                                                if:true={item.schedule.isTypeNumber}
-                                                                            >
+                                                                                if:true={item.schedule.isTypeNumber}>
                                                                                 <lightning-input
                                                                                     type={item.schedule.type}
                                                                                     class="input-text-align_right"
@@ -256,12 +149,10 @@
                                                                                     data-item-index={itemIndex}
                                                                                     data-section-index={sectionIndex}
                                                                                     data-frame-index={frameIndex}
-                                                                                    oncommit={handleInput}
-                                                                                ></lightning-input>
+                                                                                    oncommit={handleInput}></lightning-input>
                                                                             </template>
                                                                             <template
-                                                                                if:false={item.schedule.isTypeNumber}
-                                                                            >
+                                                                                if:false={item.schedule.isTypeNumber}>
                                                                                 <lightning-input
                                                                                     type={item.schedule.type}
                                                                                     variant="label-hidden"
@@ -272,16 +163,13 @@
                                                                                     data-item-index={itemIndex}
                                                                                     data-section-index={sectionIndex}
                                                                                     data-frame-index={frameIndex}
-                                                                                    oncommit={handleInput}
-                                                                                ></lightning-input>
+                                                                                    oncommit={handleInput}></lightning-input>
+
                                                                             </template>
                                                                         </template>
                                                                         <!-- Picklist Input Field (Editable) -->
-                                                                        <template
-                                                                            if:true={item.schedule.isPicklist}
-                                                                        >
-                                                                            <lightning-combobox
-                                                                                name="question"
+                                                                        <template if:true={item.schedule.isPicklist}>
+                                                                            <lightning-combobox name="question"
                                                                                 value={item.schedule.output.picklistValue}
                                                                                 variant="label-hidden"
                                                                                 placeholder="Select Option..."
@@ -291,46 +179,34 @@
                                                                                 data-item-index={itemIndex}
                                                                                 data-section-index={sectionIndex}
                                                                                 data-frame-index={frameIndex}
-                                                                                onchange={handleInput}
-                                                                            ></lightning-combobox>
+                                                                                onchange={handleInput}></lightning-combobox>
                                                                         </template>
                                                                         <!-- Calculated Input Field (Read Only) -->
-                                                                        <template
-                                                                            if:true={item.schedule.isCalculated}
-                                                                        >
+                                                                        <template if:true={item.schedule.isCalculated}>
                                                                             <template
-                                                                                if:true={item.schedule.isTypeNumber}
-                                                                            >
-                                                                                <lightning-input
-                                                                                    disabled
+                                                                                if:true={item.schedule.isTypeNumber}>
+                                                                                <lightning-input disabled
                                                                                     class="input-text-align_right"
-                                                                                    type="Number"
-                                                                                    variant="label-hidden"
-                                                                                    value={item.schedule.output.value}
-                                                                                ></lightning-input>
+                                                                                    type="Number" variant="label-hidden"
+                                                                                    value={item.schedule.output.value}></lightning-input>
                                                                             </template>
                                                                             <template
-                                                                                if:false={item.schedule.isTypeNumber}
-                                                                            >
-                                                                                <lightning-input
-                                                                                    disabled
+                                                                                if:false={item.schedule.isTypeNumber}>
+                                                                                <lightning-input disabled
                                                                                     type={item.schedule.type}
                                                                                     variant="label-hidden"
-                                                                                    value={item.schedule.output.value}
-                                                                                ></lightning-input>
+                                                                                    value={item.schedule.output.value}></lightning-input>
                                                                             </template>
                                                                         </template>
+
                                                                     </lightning-layout-item>
 
                                                                     <!-- Notes -->
-                                                                    <lightning-layout-item
-                                                                        flexibility="auto"
-                                                                        size="3"
-                                                                        if:true={isInternalUser}
-                                                                    >
+                                                                    <lightning-layout-item flexibility="auto" size="3"
+                                                                        if:true={isInternalUser}>
                                                                         <template
-                                                                            if:true={item.schedule.showStaticIcon}
-                                                                        >
+                                                                            if:true={item.schedule.showStaticIcon}>
+
                                                                             <lightning-button-icon-stateful
                                                                                 icon-name="utility:answer"
                                                                                 selected={item.schedule.output.hasNotes}
@@ -343,20 +219,17 @@
                                                                                 data-frame-index={frameIndex}
                                                                                 onclick={handleOpenNoteModal}
                                                                                 alternative-text="Notes"
-                                                                                class="slds-m-left_small note-icon-active"
-                                                                            ></lightning-button-icon-stateful>
+                                                                                class="slds-m-left_small note-icon-active"></lightning-button-icon-stateful>
+
                                                                         </template>
+
                                                                     </lightning-layout-item>
 
                                                                     <!--Chatter Icon Change IPUE-160-->
-                                                                    <lightning-layout-item
-                                                                        flexibility="auto"
-                                                                        size="2"
-                                                                        class="slds-p-left--x-small"
-                                                                    >
+                                                                    <lightning-layout-item flexibility="auto" size="2"
+                                                                        class="slds-p-left--x-small">
                                                                         <template
-                                                                            if:true={item.schedule.showStaticIcon}
-                                                                        >
+                                                                            if:true={item.schedule.showStaticIcon}>
                                                                             <lightning-button-icon
                                                                                 icon-name="utility:comments"
                                                                                 class={item.schedule.output.chatterIconClass}
@@ -366,240 +239,156 @@
                                                                                 data-secindex={sectionIndex}
                                                                                 data-secitemindex={itemIndex}
                                                                                 onclick={handleChatterClick}
-                                                                                title="Chatter Comments"
-                                                                            >
-                                                                            </lightning-button-icon
-                                                                        ></template>
+                                                                                title="Chatter Comments">
+
+                                                                            </lightning-button-icon></template>
+
                                                                     </lightning-layout-item>
                                                                     <!--Chatter Icon Change IPUE-160 END-->
+
                                                                 </lightning-layout>
-                                                            </lightning-layout-item>
-                                                            <!-- End Input Field & Notes -->
+                                                            </lightning-layout-item> <!-- End Input Field & Notes -->
                                                         </lightning-layout>
                                                     </div>
                                                 </template>
-                                            </template>
-                                            <!-- End Question -->
+                                            </template> <!-- End Question -->
 
                                             <!-- Table Section -->
-                                            <!-- <T02>: pass section numerator, denominator, and other progress ring attributes down to table -->
                                             <template if:true={item.isTable}>
-                                                <c-ipue-table
-                                                    disable-inputs={disableInputs}
+                                                <c-ipue-table disable-inputs={disableInputs}
                                                     current-frame-index={frameIndex}
-                                                    current-section-index={sectionIndex}
-                                                    current-item-index={itemIndex}
-                                                    table={item.table}
-                                                    numerator={section.numerator}
-                                                    denominator={section.denominator}
-                                                    progress={section.progress}
-                                                    loading-rows={loadingRows}
-                                                    section-just-checked={section.isChecked}
-                                                    table-locked-flag={section.tableLockedFlag}
-                                                    onupdateparent={processInputsFromTable}
-                                                    ontableinput={handleInputFromTable}
-                                                    onaddrow={handleAddRowToTable}
-                                                    onremoverow={handleRemoveRowFromTable}
-                                                    ontablelocktoggle={handleTableLockToggle}
-                                                ></c-ipue-table>
+                                                    current-section-index={sectionIndex} current-item-index={itemIndex}
+                                                    table={item.table} loading-rows={loadingRows}
+                                                    onupdateparent={handleInputFromTable} onaddrow={handleAddRowToTable}
+                                                    onremoverow={handleRemoveRowFromTable}></c-ipue-table>
                                             </template>
 
                                             <!-- Integrations Templates -->
                                             <template if:true={item.isTemplate}>
-                                                <template
-                                                    if:true={section.hasSchedules}
-                                                >
-                                                    <div
-                                                        class="questionIntegrationSection"
-                                                    >
+
+                                                <template if:true={section.hasSchedules}>
+                                                    <div class="questionIntegrationSection">
+
                                                         <!-- Title -->
-                                                        <div
-                                                            class="templateName"
-                                                        >
+                                                        <div class="templateName">
                                                             {item.template.name}
                                                         </div>
 
                                                         <!-- Information -->
-                                                        <div
-                                                            class="templateContent"
-                                                        >
-                                                            <template
-                                                                if:true={item.template.hasIntegrations}
-                                                            >
-                                                                <template
-                                                                    if:true={item.template.contentFound}
-                                                                >
+                                                        <div class="templateContent">
+                                                            <template if:true={item.template.hasIntegrations}>
+                                                                <template if:true={item.template.contentFound}>
                                                                     <lightning-formatted-rich-text
-                                                                        value={item.template.content}
-                                                                    ></lightning-formatted-rich-text>
+                                                                        value={item.template.content}></lightning-formatted-rich-text>
                                                                 </template>
-                                                                <template
-                                                                    if:false={item.template.contentFound}
-                                                                >
+                                                                <template if:false={item.template.contentFound}>
                                                                     {INTEGRATION_MESSAGE}
                                                                 </template>
                                                             </template>
-                                                            <template
-                                                                if:false={item.template.hasIntegrations}
-                                                            >
+                                                            <template if:false={item.template.hasIntegrations}>
                                                                 <lightning-formatted-rich-text
-                                                                    value={item.template.content}
-                                                                ></lightning-formatted-rich-text>
+                                                                    value={item.template.content}></lightning-formatted-rich-text>
                                                             </template>
                                                         </div>
+
                                                     </div>
                                                 </template>
 
-                                                <template
-                                                    if:false={section.hasSchedules}
-                                                >
+                                                <template if:false={section.hasSchedules}>
                                                     <div
-                                                        class="integrationSection slds-m-bottom_medium slds-m-left_small"
-                                                    >
-                                                        <template
-                                                            if:true={item.template.hasIntegrations}
-                                                        >
-                                                            <template
-                                                                if:true={item.template.contentFound}
-                                                            >
-                                                                <div
-                                                                    class="templateName"
-                                                                >
-                                                                    {item.template.name}
-                                                                </div>
-                                                                <div
-                                                                    class="slds-p-around_small"
-                                                                >
+                                                        class="integrationSection slds-m-bottom_medium slds-m-left_small">
+                                                        <template if:true={item.template.hasIntegrations}>
+                                                            <template if:true={item.template.contentFound}>
+                                                                <div class="templateName">{item.template.name}</div>
+                                                                <div class="slds-p-around_small">
                                                                     <lightning-formatted-rich-text
-                                                                        value={item.template.content}
-                                                                    >
+                                                                        value={item.template.content}>
                                                                     </lightning-formatted-rich-text>
                                                                 </div>
                                                             </template>
-                                                            <template
-                                                                if:false={item.template.contentFound}
-                                                            >
-                                                                <div
-                                                                    class="disabled"
-                                                                >
-                                                                    <div
-                                                                        class="templateName"
-                                                                    >
-                                                                        {item.template.name}
-                                                                    </div>
-                                                                    <div
-                                                                        class="slds-p-around_small"
-                                                                    >
+                                                            <template if:false={item.template.contentFound}>
+                                                                <div class="disabled">
+                                                                    <div class="templateName">{item.template.name}</div>
+                                                                    <div class="slds-p-around_small">
                                                                         {INTEGRATION_MESSAGE}
                                                                     </div>
                                                                 </div>
                                                             </template>
                                                         </template>
-                                                        <template
-                                                            if:false={item.template.hasIntegrations}
-                                                        >
-                                                            <div
-                                                                class="templateName"
-                                                            >
-                                                                {item.template.name}
-                                                            </div>
-                                                            <div
-                                                                class="slds-p-around_small"
-                                                            >
+                                                        <template if:false={item.template.hasIntegrations}>
+                                                            <div class="templateName">{item.template.name}</div>
+                                                            <div class="slds-p-around_small">
                                                                 <lightning-formatted-rich-text
-                                                                    value={item.template.content}
-                                                                >
+                                                                    value={item.template.content}>
                                                                 </lightning-formatted-rich-text>
                                                             </div>
                                                         </template>
                                                     </div>
                                                 </template>
-                                            </template>
-                                            <!-- End Conditional: Integration Section -->
+                                            </template> <!-- End Conditional: Integration Section -->
+
                                         </div>
-                                    </template>
-                                    <!-- End Interation: Section Items -->
+                                    </template> <!-- End Interation: Section Items -->
 
                                     <!-- Show Page Section IPU Total -->
-                                    <template
-                                        if:true={section.showSectionTotal}
-                                    >
+                                    <template if:true={section.showSectionTotal}>
                                         <div class="section-total-footer">
-                                            <lightning-layout
-                                                vertical-align="center"
-                                            >
-                                                <lightning-layout-item
-                                                    flexibility="auto"
-                                                    class="section-total-title"
-                                                >
+                                            <lightning-layout vertical-align="center">
+                                                <lightning-layout-item flexibility="auto" class="section-total-title">
                                                     <lightning-formatted-rich-text
-                                                        value={section.totalLabel}
-                                                    ></lightning-formatted-rich-text>
+                                                        value={section.totalLabel}></lightning-formatted-rich-text>
                                                 </lightning-layout-item>
-                                                <lightning-layout-item
-                                                    flexibility="auto"
-                                                    class="section-total-output"
-                                                >
-                                                    <lightning-formatted-number
-                                                        value={section.sectionTotal}
-                                                        maximum-fraction-digits="0"
-                                                    ></lightning-formatted-number>
-                                                    &nbsp;IPUs
+                                                <lightning-layout-item flexibility="auto" class="section-total-output">
+                                                    <lightning-formatted-number value={section.sectionTotal}
+                                                        maximum-fraction-digits="0"></lightning-formatted-number> IPUs
                                                 </lightning-layout-item>
                                             </lightning-layout>
                                         </div>
                                     </template>
-                                </template>
-                                <!-- End Conditional: section.showSection = true -->
-                            </template>
-                            <!-- End Conditional: section.showTotalIpuSection = false -->
+
+                                </template> <!-- End Conditional: section.showSection = true -->
+                            </template> <!-- End Conditional: section.showTotalIpuSection = false -->
                         </div>
-                    </template>
-                    <!-- End Interation: Page Section -->
+                    </template> <!-- End Interation: Page Section -->
                 </div>
             </div>
-        </template>
-        <!-- End Iteration: Frame -->
+        </template> <!-- End Iteration: Frame -->
     </div>
 
     <template if:true={hasSDocButtons}>
+
         <div class="slds-float_right">
+
             <lightning-button-group>
-                <template
-                    for:each={sDocButtons.mainButtons}
-                    for:item="mainButton"
-                >
+
+                <template for:each={sDocButtons.mainButtons} for:item="mainButton">
+
                     <div key={mainButton.templateId}>
+
                         <!-- Main Buttons -->
-                        <lightning-button
-                            label={mainButton.label}
-                            value={mainButton.templateId}
-                            onclick={handleSDocButtonClick}
-                        ></lightning-button>
+                        <lightning-button label={mainButton.label} value={mainButton.templateId}
+                            onclick={handleSDocButtonClick}></lightning-button>
+
                     </div>
                 </template>
 
-                <lightning-button-menu
-                    alternative-text="Additional Options"
-                    menu-alignment="auto"
-                    variant="border-filled"
-                >
-                    <template
-                        for:each={sDocButtons.menuButtons}
-                        for:item="menuButton"
-                    >
+                <lightning-button-menu alternative-text="Additional Options" menu-alignment="auto"
+                    variant="border-filled">
+
+                    <template for:each={sDocButtons.menuButtons} for:item="menuButton">
+
                         <!-- Menu Items -->
                         <div key={menuButton.templateId}>
-                            <lightning-menu-item
-                                label={menuButton.label}
-                                value={menuButton.templateId}
-                                onclick={handleSDocButtonClick}
-                            ></lightning-menu-item>
+                            <lightning-menu-item label={menuButton.label} value={menuButton.templateId}
+                                onclick={handleSDocButtonClick}></lightning-menu-item>
                         </div>
+
                     </template>
                 </lightning-button-menu>
+
             </lightning-button-group>
         </div>
-    </template>
-    <!-- End Conditional: Has sDoc Buttons -->
+
+    </template> <!-- End Conditional: Has sDoc Buttons -->
+
 </template>

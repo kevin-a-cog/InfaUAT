@@ -1,16 +1,3 @@
-<!--
-    @Author:        Advanced Technology Group
-    @Created Date:  October 2021
-    @Description:   This is the LWC HTML for the end user IPU Estimator Host
-
-    Change History
-    ********************************************************************************************************************************************
-    ModifiedBy            Date          JIRA No.        Description                                                                     Tag
-
-    Colton Kloppel        October 2021  IPUE-53         Initial Create
-    Kevin Antonioli   `   November 2023 PNP-512         Add spinner to show while form pages are being navigated to for the first time  <T01>
-    ********************************************************************************************************************************************
--->
 <template>
     <!--
         The general structure:
@@ -22,77 +9,66 @@
                 Contains a list of child components representing the pages
     -->
 
-    <!-- <T01> Show a spinner while current Page__c loads -->
-    <div if:true={pageLoading}>
-        <lightning-spinner
-            size="large"
-            alternative-text="Loading..."
-         ></lightning-spinner>
-    </div>
-
     <template if:true={fullyLoaded}>
-        <!-- <T01> wrap everything in a div so that an overlay can be applied for page section lock functionality -->
-        <!-- the following div's class dynamically gets set when ontablelocktoggle event is triggered by user -->
-        <div data-id={recordId} class="">
-            <div class="background c-container">
 
-                <div class="page-section page-header">
+        <div class="background c-container">
 
-                    <!-- <div class="header slds-clearfix"> -->
-                    <lightning-card class="header">
-                        <div class="slds-clearfix">
-                            <!--Chatter Icon Change IPUE-160-->
+            <div class="page-section page-header">
 
-                            <img class="slds-float_left logo" src={logoUrl}></img>
-                            <div class="slds-float_right">
-                                <div class="slds-float_right iconClass">
-                                    <lightning-button-icon class={summaryChatterIconClass} icon-name="utility:comments"
-                                        alternative-text="comments" title="Chatter Comments" onclick={handleChatterClick}>
-                                    </lightning-button-icon>
-                                </div>
-                                <div class="address">
-                                    <div class="boldText">{accountName}</div>
-                                    <div>{accountNumber}</div>
-                                    <div>{accountAddress}</div>
-                                </div>
+                <!-- <div class="header slds-clearfix"> -->
+                <lightning-card class="header">
+                    <div class="slds-clearfix">
+                        <!--Chatter Icon Change IPUE-160-->
+
+                        <img class="slds-float_left logo" src={logoUrl}></img>
+                        <div class="slds-float_right">
+                            <div class="slds-float_right iconClass">
+                                <lightning-button-icon class={summaryChatterIconClass} icon-name="utility:comments"
+                                    alternative-text="comments" title="Chatter Comments" onclick={handleChatterClick}>
+                                </lightning-button-icon>
+                            </div>
+                            <div class="address">
+                                <div class="boldText">{accountName}</div>
+                                <div>{accountNumber}</div>
+                                <div>{accountAddress}</div>
                             </div>
                         </div>
-                    </lightning-card>
-                </div>
-
-                <!-- Form -->
-                <div class="pagesDiv">
-                    <template for:each={formData.pages} for:item="page" for:index="pageIndex">
-                        <div class={page.Id} key={page.Id}>
-
-                            <!-- Header -->
-                            <div>
-                                <lightning-layout vertical-align="center">
-                                    <lightning-layout-item flexibility="auto" class="page-title slds-p-left_small">
-                                        <span><lightning-formatted-rich-text
-                                                value={page.name}></lightning-formatted-rich-text></span>
-                                    </lightning-layout-item>
-                                </lightning-layout>
-                            </div>
-
-                            <!-- Child component to display the page -->
-                            <c-ipue-estimator-page page={page} page-number={page.pageNumber} is-internal-user={isInternalUser} apex-running={apexRunning}
-                                apex-running-message={apexRunningMessage} is-closed={isClosed}
-                                total-estimation={totalEstimation} estimation-summary-id={recordId}
-                                loading-rows={loadingRows} onupdate={handleUserInput} onupdatenotes={handleNoteInput}
-                                onupdaterow={handleRowUpdate} ontablelocktogglehost={handleTableLockToggleForHost}></c-ipue-estimator-page>
-                        </div>
-                    </template>
-                </div>
-
-                <!-- Footer with navigation buttons -->
-                <div class="button-footer slds-clearfix">
-                    <div class="slds-float_right navigationDiv">
-                        <lightning-button variant="brand" class="navButton" if:true={hasPrevPage} label="Previous"
-                            onclick={toPrevPage} disabled={requiredFieldsMissing}></lightning-button>
-                        <lightning-button variant="brand" class="navButton" if:true={hasNextPage} label="Next"
-                            onclick={toNextPage} disabled={requiredFieldsMissing}></lightning-button>
                     </div>
+                </lightning-card>
+            </div>
+
+            <!-- Form -->
+            <div class="pagesDiv">
+                <template for:each={formData.pages} for:item="page" for:index="pageIndex">
+                    <div class={page.Id} key={page.Id}>
+
+                        <!-- Header -->
+                        <div>
+                            <lightning-layout vertical-align="center">
+                                <lightning-layout-item flexibility="auto" class="page-title slds-p-left_small">
+                                    <span><lightning-formatted-rich-text
+                                            value={page.name}></lightning-formatted-rich-text></span>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+
+                        <!-- Child component to display the page -->
+                        <c-ipue-estimator-page page={page} is-internal-user={isInternalUser} apex-running={apexRunning}
+                            apex-running-message={apexRunningMessage} is-closed={isClosed}
+                            total-estimation={totalEstimation} estimation-summary-id={recordId}
+                            loading-rows={loadingRows} onupdate={handleUserInput} onupdatenotes={handleNoteInput}
+                            onupdaterow={handleRowUpdate}></c-ipue-estimator-page>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Footer with navigation buttons -->
+            <div class="button-footer slds-clearfix">
+                <div class="slds-float_right navigationDiv">
+                    <lightning-button variant="brand" class="navButton" if:true={hasPrevPage} label="Previous"
+                        onclick={toPrevPage} disabled={requiredFieldsMissing}></lightning-button>
+                    <lightning-button variant="brand" class="navButton" if:true={hasNextPage} label="Next"
+                        onclick={toNextPage} disabled={requiredFieldsMissing}></lightning-button>
                 </div>
             </div>
         </div>

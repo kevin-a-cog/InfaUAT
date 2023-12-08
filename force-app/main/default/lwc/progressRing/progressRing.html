@@ -1,60 +1,15 @@
-<!--
-    @Author:        Advanced Technology Group
-    @Created Date:  October 2021
-    @Description:   This is the LWC HTML for the Estimator tool's Page Section progress rings
-
-    Change History
-    ********************************************************************************************************************************************
-    ModifiedBy            Date          JIRA No.        Description                                                 Tag
-
-    Colton Kloppel        October 2021  IPUE-53         Initial Create
-    Kevin Antonioli   `   October 2023  PNP-512         Set ring color to green when applicable                     <T01>
-    ********************************************************************************************************************************************
--->
-<template>
-  <div class="slds-progress-ring slds-progress-ring_large">
-    <template if:false={progressComplete}>
-      <div
-        class="slds-progress-ring__progress"
-        role="progressbar"
-        aria-valuemin="0"
-        aria-valuemax="100"
-        aria-valuenow={progress}
-      >
-        <svg viewBox="-1 -1 2 2">
-          <path
-            class="slds-progress-ring__path ring-color"
-            id="slds-progress-ring-path-51"
-            d={completeness}
-          ></path>
-        </svg>
-      </div>
-    </template>
-    <!-- <T01> new block to conditionally set ring color to green START -->
-    <template if:true={progressComplete}>
-      <div
-        class="slds-progress-ring__progress"
-        role="progressbar"
-        aria-valuemin="0"
-        aria-valuemax="100"
-        aria-valuenow={progress}
-      >
-        <svg viewBox="-1 -1 2 2">
-          <path
-            class="slds-progress-ring__path ring-color-progress-complete"
-            id="slds-progress-ring-path-52"
-            d={completeness}
-            data-parent-page-section-id={parentPageSectionId}
-          ></path>
-        </svg>
-      </div>
-    </template>
-    <!-- <T01> new block END -->
-    <div class="slds-progress-ring__content">
-      <span class="slds-icon_container font" title="Progress">
-        {numerator}/{denominator}
-        <span class="slds-assistive-text">Progress</span>
-      </span>
+<template> 
+    <div class="slds-progress-ring slds-progress-ring_large">
+        <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={progress}>
+            <svg viewBox="-1 -1 2 2">
+                <path class="slds-progress-ring__path ring-color" id="slds-progress-ring-path-51" d={completeness}></path>
+            </svg>
+        </div>
+        <div class="slds-progress-ring__content">
+            <span class="slds-icon_container font" title="Progress">
+                {numerator}/{denominator}
+                <span class="slds-assistive-text">Progress</span>
+            </span>
+        </div>
     </div>
-  </div>
 </template>
