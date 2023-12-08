@@ -1,92 +1,92 @@
 .page-section {
-    background-color: white;
-    padding: 10px 10px 10px 10px;
-    margin: 10px 10px 10px 10px;
-    min-height: 50px;
+  background-color: white;
+  padding: 10px 10px 10px 10px;
+  margin: 10px 10px 10px 10px;
+  min-height: 50px;
 }
 
 /***** Total IPU Section *****/
 .form-total {
-    font-size: medium;
-    font-weight: 600;
-    background-color: white;
-    padding: 0px 10px 0px 10px;
-    margin: 0px 10px 0px 10px;
+  font-size: medium;
+  font-weight: 600;
+  background-color: white;
+  padding: 0px 10px 0px 10px;
+  margin: 0px 10px 0px 10px;
 }
 
 .form-total-title {
-    /* padding-left: 20px; */
+  /* padding-left: 20px; */
 }
 
 .form-total-output {
-    color: #FF7D00;
-    text-align: right;
-    font-size: large;
-    /* padding-right:40px; */
+  color: #ff7d00;
+  text-align: right;
+  font-size: large;
+  /* padding-right:40px; */
 }
 
 /***** Page Section Header Bar *****/
-.section-header{
-    /* min-height: 50px; */
+.section-header {
+  /* min-height: 50px; */
 }
 
 :host {
-    --sds-c-checkbox-color-border: #9C9C9C;
-    --sds-c-checkbox-color-border-checked: #92D03D;
-    --sds-c-checkbox-color-background-checked: #92D03D;
-    --sds-c-checkbox-mark-color-foreground: white;
+  --sds-c-checkbox-color-border: #9c9c9c;
+  --sds-c-checkbox-color-border-checked: #92d03d;
+  --sds-c-checkbox-color-background-checked: #92d03d;
+  --sds-c-checkbox-mark-color-foreground: white;
 }
 
 .section-title {
-    font-size: medium;
-    font-weight: 600;
-    padding-bottom: 5px;
-    text-align: left;
+  font-size: medium;
+  font-weight: 600;
+  padding-bottom: 5px;
+  text-align: left;
 }
 
 .chevron {
-    text-align: right;
+  text-align: right;
 }
 
 .mini-loading-spinner {
-    text-align: right;
-    z-index: 97;
+  text-align: right;
+  z-index: 97;
 }
 
 .progress-ring {
-    text-align: right;
-    padding-right: 20px;
-    padding-left: 20px;
+  text-align: right;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
 /*****************Estimation Schedules & Lightning Service Templates******************/
 
 .question {
-    margin: 10px 10px;
-    padding-left: 50px;
+  margin: 10px 10px;
+  padding-left: 50px;
 }
 
 .templateName {
-    margin: 10px;
-    color: black;
-    font-weight: 500;
+  margin: 10px;
+  color: black;
+  font-weight: 500;
 }
 
 .questionIntegrationSection .templateName {
-    padding-left: 50px;
+  padding-left: 50px;
 }
 
 .disabled .templateName {
-    color: #9C9C9C;
+  color: #9c9c9c;
 }
 
 .templateContent {
-    padding-left: 70px;
-    margin: 10px;
+  padding-left: 70px;
+  margin: 10px;
 }
 
 .disabled {
-    color: #9C9C9C;
+  color: #9c9c9c;
 }
 
 /* 
@@ -103,22 +103,30 @@
 /*******Styling for the IPU Total displayed at the bottom of each section*************/
 
 .section-total-title {
-    /* padding-left: 25px; */
-    text-align: left;
+  /* padding-left: 25px; */
+  text-align: left;
 }
 
 .section-total-output {
-    color: #FF7D00;
-    text-align: right;
-    font-size: large;
-    /* padding-right: 20px; */
+  color: #ff7d00;
+  text-align: right;
+  font-size: large;
+  /* padding-right: 20px; */
 }
 
 .section-total-footer {
-    font-size: medium;
-    font-weight: 600;
-    padding: 10px 10px 10px 10px;
-    margin: 0px 10px 0px 10px;
+  font-size: medium;
+  font-weight: 600;
+  padding: 10px 10px 10px 10px;
+  margin: 0px 10px 0px 10px;
+}
+
+/* added for PNP-512, table lock functionality, to avoid overlaying the progress ring if user unlocked the table it is associated to */
+.progress-ring-z-index {
+  position: relative;
+  z-index: 2;
+  /* margin: 0 auto;
+  margin-left: 75%; */
 }
 
 /* .my-icon {
